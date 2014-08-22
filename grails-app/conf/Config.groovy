@@ -120,3 +120,6 @@ grails.plugin.reveng.defaultSchema='dbo'
 grails.plugin.reveng.excludeTables = [
 	'dbamibregistro.sys.check_constraints'
 ]
+
+grails.plugins.twitterbootstrap.fixtaglib = true
+grails.plugins.twitterbootstrap.defaultBundle = 'bundle_bootstrap'

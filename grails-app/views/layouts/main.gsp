@@ -70,7 +70,7 @@
 					    <g:render template="/layouts/menusidebar" />
 				   	</div>
 				    <div class="col-sm-9 col-sm-offset3 col-md-10 col-md-offset2">
-			        	<g:layoutBody/>
+			    		<g:layoutBody/>
 					</div>
 				</div>
 				

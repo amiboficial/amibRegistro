@@ -6,7 +6,8 @@
 // to create separate JavaScript files as needed.
 //
 //= require jquery
-//= require backbone-1.1.2-min
+//= require underscore-1.6.0-min.js
+//= require backbone-1.1.2-min.js
 //= require_tree .
 //= require_self
 //= require bootstrap
@@ -19,4 +20,10 @@ if (typeof jQuery !== 'undefined') {
 			$(this).fadeOut();
 		});
 	})(jQuery);
+}
+
+_.templateSettings = {
+	evaluate: /\{\{(.+?)\}\}/g,
+	interpolate: /\{\{=(.+?)\}\}/g,
+	escape: /\{\{-(.+?)\}\}/g
 }

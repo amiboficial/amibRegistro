@@ -112,24 +112,37 @@
 				<legend>Datos de apoderados</legend>
 				
 				<form id="frmApoderados" action="#">
+				
+				<div id="divMsgMatriculaNoEncontrada" class="alert alert-danger">
+					<span class="glyphicon glyphicon-ban-circle"></span> Matrícula <strong>no encontrada</strong>.
+				</div>
+				<div id="divMatriculaSinDga" class="alert alert-danger">
+					<span class="glyphicon glyphicon-ban-circle"></span> Matrícula encontrada <strong>sin oficio DGA válido ó vigente</strong>.
+				</div>
+				
 					<table class="table">
 						<thead>
 							<tr>
-								<th style='width:10%;'>Matrícula</th>
+								<th style='width:8%;'>Matrícula</th>
 								<th>Nombre completo</th>
-								<th>DGA CNBV</th>
-								<th style='width:10%'>...</th>
+								<th style='width:16%'>DGA CNBV</th>
+								<th style='width:8%'>...</th>
 							</tr>
 						</thead>
 						<tbody id="tbdyApoderados">
 							<tr>
 								<td><input id="txtNewMatricula" class="form-control" type="text" /></td>
-								<td><input id="txtNewNombre" class="form-control" type="text" /></td>
-								<td><input id="txtNewDGA" class="form-control" type="text" /></td>
-								<td><button id="btnAdd" class="add btn btn-default"><span class="glyphicon glyphicon-plus"></span> Agregar</button></td>
+								<td><input id="txtNewNombre" class="form-control" type="text" disabled/></td>
+								<td>
+									<select id="selNewDGA" class="form-control">
+										<option value="-1"></option>
+									</select>
+								</td>
+								<td><button id="btnAdd" class="add btn btn-default btn-success" disabled><span class="glyphicon glyphicon-plus"></span> Agregar</button></td>
 							</tr>
 						</tbody>
 					</table>
+
 				</form>
 				
 			</fieldset>
@@ -144,19 +157,38 @@
 			<td>{{=matricula}}</td>
 			<td>{{=nombreCompleto}}</td>
 			<td>{{=dga}}</td>
-			<td><button class="delete btn btn-danger"><span class="glyphicon glyphicon-trash"></span> Borrar</button> </td>
+			<td><button class="delete btn btn-danger btn-sm"><span class="glyphicon glyphicon-trash"></span> Borrar</button> </td>
 		</script>
 		<!-- FIN: TEMPLATES UNDERSCORE PARA COMPONENTE DE APODERADOS -->
 		<!-- INICIA: SCRIPT PARA COMPONENTE DE APODERADOS -->
 		<script type="text/javascript">
 
 		var apoderadosWidget = apoderadosWidget || {}
+
+		apoderadosWidget.Dga = Backbone.Model.extend({
+			defaults: {
+				dga: ''
+			}
+		});
+
+		apoderadosWidget.Dgas = Backbone.Model.extend({
+			model: apoderadosWidget.Dga
+		});
+		
+		apoderadosWidget.ApoderadoConDgas = Backbone.Model.extend({
+			defaults: {
+				matricula: -1,
+				nombreCompleto: '(Sin nombre)',
+				dga: '(Sin DGA)',
+			}
+		});
 		
 		apoderadosWidget.Apoderado = Backbone.Model.extend({
 			defaults: {
 				matricula: -1,
 				nombreCompleto: '(Sin nombre)',
-				dga: '(Sin DGA)'
+				dga: '(Sin DGA)',
+				validado: 0
 			}
 		});
 
@@ -168,26 +200,39 @@
 			tagName: 'tr',
 			className: 'apoderadoRow',
 			template: _.template( $('#apoderadoTemplate').html() ),
-			
-			render : function() {
 
-				console.log(JSON.stringify(this.model));
-				console.log($('#apoderadoTemplate').html());
-				console.log(this.template( this.model.toJSON() ));
-				
+			render : function() {				
 				this.$el.html( this.template( this.model.toJSON() ) );
-
 				return this;
+			},
+
+			events:{
+				'click .delete':'quitarApoderado'
+			},
+		
+			quitarApoderado: function() {
+				//Borra el model
+				this.model.destroy();
+				//Destruye esta vista
+				this.remove();
 			}
+		
 		});
 		
 		apoderadosWidget.ApoderadosView = Backbone.View.extend({
+			state: 'LISTO', //LISTO,DGA
 			el: '#tbdyApoderados',
+			currentMatricula: '',
+			
 			initialize: function( initialApoderados ){
 				this.collection = new apoderadosWidget.Apoderados(initialApoderados);
 				this.render();
+				this.listenTo( this.collection, 'add', this.renderApoderado );
 			},
+			
 			render: function() {
+				$('#divMsgMatriculaNoEncontrada').hide();
+				$('#divMatriculaSinDga').hide();
 				this.collection.each( function(item){
 					this.renderApoderado(item);
 				},this );
@@ -195,6 +240,106 @@
 			renderApoderado: function(item){
 				var apoderadoView = new apoderadosWidget.ApoderadoView({model:item});
 				this.$el.append( apoderadoView.render().el );
+			},
+
+			events:{
+				'click #btnAdd': 'agregarApoderado', 
+				'blur #txtNewMatricula': 'buscarPorMatricula'
+			},
+
+			agregarApoderado: function(e) {
+				e.preventDefault();
+
+				var newMatricula = $('#txtNewMatricula').val();
+				var newNombre = $('#txtNewNombre').val();
+				var newDga = $('#selNewDGA').val();
+
+				var apoderado = new apoderadosWidget.Apoderado( { matricula: newMatricula, nombreCompleto: newNombre, dga: newDga } );
+
+				this.collection.add(apoderado);
+
+				$('#txtNewMatricula').val('');
+				$('#txtNewNombre').val('');
+				$('#selNewDGA').html('');
+				$('#btnAdd').prop('disabled', true);
+				//$('#btnAdd').addClass('hidden');
+			},
+
+			buscarPorMatricula: function(e) {
+				e.preventDefault();
+
+				var newMatricula = $.trim($('#txtNewMatricula').val());
+
+				if( newMatricula == '' )
+				{
+					$('#divMsgMatriculaNoEncontrada').hide();
+					$('#divMatriculaSinDga').hide();
+					//Matricula sin introducir
+					$('#txtNewMatricula').val('');
+					$('#txtNewNombre').val('');
+					$('#selNewDGA').html('');
+					$('#btnAdd').prop('disabled', true);
+				}
+				
+				else if( newMatricula == '111' ) //Aqui va una llamada ajax
+				{
+					$('#divMsgMatriculaNoEncontrada').hide();
+					$('#divMatriculaSinDga').hide();
+					
+					newNombre = 'PETRONILA PEREZ PUEBLA';
+					dgasDisponibles = ['DGA123','DGA234','DGA345'];
+
+					$('#txtNewNombre').val(newNombre);
+					$('#selNewDGA').html('');
+					$.each(dgasDisponibles, function(key, value) {
+						$('#selNewDGA').append($("<option></option>").attr(value,key).text(value));
+					});
+
+					$('#btnAdd').prop('disabled', false);
+				}
+
+				else if( newMatricula == '222' ) //Aqui va una llamada ajax
+				{
+					$('#divMsgMatriculaNoEncontrada').hide();
+					$('#divMatriculaSinDga').hide();
+					
+					newNombre = 'GERONIMO OSWALDO PEREZ BRISUELA';
+					dgasDisponibles = ['DGA999','DGA888','DGA777'];
+
+					$('#txtNewNombre').val(newNombre);
+					$('#selNewDGA').html('');
+					$.each(dgasDisponibles, function(key, value) {
+						$('#selNewDGA').append($("<option></option>").attr(value,key).text(value));
+					});
+
+					$('#btnAdd').prop('disabled', false);
+				}
+
+				else if( newMatricula == '333' )
+				{
+					//matricula encontrada, pero sin autorización CNBV (dga) vigente
+					$('#divMsgMatriculaNoEncontrada').hide();
+					$('#divMatriculaSinDga').show();
+
+					newNombre = 'ARMANDO DE LA TORRE ALZATE';
+
+					$('#txtNewNombre').val(newNombre);
+					$('#selNewDGA').html('');
+
+					$('#btnAdd').prop('disabled', true);
+				}
+				
+				else
+				{
+					//matricula no encontrada
+					$('#divMsgMatriculaNoEncontrada').show();
+					$('#divMatriculaSinDga').hide();
+					//$('#txtNewMatricula').val('');
+					$('#txtNewNombre').val('');
+					$('#selNewDGA').html('');
+					$('#btnAdd').prop('disabled', true);
+				}
+				
 			}
 		});
 

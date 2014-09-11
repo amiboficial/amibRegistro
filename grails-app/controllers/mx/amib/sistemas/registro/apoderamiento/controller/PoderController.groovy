@@ -2,13 +2,21 @@ package mx.amib.sistemas.registro.apoderamiento.controller
 
 import static org.springframework.http.HttpStatus.*
 import mx.amib.sistemas.registro.apoderamiento.model.Poder
+import mx.amib.sistemas.registro.entidadFinanciera.service.EntidadFinancieraService
+import org.codehaus.groovy.grails.web.json.JSONObject
 import grails.transaction.Transactional
+
+//rest test; should be on the service layer
+import grails.plugins.rest.client.RestBuilder
 
 @Transactional(readOnly = true)
 class PoderController {
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
+	//servicios
+	EntidadFinancieraService entidadFinancieraService
+	
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
         respond Poder.list(params), model:[poderInstanceCount: Poder.count()]
@@ -19,6 +27,8 @@ class PoderController {
     }
 
     def create() {
+		print entidadFinancieraService.obtenerGrupoFinanciero(4).nombre
+		
         respond new Poder(params)
     }
 

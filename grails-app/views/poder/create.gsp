@@ -52,7 +52,7 @@
 		            	<g:message code="poder.nombreGrupoFinancieroOrInstituto.label" default="Nombre" /><span class="required-indicator">*</span>
 					</label>
 		            <div class="col-md-9 col-sm-9">
-		            	<g:textField class="form-control" name="representanteLegalNombre" required="" value="${poderInstance?.representanteLegalNombre}" />
+		            	<g:textField class="form-control" name="nombreGrupoFinancieroOrInstituto" required="" value="${poderInstance?.representanteLegalNombre}" />
 		            </div>
 				</div>
 			</fieldset>
@@ -111,13 +111,16 @@
 			<fieldset>
 				<legend>Datos de apoderados</legend>
 				
-				<form id="frmApoderados" action="#">
+				
 				
 				<div id="divMsgMatriculaNoEncontrada" class="alert alert-danger">
 					<span class="glyphicon glyphicon-ban-circle"></span> Matrícula <strong>no encontrada</strong>.
 				</div>
 				<div id="divMatriculaSinDga" class="alert alert-danger">
 					<span class="glyphicon glyphicon-ban-circle"></span> Matrícula encontrada <strong>sin oficio DGA válido ó vigente</strong>.
+				</div>
+				<div id="divAlMenosUnApoderado" class="alert alert-danger">
+					<span class="glyphicon glyphicon-ban-circle"></span> Se requiere ingresar <strong>al menos un apoderado</strong>.
 				</div>
 				
 					<table class="table">
@@ -143,13 +146,48 @@
 						</tbody>
 					</table>
 
-				</form>
 				
 			</fieldset>
 	
 			<fieldset>
 				<legend>Documentos de respaldo</legend>
+				
+				<div id="divMsgMaxFileSize" class="alert alert-danger">
+					<span class="glyphicon glyphicon-ban-circle"></span> El archivo xxx rebasa los <strong>5</strong>MB.
+				</div>
+				<div id="divMsgNonCompatibleFile" class="alert alert-danger">
+					<span class="glyphicon glyphicon-ban-circle"></span> El formato de archivo <strong>no es compatible</strong>.
+				</div>
+				
+				<table class="table">
+						<thead>
+							<tr>
+								<th style='width:32%;'>Tipo de documento</th>
+								<th>Nombre de archivo</th>
+								<th style='width:18%'>...</th>
+							</tr>
+						</thead>
+						<tbody id="tbdyDocsRespaldo">
+							<tr>
+								<td>Acuse de recibo AMIB.FT.11</td>
+								<td>acuse.docx</td>
+								<td><button type="button" class="btn btn-info btn-xs">Descargar</button>&nbsp;<button type="button" class="btn btn-info btn-xs">Cargar archivo</button></td>
+							</tr>
+							<tr>
+								<td>Escrito de Apoderamiento con relación del personal AMIB.FT.l67</td>
+								<td>apoderamiento.pdf</td>
+								<td><button type="button" class="btn btn-info btn-xs">Descargar</button>&nbsp;<button type="button" class="btn btn-info btn-xs">Cargar archivo</button></td>
+							</tr>
+						</tbody>
+					</table>
+				</table>
 			</fieldset>
+			
+			<div class="form-group">
+				<div class="col-lg-offset-5 col-md-offset-5 col-md-2 col-sm-2">
+					<button type="button" class="btn btn-primary btn-lg btn-block">Dar de alta el poder</button>
+				</div>
+			</div>
 	
 		</form>
 		<!-- INICIA: TEMPLATES UNDERSCORE PARA COMPONENTE DE APODERADOS -->

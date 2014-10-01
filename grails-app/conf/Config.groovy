@@ -42,23 +42,12 @@ grails.views.default.codec = "html"
 grails.controllers.defaultScope = 'singleton'
 
 // GSP settings
-grails {
-    views {
-        gsp {
-            encoding = 'UTF-8'
-            htmlcodec = 'xml' // use xml escaping instead of HTML4 escaping
-            codecs {
-                expression = 'html' // escapes values inside ${}
-                scriptlet = 'html' // escapes output from scriptlets in GSPs
-                taglib = 'none' // escapes output from taglibs
-                staticparts = 'none' // escapes output from static template parts
-            }
-        }
-        // escapes all not-encoded output at final stage of outputting
-        // filteringCodecForContentType.'text/html' = 'html'
-    }
-}
-
+grails.views.gsp.encoding = 'UTF-8'
+grails.views.gsp.htmlcodec = 'xml'
+grails.views.gsp.codecs.expression = 'html'
+grails.views.gsp.codecs.scriptlet = 'html'
+grails.views.gsp.codecs.taglib = 'none'
+grails.views.gsp.codecs.staticparts = 'none'
 
 grails.converters.encoding = "UTF-8"
 // scaffolding templates configuration
@@ -88,10 +77,24 @@ grails.hibernate.osiv.readonly = false
 environments {
     development {
         grails.logging.jul.usebridge = true
+		
+		mx.amib.sistemas.catalogos.resthttpURL = 'http://bima-devqa-serv:8080/amibCatalogos-0.1/'
+		mx.amib.sistemas.expediente.resthttpURL = 'http://bima-devqa-serv:8080/amibExpediente-0.1/'
+		mx.amib.sistemas.documentos.resthttpURL = 'http://bima-devqa-serv:8080/amibDocumentos-0.1/'
     }
+	test {
+		grails.logging.jul.usebridge = false
+		// TODO: grails.serverURL = "http://www.changeme.com"
+		mx.amib.sistemas.catalogos.resthttpURL = 'http://bima-devqa-serv:8080/amibCatalogos-0.1/'
+		mx.amib.sistemas.expediente.resthttpURL = 'http://bima-devqa-serv:8080/amibExpediente-0.1/'
+		mx.amib.sistemas.documentos.resthttpURL = 'http://bima-devqa-serv:8080/amibDocumentos-0.1/'
+	}
     production {
         grails.logging.jul.usebridge = false
         // TODO: grails.serverURL = "http://www.changeme.com"
+		mx.amib.sistemas.catalogos.resthttpURL = 'http://localhost:8081/amibCatalogos/'
+		mx.amib.sistemas.expediente.resthttpURL = 'http://localhost:8082/amibExpediente/'
+		mx.amib.sistemas.documentos.resthttpURL = 'http://localhost:8083/amibDocumentos/'
     }
 }
 
@@ -123,3 +126,11 @@ grails.plugin.reveng.excludeTables = [
 
 grails.plugins.twitterbootstrap.fixtaglib = true
 grails.plugins.twitterbootstrap.defaultBundle = 'bundle_bootstrap'
+
+mx.amib.sistemas.catalogos.general.GrupoFinanciero.classname = 'mx.amib.sistemas.catalogos.general.model.catalog.GrupoFinanciero'
+mx.amib.sistemas.catalogos.general.Institucion.classname = 'mx.amib.sistemas.catalogos.general.model.catalog.Institucion'
+mx.amib.sistemas.expediente.Sustentante.classname = 'mx.amib.sistemas.expediente.model.Sustentante'
+
+mx.amib.sistemas.catalogos.general.GrupoFinanciero.getById = 'grupoFinancieroRestful/show/'
+mx.amib.sistemas.catalogos.general.Institucion.getById = 'institucionRestful/show/'
+mx.amib.sistemas.expediente.Sustentante.obtenerSustentantePorMatricula = 'sustentanteRestful/obtenerSustentantePorMatricula/'

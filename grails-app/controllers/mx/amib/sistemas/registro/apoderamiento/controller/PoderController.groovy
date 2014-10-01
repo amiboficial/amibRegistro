@@ -6,9 +6,6 @@ import mx.amib.sistemas.registro.entidadFinanciera.service.EntidadFinancieraServ
 import org.codehaus.groovy.grails.web.json.JSONObject
 import grails.transaction.Transactional
 
-//rest test; should be on the service layer
-import grails.plugins.rest.client.RestBuilder
-
 @Transactional(readOnly = true)
 class PoderController {
 

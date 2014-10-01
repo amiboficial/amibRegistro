@@ -8,14 +8,19 @@ import org.codehaus.groovy.grails.web.json.JSONObject
 @Transactional
 class EntidadFinancieraService {
 
+	def grailsApplication
+	
     def obtenerGrupoFinanciero(long id, boolean cargaAsociados = false) {
+		String restUrl = grailsApplication.config.mx.amib.sistemas.catalogos.resthttpURL + grailsApplication.config.mx.amib.sistemas.catalogos.general.GrupoFinanciero.getById
+		String className = grailsApplication.config.mx.amib.sistemas.catalogos.general.GrupoFinanciero.classname
+		
 		def rest = new RestBuilder()
-		def resp = rest.get("http://localhost:8081/amibCatalogos/grupoFinancieroRestful/show/" + id)
+		def resp = rest.get(restUrl + id)
 		resp.json instanceof JSONObject
 
 		GrupoFinancieroTO grupoFinanciero = null
 		
-		if(resp.json.'class' == 'mx.amib.sistemas.catalogos.general.model.catalog.GrupoFinanciero'){
+		if(resp.json.'class' == className){
 			grupoFinanciero = new GrupoFinancieroTO()
 			grupoFinanciero.id = resp.json.'id'
 			grupoFinanciero.nombre = resp.json.'nombre'
@@ -26,13 +31,16 @@ class EntidadFinancieraService {
     }
 	
 	def obtenerInstitucion(long id, boolean cargaAsociados = false) {
+		String restUrl = grailsApplication.config.mx.amib.sistemas.catalogos.resthttpURL + grailsApplication.config.mx.amib.sistemas.catalogos.general.Institucion.getById
+		String className = grailsApplication.config.mx.amib.sistemas.catalogos.general.Institucion.classname
+		
 		def rest = new RestBuilder()
-		def resp = rest.get("http://localhost:8081/amibCatalogos/InstitucionRestful/show/" + id)
+		def resp = rest.get(restUrl + id)
 		resp.json instanceof JSONObject
 		
 		InstitucionTO institutcion = null 
 		
-		if(resp.json.'class' == 'mx.amib.sistemas.catalogos.general.model.catalog.Institucion'){
+		if(resp.json.'class' == className){
 			institutcion = new InstitucionTO()
 			institutcion.id = resp.json.'id'
 			institutcion.nombre = resp.json.'nombre'

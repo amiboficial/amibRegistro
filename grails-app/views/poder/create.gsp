@@ -179,7 +179,6 @@
 								<td><button type="button" class="btn btn-info btn-xs">Descargar</button>&nbsp;<button type="button" class="btn btn-info btn-xs">Cargar archivo</button></td>
 							</tr>
 						</tbody>
-					</table>
 				</table>
 			</fieldset>
 			

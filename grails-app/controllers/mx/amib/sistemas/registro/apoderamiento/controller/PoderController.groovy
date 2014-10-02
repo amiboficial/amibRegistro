@@ -1,9 +1,12 @@
 package mx.amib.sistemas.registro.apoderamiento.controller
 
 import static org.springframework.http.HttpStatus.*
+import mx.amib.sistemas.registro.apoderado.service.ApoderadoService
+import mx.amib.sistemas.registro.apoderado.service.ApoderadoTO
 import mx.amib.sistemas.registro.apoderamiento.model.Poder
 import mx.amib.sistemas.registro.entidadFinanciera.service.EntidadFinancieraService
 import org.codehaus.groovy.grails.web.json.JSONObject
+import grails.converters.JSON
 import grails.transaction.Transactional
 
 @Transactional(readOnly = true)
@@ -13,6 +16,7 @@ class PoderController {
 
 	//servicios
 	EntidadFinancieraService entidadFinancieraService
+	ApoderadoService apoderadoService
 	
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
@@ -107,4 +111,20 @@ class PoderController {
             '*'{ render status: NOT_FOUND }
         }
     }
+	
+	def obtenerDatosMatriculaDgaValido(int id){
+		//int numeroMatricula = (params.'numeroMatricula').toInteger()
+		
+		//print "el numero de matricula es: "
+		//print numeroMatricula
+		
+		ApoderadoTO apoderado = apoderadoService.obtenerDatosMatriculaDgaValido(id)
+		
+		if(apoderado == null){
+			apoderado = new ApoderadoTO()
+			apoderado.numeroMatricula = -1
+		}
+		
+		render apoderado as JSON
+	}
 }

@@ -28,13 +28,14 @@ class ApoderadoService {
 		def resp = rest.get(sustentanteRestUrl + numeroMatricula)
 		resp.json instanceof JSONObject
 		
-		println sustentanteRestUrl + numeroMatricula
-		println sustentanteClassName
-		println resp.json.'class'
+		//println sustentanteRestUrl + numeroMatricula
+		//println sustentanteClassName
+		//println resp.json.'class'
 		
-		//if(resp.json == JSONObject.NULL){
+		if(resp.json == null){
+			return null
 			//throw new Exception("JSON_NULL") //No fue posible obtener la matricula
-		//}
+		}
 		if(resp.json.'class' == sustentanteClassName){
 			apoderado = new ApoderadoTO()
 			apoderado.numeroMatricula = resp.json.'numeroMatricula'
@@ -61,6 +62,8 @@ class ApoderadoService {
     }
 	
 }
+
+//Clases de transporte de objeto
 
 class ApoderadoTO {
 	int numeroMatricula

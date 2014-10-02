@@ -111,16 +111,20 @@
 			<fieldset>
 				<legend>Datos de apoderados</legend>
 				
-				
-				
+				<div id="divMsgMatriculaYaEnLista" class="alert alert-danger">
+					<span class="glyphicon glyphicon-ban-circle"></span> Matrícula <strong>ya agregada</strong>.
+				</div>
 				<div id="divMsgMatriculaNoEncontrada" class="alert alert-danger">
 					<span class="glyphicon glyphicon-ban-circle"></span> Matrícula <strong>no encontrada</strong>.
 				</div>
-				<div id="divMatriculaSinDga" class="alert alert-danger">
+				<div id="divMsgMatriculaSinDga" class="alert alert-danger">
 					<span class="glyphicon glyphicon-ban-circle"></span> Matrícula encontrada <strong>sin oficio DGA válido ó vigente</strong>.
 				</div>
-				<div id="divAlMenosUnApoderado" class="alert alert-danger">
+				<div id="divMsgAlMenosUnApoderado" class="alert alert-danger">
 					<span class="glyphicon glyphicon-ban-circle"></span> Se requiere ingresar <strong>al menos un apoderado</strong>.
+				</div>
+				<div id="divMsgProcesandoApoderado" class="alert alert-info">
+					<asset:image src="spinner_alert_info.gif"/> <strong>Procesando datos, espere un momento</strong>.
 				</div>
 				
 					<table class="table">
@@ -193,7 +197,7 @@
 		<script type="text/template" id="apoderadoTemplate">
 			<td>{{=matricula}}</td>
 			<td>{{=nombreCompleto}}</td>
-			<td>{{=dga}}</td>
+			<td>{{=claveDga}}</td>
 			<td><button class="delete btn btn-danger btn-sm"><span class="glyphicon glyphicon-trash"></span> Borrar</button> </td>
 		</script>
 		<!-- FIN: TEMPLATES UNDERSCORE PARA COMPONENTE DE APODERADOS -->
@@ -201,30 +205,13 @@
 		<script type="text/javascript">
 
 		var apoderadosWidget = apoderadosWidget || {}
-
-		apoderadosWidget.Dga = Backbone.Model.extend({
-			defaults: {
-				dga: ''
-			}
-		});
-
-		apoderadosWidget.Dgas = Backbone.Model.extend({
-			model: apoderadosWidget.Dga
-		});
-		
-		apoderadosWidget.ApoderadoConDgas = Backbone.Model.extend({
-			defaults: {
-				matricula: -1,
-				nombreCompleto: '(Sin nombre)',
-				dga: '(Sin DGA)',
-			}
-		});
 		
 		apoderadosWidget.Apoderado = Backbone.Model.extend({
 			defaults: {
 				matricula: -1,
 				nombreCompleto: '(Sin nombre)',
-				dga: '(Sin DGA)',
+				idAutorizadoCNBV: -1,
+				claveDga: '(Sin DGA)',
 				validado: 0
 			}
 		});
@@ -257,7 +244,7 @@
 		});
 		
 		apoderadosWidget.ApoderadosView = Backbone.View.extend({
-			state: 'LISTO', //LISTO,DGA
+			state: 'LISTO', //LISTO,LISTO_YA_HAY_MATRICULA,LISTO_ERROR_MATRICULA,LISTO_DGA_NO_VALIDO,PROCESANDO,LISTO_PARA_AGREGAR
 			el: '#tbdyApoderados',
 			currentMatricula: '',
 			
@@ -268,11 +255,10 @@
 			},
 			
 			render: function() {
-				$('#divMsgMatriculaNoEncontrada').hide();
-				$('#divMatriculaSinDga').hide();
 				this.collection.each( function(item){
 					this.renderApoderado(item);
 				},this );
+				this.changeStateToListo();
 			},
 			renderApoderado: function(item){
 				var apoderadoView = new apoderadosWidget.ApoderadoView({model:item});
@@ -284,108 +270,176 @@
 				'blur #txtNewMatricula': 'buscarPorMatricula'
 			},
 
-			agregarApoderado: function(e) {
-				e.preventDefault();
-
-				var newMatricula = $('#txtNewMatricula').val();
-				var newNombre = $('#txtNewNombre').val();
-				var newDga = $('#selNewDGA').val();
-
-				var apoderado = new apoderadosWidget.Apoderado( { matricula: newMatricula, nombreCompleto: newNombre, dga: newDga } );
-
-				this.collection.add(apoderado);
-
+			//importante cambiar el estado con estos métodos
+			changeStateToListo: function(){
+				//mensajes
+				$('#divMsgMatriculaYaEnLista').hide();
+				$('#divMsgMatriculaNoEncontrada').hide();
+				$('#divMsgMatriculaSinDga').hide();
+				$('#divMsgAlMenosUnApoderado').hide();
+				$('#divMsgProcesandoApoderado').hide();
+				//campos
 				$('#txtNewMatricula').val('');
 				$('#txtNewNombre').val('');
 				$('#selNewDGA').html('');
 				$('#btnAdd').prop('disabled', true);
-				//$('#btnAdd').addClass('hidden');
+				//status
+				state = 'LISTO';
+			},
+			changeStateToListoYaHayMatricula: function(){
+				//mensajes
+				$('#divMsgMatriculaYaEnLista').show();
+				$('#divMsgMatriculaNoEncontrada').hide();
+				$('#divMsgMatriculaSinDga').hide();
+				$('#divMsgAlMenosUnApoderado').hide();
+				$('#divMsgProcesandoApoderado').hide();
+				//campos
+				//se deja el campo de nueva matricula tal cual
+				$('#txtNewNombre').val('');
+				$('#selNewDGA').html('');
+				$('#btnAdd').prop('disabled', true);
+				//status
+				state = 'LISTO_YA_HAY_MATRICULA';
+			},
+			changeStateToListoErrorMatricula: function(){
+				//mensajes
+				$('#divMsgMatriculaYaEnLista').hide();
+				$('#divMsgMatriculaNoEncontrada').show();
+				$('#divMsgMatriculaSinDga').hide();
+				$('#divMsgAlMenosUnApoderado').hide();
+				$('#divMsgProcesandoApoderado').hide();
+				//campos
+				//se deja el campo de nueva matricula tal cual
+				$('#txtNewNombre').val('');
+				$('#selNewDGA').html('');
+				$('#btnAdd').prop('disabled', true);
+				//status
+				state = 'LISTO_ERROR_MATRICULA';
+			},
+			changeStateToListoDgaNoValido: function(nombreCompleto){
+				//mensajes
+				$('#divMsgMatriculaYaEnLista').hide();
+				$('#divMsgMatriculaNoEncontrada').hide();
+				$('#divMsgMatriculaSinDga').show();
+				$('#divMsgAlMenosUnApoderado').hide();
+				$('#divMsgProcesandoApoderado').hide();
+				//campos
+				//se deja el campo de nueva matricula tal cual
+				$('#txtNewNombre').val(nombreCompleto);
+				$('#selNewDGA').html('');
+				$('#btnAdd').prop('disabled', true);
+				//status
+				state = 'LISTO_DGA_NO_VALIDO';
+			},
+			changeStateToProcesando: function(){
+				//mensajes
+				$('#divMsgMatriculaYaEnLista').hide();
+				$('#divMsgMatriculaNoEncontrada').hide();
+				$('#divMsgMatriculaSinDga').hide();
+				$('#divMsgAlMenosUnApoderado').hide();
+				$('#divMsgProcesandoApoderado').show();
+				
+				state = 'PROCESANDO';
+			},
+			changeStateToListoAgregar: function(apoderadoConDgas){
+				//mensajes
+				$('#divMsgMatriculaYaEnLista').hide();
+				$('#divMsgMatriculaNoEncontrada').hide();
+				$('#divMsgMatriculaSinDga').hide();
+				$('#divMsgAlMenosUnApoderado').hide();
+				$('#divMsgProcesandoApoderado').hide();
+				
+				$('#txtNewNombre').val(apoderadoConDgas.get('nombreCompleto'));
+				$('#selNewDGA').html('');
+
+
+				var dgas = apoderadoConDgas.get('autorizacionesCNBV');
+
+				
+				dgas.forEach(function(model){ 
+					$('#selNewDGA').append($("<option></option>").attr("value",model.idAutorizadoCNBV).text(model.claveDga));
+				});
+
+				$('#btnAdd').prop('disabled', false);
+				
+				state = 'LISTO_PARA_AGREGAR';
+			},
+			
+			//agregarApoderado: LISTOAGREGAR -> LISTO
+			agregarApoderado: function(e) {
+				e.preventDefault();
+
+				//captura los datos del formulario
+				var newMatricula = $('#txtNewMatricula').val();
+				var newNombre = $('#txtNewNombre').val();
+				var newIdAutorizado = $('#selNewDGA').val();
+				var newDga = $('#selNewDGA option:selected').text();
+				var apoderado = new apoderadosWidget.Apoderado( { matricula: newMatricula, nombreCompleto: newNombre, idAutorizadoCNBV: newIdAutorizado, claveDga: newDga } );
+
+				this.collection.add(apoderado);
+
+				//cambia a estado de "listo"
+				this.changeStateToListo();
 			},
 
 			buscarPorMatricula: function(e) {
 				e.preventDefault();
 
 				var newMatricula = $.trim($('#txtNewMatricula').val());
-
+				var yaExisteMatricula = false;
+				
 				if( newMatricula == '' )
 				{
-					$('#divMsgMatriculaNoEncontrada').hide();
-					$('#divMatriculaSinDga').hide();
-					//Matricula sin introducir
-					$('#txtNewMatricula').val('');
-					$('#txtNewNombre').val('');
-					$('#selNewDGA').html('');
-					$('#btnAdd').prop('disabled', true);
+					//cambia a estado de "listo"
+					this.changeStateToListo();
 				}
-				
-				else if( newMatricula == '111' ) //Aqui va una llamada ajax
-				{
-					$('#divMsgMatriculaNoEncontrada').hide();
-					$('#divMatriculaSinDga').hide();
-					
-					newNombre = 'PETRONILA PEREZ PUEBLA';
-					dgasDisponibles = ['DGA123','DGA234','DGA345'];
-
-					$('#txtNewNombre').val(newNombre);
-					$('#selNewDGA').html('');
-					$.each(dgasDisponibles, function(key, value) {
-						$('#selNewDGA').append($("<option></option>").attr(value,key).text(value));
-					});
-
-					$('#btnAdd').prop('disabled', false);
-				}
-
-				else if( newMatricula == '222' ) //Aqui va una llamada ajax
-				{
-					$('#divMsgMatriculaNoEncontrada').hide();
-					$('#divMatriculaSinDga').hide();
-					
-					newNombre = 'GERONIMO OSWALDO PEREZ BRISUELA';
-					dgasDisponibles = ['DGA999','DGA888','DGA777'];
-
-					$('#txtNewNombre').val(newNombre);
-					$('#selNewDGA').html('');
-					$.each(dgasDisponibles, function(key, value) {
-						$('#selNewDGA').append($("<option></option>").attr(value,key).text(value));
-					});
-
-					$('#btnAdd').prop('disabled', false);
-				}
-
-				else if( newMatricula == '333' )
-				{
-					//matricula encontrada, pero sin autorización CNBV (dga) vigente
-					$('#divMsgMatriculaNoEncontrada').hide();
-					$('#divMatriculaSinDga').show();
-
-					newNombre = 'ARMANDO DE LA TORRE ALZATE';
-
-					$('#txtNewNombre').val(newNombre);
-					$('#selNewDGA').html('');
-
-					$('#btnAdd').prop('disabled', true);
-				}
-				
 				else
 				{
-					//matricula no encontrada
-					$('#divMsgMatriculaNoEncontrada').show();
-					$('#divMatriculaSinDga').hide();
-					//$('#txtNewMatricula').val('');
-					$('#txtNewNombre').val('');
-					$('#selNewDGA').html('');
-					$('#btnAdd').prop('disabled', true);
+					this.collection.forEach( function(model){
+						if(model.get('matricula') == newMatricula)
+							yaExisteMatricula = true
+					} );
+					
+					if(yaExisteMatricula == true)
+						this.changeStateToListoYaHayMatricula();
+					else
+					{
+						var ApoderadoResponse = Backbone.Model.extend({urlRoot : '<g:createLink action="obtenerDatosMatriculaDgaValido"/>'});
+						var apoderadoResponse = new ApoderadoResponse({id: newMatricula});
+						var currentView = this;
+
+						apoderadoResponse.fetch({
+						    success: function(){
+	
+						    	//if(apoderadoResponse.get('autorizacionesCNBV'))
+						    	if(apoderadoResponse.get('numeroMatricula') == -1)
+						    	{
+						    		currentView.changeStateToListoErrorMatricula();
+						    	}
+						    	else if(apoderadoResponse.get('autorizacionesCNBV').length == 0)
+							    {
+							    	currentView.changeStateToListoDgaNoValido( apoderadoResponse.get('nombreCompleto') );
+							    }
+							    else
+							    {
+							    	currentView.changeStateToListoAgregar( apoderadoResponse );
+							    }
+						    }
+						});
+	
+						this.changeStateToProcesando();
+					}
 				}
 				
 			}
 		});
 
 		$(function(){
-			var apoderatosTest = [
+			/*var apoderatosTest = [
 				{ matricula: 1, nombreCompleto: 'PETRONILA PEREZ', dga: 'DGA-XXXX'},
 				{ matricula: 2, nombreCompleto: 'AZUL GARCIA', dga: 'DGA-XXXX'},
 				{ matricula: 3, nombreCompleto: 'JOHN DOE', dga: 'DGA-XXXX'},
-    		];
+    		];*/
 
     		new apoderadosWidget.ApoderadosView(apoderatosTest);
 		});

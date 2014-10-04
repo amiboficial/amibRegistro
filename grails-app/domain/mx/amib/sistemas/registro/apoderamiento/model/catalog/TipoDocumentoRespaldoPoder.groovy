@@ -12,6 +12,7 @@ class TipoDocumentoRespaldoPoder {
 
 	static mapping = {
 		table 't104_c_tpdocrespaldopoder'
+		cache true
 		
 		id generator: "assigned"
 		

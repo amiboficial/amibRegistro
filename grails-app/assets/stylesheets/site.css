@@ -1,4 +1,4 @@
-/* AMIB 2014 - ESTILO CSS APLICACIONES */
+/* AMIB 2014 - ESTILO CSS APLICACIONES - Ult.Mod. 02/10/2014 - v1.1 */
 
 body {
     /*padding-top: 50px;*/
@@ -140,4 +140,20 @@ navbar-default .navbar-nav > li > a:focus{
     
 .colorblack{
 	color:#000000
+}
+
+/* Mod. 02/10/2014 1.1 - Se agrega alert mas "pequeño" */
+
+.alert-small{
+	margin-top: 1px;
+	margin-bottom: 2px;
+	padding-top: 2px;
+	padding-bottom: 2px;
+	padding-right: 2px;
+	padding-left: 4px;
+}
+
+.invisibleFileUpload{
+	position: absolute;
+	opacity: 0;
 }

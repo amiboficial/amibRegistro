@@ -127,6 +127,8 @@ grails.plugin.reveng.excludeTables = [
 grails.plugins.twitterbootstrap.fixtaglib = true
 grails.plugins.twitterbootstrap.defaultBundle = 'bundle_bootstrap'
 
+mx.amib.sistemas.registro.tempDir = 'H:\\Temp\\amibRegistro\\'
+
 mx.amib.sistemas.catalogos.general.GrupoFinanciero.classname = 'mx.amib.sistemas.catalogos.general.model.catalog.GrupoFinanciero'
 mx.amib.sistemas.catalogos.general.Institucion.classname = 'mx.amib.sistemas.catalogos.general.model.catalog.Institucion'
 mx.amib.sistemas.expediente.Sustentante.classname = 'mx.amib.sistemas.expediente.model.Sustentante'

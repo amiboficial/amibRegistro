@@ -155,14 +155,7 @@
 	
 			<fieldset>
 				<legend>Documentos de respaldo</legend>
-				
-				<div id="divMsgMaxFileSize" class="alert alert-danger">
-					<span class="glyphicon glyphicon-ban-circle"></span> El archivo xxx rebasa los <strong>5</strong>MB.
-				</div>
-				<div id="divMsgNonCompatibleFile" class="alert alert-danger">
-					<span class="glyphicon glyphicon-ban-circle"></span> El formato de archivo <strong>no es compatible</strong>.
-				</div>
-				
+								
 				<table class="table">
 						<thead>
 							<tr>
@@ -171,17 +164,8 @@
 								<th style='width:18%'>...</th>
 							</tr>
 						</thead>
-						<tbody id="tbdyDocsRespaldo">
-							<tr>
-								<td>Acuse de recibo AMIB.FT.11</td>
-								<td>acuse.docx</td>
-								<td><button type="button" class="btn btn-info btn-xs">Descargar</button>&nbsp;<button type="button" class="btn btn-info btn-xs">Cargar archivo</button></td>
-							</tr>
-							<tr>
-								<td>Escrito de Apoderamiento con relación del personal AMIB.FT.l67</td>
-								<td>apoderamiento.pdf</td>
-								<td><button type="button" class="btn btn-info btn-xs">Descargar</button>&nbsp;<button type="button" class="btn btn-info btn-xs">Cargar archivo</button></td>
-							</tr>
+						<tbody id="tbdyDocs">
+
 						</tbody>
 				</table>
 			</fieldset>
@@ -193,6 +177,7 @@
 			</div>
 	
 		</form>
+		
 		<!-- INICIA: TEMPLATES UNDERSCORE PARA COMPONENTE DE APODERADOS -->
 		<script type="text/template" id="apoderadoTemplate">
 			<td>{{=matricula}}</td>
@@ -201,6 +186,7 @@
 			<td><button class="delete btn btn-danger btn-sm"><span class="glyphicon glyphicon-trash"></span> Borrar</button> </td>
 		</script>
 		<!-- FIN: TEMPLATES UNDERSCORE PARA COMPONENTE DE APODERADOS -->
+		
 		<!-- INICIA: SCRIPT PARA COMPONENTE DE APODERADOS -->
 		<script type="text/javascript">
 
@@ -440,11 +426,299 @@
 				{ matricula: 2, nombreCompleto: 'AZUL GARCIA', dga: 'DGA-XXXX'},
 				{ matricula: 3, nombreCompleto: 'JOHN DOE', dga: 'DGA-XXXX'},
     		];*/
-
+    		var apoderatosTest = []
+    		
     		new apoderadosWidget.ApoderadosView(apoderatosTest);
 		});
 		
 		</script>
 		<!-- FIN: SCRIPT PARA COMPONENTE DE APODERADOS -->
+		
+		<!-- INICIA: TEMPLATES UNDERSCORE PARA COMPONENTE DE DOCUMENTOS -->
+		
+		<script type="text/template" id="documentoTemplate_listoSinArchivo">
+			<td>{{=tipoDocumento}}</td>
+			<td>(Pendiente)</td>
+			<td>
+				<div style="float:left; margin-right:3px;">
+					<input type="file" style="width: 96px;" class="upload invisibleFileUpload btn btn-info btn-xs" name="archivo" id="archivo_{{=idTipoDocumento}}">
+					<button type="button" class="btn btn-info btn-xs">Cargar archivo</button>
+				</div>
+				<br/>
+				<div class="msgErrorTamMayor alert alert-small alert-danger">
+					<span class="glyphicon glyphicon-ban-circle"></span> El tamaño de archivo rebasa los <strong>5</strong>MB.
+				</div>
+				<div class="msgErrorTipo alert alert-small alert-danger">
+					<span class="glyphicon glyphicon-ban-circle"></span> El formato de archivo no es compatible.
+				</div>
+				<div class="msgError alert alert-small alert-danger">
+					<span class="glyphicon glyphicon-ban-circle"></span> Error desconocido.
+				</div>
+			</td>
+		</script>
+		<script type="text/template" id="documentoTemplate_listoPrecargado">
+			<td>{{=tipoDocumento}}</td>
+			<td>{{=nombreDocumento}}</td>
+			<td>
+				<button type="button" class="downloadPre btn btn-info btn-xs">Descargar</button>&nbsp;
+				<div style="float:left; margin-right:3px;">
+					<input type="file" style="width: 136px;" class="upload invisibleFileUpload btn btn-info btn-xs" name="archivo" id="archivo_{{=idTipoDocumento}}">
+					<button type="button" class="btn btn-info btn-xs">Cargar nuevo archivo</button>
+				</div>
+				<br/>
+				<div class="msgErrorTamMayor alert alert-small alert-danger">
+					<span class="glyphicon glyphicon-ban-circle"></span> El tamaño de archivo rebasa los <strong>5</strong>MB.
+				</div>
+				<div class="msgErrorTipo alert alert-small alert-danger">
+					<span class="glyphicon glyphicon-ban-circle"></span> El formato de archivo no es compatible.
+				</div>
+				<div class="msgError alert alert-small alert-danger">
+					<span class="glyphicon glyphicon-ban-circle"></span> Error desconocido.
+				</div>
+			</td>
+		</script>
+		<script type="text/template" id="documentoTemplate_listoCargado">
+			<td>{{=tipoDocumento}}</td>
+			<td>{{=nombreDocumento}}</td>
+			<td>
+				<button type="button" class="download btn btn-info btn-xs">Descargar</button>&nbsp;<button type="button" class="upload btn btn-info btn-xs">Cargar nuevo archivo</button>
+				<br/>
+				<div class="msgErrorTamMayor alert alert-small alert-danger">
+					<span class="glyphicon glyphicon-ban-circle"></span> El tamaño de archivo rebasa los <strong>5</strong>MB.
+				</div>
+				<div class="msgErrorTipo alert alert-small alert-danger">
+					<span class="glyphicon glyphicon-ban-circle"></span> El formato de archivo no es compatible.
+				</div>
+				<div class="msgError alert alert-small alert-danger">
+					<span class="glyphicon glyphicon-ban-circle"></span> Error desconocido.
+				</div>
+			</td>
+		</script>
+		<script type="text/template" id="documentoTemplate_procesando">
+			<td>{{=tipoDocumento}}</td>
+			<td>...</td>
+			<td><asset:image src="spinner_alert_info.gif"/> Procesando</td>
+		</script>
+		<!-- FIN: TEMPLATES UNDERSCORE PARA COMPONENTE DE DOCUMENTOS -->
+		
+		<!-- INICIA: SCRIPT PARA COMPONENTE DE DOCUMENTOS -->
+		<script type="text/javascript">
+		
+		var docsWidget = docsWidget || {};
+
+		docsWidget.LISTO = 0;
+		docsWidget.PROCESANDO = 1;
+		
+		docsWidget.SIN_ARCHIVO = 0;
+		docsWidget.CARGADO = 1;
+		docsWidget.PRECARGADO = 2; 
+		
+		docsWidget.NOERROR = 0;
+		docsWidget.ERROR = 1;
+		docsWidget.ERROR_TAM_MAYOR = 2;
+		docsWidget.ERROR_TIPO = 3;
+		
+		docsWidget.MSG_ERROR = 'Error al subir archivo';
+		docsWidget.MSG_ERROR_TAM_MAYOR = 'El archivo supera el tamaño permitido';
+		docsWidget.MSG_ERROR_TIPO = 'El formato del archivo no es compatible';
+		
+		docsWidget.Documento = Backbone.Model.extend({
+			defaults: {
+				id: -1,
+				
+				idTipoDocumento: -1,
+				tipoDocumento: '(Tipo Documento)',
+				
+				nombreDocumento: '(Nombre Documento)',
+				claveDocumento: '',
+				mimeType: '',
+				
+				lastErrors: [],
+				status: docsWidget.SIN_ARCHIVO,
+				uuidTemp: ''
+			}
+		});
+		
+		docsWidget.Documentos = Backbone.Collection.extend({
+			model: docsWidget.Documento
+		});
+		
+		docsWidget.DocumentoView = Backbone.View.extend({
+			state: docsWidget.LISTO, //LISTO, PROCESANDO
+			tagName: 'tr',
+			className: 'documentoRow',
+			uploadUrl: '<g:createLink action="subirArchivo"/>',
+			
+			//template: _.template( $('#documentoTemplate').html() ),
+			templateListoSinArchivo: _.template( $('#documentoTemplate_listoSinArchivo').html() ),
+			templateListoPrecargado: _.template( $('#documentoTemplate_listoPrecargado').html() ),
+			templateListoCargado: _.template( $('#documentoTemplate_listoCargado').html() ),
+			templateProcesando: _.template( $('#documentoTemplate_procesando').html() ),
+			
+			render : function() {
+				if( this.state == docsWidget.LISTO ){
+					if( this.model.get('status') == docsWidget.SIN_ARCHIVO ){
+						this.$el.html( this.templateListoSinArchivo( this.model.toJSON() ) );
+					}
+					else if ( this.model.get('status') == docsWidget.CARGADO ){
+						this.$el.html( this.templateListoPrecargado( this.model.toJSON() ) );
+					}
+					else if ( this.model.get('status') == docsWidget.PRECARGADO ){
+						this.$el.html( this.templateListoCargado( this.model.toJSON() ) );
+					}
+					
+					//mensajes de error
+					
+					this.$('.msgErrorTamMayor').hide();
+					this.$('.msgErrorTipo').hide();
+					this.$('.msgError').hide();
+					this.model.get('lastErrors').forEach(function(errstatus){
+						if(errstatus == docsWidget.ERROR_TAM_MAYOR)
+							this.$('.msgErrorTamMayor').show();
+						else if(errstatus == docsWidget.ERROR_TIPO)
+							this.$('.msgErrorTipo').show();
+						else 
+							this.$('.msgError').show();
+					}, this );
+
+				}
+				else if( this.state == docsWidget.PROCESANDO ){ 
+					
+					this.$el.html( this.templateProcesando( this.model.toJSON() ) );
+				}
+				
+				return this;
+			},
+			
+			events:{
+				'click .downloadPre':'descargarDocumentoPrecargado',
+				'click .download':'descargarDocumento',
+				'change .upload':'subirDocumento'
+			},
+			
+			//importante cambiar el estado con estos métodos
+			changeStateToListo: function(){
+				this.state = docsWidget.LISTO;
+				this.render();
+			},
+			changeStateToProcesando: function(){
+				this.state = docsWidget.PROCESANDO;
+				this.render();
+			},
+			
+			descargarDocumentoPrecargado: function(){
+				alert("DESCARGAR PRECARGADO - No implementado");
+			},
+			
+			descargarDocumento: function(){
+				alert("DESCARGAR - No implementado");
+			},
+			
+			subirDocumento: function(){
+				var contexto = this;
+				var idTipoDoc = this.model.get('idTipoDocumento');
+				
+				var file = document.getElementById('archivo_'+idTipoDoc).files[0];
+				var xhr = new XMLHttpRequest();
+				
+				
+				if (xhr.upload) {
+				
+					xhr.addEventListener('readystatechange', function(evnt){ 
+						if(xhr.readyState == 4 && xhr.status != 200 )
+						{
+							contexto.model.set('{lastErrors:[]}');
+							contexto.model.get('lastErrors').push(docsWidget.ERROR);
+							contexto.changeStateToListo();
+						}
+						else if(xhr.readyState == 4 && xhr.status == 200)
+						{
+							var respuestaJson = JSON.parse(xhr.responseText);
+							//alert(JSON.stringify(respuestaJson));
+							
+							contexto.model.set(
+								{uuidTemp: respuestaJson.uuidTemp, 
+								 nombreDocumento: respuestaJson.nombreDocumento,
+								 mimeType: respuestaJson.mimeType,
+								 status: docsWidget.CARGADO}
+							);
+							
+							contexto.changeStateToListo();
+						}
+							
+					}, false);
+				
+					xhr.open('POST', this.uploadUrl, true);
+					
+					try
+					{
+						var formData = new FormData();
+						formData.append("archivo", file);
+						formData.append("idTipoDocumento", idTipoDoc);
+						xhr.send(formData);
+						
+						this.changeStateToProcesando();
+					}
+					catch(err)
+					{
+						alert(err);
+						
+						this.model.set('{lastErrors:[]}');
+						this.model.get('lastErrors').push(docsWidget.ERROR);
+						this.changeStateToListo();
+					}
+				
+				}
+			},
+			
+			recibirRespuestaSubirDocumento: function(){
+				this.changeStateToListo();
+			},
+			
+			simulaError: function(){
+				this.model.set('{lastErrors:[]}');
+				this.model.get('lastErrors').push(docsWidget.ERROR_TAM_MAYOR);
+				this.changeStateToListo();
+			}
+		});
+		
+		docsWidget.DocumentosView = Backbone.View.extend({
+			
+			el: '#tbdyDocs',
+			
+			initialize: function( initialDocumentos ){
+				this.collection = new apoderadosWidget.Apoderados(initialDocumentos);
+				this.render();
+				this.listenTo( this.collection, 'add', this.renderApoderado );
+			},
+			
+			render: function() {
+				this.collection.each( function(item){
+					this.renderDocumento(item);
+				},this );
+				//this.changeStateToListo();
+			},
+			
+			renderDocumento: function(item){
+				var documentoView = new docsWidget.DocumentoView({model:item});
+				this.$el.append( documentoView.render().el );
+			},
+			
+		});
+		
+		$(function(){
+			/*var apoderatosTest = [
+				{ matricula: 1, nombreCompleto: 'PETRONILA PEREZ', dga: 'DGA-XXXX'},
+				{ matricula: 2, nombreCompleto: 'AZUL GARCIA', dga: 'DGA-XXXX'},
+				{ matricula: 3, nombreCompleto: 'JOHN DOE', dga: 'DGA-XXXX'},
+    		];*/
+    		var docsTest = [{id:1,idTipoDocumento:1, tipoDocumento: 'Escrito de Apoderamiento con relación del personal AMIB.FT.16', nombreDocumento: '', status: docsWidget.SIN_ARCHIVO, lastErrors: [] },
+							{id:2,idTipoDocumento:2, tipoDocumento: 'Acuse de recibo AMIB.FT.11', nombreDocumento: '', status: docsWidget.SIN_ARCHIVO, lastErrors: [] }]
+    		
+    		new docsWidget.DocumentosView(docsTest);
+		});
+		
+		</script>
+		<!-- FIN: SCRIPT PARA COMPONENTE DE DOCUMENTOS -->
 	</body>
 </html>

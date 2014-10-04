@@ -11,6 +11,7 @@ class EstatusSugerencia {
 
 	static mapping = {
 		table 't203_c_stsugerencia'
+		cache true
 		
 		id generator: "assigned"
 		

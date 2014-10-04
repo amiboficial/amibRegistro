@@ -12,6 +12,7 @@ class TipoDocumentoRespaldoRevocacion {
 
 	static mapping = {
 		table 't108_c_tpdocrespaldorevoc'
+		cache true
 		
 		id generator: "assigned"
 		

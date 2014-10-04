@@ -1,14 +1,13 @@
-package mx.amib.sistemas.registro.entidadFinanciera.service
+package mx.amib.sistemas.registro.apoderado.service
 
-import mx.amib.sistemas.registro.apoderado.service.EntidadFinancieraService;
 import grails.test.mixin.TestFor
 import spock.lang.Specification
 
 /**
  * See the API for {@link grails.test.mixin.services.ServiceUnitTestMixin} for usage instructions
  */
-@TestFor(EntidadFinancieraService)
-class EntidadFinancieraServiceSpec extends Specification {
+@TestFor(DocumentoService)
+class DocumentoServiceSpec extends Specification {
 
     def setup() {
     }

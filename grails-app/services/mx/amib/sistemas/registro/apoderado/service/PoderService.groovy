@@ -1,4 +1,4 @@
-package mx.amib.sistemas.registro.apoderamiento.service
+package mx.amib.sistemas.registro.apoderado.service
 
 import grails.transaction.Transactional
 

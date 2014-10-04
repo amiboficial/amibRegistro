@@ -3,9 +3,15 @@ package mx.amib.sistemas.registro.apoderamiento.controller
 import static org.springframework.http.HttpStatus.*
 import mx.amib.sistemas.registro.apoderado.service.ApoderadoService
 import mx.amib.sistemas.registro.apoderado.service.ApoderadoTO
+import mx.amib.sistemas.registro.apoderado.service.DocumentoService
+import mx.amib.sistemas.registro.apoderado.service.DocumentoTO
+import mx.amib.sistemas.registro.apoderado.service.EntidadFinancieraService
+import mx.amib.sistemas.registro.apoderado.service.ClaseDocumento
 import mx.amib.sistemas.registro.apoderamiento.model.Poder
-import mx.amib.sistemas.registro.entidadFinanciera.service.EntidadFinancieraService
+
 import org.codehaus.groovy.grails.web.json.JSONObject
+import org.springframework.web.multipart.commons.CommonsMultipartFile
+
 import grails.converters.JSON
 import grails.transaction.Transactional
 
@@ -17,6 +23,7 @@ class PoderController {
 	//servicios
 	EntidadFinancieraService entidadFinancieraService
 	ApoderadoService apoderadoService
+	DocumentoService documentoService
 	
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
@@ -28,6 +35,7 @@ class PoderController {
     }
 
     def create() {
+		
 		print entidadFinancieraService.obtenerGrupoFinanciero(4).nombre
 		
         respond new Poder(params)
@@ -126,5 +134,15 @@ class PoderController {
 		}
 		
 		render apoderado as JSON
+	}
+	
+	def subirArchivo(){
+		CommonsMultipartFile uploadFile = params.archivo
+		int tipoDocumento = params.int('idTipoDocumento')
+		DocumentoTO doc = null
+		
+		doc = documentoService.guardarDocumentoTemp(session.id,uploadFile,tipoDocumento,ClaseDocumento.PODER)
+		
+		render doc as JSON
 	}
 }

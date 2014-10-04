@@ -1,5 +1,6 @@
 package mx.amib.sistemas.registro.apoderamiento.service
 
+import mx.amib.sistemas.registro.apoderado.service.PoderService;
 import grails.test.mixin.TestFor
 import spock.lang.Specification
 

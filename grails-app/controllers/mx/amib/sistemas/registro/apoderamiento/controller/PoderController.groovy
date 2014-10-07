@@ -8,6 +8,9 @@ import mx.amib.sistemas.registro.apoderado.service.DocumentoTO
 import mx.amib.sistemas.registro.apoderado.service.EntidadFinancieraService
 import mx.amib.sistemas.registro.apoderado.service.ClaseDocumento
 import mx.amib.sistemas.registro.apoderamiento.model.Poder
+import mx.amib.sistemas.registro.external.catalgos.service.SepomexService
+import mx.amib.sistemas.registro.notario.service.NotarioService
+import mx.amib.sistemas.registro.apoderado.service.PoderService
 
 import org.codehaus.groovy.grails.web.json.JSONObject
 import org.springframework.web.multipart.commons.CommonsMultipartFile
@@ -24,6 +27,9 @@ class PoderController {
 	EntidadFinancieraService entidadFinancieraService
 	ApoderadoService apoderadoService
 	DocumentoService documentoService
+	SepomexService sepomexService
+	NotarioService notarioService
+	PoderService poderService
 	
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
@@ -35,10 +41,9 @@ class PoderController {
     }
 
     def create() {
-		
-		print entidadFinancieraService.obtenerGrupoFinanciero(4).nombre
-		
-        respond new Poder(params)
+        respond new Poder(params), model:[entidadFederativaList: sepomexService.obtenerEntidadesFederativas(), 
+											tipoDocumentoList: poderService.obtenerListadoTipoDocumentoRespaldoPoder(),
+											entidadFinancieraInstance: entidadFinancieraService.obtenerGrupoFinanciero(5)]
     }
 
     @Transactional
@@ -119,6 +124,33 @@ class PoderController {
             '*'{ render status: NOT_FOUND }
         }
     }
+	
+	// "OK","NOT_FOUND","NOT_VALID_INPUT"
+	def obtenerNombreNotario(){
+		String strIdEntidadFederativa = params.'idEntidadFederativa'
+		String strNumeroNotario = params.'numeroNotario'
+		
+		if(strIdEntidadFederativa.isInteger() && strNumeroNotario.isInteger()){
+			def notario = notarioService.obtenerNotario(strIdEntidadFederativa.toInteger(),strNumeroNotario.toInteger())
+			
+			if(notario != null)
+			{
+				String nombreCompletoNotario = notario.nombre + ' ' + notario.apellido1 + ' ' + notario.apellido2
+				def res = [ status: 'OK', id: notario.id, nombreCompleto: nombreCompletoNotario ]
+				render res as JSON
+			}
+			else
+			{
+				def res = [ status: 'NOT_FOUND', id: -1, nombreCompleto: '' ]
+				render res as JSON
+			}
+		}
+		else
+		{
+			def res = [ status: 'NOT_VALID_INPUT', id: -1, nombreCompleto: '' ]
+			render res as JSON
+		}
+	}
 	
 	def obtenerDatosMatriculaDgaValido(int id){
 		//int numeroMatricula = (params.'numeroMatricula').toInteger()

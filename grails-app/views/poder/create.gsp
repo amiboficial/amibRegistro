@@ -14,8 +14,16 @@
 	
 		<h1><strong>Alta de poder</strong></h1>
 	
-		<form class="form-horizontal" role="form">
+		<form id="frmApp" class="form-horizontal" role="form">
 
+			<div id="divMsgErrorEnCampos" class="alert alert-danger">
+				<span class="glyphicon glyphicon-ban-circle"></span> Datos no válidos. Revise los campos marcados en rojo.
+			</div>
+			
+			<div id="divMsgErrorServidor" class="alert alert-danger">
+				Mensajes de error de servidor.
+			</div>
+		
 			<fieldset>
 				<legend>Datos del representante legal</legend>
 				
@@ -24,7 +32,7 @@
 		            	<g:message code="poder.representanteLegalNombre.label" default="Nombre" /><span class="required-indicator">*</span>
 					</label>
 		            <div class="col-md-9 col-sm-9">
-		            	<g:textField class="form-control" name="representanteLegalNombre" required="" value="${poderInstance?.representanteLegalNombre}" />
+		            	<g:textField id="txtRepLegalNom" maxlength="100" class="form-control" name="representanteLegalNombre" required="" value="${poderInstance?.representanteLegalNombre}" />
 		            </div>
 				</div>
 				<div class="form-group">
@@ -32,13 +40,13 @@
 		            	<g:message code="poder.representanteLegalApellido1.label" default="Primer apellido" /><span class="required-indicator">*</span>
 					</label>
 		            <div class="col-md-3 col-sm-3">
-		            	<g:textField class="form-control" name="representanteLegalApellido1" required="" value="${poderInstance?.representanteLegalApellido1}" />
+		            	<g:textField id="txtAp1" maxlength="80" class="form-control" name="representanteLegalApellido1" required="" value="${poderInstance?.representanteLegalApellido1}" />
 		            </div>
 		            <label class="col-md-3 col-sm-3 control-label">
 		            	<g:message code="poder.representanteLegalApellido2.label" default="Segundo apellido" /><span class="required-indicator">*</span>						
 					</label>
 		            <div class="col-md-3 col-sm-3">
-		            	<g:textField class="form-control" name="representanteLegalApellido2" required="" value="${poderInstance?.representanteLegalApellido2}" />
+		            	<g:textField id="txtAp2" maxlength="80" class="form-control" name="representanteLegalApellido2" required="" value="${poderInstance?.representanteLegalApellido2}" />
 		            </div>
 				</div>
 				
@@ -52,7 +60,7 @@
 		            	<g:message code="poder.nombreGrupoFinancieroOrInstituto.label" default="Nombre" /><span class="required-indicator">*</span>
 					</label>
 		            <div class="col-md-9 col-sm-9">
-		            	<g:textField class="form-control" name="nombreGrupoFinancieroOrInstituto" required="" value="${poderInstance?.representanteLegalNombre}" />
+		            	<g:textField class="form-control" name="nombreGrupoFinancieroOrInstituto" required="" value="${entidadFinancieraInstance?.nombre}" disabled="disabled"/>
 		            </div>
 				</div>
 			</fieldset>
@@ -63,16 +71,16 @@
 				
 				<div class="form-group">
 					<label class="col-md-2 col-sm-3 control-label">
-		            	<g:message code="poder.representanteLegalApellido1.label" default="Numero de escritura" /><span class="required-indicator">*</span>
+		            	<g:message code="poder.numeroEscritura.label" default="Numero de escritura" /><span class="required-indicator">*</span>
 					</label>
-		            <div class="col-md-3 col-sm-3">
-		            	<g:textField class="form-control" name="representanteLegalApellido1" required="" value="${poderInstance?.representanteLegalApellido1}" />
+		            <div class="col-md-2 col-sm-2">
+		            	<g:textField id="txtPdrNumEscrit" maxlength="10" class="form-control" name="numeroEscritura" required="" value="${poderInstance?.numeroEscritura}" />
 		            </div>
 		            <label class="col-md-3 col-sm-3 control-label">
-		            	<g:message code="poder.representanteLegalApellido2.label" default="Fecha de aporderamiento" /><span class="required-indicator">*</span>						
+		            	<g:message code="poder.fechaApoderamiento.label" default="Fecha de aporderamiento" /><span class="required-indicator">*</span>						
 					</label>
-		            <div class="col-md-3 col-sm-3">
-		            	<g:textField class="form-control" name="representanteLegalApellido2" required="" value="${poderInstance?.representanteLegalApellido2}" />
+		            <div class="col-md-4 col-sm-4">
+						<g:datePicker name="fechaApoderamiento" value="${poderInstance?.fechaApoderamiento}" default="noSelection" noSelection="${['null':'-Seleccione-']}" precision="day" relativeYears="${-10..0}"/>
 		            </div>
 				</div>
 				
@@ -81,28 +89,44 @@
 	
 			<fieldset>
 				<legend>Datos del notario</legend>
+
+					<div id="divMsgProcesandoNotario" class="alert alert-info">
+						<asset:image src="spinner_alert_info.gif"/> <strong>Procesando datos, espere un momento</strong>.
+					</div>
+					<div id="divMsgErrorProcesandoNotario" class="alert alert-danger">
+						<span class="glyphicon glyphicon-ban-circle"></span> Ha habído un error al procesar la petición.
+					</div>
+					<div id="divMsgNoEncontradoNotario" class="alert alert-danger">
+						<span class="glyphicon glyphicon-ban-circle"></span> No se encontraron datos de notario.
+					</div>
+					<div id="divMsgDatoNoValidoNotario" class="alert alert-danger">
+						<span class="glyphicon glyphicon-ban-circle"></span> Datos no válidos, introduzca únicamente números.
+					</div>
 				
-				<div class="form-group">
+				<div id="divNotario" class="form-group">
 					<label class="col-md-2 col-sm-3 control-label">
-		            	<g:message code="poder.representanteLegalApellido1.label" default="Número" /><span class="required-indicator">*</span>
+		            	<g:message code="poder.notario.numero.label" default="Número" /><span class="required-indicator">*</span>
 					</label>
 		            <div class="col-md-2 col-sm-2">
-		            	<g:textField class="form-control" name="representanteLegalApellido1" required="" value="${poderInstance?.representanteLegalApellido1}" />
+		            	<g:textField id="txtNumNotario" maxlength="10" class="form-control" name="auxparam.numeroNotario" required="" value="${poderInstance?.notario?.numeroNotario}" />
 		            </div>
 		            <label class="col-md-3 col-sm-3 control-label">
-		            	<g:message code="poder.representanteLegalApellido2.label" default="Entidad Federativa" /><span class="required-indicator">*</span>						
+		            	<g:message code="poder.notario.entidadFederativa.label" default="Entidad Federativa" /><span class="required-indicator">*</span>						
 					</label>
 		            <div class="col-md-4 col-sm-4">
-		            	<g:textField class="form-control" name="representanteLegalApellido2" required="" value="${poderInstance?.representanteLegalApellido2}" />
-		            </div>
+						<g:select id="selNotarioEntidadFederativa" class="form-control" name='auxparam.notarioIdEntidadFederativa' value="${poderInstance?.notario?.idEntidadFederativa}"
+							noSelection="${['null':'-Seleccione-']}"
+							from='${entidadFederativaList}'
+							optionKey="id" optionValue="nombre"></g:select>
+					</div>
 				</div>
 				
 				<div class="form-group">
 					<label class="col-md-2 col-sm-3 control-label">
-		            	<g:message code="poder.nombreGrupoFinancieroOrInstituto.label" default="Nombre" /><span class="required-indicator">*</span>
+		            	<g:message code="poder.notario.nombreCompletro.label" default="Nombre" /><span class="required-indicator">*</span>
 					</label>
 		            <div class="col-md-9 col-sm-9">
-		            	<g:textField class="form-control" name="representanteLegalNombre" required="" value="${poderInstance?.representanteLegalNombre}" />
+		            	<g:textField id="nombreCompletoNotario" class="form-control" name="auxparam.nombreCompletoNotario" required="" disabled="disabled" />
 		            </div>
 				</div>
 				
@@ -172,7 +196,7 @@
 			
 			<div class="form-group">
 				<div class="col-lg-offset-5 col-md-offset-5 col-md-2 col-sm-2">
-					<button type="button" class="btn btn-primary btn-lg btn-block">Dar de alta el poder</button>
+					<button id="btnSubmit" type="button" class="btn btn-primary btn-lg btn-block">Aceptar</button>
 				</div>
 			</div>
 	
@@ -712,13 +736,227 @@
 				{ matricula: 2, nombreCompleto: 'AZUL GARCIA', dga: 'DGA-XXXX'},
 				{ matricula: 3, nombreCompleto: 'JOHN DOE', dga: 'DGA-XXXX'},
     		];*/
-    		var docsTest = [{id:1,idTipoDocumento:1, tipoDocumento: 'Escrito de Apoderamiento con relación del personal AMIB.FT.16', nombreDocumento: '', status: docsWidget.SIN_ARCHIVO, lastErrors: [] },
-							{id:2,idTipoDocumento:2, tipoDocumento: 'Acuse de recibo AMIB.FT.11', nombreDocumento: '', status: docsWidget.SIN_ARCHIVO, lastErrors: [] }]
-    		
+			
+			var docsTest = [<g:each in="${tipoDocumentoList}">
+								{id: -${it.id},idTipoDocumento: ${it.id}, tipoDocumento: '${it.descripcion}', nombreDocumento: '', status: docsWidget.SIN_ARCHIVO, lastErrors: [] },
+							</g:each>]
     		new docsWidget.DocumentosView(docsTest);
 		});
 		
 		</script>
 		<!-- FIN: SCRIPT PARA COMPONENTE DE DOCUMENTOS -->
+		
+		<!-- INICIO: SCRIPT PARA COMPONENTE DE NOTARIO -->
+		<script type="text/javascript">
+		
+		var notarioWidget = notarioWidget || {};
+		
+		notarioWidget.LISTO = 0;
+		notarioWidget.PROCESANDO = 1;
+		
+		notarioWidget.ERROR = 0;
+		notarioWidget.ERROR_NOT_FOUND = 1;
+		notarioWidget.ERROR_NOT_VALID_INPUT = 2;
+		
+		notarioWidget.NotarioView = Backbone.View.extend({
+			el: "#divNotario",
+			errors: [],
+			state: notarioWidget.LISTO,
+			ajaxUrl: '<g:createLink action="obtenerNombreNotario"/>',
+			
+			initialize: function(){
+				this.render();
+				$('#divMsgProcesandoNotario').hide();
+				$('#divMsgErrorProcesandoNotario').hide();
+				$('#divMsgNoEncontradoNotario').hide();
+				$('#divMsgDatoNoValidoNotario').hide();
+			},
+			
+			render: function() {
+				if(this.state == notarioWidget.PROCESANDO){
+					$('#divMsgProcesandoNotario').show();
+					$('#divMsgErrorProcesandoNotario').hide();
+					$('#divMsgNoEncontradoNotario').hide();
+					$('#divMsgDatoNoValidoNotario').hide();
+				}
+				else{
+					$('#divMsgProcesandoNotario').hide();
+					$('#divMsgErrorProcesandoNotario').hide();
+					$('#divMsgNoEncontradoNotario').hide();
+					$('#divMsgDatoNoValidoNotario').hide();
+					
+					if (_.size(this.errors) == 0)
+					{
+						$('#nombreCompletoNotario').val(this.model);
+					}
+					else
+					{
+						this.model = '';
+						$('#nombreCompletoNotario').val('');
+						_.each(this.errors, function(err){
+							if(err == notarioWidget.ERROR){
+								$('#divMsgErrorProcesandoNotario').show();
+							}
+							else if(err == notarioWidget.ERROR_NOT_FOUND){
+								$('#divMsgNoEncontradoNotario').show();
+							}
+							else if(err == notarioWidget.ERROR_NOT_VALID_INPUT){
+								$('#divMsgDatoNoValidoNotario').show();
+							}
+						}, this);
+					}
+				}
+			},
+			
+			events:{
+				'blur #txtNumNotario': 'buscarNotario',
+				'change #selNotarioEntidadFederativa': 'buscarNotario',
+			},
+			
+			buscarNotario: function(e) {
+				e.preventDefault();
+				
+				var numNotario = $('#txtNumNotario').val();
+				var idEntidadFed = $('#selNotarioEntidadFederativa').val();
+				var _url = this.ajaxUrl + '?idEntidadFederativa=' + idEntidadFed + '&numeroNotario=' + numNotario;
+				var contexto = this;
+				this.errors = []
+				
+				//valida antes de enviar solicitud
+				if( isNaN( $.trim(numNotario) ) )
+				{
+					contexto.errors.push(notarioWidget.ERROR_NOT_VALID_INPUT);
+					contexto.changeStateToListo();
+				}
+				else if($.trim(numNotario) != '' && idEntidadFed != 'null')
+				{
+					$.ajax({
+						dataType: "json",
+						url: _url,
+						//data: data,
+						success: function( data ){
+							if(data.status == "OK")
+							{
+								contexto.model = data.nombreCompleto;
+								contexto.changeStateToListo();
+							}
+							else if(data.status == "NOT_FOUND")
+							{
+								contexto.errors.push(notarioWidget.ERROR_NOT_FOUND);
+								contexto.changeStateToListo();
+							}
+							else if(data.status == "NOT_VALID_INPUT")
+							{
+								contexto.errors.push(notarioWidget.ERROR_NOT_VALID_INPUT);
+								contexto.changeStateToListo();
+							}
+							else
+							{
+								contexto.errors.push(notarioWidget.ERROR);
+								contexto.changeStateToListo();
+							}
+						}
+					});
+					this.changeStateToProcesando();
+				}
+				else
+				{
+					this.model = '';
+					this.changeStateToListo();
+				}
+				//alert(numNotario + ' ' + idEntidadFed)
+			},
+			
+			changeStateToListo: function(){
+				this.state = notarioWidget.LISTO;
+				this.render();
+			},
+			changeStateToProcesando: function(){
+				this.state = notarioWidget.PROCESANDO;
+				this.render();
+			}
+		});
+		
+		$(function(){
+			new notarioWidget.NotarioView();
+		});
+		</script>
+		<!-- FIN: SCRIPT PARA COMPONENTE DE NOTARIO -->
+		
+		<!-- INICIO: SCRIPT PARA VISTA -->
+		<script type="text/javascript">
+		
+		$( "#btnSubmit" ).click(function() {
+			$( "#frmApp" ).submit();
+		});
+		
+		$('#frmApp').submit( function(event){			
+			//validaciones
+			var valid = true;
+			var errorMsg = [];
+			
+			if($.trim($('#txtRepLegalNom').val()) == ''){
+				errorMsg.push({ errName: 'Campo requerido', errField: 'Nombre (Representante Legal)' });
+				valid = false;
+			}
+			if($.trim($('#txtAp1').val()) == ''){
+				errorMsg.push({ errName: 'Campo requerido', errField: 'Primer Apellido (Representante Legal)' });
+				valid = false;
+			}
+			if($.trim($('#txtAp2').val()) == ''){
+				errorMsg.push({ errName: 'Campo requerido', errField: 'Segundo Apellido (Representante Legal)' });
+				valid = false;
+			}
+			if($.trim($('#txtPdrNumEscrit').val()) == ''){
+				errorMsg.push({ errName: 'Campo requerido', errField: 'Numero de escritura' });
+				valid = false;
+			}
+			if( isNaN($.trim($('#txtPdrNumEscrit').val())) == true ){
+				errorMsg.push({ errName: 'Formato incorrecto, debe ser numérico entero', errField: 'Numero de escritura' });
+				valid = false;
+			}
+			if($('#fechaApoderamiento_day').val() == 'null'){
+				errorMsg.push({ errName: 'Campo requerido', errField: 'Fecha de apoderamiento (día)' });
+				valid = false;
+			}
+			if($('#fechaApoderamiento_month').val() == 'null'){
+				errorMsg.push({ errName: 'Campo requerido', errField: 'Fecha de apoderamiento (mes)' });
+				valid = false;
+			}
+			if($('#fechaApoderamiento_year').val() == 'null'){
+				errorMsg.push({ errName: 'Campo requerido', errField: 'Fecha de apoderamiento (año)' });
+				valid = false;
+			}
+			
+			alert(JSON.stringify(errorMsg));
+			
+			if(valid == false)
+				event.preventDefault();
+		});
+		
+		$(function(){
+			$('#divMsgErrorEnCampos').hide();
+			$('divMsgErrorServidor').hide();
+		});
+		
+		</script>
+		<!-- FIN: SCRIPT PARA VISTA-->
+		
+		<!-- INICIO: CSS FIXES -->
+		<script type="text/javascript">
+			$('#fechaApoderamiento_day').addClass( 'form-control' );
+			$('#fechaApoderamiento_month').addClass( 'form-control' );
+			$('#fechaApoderamiento_year').addClass( 'form-control' );
+			$('#fechaApoderamiento_day').addClass( 'col-md-4' );
+			$('#fechaApoderamiento_month').addClass( 'col-md-4' );
+			$('#fechaApoderamiento_year').addClass( 'col-md-4' );
+			//$('#fechaApoderamiento_day').addClass( 'col-sm-4' );
+			//$('#fechaApoderamiento_month').addClass( 'col-sm-4' );
+			//$('#fechaApoderamiento_year').addClass( 'col-sm-4' );
+			$('#fechaApoderamiento_day').css( 'width', '25%' );
+			$('#fechaApoderamiento_month').css( 'width', '40%' );
+			$('#fechaApoderamiento_year').css( 'width', '35%' );
+		</script>
+		<!-- FIN: CSS FIXES -->
 	</body>
 </html>

@@ -4,6 +4,7 @@ import grails.transaction.Transactional
 import javax.servlet.http.HttpSession
 import java.util.UUID
 import java.io.FileOutputStream
+import java.io.File
 import org.springframework.web.multipart.commons.CommonsMultipartFile
 
 import mx.amib.sistemas.registro.apoderamiento.model.catalog.TipoDocumentoRespaldoPoder
@@ -15,6 +16,23 @@ class DocumentoService {
 	def grailsApplication
 	
 	private static TreeMap<String,DocumentoTO> documentosTemporales = new TreeMap<String,DocumentoTO>()
+	
+	ArchivoTO obtenerArchivoDocumentoTemp(String uuid){
+
+		ArchivoTO archivo = new ArchivoTO()
+		DocumentoTO doc = null
+		
+		if(!this.documentosTemporales.containsKey(uuid)){
+			archivo = null
+		}
+		else{
+			archivo.file = new File(grailsApplication.config.mx.amib.sistemas.registro.tempDir + uuid)
+			archivo.mimeType = this.documentosTemporales.get(uuid).mimeType
+			archivo.nombre = this.documentosTemporales.get(uuid).nombreDocumento
+		}
+		
+		return archivo
+	}
 	
     DocumentoTO guardarDocumentoTemp(String sessionId, CommonsMultipartFile documentoArchivo, int idTipoDocumento, ClaseDocumento claseDocumento) {
 		DocumentoTO documento = new DocumentoTO()
@@ -108,6 +126,12 @@ class DocumentoTO{
 	String nombreDocumento
 	String claveDocumento
 	String mimeType
+}
+
+class ArchivoTO{
+	String mimeType
+	String nombre
+	File file
 }
 
 enum ClaseDocumento{

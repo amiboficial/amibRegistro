@@ -6,28 +6,27 @@
 		<title>Registro 0.1 - Alta de poder</title>
 	</head>
 	<body>
-	
+		<a id="anchorForm"></a>
 		<ul class="breadcrumb">
-	           <li><a href="#">Servicios</a><span class="divider"></span></li>
-	           <li><a href="#">Alta de poder</a></li>
+			<li><a href="#">Servicios</a><span class="divider"></span></li>
+			<li><a href="#">Alta de poder</a></li>
 		</ul>
 	
-		<h1><strong>Alta de poder</strong></h1>
-	
-		<form id="frmApp" class="form-horizontal" role="form">
+		<h2><strong>Alta de poder</strong></h2>
 
+		<form id="frmApp" class="form-horizontal" role="form">
+			
 			<div id="divMsgErrorEnCampos" class="alert alert-danger">
 				<span class="glyphicon glyphicon-ban-circle"></span> Datos no válidos. Revise los campos marcados en rojo.
 			</div>
-			
 			<div id="divMsgErrorServidor" class="alert alert-danger">
 				Mensajes de error de servidor.
 			</div>
-		
+			
 			<fieldset>
 				<legend>Datos del representante legal</legend>
 				
-				<div class="form-group">
+				<div id="divRepLegalNom" class="form-group">
 					<label class="col-md-2 col-sm-3 control-label">
 		            	<g:message code="poder.representanteLegalNombre.label" default="Nombre" /><span class="required-indicator">*</span>
 					</label>
@@ -35,19 +34,22 @@
 		            	<g:textField id="txtRepLegalNom" maxlength="100" class="form-control" name="representanteLegalNombre" required="" value="${poderInstance?.representanteLegalNombre}" />
 		            </div>
 				</div>
-				<div class="form-group">
+
+				<div id="divAp1" class="form-group">
 					<label class="col-md-2 col-sm-3 control-label">
-		            	<g:message code="poder.representanteLegalApellido1.label" default="Primer apellido" /><span class="required-indicator">*</span>
+						<g:message code="poder.representanteLegalApellido1.label" default="Primer apellido" /><span class="required-indicator">*</span>
 					</label>
-		            <div class="col-md-3 col-sm-3">
-		            	<g:textField id="txtAp1" maxlength="80" class="form-control" name="representanteLegalApellido1" required="" value="${poderInstance?.representanteLegalApellido1}" />
-		            </div>
-		            <label class="col-md-3 col-sm-3 control-label">
-		            	<g:message code="poder.representanteLegalApellido2.label" default="Segundo apellido" /><span class="required-indicator">*</span>						
+					<div class="col-md-9 col-sm-9">
+						<g:textField id="txtAp1" maxlength="80" class="form-control" name="representanteLegalApellido1" required="" value="${poderInstance?.representanteLegalApellido1}" />
+					</div>
+				</div>
+				<div id="divAp2" class="form-group">
+					<label class="col-md-2 col-sm-3 control-label">
+						<g:message code="poder.representanteLegalApellido2.label" default="Segundo apellido" /><span class="required-indicator">*</span>						
 					</label>
-		            <div class="col-md-3 col-sm-3">
-		            	<g:textField id="txtAp2" maxlength="80" class="form-control" name="representanteLegalApellido2" required="" value="${poderInstance?.representanteLegalApellido2}" />
-		            </div>
+					<div class="col-md-9 col-sm-9">
+						<g:textField id="txtAp2" maxlength="80" class="form-control" name="representanteLegalApellido2" required="" value="${poderInstance?.representanteLegalApellido2}" />
+					</div>
 				</div>
 				
 			</fieldset>
@@ -70,18 +72,22 @@
 				<legend>Datos del poder</legend>
 				
 				<div class="form-group">
-					<label class="col-md-2 col-sm-3 control-label">
-		            	<g:message code="poder.numeroEscritura.label" default="Numero de escritura" /><span class="required-indicator">*</span>
-					</label>
-		            <div class="col-md-2 col-sm-2">
-		            	<g:textField id="txtPdrNumEscrit" maxlength="10" class="form-control" name="numeroEscritura" required="" value="${poderInstance?.numeroEscritura}" />
-		            </div>
-		            <label class="col-md-3 col-sm-3 control-label">
-		            	<g:message code="poder.fechaApoderamiento.label" default="Fecha de aporderamiento" /><span class="required-indicator">*</span>						
-					</label>
-		            <div class="col-md-4 col-sm-4">
-						<g:datePicker name="fechaApoderamiento" value="${poderInstance?.fechaApoderamiento}" default="noSelection" noSelection="${['null':'-Seleccione-']}" precision="day" relativeYears="${-10..0}"/>
-		            </div>
+					<div id="divPdrNumEscrit">
+						<label id="lblPdrNumEscrit" class="col-md-2 col-sm-3 control-label">
+							<g:message code="poder.numeroEscritura.label" default="Numero de escritura" /><span class="required-indicator">*</span>
+						</label>
+						<div class="col-md-2 col-sm-2">
+							<g:textField id="txtPdrNumEscrit" maxlength="10" class="has-error form-control" name="numeroEscritura" required="" value="${poderInstance?.numeroEscritura}" />
+						</div>
+					</div>
+					<div id="divFhApod">
+						<label class="col-md-3 col-sm-3 control-label">
+							<g:message code="poder.fechaApoderamiento.label" default="Fecha de aporderamiento" /><span class="required-indicator">*</span>						
+						</label>
+						<div class="col-md-4 col-sm-4">
+							<g:datePicker name="fechaApoderamiento" value="${poderInstance?.fechaApoderamiento}" default="none" noSelection="${['null':'-Seleccione-']}" precision="day" relativeYears="${-10..0}"/>
+						</div>
+					</div>
 				</div>
 				
 			</fieldset>
@@ -104,20 +110,24 @@
 					</div>
 				
 				<div id="divNotario" class="form-group">
-					<label class="col-md-2 col-sm-3 control-label">
-		            	<g:message code="poder.notario.numero.label" default="Número" /><span class="required-indicator">*</span>
-					</label>
-		            <div class="col-md-2 col-sm-2">
-		            	<g:textField id="txtNumNotario" maxlength="10" class="form-control" name="auxparam.numeroNotario" required="" value="${poderInstance?.notario?.numeroNotario}" />
-		            </div>
-		            <label class="col-md-3 col-sm-3 control-label">
-		            	<g:message code="poder.notario.entidadFederativa.label" default="Entidad Federativa" /><span class="required-indicator">*</span>						
-					</label>
-		            <div class="col-md-4 col-sm-4">
-						<g:select id="selNotarioEntidadFederativa" class="form-control" name='auxparam.notarioIdEntidadFederativa' value="${poderInstance?.notario?.idEntidadFederativa}"
-							noSelection="${['null':'-Seleccione-']}"
-							from='${entidadFederativaList}'
-							optionKey="id" optionValue="nombre"></g:select>
+					<div id="divNumNotario">
+						<label class="col-md-2 col-sm-3 control-label">
+							<g:message code="poder.notario.numero.label" default="Número" /><span class="required-indicator">*</span>
+						</label>
+						<div class="col-md-2 col-sm-2">
+							<g:textField id="txtNumNotario" maxlength="10" class="form-control" name="auxparam.numeroNotario" required="" value="${poderInstance?.notario?.numeroNotario}" />
+						</div>
+					</div>
+					<div id="divNotarioEntidadFederativa">
+						<label class="col-md-3 col-sm-3 control-label">
+							<g:message code="poder.notario.entidadFederativa.label" default="Entidad Federativa" /><span class="required-indicator">*</span>						
+						</label>
+						<div class="col-md-4 col-sm-4">
+							<g:select id="selNotarioEntidadFederativa" class="form-control" name='auxparam.notarioIdEntidadFederativa' value="${poderInstance?.notario?.idEntidadFederativa}"
+								noSelection="${['null':'-Seleccione-']}"
+								from='${entidadFederativaList}'
+								optionKey="id" optionValue="nombre"></g:select>
+						</div>
 					</div>
 				</div>
 				
@@ -126,7 +136,7 @@
 		            	<g:message code="poder.notario.nombreCompletro.label" default="Nombre" /><span class="required-indicator">*</span>
 					</label>
 		            <div class="col-md-9 col-sm-9">
-		            	<g:textField id="nombreCompletoNotario" class="form-control" name="auxparam.nombreCompletoNotario" required="" disabled="disabled" />
+		            	<g:textField id="txtNombreCompletoNotario" class="form-control" name="auxparam.nombreCompletoNotario" required="" disabled="disabled" />
 		            </div>
 				</div>
 				
@@ -144,42 +154,47 @@
 				<div id="divMsgMatriculaSinDga" class="alert alert-danger">
 					<span class="glyphicon glyphicon-ban-circle"></span> Matrícula encontrada <strong>sin oficio DGA válido ó vigente</strong>.
 				</div>
-				<div id="divMsgAlMenosUnApoderado" class="alert alert-danger">
-					<span class="glyphicon glyphicon-ban-circle"></span> Se requiere ingresar <strong>al menos un apoderado</strong>.
-				</div>
 				<div id="divMsgProcesandoApoderado" class="alert alert-info">
 					<asset:image src="spinner_alert_info.gif"/> <strong>Procesando datos, espere un momento</strong>.
 				</div>
 				
-					<table class="table">
-						<thead>
-							<tr>
-								<th style='width:8%;'>Matrícula</th>
-								<th>Nombre completo</th>
-								<th style='width:16%'>DGA CNBV</th>
-								<th style='width:8%'>...</th>
-							</tr>
-						</thead>
-						<tbody id="tbdyApoderados">
-							<tr>
-								<td><input id="txtNewMatricula" class="form-control" type="text" /></td>
-								<td><input id="txtNewNombre" class="form-control" type="text" disabled/></td>
-								<td>
-									<select id="selNewDGA" class="form-control">
-										<option value="-1"></option>
-									</select>
-								</td>
-								<td><button id="btnAdd" class="add btn btn-default btn-success" disabled><span class="glyphicon glyphicon-plus"></span> Agregar</button></td>
-							</tr>
-						</tbody>
-					</table>
-
+				<div id="divMsgAlMenosUnApoderado" class="alert alert-danger">
+					<span class="glyphicon glyphicon-ban-circle"></span> Se requiere ingresar <strong>al menos un apoderado</strong>.
+				</div>
 				
+				<table class="table">
+					<thead>
+						<tr>
+							<th style='width:8%;'>Matrícula</th>
+							<th>Nombre completo</th>
+							<th style='width:16%'>DGA CNBV</th>
+							<th style='width:8%'>...</th>
+						</tr>
+					</thead>
+					<tbody id="tbdyApoderados">
+						<tr>
+							<td><input id="txtNewMatricula" class="form-control" type="text" /></td>
+							<td><input id="txtNewNombre" class="form-control" type="text" disabled/></td>
+							<td>
+								<select id="selNewDGA" class="form-control">
+									<option value="-1"></option>
+								</select>
+							</td>
+							<td><button id="btnAdd" class="add btn btn-success btn-sm" disabled><span class="glyphicon glyphicon-plus"></span> Agregar</button></td>
+						</tr>
+					</tbody>
+				</table>
+
+				<input type="hidden" id="hdnCountApoderados" />
 			</fieldset>
 	
 			<fieldset>
 				<legend>Documentos de respaldo</legend>
-								
+				
+				<div id="divMsgDocRequeridos" class="alert alert-danger">
+					<span class="glyphicon glyphicon-ban-circle"></span> Debes cargar <strong>TODOS</strong> los documentos solicitados.
+				</div>
+				
 				<table class="table">
 						<thead>
 							<tr>
@@ -192,6 +207,8 @@
 
 						</tbody>
 				</table>
+				
+				<input type="hidden" id="hdnDocumentosCompletados" value="false" />
 			</fieldset>
 			
 			<div class="form-group">
@@ -200,6 +217,7 @@
 				</div>
 			</div>
 	
+		
 		</form>
 		
 		<!-- INICIA: TEMPLATES UNDERSCORE PARA COMPONENTE DE APODERADOS -->
@@ -207,7 +225,10 @@
 			<td>{{=matricula}}</td>
 			<td>{{=nombreCompleto}}</td>
 			<td>{{=claveDga}}</td>
-			<td><button class="delete btn btn-danger btn-sm"><span class="glyphicon glyphicon-trash"></span> Borrar</button> </td>
+			<td>
+				<button class="delete btn btn-danger btn-sm"><span class="glyphicon glyphicon-trash"></span> Borrar</button> 
+				
+			</td>
 		</script>
 		<!-- FIN: TEMPLATES UNDERSCORE PARA COMPONENTE DE APODERADOS -->
 		
@@ -262,19 +283,28 @@
 				this.collection = new apoderadosWidget.Apoderados(initialApoderados);
 				this.render();
 				this.listenTo( this.collection, 'add', this.renderApoderado );
+				
+				this.listenTo( this.collection, 'add', this.renderHiddenData );
+				this.listenTo( this.collection, 'remove', this.renderHiddenData );
+				this.listenTo( this.collection, "reset", this.renderHiddenData );
 			},
 			
 			render: function() {
 				this.collection.each( function(item){
 					this.renderApoderado(item);
 				},this );
+				
 				this.changeStateToListo();
 			},
 			renderApoderado: function(item){
 				var apoderadoView = new apoderadosWidget.ApoderadoView({model:item});
 				this.$el.append( apoderadoView.render().el );
 			},
-
+			renderHiddenData: function(item){
+				//actualiza cantidad en var hidden
+				$("#hdnCountApoderados").val( _.size(this.collection) );
+			},
+			
 			events:{
 				'click #btnAdd': 'agregarApoderado', 
 				'blur #txtNewMatricula': 'buscarPorMatricula'
@@ -295,6 +325,7 @@
 				$('#btnAdd').prop('disabled', true);
 				//status
 				state = 'LISTO';
+				
 			},
 			changeStateToListoYaHayMatricula: function(){
 				//mensajes
@@ -365,7 +396,6 @@
 
 				var dgas = apoderadoConDgas.get('autorizacionesCNBV');
 
-				
 				dgas.forEach(function(model){ 
 					$('#selNewDGA').append($("<option></option>").attr("value",model.idAutorizadoCNBV).text(model.claveDga));
 				});
@@ -387,7 +417,7 @@
 				var apoderado = new apoderadosWidget.Apoderado( { matricula: newMatricula, nombreCompleto: newNombre, idAutorizadoCNBV: newIdAutorizado, claveDga: newDga } );
 
 				this.collection.add(apoderado);
-
+				
 				//cambia a estado de "listo"
 				this.changeStateToListo();
 			},
@@ -572,6 +602,7 @@
 			tagName: 'tr',
 			className: 'documentoRow',
 			uploadUrl: '<g:createLink action="subirArchivo"/>',
+			downloadPreUrl: '<g:createLink action="descargarPrecargado"/>',
 			
 			//template: _.template( $('#documentoTemplate').html() ),
 			templateListoSinArchivo: _.template( $('#documentoTemplate_listoSinArchivo').html() ),
@@ -631,7 +662,11 @@
 			},
 			
 			descargarDocumentoPrecargado: function(){
-				alert("DESCARGAR PRECARGADO - No implementado");
+				//alert("DESCARGAR PRECARGADO - No implementado");
+				//window.open('http://www.mydomain.com?ReportID=1', '_blank');
+				var _url = this.downloadPreUrl + '?uuid=' + this.model.get('uuidTemp');
+				
+				window.open(_url);
 			},
 			
 			descargarDocumento: function(){
@@ -713,7 +748,7 @@
 			initialize: function( initialDocumentos ){
 				this.collection = new apoderadosWidget.Apoderados(initialDocumentos);
 				this.render();
-				this.listenTo( this.collection, 'add', this.renderApoderado );
+				this.listenTo( this.collection, "change", this.renderHiddenData );
 			},
 			
 			render: function() {
@@ -721,6 +756,18 @@
 					this.renderDocumento(item);
 				},this );
 				//this.changeStateToListo();
+			},
+			renderHiddenData: function() {
+				var valid = true;
+				
+				this.collection.each( function(item){
+					if( item.get('status') == docsWidget.SIN_ARCHIVO ){
+						
+						valid = false;
+					}
+				}, this );
+				
+				$('#hdnDocumentosCompletados').val(valid);
 			},
 			
 			renderDocumento: function(item){
@@ -770,6 +817,8 @@
 				$('#divMsgErrorProcesandoNotario').hide();
 				$('#divMsgNoEncontradoNotario').hide();
 				$('#divMsgDatoNoValidoNotario').hide();
+				
+				$('#divMsgAlMenosUnApoderado').hide();
 			},
 			
 			render: function() {
@@ -778,6 +827,9 @@
 					$('#divMsgErrorProcesandoNotario').hide();
 					$('#divMsgNoEncontradoNotario').hide();
 					$('#divMsgDatoNoValidoNotario').hide();
+					
+					$('#divNumNotario').removeClass( 'has-error' );
+					$('#divNotarioEntidadFederativa').removeClass( 'has-error' );
 				}
 				else{
 					$('#divMsgProcesandoNotario').hide();
@@ -785,14 +837,17 @@
 					$('#divMsgNoEncontradoNotario').hide();
 					$('#divMsgDatoNoValidoNotario').hide();
 					
+					$('#divNumNotario').removeClass( 'has-error' );
+					$('#divNotarioEntidadFederativa').removeClass( 'has-error' );
+
 					if (_.size(this.errors) == 0)
 					{
-						$('#nombreCompletoNotario').val(this.model);
+						$('#txtNombreCompletoNotario').val(this.model);
 					}
 					else
 					{
 						this.model = '';
-						$('#nombreCompletoNotario').val('');
+						$('#txtNombreCompletoNotario').val('');
 						_.each(this.errors, function(err){
 							if(err == notarioWidget.ERROR){
 								$('#divMsgErrorProcesandoNotario').show();
@@ -802,6 +857,7 @@
 							}
 							else if(err == notarioWidget.ERROR_NOT_VALID_INPUT){
 								$('#divMsgDatoNoValidoNotario').show();
+								$('#divNumNotario').addClass( 'has-error' );
 							}
 						}, this);
 					}
@@ -886,57 +942,134 @@
 		<!-- INICIO: SCRIPT PARA VISTA -->
 		<script type="text/javascript">
 		
+		function cleanValidationMsgs(){
+			$('#divMsgErrorEnCampos').hide();
+			$('#divMsgErrorServidor').hide();
+			
+			$('#divRepLegalNom').removeClass( 'has-error' );
+			$('#divAp1').removeClass( 'has-error' );
+			$('#divAp2').removeClass( 'has-error' );
+			$('#divPdrNumEscrit').removeClass( 'has-error' );
+			$('#divFhApod').removeClass( 'has-error' );
+			$('#divNumNotario').removeClass( 'has-error' );
+			$('#divNotarioEntidadFederativa').removeClass( 'has-error' );
+			
+			$('#divMsgAlMenosUnApoderado').hide();
+			$('#divMsgDocRequeridos').hide();
+		}
+		
 		$( "#btnSubmit" ).click(function() {
 			$( "#frmApp" ).submit();
 		});
 		
 		$('#frmApp').submit( function(event){			
-			//validaciones
+			//validaciones "cliente"
+			//de igual manera se valida el servicio
+			//por si "algun listo" altera el DOM...
 			var valid = true;
 			var errorMsg = [];
 			
+			//oculta mensajes de validación
+			cleanValidationMsgs();
+			
 			if($.trim($('#txtRepLegalNom').val()) == ''){
 				errorMsg.push({ errName: 'Campo requerido', errField: 'Nombre (Representante Legal)' });
+				$('#divRepLegalNom').addClass( 'has-error' );
 				valid = false;
 			}
 			if($.trim($('#txtAp1').val()) == ''){
 				errorMsg.push({ errName: 'Campo requerido', errField: 'Primer Apellido (Representante Legal)' });
+				$('#divAp1').addClass( 'has-error' );
 				valid = false;
 			}
 			if($.trim($('#txtAp2').val()) == ''){
 				errorMsg.push({ errName: 'Campo requerido', errField: 'Segundo Apellido (Representante Legal)' });
+				$('#divAp2').addClass( 'has-error' );
 				valid = false;
 			}
 			if($.trim($('#txtPdrNumEscrit').val()) == ''){
 				errorMsg.push({ errName: 'Campo requerido', errField: 'Numero de escritura' });
+				$('#divPdrNumEscrit').addClass( 'has-error' );
 				valid = false;
 			}
 			if( isNaN($.trim($('#txtPdrNumEscrit').val())) == true ){
 				errorMsg.push({ errName: 'Formato incorrecto, debe ser numérico entero', errField: 'Numero de escritura' });
+				$('#divPdrNumEscrit').addClass( 'has-error' );
 				valid = false;
 			}
 			if($('#fechaApoderamiento_day').val() == 'null'){
 				errorMsg.push({ errName: 'Campo requerido', errField: 'Fecha de apoderamiento (día)' });
+				$('#divFhApod').addClass( 'has-error' );
 				valid = false;
 			}
 			if($('#fechaApoderamiento_month').val() == 'null'){
 				errorMsg.push({ errName: 'Campo requerido', errField: 'Fecha de apoderamiento (mes)' });
+				$('#divFhApod').addClass( 'has-error' );
 				valid = false;
 			}
 			if($('#fechaApoderamiento_year').val() == 'null'){
 				errorMsg.push({ errName: 'Campo requerido', errField: 'Fecha de apoderamiento (año)' });
+				$('#divFhApod').addClass( 'has-error' );
 				valid = false;
 			}
 			
-			alert(JSON.stringify(errorMsg));
+			if($.trim($('#txtNumNotario').val()) == ''){
+				errorMsg.push({ errName: 'Campo requerido', errField: 'Número del notario' });
+				$('#divNumNotario').addClass( 'has-error' );
+				valid = false;
+			}
+			if(isNaN($.trim($('#txtNumNotario').val())) == true){
+				errorMsg.push({ errName: 'Formato incorrecto, debe ser numérico entero', errField: 'Número del notario' });
+				$('#divNumNotario').addClass( 'has-error' );
+				valid = false;
+			}
+			
+			if($('#selNotarioEntidadFederativa').val() == 'null'){
+				errorMsg.push({ errName: 'Campo requerido', errField: 'Entidad federativa del notario' });
+				$('#divNotarioEntidadFederativa').addClass( 'has-error' );
+				valid = false;
+			}
+			
+			if( ($.trim($('#txtNombreCompletoNotario').val())) == '' ){
+				errorMsg.push({ errName: 'Dato requerido', errField: 'Información del notario' });
+				$('#divNumNotario').addClass( 'has-error' );
+				$('#divNotarioEntidadFederativa').addClass( 'has-error' );
+				valid = false;
+			}
+			
+			if( $('#hdnCountApoderados').val() == 0 ){
+				errorMsg.push({ errName: 'Datos requeridos', errField: 'Apoderados' });
+				$('#divMsgAlMenosUnApoderado').show();
+				valid = false;
+			}
+			
+			if( $('#hdnDocumentosCompletados').val() == 'false' ){
+				errorMsg.push({ errName: 'Faltan documentos', errField: 'Documentos' });
+				$('#divMsgDocRequeridos').show();
+				valid = false;
+			}
+			
+			//alert(JSON.stringify(errorMsg));
 			
 			if(valid == false)
+			{
+				$('#divMsgErrorEnCampos').show();
 				event.preventDefault();
+				
+				/*$('form').animate({ scrollTop: 0 }, 'fast');*/
+				$('html, body').animate({
+				   'scrollTop':   $('#anchorForm').offset().top - 150
+				 }, 'fast');
+			}
+			else
+			{
+				console.log('TODO ES VALIDO');
+				event.preventDefault();
+			}
 		});
 		
 		$(function(){
-			$('#divMsgErrorEnCampos').hide();
-			$('divMsgErrorServidor').hide();
+			cleanValidationMsgs();
 		});
 		
 		</script>

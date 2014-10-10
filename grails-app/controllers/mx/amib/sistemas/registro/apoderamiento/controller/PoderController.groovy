@@ -3,6 +3,7 @@ package mx.amib.sistemas.registro.apoderamiento.controller
 import static org.springframework.http.HttpStatus.*
 import mx.amib.sistemas.registro.apoderado.service.ApoderadoService
 import mx.amib.sistemas.registro.apoderado.service.ApoderadoTO
+import mx.amib.sistemas.registro.apoderado.service.ArchivoTO
 import mx.amib.sistemas.registro.apoderado.service.DocumentoService
 import mx.amib.sistemas.registro.apoderado.service.DocumentoTO
 import mx.amib.sistemas.registro.apoderado.service.EntidadFinancieraService
@@ -13,6 +14,7 @@ import mx.amib.sistemas.registro.notario.service.NotarioService
 import mx.amib.sistemas.registro.apoderado.service.PoderService
 
 import org.codehaus.groovy.grails.web.json.JSONObject
+import org.junit.After;
 import org.springframework.web.multipart.commons.CommonsMultipartFile
 
 import grails.converters.JSON
@@ -43,7 +45,7 @@ class PoderController {
     def create() {
         respond new Poder(params), model:[entidadFederativaList: sepomexService.obtenerEntidadesFederativas(), 
 											tipoDocumentoList: poderService.obtenerListadoTipoDocumentoRespaldoPoder(),
-											entidadFinancieraInstance: entidadFinancieraService.obtenerGrupoFinanciero(5)]
+											entidadFinancieraInstance: entidadFinancieraService.obtenerGrupoFinanciero(6)]
     }
 
     @Transactional
@@ -176,5 +178,27 @@ class PoderController {
 		doc = documentoService.guardarDocumentoTemp(session.id,uploadFile,tipoDocumento,ClaseDocumento.PODER)
 		
 		render doc as JSON
+	}
+	
+	def descargarPrecargado(){
+		String documentoUuid = params.'uuid'		
+		ArchivoTO fileDocumento = documentoService.obtenerArchivoDocumentoTemp(documentoUuid)
+		
+		if(fileDocumento == null){
+			response.sendError(404)
+			return
+		}
+		else{
+			if (fileDocumento.file.exists()) {
+				response.setContentType(fileDocumento.mimeType)
+				response.setHeader("Content-disposition", "attachment;filename=\"${fileDocumento.nombre}\"")
+				response.outputStream << fileDocumento.file.bytes
+				return
+			}
+			else {
+				response.sendError(404)
+				return
+			}
+		}
 	}
 }

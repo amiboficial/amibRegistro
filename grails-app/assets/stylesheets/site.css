@@ -1,4 +1,4 @@
-/* AMIB 2014 - ESTILO CSS APLICACIONES - Ult.Mod. 02/10/2014 - v1.1 */
+/* AMIB 2014 - ESTILO CSS APLICACIONES - Ult.Mod. 02/10/2014 - v1.2 */
 
 body {
     /*padding-top: 50px;*/
@@ -140,6 +140,52 @@ navbar-default .navbar-nav > li > a:focus{
     
 .colorblack{
 	color:#000000
+}
+
+/* Mod. 08/10/2014 1.2 - Se agregan ajustes de tamaños */
+
+.form-control{
+	height: 28px;
+	font-size: 12px;
+}
+
+.form-group{
+	margin-bottom: 5px;
+}
+
+.form-horizontal .control-label{
+	padding-top: 4px;
+}
+
+label{
+	font-size: small;
+}
+
+th{
+	font-size: small;
+}
+
+td{
+	font-size: small;
+}
+
+legend{
+	font-size: 18px;
+	margin-bottom: 15px;
+}
+
+fieldset{
+	padding-bottom: 1.25em;
+}
+
+/* Mod. 08/10/2014 1.2 - Se agrega alert "mediano" */
+
+.alert{
+	margin-top: 1px;
+	padding-top: 4px;
+	padding-bottom: 4px;
+	padding-right: 4px;
+	padding-left: 8px;
 }
 
 /* Mod. 02/10/2014 1.1 - Se agrega alert mas "pequeño" */

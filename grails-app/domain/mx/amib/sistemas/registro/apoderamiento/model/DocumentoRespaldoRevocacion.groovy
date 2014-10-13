@@ -4,7 +4,7 @@ import mx.amib.sistemas.registro.apoderamiento.model.catalog.TipoDocumentoRespal
 
 class DocumentoRespaldoRevocacion {
 
-	Long idDocumentoRepositorio
+	String uuidDocumentoRepositorio
 	Revocacion revocacion
 	TipoDocumentoRespaldoRevocacion tipoDocumentoRespaldoRevocacion
 
@@ -13,7 +13,7 @@ class DocumentoRespaldoRevocacion {
 	static mapping = {
 		table 't107_t_docrespaldorevoc'
 		
-		idDocumentoRepositorio column:'id_f_doc'
+		uuidDocumentoRepositorio column:'id_f_doc'
 		
 		revocacion column:'id_105_revocacion'
 		tipoDocumentoRespaldoRevocacion column:'id_108_tpdocrespaldorevocacion'

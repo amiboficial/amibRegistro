@@ -7,7 +7,6 @@ import mx.amib.sistemas.registro.apoderado.service.ArchivoTO
 import mx.amib.sistemas.registro.apoderado.service.DocumentoService
 import mx.amib.sistemas.registro.apoderado.service.DocumentoTO
 import mx.amib.sistemas.registro.apoderado.service.EntidadFinancieraService
-import mx.amib.sistemas.registro.apoderado.service.ClaseDocumento
 import mx.amib.sistemas.registro.apoderamiento.model.Poder
 import mx.amib.sistemas.registro.external.catalgos.service.SepomexService
 import mx.amib.sistemas.registro.notario.service.NotarioService
@@ -43,24 +42,80 @@ class PoderController {
     }
 
     def create() {
-        respond new Poder(params), model:[entidadFederativaList: sepomexService.obtenerEntidadesFederativas(), 
-											tipoDocumentoList: poderService.obtenerListadoTipoDocumentoRespaldoPoder(),
-											entidadFinancieraInstance: entidadFinancieraService.obtenerGrupoFinanciero(6)]
+		//Inicializa listados
+		def apoderadosList = new ArrayList<ApoderadoTO>()
+		def documentosList = new ArrayList<DocumentoTO>()
+		def tipoDocumentoList = poderService.obtenerListadoTipoDocumentoRespaldoPoder()
+		
+		//Inicializa listado de tipos documento
+		tipoDocumentoList.each{
+			documentosList.add( new DocumentoTO([ 
+				sessionId: session.id,
+				
+				idTipoDocumento: it.id,
+				tipoDocumento: it.descripcion,
+				
+				id: -it.id
+			]) )
+		}
+		
+        respond new Poder(params), model:[entidadFederativaList: sepomexService.obtenerEntidadesFederativas(),
+											entidadFinancieraInstance: entidadFinancieraService.obtenerGrupoFinanciero(6),
+											apoderadosListInstance: apoderadosList,
+											documentosListInstance: documentosList
+											]
     }
 
     @Transactional
-    def save(Poder poderInstance) {
-        if (poderInstance == null) {
-            notFound()
-            return
-        }
-
+    def save(Poder poder) {
+		
+		Poder poderInstance = poder
+		
+		//parametros adicionales al modelo
+		def notarioNumero = params.'notarioNumero'.toInteger()
+		def notarioIdEntidadFederativa = params.'notarioIdEntidadFederativa'.toInteger()
+		def _apoderadosIdAutorizadoCNBV = params.list('apoderadoIdAutorizadoCNBV')
+		def _documentos = params.list('documento')
+		
+		List<Integer> apoderadosIdAutorizadoCNBV = new ArrayList<Integer>()
+		List<DocumentoTO> documentos = new ArrayList<DocumentoTO>()
+		
+		//si "deplano" no se recibe el modelo
+		if (poderInstance == null) {
+			notFound()
+			return
+		}
+		
+		_apoderadosIdAutorizadoCNBV.each{
+			apoderadosIdAutorizadoCNBV.add(it)
+		}
+		
+		_documentos.each{
+			def documento = JSON.parse(it)
+			DocumentoTO docTO = new DocumentoTO()
+			docTO.uuid = documento.'uuid'
+			docTO.sessionId = session.id
+			docTO.idTipoDocumento = documento.'idTipoDocumento'
+			documentos.add(docTO)
+		}
+		
+		//adapta los parametros recibidos al modelo
+		poderInstance = poderService.buildFromParamsToSave(poderInstance, notarioNumero, notarioIdEntidadFederativa, 
+															apoderadosIdAutorizadoCNBV, documentos)
+		
+		//valida errores del domain
+		poderInstance.validate()
         if (poderInstance.hasErrors()) {
+			poderInstance.errors.allErrors.each { println it }
             respond poderInstance.errors, view:'create'
             return
         }
-
-        poderInstance.save flush:true
+		//valida errores en el negocio
+		//validateBusinessIntegrity(poderInstance)
+		
+		//manda al servicio de guardado
+		poderService.save(poderInstance)
+        //poderInstance.save flush:true
 
         request.withFormat {
             form multipartForm {
@@ -173,9 +228,10 @@ class PoderController {
 	def subirArchivo(){
 		CommonsMultipartFile uploadFile = params.archivo
 		int tipoDocumento = params.int('idTipoDocumento')
+		String uuidAnterior = params.'uuidAnterior'
 		DocumentoTO doc = null
 		
-		doc = documentoService.guardarDocumentoTemp(session.id,uploadFile,tipoDocumento,ClaseDocumento.PODER)
+		doc = documentoService.guardarDocumentoTemp(session.id, uploadFile, uuidAnterior)
 		
 		render doc as JSON
 	}

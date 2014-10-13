@@ -4,7 +4,7 @@ import mx.amib.sistemas.registro.apoderamiento.model.catalog.TipoDocumentoRespal
 
 class DocumentoRespaldoPoder {
 
-	Long idDocumentoRepositorio
+	String uuidDocumentoRepositorio
 	Poder poder
 	TipoDocumentoRespaldoPoder tipoDocumentoRespaldoPoder
 
@@ -13,11 +13,11 @@ class DocumentoRespaldoPoder {
 	static mapping = {
 		table 't103_t_docrespaldopoder'
 		
-		idDocumentoRepositorio column:'id_f_doc'
+		uuidDocumentoRepositorio column:'id_f_doc'
 		
 		poder column:'id_101_poder'
 		tipoDocumentoRespaldoPoder column:'id_104_tpdocrespaldopoder'
 		
-		id generator: "assigned"
+		id generator: "identity"
 	}
 }

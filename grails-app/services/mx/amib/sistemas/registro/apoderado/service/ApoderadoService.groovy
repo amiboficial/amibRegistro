@@ -69,6 +69,7 @@ class ApoderadoTO {
 	int numeroMatricula
 	String nombreCompleto
 	List<AutorizacionCnbvTO> autorizacionesCNBV
+	AutorizacionCnbvTO autorizacionAplicada
 }
 
 class AutorizacionCnbvTO {

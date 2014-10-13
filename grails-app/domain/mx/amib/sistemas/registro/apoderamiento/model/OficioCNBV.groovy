@@ -17,7 +17,7 @@ class OficioCNBV {
 		fechaCreacion column:'fh_creacion'
 		fechaModificacion column:'fh_modificacion'
 		
-		id generator: "assigned"
+		id generator: "identity"
 	}
 	
     static constraints = {

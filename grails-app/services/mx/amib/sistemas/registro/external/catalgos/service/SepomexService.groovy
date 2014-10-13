@@ -11,6 +11,11 @@ class SepomexService {
 	
 	def grailsApplication
 	
+	EntidadFederativaTO obtenerEntidadFederativa(int id){
+		def catef = EntidadFederativaCatalog.getInstance()
+		return catef.obtenerEntidadFederativa(id)
+	}
+	
     Collection<EntidadFederativaTO> obtenerEntidadesFederativas() {
 		def catef = EntidadFederativaCatalog.getInstance()
 		return catef.obtenerCatalogo()
@@ -65,7 +70,7 @@ class EntidadFederativaCatalog {
 	}
 	
 	EntidadFederativaTO obtenerEntidadFederativa(int id){
-		this.entidadesFederativas.getEntry(Integer.valueOf(id))
+		this.entidadesFederativas.get(Integer.valueOf(id))
 	}
 }
 

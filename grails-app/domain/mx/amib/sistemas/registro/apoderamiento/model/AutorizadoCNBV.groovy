@@ -17,11 +17,10 @@ class AutorizadoCNBV {
 		
 		oficioCNBV column:'id_110_oficiocnbv'
 		
-		id generator: "assigned"
+		id generator: "identity"
 	}
 	
     static constraints = {
-		numeroMatricula unique: true
 		nombreCompleto maxSize: 1000
     }
 }

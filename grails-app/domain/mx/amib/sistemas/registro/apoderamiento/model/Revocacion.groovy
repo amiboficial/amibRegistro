@@ -36,7 +36,7 @@ class Revocacion {
 		
 		notario column:'id_201_notario'
 		
-		id generator: "assigned"
+		id generator: "identity"
 	}
 
 	static constraints = {

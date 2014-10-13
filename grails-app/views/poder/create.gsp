@@ -14,7 +14,7 @@
 	
 		<h2><strong>Alta de poder</strong></h2>
 
-		<form id="frmApp" class="form-horizontal" role="form">
+		<form id="frmApp" class="form-horizontal" role="form" action="save" method="post">
 			
 			<div id="divMsgErrorEnCampos" class="alert alert-danger">
 				<span class="glyphicon glyphicon-ban-circle"></span> Datos no válidos. Revise los campos marcados en rojo.
@@ -31,7 +31,7 @@
 		            	<g:message code="poder.representanteLegalNombre.label" default="Nombre" /><span class="required-indicator">*</span>
 					</label>
 		            <div class="col-md-9 col-sm-9">
-		            	<g:textField id="txtRepLegalNom" maxlength="100" class="form-control" name="representanteLegalNombre" required="" value="${poderInstance?.representanteLegalNombre}" />
+		            	<g:textField id="txtRepLegalNom" maxlength="100" class="form-control" name="poder.representanteLegalNombre" required="" value="${poderInstance?.representanteLegalNombre}" />
 		            </div>
 				</div>
 
@@ -40,7 +40,7 @@
 						<g:message code="poder.representanteLegalApellido1.label" default="Primer apellido" /><span class="required-indicator">*</span>
 					</label>
 					<div class="col-md-9 col-sm-9">
-						<g:textField id="txtAp1" maxlength="80" class="form-control" name="representanteLegalApellido1" required="" value="${poderInstance?.representanteLegalApellido1}" />
+						<g:textField id="txtAp1" maxlength="80" class="form-control" name="poder.representanteLegalApellido1" required="" value="${poderInstance?.representanteLegalApellido1}" />
 					</div>
 				</div>
 				<div id="divAp2" class="form-group">
@@ -48,7 +48,7 @@
 						<g:message code="poder.representanteLegalApellido2.label" default="Segundo apellido" /><span class="required-indicator">*</span>						
 					</label>
 					<div class="col-md-9 col-sm-9">
-						<g:textField id="txtAp2" maxlength="80" class="form-control" name="representanteLegalApellido2" required="" value="${poderInstance?.representanteLegalApellido2}" />
+						<g:textField id="txtAp2" maxlength="80" class="form-control" name="poder.representanteLegalApellido2" required="" value="${poderInstance?.representanteLegalApellido2}" />
 					</div>
 				</div>
 				
@@ -62,7 +62,7 @@
 		            	<g:message code="poder.nombreGrupoFinancieroOrInstituto.label" default="Nombre" /><span class="required-indicator">*</span>
 					</label>
 		            <div class="col-md-9 col-sm-9">
-		            	<g:textField class="form-control" name="nombreGrupoFinancieroOrInstituto" required="" value="${entidadFinancieraInstance?.nombre}" disabled="disabled"/>
+		            	<input type="text" class="form-control" required="" value="${entidadFinancieraInstance?.nombre}" disabled="disabled"/>
 		            </div>
 				</div>
 			</fieldset>
@@ -77,7 +77,7 @@
 							<g:message code="poder.numeroEscritura.label" default="Numero de escritura" /><span class="required-indicator">*</span>
 						</label>
 						<div class="col-md-2 col-sm-2">
-							<g:textField id="txtPdrNumEscrit" maxlength="10" class="has-error form-control" name="numeroEscritura" required="" value="${poderInstance?.numeroEscritura}" />
+							<g:textField id="txtPdrNumEscrit" maxlength="10" class="has-error form-control" name="poder.numeroEscritura" required="" value="${poderInstance?.numeroEscritura}" />
 						</div>
 					</div>
 					<div id="divFhApod">
@@ -85,7 +85,7 @@
 							<g:message code="poder.fechaApoderamiento.label" default="Fecha de aporderamiento" /><span class="required-indicator">*</span>						
 						</label>
 						<div class="col-md-4 col-sm-4">
-							<g:datePicker name="fechaApoderamiento" value="${poderInstance?.fechaApoderamiento}" default="none" noSelection="${['null':'-Seleccione-']}" precision="day" relativeYears="${-10..0}"/>
+							<g:datePicker name="poder.fechaApoderamiento" value="${poderInstance?.fechaApoderamiento}" default="none" noSelection="${['null':'-Seleccione-']}" precision="day" relativeYears="${-10..0}"/>
 						</div>
 					</div>
 				</div>
@@ -115,7 +115,7 @@
 							<g:message code="poder.notario.numero.label" default="Número" /><span class="required-indicator">*</span>
 						</label>
 						<div class="col-md-2 col-sm-2">
-							<g:textField id="txtNumNotario" maxlength="10" class="form-control" name="auxparam.numeroNotario" required="" value="${poderInstance?.notario?.numeroNotario}" />
+							<g:textField id="txtNumNotario" maxlength="10" class="form-control" name="notarioNumero" required="" value="${poderInstance?.notario?.numeroNotario}" />
 						</div>
 					</div>
 					<div id="divNotarioEntidadFederativa">
@@ -123,7 +123,7 @@
 							<g:message code="poder.notario.entidadFederativa.label" default="Entidad Federativa" /><span class="required-indicator">*</span>						
 						</label>
 						<div class="col-md-4 col-sm-4">
-							<g:select id="selNotarioEntidadFederativa" class="form-control" name='auxparam.notarioIdEntidadFederativa' value="${poderInstance?.notario?.idEntidadFederativa}"
+							<g:select id="selNotarioEntidadFederativa" class="form-control" name='notarioIdEntidadFederativa' value="${poderInstance?.notario?.idEntidadFederativa}"
 								noSelection="${['null':'-Seleccione-']}"
 								from='${entidadFederativaList}'
 								optionKey="id" optionValue="nombre"></g:select>
@@ -136,7 +136,7 @@
 		            	<g:message code="poder.notario.nombreCompletro.label" default="Nombre" /><span class="required-indicator">*</span>
 					</label>
 		            <div class="col-md-9 col-sm-9">
-		            	<g:textField id="txtNombreCompletoNotario" class="form-control" name="auxparam.nombreCompletoNotario" required="" disabled="disabled" />
+		            	<input type="text" id="txtNombreCompletoNotario" class="form-control" required="" disabled="disabled" value="${poderInstance?.notario?.nombre + ' ' + poderInstance?.notario?.apellido1 + ' ' + poderInstance?.notario?.apellido2}" />
 		            </div>
 				</div>
 				
@@ -227,7 +227,7 @@
 			<td>{{=claveDga}}</td>
 			<td>
 				<button class="delete btn btn-danger btn-sm"><span class="glyphicon glyphicon-trash"></span> Borrar</button> 
-				
+				<input type="hidden" name="apoderadoIdAutorizadoCNBV" value="{{=idAutorizadoCNBV}}" />
 			</td>
 		</script>
 		<!-- FIN: TEMPLATES UNDERSCORE PARA COMPONENTE DE APODERADOS -->
@@ -474,15 +474,22 @@
 			}
 		});
 
+		//Carga datos del modelo
 		$(function(){
 			/*var apoderatosTest = [
+			
 				{ matricula: 1, nombreCompleto: 'PETRONILA PEREZ', dga: 'DGA-XXXX'},
 				{ matricula: 2, nombreCompleto: 'AZUL GARCIA', dga: 'DGA-XXXX'},
 				{ matricula: 3, nombreCompleto: 'JOHN DOE', dga: 'DGA-XXXX'},
+				
     		];*/
-    		var apoderatosTest = []
-    		
-    		new apoderadosWidget.ApoderadosView(apoderatosTest);
+			
+			var apoderados = [
+				<g:each in="${apoderadosListInstance}">
+					{ matricula: ${it.numeroMatricula}, nombreCompleto: '${it.nombreCompleto}', claveDga: '${it.autorizacionAplicada?.claveDga}', idAutorizadoCNBV: ${it.autorizacionAplicada?.idAutorizadoCNBV} },
+				</g:each>
+    		];
+    		new apoderadosWidget.ApoderadosView(apoderados);
 		});
 		
 		</script>
@@ -508,6 +515,7 @@
 				<div class="msgError alert alert-small alert-danger">
 					<span class="glyphicon glyphicon-ban-circle"></span> Error desconocido.
 				</div>
+				<input type="hidden" name="documento" value="{ 'idTipoDocumento':{{=idTipoDocumento}},'status':'SIN_ARCHIVO','uuid':'' }" />
 			</td>
 		</script>
 		<script type="text/template" id="documentoTemplate_listoPrecargado">
@@ -529,6 +537,7 @@
 				<div class="msgError alert alert-small alert-danger">
 					<span class="glyphicon glyphicon-ban-circle"></span> Error desconocido.
 				</div>
+				<input type="hidden" name="documento" value="{ 'idTipoDocumento':{{=idTipoDocumento}},'status':'PRECARGADO','uuid':'{{=uuid}}' }" />
 			</td>
 		</script>
 		<script type="text/template" id="documentoTemplate_listoCargado">
@@ -546,11 +555,12 @@
 				<div class="msgError alert alert-small alert-danger">
 					<span class="glyphicon glyphicon-ban-circle"></span> Error desconocido.
 				</div>
+				<input type="hidden" name="documento" value="{ 'idTipoDocumento':{{=idTipoDocumento}},'status':'CARGADO','uuid':'' }" />
 			</td>
 		</script>
 		<script type="text/template" id="documentoTemplate_procesando">
 			<td>{{=tipoDocumento}}</td>
-			<td>...</td>
+			<td>... <input type="hidden" name="documento" value="{ 'idTipoDocumento':{{=idTipoDocumento}},'status':'SIN_ARCHIVO','uuid':'' }" /> </td>
 			<td><asset:image src="spinner_alert_info.gif"/> Procesando</td>
 		</script>
 		<!-- FIN: TEMPLATES UNDERSCORE PARA COMPONENTE DE DOCUMENTOS -->
@@ -589,7 +599,7 @@
 				
 				lastErrors: [],
 				status: docsWidget.SIN_ARCHIVO,
-				uuidTemp: ''
+				uuid: ''
 			}
 		});
 		
@@ -664,7 +674,7 @@
 			descargarDocumentoPrecargado: function(){
 				//alert("DESCARGAR PRECARGADO - No implementado");
 				//window.open('http://www.mydomain.com?ReportID=1', '_blank');
-				var _url = this.downloadPreUrl + '?uuid=' + this.model.get('uuidTemp');
+				var _url = this.downloadPreUrl + '?uuid=' + this.model.get('uuid');
 				
 				window.open(_url);
 			},
@@ -676,6 +686,7 @@
 			subirDocumento: function(){
 				var contexto = this;
 				var idTipoDoc = this.model.get('idTipoDocumento');
+				var uuidAnterior = this.model.get('uuid');
 				
 				var file = document.getElementById('archivo_'+idTipoDoc).files[0];
 				var xhr = new XMLHttpRequest();
@@ -696,7 +707,7 @@
 							//alert(JSON.stringify(respuestaJson));
 							
 							contexto.model.set(
-								{uuidTemp: respuestaJson.uuidTemp, 
+								{uuid: respuestaJson.uuid, 
 								 nombreDocumento: respuestaJson.nombreDocumento,
 								 mimeType: respuestaJson.mimeType,
 								 status: docsWidget.CARGADO}
@@ -714,6 +725,7 @@
 						var formData = new FormData();
 						formData.append("archivo", file);
 						formData.append("idTipoDocumento", idTipoDoc);
+						formData.append("uuidAnterior", uuidAnterior);
 						xhr.send(formData);
 						
 						this.changeStateToProcesando();
@@ -784,8 +796,8 @@
 				{ matricula: 3, nombreCompleto: 'JOHN DOE', dga: 'DGA-XXXX'},
     		];*/
 			
-			var docsTest = [<g:each in="${tipoDocumentoList}">
-								{id: -${it.id},idTipoDocumento: ${it.id}, tipoDocumento: '${it.descripcion}', nombreDocumento: '', status: docsWidget.SIN_ARCHIVO, lastErrors: [] },
+			var docsTest = [<g:each in="${documentosListInstance}">
+								{id: ${it.id},idTipoDocumento: ${it.idTipoDocumento}, tipoDocumento: '${it.tipoDocumento}', nombreDocumento: '', status: docsWidget.SIN_ARCHIVO, lastErrors: [] },
 							</g:each>]
     		new docsWidget.DocumentosView(docsTest);
 		});
@@ -997,17 +1009,17 @@
 				$('#divPdrNumEscrit').addClass( 'has-error' );
 				valid = false;
 			}
-			if($('#fechaApoderamiento_day').val() == 'null'){
+			if($('#poder\\.fechaApoderamiento_day').val() == 'null'){
 				errorMsg.push({ errName: 'Campo requerido', errField: 'Fecha de apoderamiento (día)' });
 				$('#divFhApod').addClass( 'has-error' );
 				valid = false;
 			}
-			if($('#fechaApoderamiento_month').val() == 'null'){
+			if($('#poder\\.fechaApoderamiento_month').val() == 'null'){
 				errorMsg.push({ errName: 'Campo requerido', errField: 'Fecha de apoderamiento (mes)' });
 				$('#divFhApod').addClass( 'has-error' );
 				valid = false;
 			}
-			if($('#fechaApoderamiento_year').val() == 'null'){
+			if($('#poder\\.fechaApoderamiento_year').val() == 'null'){
 				errorMsg.push({ errName: 'Campo requerido', errField: 'Fecha de apoderamiento (año)' });
 				$('#divFhApod').addClass( 'has-error' );
 				valid = false;
@@ -1064,7 +1076,7 @@
 			else
 			{
 				console.log('TODO ES VALIDO');
-				event.preventDefault();
+				//event.preventDefault();
 			}
 		});
 		
@@ -1077,18 +1089,22 @@
 		
 		<!-- INICIO: CSS FIXES -->
 		<script type="text/javascript">
-			$('#fechaApoderamiento_day').addClass( 'form-control' );
-			$('#fechaApoderamiento_month').addClass( 'form-control' );
-			$('#fechaApoderamiento_year').addClass( 'form-control' );
-			$('#fechaApoderamiento_day').addClass( 'col-md-4' );
-			$('#fechaApoderamiento_month').addClass( 'col-md-4' );
-			$('#fechaApoderamiento_year').addClass( 'col-md-4' );
-			//$('#fechaApoderamiento_day').addClass( 'col-sm-4' );
-			//$('#fechaApoderamiento_month').addClass( 'col-sm-4' );
-			//$('#fechaApoderamiento_year').addClass( 'col-sm-4' );
-			$('#fechaApoderamiento_day').css( 'width', '25%' );
-			$('#fechaApoderamiento_month').css( 'width', '40%' );
-			$('#fechaApoderamiento_year').css( 'width', '35%' );
+			$('#poder\\.fechaApoderamiento_day').addClass( 'form-control' );
+			$('#poder\\.fechaApoderamiento_month').addClass( 'form-control' );
+			$('#poder\\.fechaApoderamiento_year').addClass( 'form-control' );
+			$('#poder\\.fechaApoderamiento_day').addClass( 'col-md-4' );
+			$('#poder\\.fechaApoderamiento_month').addClass( 'col-md-4' );
+			$('#poder\\.fechaApoderamiento_year').addClass( 'col-md-4' );
+			$('#poder\\.fechaApoderamiento_day').css( 'width', '25%' );
+			$('#poder\\.fechaApoderamiento_month').css( 'width', '40%' );
+			$('#poder\\.fechaApoderamiento_year').css( 'width', '35%' );
+			
+			//campos que requieren reset al hacer "back" con el navegador
+			$(window).bind("pageshow", function() {
+				$('#txtNumNotario').val('')
+				$('#hdnCountApoderados').val(0);
+				$('#hdnDocumentosCompletados').val(false);
+			});
 		</script>
 		<!-- FIN: CSS FIXES -->
 	</body>

@@ -22,7 +22,7 @@ class Revocado {
 		
 		revocacion column:'id_105_revocacion'
 		
-		id generator: "assigned"
+		id generator: "identity"
 	}
 
 	static constraints = {

@@ -3,17 +3,17 @@ package mx.amib.sistemas.registro.apoderamiento.controller
 import static org.springframework.http.HttpStatus.*
 import mx.amib.sistemas.registro.apoderado.service.ApoderadoService
 import mx.amib.sistemas.registro.apoderado.service.ApoderadoTO
-import mx.amib.sistemas.registro.apoderado.service.ArchivoTO
-import mx.amib.sistemas.registro.apoderado.service.DocumentoService
-import mx.amib.sistemas.registro.apoderado.service.DocumentoTO
+import mx.amib.sistemas.registro.apoderado.service.DocumentoRespaldoPoderTO
 import mx.amib.sistemas.registro.apoderado.service.EntidadFinancieraService
 import mx.amib.sistemas.registro.apoderamiento.model.Poder
-import mx.amib.sistemas.registro.external.catalgos.service.SepomexService
+import mx.amib.sistemas.external.catalogos.service.SepomexService
+import mx.amib.sistemas.external.documentos.service.DocumentoRepositorioService;
 import mx.amib.sistemas.registro.notario.service.NotarioService
 import mx.amib.sistemas.registro.apoderado.service.PoderService
+import mx.amib.sistemas.util.service.*
 
 import org.codehaus.groovy.grails.web.json.JSONObject
-import org.junit.After;
+import org.junit.After
 import org.springframework.web.multipart.commons.CommonsMultipartFile
 
 import grails.converters.JSON
@@ -27,7 +27,8 @@ class PoderController {
 	//servicios
 	EntidadFinancieraService entidadFinancieraService
 	ApoderadoService apoderadoService
-	DocumentoService documentoService
+	ArchivoTemporalService archivoTemporalService
+	DocumentoRepositorioService documentoRepositorioService
 	SepomexService sepomexService
 	NotarioService notarioService
 	PoderService poderService
@@ -44,18 +45,15 @@ class PoderController {
     def create() {
 		//Inicializa listados
 		def apoderadosList = new ArrayList<ApoderadoTO>()
-		def documentosList = new ArrayList<DocumentoTO>()
+		def documentosList = new ArrayList<DocumentoRespaldoPoderTO>()
 		def tipoDocumentoList = poderService.obtenerListadoTipoDocumentoRespaldoPoder()
 		
 		//Inicializa listado de tipos documento
 		tipoDocumentoList.each{
-			documentosList.add( new DocumentoTO([ 
-				sessionId: session.id,
-				
+			documentosList.add( new DocumentoRespaldoPoderTO([ 
+				id: -it.id,
 				idTipoDocumento: it.id,
 				tipoDocumento: it.descripcion,
-				
-				id: -it.id
 			]) )
 		}
 		
@@ -78,7 +76,7 @@ class PoderController {
 		def _documentos = params.list('documento')
 		
 		List<Integer> apoderadosIdAutorizadoCNBV = new ArrayList<Integer>()
-		List<DocumentoTO> documentos = new ArrayList<DocumentoTO>()
+		List<DocumentoRespaldoPoderTO> documentos = new ArrayList<DocumentoRespaldoPoderTO>()
 		
 		//si "deplano" no se recibe el modelo
 		if (poderInstance == null) {
@@ -92,7 +90,7 @@ class PoderController {
 		
 		_documentos.each{
 			def documento = JSON.parse(it)
-			DocumentoTO docTO = new DocumentoTO()
+			DocumentoRespaldoPoderTO docTO = new DocumentoRespaldoPoderTO()
 			docTO.uuid = documento.'uuid'
 			docTO.sessionId = session.id
 			docTO.idTipoDocumento = documento.'idTipoDocumento'
@@ -229,26 +227,34 @@ class PoderController {
 		CommonsMultipartFile uploadFile = params.archivo
 		int tipoDocumento = params.int('idTipoDocumento')
 		String uuidAnterior = params.'uuidAnterior'
-		DocumentoTO doc = null
 		
-		doc = documentoService.guardarDocumentoTemp(session.id, uploadFile, uuidAnterior)
+		ArchivoTO archivo = null
 		
-		render doc as JSON
+		archivo = archivoTemporalService.guardarArchivoTemporal(session.id, uploadFile)
+		archivoTemporalService.eliminarArchivoTemporal(uuidAnterior)
+		
+		//se elimina el contenido de estos parametros por motivos de seguridad
+		ArchivoTO archivoToRender = archivo.clone()
+		archivoToRender.temploc = null
+		archivoToRender.caducidad = null
+		
+		render archivoToRender as JSON
 	}
 	
 	def descargarPrecargado(){
 		String documentoUuid = params.'uuid'		
-		ArchivoTO fileDocumento = documentoService.obtenerArchivoDocumentoTemp(documentoUuid)
+		ArchivoTO fileDocumento = archivoTemporalService.obtenerArchivoTemporal(documentoUuid)
 		
 		if(fileDocumento == null){
 			response.sendError(404)
 			return
 		}
 		else{
-			if (fileDocumento.file.exists()) {
-				response.setContentType(fileDocumento.mimeType)
-				response.setHeader("Content-disposition", "attachment;filename=\"${fileDocumento.nombre}\"")
-				response.outputStream << fileDocumento.file.bytes
+			File f = new File(fileDocumento.temploc)
+			if (f.exists()) {
+				response.setContentType(f.mimeType)
+				response.setHeader("Content-disposition", "attachment;filename=\"${fileDocumento.filename}\"")
+				response.outputStream << f.bytes
 				return
 			}
 			else {

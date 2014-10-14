@@ -708,7 +708,7 @@
 							
 							contexto.model.set(
 								{uuid: respuestaJson.uuid, 
-								 nombreDocumento: respuestaJson.nombreDocumento,
+								 nombreDocumento: respuestaJson.filename,
 								 mimeType: respuestaJson.mimeType,
 								 status: docsWidget.CARGADO}
 							);

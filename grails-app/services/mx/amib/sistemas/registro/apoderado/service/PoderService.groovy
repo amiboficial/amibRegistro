@@ -11,17 +11,19 @@ import mx.amib.sistemas.registro.apoderamiento.model.AutorizadoCNBV
 import mx.amib.sistemas.registro.apoderamiento.model.DocumentoRespaldoPoder
 import mx.amib.sistemas.registro.apoderamiento.model.Poder
 import mx.amib.sistemas.registro.apoderamiento.model.catalog.TipoDocumentoRespaldoPoder
-import mx.amib.sistemas.registro.external.catalgos.service.SepomexService
+import mx.amib.sistemas.external.catalogos.service.SepomexService
+import mx.amib.sistemas.external.documentos.service.DocumentoPoderRepositorioTO;
+import mx.amib.sistemas.external.documentos.service.DocumentoRepositorioService;
+import mx.amib.sistemas.external.documentos.service.DocumentoRepositorioTO;
 import mx.amib.sistemas.registro.notario.model.Notario
 import mx.amib.sistemas.registro.notario.service.NotarioService
-
 import groovy.json.StringEscapeUtils
 
 @Transactional
 class PoderService {
 
 	NotarioService notarioService
-	DocumentoService documentoService
+	DocumentoRepositorioService documentoRepositorioService
 	SepomexService sepomexService
 	EntidadFinancieraService entidadFinancieraService
 	
@@ -40,7 +42,7 @@ class PoderService {
 	
 	//Contruye el modelo a guardar
 	Poder buildFromParamsToSave(Poder poder, int notarioNumero, int notarioIdEntidadFederativa, 
-								List<Integer> apoderadosIdAutorizadoCNBV, List<DocumentoTO> documentosGuardados){
+								List<Integer> apoderadosIdAutorizadoCNBV, List<DocumentoRespaldoPoderTO> documentosGuardados){
 								
 		Notario n = notarioService.obtenerNotario(notarioIdEntidadFederativa, notarioNumero)
 		poder.notario = n
@@ -59,8 +61,8 @@ class PoderService {
 		poder.documentosRespaldoPoder = new HashSet<DocumentoRespaldoPoder>()
 		documentosGuardados.each {
 			DocumentoRespaldoPoder drp = new DocumentoRespaldoPoder()
-			drp.uuidDocumentoRepositorio = it.uuid
 			
+			drp.uuidDocumentoRepositorio = it.uuid
 			drp.tipoDocumentoRespaldoPoder = TipoDocumentoRespaldoPoder.get(it.idTipoDocumento)
 			drp.poder = poder
 			
@@ -102,10 +104,11 @@ class PoderService {
 	//Si hay un cambio fuera de la aplicación (a nivel BD), se tendrá
 	//que hacer manualmente en la base del repositorio
 	def saveDocsOnRepository(Poder poder){
-		List<DocumentoPoderRepositorioTO> docsEnviar = new ArrayList<DocumentoPoderRepositorioTO>()
+		
+		List<DocumentoRepositorioTO> docsEnviar = new ArrayList<DocumentoRepositorioTO>()
 		
 		poder.documentosRespaldoPoder.each{
-			def docEnviar = new DocumentoPoderRepositorioTO()
+			DocumentoPoderRepositorioTO docEnviar = new DocumentoPoderRepositorioTO()
 			
 			docEnviar.id = null
 			docEnviar.uuid = it.uuidDocumentoRepositorio
@@ -138,8 +141,17 @@ class PoderService {
 
 			docsEnviar.add(docEnviar)
 		}
-		documentoService.enviaDocumentosTemp(docsEnviar)
+		documentoRepositorioService.enviarDocumentosArchivoTemporal(docsEnviar)
 	}
+}
+
+class DocumentoRespaldoPoderTO {
+	String sessionId
+	
+	Long id
+	String uuid
+	Long idTipoDocumento
+	String tipoDocumento
 }
 
 class PoderIntegrityError {

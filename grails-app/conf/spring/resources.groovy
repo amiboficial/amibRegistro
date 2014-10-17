@@ -3,7 +3,7 @@ import grails.util.Environment
 beans = {
 	archivoTemporalService(mx.amib.sistemas.util.service.ArchivoTemporalService) {
 		directorioTemporal = application.config.mx.amib.sistemas.registro.tempDir
-		minutosCaducidadPorArchivo = 60
+		minutosCaducidadPorArchivo = 50
 	}
 	documentoRepositorioService(mx.amib.sistemas.external.documentos.service.DocumentoRepositorioService) {
 		saveUrl = "PENDIENTE"

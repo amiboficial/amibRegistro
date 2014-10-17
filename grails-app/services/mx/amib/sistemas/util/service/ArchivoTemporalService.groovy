@@ -2,10 +2,15 @@ package mx.amib.sistemas.util.service
 
 import groovy.transform.AutoClone
 import grails.transaction.Transactional
+
 import org.springframework.web.multipart.commons.CommonsMultipartFile
 import org.apache.commons.io.FileUtils
+
 import groovy.time.TimeCategory
+
 import java.util.UUID
+
+import liquibase.util.file.FilenameUtils;
 
 /**
  * ArchivoTemporalService 
@@ -13,7 +18,7 @@ import java.util.UUID
  * Este servicio permite gestionar archivos temporales en la aplicación
  * 
  * @author Gabriel
- * @version 1.0 - (Última actualización) 12/09/2014
+ * @version 1.1 - (Última actualización) 16/10/2014
  * 
  */
 @Transactional
@@ -21,8 +26,26 @@ class ArchivoTemporalService {
 
 	private static TreeMap<String,ArchivoTO> archivosTemporales = new TreeMap<String,ArchivoTO>()
 	
-	String directorioTemporal //se inyecta desde spring
+	String directorioTemporal
 	Integer minutosCaducidadPorArchivo
+	
+	/**
+	 * Comprueba si un archivo dado su UUID se 
+	 * encuentra almancenado en temporal
+	 * 
+	 * @param uuid
+	 * @return
+	 */
+	boolean comprobarArchivoTemporal(String uuid){
+		return this.archivosTemporales.containsKey(uuid)
+	}
+	
+	void renuevaCaducidadArchivoTemporal(String uuid){
+		Date ahorita = new Date()
+		if(this.archivosTemporales.containsKey(uuid)){
+			this.archivosTemporales.get(uuid).caducidad = ahorita + minutosCaducidadPorArchivo.minutes
+		}
+	}
 	
 	/**
 	 * Obtiene los metadatos de un archivo temporal dado su UUID
@@ -67,6 +90,42 @@ class ArchivoTemporalService {
 		FileOutputStream fos = new FileOutputStream(anvo.temploc)
 		fos.write(cmf.getBytes())
 		fos.close()
+		
+		archivosTemporales.put(anvo.uuid, anvo)
+		
+		return anvo
+	}
+	
+	/**
+	 * Descarga un archivo dada una URL y forma una instancia de ArchivoTO
+	 * la cual estará guardada en temporal.
+	 * 
+	 * @param sessionId
+	 * @param uuid
+	 * @param filename
+	 * @param mimetype
+	 * @param source
+	 * @return Una instancia de ArchivoTO con los metadatos almacenados
+	 */
+	ArchivoTO descargarArchivoTemporal(String sessionId, String uuid, String filename, String mimetype, URL source){
+		ArchivoTO anvo = new ArchivoTO()
+		Date ahorita = new Date()
+		
+		anvo.uuid = uuid
+		anvo.sessionId = sessionId
+		anvo.filename = filename
+		anvo.mimetype = mimetype
+		anvo.temploc = directorioTemporal + anvo.uuid
+		use( TimeCategory ) {
+			anvo.caducidad = ahorita + minutosCaducidadPorArchivo.minutes
+		}
+		
+		try{
+			FileUtils.copyURLToFile(source, new File(anvo.temploc) )
+		}
+		catch(IOException e){
+			anvo = null
+		}
 		
 		archivosTemporales.put(anvo.uuid, anvo)
 		

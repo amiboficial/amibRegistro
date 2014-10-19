@@ -4,8 +4,8 @@ import static org.springframework.http.HttpStatus.*
 import mx.amib.sistemas.registro.apoderado.service.ApoderadoService
 import mx.amib.sistemas.registro.apoderado.service.ApoderadoTO
 import mx.amib.sistemas.registro.apoderado.service.DocumentoRespaldoPoderTO
-import mx.amib.sistemas.registro.apoderado.service.EntidadFinancieraService
 import mx.amib.sistemas.registro.apoderamiento.model.Poder
+import mx.amib.sistemas.external.catalogos.service.EntidadFinancieraService;
 import mx.amib.sistemas.external.catalogos.service.SepomexService
 import mx.amib.sistemas.external.documentos.service.DocumentoRepositorioService;
 import mx.amib.sistemas.registro.notario.service.NotarioService

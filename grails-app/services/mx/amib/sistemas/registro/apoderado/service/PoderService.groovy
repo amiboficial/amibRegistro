@@ -11,6 +11,7 @@ import mx.amib.sistemas.registro.apoderamiento.model.AutorizadoCNBV
 import mx.amib.sistemas.registro.apoderamiento.model.DocumentoRespaldoPoder
 import mx.amib.sistemas.registro.apoderamiento.model.Poder
 import mx.amib.sistemas.registro.apoderamiento.model.catalog.TipoDocumentoRespaldoPoder
+import mx.amib.sistemas.external.catalogos.service.EntidadFinancieraService;
 import mx.amib.sistemas.external.catalogos.service.SepomexService
 import mx.amib.sistemas.external.documentos.service.DocumentoPoderRepositorioTO;
 import mx.amib.sistemas.external.documentos.service.DocumentoRepositorioService;

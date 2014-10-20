@@ -140,6 +140,7 @@ mx.amib.sistemas.expediente.Sustentante.classname = 'mx.amib.sistemas.expediente
 
 //INICIA: ESPECIFICACIONES DE RUTAS PARA CONSUMO DE SERVICIOS REST
 //especificaciones de rutas para servicios REST de amibCatalogos
+mx.amib.sistemas.catalogos.general.GrupoFinanciero.list = 'grupoFinancieroRestful/index?max=100'
 mx.amib.sistemas.catalogos.general.GrupoFinanciero.getById = 'grupoFinancieroRestful/show/'
 mx.amib.sistemas.catalogos.general.Institucion.getById = 'institucionRestful/show/'
 mx.amib.sistemas.catalogos.sepomex.EntidadFederativa.list = 'entidadFederativaRestful/index?max=32'

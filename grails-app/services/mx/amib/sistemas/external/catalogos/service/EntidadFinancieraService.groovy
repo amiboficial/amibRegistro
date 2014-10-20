@@ -12,82 +12,78 @@ class EntidadFinancieraService {
 	
 	private HashMap<Long,GrupoFinancieroTO> gruposFinancieros = new HashMap<Long,GrupoFinancieroTO>()
 	private HashMap<Long,InstitucionTO> instituciones = new HashMap<Long,EntidadFinancieraTO>()
+
+	//Propiedades
+	Date ultimaActualizacionGruposFinancieros = new Date()
+	Date ultimaActualizacionInstituciones = new Date()
 	
-    def obtenerGrupoFinanciero(long id) {
-		
+    GrupoFinancieroTO obtenerGrupoFinanciero(long id) {
 		GrupoFinancieroTO grupoFinanciero = null
-		String restUrl = grailsApplication.config.mx.amib.sistemas.catalogos.resthttpURL + grailsApplication.config.mx.amib.sistemas.catalogos.general.GrupoFinanciero.getById
-		
 		if(this.gruposFinancieros.containsKey( Long.valueOf(id) )) {
 			grupoFinanciero = this.gruposFinancieros.get(Long.valueOf(id))
-		}
-		else{
-			grupoFinanciero = this.descargarGrupoFinanciero(id)
 		}
 		return grupoFinanciero
     }
 	
-	def obtenerInstitucion(long id) {
-		String restUrl = grailsApplication.config.mx.amib.sistemas.catalogos.resthttpURL + grailsApplication.config.mx.amib.sistemas.catalogos.general.Institucion.getById
+	Collection<GrupoFinancieroTO> obtenerGruposFinancierosVigentes(){
+		List<GrupoFinancieroTO> gpvig = new ArrayList<GrupoFinancieroTO>()
 		
+		gruposFinancieros.values().sort{it.nombre}.each{
+			if(it.vigente == true)
+				gpvig.add(it)
+		}
+		
+		return gpvig
+	}
+	
+	InstitucionTO obtenerInstitucion(long id) {
 		InstitucionTO institutcion = null
 		
-		//si la institucion ya esta almacenda
 		if(this.instituciones.containsKey( Long.valueOf(id) )) {
 			institutcion = this.instituciones.get(Long.valueOf(id))
 		}
-		else{
-			
-			def rest = new RestBuilder()
-			def resp = rest.get(restUrl + id)
-			resp.json instanceof JSONObject
-			
-			if(resp.json != null){
-				long idgp = resp.json.'idGrupoFinanciero'
-				//el descargar el grupo financiero hace que se almacene la información
-				//de la respectiva institución
-				def gp = this.descargarGrupoFinanciero( idgp )
-				//se obtiene la información de la institución
-				institutcion = this.instituciones.get( Long.valueOf(id) )
-			}
-			
-		}			
+		return institutcion
 	}
-	
-	private GrupoFinancieroTO descargarGrupoFinanciero(long id) {
-		String restUrl = grailsApplication.config.mx.amib.sistemas.catalogos.resthttpURL + grailsApplication.config.mx.amib.sistemas.catalogos.general.GrupoFinanciero.getById
-		GrupoFinancieroTO grupoFinanciero = null
+
+	void descargarCatalogo(){
+		String restUrl = grailsApplication.config.mx.amib.sistemas.catalogos.resthttpURL + grailsApplication.config.mx.amib.sistemas.catalogos.general.GrupoFinanciero.list
 		
 		def rest = new RestBuilder()
-		def resp = rest.get(restUrl + id)
+		def resp = rest.get(restUrl)
 		resp.json instanceof JSONObject
 		
 		if(resp.json != null){
-			grupoFinanciero = new GrupoFinancieroTO()
-			grupoFinanciero.id = resp.json.'id'
-			grupoFinanciero.nombre = resp.json.'nombre'
-			grupoFinanciero.vigente = resp.json.'vigente'.toBoolean()
-			
-			List<InstitucionTO> ins = new ArrayList<InstitucionTO>()
-			
-			resp.json.'instituciones'.each{
-				InstitucionTO i = new InstitucionTO()
-				i = new InstitucionTO()
-				i.id = it.'id'
-				i.nombre = it.'nombre'
-				i.vigente = it.'vigente'.toBoolean()
-				i.idTipoInstitucion = it.'idTipoInstitucion'
-				i.grupoFinanciero = grupoFinanciero
+			resp.json.each{ gfjson -> 
+				def grupoFinanciero = new GrupoFinancieroTO()
+				grupoFinanciero.id = gfjson.'id'
+				grupoFinanciero.nombre = gfjson.'nombre'
+				grupoFinanciero.vigente = gfjson.'vigente'.toBoolean()
 				
-				ins.add(i)
-				if(!this.instituciones.containsKey( Long.valueOf(i.id) ))
-					this.instituciones.put(Long.valueOf(i.id),i)
+				List<InstitucionTO> ins = new ArrayList<InstitucionTO>()
+				gfjson.'instituciones'.each{ ijson ->
+					def i = new InstitucionTO()
+					i.id = ijson.'id'
+					i.nombre = ijson.'nombre'
+					i.vigente = ijson.'vigente'.toBoolean()
+					i.idTipoInstitucion = ijson.'idTipoInstitucion'
+					i.grupoFinanciero = grupoFinanciero
+					
+					ins.add(i)
+					if(!this.instituciones.containsKey( Long.valueOf(i.id) ))
+						this.instituciones.put(Long.valueOf(i.id),i)
+				}
+				grupoFinanciero.instituciones = new InstitucionTO[ ins.size() ]
+				ins.toArray(grupoFinanciero.instituciones)
+				
+				if(!this.gruposFinancieros.containsKey( Long.valueOf(grupoFinanciero.id) ))
+					this.gruposFinancieros.put( Long.valueOf(grupoFinanciero.id) , grupoFinanciero )
 			}
-			
-			grupoFinanciero.instituciones = ins
 		}
-		this.gruposFinancieros.put( Long.valueOf(id) , grupoFinanciero )
-		return grupoFinanciero
+	}
+	
+	void limpiarCatalogo(){
+		this.gruposFinancieros.clear()
+		this.instituciones.clear()
 	}
 	
 }
@@ -103,7 +99,7 @@ class GrupoFinancieroTO implements EntidadFinancieraTO {
 	String nombre
 	boolean vigente
 	
-	Collection<InstitucionTO> instituciones
+	InstitucionTO[] instituciones
 }
 
 class InstitucionTO implements EntidadFinancieraTO {

@@ -151,6 +151,10 @@ class DocumentoRepositorioService {
 		}
     }
 	
+	void actualizaMetadatosDocumento(Collection<DocumentoRepositorioTO> docs){
+		
+	}
+	
 	/**
 	 * Elimina un documento del repositorio amibDocumentos 
 	 * dado su UUID

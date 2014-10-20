@@ -74,9 +74,22 @@ class PoderService {
 		//debera adecuarse de acuerdo a si quien esta subiendo el cambio
 		//es una entidadFinanciera o institucion
 		//o en caso de ser un ADMON, se omite este paso
-		poder.esRegistradoPorGrupoFinanciero = true
-		poder.idGrupofinanciero = 6
-		poder.idInstitucion = -1
+		
+		//SOLO PARA EFECTOS DE PRUEBA, SE ASIGNA A TODOS 6
+		//HASTA QUE ESTEN IMPLEMENTADO SPRING SECURITY
+		//SE PODRÁ HACER EL CAMBIO
+		if(poder.idGrupofinanciero == null)
+		{
+			poder.idGrupofinanciero = 6
+			poder.idInstitucion = null
+		}
+		//poder.idInstitucion = null
+		
+		if(poder.idInstitucion == null)
+			poder.esRegistradoPorGrupoFinanciero = true
+		else
+			poder.esRegistradoPorGrupoFinanciero = false
+		
 		
 		//fechas
 		poder.fechaCreacion = new Date()
@@ -85,6 +98,95 @@ class PoderService {
 		return poder
 	}
 	
+	Poder update(Poder poder, int notarioNumero, int notarioIdEntidadFederativa, 
+								List<Integer> apoderadosIdAutorizadoCNBV, List<DocumentoRespaldoPoderTO> documentosGuardados){
+	
+		Notario n = notarioService.obtenerNotario(notarioIdEntidadFederativa, notarioNumero)
+		poder.notario = n
+		
+		//borra apoderados anteriores
+		def apoant = Apoderado.findAllByPoder(poder)
+		apoant*.delete()
+		//inserta nuevos
+		poder.apoderados = new HashSet<Apoderado>()
+		apoderadosIdAutorizadoCNBV.each {
+			AutorizadoCNBV acnbv = AutorizadoCNBV.get(it)
+						
+			Apoderado a = new Apoderado()
+			a.poder = poder
+			a.autorizado = acnbv
+			
+			poder.apoderados.add(a)
+		}
+		
+		//obtiene nuevos docs y los actualizados
+		List<DocumentoRespaldoPoderTO> docsNuevos = new ArrayList<DocumentoRespaldoPoderTO>()
+		List<DocumentoRespaldoPoderTO> docsAct = new ArrayList<DocumentoRespaldoPoderTO>()
+		documentosGuardados.each { drptoGuardado -> 
+			if( poder.documentosRespaldoPoder.find{ drp -> drp.uuidDocumentoRepositorio == drptoGuardado.uuid } == null ){
+				docsNuevos.add(drptoGuardado)
+			}
+			else{
+				docsAct.add(drptoGuardado)
+			}
+		}
+		//obtiene docs a borrar
+		List<DocumentoRespaldoPoderTO> docsBorrar = new ArrayList<DocumentoRespaldoPoder>()
+		poder.documentosRespaldoPoder.each{ drp ->
+			if( documentosGuardados.find{drptoGuardado -> drptoGuardado.uuid == drp.uuid } == null ){
+				docsBorrar.add( new DocumentoRespaldoPoderTO([id:drp.id,uuid:drp.uuidDocumentoRepositorio]) )
+			}
+		}
+		
+		//borra registros anteriores
+		def docant = DocumentoRespaldoPoder.findAllByPoder(poder)
+		docant*.delete()
+		//inserta nuevos
+		poder.documentosRespaldoPoder = new HashSet<DocumentoRespaldoPoder>()
+		documentosGuardados.each {
+			DocumentoRespaldoPoder drp = new DocumentoRespaldoPoder()
+			
+			drp.uuidDocumentoRepositorio = it.uuid
+			drp.tipoDocumentoRespaldoPoder = TipoDocumentoRespaldoPoder.get(it.idTipoDocumento)
+			drp.poder = poder
+			
+			poder.documentosRespaldoPoder.add(drp)
+		}
+		
+		//en cuanto se implemente la sesión con atributos
+		//debera adecuarse de acuerdo a si quien esta subiendo el cambio
+		//es una entidadFinanciera o institucion
+		//o en caso de ser un ADMON, se omite este paso
+		
+		//SOLO PARA EFECTOS DE PRUEBA, SE ASIGNA A TODOS 6
+		//HASTA QUE ESTEN IMPLEMENTADO SPRING SECURITY
+		//SE PODRÁ HACER EL CAMBIO
+		if(poder.idGrupofinanciero == null)
+		{
+			poder.idGrupofinanciero = 6
+			poder.idInstitucion = null
+		}
+		//poder.idInstitucion = null
+		
+		if(poder.idInstitucion == null)
+			poder.esRegistradoPorGrupoFinanciero = true
+		else
+			poder.esRegistradoPorGrupoFinanciero = false
+		
+		
+		//fechas
+		poder.fechaModificacion = new Date()
+		
+		//borra los documentos que ya no se usarán mas
+		
+		//actualiza los metadatos de los documentos que no se movieron
+		
+		
+		
+		//guarda en la BD
+		return poder.save(flush:true)
+	}
+								
 	//Obtiene errores de acuerdo a validaciones de reglas de negocio
 	Collection<PoderIntegrityError> validateBusinessIntegrity(Poder poder){
 		return null
@@ -96,6 +198,20 @@ class PoderService {
 		this.saveDocsOnRepository(poder)
 		//guarda en la BD
 		return poder.save(flush:true)
+	}
+	
+	
+	//Elimina un conjunto de documentos
+	def deleteDocsOnRepository(Collection<DocumentoRepositorioTO> drpts){
+		
+	}
+	//Actualiza los metadatos de los documentos
+	def updateDocsOnRepository(Poder poder, Collection<DocumentoRepositorioTO> drpts){
+		
+	}
+	//Sube al repostorio nuevos documentos
+	def updateNewocsOnRepository(Poder poder, Collection<DocumentoRepositorioTO> drpts){
+		
 	}
 	
 	//Envía los documentos pertenecientes al Poder (que 
@@ -144,6 +260,10 @@ class PoderService {
 		}
 		documentoRepositorioService.enviarDocumentosArchivoTemporal(docsEnviar)
 	}
+}
+
+class PoderViewModel {
+	
 }
 
 class DocumentoRespaldoPoderTO {

@@ -1,5 +1,6 @@
 package mx.amib.sistemas.registro.apoderado.service
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -118,40 +119,48 @@ class PoderService {
 			
 			poder.apoderados.add(a)
 		}
-		
+
 		//obtiene nuevos docs y los actualizados
 		List<DocumentoRespaldoPoderTO> docsNuevos = new ArrayList<DocumentoRespaldoPoderTO>()
 		List<DocumentoRespaldoPoderTO> docsAct = new ArrayList<DocumentoRespaldoPoderTO>()
+		//por cada documento que va a ser guardado
 		documentosGuardados.each { drptoGuardado -> 
+			//si no encuentra un solo doc. que coincida con los que ya estan guardados
 			if( poder.documentosRespaldoPoder.find{ drp -> drp.uuidDocumentoRepositorio == drptoGuardado.uuid } == null ){
 				docsNuevos.add(drptoGuardado)
 			}
+			//de lo contrario, este doc. sera actualizado 
 			else{
 				docsAct.add(drptoGuardado)
 			}
 		}
 		//obtiene docs a borrar
 		List<DocumentoRespaldoPoderTO> docsBorrar = new ArrayList<DocumentoRespaldoPoder>()
+		def uuidsDocsBorrar = new ArrayList<String>()
+		//por cada documento ya guardado
 		poder.documentosRespaldoPoder.each{ drp ->
-			if( documentosGuardados.find{drptoGuardado -> drptoGuardado.uuid == drp.uuid } == null ){
+			//si no se encuentra dentro de los que se van a guardar, entonces será borrado
+			if( documentosGuardados.find{drptoGuardado -> drptoGuardado.uuid == drp.uuid } != null ){
 				docsBorrar.add( new DocumentoRespaldoPoderTO([id:drp.id,uuid:drp.uuidDocumentoRepositorio]) )
+				uuidsDocsBorrar.add( drp.uuidDocumentoRepositorio )
 			}
 		}
 		
-		//borra registros anteriores
-		def docant = DocumentoRespaldoPoder.findAllByPoder(poder)
-		docant*.delete()
-		//inserta nuevos
-		poder.documentosRespaldoPoder = new HashSet<DocumentoRespaldoPoder>()
-		documentosGuardados.each {
+		//borra registros de docs que ya no se guardaran
+		docsBorrar.each{
+			def doc = DocumentoRespaldoPoder.get(it.id)
+			poder.documentosRespaldoPoder.remove(doc)
+			doc.delete()
+		}
+		//inserta nuevos registros
+		docsNuevos.each{
 			DocumentoRespaldoPoder drp = new DocumentoRespaldoPoder()
-			
 			drp.uuidDocumentoRepositorio = it.uuid
 			drp.tipoDocumentoRespaldoPoder = TipoDocumentoRespaldoPoder.get(it.idTipoDocumento)
 			drp.poder = poder
-			
 			poder.documentosRespaldoPoder.add(drp)
 		}
+		
 		
 		//en cuanto se implemente la sesión con atributos
 		//debera adecuarse de acuerdo a si quien esta subiendo el cambio
@@ -178,10 +187,11 @@ class PoderService {
 		poder.fechaModificacion = new Date()
 		
 		//borra los documentos que ya no se usarán mas
-		
+		documentoRepositorioService.eliminarDocumentos(uuidsDocsBorrar)
 		//actualiza los metadatos de los documentos que no se movieron
-		
-		
+		this.updateDocsOnRepository(poder,docsAct)
+		//envía unicamente documentos nuevos
+		this.updateNewDocsOnRepository(poder,docsNuevos)
 		
 		//guarda en la BD
 		return poder.save(flush:true)
@@ -200,18 +210,84 @@ class PoderService {
 		return poder.save(flush:true)
 	}
 	
-	
-	//Elimina un conjunto de documentos
-	def deleteDocsOnRepository(Collection<DocumentoRepositorioTO> drpts){
-		
-	}
 	//Actualiza los metadatos de los documentos
 	def updateDocsOnRepository(Poder poder, Collection<DocumentoRepositorioTO> drpts){
+		List<DocumentoRepositorioTO> docsEnviar = new ArrayList<DocumentoRepositorioTO>()
 		
+		drpts.each{
+			DocumentoPoderRepositorioTO docEnviar = new DocumentoPoderRepositorioTO()
+			
+			docEnviar.id = null
+			docEnviar.uuid = it.uuid
+			
+			docEnviar.tipoDocumentoRespaldo = TipoDocumentoRespaldoPoder.get(it.idTipoDocumento).descripcion
+			docEnviar.representanteLegalNombre = poder.representanteLegalNombre
+			docEnviar.representanteLegalApellido1 = poder.representanteLegalApellido1
+			docEnviar.representanteLegalApellido2 = poder.representanteLegalApellido2
+			docEnviar.esRegistradoPorGrupoFinanciero = poder.esRegistradoPorGrupoFinanciero
+			docEnviar.numeroEscritura = poder.numeroEscritura
+			docEnviar.fechaApoderamiento = poder.fechaApoderamiento
+			docEnviar.jsonApoderados = poder.apoderados as JSON
+			docEnviar.jsonNotario = poder.notario as JSON
+			
+			docEnviar.jsonApoderados = StringEscapeUtils.unescapeJava(docEnviar.jsonApoderados)
+			docEnviar.jsonNotario = StringEscapeUtils.unescapeJava(docEnviar.jsonNotario)
+				
+			if(poder.esRegistradoPorGrupoFinanciero == true)
+			{
+				docEnviar.jsonGrupoFinanciero = entidadFinancieraService.obtenerGrupoFinanciero(poder.idGrupofinanciero) as JSON
+				docEnviar.jsonInstitucion = null
+				docEnviar.jsonGrupoFinanciero = StringEscapeUtils.unescapeJava(docEnviar.jsonGrupoFinanciero)
+			}
+			else
+			{
+				docEnviar.jsonGrupoFinanciero = null
+				docEnviar.jsonInstitucion = entidadFinancieraService.obtenerInstitucion(poder.idInstitucion) as JSON
+				docEnviar.jsonInstitucion = StringEscapeUtils.unescapeJava(docEnviar.jsonInstitucion)
+			}
+			docsEnviar.add(docEnviar)
+		}
+		documentoRepositorioService.actualizaMetadatosDocumentos(docsEnviar)
 	}
+	
 	//Sube al repostorio nuevos documentos
-	def updateNewocsOnRepository(Poder poder, Collection<DocumentoRepositorioTO> drpts){
+	def updateNewDocsOnRepository(Poder poder, Collection<DocumentoRepositorioTO> drpts){
+		List<DocumentoRepositorioTO> docsEnviar = new ArrayList<DocumentoRepositorioTO>()
 		
+		drpts.each{
+			DocumentoPoderRepositorioTO docEnviar = new DocumentoPoderRepositorioTO()
+			
+			docEnviar.id = null
+			docEnviar.uuid = it.uuid
+			
+			docEnviar.tipoDocumentoRespaldo = TipoDocumentoRespaldoPoder.get(it.idTipoDocumento).descripcion
+			docEnviar.representanteLegalNombre = poder.representanteLegalNombre
+			docEnviar.representanteLegalApellido1 = poder.representanteLegalApellido1
+			docEnviar.representanteLegalApellido2 = poder.representanteLegalApellido2
+			docEnviar.esRegistradoPorGrupoFinanciero = poder.esRegistradoPorGrupoFinanciero
+			docEnviar.numeroEscritura = poder.numeroEscritura
+			docEnviar.fechaApoderamiento = poder.fechaApoderamiento
+			docEnviar.jsonApoderados = poder.apoderados as JSON
+			docEnviar.jsonNotario = poder.notario as JSON
+			
+			docEnviar.jsonApoderados = StringEscapeUtils.unescapeJava(docEnviar.jsonApoderados)
+			docEnviar.jsonNotario = StringEscapeUtils.unescapeJava(docEnviar.jsonNotario)
+				
+			if(poder.esRegistradoPorGrupoFinanciero == true)
+			{
+				docEnviar.jsonGrupoFinanciero = entidadFinancieraService.obtenerGrupoFinanciero(poder.idGrupofinanciero) as JSON
+				docEnviar.jsonInstitucion = null
+				docEnviar.jsonGrupoFinanciero = StringEscapeUtils.unescapeJava(docEnviar.jsonGrupoFinanciero)
+			}
+			else
+			{
+				docEnviar.jsonGrupoFinanciero = null
+				docEnviar.jsonInstitucion = entidadFinancieraService.obtenerInstitucion(poder.idInstitucion) as JSON
+				docEnviar.jsonInstitucion = StringEscapeUtils.unescapeJava(docEnviar.jsonInstitucion)
+			}
+			docsEnviar.add(docEnviar)
+		}
+		documentoRepositorioService.enviarDocumentosArchivoTemporal(docsEnviar)
 	}
 	
 	//Envía los documentos pertenecientes al Poder (que 
@@ -260,6 +336,7 @@ class PoderService {
 		}
 		documentoRepositorioService.enviarDocumentosArchivoTemporal(docsEnviar)
 	}
+	
 }
 
 class PoderViewModel {

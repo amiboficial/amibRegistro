@@ -9,6 +9,7 @@ import mx.amib.sistemas.util.service.ArchivoTemporalService
 
 import org.codehaus.groovy.grails.web.json.JSONObject
 import org.junit.After;
+import org.springframework.aop.aspectj.RuntimeTestWalker.ThisInstanceOfResidueTestVisitor;
 
 import java.io.File
 
@@ -33,6 +34,7 @@ class DocumentoRepositorioService {
 	
 	String saveUrl
 	String documentoPoderSaveUrl
+	String documentoPoderUpdateUrl
 	String saveMultipartUrl
 	String getUrl
 	String downloadUrl
@@ -151,8 +153,37 @@ class DocumentoRepositorioService {
 		}
     }
 	
-	void actualizaMetadatosDocumento(Collection<DocumentoRepositorioTO> docs){
+	void actualizaMetadatosDocumentos(Collection<DocumentoRepositorioTO> docs){
+		docs.each{
+			this.actualizaMetadatosDocumento(it)
+		}
+	}
+	
+	/**
+	 * Actualiza UNICAMENTE los metadatos relativos al documento,
+	 * por lo que no actualizara datos como nombre, mimetype ni clave
+	 * 
+	 * @param doc
+	 */
+	void actualizaMetadatosDocumento(DocumentoRepositorioTO doc){
+		String restUrl = null
 		
+		doc.id = null
+		doc.fechaModificacion = new Date()
+		
+		def rest = new RestBuilder()
+		def restMultipart = new RestBuilder()
+		String _uuid = doc.uuid
+		String _json = (doc as JSON)
+		
+		if( DocumentoPoderRepositorioTO.class.isInstance(doc) ){
+			restUrl = this.documentoPoderUpdateUrl
+		}
+		//Envía acorde al metadato
+		def resp = rest.post(restUrl){
+			contentType "application/json;charset=UTF-8"
+			json _json
+		}
 	}
 	
 	/**

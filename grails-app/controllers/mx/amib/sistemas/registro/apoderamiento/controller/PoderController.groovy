@@ -210,7 +210,7 @@ class PoderController {
 			docTO.idTipoDocumento = documento.'idTipoDocumento'
 			documentos.add(docTO)
 		}
-		//adapta los parametros recibidos al modelo
+
 		poder = poderService.update(poder, notarioNumero, notarioIdEntidadFederativa,
 															apoderadosIdAutorizadoCNBV, documentos)
 		

@@ -99,24 +99,16 @@ class PoderController {
 			docTO.idTipoDocumento = documento.'idTipoDocumento'
 			documentos.add(docTO)
 		}
-		
-		//adapta los parametros recibidos al modelo
-		poder = poderService.buildFromParamsToSave(poder, notarioNumero, notarioIdEntidadFederativa, 
-															apoderadosIdAutorizadoCNBV, documentos)
-		
+
 		//valida errores del domain
-		poder.validate()
+		/*poder.validate()
         if (poder.hasErrors()) {
 			poder.errors.allErrors.each { println it }
             respond poder.errors, view:'create'
             return
-        }
-		//valida errores en el negocio
-		//validateBusinessIntegrity(poderInstance)
-		
+        }*/
 		//manda al servicio de guardado
 		poderService.save(poder)
-        //poderInstance.save flush:true
 
         request.withFormat {
             form multipartForm {
@@ -200,7 +192,6 @@ class PoderController {
 		def _documentos = params.list('documento')
 		
 		List<Long> apoderadosIdAutorizadoCNBV = new ArrayList<Long>()
-		
 		List<DocumentoRespaldoPoderTO> docsNuevos = new ArrayList<DocumentoRespaldoPoderTO>()
 		List<DocumentoRespaldoPoderTO> docsActual = new ArrayList<DocumentoRespaldoPoderTO>()
 		
@@ -223,18 +214,13 @@ class PoderController {
 			}
 		}
 
-		println (poder as JSON)
-		
-        if (poder.hasErrors()) {
+        /*if (poder.hasErrors()) {
 			println (poder.errors as JSON)
             respond poder.errors, view:'edit'
             return
-        }
-
+        }*/
 		poder = poderService.update(poder, notarioNumero, notarioIdEntidadFederativa,
 			apoderadosIdAutorizadoCNBV, docsActual, docsNuevos)
-		
-        //poder.save flush:true
 
         request.withFormat {
             form multipartForm {

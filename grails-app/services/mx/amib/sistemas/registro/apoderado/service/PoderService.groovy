@@ -28,22 +28,33 @@ class PoderService {
 	DocumentoRepositorioService documentoRepositorioService
 	SepomexService sepomexService
 	EntidadFinancieraService entidadFinancieraService
-	
-	
-    def nuevoPoderPorGrupoFinanciero(long idGrupoFinanciero) {
 		
-    }
-	
-	def nuevoPoderPorInstitucion(long idInstitucion) {
-		
-	}
-	
 	Collection<TipoDocumentoRespaldoPoder> obtenerListadoTipoDocumentoRespaldoPoder() {
 		return TipoDocumentoRespaldoPoder.findAllByVigente(true)
 	}
+			
+	//Obtiene errores de acuerdo a validaciones de reglas de negocio
+	//Este tipo de método validaría que la información sea coherente,
+	//dado que apesar de que haya validaciones del lado del cliente
+	//en javascript, siempre es posible "inyectar" valores a las
+	//peticiones HTTP
+	Collection<PoderIntegrityError> validateBusinessIntegrity(Poder poder){
+		return null
+	}
+	
+	//Guarda el modelo
+	Poder save(Poder poder, int notarioNumero, int notarioIdEntidadFederativa, 
+								List<Long> apoderadosIdAutorizadoCNBV, List<DocumentoRespaldoPoderTO> documentosGuardados){
+		//arma el poder de acuerdo a los paramtros recibidos
+		poder = this.buildFromParamsToSave(poder, notarioNumero, notarioIdEntidadFederativa, apoderadosIdAutorizadoCNBV, documentos)
+		//guarda los documentos en el repositorio
+		this.saveDocsOnRepository(poder)
+		//guarda en la BD
+		return poder.save(flush:true)
+	}
 	
 	//Contruye el modelo a guardar
-	Poder buildFromParamsToSave(Poder poder, int notarioNumero, int notarioIdEntidadFederativa, 
+	private Poder buildFromParamsToSave(Poder poder, int notarioNumero, int notarioIdEntidadFederativa,
 								List<Long> apoderadosIdAutorizadoCNBV, List<DocumentoRespaldoPoderTO> documentosGuardados){
 								
 		//los parametros numericos que son -1, se convierten a null
@@ -102,10 +113,10 @@ class PoderService {
 		return poder
 	}
 	
-	Poder update(Poder poder, int notarioNumero, int notarioIdEntidadFederativa, 
+	Poder update(Poder poder, int notarioNumero, int notarioIdEntidadFederativa,
 				List<Long> apoderadosIdAutorizadoCNBV, List<DocumentoRespaldoPoderTO> documentosActuales,
 				List<DocumentoRespaldoPoderTO> documentosNuevos){
-								
+							
 		//los parametros numericos que son -1, se convierten a null
 		if(poder.idGrupofinanciero==-1){ poder.idGrupofinanciero=null }
 		if(poder.idInstitucion==-1){ poder.idInstitucion=null }
@@ -141,7 +152,7 @@ class PoderService {
 				poder.apoderados.add(a)
 			}
 		}
-
+		
 		//obtiene docs a borrar
 		List<DocumentoRespaldoPoderTO> docsBorrar = new ArrayList<DocumentoRespaldoPoder>()
 		def uuidsDocsBorrar = new ArrayList<String>()
@@ -202,22 +213,9 @@ class PoderService {
 		this.updateNewDocsOnRepository(poder,documentosNuevos)
 		
 		//guarda en la BD
-		return poder.save(flush:true)
+			return poder.save(flush:true)
 	}
-								
-	//Obtiene errores de acuerdo a validaciones de reglas de negocio
-	Collection<PoderIntegrityError> validateBusinessIntegrity(Poder poder){
-		return null
-	}
-	
-	//Guarda el modelo
-	Poder save(Poder poder){
-		//guarda los documentos en el repositorio
-		this.saveDocsOnRepository(poder)
-		//guarda en la BD
-		return poder.save(flush:true)
-	}
-	
+															
 	//Actualiza los metadatos de los documentos
 	def updateDocsOnRepository(Poder poder, Collection<DocumentoRepositorioTO> drpts){
 		List<DocumentoRepositorioTO> docsEnviar = new ArrayList<DocumentoRepositorioTO>()
@@ -344,10 +342,6 @@ class PoderService {
 		}
 		documentoRepositorioService.enviarDocumentosArchivoTemporal(docsEnviar)
 	}
-	
-}
-
-class PoderViewModel {
 	
 }
 

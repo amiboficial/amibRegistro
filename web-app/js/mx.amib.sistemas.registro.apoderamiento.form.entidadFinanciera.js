@@ -11,10 +11,10 @@
 			//muestra mensaje procesando hasta que lleguen los datos
 			$("#divMsgProcesandoEntidadFinanciera").show();
 			$("#divMsgErrorEntidadFinanciera").hide();
-			if( $("#selAdmIdGrupoFinanciero").val() == 'null' ) {
+			if( $("#selAdmIdGrupoFinanciero").val() == '-1' ) {
 				$("#divMsgProcesandoEntidadFinanciera").hide();
 				$("#selAdmIdInstitucion").html('');
-				$("#selAdmIdInstitucion").append('<option value="null">-Seleccione-</option>');
+				$("#selAdmIdInstitucion").append('<option value="-1">-Seleccione-</option>');
 			}
 			else {
 				$.ajax({
@@ -29,12 +29,16 @@
 					success: function(data,status,_jqXHR){
 						$("#divMsgProcesandoEntidadFinanciera").hide();
 						$("#selAdmIdInstitucion").html('');
-						$("#selAdmIdInstitucion").append('<option value="null">-Sin especificar-</option>');
+						$("#selAdmIdInstitucion").append('<option value="-1">-Sin especificar-</option>');
 						_.each(data,function(item){
 							$("#selAdmIdInstitucion").append('<option value="' + item.id + '">' + item.nombre + '</option>');
 						}, this);
 						if(precargadoIdInstitucion > 0)
-							$("#selAdmIdInstitucion").val(precargadoIdInstitucion)
+						{
+							$("#selAdmIdInstitucion").val(precargadoIdInstitucion);
+							//solamente se carga una sola vez
+							precargadoIdInstitucion = 0;
+						}
 					}
 				});
 			}

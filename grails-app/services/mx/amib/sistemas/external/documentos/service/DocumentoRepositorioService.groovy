@@ -6,6 +6,7 @@ import java.util.Date
 
 import mx.amib.sistemas.util.service.ArchivoTO
 import mx.amib.sistemas.util.service.ArchivoTemporalService
+import mx.amib.sistemas.utils.AmibFechaUtils
 
 import org.codehaus.groovy.grails.web.json.JSONObject
 import org.junit.After;
@@ -17,6 +18,8 @@ import grails.converters.JSON
 import grails.plugins.rest.client.RestBuilder
 import grails.transaction.Transactional
 
+
+
 /**
  * DocumentoRepositorioService
  *
@@ -24,7 +27,7 @@ import grails.transaction.Transactional
  * HTTP/REST al sistema de amibDocumentos
  *
  * @author Gabriel
- * @version 1.0 - (Última actualización) 12/09/2014
+ * @version 1.1 - (Última actualización) 22/09/2014
  *
  */
 @Transactional
@@ -112,14 +115,15 @@ class DocumentoRepositorioService {
 	 * @param docs
 	 */
     void enviarDocumentosArchivoTemporal(Collection<DocumentoRepositorioTO> docs) {
+
 		docs.each{
 			String restUrl = null
 			
 			it.id = null //este siempre se debe setear nulo para que pueda guardar el nuevo documento
 			it.nombre = archivoTemporalService.obtenerArchivoTemporal(it.uuid).filename
 			it.mimetype = archivoTemporalService.obtenerArchivoTemporal(it.uuid).mimetype
-			it.fechaModificacion = new Date()
-			it.fechaCreacion = new Date()
+			it.fechaModificacion = AmibFechaUtils.obtenerFechaZ()
+			it.fechaCreacion = AmibFechaUtils.obtenerFechaZ()
 			
 			def rest = new RestBuilder()
 			def restMultipart = new RestBuilder()
@@ -231,17 +235,18 @@ class DocumentoRepositorioService {
 	 * @param sessionId
 	 * @param uuid
 	 */
-	void descargarATemporal(String sessionId, String uuid){
+	DocumentoRepositorioTO descargarATemporal(String sessionId, String uuid){
 		//paso 1: obtiene metadatos
 		DocumentoRepositorioTO dr = this.obtenerMetadatosDocumento(uuid)
 		//paso 2: descarga a temporal
 		if(dr != null){
 			//comprueba si ya esta en temporal, si ya esta, solo actualiza caducidad
-			if(archivoTemporalService.comprobarArchivoTemporal(uuid))
-				archivoTemporalService.renuevaCaducidadArchivoTemporal(uuid)
-			else
+			//if(archivoTemporalService.comprobarArchivoTemporal(uuid))
+				//archivoTemporalService.renuevaCaducidadArchivoTemporal(uuid)
+			//else
 				archivoTemporalService.descargarArchivoTemporal(sessionId, uuid, dr.nombre, dr.mimetype, new URL(downloadUrl+uuid))
 		}
+		return dr
 	}
 }
 

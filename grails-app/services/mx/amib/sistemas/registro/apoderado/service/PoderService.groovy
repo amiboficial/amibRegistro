@@ -44,8 +44,12 @@ class PoderService {
 	
 	//Contruye el modelo a guardar
 	Poder buildFromParamsToSave(Poder poder, int notarioNumero, int notarioIdEntidadFederativa, 
-								List<Integer> apoderadosIdAutorizadoCNBV, List<DocumentoRespaldoPoderTO> documentosGuardados){
+								List<Long> apoderadosIdAutorizadoCNBV, List<DocumentoRespaldoPoderTO> documentosGuardados){
 								
+		//los parametros numericos que son -1, se convierten a null
+		if(poder.idGrupofinanciero==-1){ poder.idGrupofinanciero=null }
+		if(poder.idInstitucion==-1){ poder.idInstitucion=null }
+		
 		Notario n = notarioService.obtenerNotario(notarioIdEntidadFederativa, notarioNumero)
 		poder.notario = n
 		
@@ -84,7 +88,6 @@ class PoderService {
 			poder.idGrupofinanciero = 6
 			poder.idInstitucion = null
 		}
-		//poder.idInstitucion = null
 		
 		if(poder.idInstitucion == null)
 			poder.esRegistradoPorGrupoFinanciero = true
@@ -100,47 +103,52 @@ class PoderService {
 	}
 	
 	Poder update(Poder poder, int notarioNumero, int notarioIdEntidadFederativa, 
-								List<Integer> apoderadosIdAutorizadoCNBV, List<DocumentoRespaldoPoderTO> documentosGuardados){
-	
+				List<Long> apoderadosIdAutorizadoCNBV, List<DocumentoRespaldoPoderTO> documentosActuales,
+				List<DocumentoRespaldoPoderTO> documentosNuevos){
+								
+		//los parametros numericos que son -1, se convierten a null
+		if(poder.idGrupofinanciero==-1){ poder.idGrupofinanciero=null }
+		if(poder.idInstitucion==-1){ poder.idInstitucion=null }
+								
 		Notario n = notarioService.obtenerNotario(notarioIdEntidadFederativa, notarioNumero)
 		poder.notario = n
 		
-		//borra apoderados anteriores
+		//borra apoderados que no se hayan guardado y conserva los que no se modificaron
 		def apoant = Apoderado.findAllByPoder(poder)
-		apoant*.delete()
+		def apBorrar = new ArrayList<Apoderado>();
+		def apSinModificar = new ArrayList<Apoderado>();
+		apoant.each{ apant ->
+			if( apoderadosIdAutorizadoCNBV.find{ _apid -> _apid.longValue() == apant.autorizado.id.longValue() } == null ){
+				//println "no encontro id de autorizado: " + _apid
+				apBorrar.add(apant)
+			}
+			else{
+				apSinModificar.add(apant)
+			}
+		}
+		apBorrar.each{
+			poder.apoderados.remove(it)
+			it.delete(flush:true)
+		}
 		//inserta nuevos
-		poder.apoderados = new HashSet<Apoderado>()
-		apoderadosIdAutorizadoCNBV.each {
-			AutorizadoCNBV acnbv = AutorizadoCNBV.get(it)
-						
-			Apoderado a = new Apoderado()
-			a.poder = poder
-			a.autorizado = acnbv
-			
-			poder.apoderados.add(a)
+		apoderadosIdAutorizadoCNBV.each { _apid ->
+			//si no se encuentra en la lista "sin modificar"
+			if( apSinModificar.find{ _ap -> _ap.autorizado.id.longValue() == _apid.longValue() } == null ){
+				AutorizadoCNBV acnbv = AutorizadoCNBV.get(_apid)
+				Apoderado a = new Apoderado()
+				a.poder = poder
+				a.autorizado = acnbv
+				poder.apoderados.add(a)
+			}
 		}
 
-		//obtiene nuevos docs y los actualizados
-		List<DocumentoRespaldoPoderTO> docsNuevos = new ArrayList<DocumentoRespaldoPoderTO>()
-		List<DocumentoRespaldoPoderTO> docsAct = new ArrayList<DocumentoRespaldoPoderTO>()
-		//por cada documento que va a ser guardado
-		documentosGuardados.each { drptoGuardado -> 
-			//si no encuentra un solo doc. que coincida con los que ya estan guardados
-			if( poder.documentosRespaldoPoder.find{ drp -> drp.uuidDocumentoRepositorio == drptoGuardado.uuid } == null ){
-				docsNuevos.add(drptoGuardado)
-			}
-			//de lo contrario, este doc. sera actualizado 
-			else{
-				docsAct.add(drptoGuardado)
-			}
-		}
 		//obtiene docs a borrar
 		List<DocumentoRespaldoPoderTO> docsBorrar = new ArrayList<DocumentoRespaldoPoder>()
 		def uuidsDocsBorrar = new ArrayList<String>()
 		//por cada documento ya guardado
 		poder.documentosRespaldoPoder.each{ drp ->
 			//si no se encuentra dentro de los que se van a guardar, entonces será borrado
-			if( documentosGuardados.find{drptoGuardado -> drptoGuardado.uuid == drp.uuid } != null ){
+			if( documentosActuales.find{drptoAct -> drptoAct.uuid == drp.uuidDocumentoRepositorio } == null ){
 				docsBorrar.add( new DocumentoRespaldoPoderTO([id:drp.id,uuid:drp.uuidDocumentoRepositorio]) )
 				uuidsDocsBorrar.add( drp.uuidDocumentoRepositorio )
 			}
@@ -150,10 +158,10 @@ class PoderService {
 		docsBorrar.each{
 			def doc = DocumentoRespaldoPoder.get(it.id)
 			poder.documentosRespaldoPoder.remove(doc)
-			doc.delete()
+			doc.delete(flush:true)
 		}
 		//inserta nuevos registros
-		docsNuevos.each{
+		documentosNuevos.each{
 			DocumentoRespaldoPoder drp = new DocumentoRespaldoPoder()
 			drp.uuidDocumentoRepositorio = it.uuid
 			drp.tipoDocumentoRespaldoPoder = TipoDocumentoRespaldoPoder.get(it.idTipoDocumento)
@@ -189,9 +197,9 @@ class PoderService {
 		//borra los documentos que ya no se usarán mas
 		documentoRepositorioService.eliminarDocumentos(uuidsDocsBorrar)
 		//actualiza los metadatos de los documentos que no se movieron
-		this.updateDocsOnRepository(poder,docsAct)
+		this.updateDocsOnRepository(poder,documentosActuales)
 		//envía unicamente documentos nuevos
-		this.updateNewDocsOnRepository(poder,docsNuevos)
+		this.updateNewDocsOnRepository(poder,documentosNuevos)
 		
 		//guarda en la BD
 		return poder.save(flush:true)
@@ -350,6 +358,8 @@ class DocumentoRespaldoPoderTO {
 	String uuid
 	Long idTipoDocumento
 	String tipoDocumento
+	
+	String nombreArchivo
 }
 
 class PoderIntegrityError {

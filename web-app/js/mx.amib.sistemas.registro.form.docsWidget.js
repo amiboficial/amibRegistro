@@ -14,7 +14,7 @@
 		docsWidget.ERROR_TIPO = 3;
 		
 		docsWidget.MSG_ERROR = 'Error al subir archivo';
-		docsWidget.MSG_ERROR_TAM_MAYOR = 'El archivo supera el tamaño permitido';
+		docsWidget.MSG_ERROR_TAM_MAYOR = 'El archivo supera el tamaï¿½o permitido';
 		docsWidget.MSG_ERROR_TIPO = 'El formato del archivo no es compatible';
 		
 		docsWidget.Documento = Backbone.Model.extend({
@@ -43,7 +43,8 @@
 			tagName: 'tr',
 			className: 'documentoRow',
 			uploadUrl: '',
-			downloadPreUrl: '',
+			downloadTmpUrl: '',
+			downloadUrl: '',
 			
 			//template: _.template( $('#documentoTemplate').html() ),
 			templateListoSinArchivo: _.template( $('#documentoTemplate_listoSinArchivo').html() ),
@@ -59,10 +60,10 @@
 						this.$el.html( this.templateListoSinArchivo( this.model.toJSON() ) );
 					}
 					else if ( this.model.get('status') == docsWidget.CARGADO ){
-						this.$el.html( this.templateListoPrecargado( this.model.toJSON() ) );
+						this.$el.html( this.templateListoCargado( this.model.toJSON() ) );
 					}
 					else if ( this.model.get('status') == docsWidget.PRECARGADO ){
-						this.$el.html( this.templateListoCargado( this.model.toJSON() ) );
+						this.$el.html( this.templateListoPrecargado( this.model.toJSON() ) );
 					}
 					
 					//mensajes de error
@@ -89,12 +90,12 @@
 			},
 			
 			events:{
-				'click .downloadPre':'descargarDocumentoPrecargado',
+				'click .downloadTmp':'descargarDocumentoTmp',
 				'click .download':'descargarDocumento',
 				'change .upload':'subirDocumento'
 			},
 			
-			//importante cambiar el estado con estos métodos
+			//importante cambiar el estado con estos mï¿½todos
 			changeStateToListo: function(){
 				this.state = docsWidget.LISTO;
 				this.render();
@@ -104,16 +105,17 @@
 				this.render();
 			},
 			
-			descargarDocumentoPrecargado: function(){
+			descargarDocumentoTmp: function(){
 				//alert("DESCARGAR PRECARGADO - No implementado");
 				//window.open('http://www.mydomain.com?ReportID=1', '_blank');
-				var _url = this.downloadPreUrl + '?uuid=' + this.model.get('uuid');
+				var _url = this.downloadTmpUrl + '?uuid=' + this.model.get('uuid');
 				
 				window.open(_url);
 			},
 			
 			descargarDocumento: function(){
-				alert("DESCARGAR - No implementado");
+				var _url = this.downloadUrl + '?uuid=' + this.model.get('uuid');
+				window.open(_url);
 			},
 			
 			subirDocumento: function(){
@@ -145,7 +147,6 @@
 								 mimeType: respuestaJson.mimeType,
 								 status: docsWidget.CARGADO}
 							);
-							
 							contexto.changeStateToListo();
 						}
 							
@@ -191,11 +192,13 @@
 			
 			el: '#tbdyDocs',
 			uploadUrl: '',
-			downloadPreUrl: '',
+			downloadTmpUrl: '',
+			downloadUrl: '',
 			
-			initialize: function( initialDocumentos,uploadUrl,downloadPreUrl ){
+			initialize: function( initialDocumentos,uploadUrl,downloadUrl,downloadTmpUrl ){
 				this.uploadUrl = uploadUrl;
-				this.downloadPreUrl = downloadPreUrl;
+				this.downloadUrl = downloadUrl;
+				this.downloadTmpUrl = downloadTmpUrl;
 				this.collection = new apoderadosWidget.Apoderados(initialDocumentos);
 				this.render();
 				this.listenTo( this.collection, "change", this.renderHiddenData );
@@ -224,7 +227,8 @@
 				console.log("AL CREAR LA VISTA DE COL." + this.uploadUrl)
 				var documentoView = new docsWidget.DocumentoView({model:item});
 				documentoView.uploadUrl = this.uploadUrl;
-				documentoView.downloadPreUrl = this.downloadPreUrl;
+				documentoView.downloadTmpUrl = this.downloadTmpUrl;
+				documentoView.downloadUrl = this.downloadUrl;
 				this.$el.append( documentoView.render().el );
 			},
 			

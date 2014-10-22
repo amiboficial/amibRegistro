@@ -3,7 +3,9 @@
 		<!-- INICIA: SCRIPT PARA FUNCIONAMIENTO DE ENTIDAD FINANCIERA -->
 		<script type="text/javascript">
 			var institAjaxUrl = '<g:createLink action="obtenerInstituciones"/>';
-			var precargadoIdInstitucion = ${poderInstance?.idInstitucion};
+			<g:if test="${poderInstance.idInstitucion != null}">
+				var precargadoIdInstitucion = ${poderInstance.idInstitucion};
+			</g:if>
 		</script>
 		<g:javascript src="mx.amib.sistemas.registro.apoderamiento.form.entidadFinanciera.js" />
 		<script type="text/javascript">
@@ -35,9 +37,9 @@
 		<script type="text/javascript">
 		$(function(){
 			var docs = [<g:each in="${documentosList}">
-								{id: ${it.id},idTipoDocumento: ${it.idTipoDocumento}, tipoDocumento: '${it.tipoDocumento}', nombreDocumento: '(${it.tipoDocumento})', status: <g:if test="${it.id < 0}">docsWidget.SIN_ARCHIVO</g:if><g:else>docsWidget.PRECARGADO</g:else>, lastErrors: [] },
+								{id: ${it.id},idTipoDocumento: ${it.idTipoDocumento}, tipoDocumento: '${it.tipoDocumento}', nombreDocumento: '${it?.nombreArchivo}', status: <g:if test="${it.id < 0}">docsWidget.SIN_ARCHIVO</g:if><g:else>docsWidget.PRECARGADO</g:else>,uuid:'${it?.uuid}', lastErrors: [] },
 							</g:each>]
-    		new docsWidget.DocumentosView(docs,'<g:createLink action="subirArchivo"/>','<g:createLink action="descargarPrecargado"/>');
+    		new docsWidget.DocumentosView(docs,'<g:createLink action="subirArchivo"/>','<g:createLink action="descargar"/>','<g:createLink action="descargarCargado"/>');
 		});
 		</script>
 		<!-- FIN: SCRIPT PARA COMPONENTE DE DOCUMENTOS -->

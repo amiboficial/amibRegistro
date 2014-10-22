@@ -80,14 +80,14 @@ environments {
 		
 		mx.amib.sistemas.catalogos.resthttpURL = 'http://bimalatrop.no-ip.biz:8080/amibCatalogos-0.1/'
 		mx.amib.sistemas.expediente.resthttpURL = 'http://bimalatrop.no-ip.biz:8080/amibExpediente-0.1/'
-		mx.amib.sistemas.documentos.resthttpURL = 'http://localhost:8083/amibDocumentos/'
+		mx.amib.sistemas.documentos.resthttpURL = 'http://bimalatrop.no-ip.biz:8080/amibDocumentos-0.1'
     }
 	test {
 		grails.logging.jul.usebridge = false
 		// TODO: grails.serverURL = "http://www.changeme.com"
 		mx.amib.sistemas.catalogos.resthttpURL = 'http://bimalatrop.no-ip.biz:8080/amibCatalogos-0.1/'
 		mx.amib.sistemas.expediente.resthttpURL = 'http://bimalatrop.no-ip.biz:8080/amibExpediente-0.1/'
-		mx.amib.sistemas.documentos.resthttpURL = 'http://localhost:8083/amibDocumentos/'
+		mx.amib.sistemas.documentos.resthttpURL = 'http://bimalatrop.no-ip.biz:8080/amibDocumentos-0.1'
 	}
     production {
         grails.logging.jul.usebridge = false
@@ -153,5 +153,6 @@ mx.amib.sistemas.expediente.Sustentante.obtenerSustentantePorMatricula = 'susten
 mx.amib.sistemas.documentos.Documento.getByUuid = 'documentoRestful/getByUuid?uuid='
 mx.amib.sistemas.documentos.Documento.deleteByUuid = 'documentoRestful/deleteByUuid?uuid='
 mx.amib.sistemas.documentos.DocumentoPoder.save = 'documentoPoderRestful/save'
+mx.amib.sistemas.documentos.DocumentoPoder.update = 'documentoPoderRestful/updateByUuid'
 mx.amib.sistemas.documentos.archivo.subirArchivoDocumentoUuid = 'archivoDocumento/subirArchivoDocumentoUuid?uuid='
 mx.amib.sistemas.documentos.archivo.descargarArchivoDocumentoUuid = 'archivoDocumento/descargarArchivoDocumentoUuid?uuid='

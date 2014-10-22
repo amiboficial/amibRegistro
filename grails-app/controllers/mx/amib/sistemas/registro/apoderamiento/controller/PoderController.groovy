@@ -12,6 +12,7 @@ import mx.amib.sistemas.registro.apoderamiento.model.Poder
 import mx.amib.sistemas.external.catalogos.service.EntidadFinancieraService;
 import mx.amib.sistemas.external.catalogos.service.SepomexService
 import mx.amib.sistemas.external.documentos.service.DocumentoRepositorioService;
+import mx.amib.sistemas.external.documentos.service.DocumentoRepositorioTO
 import mx.amib.sistemas.registro.notario.service.NotarioService
 import mx.amib.sistemas.registro.apoderado.service.PoderService
 import mx.amib.sistemas.util.service.*
@@ -144,6 +145,8 @@ class PoderController {
 					id: -it.id,
 					idTipoDocumento: it.id,
 					tipoDocumento: it.descripcion,
+					uuid: '',
+					nombreArchivo: ''
 				]) )
 			}
 			else{
@@ -151,6 +154,8 @@ class PoderController {
 					id: doc.id,
 					idTipoDocumento: it.id,
 					tipoDocumento: it.descripcion,
+					uuid: doc.uuidDocumentoRepositorio,
+					nombreArchivo: documentoRepositorioService.obtenerMetadatosDocumento(doc.uuidDocumentoRepositorio).nombre
 				]) )
 			}
 		}
@@ -194,12 +199,14 @@ class PoderController {
 		def _apoderadosIdAutorizadoCNBV = params.list('apoderadoIdAutorizadoCNBV')
 		def _documentos = params.list('documento')
 		
-		List<Integer> apoderadosIdAutorizadoCNBV = new ArrayList<Integer>()
-		List<DocumentoRespaldoPoderTO> documentos = new ArrayList<DocumentoRespaldoPoderTO>()
+		List<Long> apoderadosIdAutorizadoCNBV = new ArrayList<Long>()
+		
+		List<DocumentoRespaldoPoderTO> docsNuevos = new ArrayList<DocumentoRespaldoPoderTO>()
+		List<DocumentoRespaldoPoderTO> docsActual = new ArrayList<DocumentoRespaldoPoderTO>()
 		
 		//obtiene de la lista de paramatros con el mismo name="apoderadoIdAutorizadoCNBV"
 		_apoderadosIdAutorizadoCNBV.each{
-			apoderadosIdAutorizadoCNBV.add(it)
+			apoderadosIdAutorizadoCNBV.add(Long.parseLong(it,10))
 		}
 		//obtiene de la lista de paramatros con el mismo name="documento"
 		_documentos.each{
@@ -208,20 +215,26 @@ class PoderController {
 			docTO.uuid = documento.'uuid'
 			docTO.sessionId = session.id
 			docTO.idTipoDocumento = documento.'idTipoDocumento'
-			documentos.add(docTO)
+			if(documento.'status' == 'PRECARGADO'){
+				docsActual.add(docTO)
+			}
+			else if(documento.'status' == 'CARGADO'){
+				docsNuevos.add(docTO)
+			}
 		}
 
-		poder = poderService.update(poder, notarioNumero, notarioIdEntidadFederativa,
-															apoderadosIdAutorizadoCNBV, documentos)
-		
 		println (poder as JSON)
-		/*
+		
         if (poder.hasErrors()) {
+			println (poder.errors as JSON)
             respond poder.errors, view:'edit'
             return
         }
 
-        poder.save flush:true
+		poder = poderService.update(poder, notarioNumero, notarioIdEntidadFederativa,
+			apoderadosIdAutorizadoCNBV, docsActual, docsNuevos)
+		
+        //poder.save flush:true
 
         request.withFormat {
             form multipartForm {
@@ -229,7 +242,7 @@ class PoderController {
                 redirect poder
             }
             '*'{ respond poder, [status: OK] }
-        }*/
+        }
     }
 
     @Transactional
@@ -329,7 +342,37 @@ class PoderController {
 		render archivoToRender as JSON
 	}
 	
-	def descargarPrecargado(){
+	def descargar(){
+		String documentoUuid = params.'uuid'
+		DocumentoRepositorioTO drt = documentoRepositorioService.descargarATemporal(session.id, documentoUuid)
+		
+		if(drt != null){
+			ArchivoTO fileDocumento = archivoTemporalService.obtenerArchivoTemporal(documentoUuid)
+			if(fileDocumento == null){
+				response.sendError(404)
+				return
+			}
+			else{
+				File f = new File(fileDocumento.temploc)
+				if (f.exists()) {
+					response.setContentType(fileDocumento.mimetype)
+					response.setHeader("Content-disposition", "attachment;filename=\"${fileDocumento.filename}\"")
+					response.outputStream << f.bytes
+					return
+				}
+				else {
+					response.sendError(404)
+					return
+				}
+			}
+		}
+		else{
+			response.sendError(404)
+			return
+		}
+	}
+	
+	def descargarCargado(){
 		String documentoUuid = params.'uuid'		
 		ArchivoTO fileDocumento = archivoTemporalService.obtenerArchivoTemporal(documentoUuid)
 		
@@ -340,7 +383,7 @@ class PoderController {
 		else{
 			File f = new File(fileDocumento.temploc)
 			if (f.exists()) {
-				response.setContentType(f.mimeType)
+				response.setContentType(fileDocumento.mimetype)
 				response.setHeader("Content-disposition", "attachment;filename=\"${fileDocumento.filename}\"")
 				response.outputStream << f.bytes
 				return

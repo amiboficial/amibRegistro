@@ -127,7 +127,7 @@
 			}
 			
 			if(_isAdmin == "true"){
-				if($("#selAdmIdGrupoFinanciero").val() == "null"){
+				if($("#selAdmIdGrupoFinanciero").val() == "-1"){
 					errorMsg.push({ errName: 'Dato requerido', errField: 'Grupo Financiero' });
 					$('#divAdmGrupoFinanciero').addClass( 'has-error' );
 				}

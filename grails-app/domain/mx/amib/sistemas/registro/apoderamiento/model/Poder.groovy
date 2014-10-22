@@ -43,6 +43,8 @@ class Poder {
 		representanteLegalNombre maxSize: 100
 		representanteLegalApellido1 maxSize: 80
 		representanteLegalApellido2 maxSize: 80
+		idGrupofinanciero nullable: true
+		idInstitucion nullable: true
 		fechaCreacion nullable: true
 		fechaModificacion nullable: true
 	}

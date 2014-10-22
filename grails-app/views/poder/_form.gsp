@@ -70,7 +70,7 @@
 					</label>
 		            <div class="col-md-9 col-sm-9">
 						<g:select class="form-control" id="selAdmIdGrupoFinanciero" name='poder.idGrupofinanciero' value="${poderInstance?.idGrupofinanciero}"
-						noSelection="${['null':'-Seleccione-']}"
+						noSelection="${['-1':'-Seleccione-']}"
 						from='${gruposFinancierosList}'
 						optionKey="id" optionValue="nombre"></g:select>
 		            </div>
@@ -82,7 +82,7 @@
 					</label>
 					<div class="col-md-9 col-sm-9">
 						<select class="form-control" id="selAdmIdInstitucion" name="poder.idInstitucion" value="${poderInstance?.idInstitucion}">
-							<option value="null">-Seleccione-</option>
+							<option value="-1">-Seleccione-</option>
 						</select>
 					</div>
 				</div>

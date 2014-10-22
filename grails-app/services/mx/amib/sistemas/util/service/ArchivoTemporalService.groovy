@@ -126,9 +126,13 @@ class ArchivoTemporalService {
 		catch(IOException e){
 			anvo = null
 		}
-		
-		archivosTemporales.put(anvo.uuid, anvo)
-		
+		if(!this.archivosTemporales.containsKey(anvo.uuid)){
+			this.archivosTemporales.put(anvo.uuid, anvo)
+		}
+		else{
+			this.archivosTemporales.remove(anvo.uuid)
+			this.archivosTemporales.put(anvo.uuid, anvo)
+		}
 		return anvo
 	}
 	

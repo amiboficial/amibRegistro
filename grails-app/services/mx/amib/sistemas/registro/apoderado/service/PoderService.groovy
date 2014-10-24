@@ -46,7 +46,7 @@ class PoderService {
 	Poder save(Poder poder, int notarioNumero, int notarioIdEntidadFederativa, 
 								List<Long> apoderadosIdAutorizadoCNBV, List<DocumentoRespaldoPoderTO> documentosGuardados){
 		//arma el poder de acuerdo a los paramtros recibidos
-		poder = this.buildFromParamsToSave(poder, notarioNumero, notarioIdEntidadFederativa, apoderadosIdAutorizadoCNBV, documentos)
+		poder = this.buildFromParamsToSave(poder, notarioNumero, notarioIdEntidadFederativa, apoderadosIdAutorizadoCNBV, documentosGuardados)
 		//guarda los documentos en el repositorio
 		this.saveDocsOnRepository(poder)
 		//guarda en la BD

@@ -1,0 +1,1 @@
+<%@ page import="mx.amib.sistemas.registro.apoderamiento.model.Poder" %>

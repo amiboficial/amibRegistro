@@ -108,7 +108,7 @@ class PoderController {
             return
         }*/
 		//manda al servicio de guardado
-		poderService.save(poder)
+		poderService.save(poder,notarioNumero,notarioIdEntidadFederativa,apoderadosIdAutorizadoCNBV,documentos)
 
         request.withFormat {
             form multipartForm {

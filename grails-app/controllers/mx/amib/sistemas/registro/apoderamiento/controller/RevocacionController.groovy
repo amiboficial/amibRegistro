@@ -7,12 +7,14 @@ import static org.springframework.http.HttpStatus.*
 import java.util.Collection;
 
 import mx.amib.sistemas.registro.apoderamiento.model.Revocacion
+import grails.converters.JSON
 import grails.transaction.Transactional
 import mx.amib.sistemas.external.catalogos.service.EntidadFederativaTO
 import mx.amib.sistemas.external.catalogos.service.EntidadFinancieraService;
 import mx.amib.sistemas.external.catalogos.service.EntidadFinancieraTO
 import mx.amib.sistemas.external.catalogos.service.GrupoFinancieroTO;
 import mx.amib.sistemas.external.catalogos.service.SepomexService;
+import mx.amib.sistemas.external.expediente.service.SustentanteService
 
 @Transactional(readOnly = true)
 class RevocacionController {
@@ -22,6 +24,7 @@ class RevocacionController {
 	//servicios
 	EntidadFinancieraService entidadFinancieraService
 	SepomexService sepomexService
+	SustentanteService sustentanteService
 	
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
@@ -124,6 +127,19 @@ class RevocacionController {
             '*'{ render status: NOT_FOUND }
         }
     }
+	
+	//el id es la matricula
+	def obtenerSustentantePorMatricula(int id){
+		def sustentante = sustentanteService.obtenerPorMatricula(id)
+		def res = null
+		if(sustentante != null){
+			res = [ status: 'OK' , object: sustentante ]
+		}
+		else{
+			res = [ status: 'NOT_FOUND' ]
+		}
+		render res as JSON
+	}
 }
 
 class RevocacionViewModel {

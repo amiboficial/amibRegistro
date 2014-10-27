@@ -166,15 +166,9 @@
 				<div id="divMsgRevEditando" class="alert alert-danger">
 					<span class="glyphicon glyphicon-ban-circle"></span> Debes confirmar cambios para continuar.
 				</div>
-				
-				<div>
-				</div>
-				<div>
-				</div>
-				
+
 				<div id="divLgRevocados" class="list-group">
-					<g:render template="revocados"/>
-					<a class="list-group-item"><button type="button" class="btn btn-success"> <span class="glyphicon glyphicon-plus-sign"></span> Agregar nuevo elemento</button></a>
+					<div class="newElementAction list-group-item"><button type="button" class="add btn btn-success"> <a href=""></a><span class="glyphicon glyphicon-plus-sign"></span> Agregar nuevo elemento</button></div>
 				</div>
-				
+
 			</fieldset>

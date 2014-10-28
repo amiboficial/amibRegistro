@@ -259,14 +259,14 @@ app.RevocadoView = Backbone.View.extend({
 		this.trimFields();
 		
 		var valid = this.validarCamposNew();
-		if(valid == false){	
+		if(valid == false){
 			this.renderValidate();
 		}
 		else{
 			this.model.set("numeroMatricula", this.$(".numeroMatricula").val() );
 			this.model.set("nombreCompleto", this.$(".nombreCompleto").val() );
-			this.model.set("numeroEscritura", this.$(".numeroEscritura").val() );
-			this.model.set("motivo", this.$(".motivo").val() );
+			this.model.set("numeroEscritura", Encoder.XSSEncode(this.$(".numeroEscritura").val()) );
+			this.model.set("motivo", Encoder.XSSEncode(this.$(".motivo").val()) );
 			this.model.set("fechaBajaDia", this.$(".fechaBaja_day").val() );
 			this.model.set("fechaBajaMes", this.$(".fechaBaja_month").val() );
 			this.model.set("fechaBajaAnyo", this.$(".fechaBaja_year").val() );
@@ -336,8 +336,8 @@ app.RevocadoView = Backbone.View.extend({
 			this.renderValidate();
 		}
 		else{
-			this.model.set("numeroEscritura", this.$(".numeroEscritura").val() );
-			this.model.set("motivo", this.$(".motivo").val() );
+			this.model.set("numeroEscritura", Encoder.XSSEncode(this.$(".numeroEscritura").val()) );
+			this.model.set("motivo", Encoder.XSSEncode(this.$(".motivo").val()) );
 			this.model.set("fechaBajaDia", this.$(".fechaBaja_day").val() );
 			this.model.set("fechaBajaMes", this.$(".fechaBaja_month").val() );
 			this.model.set("fechaBajaAnyo", this.$(".fechaBaja_year").val() );
@@ -415,17 +415,20 @@ app.RevocadosView = Backbone.View.extend({
 		}, 'fast');
 	},
 	renderHiddenData: function(){
-	
 		var busyCount = 0;
+		var readyCount = 0;
 		this.collection.forEach( function(item){
-			if(item.getState != app.RVC_SHOW){
+			if(item.getState() != app.RVC_SHOW){
 				busyCount = busyCount + 1;
+			}
+			else{
+				readyCount = readyCount + 1;
 			}
 		}
 		, this);
 
 		$("#hdnRevocadosWidgetBusyCount").val( busyCount );
-		$("#hdnRevocadosWidgetCount").val( _.size(this.collection) );
+		$("#hdnRevocadosWidgetCount").val( readyCount );
 	},
 	
 	agregarNuevoRevocado: function(e){

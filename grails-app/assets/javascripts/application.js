@@ -8,6 +8,8 @@
 //= require jquery
 //= require underscore-1.6.0-min.js
 //= require backbone-1.1.2-min.js
+//= require moment-2.8.3-min.js
+//= require encoder.js
 //= require_tree .
 //= require_self
 //= require bootstrap

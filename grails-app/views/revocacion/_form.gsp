@@ -171,4 +171,6 @@
 					<div class="newElementAction list-group-item"><button type="button" class="add btn btn-success"> <a href=""></a><span class="glyphicon glyphicon-plus-sign"></span> Agregar nuevo elemento</button></div>
 				</div>
 
+				<input type="hidden" id="hdnRevocadosWidgetBusyCount"/>
+				<input type="hidden" id="hdnRevocadosWidgetCount"/>
 			</fieldset>

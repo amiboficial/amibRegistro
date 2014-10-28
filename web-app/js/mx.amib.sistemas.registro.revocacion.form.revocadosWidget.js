@@ -284,25 +284,25 @@ app.RevocadoView = Backbone.View.extend({
 	
 	validarCamposNew: function(){
 		this.errors = [];
-		if( $(".numeroMatricula").val() == "" ){
+		if( this.$(".numeroMatricula").val() == "" ){
 			this.errors.push({ errType: app.RVC_ERR_EMPTY, errField: "numeroMatricula" });
 		}
 		if( this.model.isMatriculaValida() == false ){
 			this.errors.push({ errType: app.RVC_ERR_VALID, errField: "numeroMatricula" });
 		}
-		if( $(".numeroEscritura").val() == "" ){
+		if( this.$(".numeroEscritura").val() == "" ){
 			this.errors.push({ errType: app.RVC_ERR_EMPTY, errField: "numeroEscritura" });
 		}
-		if( $(".motivo").val() == "" ){
+		if( this.$(".motivo").val() == "" ){
 			this.errors.push({ errType: app.RVC_ERR_EMPTY, errField: "motivo" });
 		}
-		if( $(".fechaBaja_day").val() == "null" ){
+		if( this.$(".fechaBaja_day").val() == "null" ){
 			this.errors.push({ errType: app.RVC_ERR_VALID, errField: "fechaBaja" });
 		}
-		if( $(".fechaBaja_month").val() == "null" ){
+		if( this.$(".fechaBaja_month").val() == "null" ){
 			this.errors.push({ errType: app.RVC_ERR_VALID, errField: "fechaBaja" });
 		}
-		if( $(".fechaBaja_year").val() == "null" ){
+		if( this.$(".fechaBaja_year").val() == "null" ){
 			this.errors.push({ errType: app.RVC_ERR_VALID, errField: "fechaBaja" });
 		}
 		if(this.errors.length > 0)
@@ -352,19 +352,19 @@ app.RevocadoView = Backbone.View.extend({
 	},
 	validarCamposEdit: function(){
 		this.errors = [];
-		if( $(".numeroEscritura").val() == "" ){
+		if( this.$(".numeroEscritura").val() == "" ){
 			this.errors.push({ errType: app.RVC_ERR_EMPTY, errField: "numeroEscritura" });
 		}
-		if( $(".motivo").val() == "" ){
+		if( this.$(".motivo").val() == "" ){
 			this.errors.push({ errType: app.RVC_ERR_EMPTY, errField: "motivo" });
 		}
-		if( $(".fechaBaja_day").val() == "null" ){
+		if( this.$(".fechaBaja_day").val() == "null" ){
 			this.errors.push({ errType: app.RVC_ERR_VALID, errField: "fechaBaja" });
 		}
-		if( $(".fechaBaja_month").val() == "null" ){
+		if( this.$(".fechaBaja_month").val() == "null" ){
 			this.errors.push({ errType: app.RVC_ERR_VALID, errField: "fechaBaja" });
 		}
-		if( $(".fechaBaja_year").val() == "null" ){
+		if( this.$(".fechaBaja_year").val() == "null" ){
 			this.errors.push({ errType: app.RVC_ERR_VALID, errField: "fechaBaja" });
 		}
 		if(this.errors.length > 0)

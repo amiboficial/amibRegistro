@@ -16,8 +16,8 @@
 								<div class="col-sm-4">{{=numeroEscritura}}</div>
 								<div class="hidden-xs hidden-sm hidden-md col-lg-offset-2 col-lg-3">
 									<div style="text-align:center; margin-top: -0.5em; margin-bottom: -0.5em">
-										<button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-pencil"></span> Editar</button>
-										<button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-trash"></span> Borrar</button>
+										<button type="button" class="edit btn btn-primary"><span class="glyphicon glyphicon-pencil"></span> Editar</button>
+										<button type="button" class="delete btn btn-danger"><span class="glyphicon glyphicon-trash"></span> Borrar</button>
 									</div>
 								</div>
 							</div>
@@ -31,8 +31,8 @@
 							</div>
 							<div class="hidden-lg row">
 								<div style="text-align:center; margin-top: 0.75em;">
-									<button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-pencil"></span> Editar</button>
-									<button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-trash"></span> Borrar</button>
+									<button type="button" class="edit btn btn-primary"><span class="glyphicon glyphicon-pencil"></span> Editar</button>
+									<button type="button" class="delete btn btn-danger"><span class="glyphicon glyphicon-trash"></span> Borrar</button>
 								</div>
 							</div>
 							<input type="hidden" name="revocado" value="{ id:{{=grailsId}}, numeroMatricula:{{=numeroMatricula}}, numeroEscritura:{{=numeroEscritura}}, motivo:'{{=motivo}}', fechaBajaDia:{{=fechaBajaDia}}, fechaBajaMes:{{=fechaBajaMes}}, fechaBajaAnyo:{{=fechaBajaAnyo}} }" />
@@ -53,15 +53,15 @@
 								<label class="col-sm-3 control-label">Nombre completo</label>
 								<div class="col-sm-4">{{=nombreCompleto}}</div>
 							</div>
-							<div class="numeroEscrituraRow row has-error">
+							<div class="numeroEscrituraRow row">
 								<label class="col-sm-3 control-label">Número de escritura a revocar</label>
 								<div class="col-sm-4">
 									<input class="numeroEscritura form-control" type="text" value="{{=numeroEscritura}}"/>
 								</div>
 								<div class="hidden-xs hidden-sm hidden-md col-lg-offset-2 col-lg-3">
 									<div style="text-align:center; margin-top: -0.5em; margin-bottom: -0.5em">
-										<button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-ok"></span> Aplicar</button>
-										<button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-remove"></span> Cancelar</button>
+										<button type="button" class="update btn btn-primary"><span class="glyphicon glyphicon-ok"></span> Aplicar</button>
+										<button type="button" class="cancelEdit btn btn-primary"><span class="glyphicon glyphicon-remove"></span> Cancelar</button>
 									</div>
 								</div>
 							</div>
@@ -138,8 +138,8 @@
 							</div>
 							<div class="hidden-lg row">
 								<div style="text-align:center; margin-top: 0.75em;">
-									<button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-ok"></span> Aplicar</button>
-									<button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-remove"></span> Cancelar</button>
+									<button type="button" class="update btn btn-primary"><span class="glyphicon glyphicon-ok"></span> Aplicar</button>
+									<button type="button" class="cancelEdit btn btn-primary"><span class="glyphicon glyphicon-remove"></span> Cancelar</button>
 								</div>
 							</div>
 

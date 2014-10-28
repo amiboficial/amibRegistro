@@ -44,6 +44,9 @@ app.Revocado = Backbone.Model.extend({
 	setShowState: function(){
 		this.set("_state", app.RVC_SHOW);
 	},
+	setEditState: function(){
+		this.set("_state",app.RVC_EDIT);
+	},
 	
 	isMatriculaValida: function(){
 		return this.get('_validMatricula');
@@ -256,7 +259,7 @@ app.RevocadoView = Backbone.View.extend({
 		this.trimFields();
 		
 		var valid = this.validarCamposNew();
-		if(valid == false){
+		if(valid == false){	
 			this.renderValidate();
 		}
 		else{
@@ -307,26 +310,68 @@ app.RevocadoView = Backbone.View.extend({
 		else
 			return true;
 	},
-	
+			
 	//acciones en SHOW
 	editarRevocado: function(e){
-		alert('NO IMPLEMENTADO D');
 		e.preventDefault();
+		//cambia el estado a editable
+		this.model.setEditState();
+		this.render();
 	},
 	eliminarRevocado: function(e){
-		alert('NO IMPLEMENTADO E');
 		e.preventDefault();
+		//Borra el model
+		this.model.destroy();
+		//Destruye esta vista
+		this.remove();
 	},
 	
 	//acciones en EDIT
 	actualizarRevocado: function(e){
-		alert('NO IMPLEMENTADO F');
 		e.preventDefault();
+		this.trimFields();
+		
+		var valid = this.validarCamposEdit();
+		if(valid == false){
+			this.renderValidate();
+		}
+		else{
+			this.model.set("numeroEscritura", this.$(".numeroEscritura").val() );
+			this.model.set("motivo", this.$(".motivo").val() );
+			this.model.set("fechaBajaDia", this.$(".fechaBaja_day").val() );
+			this.model.set("fechaBajaMes", this.$(".fechaBaja_month").val() );
+			this.model.set("fechaBajaAnyo", this.$(".fechaBaja_year").val() );
+			this.model.setShowState();
+			this.render();
+		}
 	},
 	cancelarEditarRevocado: function(e){
-		alert('NO IMPLEMENTADO G');
 		e.preventDefault();
+		this.model.setShowState();
+		this.render();
 	},
+	validarCamposEdit: function(){
+		this.errors = [];
+		if( $(".numeroEscritura").val() == "" ){
+			this.errors.push({ errType: app.RVC_ERR_EMPTY, errField: "numeroEscritura" });
+		}
+		if( $(".motivo").val() == "" ){
+			this.errors.push({ errType: app.RVC_ERR_EMPTY, errField: "motivo" });
+		}
+		if( $(".fechaBaja_day").val() == "null" ){
+			this.errors.push({ errType: app.RVC_ERR_VALID, errField: "fechaBaja" });
+		}
+		if( $(".fechaBaja_month").val() == "null" ){
+			this.errors.push({ errType: app.RVC_ERR_VALID, errField: "fechaBaja" });
+		}
+		if( $(".fechaBaja_year").val() == "null" ){
+			this.errors.push({ errType: app.RVC_ERR_VALID, errField: "fechaBaja" });
+		}
+		if(this.errors.length > 0)
+			return false;
+		else
+			return true;
+	}
 	
 });
 

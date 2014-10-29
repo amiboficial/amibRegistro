@@ -35,7 +35,7 @@
 									<button type="button" class="delete btn btn-danger"><span class="glyphicon glyphicon-trash"></span> Borrar</button>
 								</div>
 							</div>
-							<input type="hidden" name="revocado" value="{ id:{{=grailsId}}, numeroMatricula:{{=numeroMatricula}}, numeroEscritura:{{=numeroEscritura}}, motivo:'{{=motivo}}', fechaBajaDia:{{=fechaBajaDia}}, fechaBajaMes:{{=fechaBajaMes}}, fechaBajaAnyo:{{=fechaBajaAnyo}} }" />
+							<input type="hidden" name="revocado" value="{ id:{{=grailsId}}, numeroMatricula:{{=numeroMatricula}}, numeroEscritura:'{{=numeroEscritura}}', motivo:'{{=motivo}}', fechaBajaDia:{{=fechaBajaDia}}, fechaBajaMes:{{=fechaBajaMes}}, fechaBajaAnyo:{{=fechaBajaAnyo}} }" />
 						
 					</script>
 					
@@ -159,7 +159,7 @@
 							<div class="msgRevErrorEnCampos alert alert-danger">
 								<span class="glyphicon glyphicon-ban-circle"></span> Datos no válidos. Revise los campos marcados en rojo.
 							</div>
-							<div class="msgErrorPeticion" class="alert alert-danger">
+							<div class="msgErrorPeticion alert alert-danger">
 								<span class="glyphicon glyphicon-ban-circle"></span> Ha habído un error al procesar la petición.
 							</div>
 						

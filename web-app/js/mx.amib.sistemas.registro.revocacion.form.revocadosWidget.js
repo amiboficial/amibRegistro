@@ -67,7 +67,6 @@ app.Revocados = Backbone.Collection.extend({
 	checarSiYaHayMatricula: function(numeroMatricula){
 		var hayMatricula = false;
 		this.forEach( function(item){
-			console.log( item.toJSON() )
 			if(item.get("numeroMatricula") == numeroMatricula && item.getState() != app.RVC_NEW){
 				hayMatricula = true;
 			}
@@ -80,7 +79,7 @@ app.Revocados = Backbone.Collection.extend({
 app.RevocadoView = Backbone.View.extend({
 	tagname: 'div',
 	className: 'list-group-item',
-	matriculaUrl: 'http://localhost:8080/amibRegistro/revocacion/obtenerSustentantePorMatricula',
+	matriculaUrl: '',
 	
 	templateShow: _.template( $('#revocadoTemplateShow').html() ),
 	templateNew: _.template( $('#revocadoTemplateNew').html() ),
@@ -224,6 +223,7 @@ app.RevocadoView = Backbone.View.extend({
 				try{
 					if(_data.status == "OK"){
 						context.model.set("numeroMatricula",_data.object.numeroMatricula);
+						context.model.set("nombreCompleto", _data.object.nombre + " " + _data.object.primerApellido + " " + _data.object.segundoApellido );
 						if(context.model.collection.checarSiYaHayMatricula(_data.object.numeroMatricula)){
 							context.model.setInvalidMatricula();
 							context.$(".nombreCompleto").val("");
@@ -263,8 +263,6 @@ app.RevocadoView = Backbone.View.extend({
 			this.renderValidate();
 		}
 		else{
-			this.model.set("numeroMatricula", this.$(".numeroMatricula").val() );
-			this.model.set("nombreCompleto", this.$(".nombreCompleto").val() );
 			this.model.set("numeroEscritura", Encoder.XSSEncode(this.$(".numeroEscritura").val()) );
 			this.model.set("motivo", Encoder.XSSEncode(this.$(".motivo").val()) );
 			this.model.set("fechaBajaDia", this.$(".fechaBaja_day").val() );
@@ -304,6 +302,11 @@ app.RevocadoView = Backbone.View.extend({
 		}
 		if( this.$(".fechaBaja_year").val() == "null" ){
 			this.errors.push({ errType: app.RVC_ERR_VALID, errField: "fechaBaja" });
+		}
+		if(this.model.collection.checarSiYaHayMatricula( this.model.get("numeroMatricula") ) ){
+			this.model.setInvalidMatricula();
+			this.setErrorMatriculaAjax(app.RVC_ERR_MAT_EN_LISTA);
+			this.errors.push({ errType: app.RVC_ERR_VALID, errField: "numeroMatricula" });
 		}
 		if(this.errors.length > 0)
 			return false;
@@ -377,7 +380,7 @@ app.RevocadoView = Backbone.View.extend({
 
 app.RevocadosView = Backbone.View.extend({
 	el: '#divLgRevocados',
-	matriculaUrl: 'http://localhost:8080/amibRegistro/revocacion/obtenerSustentantePorMatricula',
+	matriculaUrl: '',
 	
 	initialize: function( initialRevocados, matriculaUrl ){
 		this.matriculaUrl = matriculaUrl;
@@ -402,11 +405,8 @@ app.RevocadosView = Backbone.View.extend({
 		},this );
 	},
 	renderElement: function(item){
-		console.log("paso aqui");
 		var revocadoView = new app.RevocadoView({model:item});
-		//this.$( revocadoView.render().el ).prependTo( '.newElementAction' );
-		//$(revocadoView.render().el).prependTo('#divRevocadosNewElement');
-		//this.$el.prepend( revocadoView.render().el );
+		revocadoView.matriculaUrl = this.matriculaUrl;
 		this.$(".newElementAction").before( revocadoView.render().el );
 		
 		var context = this;

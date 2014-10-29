@@ -168,9 +168,74 @@
 				</div>
 
 				<div id="divLgRevocados" class="list-group">
-					<div class="newElementAction list-group-item"><button type="button" class="add btn btn-success"> <a href=""></a><span class="glyphicon glyphicon-plus-sign"></span> Agregar nuevo elemento</button></div>
+					<div class="newElementAction list-group-item"><button type="button" class="add btn btn-success"><span class="glyphicon glyphicon-plus-sign"></span> Agregar nuevo elemento</button></div>
 				</div>
 
 				<input type="hidden" id="hdnRevocadosWidgetBusyCount"/>
 				<input type="hidden" id="hdnRevocadosWidgetCount"/>
+			</fieldset>
+			
+			<fieldset>
+				<legend>Documentos de respaldo</legend>
+				
+				<div id="divDocsCompletos" class="alert alert-danger">
+					<span class="glyphicon glyphicon-ban-circle"></span> Debes incluir un documento de respaldo
+				</div>
+				
+				<div id="divComponenteDocumentos">
+					
+					<div class="msgProcesando alert alert-info">
+						<asset:image src="spinner_alert_info.gif"/> <strong>Procesando datos, espere un momento</strong>.
+					</div>
+					<div class="msgErrorPeticion alert alert-danger">
+						<span class="glyphicon glyphicon-ban-circle"></span> Ha habído un error al procesar la petición.
+					</div>
+					
+					<div class="newFileRow row">
+						<div class="archivoInputDiv col-md-5">
+							<label class="control-label col-md-4">Seleccione un archivo:</label>
+							<div class="col-md-8"><input type="file" id="fileDocumento"/></div>
+						</div>
+						<div class="tipoDiv col-md-4">
+							<label class="control-label col-md-4">Tipo:</label>
+							<div class="col-md-8">
+								<select class="form-control col-md-8">
+									<option value="null">-Seleccione-</option>
+								</select>
+							</div>
+						</div>
+						<div class="col-md-3" style="text-align:center;">
+							<button type="button" class="add btn btn-sm btn-success"><span class="glyphicon glyphicon-plus-sign"></span> Agregar</button>
+						</div>
+					</div>
+					<br/>
+					<div id="divComponenteDocumentosLista" class="list-group">
+						<div class="list-group-item">
+							<div class="row">
+								<div class="col-sm-1"><label>Nombre:</label></div>
+								<div class="col-sm-3">Lorem ipsum 2</div>
+								<div class="col-sm-offset-1 col-sm-1"><label>Tipo:</label></div>
+								<div class="col-sm-3">Dolor sit amet 2</div>
+								<div class="col-sm-3" style="text-align:center;">
+									<button type="button" class="add btn btn-xs btn-primary"><span class="glyphicon glyphicon-circle-arrow-down"></span> Descargar</button>
+									<button type="button" class="add btn btn-xs btn-danger"><span class="glyphicon glyphicon-trash"></span> Eliminar</button>
+								</div>
+							</div>
+						</div>
+						<div class="list-group-item">
+							<div class="row">
+								<div class="col-sm-1"><label>Nombre:</label></div>
+								<div class="col-sm-3">Lorem ipsum</div>
+								<div class="col-sm-offset-1 col-sm-1"><label>Tipo:</label></div>
+								<div class="col-sm-3">Dolor sit amet</div>
+								<div class="col-sm-3" style="text-align:center;">
+									<button type="button" class="add btn btn-xs btn-primary"><span class="glyphicon glyphicon-circle-arrow-down"></span> Descargar</button>
+									<button type="button" class="add btn btn-xs btn-danger"><span class="glyphicon glyphicon-trash"></span> Eliminar</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+				</div>
+				
 			</fieldset>

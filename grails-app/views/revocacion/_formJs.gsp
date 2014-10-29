@@ -5,7 +5,7 @@
 		<script type="text/javascript">
 		$(function(){
 			var revocados = [];
-			new app.RevocadosView(revocados, 'http://localhost:8080/amibRegistro/sustentante/findByMatricula');
+			new app.RevocadosView(revocados, '<g:createLink action="obtenerSustentantePorMatricula"/>');
 		});
 		</script>
 		<!-- FIN: SCRIPT PARA REVOCADOS  -->

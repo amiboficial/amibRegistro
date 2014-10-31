@@ -9,3 +9,13 @@
 		});
 		</script>
 		<!-- FIN: SCRIPT PARA REVOCADOS  -->
+		<!-- INICIA: SCRIPT PARA DOCUMENTOS -->
+		<g:render template="../common/multiDocs"/>
+		<g:javascript src="mx.amib.sistemas.registro.form.docsMultiWidget.js" />
+		<script type="text/javascript">
+		$(function(){
+			var docs = [];
+			var docsView = new app.DocsView(docs);
+		});
+		</script>
+		<!-- FIN: SCRIPT PARA REVOCADOS  -->

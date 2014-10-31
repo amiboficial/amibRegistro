@@ -182,7 +182,7 @@
 					<span class="glyphicon glyphicon-ban-circle"></span> Debes incluir un documento de respaldo
 				</div>
 				
-				<div id="divComponenteDocumentos">
+				<div id="divMultiplesDocumentos">
 					
 					<div class="msgProcesando alert alert-info">
 						<asset:image src="spinner_alert_info.gif"/> <strong>Procesando datos, espere un momento</strong>.
@@ -209,31 +209,8 @@
 						</div>
 					</div>
 					<br/>
-					<div id="divComponenteDocumentosLista" class="list-group">
-						<div class="list-group-item">
-							<div class="row">
-								<div class="col-sm-1"><label>Nombre:</label></div>
-								<div class="col-sm-3">Lorem ipsum 2</div>
-								<div class="col-sm-offset-1 col-sm-1"><label>Tipo:</label></div>
-								<div class="col-sm-3">Dolor sit amet 2</div>
-								<div class="col-sm-3" style="text-align:center;">
-									<button type="button" class="add btn btn-xs btn-primary"><span class="glyphicon glyphicon-circle-arrow-down"></span> Descargar</button>
-									<button type="button" class="add btn btn-xs btn-danger"><span class="glyphicon glyphicon-trash"></span> Eliminar</button>
-								</div>
-							</div>
-						</div>
-						<div class="list-group-item">
-							<div class="row">
-								<div class="col-sm-1"><label>Nombre:</label></div>
-								<div class="col-sm-3">Lorem ipsum</div>
-								<div class="col-sm-offset-1 col-sm-1"><label>Tipo:</label></div>
-								<div class="col-sm-3">Dolor sit amet</div>
-								<div class="col-sm-3" style="text-align:center;">
-									<button type="button" class="add btn btn-xs btn-primary"><span class="glyphicon glyphicon-circle-arrow-down"></span> Descargar</button>
-									<button type="button" class="add btn btn-xs btn-danger"><span class="glyphicon glyphicon-trash"></span> Eliminar</button>
-								</div>
-							</div>
-						</div>
+					
+					<div class="listaDocs list-group">						
 					</div>
 					
 				</div>

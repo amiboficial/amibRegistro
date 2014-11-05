@@ -1,12 +1,18 @@
 var app = app || {};
 
-app.ST_DOC_PRELOADED = 0;
-app.ST_DOC_UPLOADED = 1;
-app.ST_DOC_DELETED = 2;
+app.ST_DOC_PRELOADED = 0; //Precargado
+app.ST_DOC_UPLOADED = 1; //Archivo cargado
+app.ST_DOC_DELETED = 2; //Borrado
 
-app.ST_VM_DOC_READY = 0;
-app.ST_VM_DOC_UPLOADING = 1;
-app.ST_VM_DOC_READY_ERRORS = 2;
+app.ST_VM_DOC_READY = 0; //Listo
+app.ST_VM_DOC_UPLOADING = 1; //Subiendo
+app.ST_VM_DOC_READY_ERRORS = 2; //Listo con errores
+
+app.ST_VM_DOC_UPLD_NE = 0; //No error
+app.ST_VM_DOC_UPLD_ERR = 1; //Error genérico
+app.ST_VM_DOC_UPLD_NSEL = 2; //No hay tipo seleccionado
+app.ST_VM_DOC_UPLD_NARC = 3; //No hay archivo
+app.ST_VM_DOC_UPLD_EXT = 4; //Mensajes de validador externo
 
 app.Doc = Backbone.Model.extend({
 	defaults: {
@@ -31,7 +37,8 @@ app.DocsViewModel = Backbone.Model.extend({
 		urlUpload: '/amibRegistro/documento/upload',
 		urlDownload: '/amibRegistro/documento/download',
 		urlDownloadNew: '/amibRegistro/documento/downloadNew',
-		urlDelete: '/amibRegistro/documento/delete'
+		urlDelete: '/amibRegistro/documento/delete',
+		errors: []
 	}
 });
 
@@ -95,6 +102,9 @@ app.DocsView = Backbone.View.extend({
 		//limpiar mensajes
 		this.$(".msgProcesando").hide();
 		this.$(".msgErrorPeticion").hide();
+		this.$(".msgErrorTipoNoSel").hide();
+		this.$(".msgErrorTipoNoArc").hide();
+		this.$(".msgErrorValidadorExt").hide();
 		return this;
 	},
 	
@@ -111,7 +121,7 @@ app.DocsView = Backbone.View.extend({
 		}
 		var validatedByExternal = true;
 		if( !jQuery.isEmptyObject(this.validator) ){
-			validatedByExternal = this.validator.validateModel(this.collection);
+			validatedByExternal = this.validator.submitValidation(this.collection);
 		}
 		
 		// esta ocupado?
@@ -123,16 +133,53 @@ app.DocsView = Backbone.View.extend({
 		if(item.get('status') == app.ST_VM_DOC_UPLOADING){
 			this.$(".msgProcesando").show();
 			this.$(".msgErrorPeticion").hide();
+			this.$(".msgErrorTipoNoSel").hide();
+			this.$(".msgErrorTipoNoArc").hide();
 			this.$(".newFileRow").hide();
+			this.$(".msgErrorValidadorExt").hide();
 		}
 		else if(item.get('status') == app.ST_VM_DOC_READY_ERRORS){
+	
 			this.$(".msgProcesando").hide();
-			this.$(".msgErrorPeticion").show();
+			this.$('.tipoDiv').removeClass('has-error');
+			this.$(".msgErrorTipoNoSel").hide();
+			this.$(".archivoInputDiv").removeClass('has-error');
+			this.$(".msgErrorTipoNoArc").hide();
+			this.$(".msgErrorPeticion").hide();
+			this.$(".msgErrorValidadorExt").hide();
+			
+			for(var i=0; i < this.viewModel.get('errors').length; i++){
+				var item = this.viewModel.get('errors')[i];
+				console.log("elemento de error: " + item);
+				if(item == app.ST_VM_DOC_UPLD_ERR){
+					this.$(".msgErrorPeticion").show();
+				}
+				else if(item == app.ST_VM_DOC_UPLD_NSEL){
+					this.$(".tipoDiv").addClass('has-error');
+					this.$(".msgErrorTipoNoSel").show();
+				}
+				else if(item == app.ST_VM_DOC_UPLD_NARC){
+					this.$(".archivoInputDiv").addClass('has-error');
+					this.$(".msgErrorTipoNoArc").show();
+				}
+				else if(item == app.ST_VM_DOC_UPLD_EXT){
+					this.$(".msgErrorValidadorExt").html( this.validator.renderLastBeforeUploadErrorsHtml() );
+					this.$(".msgErrorValidadorExt").show();
+				}
+			}
+
 			this.$(".newFileRow").show();
 		}
 		else{
 			this.$(".msgProcesando").hide();
+			
+			this.$('.tipoDiv').removeClass('has-error');
+			this.$(".msgErrorTipoNoSel").hide();
+			this.$(".archivoInputDiv").removeClass('has-error');
+			this.$(".msgErrorTipoNoArc").hide();
 			this.$(".msgErrorPeticion").hide();
+			this.$(".msgErrorValidadorExt").hide();
+			
 			this.$(".newFileRow").show();
 		}
 	},
@@ -143,10 +190,93 @@ app.DocsView = Backbone.View.extend({
 	
 	agregarNuevoDocumento: function(e){
 		e.preventDefault();
+		var contexto = this;
 		
 		this.viewModel.set('status',app.ST_VM_DOC_UPLOADING);
 		
-		var contexto = this;
+		var file = document.getElementById("ZmlsZURvY3VtZW50bw").files[0];//ZmlsZURvY3VtZW50bw== -> fileDocumento
+		
+		var fileString = document.getElementById("ZmlsZURvY3VtZW50bw").value;
+		var idTipo = this.$(".tipoDocumento").val();
+		var dsTipo = this.$(".tipoDocumento option:selected").text();
+		
+		
+		console.log(idTipo + ',' + dsTipo + ',' + document.getElementById("ZmlsZURvY3VtZW50bw").value );
+		
+		this.viewModel.set('errors',new Array());
+		if(fileString == ""){
+			this.viewModel.get('errors').push(app.ST_VM_DOC_UPLD_NARC);	
+		}
+		if(idTipo == "null") {
+			this.viewModel.get('errors').push(app.ST_VM_DOC_UPLD_NSEL);
+		}
+		
+		console.log("el tamaño es " + this.viewModel.get('errors').length)
+		 
+		if(this.viewModel.get('errors').length > 0){
+			this.viewModel.set('status',app.ST_VM_DOC_READY_ERRORS);
+			return;
+		}
+		else{
+			var validatedByExternal = true;
+			if( !jQuery.isEmptyObject(this.validator) ){
+				validatedByExternal = this.validator.validateBeforeUpload(this.collection,file,idTipo);
+			}
+			if(validatedByExternal==false){
+				this.viewModel.get('errors').push(app.ST_VM_DOC_UPLD_EXT);
+				this.viewModel.set('status',app.ST_VM_DOC_READY_ERRORS);
+				return;
+			}
+		}
+		
+		var xhr = new XMLHttpRequest();
+		if (xhr.upload) {
+		
+			xhr.addEventListener('readystatechange', function(evnt){ 
+				if(xhr.readyState == 4 && xhr.status != 200 )
+				{
+					contexto.viewModel.set('errors',new Array());
+					contexto.viewModel.get('errors').push(app.ST_VM_DOC_UPLD_ERR);
+					contexto.viewModel.set('status',app.ST_VM_DOC_READY_ERRORS);
+				}
+				else if(xhr.readyState == 4 && xhr.status == 200)
+				{
+					var respuestaJson = JSON.parse(xhr.responseText);
+					var doc = new app.Doc();
+					doc.set(
+						{uuid: respuestaJson.uuid, 
+						 nombre: respuestaJson.filename,
+						 status: app.ST_DOC_UPLOADED,
+						 idTipo: idTipo,
+						 dsTipo: dsTipo,
+						 _urlDown: contexto.viewModel.get('urlDownloadNew') + '/' + respuestaJson.uuid,
+						 _urlDelete: contexto.viewModel.get('urlDelete') + '/' + respuestaJson.uuid}
+					);
+					contexto.collection.add(doc);
+					$("#ZmlsZURvY3VtZW50bw").val("");
+					$(".tipoDocumento").val('null');
+					contexto.viewModel.set('status',app.ST_VM_DOC_READY);
+				}
+					
+			}, false);
+			
+			
+			xhr.open('POST', this.viewModel.get('urlUpload'), true);
+			try
+			{
+				var formData = new FormData();
+				formData.append("archivo", file);
+				xhr.send(formData);
+			}
+			catch(err)
+			{
+				this.viewModel.set('errors',new Array());
+				this.viewModel.get('errors').push(app.ST_VM_DOC_UPLD_ERR);
+				this.viewModel.set('status',app.ST_VM_DOC_READY_ERRORS);
+			}
+		}
+		
+		/*
 		setTimeout(function(){
 			contexto.viewModel.set('status',app.ST_VM_DOC_READY);
 			
@@ -154,7 +284,7 @@ app.DocsView = Backbone.View.extend({
 			contexto.collection.add(doc);
 			
 		}, 200);
-		
+		*/
 		//var doc = new app.Doc();
 		//this.collection.add(doc);
 	}

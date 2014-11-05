@@ -190,17 +190,29 @@
 					<div class="msgErrorPeticion alert alert-danger">
 						<span class="glyphicon glyphicon-ban-circle"></span> Ha habído un error al procesar la petición.
 					</div>
+					<div class="msgErrorTipoNoSel alert alert-danger">
+						<span class="glyphicon glyphicon-ban-circle"></span> Debes seleccionar el tipo de documento a cargar.
+					</div>
+					<div class="msgErrorTipoNoArc alert alert-danger">
+						<span class="glyphicon glyphicon-ban-circle"></span> Debes seleccionar un archivo a cargar.
+					</div>
+					<div class="msgErrorValidadorExt alert alert-danger">
+					</div>
 					
 					<div class="newFileRow row">
 						<div class="archivoInputDiv col-md-5">
 							<label class="control-label col-md-4">Seleccione un archivo:</label>
-							<div class="col-md-8"><input type="file" id="fileDocumento"/></div>
+							<div class="col-md-8"><input type="file" class="file" id="ZmlsZURvY3VtZW50bw"/></div>
 						</div>
 						<div class="tipoDiv col-md-4">
 							<label class="control-label col-md-4">Tipo:</label>
 							<div class="col-md-8">
-								<select class="form-control col-md-8">
+								<select class="tipoDocumento form-control col-md-8">
 									<option value="null">-Seleccione-</option>
+									<g:each in="${viewModelInstance.tipoDocumentoList}">
+										validador.addDocType(${it.id});
+										<option value="${it.id}">${it.descripcion}</option>
+									</g:each>
 								</select>
 							</div>
 						</div>

@@ -12,12 +12,12 @@ class DocumentoController {
 	
 	def upload() {
 		CommonsMultipartFile uploadFile = params.archivo
-		String uuidAnterior = params.'uuidAnterior'
+		//String uuidAnterior = params.'uuidAnterior'
 		
 		ArchivoTO archivo = null
 		
 		archivo = archivoTemporalService.guardarArchivoTemporal(session.id, uploadFile)
-		archivoTemporalService.eliminarArchivoTemporal(uuidAnterior)
+		//archivoTemporalService.eliminarArchivoTemporal(uuidAnterior)
 		
 		//se elimina el contenido de estos parametros por motivos de seguridad
 		ArchivoTO archivoToRender = archivo.clone()

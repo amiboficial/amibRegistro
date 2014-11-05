@@ -7,6 +7,7 @@ import static org.springframework.http.HttpStatus.*
 import java.util.Collection;
 
 import mx.amib.sistemas.registro.apoderamiento.model.Revocacion
+import mx.amib.sistemas.registro.apoderamiento.model.catalog.TipoDocumentoRespaldoRevocacion
 import grails.converters.JSON
 import grails.transaction.Transactional
 import mx.amib.sistemas.external.catalogos.service.EntidadFederativaTO
@@ -46,6 +47,7 @@ class RevocacionController {
 		revocacionViewModel.entidadFinanciera = entidadFinancieraService.obtenerGrupoFinanciero(6)
 		revocacionViewModel.entidadFederativaList = sepomexService.obtenerEntidadesFederativas()
 		revocacionViewModel.gruposFinancierosList = entidadFinancieraService.obtenerGruposFinancierosVigentes()
+		revocacionViewModel.tipoDocumentoList = TipoDocumentoRespaldoRevocacion.findAllByVigente(true)
 		return revocacionViewModel
 	}
 
@@ -146,4 +148,5 @@ class RevocacionViewModel {
 	EntidadFinancieraTO entidadFinanciera
 	Collection<EntidadFederativaTO> entidadFederativaList
 	Collection<GrupoFinancieroTO> gruposFinancierosList
+	Collection<TipoDocumentoRespaldoRevocacion> tipoDocumentoList
 }

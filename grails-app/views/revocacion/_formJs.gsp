@@ -12,10 +12,17 @@
 		<!-- INICIA: SCRIPT PARA DOCUMENTOS -->
 		<g:render template="../common/multiDocs"/>
 		<g:javascript src="mx.amib.sistemas.registro.form.docsMultiWidget.js" />
+		<g:javascript src="mx.amib.sistemas.registro.revocacion.form.docsValidator.js" />
 		<script type="text/javascript">
 		$(function(){
 			var docs = [];
+			<g:each in="${viewModelInstance.tipoDocumentoList}">
+				app.DocsValidator.addDocType(${it.id});
+			</g:each>
+			
 			var docsView = new app.DocsView(docs);
+			docsView.validator = app.DocsValidator;
+			
 		});
 		</script>
-		<!-- FIN: SCRIPT PARA REVOCADOS  -->
+		<!-- FIN: SCRIPT PARA DOCUMENTOS  -->

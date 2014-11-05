@@ -45,7 +45,7 @@ app.DocsValidator = {
 	},
 	renderLastSubmitValidationMsg: function(){
 		return lastSubmitErrorMsg;
-	}
+	},
 	
 	validateBeforeUpload: function(collection,file,idTipo){
 		console.log("validateBeforeUpload -> idTipo:"+idTipo);

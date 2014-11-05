@@ -120,13 +120,19 @@ app.DocsView = Backbone.View.extend({
 			busy = true;
 		}
 		var validatedByExternal = true;
+		var validatedByExternalMessage = "";
 		if( !jQuery.isEmptyObject(this.validator) ){
 			validatedByExternal = this.validator.submitValidation(this.collection);
 		}
-		
+		if(validatedByExternal){
+			validatedByExternalMessage = this.validator.renderLastSubmitValidationMsg();
+		}
 		// esta ocupado?
+		$("#hdnDocsIsBusy").val(busy);
 		// fue validado correctamente por "validator"? (si es que hay uno referenciado)
+		$("#hdnDocsModelValidated").val(validatedByExternal);
 		// mensajes adicionales de "validator"
+		$("#hdnDocsModelValidatedMsg").val(busy);
 	},
 	
 	renderBusy: function(item){

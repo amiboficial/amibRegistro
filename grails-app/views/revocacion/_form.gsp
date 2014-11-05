@@ -88,7 +88,7 @@
 			<fieldset>
 				<legend>Datos de la revocación</legend>
 				<div class="form-group">
-					<div id="divPdrNumEscrit">
+					<div id="divRevNumEscrit">
 						<label id="lblPdrNumEscrit" class="col-md-2 col-sm-3 control-label">
 							<g:message code="revocacion.numeroEscritura.label" default="Numero de escritura" /><span class="required-indicator">*</span>
 						</label>
@@ -96,7 +96,7 @@
 							<g:textField id="txtPdrNumEscrit" maxlength="10" class="has-error form-control" name="revocacion.numeroEscritura" required="" value="${revocacionInstance?.numeroEscritura}" />
 						</div>
 					</div>
-					<div id="divFhApod">
+					<div id="divFhRev">
 						<label class="col-md-3 col-sm-3 control-label">
 							<g:message code="revocacion.fechaApoderamiento.label" default="Fecha de revocación" /><span class="required-indicator">*</span>						
 						</label>
@@ -172,6 +172,7 @@
 				</div>
 
 				<input type="hidden" id="hdnRevocadosWidgetBusyCount"/>
+				<input type="hidden" id="hdnRevocadosWidgetLoadedCount"/>
 				<input type="hidden" id="hdnRevocadosWidgetCount"/>
 			</fieldset>
 			
@@ -226,5 +227,15 @@
 					</div>
 					
 				</div>
-				
+				<input type="hidden" id="hdnDocsIsBusy" value="false"/>
+				<input type="hidden" id="hdnDocsModelValidated" value="false"/>
+				<input type="hidden" id="hdnDocsModelValidatedMsg" value=""/>
 			</fieldset>
+			
+			<input id="hdnIsAdmin" type="hidden" value="true" /> <!-- Para validacion de campos -->
+			
+			<div class="form-group">
+				<div class="col-lg-offset-5 col-md-offset-5 col-md-2 col-sm-2">
+					<button id="btnSubmit" type="button" class="btn btn-primary btn-lg btn-block">Aceptar</button>
+				</div>
+			</div>

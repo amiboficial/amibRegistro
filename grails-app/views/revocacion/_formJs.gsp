@@ -26,3 +26,6 @@
 		});
 		</script>
 		<!-- FIN: SCRIPT PARA DOCUMENTOS  -->
+		<!-- INICIO: SCRIPT PARA VISTA -->
+		<g:javascript src="mx.amib.sistemas.registro.revocacion.form.js" />
+		<!-- FIN: SCRIPT PARA VISTA-->

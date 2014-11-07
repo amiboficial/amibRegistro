@@ -93,7 +93,7 @@
 							<g:message code="revocacion.numeroEscritura.label" default="Numero de escritura" /><span class="required-indicator">*</span>
 						</label>
 						<div class="col-md-2 col-sm-2">
-							<g:textField id="txtPdrNumEscrit" maxlength="10" class="has-error form-control" name="revocacion.numeroEscritura" required="" value="${revocacionInstance?.numeroEscritura}" />
+							<g:textField id="txtRevNumEscrit" maxlength="10" class="has-error form-control" name="revocacion.numeroEscritura" required="" value="${revocacionInstance?.numeroEscritura}" />
 						</div>
 					</div>
 					<div id="divFhRev">
@@ -171,8 +171,8 @@
 					<div class="newElementAction list-group-item"><button type="button" class="add btn btn-success"><span class="glyphicon glyphicon-plus-sign"></span> Agregar nuevo elemento</button></div>
 				</div>
 
-				<input type="hidden" id="hdnRevocadosWidgetBusyCount"/>
-				<input type="hidden" id="hdnRevocadosWidgetLoadedCount"/>
+				<input type="hidden" id="hdnRevocadosWidgetBusyCount" value="0"/>
+				<input type="hidden" id="hdnRevocadosWidgetLoadedCount" value="0"/>
 				<input type="hidden" id="hdnRevocadosWidgetCount"/>
 			</fieldset>
 			
@@ -228,6 +228,7 @@
 					
 				</div>
 				<input type="hidden" id="hdnDocsIsBusy" value="false"/>
+				<input type="hidden" id="hdnDocsModelValidatedLoaded" value="false"/>
 				<input type="hidden" id="hdnDocsModelValidated" value="false"/>
 				<input type="hidden" id="hdnDocsModelValidatedMsg" value=""/>
 			</fieldset>

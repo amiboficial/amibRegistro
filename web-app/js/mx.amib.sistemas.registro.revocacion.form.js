@@ -28,17 +28,19 @@
 		
 		//callback al boton para submitear
 		$( "#btnSubmit" ).click(function() {
-			/*$( "#frmApp" ).submit();*/
+			$( "#frmApp" ).submit();
 		});
 		
 		//campos que requieren reset al hacer "back" con el navegador
 		$(window).bind("pageshow", function() {
-			/*var _isAdmin = $("#hdnIsAdmin").val();
-		
-			$('#hdnCountApoderados').val( $('#hdnCountApoderadosLoaded').val() );
-			$('#hdnDocumentosCompletados').val( $('#hdnDocumentosCompletadosLoaded').val() );
+			var _isAdmin = $("#hdnIsAdmin").val();
+			$('#hdnDocsModelValidated').val( $('#hdnDocsModelValidatedLoaded').val() );
+			$('#hdnDocsIsBusy').val("false");
 			
-			$('#txtNumNotario').trigger('blur');*/
+			$('#hdnRevocadosWidgetCount').val( $('#hdnRevocadosWidgetLoadedCount').val() );
+			$('#hdnRevocadosWidgetBusyCount').val("0");
+			
+			$('#txtNumNotario').trigger('blur');
 		});
 		
 		//callback para submit
@@ -50,10 +52,11 @@
 			var valid = true;
 			var errorMsg = [];
 			
-			alert("NOT YET IMPLEMENTED");
+			//alert("NOT YET IMPLEMENTED");
+			//event.preventDefault();
 			//oculta mensajes de validación
-			//cleanValidationMsgs();
-			/*
+			cleanValidationMsgs();
+			
 			if($.trim($('#txtRepLegalNom').val()) == ''){
 				errorMsg.push({ errName: 'Campo requerido', errField: 'Nombre (Representante Legal)' });
 				$('#divRepLegalNom').addClass( 'has-error' );
@@ -69,29 +72,31 @@
 				$('#divAp2').addClass( 'has-error' );
 				valid = false;
 			}
-			if($.trim($('#txtPdrNumEscrit').val()) == ''){
+			
+			if($.trim($('#txtRevNumEscrit').val()) == ''){
 				errorMsg.push({ errName: 'Campo requerido', errField: 'Numero de escritura' });
-				$('#divPdrNumEscrit').addClass( 'has-error' );
+				$('#divRevNumEscrit').addClass( 'has-error' );
 				valid = false;
 			}
-			if( isNaN($.trim($('#txtPdrNumEscrit').val())) == true ){
+			if( isNaN($.trim($('#txtRevNumEscrit').val())) == true ){
 				errorMsg.push({ errName: 'Formato incorrecto, debe ser numérico entero', errField: 'Numero de escritura' });
-				$('#divPdrNumEscrit').addClass( 'has-error' );
+				$('#divRevNumEscrit').addClass( 'has-error' );
 				valid = false;
 			}
-			if($('#poder\\.fechaApoderamiento_day').val() == 'null'){
+			
+			if($('#revocacion\\.fechaApoderamiento_day').val() == 'null'){
 				errorMsg.push({ errName: 'Campo requerido', errField: 'Fecha de apoderamiento (día)' });
-				$('#divFhApod').addClass( 'has-error' );
+				$('#divFhRev').addClass( 'has-error' );
 				valid = false;
 			}
-			if($('#poder\\.fechaApoderamiento_month').val() == 'null'){
+			if($('#revocacion\\.fechaApoderamiento_month').val() == 'null'){
 				errorMsg.push({ errName: 'Campo requerido', errField: 'Fecha de apoderamiento (mes)' });
-				$('#divFhApod').addClass( 'has-error' );
+				$('#divFhRev').addClass( 'has-error' );
 				valid = false;
 			}
-			if($('#poder\\.fechaApoderamiento_year').val() == 'null'){
+			if($('#revocacion\\.fechaApoderamiento_year').val() == 'null'){
 				errorMsg.push({ errName: 'Campo requerido', errField: 'Fecha de apoderamiento (año)' });
-				$('#divFhApod').addClass( 'has-error' );
+				$('#divFhRev').addClass( 'has-error' );
 				valid = false;
 			}
 			
@@ -119,15 +124,22 @@
 				valid = false;
 			}
 			
-			if( $('#hdnCountApoderados').val() == 0 ){
+			if( $('#hdnRevocadosWidgetCount').val() == 0 ){
 				errorMsg.push({ errName: 'Datos requeridos', errField: 'Apoderados' });
-				$('#divMsgAlMenosUnApoderado').show();
+				$('#divMsgRevAlMenosUno').show();
 				valid = false;
 			}
 			
-			if( $('#hdnDocumentosCompletados').val() == 'false' ){
+			if( parseInt($('#hdnRevocadosWidgetBusyCount').val()) > 0 ){
+				errorMsg.push({ errName: 'Datos aún editandose', errField: 'Apoderados' });
+				$('#divMsgRevEditando').show();
+				valid = false;
+				console.log("EDITANDO; BUSYCOUNT: " + $('#hdnRevocadosWidgetBusyCount').val());
+			}
+			
+			if( $('#hdnDocsModelValidated').val() == 'false' ){
 				errorMsg.push({ errName: 'Faltan documentos', errField: 'Documentos' });
-				$('#divMsgDocRequeridos').show();
+				$('#divDocsCompletos').show();
 				valid = false;
 			}
 			
@@ -135,25 +147,27 @@
 				if($("#selAdmIdGrupoFinanciero").val() == "-1"){
 					errorMsg.push({ errName: 'Dato requerido', errField: 'Grupo Financiero' });
 					$('#divAdmGrupoFinanciero').addClass( 'has-error' );
+					valid = false;
 				}
-			}*/
-			//alert(JSON.stringify(errorMsg));
-			/*
+			}
+
+			//alert(JSON.stringify(errorMsg));  ""
+			
 			if(valid == false)
 			{
 				$('#divMsgErrorEnCampos').show();
-				event.preventDefault();*/
+				event.preventDefault();
 				
-				/*$('form').animate({ scrollTop: 0 }, 'fast');*/
-				/*$('html, body').animate({
+				$('form').animate({ scrollTop: 0 }, 'fast');
+				$('html, body').animate({
 				   'scrollTop':   $('#anchorForm').offset().top - 150
 				 }, 'fast');
 			}
 			else
 			{
 				console.log('TODO ES VALIDO');
-				//event.preventDefault();
-			}*/
+				event.preventDefault();
+			}
 		});
 		
 		//fixes a ejecutarse al inicio

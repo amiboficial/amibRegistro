@@ -1,4 +1,18 @@
 <%@ page import="mx.amib.sistemas.registro.apoderamiento.model.Poder" %>
+		
+		<!-- INICIA: SCRIPT PARA FUNCIONAMIENTO DE ENTIDAD FINANCIERA -->
+		<script type="text/javascript">
+			var institAjaxUrl = '<g:createLink action="obtenerInstituciones"/>';
+			<g:if test="${revocacionInstance.idInstitucion != null}">
+				var precargadoIdInstitucion = ${revocacionInstance.idInstitucion};
+			</g:if>
+		</script>
+		<g:javascript src="mx.amib.sistemas.registro.form.entidadFinanciera.js" />
+		<script type="text/javascript">
+			$("#selAdmIdGrupoFinanciero").trigger("change");
+		</script>
+		<!-- FIN: SCRIPT PARA FUNCIONAMIENTO DE ENTIDAD FINANCIERA -->
+		
 		<!-- INICIA: SCRIPT PARA REVOCADOS -->
 		<g:render template="revocados"/>
 		<g:javascript src="mx.amib.sistemas.registro.revocacion.form.revocadosWidget.js" />
@@ -26,6 +40,14 @@
 		});
 		</script>
 		<!-- FIN: SCRIPT PARA DOCUMENTOS  -->
+		<!-- INICIO: SCRIPT PARA COMPONENTE DE NOTARIO -->
+		<g:javascript src="mx.amib.sistemas.registro.form.notarioWidget.js" />
+		<script type="text/javascript">
+		$(function(){
+			new notarioWidget.NotarioView(null,'<g:createLink action="obtenerNombreNotario"/>');
+		});
+		</script>
+		<!-- FIN: SCRIPT PARA COMPONENTE DE NOTARIO -->
 		<!-- INICIO: SCRIPT PARA VISTA -->
 		<g:javascript src="mx.amib.sistemas.registro.revocacion.form.js" />
 		<!-- FIN: SCRIPT PARA VISTA-->

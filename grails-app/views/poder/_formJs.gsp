@@ -7,7 +7,7 @@
 				var precargadoIdInstitucion = ${poderInstance.idInstitucion};
 			</g:if>
 		</script>
-		<g:javascript src="mx.amib.sistemas.registro.apoderamiento.form.entidadFinanciera.js" />
+		<g:javascript src="mx.amib.sistemas.registro.form.entidadFinanciera.js" />
 		<script type="text/javascript">
 			$("#selAdmIdGrupoFinanciero").trigger("change");
 		</script>
@@ -44,7 +44,7 @@
 		</script>
 		<!-- FIN: SCRIPT PARA COMPONENTE DE DOCUMENTOS -->
 		<!-- INICIO: SCRIPT PARA COMPONENTE DE NOTARIO -->
-		<g:javascript src="mx.amib.sistemas.registro.apoderamiento.form.notarioWidget.js" />
+		<g:javascript src="mx.amib.sistemas.registro.form.notarioWidget.js" />
 		<script type="text/javascript">
 		$(function(){
 			new notarioWidget.NotarioView(null,'<g:createLink action="obtenerNombreNotario"/>');

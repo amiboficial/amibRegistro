@@ -130,6 +130,7 @@
 				if($("#selAdmIdGrupoFinanciero").val() == "-1"){
 					errorMsg.push({ errName: 'Dato requerido', errField: 'Grupo Financiero' });
 					$('#divAdmGrupoFinanciero').addClass( 'has-error' );
+					valid = false;
 				}
 			}
 			//alert(JSON.stringify(errorMsg));

@@ -8,6 +8,7 @@ import java.util.Collection;
 
 import mx.amib.sistemas.registro.apoderamiento.model.Revocacion
 import mx.amib.sistemas.registro.apoderamiento.model.catalog.TipoDocumentoRespaldoRevocacion
+import mx.amib.sistemas.registro.notario.service.NotarioService
 import grails.converters.JSON
 import grails.transaction.Transactional
 import mx.amib.sistemas.external.catalogos.service.EntidadFederativaTO
@@ -26,6 +27,7 @@ class RevocacionController {
 	EntidadFinancieraService entidadFinancieraService
 	SepomexService sepomexService
 	SustentanteService sustentanteService
+	NotarioService notarioService
 	
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
@@ -141,6 +143,40 @@ class RevocacionController {
 			res = [ status: 'NOT_FOUND' ]
 		}
 		render res as JSON
+	}
+	
+	// "OK","NOT_FOUND","NOT_VALID_INPUT"
+	def obtenerNombreNotario(){
+		String strIdEntidadFederativa = params.'idEntidadFederativa'
+		String strNumeroNotario = params.'numeroNotario'
+		
+		if(strIdEntidadFederativa.isInteger() && strNumeroNotario.isInteger()){
+			def notario = notarioService.obtenerNotario(strIdEntidadFederativa.toInteger(),strNumeroNotario.toInteger())
+			
+			if(notario != null)
+			{
+				String nombreCompletoNotario = notario.nombre + ' ' + notario.apellido1 + ' ' + notario.apellido2
+				def res = [ status: 'OK', id: notario.id, nombreCompleto: nombreCompletoNotario ]
+				render res as JSON
+			}
+			else
+			{
+				def res = [ status: 'NOT_FOUND', id: -1, nombreCompleto: '' ]
+				render res as JSON
+			}
+		}
+		else
+		{
+			def res = [ status: 'NOT_VALID_INPUT', id: -1, nombreCompleto: '' ]
+			render res as JSON
+		}
+	}
+	
+	//obtiene instituciones dado un id de grupo financiero
+	def obtenerInstituciones(long id){
+		def gp = entidadFinancieraService.obtenerGrupoFinanciero(id)
+		def instituciones = gp.instituciones
+		render instituciones as grails.converters.deep.JSON
 	}
 }
 

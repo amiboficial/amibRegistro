@@ -22,7 +22,7 @@
 						<g:message code="revocacion.representanteLegalApellido1.label" default="Primer apellido" /><span class="required-indicator">*</span>
 					</label>
 					<div class="col-md-9 col-sm-9">
-						<g:textField id="txtAp1" maxlength="80" class="form-control" name="poder.representanteLegalApellido1" required="" value="${revocacionInstance?.representanteLegalApellido1}" />
+						<g:textField id="txtAp1" maxlength="80" class="form-control" name="revocacion.representanteLegalApellido1" required="" value="${revocacionInstance?.representanteLegalApellido1}" />
 					</div>
 				</div>
 				<div id="divAp2" class="form-group">
@@ -227,6 +227,7 @@
 					</div>
 					
 				</div>
+				<input type="hidden" id="hdnDocsDeleted" name="idsDocumentosBorrados" value=""/>
 				<input type="hidden" id="hdnDocsIsBusy" value="false"/>
 				<input type="hidden" id="hdnDocsModelValidatedLoaded" value="false"/>
 				<input type="hidden" id="hdnDocsModelValidated" value="false"/>

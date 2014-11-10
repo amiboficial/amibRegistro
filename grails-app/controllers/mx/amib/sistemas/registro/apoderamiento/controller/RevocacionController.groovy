@@ -6,6 +6,7 @@ import static org.springframework.http.HttpStatus.*
 
 import java.util.Collection;
 
+import mx.amib.sistemas.registro.apoderado.service.RevocacionService
 import mx.amib.sistemas.registro.apoderamiento.model.Revocacion
 import mx.amib.sistemas.registro.apoderamiento.model.catalog.TipoDocumentoRespaldoRevocacion
 import mx.amib.sistemas.registro.notario.service.NotarioService
@@ -28,6 +29,7 @@ class RevocacionController {
 	SepomexService sepomexService
 	SustentanteService sustentanteService
 	NotarioService notarioService
+	RevocacionService revocacionService
 	
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
@@ -54,19 +56,34 @@ class RevocacionController {
 	}
 
     @Transactional
-    def save(Revocacion revocacionInstance) {
-        if (revocacionInstance == null) {
+    def save(Revocacion revocacion) {
+		def revocacionInstance = revocacion
+		
+		def revocadosToBind = params.list('revocado')
+		def documentosToBind = params.list('documento')
+		def documentosToEraseStrParam = params.'idsDocumentosBorrados'
+		def notarioNumero = params.'notarioNumero'.toInteger()
+		def notarioIdEntidadFederativa = params.'notarioIdEntidadFederativa'.toInteger()
+        def documentosToErase = null
+		if(documentosToEraseStrParam != null || documentosToEraseStrParam != ""){
+			documentosToErase = documentosToEraseStrParam.split("\\|")
+		}
+		
+		if (revocacionInstance == null) {
             notFound()
             return
         }
 
+		revocacionService.save(revocacionInstance, revocadosToBind, documentosToBind, notarioIdEntidadFederativa, notarioNumero)
+		
+		/*
         if (revocacionInstance.hasErrors()) {
             respond revocacionInstance.errors, view:'create'
             return
         }
 
         revocacionInstance.save flush:true
-
+		*/
         request.withFormat {
             form multipartForm {
                 flash.message = message(code: 'default.created.message', args: [message(code: 'revocacion.label', default: 'Revocacion'), revocacionInstance.id])

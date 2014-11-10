@@ -18,6 +18,6 @@ class DocumentoRespaldoRevocacion {
 		revocacion column:'id_105_revocacion'
 		tipoDocumentoRespaldoRevocacion column:'id_108_tpdocrespaldorevocacion'
 		
-		id generator: "assigned"
+		id generator: "identity"
 	}
 }

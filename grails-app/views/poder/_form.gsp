@@ -208,6 +208,7 @@
 
 			</fieldset>
 	
+			<!-- INCIA: SECCION DE DOCUMENTOS -->
 			<fieldset>
 				<legend>Documentos de respaldo</legend>
 				
@@ -230,6 +231,7 @@
 				
 				
 			</fieldset>
+			<!-- FIN: SECCION DE DOCUMENTOS -->
 			
 			<div class="form-group">
 				<div class="col-lg-offset-5 col-md-offset-5 col-md-2 col-sm-2">

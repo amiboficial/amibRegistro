@@ -12,8 +12,11 @@ app.DocsValidator = {
 	errors: [], //errType
 	lastSubmitErrorMsg: "",
 	
-	addDocType: function(idTipo){
-		this.docTypes.push("{ idTipo:"+idTipo+", cant:0 }");
+	addDocType: function(_idTipo){
+	
+		var element = { idTipo:_idTipo,cant:0 };
+		this.docTypes.push(element);
+		//console.log("coleccion on addDocType -> docType:"+this.docTypes[0].idTipo+",cant:"+this.docTypes[0].cant);
 	},
 	
 	submitValidation: function(collection){
@@ -25,6 +28,7 @@ app.DocsValidator = {
 					item.cant++;
 				}
 			},this);
+			console.log("coleccion -> docType:"+item.idTipo+",cant:"+item.cant);
 		}, this);
 		
 		//revisa si hay alguno que haya quedado con cantidad de 0,

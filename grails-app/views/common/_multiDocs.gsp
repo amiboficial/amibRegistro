@@ -9,5 +9,6 @@
 					<button type="button" class="download btn btn-xs btn-primary"><span class="glyphicon glyphicon-circle-arrow-down"></span> Descargar</button>
 					<button type="button" class="delete btn btn-xs btn-danger"><span class="glyphicon glyphicon-trash"></span> Eliminar</button>
 				</div>
+				<input type="hidden" name="documento" value="{ id: {{=grailsId}}, idTipo:{{=idTipo}}, status:{{=status}}, uuid:'{{=uuid}}' }" />
 			</div>
 		</script>

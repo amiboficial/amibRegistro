@@ -163,11 +163,11 @@
 				   'scrollTop':   $('#anchorForm').offset().top - 150
 				 }, 'fast');
 			}
-			else
+			/*else
 			{
 				console.log('TODO ES VALIDO');
 				event.preventDefault();
-			}
+			}*/
 		});
 		
 		//fixes a ejecutarse al inicio

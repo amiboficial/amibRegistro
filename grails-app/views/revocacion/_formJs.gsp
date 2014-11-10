@@ -36,7 +36,6 @@
 			
 			var docsView = new app.DocsView(docs);
 			docsView.validator = app.DocsValidator;
-			
 		});
 		</script>
 		<!-- FIN: SCRIPT PARA DOCUMENTOS  -->

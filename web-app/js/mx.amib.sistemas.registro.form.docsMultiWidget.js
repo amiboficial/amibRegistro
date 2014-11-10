@@ -67,11 +67,12 @@ app.DocView = Backbone.View.extend({
 		e.preventDefault();
 
 		//manda borrar el documento de los temporales del servidor
-			//si lo ejecuta debidamente:
-			//Borra el model
-			this.model.destroy();
-			//Destruye esta vista
-			this.remove();
+		
+		//si lo ejecuta debidamente:
+		//Borra el model
+		this.model.destroy();
+		//Destruye esta vista
+		this.remove();
 	},
 	
 });
@@ -86,10 +87,13 @@ app.DocsView = Backbone.View.extend({
 		this.render();
 		
 		this.listenTo( this.collection, 'add', this.renderElement );
+		
 		this.listenTo( this.collection, 'add', this.renderHiddenData );
 		this.listenTo( this.collection, 'change', this.renderHiddenData );
 		this.listenTo( this.collection, 'remove', this.renderHiddenData );
 		this.listenTo( this.collection, "reset", this.renderHiddenData );
+		
+		this.listenTo( this.collection, 'remove', this.renderDeletedInHidden );
 		
 		this.listenTo( this.viewModel, 'change:status', this.renderBusy );
 	},
@@ -115,6 +119,7 @@ app.DocsView = Backbone.View.extend({
 	},
 	
 	renderHiddenData: function(){
+		
 		var busy = false;
 		if(this.viewModel.get('status') == app.ST_VM_DOC_UPLOADING){
 			busy = true;
@@ -133,6 +138,23 @@ app.DocsView = Backbone.View.extend({
 		$("#hdnDocsModelValidated").val(validatedByExternal);
 		// mensajes adicionales de "validator"
 		$("#hdnDocsModelValidatedMsg").val(busy);
+	},
+	
+	renderDeletedInHidden: function(item){
+		if(item.get('grailsId') > 0){
+			console.log("Se borrará un documento en el server, su id fué: " + item.get('grailsId'));
+			var pipeString = $.trim($("#hdnDocsDeleted").val());
+			if(pipeString == ""){
+				pipeString = item.get('grailsId')
+			}
+			else{
+				pipeString = pipeString + '|' + item.get('grailsId')
+			}
+			$("#hdnDocsDeleted").val(pipeString)
+		}
+		else{
+			console.log("Fue un documento que aún no está en repositorio, su id fué: " + item.get('grailsId'));
+		}
 	},
 	
 	renderBusy: function(item){

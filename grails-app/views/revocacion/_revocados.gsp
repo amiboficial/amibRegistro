@@ -35,7 +35,7 @@
 									<button type="button" class="delete btn btn-danger"><span class="glyphicon glyphicon-trash"></span> Borrar</button>
 								</div>
 							</div>
-							<input type="hidden" name="revocado" value="{ id:{{=grailsId}}, numeroMatricula:{{=numeroMatricula}}, numeroEscritura:'{{=numeroEscritura}}', motivo:'{{=motivo}}', fechaBajaDia:{{=fechaBajaDia}}, fechaBajaMes:{{=fechaBajaMes}}, fechaBajaAnyo:{{=fechaBajaAnyo}} }" />
+							<input type="hidden" name="revocado" value="{ id:{{=grailsId}}, numeroMatricula:{{=numeroMatricula}}, numeroEscritura:{{=numeroEscritura}}, motivo:'{{=motivo}}', fechaBajaDia:'{{=fechaBajaDia}}', fechaBajaMes:'{{=fechaBajaMes}}', fechaBajaAnyo:'{{=fechaBajaAnyo}}' }" />
 						
 					</script>
 					
@@ -75,15 +75,15 @@
 								<label class="col-sm-3 control-label">Fecha de baja</label>
 								<div class="col-sm-4">
 									<select class="fechaBaja_day form-control"><option value="null">-Seleccione-</option>
-										<option value="1">1</option>
-										<option value="2">2</option>
-										<option value="3">3</option>
-										<option value="4">4</option>
-										<option value="5">5</option>
-										<option value="6">6</option>
-										<option value="7">7</option>
-										<option value="8">8</option>
-										<option value="9">9</option>
+										<option value="01">1</option>
+										<option value="02">2</option>
+										<option value="03">3</option>
+										<option value="04">4</option>
+										<option value="05">5</option>
+										<option value="06">6</option>
+										<option value="07">7</option>
+										<option value="08">8</option>
+										<option value="09">9</option>
 										<option value="10">10</option>
 										<option value="11">11</option>
 										<option value="12">12</option>
@@ -108,15 +108,15 @@
 										<option value="31">31</option>
 									</select>
 									<select class="fechaBaja_month form-control"><option value="null">-Seleccione-</option>
-										<option value="1">enero</option>
-										<option value="2">febrero</option>
-										<option value="3">marzo</option>
-										<option value="4">abril</option>
-										<option value="5">mayo</option>
-										<option value="6">junio</option>
-										<option value="7">julio</option>
-										<option value="8">agosto</option>
-										<option value="9">septiembre</option>
+										<option value="01">enero</option>
+										<option value="02">febrero</option>
+										<option value="03">marzo</option>
+										<option value="04">abril</option>
+										<option value="05">mayo</option>
+										<option value="06">junio</option>
+										<option value="07">julio</option>
+										<option value="08">agosto</option>
+										<option value="09">septiembre</option>
 										<option value="10">octubre</option>
 										<option value="11">noviembre</option>
 										<option value="12">diciembre</option>
@@ -194,15 +194,15 @@
 								<div class="col-sm-4">
 								
 									<select class="fechaBaja_day form-control"><option value="null">-Seleccione-</option>
-										<option value="1">1</option>
-										<option value="2">2</option>
-										<option value="3">3</option>
-										<option value="4">4</option>
-										<option value="5">5</option>
-										<option value="6">6</option>
-										<option value="7">7</option>
-										<option value="8">8</option>
-										<option value="9">9</option>
+										<option value="01">1</option>
+										<option value="02">2</option>
+										<option value="03">3</option>
+										<option value="04">4</option>
+										<option value="05">5</option>
+										<option value="06">6</option>
+										<option value="07">7</option>
+										<option value="08">8</option>
+										<option value="09">9</option>
 										<option value="10">10</option>
 										<option value="11">11</option>
 										<option value="12">12</option>
@@ -227,15 +227,15 @@
 										<option value="31">31</option>
 									</select>
 									<select class="fechaBaja_month form-control"><option value="null">-Seleccione-</option>
-										<option value="1">enero</option>
-										<option value="2">febrero</option>
-										<option value="3">marzo</option>
-										<option value="4">abril</option>
-										<option value="5">mayo</option>
-										<option value="6">junio</option>
-										<option value="7">julio</option>
-										<option value="8">agosto</option>
-										<option value="9">septiembre</option>
+										<option value="01">enero</option>
+										<option value="02">febrero</option>
+										<option value="03">marzo</option>
+										<option value="04">abril</option>
+										<option value="05">mayo</option>
+										<option value="06">junio</option>
+										<option value="07">julio</option>
+										<option value="08">agosto</option>
+										<option value="09">septiembre</option>
 										<option value="10">octubre</option>
 										<option value="11">noviembre</option>
 										<option value="12">diciembre</option>

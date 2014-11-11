@@ -38,6 +38,9 @@ class DocumentoRepositorioService {
 	String saveUrl
 	String documentoPoderSaveUrl
 	String documentoPoderUpdateUrl
+	String documentoRevocacionSaveUrl
+	String documentoRevocacionUpdateUrl
+	
 	String saveMultipartUrl
 	String getUrl
 	String downloadUrl
@@ -133,6 +136,9 @@ class DocumentoRepositorioService {
 			if( DocumentoPoderRepositorioTO.class.isInstance(it) ){
 				restUrl = this.documentoPoderSaveUrl
 			}
+			else if ( DocumentoRevocacionRepositorioTO.class.isInstance(it) ){
+				restUrl = this.documentoRevocacionSaveUrl
+			}
 			
 			//Envía acorde al metadato
 			def resp = rest.post(restUrl){
@@ -182,6 +188,9 @@ class DocumentoRepositorioService {
 		
 		if( DocumentoPoderRepositorioTO.class.isInstance(doc) ){
 			restUrl = this.documentoPoderUpdateUrl
+		}
+		else if ( DocumentoRevocacionRepositorioTO.class.isInstance(it) ){
+			restUrl = this.documentoRevocacionUpdateUrl
 		}
 		//Envía acorde al metadato
 		def resp = rest.post(restUrl){
@@ -273,6 +282,20 @@ class DocumentoPoderRepositorioTO extends DocumentoRepositorioTO{
 	Integer numeroEscritura
 	Date fechaApoderamiento
 	String jsonApoderados
+	String jsonNotario
+	String jsonGrupoFinanciero
+	String jsonInstitucion
+}
+
+class DocumentoRevocacionRepositorioTO extends DocumentoRepositorioTO{
+	String tipoDocumentoRespaldo
+	String representanteLegalNombre
+	String representanteLegalApellido1
+	String representanteLegalApellido2
+	Boolean esRegistradoPorGrupoFinanciero
+	Integer numeroEscritura
+	Date fechaRevocacion
+	String jsonRevocados
 	String jsonNotario
 	String jsonGrupoFinanciero
 	String jsonInstitucion

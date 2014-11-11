@@ -98,10 +98,10 @@
 					</div>
 					<div id="divFhRev">
 						<label class="col-md-3 col-sm-3 control-label">
-							<g:message code="revocacion.fechaApoderamiento.label" default="Fecha de revocación" /><span class="required-indicator">*</span>						
+							<g:message code="revocacion.fechaRevocacion.label" default="Fecha de revocación" /><span class="required-indicator">*</span>						
 						</label>
 						<div class="col-md-4 col-sm-4">
-							<g:datePicker name="revocacion.fechaApoderamiento" value="${revocacionInstance?.fechaApoderamiento}" default="none" noSelection="${['null':'-Seleccione-']}" precision="day" relativeYears="${-10..0}"/>
+							<g:datePicker name="revocacion.fechaRevocacion" value="${revocacionInstance?.fechaRevocacion}" default="none" noSelection="${['null':'-Seleccione-']}" precision="day" relativeYears="${-10..0}"/>
 						</div>
 					</div>
 				</div>

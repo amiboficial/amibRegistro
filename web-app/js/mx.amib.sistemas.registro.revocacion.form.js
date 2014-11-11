@@ -84,17 +84,17 @@
 				valid = false;
 			}
 			
-			if($('#revocacion\\.fechaApoderamiento_day').val() == 'null'){
+			if($('#revocacion\\.fechaRevocacion_day').val() == 'null'){
 				errorMsg.push({ errName: 'Campo requerido', errField: 'Fecha de apoderamiento (día)' });
 				$('#divFhRev').addClass( 'has-error' );
 				valid = false;
 			}
-			if($('#revocacion\\.fechaApoderamiento_month').val() == 'null'){
+			if($('#revocacion\\.fechaRevocacion_month').val() == 'null'){
 				errorMsg.push({ errName: 'Campo requerido', errField: 'Fecha de apoderamiento (mes)' });
 				$('#divFhRev').addClass( 'has-error' );
 				valid = false;
 			}
-			if($('#revocacion\\.fechaApoderamiento_year').val() == 'null'){
+			if($('#revocacion\\.fechaRevocacion_year').val() == 'null'){
 				errorMsg.push({ errName: 'Campo requerido', errField: 'Fecha de apoderamiento (año)' });
 				$('#divFhRev').addClass( 'has-error' );
 				valid = false;
@@ -173,14 +173,14 @@
 		//fixes a ejecutarse al inicio
 		$(function(){
 			cleanValidationMsgs();
-			$('#revocacion\\.fechaApoderamiento_day').addClass( 'form-control' );
-			$('#revocacion\\.fechaApoderamiento_month').addClass( 'form-control' );
-			$('#revocacion\\.fechaApoderamiento_year').addClass( 'form-control' );
-			$('#revocacion\\.fechaApoderamiento_day').addClass( 'col-md-4' );
-			$('#revocacion\\.fechaApoderamiento_month').addClass( 'col-md-4' );
-			$('#revocacion\\.fechaApoderamiento_year').addClass( 'col-md-4' );
-			$('#revocacion\\.fechaApoderamiento_day').css( 'width', '25%' );
-			$('#revocacion\\.fechaApoderamiento_month').css( 'width', '40%' );
-			$('#revocacion\\.fechaApoderamiento_year').css( 'width', '35%' );
+			$('#revocacion\\.fechaRevocacion_day').addClass( 'form-control' );
+			$('#revocacion\\.fechaRevocacion_month').addClass( 'form-control' );
+			$('#revocacion\\.fechaRevocacion_year').addClass( 'form-control' );
+			$('#revocacion\\.fechaRevocacion_day').addClass( 'col-md-4' );
+			$('#revocacion\\.fechaRevocacion_month').addClass( 'col-md-4' );
+			$('#revocacion\\.fechaRevocacion_year').addClass( 'col-md-4' );
+			$('#revocacion\\.fechaRevocacion_day').css( 'width', '25%' );
+			$('#revocacion\\.fechaRevocacion_month').css( 'width', '40%' );
+			$('#revocacion\\.fechaRevocacion_year').css( 'width', '35%' );
 		});
 		

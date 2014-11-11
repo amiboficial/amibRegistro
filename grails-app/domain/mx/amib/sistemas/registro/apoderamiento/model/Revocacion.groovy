@@ -11,7 +11,7 @@ class Revocacion {
 	Long idGrupofinanciero
 	Long idInstitucion
 	Integer numeroEscritura
-	Date fechaApoderamiento
+	Date fechaRevocacion
 	Date fechaCreacion
 	Date fechaModificacion
 	Notario notario
@@ -30,7 +30,7 @@ class Revocacion {
 		idGrupofinanciero column:'id_f_grupofinanciero'
 		idInstitucion column:'id_f_institucion'
 		numeroEscritura column:'nu_escritura'
-		fechaApoderamiento column:'fh_apoderamiento'
+		fechaRevocacion column:'fh_revocacion'
 		fechaCreacion column:'fh_creacion'
 		fechaModificacion column:'fh_modificacion'
 		

@@ -88,11 +88,11 @@
 				</li>
 				</g:if>
 			
-				<g:if test="${revocacionInstance?.fechaApoderamiento}">
+				<g:if test="${revocacionInstance?.fechaRevocacion}">
 				<li class="fieldcontain">
-					<span id="fechaApoderamiento-label" class="property-label"><g:message code="revocacion.fechaApoderamiento.label" default="Fecha Apoderamiento" /></span>
+					<span id="fechaRevocacion-label" class="property-label"><g:message code="revocacion.fechaRevocacion.label" default="Fecha Apoderamiento" /></span>
 					
-						<span class="property-value" aria-labelledby="fechaApoderamiento-label"><g:formatDate date="${revocacionInstance?.fechaApoderamiento}" /></span>
+						<span class="property-value" aria-labelledby="fechaRevocacion-label"><g:formatDate date="${revocacionInstance?.fechaRevocacion}" /></span>
 					
 				</li>
 				</g:if>

@@ -1,23 +1,28 @@
 package mx.amib.sistemas.registro.apoderado.service
 
 import java.util.Date
+
 import grails.converters.JSON
+import grails.transaction.Transactional
+
 import mx.amib.sistemas.external.documentos.service.DocumentoRepositorioTO
+import mx.amib.sistemas.external.documentos.service.DocumentoRevocacionRepositorioTO
 import mx.amib.sistemas.external.expediente.service.SustentanteService
 import mx.amib.sistemas.registro.apoderamiento.model.DocumentoRespaldoRevocacion
 import mx.amib.sistemas.registro.apoderamiento.model.Revocacion
 import mx.amib.sistemas.registro.apoderamiento.model.Revocado
 import mx.amib.sistemas.registro.apoderamiento.model.catalog.TipoDocumentoRespaldoRevocacion
 import mx.amib.sistemas.registro.notario.service.NotarioService;
-import grails.transaction.Transactional
 
-
+import groovy.json.StringEscapeUtils
 
 @Transactional
 class RevocacionService {
 
 	def sustentanteService
 	def notarioService
+	def entidadFinancieraService
+	def documentoRepositorioService
 	
     def serviceMethod() {
 
@@ -45,23 +50,6 @@ class RevocacionService {
 			revocacion.revocados.add(revocado)
 		}
 		
-		revocacion.documentosRespaldoRevocacion = new HashSet<DocumentoRespaldoRevocacion>()
-		documentosJson.each{ String _docJson -> 
-			def parsedJson = JSON.parse(_docJson)
-			
-			DocumentoRespaldoRevocacion drr = new DocumentoRespaldoRevocacion()
-			drr.uuidDocumentoRepositorio = parsedJson.'uuid'
-			drr.tipoDocumentoRespaldoRevocacion = TipoDocumentoRespaldoRevocacion.get( parsedJson.'idTipo' )
-			
-			drr.revocacion = revocacion
-			revocacion.documentosRespaldoRevocacion.add(drr)
-			/*
-			DocumentoRepositorioTO dr = new DocumentoRepositorioTO()
-			dr.uuid
-			dr.clave
-			dr.nombre
-			dr.mimetype*/
-		}
 		
 		//en cuanto se implemente la sesión con atributos
 		//debera adecuarse de acuerdo a si quien esta subiendo el cambio
@@ -82,13 +70,51 @@ class RevocacionService {
 		else
 			revocacion.esRegistradoPorGrupoFinanciero = false
 		
+		revocacion.documentosRespaldoRevocacion = new HashSet<DocumentoRespaldoRevocacion>()
+		documentosJson.each{ String _docJson -> 
+			def parsedJson = JSON.parse(_docJson)
+			
+			DocumentoRespaldoRevocacion drr = new DocumentoRespaldoRevocacion()
+			drr.uuidDocumentoRepositorio = parsedJson.'uuid'
+			drr.tipoDocumentoRespaldoRevocacion = TipoDocumentoRespaldoRevocacion.get( parsedJson.'idTipo' )
+			
+			drr.revocacion = revocacion
+			revocacion.documentosRespaldoRevocacion.add(drr)
+			
+			DocumentoRevocacionRepositorioTO dr = new DocumentoRevocacionRepositorioTO()
+			dr.uuid = parsedJson.'uuid'
+			dr.clave = ''
+			dr.tipoDocumentoRespaldo = TipoDocumentoRespaldoRevocacion.get( parsedJson.'idTipo' ).descripcion 
+			dr.representanteLegalNombre = revocacion.representanteLegalNombre
+			dr.representanteLegalApellido1 = revocacion.representanteLegalApellido1
+			dr.representanteLegalApellido2 = revocacion.representanteLegalApellido2
+			dr.esRegistradoPorGrupoFinanciero = revocacion.esRegistradoPorGrupoFinanciero
+			dr.numeroEscritura = revocacion.numeroEscritura
+			dr.fechaRevocacion = revocacion.fechaRevocacion
+			dr.jsonRevocados = revocacion.revocados as JSON
+			dr.jsonNotario = revocacion.notario as JSON
+			if(revocacion.esRegistradoPorGrupoFinanciero == true)
+			{
+				dr.jsonGrupoFinanciero = entidadFinancieraService.obtenerGrupoFinanciero(revocacion.idGrupofinanciero) as JSON
+				dr.jsonGrupoFinanciero = StringEscapeUtils.unescapeJava(dr.jsonGrupoFinanciero)
+				dr.jsonInstitucion = null
+			}
+			else
+			{
+				dr.jsonGrupoFinanciero = null
+				dr.jsonInstitucion = entidadFinancieraService.obtenerInstitucion(revocacion.idInstitucion) as JSON
+				dr.jsonInstitucion = StringEscapeUtils.unescapeJava(dr.jsonInstitucion)
+			}
+			docsAEnviar.add(dr)
+		}
 		
 		//fechas
 		revocacion.fechaCreacion = new Date()
 		revocacion.fechaModificacion = new Date()
 		
-		revocacion.validate()
-		revocacion.save(flush:true, failOnError: true)
+		documentoRepositorioService.enviarDocumentosArchivoTemporal(docsAEnviar) //envía documentos a repositorio
+		revocacion.validate() //valida de acuerdo a domains
+		revocacion.save(flush:true, failOnError: true) //guarda
 	}
 }
 

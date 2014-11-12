@@ -17,6 +17,7 @@ import mx.amib.sistemas.external.catalogos.service.EntidadFinancieraService;
 import mx.amib.sistemas.external.catalogos.service.EntidadFinancieraTO
 import mx.amib.sistemas.external.catalogos.service.GrupoFinancieroTO;
 import mx.amib.sistemas.external.catalogos.service.SepomexService;
+import mx.amib.sistemas.external.documentos.service.DocumentoRepositorioService
 import mx.amib.sistemas.external.expediente.service.SustentanteService
 
 @Transactional(readOnly = true)
@@ -30,6 +31,7 @@ class RevocacionController {
 	SustentanteService sustentanteService
 	NotarioService notarioService
 	RevocacionService revocacionService
+	DocumentoRepositorioService documentoRepositorioService
 	
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
@@ -52,6 +54,7 @@ class RevocacionController {
 		revocacionViewModel.entidadFederativaList = sepomexService.obtenerEntidadesFederativas()
 		revocacionViewModel.gruposFinancierosList = entidadFinancieraService.obtenerGruposFinancierosVigentes()
 		revocacionViewModel.tipoDocumentoList = TipoDocumentoRespaldoRevocacion.findAllByVigente(true)
+		revocacionViewModel.validDocumentosCargados = false
 		return revocacionViewModel
 	}
 
@@ -94,7 +97,8 @@ class RevocacionController {
     }
 
     def edit(Revocacion revocacionInstance) {
-		RevocacionViewModel revocacionViewModel = this.createViewModel()
+		RevocacionViewModel revocacionViewModel = this.editViewModel()
+		revocacionInstance = this.cargaNombresArchivo(revocacionInstance)
         respond revocacionInstance, model:[viewModelInstance: revocacionViewModel]
     }
 	
@@ -105,9 +109,17 @@ class RevocacionController {
 		revocacionViewModel.entidadFederativaList = sepomexService.obtenerEntidadesFederativas()
 		revocacionViewModel.gruposFinancierosList = entidadFinancieraService.obtenerGruposFinancierosVigentes()
 		revocacionViewModel.tipoDocumentoList = TipoDocumentoRespaldoRevocacion.findAllByVigente(true)
+		revocacionViewModel.validDocumentosCargados = true
 		return revocacionViewModel
 	}
 
+	private Revocacion cargaNombresArchivo(Revocacion revocacionInstance){
+		revocacionInstance.documentosRespaldoRevocacion.each{
+			it.nombreDeArchivo = documentoRepositorioService.obtenerMetadatosDocumento(it.uuidDocumentoRepositorio).nombre
+		}
+		return revocacionInstance
+	}
+	
     @Transactional
     def update(Revocacion revocacionInstance) {
         if (revocacionInstance == null) {
@@ -213,4 +225,6 @@ class RevocacionViewModel {
 	Collection<EntidadFederativaTO> entidadFederativaList
 	Collection<GrupoFinancieroTO> gruposFinancierosList
 	Collection<TipoDocumentoRespaldoRevocacion> tipoDocumentoList
+	
+	boolean validDocumentosCargados
 }

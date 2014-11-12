@@ -172,7 +172,7 @@
 				</div>
 
 				<input type="hidden" id="hdnRevocadosWidgetBusyCount" value="0"/>
-				<input type="hidden" id="hdnRevocadosWidgetLoadedCount" value="0"/>
+				<input type="hidden" id="hdnRevocadosWidgetLoadedCount" value="${revocacionInstance?.revocados.size()}"/>
 				<input type="hidden" id="hdnRevocadosWidgetCount"/>
 			</fieldset>
 			
@@ -229,7 +229,15 @@
 				</div>
 				<input type="hidden" id="hdnDocsDeleted" name="idsDocumentosBorrados" value=""/>
 				<input type="hidden" id="hdnDocsIsBusy" value="false"/>
-				<input type="hidden" id="hdnDocsModelValidatedLoaded" value="false"/>
+				
+				<g:if test="${viewModelInstance.validDocumentosCargados == true}">
+					<input type="hidden" id="hdnDocsModelValidatedLoaded" value="true"/>
+				</g:if>
+				<g:else>
+					<input type="hidden" id="hdnDocsModelValidatedLoaded" value="false"/>
+				</g:else>
+				
+				
 				<input type="hidden" id="hdnDocsModelValidated" value="false"/>
 				<input type="hidden" id="hdnDocsModelValidatedMsg" value=""/>
 			</fieldset>

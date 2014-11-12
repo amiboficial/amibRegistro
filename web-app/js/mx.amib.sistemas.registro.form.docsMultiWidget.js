@@ -35,9 +35,8 @@ app.DocsViewModel = Backbone.Model.extend({
 	defaults: {
 		status: app.ST_VM_DOC_READY,
 		urlUpload: '/amibRegistro/documento/upload',
-		urlDownload: '/amibRegistro/documento/download',
 		urlDownloadNew: '/amibRegistro/documento/downloadNew',
-		urlDelete: '/amibRegistro/documento/delete',
+		urlDeleteNew: '/amibRegistro/documento/delete',
 		errors: []
 	}
 });
@@ -65,11 +64,15 @@ app.DocView = Backbone.View.extend({
 	eliminarDocumento: function(e){
 		e.preventDefault();
 
-		//manda borrar el documento de los temporales del servidor
-		$.ajax({
-			url: this.model.get('_urlDelete'),
-			context: document.body
-		});
+		if(this.model.get('status') == app.ST_DOC_UPLOADED )
+		{
+			//manda borrar el documento de los temporales del servidor
+			$.ajax({
+				url: this.model.get('_urlDelete'),
+				context: document.body
+			});
+		}
+		
 		//si lo ejecuta debidamente:
 		//Borra el model
 		this.model.destroy();
@@ -121,7 +124,6 @@ app.DocsView = Backbone.View.extend({
 	},
 	
 	renderHiddenData: function(){
-		
 		var busy = false;
 		if(this.viewModel.get('status') == app.ST_VM_DOC_UPLOADING){
 			busy = true;
@@ -280,7 +282,7 @@ app.DocsView = Backbone.View.extend({
 						 idTipo: idTipo,
 						 dsTipo: dsTipo,
 						 _urlDown: contexto.viewModel.get('urlDownloadNew') + '/' + respuestaJson.uuid,
-						 _urlDelete: contexto.viewModel.get('urlDelete') + '/' + respuestaJson.uuid}
+						 _urlDelete: contexto.viewModel.get('urlDeleteNew') + '/' + respuestaJson.uuid}
 					);
 					contexto.collection.add(doc);
 					$("#ZmlsZURvY3VtZW50bw").val("");

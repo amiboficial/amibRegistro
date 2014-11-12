@@ -35,6 +35,7 @@ app.DocsValidator = {
 		//de ser así entonces aun faltan documentos por subir.
 		var valid = true;
 		_.each(this.docTypes,function(item){
+			console.log("2da iteracion de coleccion -> docType:"+item.idTipo+",cant:"+item.cant);
 			if(item.cant == 0){
 				valid = false;
 			}

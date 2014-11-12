@@ -28,7 +28,7 @@ class DocumentoController {
 	}
 	
 	//solamente borra el archivo de TEMPORALES, no lo del repositorio
-	def delete() {
+	def delete(String id) {
 		HashMap<String,String> _response = new HashMap<String,String>();
 		String documentoUuid = id
 		archivoTemporalService.eliminarArchivoTemporal(documentoUuid)

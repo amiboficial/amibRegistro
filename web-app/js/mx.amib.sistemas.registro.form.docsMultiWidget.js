@@ -58,16 +58,18 @@ app.DocView = Backbone.View.extend({
 		'click .delete':'eliminarDocumento'
 	},
 	
-	descargarDocumento: function(e){
-		e.preventDefault();
-		alert("descargarDocumento");
+	descargarDocumento: function(e){		
+		window.open(this.model.get('_urlDown'));
 	},
 	
 	eliminarDocumento: function(e){
 		e.preventDefault();
 
 		//manda borrar el documento de los temporales del servidor
-		
+		$.ajax({
+			url: this.model.get('_urlDelete'),
+			context: document.body
+		});
 		//si lo ejecuta debidamente:
 		//Borra el model
 		this.model.destroy();

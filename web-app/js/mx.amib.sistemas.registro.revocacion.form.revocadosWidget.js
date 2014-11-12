@@ -282,6 +282,7 @@ app.RevocadoView = Backbone.View.extend({
 	
 	validarCamposNew: function(){
 		this.errors = [];
+		
 		if( this.$(".numeroMatricula").val() == "" ){
 			this.errors.push({ errType: app.RVC_ERR_EMPTY, errField: "numeroMatricula" });
 		}
@@ -291,6 +292,11 @@ app.RevocadoView = Backbone.View.extend({
 		if( this.$(".numeroEscritura").val() == "" ){
 			this.errors.push({ errType: app.RVC_ERR_EMPTY, errField: "numeroEscritura" });
 		}
+		
+		if( $.isNumeric(this.$(".numeroEscritura").val()) == false ){
+			this.errors.push({ errType: app.RVC_ERR_VALID, errField: "numeroEscritura" });
+		}
+		
 		if( this.$(".motivo").val() == "" ){
 			this.errors.push({ errType: app.RVC_ERR_EMPTY, errField: "motivo" });
 		}

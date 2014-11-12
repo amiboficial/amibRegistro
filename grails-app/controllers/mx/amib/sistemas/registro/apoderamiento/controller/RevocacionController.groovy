@@ -94,8 +94,19 @@ class RevocacionController {
     }
 
     def edit(Revocacion revocacionInstance) {
-        respond revocacionInstance
+		RevocacionViewModel revocacionViewModel = this.createViewModel()
+        respond revocacionInstance, model:[viewModelInstance: revocacionViewModel]
     }
+	
+	private RevocacionViewModel editViewModel(){
+		RevocacionViewModel revocacionViewModel = new RevocacionViewModel()
+		//este se tiene que cambiar en cuanto se tenga el rol de spring security
+		revocacionViewModel.entidadFinanciera = entidadFinancieraService.obtenerGrupoFinanciero(6)
+		revocacionViewModel.entidadFederativaList = sepomexService.obtenerEntidadesFederativas()
+		revocacionViewModel.gruposFinancierosList = entidadFinancieraService.obtenerGruposFinancierosVigentes()
+		revocacionViewModel.tipoDocumentoList = TipoDocumentoRespaldoRevocacion.findAllByVigente(true)
+		return revocacionViewModel
+	}
 
     @Transactional
     def update(Revocacion revocacionInstance) {

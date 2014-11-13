@@ -9,6 +9,9 @@ class Revocado {
 	Date fechaBaja
 	Revocacion revocacion
 
+	boolean toBeUpdated
+	
+	static transients = ['toBeUpdated']
 	static belongsTo = [Revocacion]
 
 	static mapping = {

@@ -2,9 +2,10 @@ package mx.amib.sistemas.registro.apoderado.service
 
 import java.util.Date
 
+import org.junit.After;
+
 import grails.converters.JSON
 import grails.transaction.Transactional
-
 import mx.amib.sistemas.external.documentos.service.DocumentoRepositorioTO
 import mx.amib.sistemas.external.documentos.service.DocumentoRevocacionRepositorioTO
 import mx.amib.sistemas.external.expediente.service.SustentanteService
@@ -13,7 +14,6 @@ import mx.amib.sistemas.registro.apoderamiento.model.Revocacion
 import mx.amib.sistemas.registro.apoderamiento.model.Revocado
 import mx.amib.sistemas.registro.apoderamiento.model.catalog.TipoDocumentoRespaldoRevocacion
 import mx.amib.sistemas.registro.notario.service.NotarioService;
-
 import groovy.json.StringEscapeUtils
 
 @Transactional
@@ -113,6 +113,69 @@ class RevocacionService {
 		revocacion.fechaModificacion = new Date()
 		
 		documentoRepositorioService.enviarDocumentosArchivoTemporal(docsAEnviar) //envía documentos a repositorio
+		revocacion.validate() //valida de acuerdo a domains
+		revocacion.save(flush:true, failOnError: true) //guarda
+	}
+	
+	def update(Revocacion revocacion, List<String> revocadosJson, List<String> documentosJson, int notarioIdEntidadFederativa, int notarioNumero, String[] idsDocumentosToErase ){
+		List<DocumentoRepositorioTO> docsAEnviar = new ArrayList<DocumentoRepositorioTO>()
+		def n = notarioService.obtenerNotario(notarioIdEntidadFederativa, notarioNumero)
+		revocacion.notario = n
+
+		List<Revocado> revocadosToDelete = new ArrayList<Revocado>()
+		revocacion.revocados.each{ Revocado _r ->
+			_r.toBeUpdated = false
+		}
+		revocadosJson.each{ String _revocadoJson ->
+			Revocado revocado = null
+			
+			def parsedJson = JSON.parse(_revocadoJson)
+			def sustentante = sustentanteService.obtenerPorMatricula(parsedJson.'numeroMatricula');
+			
+			revocado = Revocado.get(parsedJson.'id')
+			if(revocado == null){
+				revocado = new Revocado()
+				revocado.revocacion = revocacion
+				revocacion.revocados.add(revocado)
+			}
+			revocado.numeroMatricula = parsedJson.'numeroMatricula'
+			revocado.nombreCompleto = sustentante.nombre + ' ' + sustentante.primerApellido +  ' ' + sustentante.segundoApellido
+			revocado.numeroEscritura = parsedJson.'numeroEscritura'
+			revocado.motivo = parsedJson.'motivo'
+			revocado.fechaBaja = Date.parse('yyyyMMdd',parsedJson.'fechaBajaAnyo'+parsedJson.'fechaBajaMes'+parsedJson.'fechaBajaDia')
+			revocado.toBeUpdated = true
+		}
+		revocacion.revocados.each{ Revocado _r ->
+			if(_r.toBeUpdated == false)
+				revocadosToDelete.add(_r)
+		}
+		revocadosToDelete.each{ Revocado _r ->
+			revocacion.removeFromRevocados(_r)
+			_r.delete()
+		}
+		
+		//en cuanto se implemente la sesión con atributos
+		//debera adecuarse de acuerdo a si quien esta subiendo el cambio
+		//es una entidadFinanciera o institucion
+		//o en caso de ser un ADMON, se omite este paso
+		
+		//SOLO PARA EFECTOS DE PRUEBA, SE ASIGNA A TODOS 6
+		//HASTA QUE ESTEN IMPLEMENTADO SPRING SECURITY
+		//SE PODRÁ HACER EL CAMBIO
+		if(revocacion.idGrupofinanciero == null)
+		{
+			revocacion.idGrupofinanciero = 6
+			revocacion.idInstitucion = null
+		}
+		
+		if(revocacion.idInstitucion == null)
+			revocacion.esRegistradoPorGrupoFinanciero = true
+		else
+			revocacion.esRegistradoPorGrupoFinanciero = false
+		
+		revocacion.fechaModificacion = new Date()
+		
+		
 		revocacion.validate() //valida de acuerdo a domains
 		revocacion.save(flush:true, failOnError: true) //guarda
 	}

@@ -84,7 +84,6 @@ class RevocacionController {
             respond revocacionInstance.errors, view:'create'
             return
         }
-
         revocacionInstance.save flush:true
 		*/
         request.withFormat {
@@ -121,18 +120,25 @@ class RevocacionController {
 	}
 	
     @Transactional
-    def update(Revocacion revocacionInstance) {
-        if (revocacionInstance == null) {
-            notFound()
-            return
-        }
+    def update(Revocacion revocacion) {
+		def revocacionInstance = revocacion
+		
+		def revocadosToBind = params.list('revocado')
+		def documentosToBind = params.list('documento')
+		def documentosToEraseStrParam = params.'idsDocumentosBorrados'
+		def notarioNumero = params.'notarioNumero'.toInteger()
+		def notarioIdEntidadFederativa = params.'notarioIdEntidadFederativa'.toInteger()
+		def documentosToErase = null
+		if(documentosToEraseStrParam != null || documentosToEraseStrParam != ""){
+			documentosToErase = documentosToEraseStrParam.split("\\|")
+		}
+		
+		if (revocacionInstance == null) {
+			notFound()
+			return
+		}
 
-        if (revocacionInstance.hasErrors()) {
-            respond revocacionInstance.errors, view:'edit'
-            return
-        }
-
-        revocacionInstance.save flush:true
+		revocacionService.update(revocacionInstance, revocadosToBind, documentosToBind, notarioIdEntidadFederativa, notarioNumero, documentosToErase)
 
         request.withFormat {
             form multipartForm {

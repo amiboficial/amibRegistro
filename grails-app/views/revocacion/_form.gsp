@@ -172,7 +172,7 @@
 				</div>
 
 				<input type="hidden" id="hdnRevocadosWidgetBusyCount" value="0"/>
-				<input type="hidden" id="hdnRevocadosWidgetLoadedCount" value="${revocacionInstance?.revocados.size()}"/>
+				<input type="hidden" id="hdnRevocadosWidgetLoadedCount" value="${revocacionInstance?.revocados?.size()}"/>
 				<input type="hidden" id="hdnRevocadosWidgetCount"/>
 			</fieldset>
 			

@@ -9,8 +9,9 @@ class DocumentoRespaldoRevocacion {
 	TipoDocumentoRespaldoRevocacion tipoDocumentoRespaldoRevocacion
 
 	String nombreDeArchivo
+	boolean toBeUpdated
 	
-	static transients = ['nombreDeArchivo']
+	static transients = ['nombreDeArchivo','toBeUpdated']
 	static belongsTo = [Revocacion, TipoDocumentoRespaldoRevocacion]
 
 	static mapping = {

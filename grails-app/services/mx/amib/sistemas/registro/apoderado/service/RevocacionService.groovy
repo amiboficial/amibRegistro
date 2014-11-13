@@ -112,13 +112,14 @@ class RevocacionService {
 		revocacion.fechaCreacion = new Date()
 		revocacion.fechaModificacion = new Date()
 		
-		documentoRepositorioService.enviarDocumentosArchivoTemporal(docsAEnviar) //envía documentos a repositorio
 		revocacion.validate() //valida de acuerdo a domains
 		revocacion.save(flush:true, failOnError: true) //guarda
+		
+		documentoRepositorioService.enviarDocumentosArchivoTemporal(docsAEnviar) //envía documentos a repositorio
 	}
 	
 	def update(Revocacion revocacion, List<String> revocadosJson, List<String> documentosJson, int notarioIdEntidadFederativa, int notarioNumero, String[] idsDocumentosToErase ){
-		List<DocumentoRepositorioTO> docsAEnviar = new ArrayList<DocumentoRepositorioTO>()
+	
 		def n = notarioService.obtenerNotario(notarioIdEntidadFederativa, notarioNumero)
 		revocacion.notario = n
 
@@ -173,11 +174,72 @@ class RevocacionService {
 		else
 			revocacion.esRegistradoPorGrupoFinanciero = false
 		
-		revocacion.fechaModificacion = new Date()
+			
+		List<DocumentoRepositorioTO> docsAEnviar = new ArrayList<DocumentoRepositorioTO>()
+		List<String> uuidsDocsABorrar = new ArrayList<DocumentoRepositorioTO>()
+		List<DocumentoRespaldoRevocacion> drrABorrar = new ArrayList<DocumentoRespaldoRevocacion>()
+		revocacion.documentosRespaldoRevocacion.each{ 
+			it.toBeUpdated = false
+		}
+		revocadosJson.each{ 
+			DocumentoRespaldoRevocacion drr = null
+			def parsedJson = JSON.parse(_revocadoJson)
+			def sustentante = sustentanteService.obtenerPorMatricula(parsedJson.'numeroMatricula');
+			
+			drr = DocumentoRespaldoRevocacion.get(parsedJson.'id')
+			if(drr == null){
+				drr = new Revocado()
+				drr.uuidDocumentoRepositorio = parsedJson.'uuid'
+				drr.tipoDocumentoRespaldoRevocacion = TipoDocumentoRespaldoRevocacion.get( parsedJson.'idTipo' )
+				drr.revocacion = revocacion
+				revocacion.documentosRespaldoRevocacion.add(drr)
+				
+				DocumentoRevocacionRepositorioTO dr = new DocumentoRevocacionRepositorioTO()
+				dr.uuid = parsedJson.'uuid'
+				dr.clave = ''
+				dr.tipoDocumentoRespaldo = TipoDocumentoRespaldoRevocacion.get( parsedJson.'idTipo' ).descripcion
+				dr.representanteLegalNombre = revocacion.representanteLegalNombre
+				dr.representanteLegalApellido1 = revocacion.representanteLegalApellido1
+				dr.representanteLegalApellido2 = revocacion.representanteLegalApellido2
+				dr.esRegistradoPorGrupoFinanciero = revocacion.esRegistradoPorGrupoFinanciero
+				dr.numeroEscritura = revocacion.numeroEscritura
+				dr.fechaRevocacion = revocacion.fechaRevocacion
+				dr.jsonRevocados = revocacion.revocados as JSON
+				dr.jsonNotario = revocacion.notario as JSON
+				if(revocacion.esRegistradoPorGrupoFinanciero == true)
+				{
+					dr.jsonGrupoFinanciero = entidadFinancieraService.obtenerGrupoFinanciero(revocacion.idGrupofinanciero) as JSON
+					dr.jsonGrupoFinanciero = StringEscapeUtils.unescapeJava(dr.jsonGrupoFinanciero)
+					dr.jsonInstitucion = null
+				}
+				else
+				{
+					dr.jsonGrupoFinanciero = null
+					dr.jsonInstitucion = entidadFinancieraService.obtenerInstitucion(revocacion.idInstitucion) as JSON
+					dr.jsonInstitucion = StringEscapeUtils.unescapeJava(dr.jsonInstitucion)
+				}
+				docsAEnviar.add(dr)
+			}
+			drr.toBeUpdated = true
+		}
+		revocacion.documentosRespaldoRevocacion.each{ 
+			if(it.toBeUpdated == false){
+				uuidsDocsABorrar.add(it.uuidDocumentoRepositorio)
+				drrABorrar.add(it)
+			}
+		}
+		drrABorrar.each{ 
+			revocacion.removeFromDocumentosRespaldoRevocacion(it)
+			it.delete()
+		}
 		
+		revocacion.fechaModificacion = new Date()
 		
 		revocacion.validate() //valida de acuerdo a domains
 		revocacion.save(flush:true, failOnError: true) //guarda
+		
+		documentoRepositorioService.enviarDocumentosArchivoTemporal(docsAEnviar) //envía documentos a repositorio
+		documentoRepositorioService.eliminarDocumentos(uuidsDocsABorrar)
 	}
 }
 

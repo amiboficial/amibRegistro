@@ -128,17 +128,20 @@ class RevocacionController {
 		def documentosToEraseStrParam = params.'idsDocumentosBorrados'
 		def notarioNumero = params.'notarioNumero'.toInteger()
 		def notarioIdEntidadFederativa = params.'notarioIdEntidadFederativa'.toInteger()
+		
+		/*
+		 * YA NO SE USO ESTE PARAMETRO - ELIMINAR DE CLIENTE
 		def documentosToErase = null
 		if(documentosToEraseStrParam != null || documentosToEraseStrParam != ""){
 			documentosToErase = documentosToEraseStrParam.split("\\|")
 		}
-		
+		*/
 		if (revocacionInstance == null) {
 			notFound()
 			return
 		}
 
-		revocacionService.update(revocacionInstance, revocadosToBind, documentosToBind, notarioIdEntidadFederativa, notarioNumero, documentosToErase)
+		revocacionService.update(revocacionInstance, revocadosToBind, documentosToBind, notarioIdEntidadFederativa, notarioNumero)
 
         request.withFormat {
             form multipartForm {

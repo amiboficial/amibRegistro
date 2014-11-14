@@ -118,12 +118,13 @@ class RevocacionService {
 		documentoRepositorioService.enviarDocumentosArchivoTemporal(docsAEnviar) //envía documentos a repositorio
 	}
 	
-	def update(Revocacion revocacion, List<String> revocadosJson, List<String> documentosJson, int notarioIdEntidadFederativa, int notarioNumero, String[] idsDocumentosToErase ){
+	def update(Revocacion revocacion, List<String> revocadosJson, List<String> documentosJson, int notarioIdEntidadFederativa, int notarioNumero ){
 	
 		def n = notarioService.obtenerNotario(notarioIdEntidadFederativa, notarioNumero)
 		revocacion.notario = n
 
 		List<Revocado> revocadosToDelete = new ArrayList<Revocado>()
+		List<Revocado> revocadosToAdd = new ArrayList<Revocado>()
 		revocacion.revocados.each{ Revocado _r ->
 			_r.toBeUpdated = false
 		}
@@ -136,8 +137,7 @@ class RevocacionService {
 			revocado = Revocado.get(parsedJson.'id')
 			if(revocado == null){
 				revocado = new Revocado()
-				revocado.revocacion = revocacion
-				revocacion.revocados.add(revocado)
+				revocadosToAdd.add(revocado)
 			}
 			revocado.numeroMatricula = parsedJson.'numeroMatricula'
 			revocado.nombreCompleto = sustentante.nombre + ' ' + sustentante.primerApellido +  ' ' + sustentante.segundoApellido
@@ -152,7 +152,11 @@ class RevocacionService {
 		}
 		revocadosToDelete.each{ Revocado _r ->
 			revocacion.removeFromRevocados(_r)
-			_r.delete()
+			_r.delete(flush:true)
+		}
+		revocadosToAdd.each{ Revocado _r ->
+			_r.revocacion = revocacion
+			revocacion.revocados.add(_r)
 		}
 		
 		//en cuanto se implemente la sesión con atributos
@@ -174,51 +178,55 @@ class RevocacionService {
 		else
 			revocacion.esRegistradoPorGrupoFinanciero = false
 		
-			
+		
 		List<DocumentoRepositorioTO> docsAEnviar = new ArrayList<DocumentoRepositorioTO>()
+		List<DocumentoRepositorioTO> docsAActualizar = new ArrayList<DocumentoRepositorioTO>()
 		List<String> uuidsDocsABorrar = new ArrayList<DocumentoRepositorioTO>()
 		List<DocumentoRespaldoRevocacion> drrABorrar = new ArrayList<DocumentoRespaldoRevocacion>()
+		List<DocumentoRespaldoRevocacion> drrAAgregar = new ArrayList<DocumentoRespaldoRevocacion>()
 		revocacion.documentosRespaldoRevocacion.each{ 
 			it.toBeUpdated = false
 		}
-		revocadosJson.each{ 
+		documentosJson.each{ String _documentoJson -> 
 			DocumentoRespaldoRevocacion drr = null
-			def parsedJson = JSON.parse(_revocadoJson)
-			def sustentante = sustentanteService.obtenerPorMatricula(parsedJson.'numeroMatricula');
+			def parsedJson = JSON.parse(_documentoJson)
+			DocumentoRevocacionRepositorioTO dr = new DocumentoRevocacionRepositorioTO()
 			
 			drr = DocumentoRespaldoRevocacion.get(parsedJson.'id')
 			if(drr == null){
-				drr = new Revocado()
+				drr = new DocumentoRespaldoRevocacion()
 				drr.uuidDocumentoRepositorio = parsedJson.'uuid'
 				drr.tipoDocumentoRespaldoRevocacion = TipoDocumentoRespaldoRevocacion.get( parsedJson.'idTipo' )
-				drr.revocacion = revocacion
-				revocacion.documentosRespaldoRevocacion.add(drr)
 				
-				DocumentoRevocacionRepositorioTO dr = new DocumentoRevocacionRepositorioTO()
-				dr.uuid = parsedJson.'uuid'
-				dr.clave = ''
-				dr.tipoDocumentoRespaldo = TipoDocumentoRespaldoRevocacion.get( parsedJson.'idTipo' ).descripcion
-				dr.representanteLegalNombre = revocacion.representanteLegalNombre
-				dr.representanteLegalApellido1 = revocacion.representanteLegalApellido1
-				dr.representanteLegalApellido2 = revocacion.representanteLegalApellido2
-				dr.esRegistradoPorGrupoFinanciero = revocacion.esRegistradoPorGrupoFinanciero
-				dr.numeroEscritura = revocacion.numeroEscritura
-				dr.fechaRevocacion = revocacion.fechaRevocacion
-				dr.jsonRevocados = revocacion.revocados as JSON
-				dr.jsonNotario = revocacion.notario as JSON
-				if(revocacion.esRegistradoPorGrupoFinanciero == true)
-				{
-					dr.jsonGrupoFinanciero = entidadFinancieraService.obtenerGrupoFinanciero(revocacion.idGrupofinanciero) as JSON
-					dr.jsonGrupoFinanciero = StringEscapeUtils.unescapeJava(dr.jsonGrupoFinanciero)
-					dr.jsonInstitucion = null
-				}
-				else
-				{
-					dr.jsonGrupoFinanciero = null
-					dr.jsonInstitucion = entidadFinancieraService.obtenerInstitucion(revocacion.idInstitucion) as JSON
-					dr.jsonInstitucion = StringEscapeUtils.unescapeJava(dr.jsonInstitucion)
-				}
+				drrAAgregar.add(drr)
 				docsAEnviar.add(dr)
+			}
+			else{
+				docsAActualizar.add(dr)
+			}
+			
+			dr.uuid = parsedJson.'uuid'
+			dr.clave = ''
+			dr.tipoDocumentoRespaldo = drr.tipoDocumentoRespaldoRevocacion.descripcion
+			dr.representanteLegalNombre = revocacion.representanteLegalNombre
+			dr.representanteLegalApellido1 = revocacion.representanteLegalApellido1
+			dr.representanteLegalApellido2 = revocacion.representanteLegalApellido2
+			dr.esRegistradoPorGrupoFinanciero = revocacion.esRegistradoPorGrupoFinanciero
+			dr.numeroEscritura = revocacion.numeroEscritura
+			dr.fechaRevocacion = revocacion.fechaRevocacion
+			dr.jsonRevocados = revocacion.revocados as JSON
+			dr.jsonNotario = revocacion.notario as JSON
+			if(revocacion.esRegistradoPorGrupoFinanciero == true)
+			{
+				dr.jsonGrupoFinanciero = entidadFinancieraService.obtenerGrupoFinanciero(revocacion.idGrupofinanciero) as JSON
+				dr.jsonGrupoFinanciero = StringEscapeUtils.unescapeJava(dr.jsonGrupoFinanciero)
+				dr.jsonInstitucion = null
+			}
+			else
+			{
+				dr.jsonGrupoFinanciero = null
+				dr.jsonInstitucion = entidadFinancieraService.obtenerInstitucion(revocacion.idInstitucion) as JSON
+				dr.jsonInstitucion = StringEscapeUtils.unescapeJava(dr.jsonInstitucion)
 			}
 			drr.toBeUpdated = true
 		}
@@ -230,7 +238,11 @@ class RevocacionService {
 		}
 		drrABorrar.each{ 
 			revocacion.removeFromDocumentosRespaldoRevocacion(it)
-			it.delete()
+			it.delete(flush:true)
+		}
+		drrAAgregar.each{
+			it.revocacion = revocacion
+			revocacion.documentosRespaldoRevocacion.add(it)
 		}
 		
 		revocacion.fechaModificacion = new Date()
@@ -239,8 +251,10 @@ class RevocacionService {
 		revocacion.save(flush:true, failOnError: true) //guarda
 		
 		documentoRepositorioService.enviarDocumentosArchivoTemporal(docsAEnviar) //envía documentos a repositorio
+		documentoRepositorioService.actualizaMetadatosDocumentos(docsAActualizar)
 		documentoRepositorioService.eliminarDocumentos(uuidsDocsABorrar)
 	}
+	
 }
 
 class RevocadoTO {

@@ -5,7 +5,8 @@
 	<g:javascript src="mx.amib.sistemas.registro.oficioCNBV.form.autorizadosWidget.js" />
 	<script type="text/javascript">
 		$(function(){ 
-			new app.AutorizadosView();
+			var autorizadosView = new app.AutorizadosView();
+			autorizadosView.ajaxUrl = '<g:createLink action="obtenerSustentantePorMatricula"/>';
 		});
 	</script>
 	<!-- FIN: SCRIPT PARA FUNCIONAMIENTO DE AUTORIZADOS -->

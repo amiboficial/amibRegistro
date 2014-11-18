@@ -22,7 +22,7 @@
 		            	<g:message code="oficioCNBV.fechaFinVigencia.label" default="Fecha de fin de vigencia" /><span class="required-indicator">*</span>
 					</label>
 					<div class="col-md-4 col-sm-8">
-						<g:datePicker name="oficioCNBV.fechaFinVigencia" precision="day"  value="${oficioCNBVInstance?.fechaFinVigencia}"  />
+						<g:datePicker name="oficioCNBV.fechaFinVigencia" precision="day" default="none" noSelection="${['null':'-Seleccione-']}" precision="day" value="${oficioCNBVInstance?.fechaFinVigencia}" relativeYears="${-30..30}" />
 					</div>
 				</div>
 			</fieldset>
@@ -59,16 +59,14 @@
 							</tr>
 						</thead>
 						<tbody id="tbdyAutorizados">
-							<tr>
-								<td><input id="txtAutorizadosNewMatricula" class="newMatricula form-control" type="text" /></td>
-								<td><input id="txtAutorizadosNewNombre" class="newNombre form-control" type="text" disabled/></td>
-								<td><button id="btnAutorizadosAdd" class="add btn btn-success btn-sm" disabled><span class="glyphicon glyphicon-plus"></span><span class="hidden-xs hidden-sm"> Agregar</span></button></td>
-							</tr>
+							
 						</tbody>
 					</table>
 					
 				</div>
 				
+				<input type="hidden" id="hdnAutorizadosWidgetLoadedCount" value="${oficioCNBVInstance?.autorizadosCNBV?.size()}"/>
+				<input type="hidden" id="hdnAutorizadosWidgetCount" />
 			</fieldset>
 			
 			

@@ -4,6 +4,7 @@ package mx.amib.sistemas.registro.apoderamiento.controller
 
 import static org.springframework.http.HttpStatus.*
 import mx.amib.sistemas.registro.apoderamiento.model.OficioCNBV;
+import grails.converters.JSON
 import grails.transaction.Transactional
 
 @Transactional(readOnly = true)
@@ -11,6 +12,8 @@ class OficioCNBVController {
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
+	def sustentanteService
+	
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
         respond OficioCNBV.list(params), model:[oficioCNBVInstanceCount: OficioCNBV.count()]
@@ -102,4 +105,17 @@ class OficioCNBVController {
             '*'{ render status: NOT_FOUND }
         }
     }
+	
+	//el id es la matricula
+	def obtenerSustentantePorMatricula(int id){
+		def sustentante = sustentanteService.obtenerPorMatricula(id)
+		def res = null
+		if(sustentante != null){
+			res = [ status: 'OK' , object: sustentante ]
+		}
+		else{
+			res = [ status: 'NOT_FOUND' ]
+		}
+		render res as JSON
+	}
 }

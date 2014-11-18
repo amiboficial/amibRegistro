@@ -1,0 +1,58 @@
+<%@ page import="mx.amib.sistemas.registro.apoderamiento.model.OficioCNBV" %>
+
+
+
+<div class="fieldcontain ${hasErrors(bean: oficioCNBVInstance, field: 'claveDga', 'error')} required">
+	<label for="claveDga">
+		<g:message code="oficioCNBV.claveDga.label" default="Clave Dga" />
+		<span class="required-indicator">*</span>
+	</label>
+	<g:textField name="claveDga" maxlength="16" required="" value="${oficioCNBVInstance?.claveDga}"/>
+
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: oficioCNBVInstance, field: 'autorizadosCNBV', 'error')} ">
+	<label for="autorizadosCNBV">
+		<g:message code="oficioCNBV.autorizadosCNBV.label" default="Autorizados CNBV" />
+		
+	</label>
+	
+<ul class="one-to-many">
+<g:each in="${oficioCNBVInstance?.autorizadosCNBV?}" var="a">
+    <li><g:link controller="autorizadoCNBV" action="show" id="${a.id}">${a?.encodeAsHTML()}</g:link></li>
+</g:each>
+<li class="add">
+<g:link controller="autorizadoCNBV" action="create" params="['oficioCNBV.id': oficioCNBVInstance?.id]">${message(code: 'default.add.label', args: [message(code: 'autorizadoCNBV.label', default: 'AutorizadoCNBV')])}</g:link>
+</li>
+</ul>
+
+
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: oficioCNBVInstance, field: 'fechaCreacion', 'error')} required">
+	<label for="fechaCreacion">
+		<g:message code="oficioCNBV.fechaCreacion.label" default="Fecha Creacion" />
+		<span class="required-indicator">*</span>
+	</label>
+	<g:datePicker name="fechaCreacion" precision="day"  value="${oficioCNBVInstance?.fechaCreacion}"  />
+
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: oficioCNBVInstance, field: 'fechaFinVigencia', 'error')} required">
+	<label for="fechaFinVigencia">
+		<g:message code="oficioCNBV.fechaFinVigencia.label" default="Fecha Fin Vigencia" />
+		<span class="required-indicator">*</span>
+	</label>
+	<g:datePicker name="fechaFinVigencia" precision="day"  value="${oficioCNBVInstance?.fechaFinVigencia}"  />
+
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: oficioCNBVInstance, field: 'fechaModificacion', 'error')} required">
+	<label for="fechaModificacion">
+		<g:message code="oficioCNBV.fechaModificacion.label" default="Fecha Modificacion" />
+		<span class="required-indicator">*</span>
+	</label>
+	<g:datePicker name="fechaModificacion" precision="day"  value="${oficioCNBVInstance?.fechaModificacion}"  />
+
+</div>
+

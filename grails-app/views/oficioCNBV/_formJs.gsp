@@ -5,7 +5,12 @@
 	<g:javascript src="mx.amib.sistemas.registro.oficioCNBV.form.autorizadosWidget.js" />
 	<script type="text/javascript">
 		$(function(){ 
-			var autorizadosView = new app.AutorizadosView();
+			var autorizados = [
+				<g:each in="${oficioCNBVInstance?.autorizadosCNBV?.sort{it.numeroMatricula} }">
+					{  grailsId: ${it.id}, numeroMatricula:${it.numeroMatricula}, nombreCompleto:'${it.nombreCompleto}' },
+				</g:each>
+			];
+			var autorizadosView = new app.AutorizadosView(autorizados);
 			autorizadosView.ajaxUrl = '<g:createLink action="obtenerSustentantePorMatricula"/>';
 		});
 	</script>

@@ -60,19 +60,23 @@ class OficioCNBVController {
     }
 
     @Transactional
-    def update(OficioCNBV oficioCNBVInstance) {
+    def update(OficioCNBV oficioCNBV) {
+		def oficioCNBVInstance = oficioCNBV
+		def jsonStrLstAutorizados = params.list('autorizado')
         if (oficioCNBVInstance == null) {
             notFound()
             return
         }
-
+		oficioCNBVService.update(oficioCNBVInstance, jsonStrLstAutorizados)
+		
+		/*
         if (oficioCNBVInstance.hasErrors()) {
             respond oficioCNBVInstance.errors, view:'edit'
             return
         }
 
         oficioCNBVInstance.save flush:true
-
+		*/
         request.withFormat {
             form multipartForm {
                 flash.message = message(code: 'default.updated.message', args: [message(code: 'OficioCNBV.label', default: 'OficioCNBV'), oficioCNBVInstance.id])

@@ -13,6 +13,7 @@ class OficioCNBVController {
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
 	def sustentanteService
+	def oficioCNBVService
 	
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
@@ -28,19 +29,23 @@ class OficioCNBVController {
     }
 
     @Transactional
-    def save(OficioCNBV oficioCNBVInstance) {
+    def save(OficioCNBV oficioCNBV) {
+		def oficioCNBVInstance = oficioCNBV
+		def jsonStrLstAutorizados = params.list('autorizado')
+		
         if (oficioCNBVInstance == null) {
             notFound()
             return
         }
-
-        if (oficioCNBVInstance.hasErrors()) {
+		oficioCNBVService.save(oficioCNBVInstance, jsonStrLstAutorizados)
+		
+		/*
+		if (oficioCNBVInstance.hasErrors()) {
             respond oficioCNBVInstance.errors, view:'create'
             return
         }
-
         oficioCNBVInstance.save flush:true
-
+		*/
         request.withFormat {
             form multipartForm {
                 flash.message = message(code: 'default.created.message', args: [message(code: 'oficioCNBV.label', default: 'OficioCNBV'), oficioCNBVInstance.id])

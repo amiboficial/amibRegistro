@@ -75,8 +75,8 @@ class PoderController {
 		//parametros adicionales al modelo
 		def notarioNumero = params.'notarioNumero'.toInteger()
 		def notarioIdEntidadFederativa = params.'notarioIdEntidadFederativa'.toInteger()
-		def _apoderadosIdAutorizadoCNBV = params.list('apoderadoIdAutorizadoCNBV')
-		def _documentos = params.list('documento')
+		def jsonLstApoderadosIdAutorizadoCNBV = params.list('apoderadoIdAutorizadoCNBV')
+		def jsonLstDocumentos = params.list('documento')
 		
 		List<Integer> apoderadosIdAutorizadoCNBV = new ArrayList<Integer>()
 		List<DocumentoRespaldoPoderTO> documentos = new ArrayList<DocumentoRespaldoPoderTO>()
@@ -87,11 +87,11 @@ class PoderController {
 			return
 		}
 		//obtiene de la lista de paramatros con el mismo name="apoderadoIdAutorizadoCNBV"
-		_apoderadosIdAutorizadoCNBV.each{
+		jsonLstApoderadosIdAutorizadoCNBV.each{
 			apoderadosIdAutorizadoCNBV.add(it)
 		}
 		//obtiene de la lista de paramatros con el mismo name="documento"
-		_documentos.each{
+		jsonLstDocumentos.each{
 			def documento = JSON.parse(it)
 			DocumentoRespaldoPoderTO docTO = new DocumentoRespaldoPoderTO()
 			docTO.uuid = documento.'uuid'

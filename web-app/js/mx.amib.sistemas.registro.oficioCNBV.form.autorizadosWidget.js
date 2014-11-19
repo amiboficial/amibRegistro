@@ -114,6 +114,8 @@ app.AutorizadosView =  Backbone.View.extend({
 			this.$('.add').prop('disabled', false);
 		}
 		else if(this.state == app.AUT_STATUS_PROCESANDO ){
+			$('#divMsgProcesandoAutorizado').show();
+		
 			this.$('.newMatricula').prop('disabled', true);
 			this.$('.newNombre').prop('disabled', true);
 			this.$('.add').prop('disabled', true);

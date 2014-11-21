@@ -10,13 +10,19 @@
 			<div id="divLineBreaks">
 			</div>
             <div class="list-group" >
+            	<a class="list-group-item colortitle">Gestión</a>
+            	<a href="<g:createLink controller="general" action="index" />" class="list-group-item"><span class="glyphicon glyphicon-open"></span>&nbsp;Poderes</a>
+                <a href="#" class="list-group-item"><span class="glyphicon glyphicon-share-alt"></span>&nbsp;Revocaciones</a>
+            	<a class="list-group-item colortitle">Gestión de catálogos</a>
+            	<a href="#" class="list-group-item"><span class="glyphicon glyphicon-book"></span>&nbsp;Notarios</a>
                 <a class="list-group-item colortitle">Servicios</a>
                 <a href="<g:createLink controller="general" action="index" />" class="list-group-item"><span class="glyphicon glyphicon-open"></span>&nbsp;Alta de poder</a>
-                <a href="#" class="list-group-item"><span class="glyphicon glyphicon-share-alt"></span>&nbsp;Revocación</a>
-                <a href="#" class="list-group-item"><span class="glyphicon glyphicon-th-list"></span>&nbsp;Detalle de servicios</a>
+                <a href="#" class="list-group-item"><span class="glyphicon glyphicon-share-alt"></span>&nbsp;Solicitud de Revocación</a>
+                
                 <a href="#" class="list-group-item colortitle">Información</a>
-                <a href="<g:createLink controller="busqueda" action="index" />" class="list-group-item"><span class="glyphicon glyphicon-th-list"></span>&nbsp;Detalle de poderes</a>
-                <a href="#" class="list-group-item"><span class="glyphicon glyphicon-th-list"></span>&nbsp;Detalle de personal</a>
+                <a href="#" class="list-group-item"><span class="glyphicon glyphicon-th-list"></span>&nbsp;Detalle de solicitudes</a>
+                <a href="<g:createLink controller="busqueda" action="index" />" class="list-group-item"><span class="glyphicon glyphicon-th-list"></span>&nbsp;Poderes vigentes</a>
+                <a href="#" class="list-group-item"><span class="glyphicon glyphicon-th-list"></span>&nbsp;Personal apoderado</a>
                 <a href="#" class="list-group-item"><span class="glyphicon glyphicon-book"></span>&nbsp;Catálogo de notarios</a>
                 <a href="#" class="list-group-item colortitle">Acciones</a>
                 <a href="#" class="list-group-item"><span class="glyphicon glyphicon-user"></span>&nbsp;Información de usuario</a>

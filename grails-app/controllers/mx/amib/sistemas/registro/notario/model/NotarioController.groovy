@@ -15,21 +15,36 @@ class NotarioController {
 	def notarioService
 	
     def index(Integer max) {
-		NotarioIndexViewModel nivm = this.getIndexViewModel()
-        params.max = Math.min(max ?: 10, 100)
 		
-        respond notarioService.search(params.max, params.offset, params.sort, params.order, params.filterIdEntidadFederativa,
-										params.filterNombre, params.filterApellido1, params.filterApellido2, params.filterNumero), 
+        params.max = Math.min(max ?: 10, 100)
+		//params.offset = params.offset?:'0'
+		//params.sort = params.sort?:'id'
+		//params.order = params.order?:'desc'
+		params.filterIdEntidadFederativa = params.filterIdEntidadFederativa?:'-1'
+		params.filterNumero = params.filterNumero?:'-1'
+		
+		NotarioIndexViewModel nivm = this.getIndexViewModel(params)
+		
+        respond notarioService.search(params.max, params.offset, params.sort, params.order, params.filterIdEntidadFederativa?.toInteger(),
+										params.filterNombre, params.filterApellido1, params.filterApellido2, params.filterNumero?.toInteger()), 
 										model:[notarioInstanceCount: Notario.count(), viewModelInstance:nivm]
     }
 
-	private NotarioIndexViewModel getIndexViewModel(){
+	private NotarioIndexViewModel getIndexViewModel(def params){
 		NotarioIndexViewModel nivm = new NotarioIndexViewModel()
 		nivm.entidadesFederativasList = sepomexService.obtenerEntidadesFederativas()
 		nivm.entidadesFederativasNombresMap = new HashMap()
 		nivm.entidadesFederativasList.each{
 			nivm.entidadesFederativasNombresMap.put(it.id, it.nombre)
 		}
+		
+		nivm.filterIdEntidadFederativa = params.filterIdEntidadFederativa?.toInteger()
+		nivm.filterNombre = params.filterNombre
+		nivm.filterApellido1 = params.filterApellido1
+		nivm.filterApellido2 = params.filterApellido2
+		if(params.filterNumero == '-1')
+			nivm.filterNumero = ""
+		
 		return nivm
 	}
 	
@@ -124,4 +139,10 @@ class NotarioController {
 class NotarioIndexViewModel{
 	Collection<EntidadFederativaTO> entidadesFederativasList
 	HashMap<String,String> entidadesFederativasNombresMap
+	
+	Integer filterIdEntidadFederativa
+	String filterNombre
+	String filterApellido1
+	String filterApellido2
+	String filterNumero
 }

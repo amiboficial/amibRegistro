@@ -11,13 +11,14 @@
 			</div>
             <div class="list-group" >
             	<a class="list-group-item colortitle">Gestión</a>
-            	<a href="<g:createLink controller="general" action="index" />" class="list-group-item"><span class="glyphicon glyphicon-open"></span>&nbsp;Poderes</a>
-                <a href="#" class="list-group-item"><span class="glyphicon glyphicon-share-alt"></span>&nbsp;Revocaciones</a>
+            	<a href="<g:createLink controller="poder" action="index" />" class="list-group-item"><span class="glyphicon glyphicon-open"></span>&nbsp;Poderes</a>
+                <a href="<g:createLink controller="revocacion" action="index" />" class="list-group-item"><span class="glyphicon glyphicon-share-alt"></span>&nbsp;Revocaciones</a>
+                <a href="<g:createLink controller="oficioCNBV" action="index" />" class="list-group-item"><span class="glyphicon glyphicon-file"></span>&nbsp;Oficios CNBV</a>
             	<a class="list-group-item colortitle">Gestión de catálogos</a>
-            	<a href="#" class="list-group-item"><span class="glyphicon glyphicon-book"></span>&nbsp;Notarios</a>
+            	<a href="<g:createLink controller="notario" action="index" />" class="list-group-item"><span class="glyphicon glyphicon-book"></span>&nbsp;Notarios</a>
                 <a class="list-group-item colortitle">Servicios</a>
-                <a href="<g:createLink controller="general" action="index" />" class="list-group-item"><span class="glyphicon glyphicon-open"></span>&nbsp;Alta de poder</a>
-                <a href="#" class="list-group-item"><span class="glyphicon glyphicon-share-alt"></span>&nbsp;Solicitud de Revocación</a>
+                <a href="<g:createLink controller="poder" action="create" />" class="list-group-item"><span class="glyphicon glyphicon-open"></span>&nbsp;Alta de poder</a>
+                <a href="<g:createLink controller="revocacion" action="create" />" class="list-group-item"><span class="glyphicon glyphicon-share-alt"></span>&nbsp;Solicitud de Revocación</a>
                 
                 <a href="#" class="list-group-item colortitle">Información</a>
                 <a href="#" class="list-group-item"><span class="glyphicon glyphicon-th-list"></span>&nbsp;Detalle de solicitudes</a>

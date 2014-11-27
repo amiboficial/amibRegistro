@@ -21,7 +21,7 @@
 	<h2><strong>Gestión de notarios</strong></h2>
 	<h2><strong>Catálogo de notarios</strong></h2>
 	
-	<form id="frmApp" class="form-horizontal" role="form" action="index" method="get">
+	<form id="frmApp" class="form-horizontal" role="form" action="<g:createLink controller="notario" action="index" />" method="get">
 		<fieldset>
 			<legend>Acciones</legend>
 			
@@ -38,8 +38,8 @@
 					<g:message code="notario.entidadFederativa.label" default="Entidad Federativa" />
 				</label>
 				<div class="col-md-9 col-sm-9">
-					<g:select id="selNotarioEntidadFederativa" class="form-control" name='filterIdEntidadFederativa' value="none"
-						noSelection="${['null':'-Seleccione-']}"
+					<g:select id="selNotarioEntidadFederativa" class="form-control" name='filterIdEntidadFederativa' value="${viewModelInstance.filterIdEntidadFederativa}"
+						noSelection="${['-1':'-Seleccione-']}"
 						from='${viewModelInstance?.entidadesFederativasList}'
 						optionKey="id" optionValue="nombre"></g:select>
 				</div>
@@ -50,7 +50,7 @@
 					<g:message code="notario.nombre.label" default="Nombre" />
 				</label>
 				<div class="col-md-9 col-sm-9">
-					<g:textField id="txtNombre" maxlength="80" class="form-control" name="filterNombre" value="" />
+					<g:textField id="txtNombre" maxlength="80" class="form-control" name="filterNombre" value="${viewModelInstance.filterNombre}" />
 				</div>
 			</div>
 			
@@ -59,7 +59,7 @@
 					<g:message code="notario.apellido1.label" default="Primer apellido" />
 				</label>
 				<div class="col-md-9 col-sm-9">
-					<g:textField id="txtApellido1" maxlength="100" class="form-control" name="filterApellido1" value="" />
+					<g:textField id="txtApellido1" maxlength="100" class="form-control" name="filterApellido1" value="${viewModelInstance.filterApellido1}" />
 				</div>
 			</div>
 			
@@ -68,7 +68,7 @@
 					<g:message code="notario.apellido1.label" default="Segundo apellido" />
 				</label>
 				<div class="col-md-9 col-sm-9">
-					<g:textField id="txtApellido2" maxlength="100" class="form-control" name="filterApellido2" value="" />
+					<g:textField id="txtApellido2" maxlength="100" class="form-control" name="filterApellido2" value="${viewModelInstance.filterApellido2}" />
 				</div>
 			</div>
 			
@@ -77,7 +77,7 @@
 					<g:message code="notario.numero.label" default="Numero" />
 				</label>
 				<div class="col-md-9 col-sm-9">
-					<g:textField id="txtNumero" maxlength="80" class="form-control" name="filterNumero" value="" />
+					<g:textField id="txtNumero" maxlength="80" class="form-control" name="filterNumero" value="${viewModelInstance.filterNumero}" />
 				</div>
 			</div>
 			
@@ -138,5 +138,20 @@
 		</fieldset>
 		
 	</form>
+	<script>
+
+	$( "#btnLimpiar" ).click(function() {
+		$( "#selNotarioEntidadFederativa" ).val('-1');
+		$( "#txtNombre" ).val('');
+		$( "#txtApellido1" ).val('');
+		$( "#txtApellido2" ).val('');
+		$( "#txtNumero" ).val('');
+	});
+	//callback al boton para submitear
+	$( "#btnBuscar" ).click(function() {
+		$( "#frmApp" ).submit();
+	});
+	
+	</script>
 </body>
 </html>

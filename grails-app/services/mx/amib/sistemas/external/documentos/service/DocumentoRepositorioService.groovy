@@ -189,7 +189,7 @@ class DocumentoRepositorioService {
 		if( DocumentoPoderRepositorioTO.class.isInstance(doc) ){
 			restUrl = this.documentoPoderUpdateUrl
 		}
-		else if ( DocumentoRevocacionRepositorioTO.class.isInstance(it) ){
+		else if ( DocumentoRevocacionRepositorioTO.class.isInstance(doc) ){
 			restUrl = this.documentoRevocacionUpdateUrl
 		}
 		//Envía acorde al metadato

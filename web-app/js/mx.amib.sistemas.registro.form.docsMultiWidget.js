@@ -21,7 +21,7 @@ app.Doc = Backbone.Model.extend({
 		idTipo: -1,
 		dsTipo: '',
 		nombre: '',
-		status: app.ST_DOC_PRELOADED,
+		status: app.ST_VM_DOC_READY,
 		_urlDown: '',
 		_urlDelete: ''
 	}

@@ -1,5 +1,6 @@
 package mx.amib.sistemas.registro.notario.service
 
+import grails.converters.JSON
 import grails.transaction.Transactional
 
 import mx.amib.sistemas.registro.notario.model.Notario
@@ -13,12 +14,12 @@ class NotarioService {
 		return n
     }
 	
-	def search(Integer max, Integer offset, String sort, String order, String filterIdEntidadFederativa, String filterNombre, String filterApellido1, String filterApellido2, String filterNumero){
+	def search(Integer max, Integer offset, String sort, String order, Integer filterIdEntidadFederativa, String filterNombre, String filterApellido1, String filterApellido2, Integer filterNumero){
 		List<String> hqlFilters = new ArrayList<String>();
 		String whereKeyword = "where ";
 		Boolean whereKeywordNeeded = false;
 		StringBuilder sbHql = new StringBuilder()
-		Map<String,String> namedParameters = new HashMap<String,String>()
+		Map<String,Object> namedParameters = new HashMap<String,Object>()
 		
 		if(max == null || max <= 0){
 			max = 10
@@ -70,7 +71,7 @@ class NotarioService {
 		else
 			filterApellido2 = ""
 			
-		if(filterNumero != null && filterNumero != ""){
+		if(filterNumero != null && filterNumero != -1 && filterNumero != ""){
 			hqlFilters.add("n.numeroNotario like :numeroNotario ");
 			whereKeywordNeeded = true
 			namedParameters.put("numeroNotario",filterNumero)
@@ -83,12 +84,15 @@ class NotarioService {
 			sbHql.append(whereKeyword)
 			hqlFilters.each{
 				if(it != hqlFilters.last())
-					sbHql.append(it).append("or ")
+					sbHql.append(it).append("and ")
 				else
 					sbHql.append(it)
 			}
 		}
 		sbHql.append("order by n.").append(sort).append(" ").append(order)
+		
+		println sbHql.toString()
+		println (namedParameters as JSON)
 		
 		def results = Notario.findAll(sbHql.toString(),namedParameters,[max: max, offset: offset])
 		return results

@@ -34,7 +34,7 @@
 		$(function(){
 			var docs = [
 			<g:each in="${revocacionInstance.documentosRespaldoRevocacion}">
-				{ grailsId: ${it.id}, uuid:'${it.uuidDocumentoRepositorio}', idTipo:${it.tipoDocumentoRespaldoRevocacion.id}, dsTipo:'${it.tipoDocumentoRespaldoRevocacion.descripcion}', nombre:'${it.nombreDeArchivo}', _urlDown:'<g:createLink controller="documento" action="download" id="${it.uuidDocumentoRepositorio}"/>',_urlDelete:'' },
+				{ grailsId: ${it.id}, uuid:'${it.uuidDocumentoRepositorio}', idTipo:${it.tipoDocumentoRespaldoRevocacion.id}, dsTipo:'${it.tipoDocumentoRespaldoRevocacion.descripcion}', nombre:'${it.nombreDeArchivo}', status:app.ST_VM_DOC_READY ,_urlDown:'<g:createLink controller="documento" action="download" id="${it.uuidDocumentoRepositorio}"/>',_urlDelete:'' },
 			</g:each> ];
 			
 			<g:each in="${viewModelInstance.tipoDocumentoList}">

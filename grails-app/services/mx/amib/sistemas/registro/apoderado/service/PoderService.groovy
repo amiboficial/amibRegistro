@@ -343,6 +343,15 @@ class PoderService {
 		documentoRepositorioService.enviarDocumentosArchivoTemporal(docsEnviar)
 	}
 	
+	def delete(Poder poderInstance){
+		List<String> uuidsDocsABorrar = new ArrayList<String>()
+		poderInstance.documentosRespaldoPoder.each{
+			uuidsDocsABorrar.add(it.uuidDocumentoRepositorio)
+		}
+		poderInstance.delete(flush:true,failOnError:true)
+		documentoRepositorioService.eliminarDocumentos(uuidsDocsABorrar)
+	}
+	
 }
 
 class DocumentoRespaldoPoderTO {

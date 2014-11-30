@@ -7,10 +7,14 @@
 	</head>
 	<body>
 		<a id="anchorForm"></a>
+	
+		<!-- INICIA: BREADCRUMB ADMIN -->
 		<ul class="breadcrumb">
-			<li><a href="#">Servicios</a><span class="divider"></span></li>
+			<li><a href="#">Gestión</a><span class="divider"></span></li>
+			<li><a href="<g:createLink controller="poder" action="index" />">Poderes</a></li>
 			<li><a href="#">Editar poder</a></li>
 		</ul>
+		<!-- FIN: BREADCRUMB ADMIN -->
 	
 		<h2><strong>Editar poder</strong></h2>
 

@@ -7,13 +7,25 @@
 	</head>
 	<body>
 		<a id="anchorForm"></a>
+		
+		<!-- INICIA: BREADCRUMB INSTITUCION/GPOFINANCIERO -->
 		<ul class="breadcrumb">
 			<li><a href="#">Servicios</a><span class="divider"></span></li>
 			<li><a href="#">Alta de poder</a></li>
 		</ul>
+		<!-- FIN: BREADCRUMB INSTITUCION/GPOFINANCIERO  -->
+	
+		<!-- INICIA: BREADCRUMB ADMIN -->
+		<ul class="breadcrumb">
+			<li><a href="#">Gestión</a><span class="divider"></span></li>
+			<li><a href="<g:createLink controller="poder" action="index" />">Poderes</a></li>
+			<li><a href="#">Nuevo poder</a></li>
+		</ul>
+		<!-- FIN: BREADCRUMB ADMIN -->
 	
 		<h2><strong>Alta de poder</strong></h2>
-
+		<h2><strong>Nuevo poder</strong></h2>
+		
 		<form id="frmApp" class="form-horizontal" role="form" action="save" method="post">
 			<g:render template="form"/>
 		</form>

@@ -27,7 +27,7 @@ import grails.transaction.Transactional
 @Transactional(readOnly = true)
 class PoderController {
 
-    static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
+    static allowedMethods = [save: "POST", update: "PUT", delete: ["DELETE","GET"]]
 
 	//servicios
 	EntidadFinancieraService entidadFinancieraService
@@ -238,15 +238,14 @@ class PoderController {
             notFound()
             return
         }
-
-        poderInstance.delete flush:true
-
+        poderService.delete(poderInstance)
+		
         request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.deleted.message', args: [message(code: 'Poder.label', default: 'Poder'), poderInstance.id])
+            '*'{
+                //flash.message = message(code: 'default.deleted.message', args: [message(code: 'Poder.label', default: 'Poder'), poderInstance.id])
+				flash.message = message(code: 'mx.amib.sistemas.registro.apoderado.deleted.message', args: [poderInstance.numeroEscritura,poderInstance.id])
                 redirect action:"index", method:"GET"
             }
-            '*'{ render status: NO_CONTENT }
         }
     }
 

@@ -1,156 +1,222 @@
-
-<%@ page import="mx.amib.sistemas.registro.apoderamiento.model.Poder" %>
-<!DOCTYPE html>
+<%@ page contentType="text/html;charset=UTF-8" %>
 <html>
 	<head>
 		<meta name="layout" content="main">
 		<g:set var="entityName" value="${message(code: 'poder.label', default: 'Poder')}" />
-		<title><g:message code="default.show.label" args="[entityName]" /></title>
+		<title>Registro 0.1 - Datos del Poder</title>
 	</head>
 	<body>
-		<a href="#show-poder" class="skip" tabindex="-1"><g:message code="default.link.skip.label" default="Skip to content&hellip;"/></a>
-		<div class="nav" role="navigation">
-			<ul>
-				<li><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></li>
-				<li><g:link class="list" action="index"><g:message code="default.list.label" args="[entityName]" /></g:link></li>
-				<li><g:link class="create" action="create"><g:message code="default.new.label" args="[entityName]" /></g:link></li>
-			</ul>
-		</div>
-		<div id="show-poder" class="content scaffold-show" role="main">
-			<h1><g:message code="default.show.label" args="[entityName]" /></h1>
-			<g:if test="${flash.message}">
-			<div class="message" role="status">${flash.message}</div>
-			</g:if>
-			<ol class="property-list poder">
+		<a id="anchorForm"></a>
+	
+		<!-- INICIA: BREADCRUMB ADMIN -->
+		<ul class="breadcrumb">
+			<li><a href="#">Gestión</a><span class="divider"></span></li>
+			<li><a href="<g:createLink controller="poder" action="index" />">Poderes</a></li>
+			<li><a href="#">Datos del poder</a></li>
+		</ul>
+		<!-- FIN: BREADCRUMB ADMIN -->
+		
+		<h2><strong>Datos del poder</strong></h2>
+		
+		<fieldset>
+			<legend>Acciones</legend>
 			
-				<g:if test="${poderInstance?.representanteLegalNombre}">
-				<li class="fieldcontain">
-					<span id="representanteLegalNombre-label" class="property-label"><g:message code="poder.representanteLegalNombre.label" default="Representante Legal Nombre" /></span>
-					
-						<span class="property-value" aria-labelledby="representanteLegalNombre-label"><g:fieldValue bean="${poderInstance}" field="representanteLegalNombre"/></span>
-					
-				</li>
-				</g:if>
+			<button id="btnNuevoPoder" type="button" onclick="btnNuevoPoder_click()" class="btn btn-default btn-primary"><span class="glyphicon glyphicon-file"></span> Nuevo</button>
+			&nbsp;&nbsp;&nbsp;
+			<button id="btnEditarPoder" type="button" onclick="btnEditarPoder_click(${poderInstance?.id})" class="btn btn-default btn-primary"><span class="glyphicon glyphicon-pencil"></span> Editar</button>
+			<button id="btnEliminarPoder" type="button" onclick="btnEliminarPoder_click(${poderInstance?.id})" class="btn btn-default btn-primary"><span class="glyphicon glyphicon-trash"></span> Eliminar</button>
 			
-				<g:if test="${poderInstance?.representanteLegalApellido1}">
-				<li class="fieldcontain">
-					<span id="representanteLegalApellido1-label" class="property-label"><g:message code="poder.representanteLegalApellido1.label" default="Representante Legal Apellido1" /></span>
-					
-						<span class="property-value" aria-labelledby="representanteLegalApellido1-label"><g:fieldValue bean="${poderInstance}" field="representanteLegalApellido1"/></span>
-					
-				</li>
-				</g:if>
+		</fieldset>
+		
+		<fieldset>
+			<legend>Poder</legend>
 			
-				<g:if test="${poderInstance?.representanteLegalApellido2}">
-				<li class="fieldcontain">
-					<span id="representanteLegalApellido2-label" class="property-label"><g:message code="poder.representanteLegalApellido2.label" default="Representante Legal Apellido2" /></span>
-					
-						<span class="property-value" aria-labelledby="representanteLegalApellido2-label"><g:fieldValue bean="${poderInstance}" field="representanteLegalApellido2"/></span>
-					
-				</li>
-				</g:if>
+			<fieldset>
+				<legend><i>Datos del representante legal</i></legend>
+				
+				<div id="divRepLegalNom" class="form-group">
+					<label class="col-md-2 col-sm-3 control-label">
+		            	<g:message code="poder.representanteLegalNombre.label" default="Nombre" />
+					</label>
+		            <div class="col-md-9 col-sm-9">
+		            	<p class="form-control-static">${poderInstance?.representanteLegalNombre}</p>
+		            </div>
+				</div>
+
+				<div id="divAp1" class="form-group">
+					<label class="col-md-2 col-sm-3 control-label">
+						<g:message code="poder.representanteLegalApellido1.label" default="Primer apellido" />
+					</label>
+					<div class="col-md-9 col-sm-9">
+						<p class="form-control-static">${poderInstance?.representanteLegalApellido1}</p>
+					</div>
+				</div>
+				
+				<div id="divAp2" class="form-group">
+					<label class="col-md-2 col-sm-3 control-label">
+						<g:message code="poder.representanteLegalApellido2.label" default="Segundo apellido" />					
+					</label>
+					<div class="col-md-9 col-sm-9">
+						<p class="form-control-static">${poderInstance?.representanteLegalApellido2}</p>
+					</div>
+				</div>
+				
+			</fieldset>
 			
-				<g:if test="${poderInstance?.fechaCreacion}">
-				<li class="fieldcontain">
-					<span id="fechaCreacion-label" class="property-label"><g:message code="poder.fechaCreacion.label" default="Fecha Creacion" /></span>
-					
-						<span class="property-value" aria-labelledby="fechaCreacion-label"><g:formatDate date="${poderInstance?.fechaCreacion}" /></span>
-					
-				</li>
-				</g:if>
 			
-				<g:if test="${poderInstance?.fechaModificacion}">
-				<li class="fieldcontain">
-					<span id="fechaModificacion-label" class="property-label"><g:message code="poder.fechaModificacion.label" default="Fecha Modificacion" /></span>
+			<fieldset>
+				<legend><i>Datos de la institución o grupo financiero</i></legend>
+				
+				<div id="divAdmGrupoFinanciero" class="form-group">
+					<label class="col-md-2 col-sm-3 control-label">
+		            	<g:message code="poder.groupoFinanciero.label" default="Grupo financiero" />
+					</label>
 					
-						<span class="property-value" aria-labelledby="fechaModificacion-label"><g:formatDate date="${poderInstance?.fechaModificacion}" /></span>
-					
-				</li>
-				</g:if>
+		            <div class="col-md-9 col-sm-9">						
+						<p class="form-control-static">${poderInstance?.idGrupofinanciero}</p>
+		            </div>
+				</div>
+				
+				<div id="divAdmInstitucion" class="form-group">
+					<label class="col-md-2 col-sm-3 control-label">
+		            	<g:message code="poder.institucion.label" default="Institución" />
+					</label>
+					<div class="col-md-9 col-sm-9">
+						<p class="form-control-static">${poderInstance?.idInstitucion}</p>
+					</div>
+				</div>
+				
+			</fieldset>
 			
-				<g:if test="${poderInstance?.apoderados}">
-				<li class="fieldcontain">
-					<span id="apoderados-label" class="property-label"><g:message code="poder.apoderados.label" default="Apoderados" /></span>
+			<fieldset>
+				<legend><i>Datos del poder</i></legend>
+				
+				<div id="divPdrNumEscrit" class="form-group">
+					<label class="col-md-2 col-sm-3 control-label">
+		            	<g:message code="poder.numeroEscritura.label" default="Numero de escritura" />
+					</label>
 					
-						<g:each in="${poderInstance.apoderados}" var="a">
-						<span class="property-value" aria-labelledby="apoderados-label"><g:link controller="apoderado" action="show" id="${a.id}">${a?.encodeAsHTML()}</g:link></span>
+		            <div class="col-md-9 col-sm-9">						
+						<p class="form-control-static">${poderInstance?.numeroEscritura}</p>
+		            </div>
+				</div>
+				
+				<div id="divFhApod" class="form-group">
+					<label class="col-md-2 col-sm-3 control-label">
+		            	<g:message code="poder.fechaApoderamiento.label" default="Fecha de aporderamiento" />
+					</label>
+					<div class="col-md-9 col-sm-9">
+						<p class="form-control-static">${poderInstance?.fechaApoderamiento}</p>
+					</div>
+				</div>
+				
+			</fieldset>
+			
+			<fieldset>
+				<legend><i>Datos del notario</i></legend>
+				
+				<div id="divNumNotario" class="form-group">
+					<label class="col-md-2 col-sm-3 control-label">
+		            	<g:message code="poder.notario.numero.label" default="Número" />
+					</label>
+					
+		            <div class="col-md-9 col-sm-9">						
+						<p class="form-control-static">${poderInstance?.notario?.numeroNotario}</p>
+		            </div>
+				</div>
+				
+				<div id="divNotarioEntidadFederativa" class="form-group">
+					<label class="col-md-2 col-sm-3 control-label">
+		            	<g:message code="poder.notario.entidadFederativa.label" default="Entidad Federativa"  />
+					</label>
+					
+		            <div class="col-md-9 col-sm-9">						
+						<p class="form-control-static">${poderInstance?.notario?.idEntidadFederativa}</p>
+		            </div>
+				</div>
+				
+				<div id="divNombreCompleto" class="form-group">
+					<label class="col-md-2 col-sm-3 control-label">
+		            	<g:message code="poder.notario.nombreCompletro.label" default="Nombre" />
+					</label>
+					
+		            <div class="col-md-9 col-sm-9">						
+						<p class="form-control-static">${poderInstance?.notario?.nombre + ' ' + poderInstance?.notario?.apellido1 + ' ' + poderInstance?.notario?.apellido2}</p>
+		            </div>
+				</div>
+				
+			</fieldset>
+			
+			<fieldset>
+				<legend><i>Datos de apoderados</i></legend>
+				
+				<table class="table">
+					<thead>
+						<tr>
+							<th style='width:8%;'>Matrícula</th>
+							<th>Nombre completo</th>
+							<th style='width:16%'>DGA CNBV</th>
+						</tr>
+					</thead>
+					<tbody id="tbdyApoderados">
+						<g:each in="${poderInstance?.apoderados}">
+							<tr>
+								<td>${it.autorizado?.numeroMatricula}</td>
+								<td>${it.autorizado?.nombreCompleto}</td>
+								<td>${it.autorizado?.oficioCNBV?.claveDga}</td>
+							</tr>
+						</g:each>			
+					</tbody>
+					
+				</table>
+				
+			</fieldset>
+			
+			<fieldset>
+				<legend><i>Documentos de respaldo</i></legend>
+				
+				<table class="table">
+					<thead>
+						<tr>
+							<th style='width:32%;'>Tipo de documento</th>
+							<th>Nombre de archivo</th>
+							<th style='width:18%'>...</th>
+						</tr>
+					</thead>
+					
+					<tbody id="tbdyDocs">
+						<g:each in="${poderInstance?.documentosRespaldoPoder}">
+							<tr>
+								<td>${it.tipoDocumentoRespaldoPoder?.descripcion}</td>
+								<td>${it.id}</td>
+								<td>
+									<button type="button" class="download btn btn-info btn-xs">Descargar</button>
+								</td>
+							</tr>
 						</g:each>
-					
-				</li>
-				</g:if>
+					</tbody>
+				</table>
+				
+			</fieldset>
 			
-				<g:if test="${poderInstance?.documentosRespaldoPoder}">
-				<li class="fieldcontain">
-					<span id="documentosRespaldoPoder-label" class="property-label"><g:message code="poder.documentosRespaldoPoder.label" default="Documentos Respaldo Poder" /></span>
-					
-						<g:each in="${poderInstance.documentosRespaldoPoder}" var="d">
-						<span class="property-value" aria-labelledby="documentosRespaldoPoder-label"><g:link controller="documentoRespaldoPoder" action="show" id="${d.id}">${d?.encodeAsHTML()}</g:link></span>
-						</g:each>
-					
-				</li>
-				</g:if>
-			
-				<g:if test="${poderInstance?.esRegistradoPorGrupoFinanciero}">
-				<li class="fieldcontain">
-					<span id="esRegistradoPorGrupoFinanciero-label" class="property-label"><g:message code="poder.esRegistradoPorGrupoFinanciero.label" default="Es Registrado Por Grupo Financiero" /></span>
-					
-						<span class="property-value" aria-labelledby="esRegistradoPorGrupoFinanciero-label"><g:formatBoolean boolean="${poderInstance?.esRegistradoPorGrupoFinanciero}" /></span>
-					
-				</li>
-				</g:if>
-			
-				<g:if test="${poderInstance?.fechaApoderamiento}">
-				<li class="fieldcontain">
-					<span id="fechaApoderamiento-label" class="property-label"><g:message code="poder.fechaApoderamiento.label" default="Fecha Apoderamiento" /></span>
-					
-						<span class="property-value" aria-labelledby="fechaApoderamiento-label"><g:formatDate date="${poderInstance?.fechaApoderamiento}" /></span>
-					
-				</li>
-				</g:if>
-			
-				<g:if test="${poderInstance?.idGrupofinanciero}">
-				<li class="fieldcontain">
-					<span id="idGrupofinanciero-label" class="property-label"><g:message code="poder.idGrupofinanciero.label" default="Id Grupofinanciero" /></span>
-					
-						<span class="property-value" aria-labelledby="idGrupofinanciero-label"><g:fieldValue bean="${poderInstance}" field="idGrupofinanciero"/></span>
-					
-				</li>
-				</g:if>
-			
-				<g:if test="${poderInstance?.idInstitucion}">
-				<li class="fieldcontain">
-					<span id="idInstitucion-label" class="property-label"><g:message code="poder.idInstitucion.label" default="Id Institucion" /></span>
-					
-						<span class="property-value" aria-labelledby="idInstitucion-label"><g:fieldValue bean="${poderInstance}" field="idInstitucion"/></span>
-					
-				</li>
-				</g:if>
-			
-				<g:if test="${poderInstance?.notario}">
-				<li class="fieldcontain">
-					<span id="notario-label" class="property-label"><g:message code="poder.notario.label" default="Notario" /></span>
-					
-						<span class="property-value" aria-labelledby="notario-label"><g:link controller="notario" action="show" id="${poderInstance?.notario?.id}">${poderInstance?.notario?.encodeAsHTML()}</g:link></span>
-					
-				</li>
-				</g:if>
-			
-				<g:if test="${poderInstance?.numeroEscritura}">
-				<li class="fieldcontain">
-					<span id="numeroEscritura-label" class="property-label"><g:message code="poder.numeroEscritura.label" default="Numero Escritura" /></span>
-					
-						<span class="property-value" aria-labelledby="numeroEscritura-label"><g:fieldValue bean="${poderInstance}" field="numeroEscritura"/></span>
-					
-				</li>
-				</g:if>
-			
-			</ol>
-			<g:form url="[resource:poderInstance, action:'delete']" method="DELETE">
-				<fieldset class="buttons">
-					<g:link class="edit" action="edit" resource="${poderInstance}"><g:message code="default.button.edit.label" default="Edit" /></g:link>
-					<g:actionSubmit class="delete" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" />
-				</fieldset>
-			</g:form>
-		</div>
+		</fieldset>
+	
+	<!-- INCIA: SCRIPTS ESPECIFICOS DE VISTA -->
+	<script>
+	function btnNuevoPoder_click(){
+		window.location.href = "<g:createLink controller="poder" action="create" />";
+	}
+	function btnEditarPoder_click(id){
+		window.location.href = "<g:createLink controller="poder" action="edit" />/"+id;
+	}
+	function btnEliminarPoder_click(id){
+		var url = '<g:createLink controller="poder" action="delete" />/'+id
+		var r = confirm("¿Desea eliminar el elemento seleccionado?");
+		if(r == true)
+			window.location.href = url;
+	}
+	</script>
+	<!-- FIN: SCRIPTS ESPECIFICOS DE VISTA -->
+	
 	</body>
 </html>

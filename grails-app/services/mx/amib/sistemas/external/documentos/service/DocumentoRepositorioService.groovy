@@ -139,6 +139,9 @@ class DocumentoRepositorioService {
 			else if ( DocumentoRevocacionRepositorioTO.class.isInstance(it) ){
 				restUrl = this.documentoRevocacionSaveUrl
 			}
+			else{
+				restUrl = this.saveUrl
+			}
 			
 			//Envía acorde al metadato
 			def resp = rest.post(restUrl){
@@ -310,5 +313,5 @@ class DocumentoSustentanteRepositorioTO extends DocumentoRepositorioTO{
 }
 
 enum ClaseDocumento{
-	DOCUMENTO, OFICIO_CNBV, PODER, FOTO_SUSTENTANTE, DOC_SUSTENTANTE
+	DOCUMENTO, OFICIO_CNBV, PODER, REVOCACION, FOTO_SUSTENTANTE, DOC_SUSTENTANTE
 }

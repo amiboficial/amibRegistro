@@ -2,6 +2,7 @@ package mx.amib.sistemas.registro.apoderamiento.controller
 
 import static org.springframework.http.HttpStatus.*
 
+import java.util.Collection;
 import java.util.List;
 
 import mx.amib.sistemas.registro.apoderado.service.ApoderadoService
@@ -10,6 +11,8 @@ import mx.amib.sistemas.registro.apoderado.service.AutorizacionCnbvTO;
 import mx.amib.sistemas.registro.apoderado.service.DocumentoRespaldoPoderTO
 import mx.amib.sistemas.registro.apoderamiento.model.Poder
 import mx.amib.sistemas.external.catalogos.service.EntidadFinancieraService;
+import mx.amib.sistemas.external.catalogos.service.GrupoFinancieroTO;
+import mx.amib.sistemas.external.catalogos.service.InstitucionTO
 import mx.amib.sistemas.external.catalogos.service.SepomexService
 import mx.amib.sistemas.external.documentos.service.DocumentoRepositorioService;
 import mx.amib.sistemas.external.documentos.service.DocumentoRepositorioTO
@@ -40,9 +43,49 @@ class PoderController {
 	
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        respond Poder.list(params), model:[poderInstanceCount: Poder.count()]
+		
+		params.fltNumEsc = params.fltNumEsc?:'-1'
+		
+		params.fltFecIni_day = (params.fltFecIni_day==null || params.fltFecIni_day=='null')?'-1':params.fltFecIni_day
+		params.fltFecIni_month = (params.fltFecIni_month==null || params.fltFecIni_month=='null')?'-1':params.fltFecIni_month
+		params.fltFecIni_year = (params.fltFecIni_year==null || params.fltFecIni_year=='null')?'-1':params.fltFecIni_year
+		params.fltFecFn_day = (params.fltFecFn_day==null || params.fltFecFn_day=='null')?'-1':params.fltFecFn_day
+		params.fltFecFn_month = (params.fltFecFn_month==null || params.fltFecFn_month=='null')?'-1':params.fltFecFn_month
+		params.fltFecFn_year = (params.fltFecFn_year==null || params.fltFecFn_year=='null')?'-1':params.fltFecFn_year
+		//params.fltFecIni_day = params.fltFecIni_day?:'-1'
+		//params.fltFecIni_month = params.fltFecIni_month?:'-1'
+		//params.fltFecIni_year = params.fltFecIni_year?:'-1'
+		//params.fltFecFn_day = params.fltFecFn_day?:'-1'
+		//params.fltFecFn_month = params.fltFecFn_month?:'-1'
+		//params.fltFecFn_year = params.fltFecFn_year?:'-1'
+		params.filterIdGrupoFinanciero = params.filterIdGrupoFinanciero?:'-1'
+		params.filterIdInstitucion = params.filterIdInstitucion?:'-1'
+		
+        respond poderService.search(params.max, params.offset, params.sort, params.order, params.fltNumEsc?.toInteger(),
+									params.fltFecIni_day?.toInteger(), params.fltFecIni_month?.toInteger(), params.fltFecIni_year?.toInteger(), 
+									params.fltFecFn_day?.toInteger(), params.fltFecFn_month?.toInteger(), params.fltFecFn_year?.toInteger(), 
+									params.filterIdGrupoFinanciero?.toLong(), params.filterIdInstitucion?.toLong()), 
+				model:[poderInstanceCount: Poder.count(), viewModelInstance: this.getIndexViewModel(params)]
     }
 
+	private PoderIndexViewModel getIndexViewModel(def params){
+		PoderIndexViewModel pivw = new PoderIndexViewModel()
+		pivw.gruposFinancierosList = entidadFinancieraService.obtenerGruposFinancierosVigentes()
+		pivw.institucionesGpoFinList = entidadFinancieraService.obtenerGrupoFinanciero( params.filterIdGrupoFinanciero?.toLong() )?.instituciones
+		
+		pivw.fltNumEsc = params.fltNumEsc?.toInteger()
+		pivw.fltFecIniDay = params.fltFecIni_day?.toInteger()
+		pivw.fltFecIniMonth = params.fltFecIni_month?.toInteger()
+		pivw.fltFecIniYear = params.fltFecIni_year?.toInteger()
+		pivw.fltFecFnDay = params.fltFecFn_day?.toInteger()
+		pivw.fltFecFnMonth = params.fltFecFn_month?.toInteger()
+		pivw.fltFecFnYear = params.fltFecFn_year?.toInteger()
+		pivw.filterIdGrupoFinanciero = params.filterIdGrupoFinanciero?.toLong()
+		pivw.filterIdInstitucion = params.filterIdInstitucion?.toLong()
+		
+		return pivw
+	}
+	
     def show(Poder poderInstance) {
         respond poderInstance
     }
@@ -379,4 +422,19 @@ class PoderController {
 			}
 		}
 	}
+}
+
+class PoderIndexViewModel {
+	Collection<GrupoFinancieroTO> gruposFinancierosList
+	InstitucionTO[] institucionesGpoFinList
+	
+	Integer fltNumEsc
+	Integer fltFecIniDay
+	Integer fltFecIniMonth
+	Integer fltFecIniYear
+	Integer fltFecFnDay
+	Integer fltFecFnMonth
+	Integer fltFecFnYear
+	Long filterIdGrupoFinanciero
+	Long filterIdInstitucion
 }

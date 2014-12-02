@@ -150,6 +150,7 @@ mx.amib.sistemas.catalogos.sepomex.Sepomex.findByCodigoPostal = 'sepomexRestful/
 mx.amib.sistemas.expediente.Sustentante.obtenerSustentantePorMatricula = 'sustentanteRestful/obtenerSustentantePorMatricula/'
 
 //especificaciones de rutas para servicios REST de amibDocumentos
+mx.amib.sistemas.documentos.Documento.save = 'documentoRestful/save'
 mx.amib.sistemas.documentos.Documento.getByUuid = 'documentoRestful/getByUuid?uuid='
 mx.amib.sistemas.documentos.Documento.deleteByUuid = 'documentoRestful/deleteByUuid?uuid='
 mx.amib.sistemas.documentos.DocumentoPoder.save = 'documentoPoderRestful/save'

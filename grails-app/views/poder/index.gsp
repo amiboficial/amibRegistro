@@ -60,7 +60,7 @@
 	            	<g:message code="poder.groupoFinanciero.label" default="Grupo financiero" />
 				</label>
 	            <div class="col-md-9 col-sm-9">
-					<g:select name='filterIdGrupofinanciero' class="form-control" id="selAdmIdGrupoFinanciero" 
+					<g:select name='filterIdGrupoFinanciero' class="form-control" id="selAdmIdGrupoFinanciero" 
 					value="${viewModelInstance?.filterIdGrupoFinanciero}"
 					noSelection="${['-1':'-Seleccione-']}"
 					from='${viewModelInstance?.gruposFinancierosList}'
@@ -100,7 +100,7 @@
 			
 			<div id="list-poder" class="content scaffold-list" role="main">
 				<table class="table">
-				<thead>
+					<thead>
 						<tr>
 						
 							<g:sortableColumn property="id" title="${message(code: 'poder.id.label', default: 'ID')}" params="[fltNumEsc:viewModelInstance.fltNumEsc, fltFecIni_day:viewModelInstance.fltFecIniDay,fltFecIni_month:viewModelInstance.fltFecIniMonth, fltFecIni_year:viewModelInstance.fltFecIniYear, fltFecFn_day:viewModelInstance.fltFecFnDay, fltFecFn_month:viewModelInstance.fltFecFnMonth, fltFecFn_year:viewModelInstance.fltFecFnYear, filterIdGrupoFinanciero:viewModelInstance.filterIdGrupoFinanciero, filterIdInstitucion:viewModelInstance.filterIdInstitucion]" />
@@ -197,21 +197,21 @@
 	//fixes a ejecutarse al inicio
 	$(function(){
 
-		var fltNumEsc = ${viewModelInstance?.fltNumEsc};
-		var fltFecIniDay = ${viewModelInstance.fltFecIniDay};
-		var fltFecIniMonth = ${viewModelInstance.fltFecIniMonth};
-		var fltFecIniYear = ${viewModelInstance.fltFecIniYear};
-		var fltFecFnDay = ${viewModelInstance.fltFecFnDay};
-		var fltFecFnMonth = ${viewModelInstance.fltFecFnMonth};
-		var fltFecFnYear = ${viewModelInstance.fltFecFnYear};
+		var fltNumEsc = "${viewModelInstance?.fltNumEsc}";
+		var fltFecIniDay = "${viewModelInstance?.fltFecIniDay}";
+		var fltFecIniMonth = "${viewModelInstance?.fltFecIniMonth}";
+		var fltFecIniYear = "${viewModelInstance?.fltFecIniYear}";
+		var fltFecFnDay = "${viewModelInstance?.fltFecFnDay}";
+		var fltFecFnMonth = "${viewModelInstance?.fltFecFnMonth}";
+		var fltFecFnYear = "${viewModelInstance?.fltFecFnYear}";
 
-		if(fltNumEsc==-1) fltNumEsc="";
-		if(fltFecIniDay==-1) fltFecIniDay="null";
-		if(fltFecIniMonth==-1) fltFecIniMonth="null";
-		if(fltFecIniYear==-1) fltFecIniYear="null";
-		if(fltFecFnDay==-1) fltFecFnDay="null";
-		if(fltFecFnMonth==-1) fltFecFnMonth="null";
-		if(fltFecFnYear==-1) fltFecFnYear="null";
+		if(fltNumEsc=="-1") fltNumEsc="";
+		if(fltFecIniDay=="-1"||fltFecIniDay=="") fltFecIniDay="null";
+		if(fltFecIniMonth=="-1"||fltFecIniMonth=="") fltFecIniMonth="null";
+		if(fltFecIniYear=="-1"||fltFecIniYear=="") fltFecIniYear="null";
+		if(fltFecFnDay=="-1"||fltFecFnDay=="") fltFecFnDay="null";
+		if(fltFecFnMonth=="-1"||fltFecFnMonth=="") fltFecFnMonth="null";
+		if(fltFecFnYear=="-1"||fltFecFnYear=="") fltFecFnYear="null";
 
 		$('#txtNumEscritura').val(fltNumEsc);
 		$('#fltFecIni_day').val(fltFecIniDay);

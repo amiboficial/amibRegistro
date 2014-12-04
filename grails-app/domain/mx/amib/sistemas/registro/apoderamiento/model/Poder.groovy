@@ -16,6 +16,10 @@ class Poder {
 	Date fechaModificacion
 	Notario notario
 
+	String nombreGrupoFinanciero
+	String nombreInstitucion
+
+	static transients = ['nombreGrupoFinanciero','nombreInstitucion']
 	static hasMany = [apoderados: Apoderado,
 	                  documentosRespaldoPoder: DocumentoRespaldoPoder]
 	static belongsTo = [Notario]

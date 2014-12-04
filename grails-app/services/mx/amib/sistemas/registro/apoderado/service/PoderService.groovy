@@ -423,14 +423,14 @@ class PoderService {
 			namedParameters.put("fechaApoderamientoAl",filterCalFechaAl.getTime())
 		}
 		//filterIdGrupoFinanciero
-		if(filterIdGrupoFinanciero != null && filterIdGrupoFinanciero != -1 && filterIdGrupoFinanciero != ""){
-			hqlFilters.add("n.idGrupofinanciero like :idGrupofinanciero ")
+		if(filterIdGrupoFinanciero != null && filterIdGrupoFinanciero != -1 && filterIdGrupoFinanciero != 0){
+			hqlFilters.add("n.idGrupofinanciero = :idGrupofinanciero ")
 			whereKeywordNeeded = true
 			namedParameters.put("idGrupofinanciero",filterIdGrupoFinanciero)
 		}
 		//filterIdInstitucion
-		if(filterIdInstitucion != null && filterIdInstitucion != -1 && filterIdInstitucion != ""){
-			hqlFilters.add("n.idInstitucion like :idInstitucion ")
+		if(filterIdInstitucion != null && filterIdInstitucion != -1 && filterIdInstitucion != 0){
+			hqlFilters.add("n.idInstitucion = :idInstitucion ")
 			whereKeywordNeeded = true
 			namedParameters.put("idInstitucion",filterIdInstitucion)
 		}

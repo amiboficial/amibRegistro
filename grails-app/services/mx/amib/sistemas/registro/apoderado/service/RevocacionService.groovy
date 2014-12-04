@@ -255,6 +255,109 @@ class RevocacionService {
 		documentoRepositorioService.eliminarDocumentos(uuidsDocsABorrar)
 	}
 	
+	def search(Integer max, Integer offset, String sort, String order, Integer filterNumeroEscritura, 
+				Integer filterFechaDelDia, Integer filterFechaDelMes, Integer filterFechaDelAnio, 
+				Integer filterFechaAlDia, Integer filterFechaAlMes, Integer filterFechaAlAnio,
+				Long filterIdGrupoFinanciero, Long filterIdInstitucion){
+				
+		Calendar filterCalFechaDel = null
+		Calendar filterCalFechaAl = null
+						
+		List<String> hqlFilters = new ArrayList<String>();
+		String whereKeyword = "where ";
+		Boolean whereKeywordNeeded = false;
+		StringBuilder sbHql = new StringBuilder()
+		Map<String,Object> namedParameters = new HashMap<String,Object>()
+		
+		if(max == null || max <= 0){
+			max = 10
+		}
+		if(offset == null || offset <= 0){
+			offset = 0
+		}
+		if(sort == null || sort == ""){
+			sort = "id"
+		}
+		else if(["id","fechaRevocacion","numeroEscritura"].find{ sort == it } == null){
+			sort = "id"
+		}
+		if(order == null || order == ""){
+			order = "asc"
+		}
+		else if(order != "desc" && order != "asc"){
+			order = "asc"
+		}
+		
+		//formar fechas
+		if( (filterFechaDelDia != null && filterFechaDelMes != null && filterFechaDelAnio != null) &&
+			(filterFechaDelDia > 0 && filterFechaDelMes > 0 && filterFechaDelAnio > 0) ){
+			filterCalFechaDel = new GregorianCalendar(filterFechaDelAnio,filterFechaDelMes-1,filterFechaDelDia,00,00,00);
+		}
+		if( (filterFechaAlDia != null && filterFechaAlMes != null && filterFechaAlAnio != null) &&
+			(filterFechaAlDia > 0 && filterFechaAlMes > 0 && filterFechaAlAnio > 0) ){
+			filterCalFechaAl = new GregorianCalendar(filterFechaAlAnio,filterFechaAlMes-1,filterFechaAlDia,00,00,00);
+		}
+		
+		//formar filtros
+
+		//filterNumeroEscritura
+		println "el numero de escritura es: " + filterNumeroEscritura
+		if(filterNumeroEscritura != null && filterNumeroEscritura != -1 && filterNumeroEscritura != ""){
+			hqlFilters.add("n.numeroEscritura like :numeroEscritura ")
+			whereKeywordNeeded = true
+			namedParameters.put("numeroEscritura",filterNumeroEscritura)
+		}
+		//rangos de fecha
+		//si ambos son nulos, se omite; si uno es nulo, el que no es nulo se toma como unico
+		if( filterCalFechaDel != null && filterCalFechaAl == null){
+			hqlFilters.add("n.fechaRevocacion >= :fechaRevocacion ")
+			whereKeywordNeeded = true
+			namedParameters.put("fechaRevocacion",filterCalFechaDel.getTime())
+		}
+		if( filterCalFechaDel == null && filterCalFechaAl != null){
+			hqlFilters.add("n.fechaRevocacion <= :fechaRevocacion ")
+			whereKeywordNeeded = true
+			namedParameters.put("fechaRevocacion",filterCalFechaAl.getTime())
+		}
+		if( filterCalFechaDel != null && filterCalFechaAl != null){
+			hqlFilters.add("n.fechaRevocacion between :fechaRevocacionDel and :fechaRevocacionAl ")
+			whereKeywordNeeded = true
+			namedParameters.put("fechaRevocacionDel",filterCalFechaDel.getTime())
+			namedParameters.put("fechaRevocacionAl",filterCalFechaAl.getTime())
+		}
+		//filterIdGrupoFinanciero
+		if(filterIdGrupoFinanciero != null && filterIdGrupoFinanciero != -1 && filterIdGrupoFinanciero != ""){
+			hqlFilters.add("n.idGrupofinanciero like :idGrupofinanciero ")
+			whereKeywordNeeded = true
+			namedParameters.put("idGrupofinanciero",filterIdGrupoFinanciero)
+		}
+		//filterIdInstitucion
+		if(filterIdInstitucion != null && filterIdInstitucion != -1 && filterIdInstitucion != ""){
+			hqlFilters.add("n.idInstitucion like :idInstitucion ")
+			whereKeywordNeeded = true
+			namedParameters.put("idInstitucion",filterIdInstitucion)
+		}
+		
+		sbHql.append("from Revocacion as n ")
+		if(whereKeywordNeeded){
+			sbHql.append(whereKeyword)
+			hqlFilters.each{
+				if(it != hqlFilters.last())
+					sbHql.append(it).append("and ")
+				else
+					sbHql.append(it)
+			}
+		}
+		sbHql.append("order by n.").append(sort).append(" ").append(order)
+		
+		println sbHql.toString()
+		println (namedParameters as JSON)
+		
+		def results = Revocacion.findAll(sbHql.toString(),namedParameters,[max: max, offset: offset])
+		return results
+		
+	}
+	
 }
 
 class RevocadoTO {

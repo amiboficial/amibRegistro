@@ -16,6 +16,7 @@ import mx.amib.sistemas.external.catalogos.service.EntidadFederativaTO
 import mx.amib.sistemas.external.catalogos.service.EntidadFinancieraService;
 import mx.amib.sistemas.external.catalogos.service.EntidadFinancieraTO
 import mx.amib.sistemas.external.catalogos.service.GrupoFinancieroTO;
+import mx.amib.sistemas.external.catalogos.service.InstitucionTO;
 import mx.amib.sistemas.external.catalogos.service.SepomexService;
 import mx.amib.sistemas.external.documentos.service.DocumentoRepositorioService
 import mx.amib.sistemas.external.expediente.service.SustentanteService
@@ -35,9 +36,44 @@ class RevocacionController {
 	
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        respond Revocacion.list(params), model:[revocacionInstanceCount: Revocacion.count()]
+		
+		params.fltNumEsc = params.fltNumEsc?:'-1'
+		
+		params.fltFecIni_day = (params.fltFecIni_day==null || params.fltFecIni_day=='null')?'-1':params.fltFecIni_day
+		params.fltFecIni_month = (params.fltFecIni_month==null || params.fltFecIni_month=='null')?'-1':params.fltFecIni_month
+		params.fltFecIni_year = (params.fltFecIni_year==null || params.fltFecIni_year=='null')?'-1':params.fltFecIni_year
+		params.fltFecFn_day = (params.fltFecFn_day==null || params.fltFecFn_day=='null')?'-1':params.fltFecFn_day
+		params.fltFecFn_month = (params.fltFecFn_month==null || params.fltFecFn_month=='null')?'-1':params.fltFecFn_month
+		params.fltFecFn_year = (params.fltFecFn_year==null || params.fltFecFn_year=='null')?'-1':params.fltFecFn_year
+		params.filterIdGrupoFinanciero = params.filterIdGrupoFinanciero?:'-1'
+		params.filterIdInstitucion = params.filterIdInstitucion?:'-1'
+		
+		def results = revocacionService.search(params.max, params.offset, params.sort, params.order, params.fltNumEsc?.toInteger(),
+									params.fltFecIni_day?.toInteger(), params.fltFecIni_month?.toInteger(), params.fltFecIni_year?.toInteger(),
+									params.fltFecFn_day?.toInteger(), params.fltFecFn_month?.toInteger(), params.fltFecFn_year?.toInteger(),
+									params.filterIdGrupoFinanciero?.toLong(), params.filterIdInstitucion?.toLong())
+		
+		respond results, model:[revocacionInstanceCount: results.size(), viewModelInstance: this.getIndexViewModel(params)]
     }
 
+	private RevocacionIndexViewModel getIndexViewModel(def params){
+		RevocacionIndexViewModel rivw = new RevocacionIndexViewModel()
+		rivw.gruposFinancierosList = entidadFinancieraService.obtenerGruposFinancierosVigentes()
+		rivw.institucionesGpoFinList = entidadFinancieraService.obtenerGrupoFinanciero( params.filterIdGrupoFinanciero?.toLong() )?.instituciones
+		
+		rivw.fltNumEsc = params.fltNumEsc?.toInteger()
+		rivw.fltFecIniDay = params.fltFecIni_day?.toInteger()
+		rivw.fltFecIniMonth = params.fltFecIni_month?.toInteger()
+		rivw.fltFecIniYear = params.fltFecIni_year?.toInteger()
+		rivw.fltFecFnDay = params.fltFecFn_day?.toInteger()
+		rivw.fltFecFnMonth = params.fltFecFn_month?.toInteger()
+		rivw.fltFecFnYear = params.fltFecFn_year?.toInteger()
+		rivw.filterIdGrupoFinanciero = params.filterIdGrupoFinanciero?.toLong()
+		rivw.filterIdInstitucion = params.filterIdInstitucion?.toLong()
+		
+		return rivw
+	}
+	
     def show(Revocacion revocacionInstance) {
         respond revocacionInstance
     }
@@ -236,4 +272,19 @@ class RevocacionViewModel {
 	Collection<TipoDocumentoRespaldoRevocacion> tipoDocumentoList
 	
 	boolean validDocumentosCargados
+}
+
+class RevocacionIndexViewModel {
+	Collection<GrupoFinancieroTO> gruposFinancierosList
+	InstitucionTO[] institucionesGpoFinList
+	
+	Integer fltNumEsc
+	Integer fltFecIniDay
+	Integer fltFecIniMonth
+	Integer fltFecIniYear
+	Integer fltFecFnDay
+	Integer fltFecFnMonth
+	Integer fltFecFnYear
+	Long filterIdGrupoFinanciero
+	Long filterIdInstitucion
 }

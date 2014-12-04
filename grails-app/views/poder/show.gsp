@@ -73,7 +73,7 @@
 					</label>
 					
 		            <div class="col-md-9 col-sm-9">						
-						<p class="form-control-static">${poderInstance?.idGrupofinanciero}</p>
+						<p class="form-control-static">${poderInstance?.nombreGrupoFinanciero}</p>
 		            </div>
 				</div>
 				
@@ -82,7 +82,7 @@
 		            	<g:message code="poder.institucion.label" default="Institución" />
 					</label>
 					<div class="col-md-9 col-sm-9">
-						<p class="form-control-static">${poderInstance?.idInstitucion}</p>
+						<p class="form-control-static">${poderInstance?.nombreInstitucion}</p>
 					</div>
 				</div>
 				
@@ -188,9 +188,9 @@
 						<g:each in="${poderInstance?.documentosRespaldoPoder}">
 							<tr>
 								<td>${it.tipoDocumentoRespaldoPoder?.descripcion}</td>
-								<td>${it.id}</td>
+								<td>${it.nombreDeArchivo}</td>
 								<td>
-									<button type="button" class="download btn btn-info btn-xs">Descargar</button>
+									<button type="button" onclick="btnDescargar_click('${it.uuidDocumentoRepositorio}')" class="download btn btn-info btn-xs">Descargar</button>
 								</td>
 							</tr>
 						</g:each>
@@ -214,6 +214,9 @@
 		var r = confirm("¿Desea eliminar el elemento seleccionado?");
 		if(r == true)
 			window.location.href = url;
+	}
+	function btnDescargar_click(uuid){
+		window.open("<g:createLink controller="poder" action="descargar" />?uuid="+uuid);
 	}
 	</script>
 	<!-- FIN: SCRIPTS ESPECIFICOS DE VISTA -->

@@ -10,12 +10,13 @@ import mx.amib.sistemas.registro.apoderado.service.ApoderadoTO
 import mx.amib.sistemas.registro.apoderado.service.AutorizacionCnbvTO;
 import mx.amib.sistemas.registro.apoderado.service.DocumentoRespaldoPoderTO
 import mx.amib.sistemas.registro.apoderamiento.model.Poder
-import mx.amib.sistemas.external.catalogos.service.EntidadFinancieraService;
-import mx.amib.sistemas.external.catalogos.service.GrupoFinancieroTO;
+import mx.amib.sistemas.external.catalogos.service.EntidadFinancieraService
+import mx.amib.sistemas.external.catalogos.service.GrupoFinancieroTO
 import mx.amib.sistemas.external.catalogos.service.InstitucionTO
 import mx.amib.sistemas.external.catalogos.service.SepomexService
-import mx.amib.sistemas.external.documentos.service.DocumentoRepositorioService;
+import mx.amib.sistemas.external.documentos.service.DocumentoRepositorioService
 import mx.amib.sistemas.external.documentos.service.DocumentoRepositorioTO
+import mx.amib.sistemas.external.documentos.service.ClaseDocumento
 import mx.amib.sistemas.registro.notario.service.NotarioService
 import mx.amib.sistemas.registro.apoderado.service.PoderService
 import mx.amib.sistemas.util.service.*
@@ -52,12 +53,6 @@ class PoderController {
 		params.fltFecFn_day = (params.fltFecFn_day==null || params.fltFecFn_day=='null')?'-1':params.fltFecFn_day
 		params.fltFecFn_month = (params.fltFecFn_month==null || params.fltFecFn_month=='null')?'-1':params.fltFecFn_month
 		params.fltFecFn_year = (params.fltFecFn_year==null || params.fltFecFn_year=='null')?'-1':params.fltFecFn_year
-		//params.fltFecIni_day = params.fltFecIni_day?:'-1'
-		//params.fltFecIni_month = params.fltFecIni_month?:'-1'
-		//params.fltFecIni_year = params.fltFecIni_year?:'-1'
-		//params.fltFecFn_day = params.fltFecFn_day?:'-1'
-		//params.fltFecFn_month = params.fltFecFn_month?:'-1'
-		//params.fltFecFn_year = params.fltFecFn_year?:'-1'
 		params.filterIdGrupoFinanciero = params.filterIdGrupoFinanciero?:'-1'
 		params.filterIdInstitucion = params.filterIdInstitucion?:'-1'
 		
@@ -87,6 +82,12 @@ class PoderController {
 	}
 	
     def show(Poder poderInstance) {
+		//obtiene nombres/descripciones de servicios
+		poderInstance.nombreGrupoFinanciero = entidadFinancieraService.obtenerGrupoFinanciero(poderInstance.idGrupofinanciero)?.nombre
+		poderInstance.nombreInstitucion = entidadFinancieraService.obtenerInstitucion(poderInstance.idInstitucion)?.nombre
+		poderInstance.documentosRespaldoPoder.each{
+			it.nombreDeArchivo = documentoRepositorioService.obtenerMetadatosDocumento(it.uuidDocumentoRepositorio)?.nombre;
+		}
         respond poderInstance
     }
 

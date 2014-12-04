@@ -8,6 +8,10 @@ class DocumentoRespaldoPoder {
 	Poder poder
 	TipoDocumentoRespaldoPoder tipoDocumentoRespaldoPoder
 
+	String nombreDeArchivo
+	boolean toBeUpdated
+	
+	static transients = ['nombreDeArchivo','toBeUpdated']
 	static belongsTo = [Poder, TipoDocumentoRespaldoPoder]
 
 	static mapping = {

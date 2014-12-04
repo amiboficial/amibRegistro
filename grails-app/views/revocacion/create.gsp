@@ -7,13 +7,25 @@
 	</head>
 	<body>
 		<a id="anchorForm"></a>
+		
+		<!-- INICIA: BREADCRUMB INSTITUCION/GPOFINANCIERO -->
 		<ul class="breadcrumb">
 			<li><a href="#">Servicios</a><span class="divider"></span></li>
 			<li><a href="#">Solicitud de revocación</a></li>
 		</ul>
-	
+		<!-- FIN: BREADCRUMB INSTITUCION/GPOFINANCIERO  -->
+		
+		<!-- INICIA: BREADCRUMB ADMIN -->
+		<ul class="breadcrumb">
+			<li><a href="#">Gestión</a><span class="divider"></span></li>
+			<li><a href="<g:createLink controller="revocacion" action="index" />">Revocaciones</a></li>
+			<li><a href="#">Nueva revocación</a></li>
+		</ul>
+		<!-- FIN: BREADCRUMB ADMIN -->
+		
 		<h2><strong>Solicitud de revocación</strong></h2>
-
+		<h2><strong>Nueva revocación</strong></h2>
+		
 		<form id="frmApp" class="form-horizontal" role="form" action="save" method="post">
 			<g:render template="form"/>
 		</form>

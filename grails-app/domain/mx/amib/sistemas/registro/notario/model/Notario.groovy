@@ -18,6 +18,9 @@ class Notario {
 	Date fechaCreacion
 	Date fechaModificacion
 
+	String nombreEntidadFederativa
+	
+	static transients = ['nombreEntidadFederativa']
 	static hasMany = [poderes: Poder,
 	                  revocaciones: Revocacion]
 

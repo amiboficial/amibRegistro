@@ -16,6 +16,10 @@ class Revocacion {
 	Date fechaModificacion
 	Notario notario
 
+	String nombreGrupoFinanciero
+	String nombreInstitucion
+
+	static transients = ['nombreGrupoFinanciero','nombreInstitucion']
 	static hasMany = [revocados: Revocado,
 	                  documentosRespaldoRevocacion: DocumentoRespaldoRevocacion]
 	static belongsTo = [Notario]

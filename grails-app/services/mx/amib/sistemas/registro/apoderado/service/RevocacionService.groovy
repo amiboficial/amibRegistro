@@ -10,6 +10,7 @@ import mx.amib.sistemas.external.documentos.service.DocumentoRepositorioTO
 import mx.amib.sistemas.external.documentos.service.DocumentoRevocacionRepositorioTO
 import mx.amib.sistemas.external.expediente.service.SustentanteService
 import mx.amib.sistemas.registro.apoderamiento.model.DocumentoRespaldoRevocacion
+import mx.amib.sistemas.registro.apoderamiento.model.Poder;
 import mx.amib.sistemas.registro.apoderamiento.model.Revocacion
 import mx.amib.sistemas.registro.apoderamiento.model.Revocado
 import mx.amib.sistemas.registro.apoderamiento.model.catalog.TipoDocumentoRespaldoRevocacion
@@ -252,6 +253,15 @@ class RevocacionService {
 		
 		documentoRepositorioService.enviarDocumentosArchivoTemporal(docsAEnviar) //envía documentos a repositorio
 		documentoRepositorioService.actualizaMetadatosDocumentos(docsAActualizar)
+		documentoRepositorioService.eliminarDocumentos(uuidsDocsABorrar)
+	}
+	
+	def delete(Revocacion revocacionInstance){
+		List<String> uuidsDocsABorrar = new ArrayList<String>()
+		revocacionInstance.documentosRespaldoRevocacion.each{
+			uuidsDocsABorrar.add(it.uuidDocumentoRepositorio)
+		}
+		revocacionInstance.delete(flush:true,failOnError:true)
 		documentoRepositorioService.eliminarDocumentos(uuidsDocsABorrar)
 	}
 	

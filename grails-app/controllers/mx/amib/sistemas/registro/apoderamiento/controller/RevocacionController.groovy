@@ -24,7 +24,7 @@ import mx.amib.sistemas.external.expediente.service.SustentanteService
 @Transactional(readOnly = true)
 class RevocacionController {
 
-    static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
+    static allowedMethods = [save: "POST", update: "PUT", delete: ["DELETE","GET"]]
 
 	//servicios
 	EntidadFinancieraService entidadFinancieraService
@@ -75,6 +75,13 @@ class RevocacionController {
 	}
 	
     def show(Revocacion revocacionInstance) {
+		
+		revocacionInstance.nombreGrupoFinanciero = entidadFinancieraService.obtenerGrupoFinanciero(revocacionInstance.idGrupofinanciero)?.nombre
+		revocacionInstance.nombreInstitucion = entidadFinancieraService.obtenerInstitucion(revocacionInstance.idInstitucion)?.nombre
+		revocacionInstance.documentosRespaldoRevocacion.each{
+			it.nombreDeArchivo = documentoRepositorioService.obtenerMetadatosDocumento(it.uuidDocumentoRepositorio)?.nombre;
+		}
+		revocacionInstance.notario.nombreEntidadFederativa = sepomexService.obtenerEntidadFederativa( revocacionInstance.notario.idEntidadFederativa ).nombre
         respond revocacionInstance
     }
 
@@ -196,14 +203,14 @@ class RevocacionController {
             return
         }
 
-        revocacionInstance.delete flush:true
-
+        //revocacionInstance.delete flush:true
+		revocacionService.delete(revocacionInstance)
+		
         request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.deleted.message', args: [message(code: 'Revocacion.label', default: 'Revocacion'), revocacionInstance.id])
+            '*'{
+                flash.message = message(code: 'mx.amib.sistemas.registro.apoderamiento.revocacion.deleted.message', args: [revocacionInstance.numeroEscritura,revocacionInstance.id])
                 redirect action:"index", method:"GET"
             }
-            '*'{ render status: NO_CONTENT }
         }
     }
 

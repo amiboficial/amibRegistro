@@ -88,6 +88,7 @@ class PoderController {
 		poderInstance.documentosRespaldoPoder.each{
 			it.nombreDeArchivo = documentoRepositorioService.obtenerMetadatosDocumento(it.uuidDocumentoRepositorio)?.nombre;
 		}
+		poderInstance.notario.nombreEntidadFederativa = sepomexService.obtenerEntidadFederativa( poderInstance.notario.idEntidadFederativa ).nombre
         respond poderInstance
     }
 
@@ -287,7 +288,7 @@ class PoderController {
         request.withFormat {
             '*'{
                 //flash.message = message(code: 'default.deleted.message', args: [message(code: 'Poder.label', default: 'Poder'), poderInstance.id])
-				flash.message = message(code: 'mx.amib.sistemas.registro.apoderado.deleted.message', args: [poderInstance.numeroEscritura,poderInstance.id])
+				flash.message = message(code: 'mx.amib.sistemas.registro.apoderamiento.poder.deleted.message', args: [poderInstance.numeroEscritura,poderInstance.id])
                 redirect action:"index", method:"GET"
             }
         }

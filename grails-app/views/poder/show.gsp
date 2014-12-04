@@ -131,7 +131,7 @@
 					</label>
 					
 		            <div class="col-md-9 col-sm-9">						
-						<p class="form-control-static">${poderInstance?.notario?.idEntidadFederativa}</p>
+						<p class="form-control-static">${poderInstance?.notario?.nombreEntidadFederativa}</p>
 		            </div>
 				</div>
 				

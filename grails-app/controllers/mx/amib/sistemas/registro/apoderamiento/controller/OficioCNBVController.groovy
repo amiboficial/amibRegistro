@@ -15,9 +15,26 @@ class OficioCNBVController {
 	def sustentanteService
 	def oficioCNBVService
 	
+	// fltType (filtro de búsqueda)
+	// 'DO' -> Datos de OficioCNBV
+	// 'AMAT' -> Por matricula de autorizado
+	// 'ANOM' -> Por nombre de autorizado
     def index(Integer max) {
-        params.max = Math.min(max ?: 10, 100)
-        respond OficioCNBV.list(params), model:[oficioCNBVInstanceCount: OficioCNBV.count()]
+        def resultList = null
+		long resultListCount = 0
+		params.max = Math.min(max ?: 10, 100)
+		params.fltType = params.fltType?:'' 
+		
+		if(params.fltType == ''){
+			resultList = OficioCNBV.list(params)
+			resultListCount = OficioCNBV.count()
+		}
+		else if(params.fltType == 'ANOM'){
+			resultList = oficioCNBVService.searchByNombre(params.max, params.offset, params.sort, params.order, params.fltANom)
+			resultListCount = resultList.size()
+		}
+		
+        respond resultList, model:[oficioCNBVInstanceCount: resultListCount]
     }
 
     def show(OficioCNBV oficioCNBVInstance) {

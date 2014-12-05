@@ -1,156 +1,215 @@
-
-<%@ page import="mx.amib.sistemas.registro.apoderamiento.model.Revocacion" %>
-<!DOCTYPE html>
+<%@ page contentType="text/html;charset=UTF-8" %>
 <html>
-	<head>
-		<meta name="layout" content="main">
-		<g:set var="entityName" value="${message(code: 'revocacion.label', default: 'Revocacion')}" />
-		<title><g:message code="default.show.label" args="[entityName]" /></title>
-	</head>
-	<body>
-		<a href="#show-revocacion" class="skip" tabindex="-1"><g:message code="default.link.skip.label" default="Skip to content&hellip;"/></a>
-		<div class="nav" role="navigation">
-			<ul>
-				<li><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></li>
-				<li><g:link class="list" action="index"><g:message code="default.list.label" args="[entityName]" /></g:link></li>
-				<li><g:link class="create" action="create"><g:message code="default.new.label" args="[entityName]" /></g:link></li>
-			</ul>
-		</div>
-		<div id="show-revocacion" class="content scaffold-show" role="main">
-			<h1><g:message code="default.show.label" args="[entityName]" /></h1>
-			<g:if test="${flash.message}">
-			<div class="message" role="status">${flash.message}</div>
-			</g:if>
-			<ol class="property-list revocacion">
+<head>
+	<meta name="layout" content="main">
+	<g:set var="entityName" value="${message(code: 'revocacion.label', default: 'Poder')}" />
+	<title>Registro 0.1 - Datos de la Revocación</title>
+</head>
+<body>
+	<a id="anchorForm"></a>
+	
+	<!-- INICIA: BREADCRUMB ADMIN -->
+	<ul class="breadcrumb">
+		<li><a href="#">Gestión</a><span class="divider"></span></li>
+		<li><a href="<g:createLink controller="revocacion" action="index" />">Revocaciones</a></li>
+		<li><a href="#">Datos de la revocación</a></li>
+	</ul>
+	<!-- FIN: BREADCRUMB ADMIN -->
+	
+	<h2><strong>Datos de la revocación</strong></h2>
+	
+	<fieldset>
+		<legend>Acciones</legend>
+		
+		<button id="btnNuevaRevoc" type="button" onclick="btnNuevaRevoc_click()" class="btn btn-default btn-primary"><span class="glyphicon glyphicon-file"></span> Nuevo</button>
+		&nbsp;&nbsp;&nbsp;
+		<button id="btnEditarRevoc" type="button" onclick="btnEditarRevoc_click(${revocacionInstance?.id})" class="btn btn-default btn-primary"><span class="glyphicon glyphicon-pencil"></span> Editar</button>
+		<button id="btnEliminarRevoc" type="button" onclick="btnEliminarRevoc_click(${revocacionInstance?.id})" class="btn btn-default btn-primary"><span class="glyphicon glyphicon-trash"></span> Eliminar</button>
+		
+	</fieldset>
+	
+	<fieldset>
+		<legend>Revocación</legend>
+		
+		<fieldset>
+			<legend><i>Datos del representante legal</i></legend>
+			<div id="divRepLegalNom" class="form-group">
+				<label class="col-md-2 col-sm-3 control-label">
+	            	<g:message code="revocacion.representanteLegalNombre.label" default="Nombre" />
+				</label>
+	            <div class="col-md-9 col-sm-9">
+	            	<p class="form-control-static">${revocacionInstance?.representanteLegalNombre}</p>
+	            </div>
+			</div>
+
+			<div id="divAp1" class="form-group">
+				<label class="col-md-2 col-sm-3 control-label">
+					<g:message code="revocacion.representanteLegalApellido1.label" default="Primer apellido" />
+				</label>
+				<div class="col-md-9 col-sm-9">
+					<p class="form-control-static">${revocacionInstance?.representanteLegalApellido1}</p>
+				</div>
+			</div>
 			
-				<g:if test="${revocacionInstance?.representanteLegalNombre}">
-				<li class="fieldcontain">
-					<span id="representanteLegalNombre-label" class="property-label"><g:message code="revocacion.representanteLegalNombre.label" default="Representante Legal Nombre" /></span>
-					
-						<span class="property-value" aria-labelledby="representanteLegalNombre-label"><g:fieldValue bean="${revocacionInstance}" field="representanteLegalNombre"/></span>
-					
-				</li>
-				</g:if>
+			<div id="divAp2" class="form-group">
+				<label class="col-md-2 col-sm-3 control-label">
+					<g:message code="revocacion.representanteLegalApellido2.label" default="Segundo apellido" />					
+				</label>
+				<div class="col-md-9 col-sm-9">
+					<p class="form-control-static">${revocacionInstance?.representanteLegalApellido2}</p>
+				</div>
+			</div>
+		</fieldset>
+		
+		<fieldset>
+			<legend><i>Datos de la institución o grupo financiero</i></legend>
 			
-				<g:if test="${revocacionInstance?.representanteLegalApellido1}">
-				<li class="fieldcontain">
-					<span id="representanteLegalApellido1-label" class="property-label"><g:message code="revocacion.representanteLegalApellido1.label" default="Representante Legal Apellido1" /></span>
-					
-						<span class="property-value" aria-labelledby="representanteLegalApellido1-label"><g:fieldValue bean="${revocacionInstance}" field="representanteLegalApellido1"/></span>
-					
-				</li>
-				</g:if>
+			<div id="divAdmGrupoFinanciero" class="form-group">
+				<label class="col-md-2 col-sm-3 control-label">
+	            	<g:message code="revocacion.groupoFinanciero.label" default="Grupo financiero" />
+				</label>
+				
+	            <div class="col-md-9 col-sm-9">						
+					<p class="form-control-static">${revocacionInstance?.nombreGrupoFinanciero}</p>
+	            </div>
+			</div>
 			
-				<g:if test="${revocacionInstance?.representanteLegalApellido2}">
-				<li class="fieldcontain">
-					<span id="representanteLegalApellido2-label" class="property-label"><g:message code="revocacion.representanteLegalApellido2.label" default="Representante Legal Apellido2" /></span>
-					
-						<span class="property-value" aria-labelledby="representanteLegalApellido2-label"><g:fieldValue bean="${revocacionInstance}" field="representanteLegalApellido2"/></span>
-					
-				</li>
-				</g:if>
+			<div id="divAdmInstitucion" class="form-group">
+				<label class="col-md-2 col-sm-3 control-label">
+	            	<g:message code="revocacion.institucion.label" default="Institución" />
+				</label>
+				<div class="col-md-9 col-sm-9">
+					<p class="form-control-static">${revocacionInstance?.nombreInstitucion}</p>
+				</div>
+			</div>
 			
-				<g:if test="${revocacionInstance?.fechaCreacion}">
-				<li class="fieldcontain">
-					<span id="fechaCreacion-label" class="property-label"><g:message code="revocacion.fechaCreacion.label" default="Fecha Creacion" /></span>
-					
-						<span class="property-value" aria-labelledby="fechaCreacion-label"><g:formatDate date="${revocacionInstance?.fechaCreacion}" /></span>
-					
-				</li>
-				</g:if>
+		</fieldset>
+		
+		<fieldset>
+			<legend><i>Datos de la revocación</i></legend>
 			
-				<g:if test="${revocacionInstance?.fechaModificacion}">
-				<li class="fieldcontain">
-					<span id="fechaModificacion-label" class="property-label"><g:message code="revocacion.fechaModificacion.label" default="Fecha Modificacion" /></span>
-					
-						<span class="property-value" aria-labelledby="fechaModificacion-label"><g:formatDate date="${revocacionInstance?.fechaModificacion}" /></span>
-					
-				</li>
-				</g:if>
+			<div id="divPdrNumEscrit" class="form-group">
+				<label class="col-md-2 col-sm-3 control-label">
+	            	<g:message code="revocacion.numeroEscritura.label" default="Numero de escritura" />
+				</label>
+				
+	            <div class="col-md-9 col-sm-9">						
+					<p class="form-control-static">${revocacionInstance?.numeroEscritura}</p>
+	            </div>
+			</div>
 			
-				<g:if test="${revocacionInstance?.documentosRespaldoRevocacion}">
-				<li class="fieldcontain">
-					<span id="documentosRespaldoRevocacion-label" class="property-label"><g:message code="revocacion.documentosRespaldoRevocacion.label" default="Documentos Respaldo Revocacion" /></span>
-					
-						<g:each in="${revocacionInstance.documentosRespaldoRevocacion}" var="d">
-						<span class="property-value" aria-labelledby="documentosRespaldoRevocacion-label"><g:link controller="documentoRespaldoRevocacion" action="show" id="${d.id}">${d?.encodeAsHTML()}</g:link></span>
-						</g:each>
-					
-				</li>
-				</g:if>
+			<div id="divFhApod" class="form-group">
+				<label class="col-md-2 col-sm-3 control-label">
+	            	<g:message code="revocacion.fechaApoderamiento.label" default="Fecha de revocación" />
+				</label>
+				<div class="col-md-9 col-sm-9">
+					<p class="form-control-static">${revocacionInstance?.fechaRevocacion}</p>
+				</div>
+			</div>
+		</fieldset>
+		
+		<fieldset>
+			<legend><i>Datos del notario</i></legend>
+			<div id="divNumNotario" class="form-group">
+				<label class="col-md-2 col-sm-3 control-label">
+	            	<g:message code="revocacion.notario.numero.label" default="Número" />
+				</label>
+				
+	            <div class="col-md-9 col-sm-9">						
+					<p class="form-control-static">${revocacionInstance?.notario?.numeroNotario}</p>
+	            </div>
+			</div>
+			<div id="divNotarioEntidadFederativa" class="form-group">
+				<label class="col-md-2 col-sm-3 control-label">
+	            	<g:message code="revocacion.notario.entidadFederativa.label" default="Entidad Federativa"  />
+				</label>
+				
+	            <div class="col-md-9 col-sm-9">						
+					<p class="form-control-static">${revocacionInstance?.notario?.nombreEntidadFederativa}</p>
+	            </div>
+			</div>
+			<div id="divNombreCompleto" class="form-group">
+				<label class="col-md-2 col-sm-3 control-label">
+	            	<g:message code="revocacion.notario.nombreCompletro.label" default="Nombre" />
+				</label>
+				
+	            <div class="col-md-9 col-sm-9">						
+					<p class="form-control-static">${revocacionInstance?.notario?.nombre + ' ' + revocacionInstance?.notario?.apellido1 + ' ' + revocacionInstance?.notario?.apellido2}</p>
+	            </div>
+			</div>
+		</fieldset>
+		
+		<fieldset>
+			<legend><i>Datos de apoderados</i></legend>
 			
-				<g:if test="${revocacionInstance?.esRegistradoPorGrupoFinanciero}">
-				<li class="fieldcontain">
-					<span id="esRegistradoPorGrupoFinanciero-label" class="property-label"><g:message code="revocacion.esRegistradoPorGrupoFinanciero.label" default="Es Registrado Por Grupo Financiero" /></span>
-					
-						<span class="property-value" aria-labelledby="esRegistradoPorGrupoFinanciero-label"><g:formatBoolean boolean="${revocacionInstance?.esRegistradoPorGrupoFinanciero}" /></span>
-					
-				</li>
-				</g:if>
+			<table class="table">
+				<thead>
+					<tr>
+						<th style='width:8%;'>Matrícula</th>
+						<th>Nombre completo</th>
+						<th style='width:32%'>Motivo</th>
+						<th>Fecha de baja</th>
+					</tr>
+				</thead>
+				<tbody id="tbdyApoderados">
+					<g:each in="${revocacionInstance?.revocados}">
+						<tr>
+							<td>${it.numeroMatricula}</td>
+							<td>${it.nombreCompleto}</td>
+							<td>${it.motivo}</td>
+							<td>${it.fechaBaja}</td>
+						</tr>
+					</g:each>			
+				</tbody>
+			</table>
 			
-				<g:if test="${revocacionInstance?.fechaRevocacion}">
-				<li class="fieldcontain">
-					<span id="fechaRevocacion-label" class="property-label"><g:message code="revocacion.fechaRevocacion.label" default="Fecha Apoderamiento" /></span>
-					
-						<span class="property-value" aria-labelledby="fechaRevocacion-label"><g:formatDate date="${revocacionInstance?.fechaRevocacion}" /></span>
-					
-				</li>
-				</g:if>
-			
-				<g:if test="${revocacionInstance?.idGrupofinanciero}">
-				<li class="fieldcontain">
-					<span id="idGrupofinanciero-label" class="property-label"><g:message code="revocacion.idGrupofinanciero.label" default="Id Grupofinanciero" /></span>
-					
-						<span class="property-value" aria-labelledby="idGrupofinanciero-label"><g:fieldValue bean="${revocacionInstance}" field="idGrupofinanciero"/></span>
-					
-				</li>
-				</g:if>
-			
-				<g:if test="${revocacionInstance?.idInstitucion}">
-				<li class="fieldcontain">
-					<span id="idInstitucion-label" class="property-label"><g:message code="revocacion.idInstitucion.label" default="Id Institucion" /></span>
-					
-						<span class="property-value" aria-labelledby="idInstitucion-label"><g:fieldValue bean="${revocacionInstance}" field="idInstitucion"/></span>
-					
-				</li>
-				</g:if>
-			
-				<g:if test="${revocacionInstance?.notario}">
-				<li class="fieldcontain">
-					<span id="notario-label" class="property-label"><g:message code="revocacion.notario.label" default="Notario" /></span>
-					
-						<span class="property-value" aria-labelledby="notario-label"><g:link controller="notario" action="show" id="${revocacionInstance?.notario?.id}">${revocacionInstance?.notario?.encodeAsHTML()}</g:link></span>
-					
-				</li>
-				</g:if>
-			
-				<g:if test="${revocacionInstance?.numeroEscritura}">
-				<li class="fieldcontain">
-					<span id="numeroEscritura-label" class="property-label"><g:message code="revocacion.numeroEscritura.label" default="Numero Escritura" /></span>
-					
-						<span class="property-value" aria-labelledby="numeroEscritura-label"><g:fieldValue bean="${revocacionInstance}" field="numeroEscritura"/></span>
-					
-				</li>
-				</g:if>
-			
-				<g:if test="${revocacionInstance?.revocados}">
-				<li class="fieldcontain">
-					<span id="revocados-label" class="property-label"><g:message code="revocacion.revocados.label" default="Revocados" /></span>
-					
-						<g:each in="${revocacionInstance.revocados}" var="r">
-						<span class="property-value" aria-labelledby="revocados-label"><g:link controller="revocado" action="show" id="${r.id}">${r?.encodeAsHTML()}</g:link></span>
-						</g:each>
-					
-				</li>
-				</g:if>
-			
-			</ol>
-			<g:form url="[resource:revocacionInstance, action:'delete']" method="DELETE">
-				<fieldset class="buttons">
-					<g:link class="edit" action="edit" resource="${revocacionInstance}"><g:message code="default.button.edit.label" default="Edit" /></g:link>
-					<g:actionSubmit class="delete" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" />
-				</fieldset>
-			</g:form>
-		</div>
-	</body>
+		</fieldset>
+		
+		<fieldset>
+			<legend><i>Documentos de respaldo</i></legend>
+			<table class="table">
+				<thead>
+					<tr>
+						<th style='width:32%;'>Tipo de documento</th>
+						<th>Nombre de archivo</th>
+						<th style='width:18%'>...</th>
+					</tr>
+				</thead>
+				
+				<tbody id="tbdyDocs">
+					<g:each in="${revocacionInstance?.documentosRespaldoRevocacion}">
+						<tr>
+							<td>${it.tipoDocumentoRespaldoRevocacion?.descripcion}</td>
+							<td>${it.nombreDeArchivo}</td>
+							<td>
+								<button type="button" onclick="btnDescargar_click('${it.uuidDocumentoRepositorio}')" class="download btn btn-info btn-xs">Descargar</button>
+							</td>
+						</tr>
+					</g:each>
+				</tbody>
+			</table>
+		</fieldset>
+	</fieldset>
+	
+	<!-- INCIA: SCRIPTS ESPECIFICOS DE VISTA -->
+	<script>
+	function btnNuevaRevoc_click(){
+		window.location.href = "<g:createLink controller="revocacion" action="create" />";
+	}
+	function btnEditarRevoc_click(id){
+		window.location.href = "<g:createLink controller="revocacion" action="edit" />/"+id;
+	}
+	function btnEliminarRevoc_click(id){
+		var url = '<g:createLink controller="revocacion" action="delete" />/'+id
+		var r = confirm("¿Desea eliminar el elemento seleccionado?");
+		if(r == true)
+			window.location.href = url;
+	}
+	function btnDescargar_click(uuid){
+		window.open("<g:createLink controller="documento" action="download" />/"+uuid);
+	}
+	</script>
+	<!-- FIN: SCRIPTS ESPECIFICOS DE VISTA -->
+	
+</body>
 </html>

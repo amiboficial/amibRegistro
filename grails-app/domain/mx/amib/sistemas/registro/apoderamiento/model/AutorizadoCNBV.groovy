@@ -27,4 +27,8 @@ class AutorizadoCNBV {
     static constraints = {
 		nombreCompleto maxSize: 1000
     }
+	
+	public String toString(){
+		return numeroMatricula + ":" + nombreCompleto;
+	}
 }

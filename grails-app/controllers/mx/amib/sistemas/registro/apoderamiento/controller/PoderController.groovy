@@ -44,6 +44,7 @@ class PoderController {
 	
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
+		params.offset = params.offset?:0
 		
 		params.fltNumEsc = params.fltNumEsc?:'-1'
 		

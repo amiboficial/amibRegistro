@@ -98,9 +98,9 @@
 				<table class="table">
 					<thead>
 						<tr>
-							<g:sortableColumn property="id" title="${message(code: 'revocacion.id.label', default: 'ID')}" />
-							<g:sortableColumn property="fechaRevocacion" title="${message(code: 'revocacion.fechaRevocacion.label', default: 'Fec. Apoderamiento')}"  />
-							<g:sortableColumn property="numeroEscritura" title="${message(code: 'revocacion.numeroEscritura.label', default: 'Num. Escritura')}" />
+							<g:sortableColumn property="id" title="${message(code: 'revocacion.id.label', default: 'ID')}" params="[fltNumEsc: viewModelInstance.fltNumEsc,fltFecIni_day: viewModelInstance.fltFecIniDay,fltFecIni_month: viewModelInstance.fltFecIniMonth,fltFecIni_year: viewModelInstance.fltFecIniYear,fltFecFn_day: viewModelInstance.fltFecFnDay,fltFecFn_month: viewModelInstance.fltFecFnMonth,fltFecFn_year: viewModelInstance.fltFecFnYear,filterIdGrupoFinanciero: viewModelInstance.filterIdGrupoFinanciero,filterIdInstitucion: viewModelInstance.filterIdInstitucion]"/>
+							<g:sortableColumn property="fechaRevocacion" title="${message(code: 'revocacion.fechaRevocacion.label', default: 'Fec. Apoderamiento')}" params="[fltNumEsc: viewModelInstance.fltNumEsc,fltFecIni_day: viewModelInstance.fltFecIniDay,fltFecIni_month: viewModelInstance.fltFecIniMonth,fltFecIni_year: viewModelInstance.fltFecIniYear,fltFecFn_day: viewModelInstance.fltFecFnDay,fltFecFn_month: viewModelInstance.fltFecFnMonth,fltFecFn_year: viewModelInstance.fltFecFnYear,filterIdGrupoFinanciero: viewModelInstance.filterIdGrupoFinanciero,filterIdInstitucion: viewModelInstance.filterIdInstitucion]" />
+							<g:sortableColumn property="numeroEscritura" title="${message(code: 'revocacion.numeroEscritura.label', default: 'Num. Escritura')}" params="[fltNumEsc: viewModelInstance.fltNumEsc,fltFecIni_day: viewModelInstance.fltFecIniDay,fltFecIni_month: viewModelInstance.fltFecIniMonth,fltFecIni_year: viewModelInstance.fltFecIniYear,fltFecFn_day: viewModelInstance.fltFecFnDay,fltFecFn_month: viewModelInstance.fltFecFnMonth,fltFecFn_year: viewModelInstance.fltFecFnYear,filterIdGrupoFinanciero: viewModelInstance.filterIdGrupoFinanciero,filterIdInstitucion: viewModelInstance.filterIdInstitucion]"/>
 							<th>...</th>
 						</tr>
 					</thead>
@@ -120,7 +120,7 @@
 					</tbody>
 				</table>
 				<div class="pagination">
-					<g:paginate total="${poderInstanceCount?:0}"  />
+					<g:paginate total="${poderInstanceCount?:0}" params="[fltNumEsc: viewModelInstance.fltNumEsc,fltFecIni_day: viewModelInstance.fltFecIniDay,fltFecIni_month: viewModelInstance.fltFecIniMonth,fltFecIni_year: viewModelInstance.fltFecIniYear,fltFecFn_day: viewModelInstance.fltFecFnDay,fltFecFn_month: viewModelInstance.fltFecFnMonth,fltFecFn_year: viewModelInstance.fltFecFnYear,filterIdGrupoFinanciero: viewModelInstance.filterIdGrupoFinanciero,filterIdInstitucion: viewModelInstance.filterIdInstitucion]" />
 				</div>
 			</div>
 		</fieldset>

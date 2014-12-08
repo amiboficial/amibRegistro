@@ -20,14 +20,15 @@ import groovy.json.StringEscapeUtils
 @Transactional
 class RevocacionService {
 
+	class SearchResult {
+		def list
+		def count
+	}
+	
 	def sustentanteService
 	def notarioService
 	def entidadFinancieraService
 	def documentoRepositorioService
-	
-    def serviceMethod() {
-
-    }
 	
 	def save(Revocacion revocacion, List<String> revocadosJson, List<String> documentosJson, int notarioIdEntidadFederativa, int notarioNumero ){
 		List<DocumentoRepositorioTO> docsAEnviar = new ArrayList<DocumentoRepositorioTO>()
@@ -273,6 +274,7 @@ class RevocacionService {
 		Calendar filterCalFechaDel = null
 		Calendar filterCalFechaAl = null
 						
+		String strHqlCount = null
 		List<String> hqlFilters = new ArrayList<String>();
 		String whereKeyword = "where ";
 		Boolean whereKeywordNeeded = false;
@@ -358,13 +360,13 @@ class RevocacionService {
 					sbHql.append(it)
 			}
 		}
+		strHqlCount = "select count(n) " + sbHql.toString()
 		sbHql.append("order by n.").append(sort).append(" ").append(order)
 		
-		println sbHql.toString()
-		println (namedParameters as JSON)
-		
-		def results = Revocacion.findAll(sbHql.toString(),namedParameters,[max: max, offset: offset])
-		return results
+		def searchResult = new SearchResult()
+		searchResult.count = (Revocacion.executeQuery(strHqlCount,namedParameters))[0]
+		searchResult.list = Revocacion.findAll(sbHql.toString(),namedParameters,[max: max, offset: offset])
+		return searchResult
 		
 	}
 	

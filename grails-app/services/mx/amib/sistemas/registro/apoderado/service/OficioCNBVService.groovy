@@ -164,10 +164,11 @@ class OficioCNBVService {
 	}
 	
 	def searchByMatricula(Integer max, Integer offset, String sort, String order, Integer filterMatricula){
-		List<String> hqlFilters = new ArrayList<String>();
-		String whereKeyword = "where ";
-		Boolean whereKeywordNeeded = false;
+		List<String> hqlFilters = new ArrayList<String>()
+		String whereKeyword = "where "
+		Boolean whereKeywordNeeded = false
 		StringBuilder sbHql = new StringBuilder()
+		StringBuilder strHqlCount = new StringBuilder()
 		Map<String,Object> namedParameters = new HashMap<String,Object>()
 		
 		if(max == null || max <= 0){
@@ -195,31 +196,37 @@ class OficioCNBVService {
 			namedParameters.put("numeroMatricula",filterMatricula)
 		}
 		
-		sbHql.append("select a.oficioCNBV from AutorizadoCNBV as a ")
+		strHqlCount.append("select count(distinct a.oficioCNBV) from AutorizadoCNBV as a ")
+		sbHql.append("select distinct o from AutorizadoCNBV as a inner join a.oficioCNBV o ")
 		if(whereKeywordNeeded){
 			sbHql.append(whereKeyword)
+			strHqlCount.append(whereKeyword)
 			hqlFilters.each{
-				if(it != hqlFilters.last())
+				if(it != hqlFilters.last()){
 					sbHql.append(it).append("and ")
-				else
+					strHqlCount.append(it).append("and ")
+				}
+				else{
 					sbHql.append(it)
+					strHqlCount.append(it)
+				}
 			}
 		}
-		sbHql.append("order by a.oficioCNBV.").append(sort).append(" ").append(order)
+		sbHql.append("order by o.").append(sort).append(" ").append(order)
 		
-		println sbHql.toString()
-		println (namedParameters as JSON)
-		
-		def results = OficioCNBV.executeQuery(sbHql.toString(),namedParameters,[max: max, offset: offset])
-		return results
+		def searchResult = new SearchResult()
+		searchResult.count = OficioCNBV.executeQuery(strHqlCount.toString(),namedParameters)[0]
+		searchResult.list = OficioCNBV.executeQuery(sbHql.toString(),namedParameters,[max: max, offset: offset])
+		return searchResult
 	}
 	
 	def searchByNombre(Integer max, Integer offset, String sort, String order, String filterNombre){
 		
-		List<String> hqlFilters = new ArrayList<String>();
-		String whereKeyword = "where ";
-		Boolean whereKeywordNeeded = false;
+		List<String> hqlFilters = new ArrayList<String>()
+		String whereKeyword = "where "
+		Boolean whereKeywordNeeded = false
 		StringBuilder sbHql = new StringBuilder()
+		StringBuilder strHqlCount = new StringBuilder()
 		Map<String,Object> namedParameters = new HashMap<String,Object>()
 		
 		if(max == null || max <= 0){
@@ -246,23 +253,27 @@ class OficioCNBVService {
 			whereKeywordNeeded = true
 			namedParameters.put("nombreCompleto","%"+filterNombre+"%")
 		}
-		
-		sbHql.append("select a.oficioCNBV from AutorizadoCNBV as a ")
+		strHqlCount.append("select count(distinct a.oficioCNBV.id) from AutorizadoCNBV as a ")
+		sbHql.append("select distinct o from AutorizadoCNBV as a inner join a.oficioCNBV o ")
 		if(whereKeywordNeeded){
 			sbHql.append(whereKeyword)
+			strHqlCount.append(whereKeyword)
 			hqlFilters.each{
-				if(it != hqlFilters.last())
+				if(it != hqlFilters.last()){
 					sbHql.append(it).append("and ")
-				else
+					strHqlCount.append(it).append("and ")
+				}
+				else{
 					sbHql.append(it)
+					strHqlCount.append(it)
+				}
 			}
 		}
-		sbHql.append("order by a.oficioCNBV.").append(sort).append(" ").append(order)
+		sbHql.append("order by o.").append(sort).append(" ").append(order)
 		
-		println sbHql.toString()
-		println (namedParameters as JSON)
-		
-		def results = OficioCNBV.executeQuery(sbHql.toString(),namedParameters,[max: max, offset: offset])
-		return results
+		def searchResult = new SearchResult()
+		searchResult.count = OficioCNBV.executeQuery(strHqlCount.toString(), namedParameters)[0]
+		searchResult.list = OficioCNBV.executeQuery(sbHql.toString(),namedParameters,[max: max, offset: offset])
+		return searchResult
 	}
 }

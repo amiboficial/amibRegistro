@@ -47,13 +47,15 @@ class OficioCNBVController {
 		}
 		else if(params.fltType == 'AMAT'){
 			params.fltAMat = params.fltAMat?:'-1'
-			resultList = oficioCNBVService.searchByMatricula(params.max, params.offset, params.sort, params.order, params.fltAMat.toInteger())
-			resultListCount = resultList.size()
+			result = oficioCNBVService.searchByMatricula(params.max, params.offset.toInteger(), params.sort, params.order, params.fltAMat.toInteger())
+			resultList = result.list
+			resultListCount = result.count
 		}
 		else if(params.fltType == 'ANOM'){
 			params.fltANom = params.fltANom?:""
-			resultList = oficioCNBVService.searchByNombre(params.max, params.offset, params.sort, params.order, params.fltANom)
-			resultListCount = resultList.size()
+			result = oficioCNBVService.searchByNombre(params.max, params.offset.toInteger(), params.sort, params.order, params.fltANom)
+			resultList = result.list
+			resultListCount = result.count
 		}
 		
         respond resultList, model:[oficioCNBVInstanceCount: resultListCount, viewModelInstance: oivm]

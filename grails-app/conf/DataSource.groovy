@@ -19,6 +19,7 @@ environments {
 		dataSource {
 			dbCreate = "validate" // one of 'create', 'create-drop', 'update', 'validate', ''
 			url = "jdbc:sqlserver://bima-devqa-serv:1433;databaseName=dbamibregistro"
+			logSql = true
 		}
 	}
 	test {

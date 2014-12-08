@@ -57,11 +57,11 @@ class PoderController {
 		params.filterIdGrupoFinanciero = params.filterIdGrupoFinanciero?:'-1'
 		params.filterIdInstitucion = params.filterIdInstitucion?:'-1'
 		
-        respond poderService.search(params.max, params.offset, params.sort, params.order, params.fltNumEsc?.toInteger(),
+		def result = poderService.search(params.max, params.offset.toInteger(), params.sort, params.order, params.fltNumEsc?.toInteger(),
 									params.fltFecIni_day?.toInteger(), params.fltFecIni_month?.toInteger(), params.fltFecIni_year?.toInteger(), 
 									params.fltFecFn_day?.toInteger(), params.fltFecFn_month?.toInteger(), params.fltFecFn_year?.toInteger(), 
-									params.filterIdGrupoFinanciero?.toLong(), params.filterIdInstitucion?.toLong()), 
-				model:[poderInstanceCount: Poder.count(), viewModelInstance: this.getIndexViewModel(params)]
+									params.filterIdGrupoFinanciero?.toLong(), params.filterIdInstitucion?.toLong())
+        respond result.list, model:[poderInstanceCount: result.count, viewModelInstance: this.getIndexViewModel(params)]
     }
 
 	private PoderIndexViewModel getIndexViewModel(def params){

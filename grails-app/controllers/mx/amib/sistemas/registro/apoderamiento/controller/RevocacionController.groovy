@@ -48,12 +48,12 @@ class RevocacionController {
 		params.filterIdGrupoFinanciero = params.filterIdGrupoFinanciero?:'-1'
 		params.filterIdInstitucion = params.filterIdInstitucion?:'-1'
 		
-		def results = revocacionService.search(params.max, params.offset, params.sort, params.order, params.fltNumEsc?.toInteger(),
+		def result = revocacionService.search(params.max, params.offset, params.sort, params.order, params.fltNumEsc?.toInteger(),
 									params.fltFecIni_day?.toInteger(), params.fltFecIni_month?.toInteger(), params.fltFecIni_year?.toInteger(),
 									params.fltFecFn_day?.toInteger(), params.fltFecFn_month?.toInteger(), params.fltFecFn_year?.toInteger(),
 									params.filterIdGrupoFinanciero?.toLong(), params.filterIdInstitucion?.toLong())
 		
-		respond results, model:[revocacionInstanceCount: results.size(), viewModelInstance: this.getIndexViewModel(params)]
+		respond result.list, model:[revocacionInstanceCount: result.count, viewModelInstance: this.getIndexViewModel(params)]
     }
 
 	private RevocacionIndexViewModel getIndexViewModel(def params){

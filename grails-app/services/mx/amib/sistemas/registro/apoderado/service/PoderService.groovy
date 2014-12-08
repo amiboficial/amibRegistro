@@ -24,6 +24,11 @@ import groovy.json.StringEscapeUtils
 @Transactional
 class PoderService {
 
+	class SearchResult {
+		def list
+		def count
+	}
+	
 	NotarioService notarioService
 	DocumentoRepositorioService documentoRepositorioService
 	SepomexService sepomexService
@@ -365,6 +370,7 @@ class PoderService {
 		Boolean whereKeywordNeeded = false;
 		StringBuilder sbHql = new StringBuilder()
 		Map<String,Object> namedParameters = new HashMap<String,Object>()
+		String strHqlCount = null
 		
 		if(max == null || max <= 0){
 			max = 10
@@ -445,13 +451,14 @@ class PoderService {
 					sbHql.append(it)
 			}
 		}
+		
+		strHqlCount = "select count(n) " + sbHql.toString()
 		sbHql.append("order by n.").append(sort).append(" ").append(order)
 		
-		println sbHql.toString()
-		println (namedParameters as JSON)
-		
-		def results = Poder.findAll(sbHql.toString(),namedParameters,[max: max, offset: offset])
-		return results
+		def searchResult = new SearchResult()
+		searchResult.count = (Poder.executeQuery(strHqlCount,namedParameters))[0]
+		searchResult.list = Poder.findAll(sbHql.toString(),namedParameters,[max: max, offset: offset])
+		return searchResult
 	}
 }
 

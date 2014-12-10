@@ -11,23 +11,16 @@
 	<a id="anchorForm"></a>
 	<ul class="breadcrumb">
 		<li><a href="#">Gestión de catálogos</a><span class="divider"></span></li>
-		<li><a href="#">Gestión de notarios</a></li>
-	</ul>
-	<ul class="breadcrumb">
-		<li><a href="#">Información</a><span class="divider"></span></li>
-		<li><a href="#">Catálogo de notarios</a></li>
+		<li><a href="#">Notarios</a></li>
 	</ul>
 	
-	<h2><strong>Gestión de notarios</strong></h2>
-	<h2><strong>Catálogo de notarios</strong></h2>
+	<h2><strong>Notarios</strong></h2>
 	
 	<form id="frmApp" class="form-horizontal" role="form" action="<g:createLink controller="notario" action="index" />" method="get">
 		<fieldset>
 			<legend>Acciones</legend>
 			
-			<button type="button" class="btn btn-default btn-primary"><span class="glyphicon glyphicon-file"></span> Nuevo notario</button>
-			<button type="button" class="btn btn-default btn-primary"><span class="glyphicon glyphicon-info-sign"></span> Sugerir cambio</button>
-			<button type="button" class="btn btn-default btn-primary"><span class="glyphicon glyphicon-list"></span> Ver sugerencias</button>
+			<button id="btnNuevo" type="button" class="btn btn-default btn-primary"><span class="glyphicon glyphicon-file"></span> Nuevo notario</button>
 			
 		</fieldset>
 		<fieldset>
@@ -107,9 +100,10 @@
 				<thead>
 						<tr>
 						
-							<g:sortableColumn property="idEntidadFederativa" title="${message(code: 'notario.idEntidadFederativa.label', default: 'Entidad Federativa')}" />
-							<g:sortableColumn property="numeroNotario" title="${message(code: 'notario.numeroNotario.label', default: 'Num.')}" />
-							<g:sortableColumn property="nombre" title="${message(code: 'notario.nombre.label', default: 'Nombre')}" />
+							<g:sortableColumn property="idEntidadFederativa" title="${message(code: 'notario.idEntidadFederativa.label', default: 'Entidad Federativa')}" params="[filterIdEntidadFederativa:viewModelInstance.filterIdEntidadFederativa, filterNumero:viewModelInstance.filterNumero, filterNombre:viewModelInstance.filterNombre, filterApellido1:viewModelInstance.filterApellido1,filterApellido2:viewModelInstance.filterApellido2]"/>
+							<g:sortableColumn property="numeroNotario" title="${message(code: 'notario.numeroNotario.label', default: 'Num.')}" params="[filterIdEntidadFederativa:viewModelInstance.filterIdEntidadFederativa, filterNumero:viewModelInstance.filterNumero, filterNombre:viewModelInstance.filterNombre, filterApellido1:viewModelInstance.filterApellido1,filterApellido2:viewModelInstance.filterApellido2]"/>
+							<g:sortableColumn property="nombre" title="${message(code: 'notario.nombre.label', default: 'Nombre')}" params="[filterIdEntidadFederativa:viewModelInstance.filterIdEntidadFederativa, filterNumero:viewModelInstance.filterNumero, filterNombre:viewModelInstance.filterNombre, filterApellido1:viewModelInstance.filterApellido1,filterApellido2:viewModelInstance.filterApellido2]"/>
+							<th>Vigente</th>
 							<th>...</th>
 						
 						</tr>
@@ -118,12 +112,18 @@
 					<g:each in="${notarioInstanceList}" status="i" var="notarioInstance">
 						<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
 						
-							<td><g:link action="show" id="${notarioInstance.id}">${viewModelInstance.entidadesFederativasNombresMap.get(notarioInstance.idEntidadFederativa)}</g:link></td>
+							<td>${viewModelInstance.entidadesFederativasNombresMap.get(notarioInstance.idEntidadFederativa)}</td>
 							<td>${fieldValue(bean: notarioInstance, field: "numeroNotario")}</td>
 							<td>${fieldValue(bean: notarioInstance, field: "nombre")} ${fieldValue(bean: notarioInstance, field: "apellido1")} ${fieldValue(bean: notarioInstance, field: "apellido2")}</td>
 							<td>
-								<button type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-pencil"></span><span class="hidden-xs hidden-sm"> Editar</span></button>
-								<button type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-trash"></span><span class="hidden-xs hidden-sm"> Eliminar</span></button>
+								<g:if test="${notarioInstance.vigente == true}">
+									<span class="glyphicon glyphicon-ok"></span>
+								</g:if>
+							</td>
+							<td>
+								<button id="btnVer" onclick="btnVer_click(${notarioInstance.id})" type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-eye-open"></span><span class="hidden-xs hidden-sm"> Ver detalle</span></button>
+								<button id="btnEditar" onclick="btnEditar_click(${notarioInstance.id})" type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-pencil"></span><span class="hidden-xs hidden-sm"> Editar</span></button>
+								<button id="btnEliminar" onclick="btnEliminar_click(${notarioInstance.id})" type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-trash"></span><span class="hidden-xs hidden-sm"> Eliminar</span></button>
 							</td>
 						
 						</tr>
@@ -131,7 +131,7 @@
 					</tbody>
 				</table>
 				<div class="pagination">
-					<g:paginate total="${notarioInstanceCount ?: 0}" />
+					<g:paginate total="${notarioInstanceCount ?: 0}" params="[filterIdEntidadFederativa:viewModelInstance.filterIdEntidadFederativa, filterNumero:viewModelInstance.filterNumero, filterNombre:viewModelInstance.filterNombre, filterApellido1:viewModelInstance.filterApellido1,filterApellido2:viewModelInstance.filterApellido2]"/>
 				</div>
 			</div>
 			
@@ -140,6 +140,24 @@
 	</form>
 	<script>
 
+	//callbacks para botones en lista
+	function btnVer_click(id){
+		window.location.href = '<g:createLink controller="notario" action="show" />/'+id;
+	}
+	function btnEditar_click(id){
+		window.location.href = '<g:createLink controller="notario" action="edit" />/'+id;
+	}
+	function btnEliminar_click(id){
+		var url = '<g:createLink controller="notario" action="delete" />/'+id
+		var r = confirm("¿Desea eliminar el elemento seleccionado?");
+		if(r == true)
+			window.location.href = url;
+	}
+	//callbacks para barra de acciones
+	$( "#btnNuevo" ).click(function() {
+		window.location.href = '<g:createLink controller="notario" action="create" />'
+	});
+	
 	$( "#btnLimpiar" ).click(function() {
 		$( "#selNotarioEntidadFederativa" ).val('-1');
 		$( "#txtNombre" ).val('');

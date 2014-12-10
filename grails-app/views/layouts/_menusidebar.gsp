@@ -10,7 +10,9 @@
 			<div id="divLineBreaks">
 			</div>
             <div class="list-group" >
-            	<a class="list-group-item colortitle">Gestión</a>
+            	<a class="list-group-item colortitle">Gestión de expediente</a>
+            	<a href="<g:createLink controller="notario" action="index" />" class="list-group-item"><span class="glyphicon glyphicon-book"></span>&nbsp;Expedientes</a>
+            	<a class="list-group-item colortitle">Gestión de oficios</a>
             	<a href="<g:createLink controller="poder" action="index" />" class="list-group-item"><span class="glyphicon glyphicon-open"></span>&nbsp;Poderes</a>
                 <a href="<g:createLink controller="revocacion" action="index" />" class="list-group-item"><span class="glyphicon glyphicon-share-alt"></span>&nbsp;Revocaciones</a>
                 <a href="<g:createLink controller="oficioCNBV" action="index" />" class="list-group-item"><span class="glyphicon glyphicon-file"></span>&nbsp;Oficios CNBV</a>
@@ -24,6 +26,7 @@
                 <a href="#" class="list-group-item"><span class="glyphicon glyphicon-th-list"></span>&nbsp;Detalle de solicitudes</a>
                 <a href="<g:createLink controller="busqueda" action="index" />" class="list-group-item"><span class="glyphicon glyphicon-th-list"></span>&nbsp;Poderes vigentes</a>
                 <a href="#" class="list-group-item"><span class="glyphicon glyphicon-th-list"></span>&nbsp;Personal apoderado</a>
+                <a href="#" class="list-group-item"><span class="glyphicon glyphicon-th-list"></span>&nbsp;Consulta de autorizados</a>
                 <a href="#" class="list-group-item"><span class="glyphicon glyphicon-book"></span>&nbsp;Catálogo de notarios</a>
                 <a href="#" class="list-group-item colortitle">Acciones</a>
                 <a href="#" class="list-group-item"><span class="glyphicon glyphicon-user"></span>&nbsp;Información de usuario</a>

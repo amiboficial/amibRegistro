@@ -27,7 +27,7 @@ class Notario {
 	static mapping = {
 		table 't201_t_notario'
 		
-		id generator: "assigned"
+		id generator: "identity"
 		
 		idEntidadFederativa column:'id_f_entidadfed'
 		numeroNotario column:'nu_numnotariope'

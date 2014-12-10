@@ -2,23 +2,31 @@ package mx.amib.sistemas.registro.notario.service
 
 import grails.converters.JSON
 import grails.transaction.Transactional
+import org.springframework.transaction.annotation.Isolation
 
 import mx.amib.sistemas.registro.notario.model.Notario
 
-@Transactional
-class NotarioService {
 
+class NotarioService {
+	class SearchResult {
+		def list
+		def count
+	}
+	
+	@Transactional
     Notario obtenerNotario(int idEntidadFederativa, int numeroNotario) {
 		//valida si los parametros son numeros
 		Notario n = Notario.findByIdEntidadFederativaAndNumeroNotarioAndVigente(idEntidadFederativa,numeroNotario,true)
 		return n
     }
 	
+	@Transactional
 	def search(Integer max, Integer offset, String sort, String order, Integer filterIdEntidadFederativa, String filterNombre, String filterApellido1, String filterApellido2, Integer filterNumero){
 		List<String> hqlFilters = new ArrayList<String>();
 		String whereKeyword = "where ";
 		Boolean whereKeywordNeeded = false;
 		StringBuilder sbHql = new StringBuilder()
+		StringBuilder sbHqlCount = new StringBuilder()
 		Map<String,Object> namedParameters = new HashMap<String,Object>()
 		
 		if(max == null || max <= 0){
@@ -89,13 +97,41 @@ class NotarioService {
 					sbHql.append(it)
 			}
 		}
+		sbHqlCount.append("select count(n) ").append(sbHql.toString())
 		sbHql.append("order by n.").append(sort).append(" ").append(order)
 		
-		println sbHql.toString()
-		println (namedParameters as JSON)
+		def searchResult = new SearchResult()
+		searchResult.count = Notario.executeQuery(sbHqlCount.toString(), namedParameters)[0]
+		searchResult.list = Notario.findAll(sbHql.toString(),namedParameters,[max: max, offset: offset])
+		return searchResult
+	}
+	
+	@Transactional(isolation=Isolation.SERIALIZABLE)
+	def save(Notario notario){
+		long actualCount = this.getCurrentSequenceNotario(notario.numeroNotario, notario.idEntidadFederativa);
+		notario.seqNotario = actualCount + 1
 		
-		def results = Notario.findAll(sbHql.toString(),namedParameters,[max: max, offset: offset])
-		return results
+		notario.fechaCreacion = new Date()
+		notario.fechaModificacion = new Date()
+		
+		notario.save (flush:true, failOnError:true)
+	}
+	private long getCurrentSequenceNotario(Integer numeroNotario, Integer idEntidadFederativa){
+		long _count
+		def result = Notario.executeQuery("select max(n.seqNotario) from Notario as n where n.numeroNotario = :numeroNotario and n.idEntidadFederativa = :idEntidadFederativa", [numeroNotario:numeroNotario, idEntidadFederativa:idEntidadFederativa])
+		
+		if(result == null || result[0] == null)
+			_count = 0
+		else
+			_count = result[0]
+			
+		return _count
+	}
+	
+	@Transactional
+	def update(Notario notario){
+		notario.fechaModificacion = new Date()
+		notario.save (flush:true, failOnError:true)
 	}
 	
 }

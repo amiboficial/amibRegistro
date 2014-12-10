@@ -9,7 +9,7 @@ import mx.amib.sistemas.external.catalogos.service.EntidadFederativaTO
 @Transactional(readOnly = true)
 class NotarioController {
 
-    static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
+    static allowedMethods = [save: "POST", update: "PUT", delete: ["DELETE","GET"]]
 
 	def sepomexService
 	def notarioService
@@ -17,7 +17,7 @@ class NotarioController {
     def index(Integer max) {
 		
         params.max = Math.min(max ?: 10, 100)
-		//params.offset = params.offset?:'0'
+		params.offset = params.offset?:'0'
 		//params.sort = params.sort?:'id'
 		//params.order = params.order?:'desc'
 		params.filterIdEntidadFederativa = params.filterIdEntidadFederativa?:'-1'
@@ -25,9 +25,9 @@ class NotarioController {
 		
 		NotarioIndexViewModel nivm = this.getIndexViewModel(params)
 		
-        respond notarioService.search(params.max, params.offset, params.sort, params.order, params.filterIdEntidadFederativa?.toInteger(),
-										params.filterNombre, params.filterApellido1, params.filterApellido2, params.filterNumero?.toInteger()), 
-										model:[notarioInstanceCount: Notario.count(), viewModelInstance:nivm]
+		def result = notarioService.search(params.max, params.offset.toInteger(), params.sort, params.order, params.filterIdEntidadFederativa?.toInteger(),
+										params.filterNombre, params.filterApellido1, params.filterApellido2, params.filterNumero?.toInteger())
+        respond result.list, model:[notarioInstanceCount: result.count, viewModelInstance:nivm]
     }
 
 	private NotarioIndexViewModel getIndexViewModel(def params){
@@ -53,22 +53,23 @@ class NotarioController {
     }
 
     def create() {
-        respond new Notario(params)
+        respond new Notario(params), model:[viewModelInstance: this.getViewModel()]
     }
-
+	private NotarioViewModel getViewModel(){
+		NotarioViewModel nvm = new NotarioViewModel()
+		nvm.entidadesFederativasList = sepomexService.obtenerEntidadesFederativas()
+		return nvm
+	}
     @Transactional
-    def save(Notario notarioInstance) {
+    def save(Notario notario) {
+		def notarioInstance = notario
+		
         if (notarioInstance == null) {
             notFound()
             return
         }
 
-        if (notarioInstance.hasErrors()) {
-            respond notarioInstance.errors, view:'create'
-            return
-        }
-
-        notarioInstance.save flush:true
+		notarioService.save(notarioInstance)
 
         request.withFormat {
             form multipartForm {
@@ -80,22 +81,24 @@ class NotarioController {
     }
 
     def edit(Notario notarioInstance) {
-        respond notarioInstance
+        respond notarioInstance, model:[viewModelInstance: this.getViewModel()]
     }
 
     @Transactional
-    def update(Notario notarioInstance) {
+    def update(Notario notario) {
+		def notarioInstance = notario
+		
         if (notarioInstance == null) {
             notFound()
             return
         }
 
-        if (notarioInstance.hasErrors()) {
+        /*if (notarioInstance.hasErrors()) {
             respond notarioInstance.errors, view:'edit'
             return
-        }
+        }*/
 
-        notarioInstance.save flush:true
+		notarioService.update(notarioInstance)
 
         request.withFormat {
             form multipartForm {
@@ -117,11 +120,10 @@ class NotarioController {
         notarioInstance.delete flush:true
 
         request.withFormat {
-            form multipartForm {
+            '*'{
                 flash.message = message(code: 'default.deleted.message', args: [message(code: 'Notario.label', default: 'Notario'), notarioInstance.id])
                 redirect action:"index", method:"GET"
             }
-            '*'{ render status: NO_CONTENT }
         }
     }
 
@@ -145,4 +147,8 @@ class NotarioIndexViewModel{
 	String filterApellido1
 	String filterApellido2
 	String filterNumero
+}
+
+class NotarioViewModel{
+	Collection<EntidadFederativaTO> entidadesFederativasList
 }

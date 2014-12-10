@@ -28,7 +28,7 @@ app.Doc = Backbone.Model.extend({
 });
 
 app.Docs = Backbone.Collection.extend({
-	model: app.Revocado
+	model: app.Doc
 });
 
 app.DocsViewModel = Backbone.Model.extend({

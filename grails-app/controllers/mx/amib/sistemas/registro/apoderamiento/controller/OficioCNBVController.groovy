@@ -8,7 +8,7 @@ import grails.transaction.Transactional
 @Transactional(readOnly = true)
 class OficioCNBVController {
 
-    static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
+    static allowedMethods = [save: "POST", update: "PUT", delete: ["DELETE","GET"]]
 
 	def sustentanteService
 	def oficioCNBVService
@@ -157,11 +157,10 @@ class OficioCNBVController {
         oficioCNBVInstance.delete flush:true
 
         request.withFormat {
-            form multipartForm {
+            '*' {
                 flash.message = message(code: 'default.deleted.message', args: [message(code: 'OficioCNBV.label', default: 'OficioCNBV'), oficioCNBVInstance.id])
                 redirect action:"index", method:"GET"
             }
-            '*'{ render status: NO_CONTENT }
         }
     }
 

@@ -11,7 +11,7 @@
 			</div>
             <div class="list-group" >
             	<a class="list-group-item colortitle">Gestión de expediente</a>
-            	<a href="<g:createLink controller="notario" action="index" />" class="list-group-item"><span class="glyphicon glyphicon-book"></span>&nbsp;Expedientes</a>
+            	<a href="<g:createLink controller="expediente" action="index" />" class="list-group-item"><span class="glyphicon glyphicon-book"></span>&nbsp;Expedientes</a>
             	<a class="list-group-item colortitle">Gestión de oficios</a>
             	<a href="<g:createLink controller="poder" action="index" />" class="list-group-item"><span class="glyphicon glyphicon-open"></span>&nbsp;Poderes</a>
                 <a href="<g:createLink controller="revocacion" action="index" />" class="list-group-item"><span class="glyphicon glyphicon-share-alt"></span>&nbsp;Revocaciones</a>

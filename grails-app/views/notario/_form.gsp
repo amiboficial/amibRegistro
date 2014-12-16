@@ -1,121 +1,89 @@
+<%@ page contentType="text/html;charset=UTF-8" %>
 <%@ page import="mx.amib.sistemas.registro.notario.model.Notario" %>
 
-
-
-<div class="fieldcontain ${hasErrors(bean: notarioInstance, field: 'idEntidadFederativa', 'error')} required">
-	<label for="idEntidadFederativa">
-		<g:message code="notario.idEntidadFederativa.label" default="Id Entidad Federativa" />
-		<span class="required-indicator">*</span>
-	</label>
-	<g:field name="idEntidadFederativa" type="number" value="${notarioInstance.idEntidadFederativa}" required=""/>
-
+<div id="divMsgErrorEnCampos" class="alert alert-danger">
+	<span class="glyphicon glyphicon-ban-circle"></span> Datos no válidos. Revise los campos marcados en rojo.
+</div>
+<div id="divMsgErrorServidor" class="alert alert-danger">
+	Mensajes de error de servidor.
 </div>
 
-<div class="fieldcontain ${hasErrors(bean: notarioInstance, field: 'nombre', 'error')} required">
-	<label for="nombre">
-		<g:message code="notario.nombre.label" default="Nombre" />
-		<span class="required-indicator">*</span>
-	</label>
-	<g:textField name="nombre" maxlength="100" required="" value="${notarioInstance?.nombre}"/>
+<fieldset>
+<legend>Datos de personales</legend>
 
+<div id="divNom" class="form-group">
+	<label class="col-md-2 col-sm-3 control-label">
+          	<g:message code="notario.nombre.label" default="Nombre" /><span class="required-indicator">*</span>
+	</label>
+          <div class="col-md-9 col-sm-9">
+          	<g:textField id="txtNom" maxlength="100" class="form-control" name="notario.nombre" required="" value="${notarioInstance?.nombre}" />
+          </div>
+</div>
+<div id="divAp1" class="form-group">
+	<label class="col-md-2 col-sm-3 control-label">
+		<g:message code="notario.apellido1.label" default="Primer apellido" /><span class="required-indicator">*</span>
+	</label>
+	<div class="col-md-9 col-sm-9">
+		<g:textField id="txtAp1" maxlength="80" class="form-control" name="notario.apellido1" required="" value="${notarioInstance?.apellido1}" />
+	</div>
+</div>
+<div id="divAp2" class="form-group">
+	<label class="col-md-2 col-sm-3 control-label">
+		<g:message code="notario.apellido2.label" default="Segundo apellido" /><span class="required-indicator">*</span>						
+	</label>
+	<div class="col-md-9 col-sm-9">
+		<g:textField id="txtAp2" maxlength="80" class="form-control" name="notario.apellido2" required="" value="${notarioInstance?.apellido2}" />
+	</div>
 </div>
 
-<div class="fieldcontain ${hasErrors(bean: notarioInstance, field: 'apellido1', 'error')} required">
-	<label for="apellido1">
-		<g:message code="notario.apellido1.label" default="Apellido1" />
-		<span class="required-indicator">*</span>
-	</label>
-	<g:textField name="apellido1" maxlength="80" required="" value="${notarioInstance?.apellido1}"/>
+</fieldset>
 
+<fieldset>
+<legend>Datos de identificación</legend>
+
+<div id="divNotario" class="form-group">
+	<div id="divNumNotario">
+		<label class="col-md-2 col-sm-3 control-label">
+			<g:message code="notario.numeroNotario.label" default="Número de notaría" /><span class="required-indicator">*</span>
+		</label>
+		<div class="col-md-2 col-sm-2">
+			<g:textField id="txtNumNotario" maxlength="10" class="form-control" name="notario.numeroNotario" required="" value="${notarioInstance?.numeroNotario}" />
+		</div>
+	</div>
+	<div id="divNotarioEntidadFederativa">
+		<label class="col-md-3 col-sm-3 control-label">
+			<g:message code="notario.entidadFederativa.label" default="Entidad Federativa" /><span class="required-indicator">*</span>						
+		</label>
+		<div class="col-md-4 col-sm-4">
+			<g:select id="selNotarioEntidadFederativa" class="form-control" name='notario.idEntidadFederativa' value="${notarioInstance?.idEntidadFederativa}"
+				noSelection="${['null':'-Seleccione-']}"
+				from='${viewModelInstance?.entidadesFederativasList}'
+				optionKey="id" optionValue="nombre"></g:select>
+		</div>
+	</div>
 </div>
 
-<div class="fieldcontain ${hasErrors(bean: notarioInstance, field: 'apellido2', 'error')} required">
-	<label for="apellido2">
-		<g:message code="notario.apellido2.label" default="Apellido2" />
-		<span class="required-indicator">*</span>
-	</label>
-	<g:textField name="apellido2" maxlength="80" required="" value="${notarioInstance?.apellido2}"/>
+</fieldset>
 
+<fieldset>
+<legend>Vigencia actual</legend>
+
+<div class="alert alert-info"><span class="glyphicon glyphicon-info-sign"></span> <g:message code="notario.informacionVigencia" default="" /></div>
+
+<div id="divVigencia" class="form-group">
+	<label class="col-md-2 col-sm-3 control-label">
+		<g:message code="notario.vigente.label" default="Estatus de vigencia" /><span class="required-indicator">*</span>						
+	</label>
+	<div class="col-md-9 col-sm-9">
+		<g:checkBox name="notario.vigente" value="${notarioInstance?.vigente}" /> Vigente
+	</div>
 </div>
 
-<div class="fieldcontain ${hasErrors(bean: notarioInstance, field: 'fechaCreacion', 'error')} ">
-	<label for="fechaCreacion">
-		<g:message code="notario.fechaCreacion.label" default="Fecha Creacion" />
-		
-	</label>
-	<g:datePicker name="fechaCreacion" precision="day"  value="${notarioInstance?.fechaCreacion}" default="none" noSelection="['': '']" />
+</fieldset>
 
+
+<div class="form-group" style="text-align:center">
+	<div>
+		<button id="btnSubmit" type="button" class="btn btn-primary btn-lg">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Aceptar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</button>
+	</div>
 </div>
-
-<div class="fieldcontain ${hasErrors(bean: notarioInstance, field: 'fechaModificacion', 'error')} ">
-	<label for="fechaModificacion">
-		<g:message code="notario.fechaModificacion.label" default="Fecha Modificacion" />
-		
-	</label>
-	<g:datePicker name="fechaModificacion" precision="day"  value="${notarioInstance?.fechaModificacion}" default="none" noSelection="['': '']" />
-
-</div>
-
-<div class="fieldcontain ${hasErrors(bean: notarioInstance, field: 'numeroNotario', 'error')} required">
-	<label for="numeroNotario">
-		<g:message code="notario.numeroNotario.label" default="Numero Notario" />
-		<span class="required-indicator">*</span>
-	</label>
-	<g:field name="numeroNotario" type="number" value="${notarioInstance.numeroNotario}" required=""/>
-
-</div>
-
-<div class="fieldcontain ${hasErrors(bean: notarioInstance, field: 'poderes', 'error')} ">
-	<label for="poderes">
-		<g:message code="notario.poderes.label" default="Poderes" />
-		
-	</label>
-	
-<ul class="one-to-many">
-<g:each in="${notarioInstance?.poderes?}" var="p">
-    <li><g:link controller="poder" action="show" id="${p.id}">${p?.encodeAsHTML()}</g:link></li>
-</g:each>
-<li class="add">
-<g:link controller="poder" action="create" params="['notario.id': notarioInstance?.id]">${message(code: 'default.add.label', args: [message(code: 'poder.label', default: 'Poder')])}</g:link>
-</li>
-</ul>
-
-
-</div>
-
-<div class="fieldcontain ${hasErrors(bean: notarioInstance, field: 'revocaciones', 'error')} ">
-	<label for="revocaciones">
-		<g:message code="notario.revocaciones.label" default="Revocaciones" />
-		
-	</label>
-	
-<ul class="one-to-many">
-<g:each in="${notarioInstance?.revocaciones?}" var="r">
-    <li><g:link controller="revocacion" action="show" id="${r.id}">${r?.encodeAsHTML()}</g:link></li>
-</g:each>
-<li class="add">
-<g:link controller="revocacion" action="create" params="['notario.id': notarioInstance?.id]">${message(code: 'default.add.label', args: [message(code: 'revocacion.label', default: 'Revocacion')])}</g:link>
-</li>
-</ul>
-
-
-</div>
-
-<div class="fieldcontain ${hasErrors(bean: notarioInstance, field: 'seqNotario', 'error')} required">
-	<label for="seqNotario">
-		<g:message code="notario.seqNotario.label" default="Seq Notario" />
-		<span class="required-indicator">*</span>
-	</label>
-	<g:field name="seqNotario" type="number" value="${notarioInstance.seqNotario}" required=""/>
-
-</div>
-
-<div class="fieldcontain ${hasErrors(bean: notarioInstance, field: 'vigente', 'error')} ">
-	<label for="vigente">
-		<g:message code="notario.vigente.label" default="Vigente" />
-		
-	</label>
-	<g:checkBox name="vigente" value="${notarioInstance?.vigente}" />
-
-</div>
-

@@ -10,7 +10,7 @@
 	<a id="anchorForm"></a>
 	<ul class="breadcrumb">
 		<li><a href="#">Gestión de expedientes</a><span class="divider"></span></li>
-		<li><a href="#">Búsqueda de Expedientes</a></li>
+		<li><a href="#">Expedientes</a></li>
 	</ul>
 	<h2><strong>Expedientes</strong></h2>
 

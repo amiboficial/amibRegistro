@@ -1,4 +1,4 @@
-/* AMIB 2014 - ESTILO CSS APLICACIONES - Ult.Mod. 02/10/2014 - v1.2 */
+/* AMIB 2014 - ESTILO CSS APLICACIONES - Ult.Mod. 17/12/2014 - v1.3 */
 
 body {
     /*padding-top: 50px;*/
@@ -155,6 +155,12 @@ navbar-default .navbar-nav > li > a:focus{
 
 .form-horizontal .control-label{
 	padding-top: 4px;
+}
+
+/* Mod. 17/12/2014 1.2 - Se agregan mas ajustes de tamaños */
+
+.form-control-static{
+	padding-top: 2px;
 }
 
 label{

@@ -9,7 +9,7 @@
 </div>
 
 <fieldset>
-<legend>Datos de personales</legend>
+<legend>Datos personales</legend>
 
 <div id="divNom" class="form-group">
 	<label class="col-md-2 col-sm-3 control-label">

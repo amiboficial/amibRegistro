@@ -11,6 +11,8 @@ class AutorizadoCNBV {
 	
 	static transients = ['toBeDeleted']
 	
+	static hasMany = [apoderados: Apoderado]
+	
 	static belongsTo = [OficioCNBV]
 	
 	static mapping = {

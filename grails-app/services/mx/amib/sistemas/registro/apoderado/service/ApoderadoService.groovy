@@ -36,7 +36,7 @@ class ApoderadoService {
 			return null
 			//throw new Exception("JSON_NULL") //No fue posible obtener la matricula
 		}
-		if(resp.json.'class' == sustentanteClassName){
+		else {
 			apoderado = new ApoderadoTO()
 			apoderado.numeroMatricula = resp.json.'numeroMatricula'
 			apoderado.nombreCompleto = resp.json.'nombre' + ' ' + resp.json.'primerApellido'  + ' ' +  resp.json.'segundoApellido'

@@ -3,9 +3,10 @@
 			<div id="divMsgErrorEnCampos" class="alert alert-danger">
 				<span class="glyphicon glyphicon-ban-circle"></span> Datos no válidos. Revise los campos marcados en rojo.
 			</div>
-			<div id="divMsgErrorServidor" class="alert alert-danger">
-				Mensajes de error de servidor.
-			</div>
+			<g:if test="${errorMessage}">
+				<div id="divMsgErrorServidor" class="alert alert-danger"><span class="glyphicon glyphicon-info-sign"></span> ${errorMessage}</div>
+			</g:if>
+			
 			
 			<fieldset>
 				<legend>Datos del oficio</legend>

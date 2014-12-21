@@ -16,6 +16,9 @@
 	<g:if test="${flash.message}">
 		<div class="alert alert-info"><span class="glyphicon glyphicon-info-sign"></span> ${flash.message}</div>
 	</g:if>
+	<g:if test="${flash.errorMessage}">
+		<div class="alert alert-danger"><span class="glyphicon glyphicon-info-sign"></span> ${flash.errorMessage}</div>
+	</g:if>
 	
 	<form id="frmApp" class="form-horizontal" role="form" action="<g:createLink controller="oficioCNBV" action="index" />" method="get">
 		<fieldset>

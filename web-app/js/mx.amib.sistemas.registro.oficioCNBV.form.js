@@ -3,7 +3,7 @@
 		//limpia mensajes de validación
 		function cleanValidationMsgs(){
 			$("#divMsgErrorEnCampos").hide();
-			$("#divMsgErrorServidor").hide();
+			//$("#divMsgErrorServidor").hide();
 			
 			$('#divMsgAlMenosUnAutorizado').hide();
 			

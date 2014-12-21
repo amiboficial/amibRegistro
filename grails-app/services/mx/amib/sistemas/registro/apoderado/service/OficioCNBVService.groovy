@@ -2,6 +2,7 @@ package mx.amib.sistemas.registro.apoderado.service
 
 import grails.transaction.Transactional
 import grails.converters.JSON
+import mx.amib.sistemas.registro.apoderamiento.model.Apoderado
 import mx.amib.sistemas.registro.apoderamiento.model.AutorizadoCNBV
 import mx.amib.sistemas.registro.apoderamiento.model.OficioCNBV
 
@@ -10,6 +11,11 @@ class OficioCNBVService {
 	class SearchResult {
 		def list
 		def count
+	}
+	class TransactionResult {
+		def instance
+		boolean valid = true;
+		String errMsg
 	}
 	
 	def save(OficioCNBV oficioCNBVInstance, List<String> autorizadosJson){
@@ -35,6 +41,9 @@ class OficioCNBVService {
 	}
 	
 	def update(OficioCNBV oficioCNBVInstance, List<String> autorizadosJson){
+		TransactionResult tr = new TransactionResult()
+		StringBuilder errMsgSb = new StringBuilder()
+		tr.valid = true
 		
 		List<AutorizadoCNBV> autsToDelete = new ArrayList<AutorizadoCNBV>();
 		List<AutorizadoCNBV> autsToAdd = new ArrayList<AutorizadoCNBV>();
@@ -58,10 +67,26 @@ class OficioCNBVService {
 				autsToDelete.add(it)
 			}
 		}
+		
+		//valida que no se borre algún autorizado asociado con algún poder
+		autsToDelete.each{
+			if(it.apoderados.size() > 0){
+				tr.valid = false
+				def sbEachPoderes = new StringBuilder()
+				it.apoderados.each { Apoderado ap ->
+					sbEachPoderes.append(ap?.poder?.id).append(";")
+				}
+				errMsgSb.append("El autorizado con matrícula " + it?.numeroMatricula + " tiene poder(es) (id(s):"+ sbEachPoderes.toString() +") asociado(s); ")
+			}
+			else{
+				oficioCNBVInstance.removeFromAutorizadosCNBV(it)
+			}
+		}
+		/*
 		autsToDelete.each{
 			oficioCNBVInstance.removeFromAutorizadosCNBV(it)
 			it.delete(flush:true)
-		}
+		}*/
 		autsToAdd.each{
 			it.oficioCNBV = oficioCNBVInstance
 			oficioCNBVInstance.autorizadosCNBV.add(it)
@@ -70,9 +95,59 @@ class OficioCNBVService {
 		oficioCNBVInstance.fechaCreacion = new Date()
 		oficioCNBVInstance.fechaModificacion = new Date()
 		
-		oficioCNBVInstance.save(flush:true, failOnError: true)
 		
-		return oficioCNBVInstance
+		oficioCNBVInstance.validate()
+		if(oficioCNBVInstance.hasErrors()){
+			tr.valid = false
+			oficioCNBVInstance.errors.each{
+				errMsgSb.append(it?.field).append(it).append("; ")
+			}
+		}
+		
+		if(tr.valid == true){
+			tr.valid = true
+			tr.errMsg = null
+			autsToDelete.each{
+				it.delete(flush:true)
+			}
+			tr.instance = oficioCNBVInstance.save(flush:true, failOnError: true)
+		}
+		else{
+			tr.instance = oficioCNBVInstance
+			tr.errMsg = "No es posible actualizar datos en el OficioCNBV: " + errMsgSb.toString()
+		}
+		return tr
+	}
+	
+	//Valida el borrado; de no ser valido, se devolvera un mensaje ó conjunto de mensajes
+	def delete(OficioCNBV oficioCNBVInstance){
+		TransactionResult tr = new TransactionResult()
+		tr.valid = true
+		StringBuilder sbValidation = new StringBuilder()
+		StringBuilder sbEachPoderes
+		//valida que no se haya asociado algun autorizado con algún poder
+		oficioCNBVInstance.autorizadosCNBV.each{
+			if(it.apoderados.size() > 0){
+				tr.valid = false;
+				sbEachPoderes = new StringBuilder()
+				it.apoderados.each { Apoderado ap ->
+					sbEachPoderes.append(ap?.poder?.id).append(";")
+				}
+				sbValidation.append("El autorizado con matrícula " + it?.numeroMatricula + " tiene poder(es) (id(s):"+ sbEachPoderes.toString() +") asociado(s) al oficio que intenta borrar; ")
+			}
+		}
+		if(tr.valid == true){
+			tr.valid = true
+			tr.errMsg = null
+			tr.instance = null
+		}
+		else{
+			tr.valid = false
+			tr.errMsg =  "No es posible borrar el OficioCNBV: " + sbValidation.toString()
+			tr.instance = oficioCNBVInstance
+		}
+		
+		return tr
 	}
 	
 	def searchByDatosOficio(Integer max, Integer offset, String sort, String order,

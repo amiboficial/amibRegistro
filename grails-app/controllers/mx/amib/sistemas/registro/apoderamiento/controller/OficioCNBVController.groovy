@@ -123,45 +123,59 @@ class OficioCNBVController {
     def update(OficioCNBV oficioCNBV) {
 		def oficioCNBVInstance = oficioCNBV
 		def jsonStrLstAutorizados = params.list('autorizado')
+		
         if (oficioCNBVInstance == null) {
             notFound()
             return
         }
-		oficioCNBVService.update(oficioCNBVInstance, jsonStrLstAutorizados)
 		
-		/*
-        if (oficioCNBVInstance.hasErrors()) {
-            respond oficioCNBVInstance.errors, view:'edit'
-            return
-        }
-
-        oficioCNBVInstance.save flush:true
-		*/
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.updated.message', args: [message(code: 'OficioCNBV.label', default: 'OficioCNBV'), oficioCNBVInstance.id])
-                redirect oficioCNBVInstance
-            }
-            '*'{ respond oficioCNBVInstance, [status: OK] }
-        }
+		def tr = oficioCNBVService.update(oficioCNBVInstance, jsonStrLstAutorizados)
+		oficioCNBVInstance = tr.instance
+		
+		if(tr.valid == true){
+	        request.withFormat {
+	            form multipartForm {
+	                flash.message = message(code: 'default.updated.message', args: [message(code: 'OficioCNBV.label', default: 'OficioCNBV'), oficioCNBVInstance.id])
+	                redirect oficioCNBVInstance
+	            }
+	            '*'{ respond oficioCNBVInstance, [status: OK] }
+	        }
+		}
+		else{
+			request.withFormat {
+				'*' {
+					respond oficioCNBVInstance, model:[ errorMessage:tr.errMsg ], view:"edit"
+					return
+				}
+			}
+		}
     }
 
     @Transactional
     def delete(OficioCNBV oficioCNBVInstance) {
-
         if (oficioCNBVInstance == null) {
             notFound()
             return
         }
 
-        oficioCNBVInstance.delete flush:true
+		def tr = oficioCNBVService.delete(oficioCNBVInstance)
+		if(tr.valid == true){
+			request.withFormat {
+				'*' {
+					flash.message = message(code: 'default.deleted.message', args: [message(code: 'OficioCNBV.label', default: 'OficioCNBV'), oficioCNBVInstance.id])
+					redirect action:"index", method:"GET"
+				}
+			}
+		}
+        else{
+			request.withFormat {
+				'*' {
+					flash.errorMessage = tr.errMsg
+					redirect action:"index", method:"GET"
+				}
+			}
+		}
 
-        request.withFormat {
-            '*' {
-                flash.message = message(code: 'default.deleted.message', args: [message(code: 'OficioCNBV.label', default: 'OficioCNBV'), oficioCNBVInstance.id])
-                redirect action:"index", method:"GET"
-            }
-        }
     }
 
     protected void notFound() {

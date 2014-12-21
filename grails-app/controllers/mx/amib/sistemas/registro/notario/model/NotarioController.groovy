@@ -49,6 +49,7 @@ class NotarioController {
 	}
 	
     def show(Notario notarioInstance) {
+		notarioInstance.nombreEntidadFederativa = sepomexService.obtenerEntidadFederativa(notarioInstance.idEntidadFederativa).nombre
         respond notarioInstance
     }
 

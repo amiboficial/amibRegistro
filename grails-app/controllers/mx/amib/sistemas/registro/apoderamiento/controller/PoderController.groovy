@@ -107,14 +107,70 @@ class PoderController {
 			]) )
 		}
 		
-        respond new Poder(params), model:[entidadFinanciera: entidadFinancieraService.obtenerGrupoFinanciero(6),
+        respond new Poder(params), model:[apoderadosList: new ArrayList<ApoderadoTO>(),
+											documentosList: documentosList,
+											entidadFederativaList: sepomexService.obtenerEntidadesFederativas(),
+											gruposFinancierosList: entidadFinancieraService.obtenerGruposFinancierosVigentes(),
+											areDocumentosCompletados: false,
+											action:'create']
+    }
+
+	def createAltaGpoFin(){
+		//Inicializa listados
+		def documentosList = new ArrayList<DocumentoRespaldoPoderTO>()
+		
+		//Inicializa listado de documento con sus respectivos tipos
+		def tipoDocumentoList = poderService.obtenerListadoTipoDocumentoRespaldoPoder()
+		tipoDocumentoList.each{
+			documentosList.add( new DocumentoRespaldoPoderTO([
+				id: -it.id,
+				idTipoDocumento: it.id,
+				tipoDocumento: it.descripcion,
+			]) )
+		}
+		
+		//Obtiene datos del grupo financiero en sesión
+		def grupoFinanciero = entidadFinancieraService.obtenerGrupoFinanciero(4)
+		def institucionesList = entidadFinancieraService.obtenerGrupoFinanciero(4).instituciones
+		
+		respond new Poder(params), model:[grupoFinanciero: grupoFinanciero,
+											institucionesList: institucionesList,
 											apoderadosList: new ArrayList<ApoderadoTO>(),
 											documentosList: documentosList,
 											entidadFederativaList: sepomexService.obtenerEntidadesFederativas(),
 											gruposFinancierosList: entidadFinancieraService.obtenerGruposFinancierosVigentes(),
-											areDocumentosCompletados: false]
-    }
-
+											areDocumentosCompletados: false,
+											action:'createAltaGpoFin']
+	}
+	
+	def createAltaInst(){
+		//Inicializa listados
+		def documentosList = new ArrayList<DocumentoRespaldoPoderTO>()
+		
+		//Inicializa listado de documento con sus respectivos tipos
+		def tipoDocumentoList = poderService.obtenerListadoTipoDocumentoRespaldoPoder()
+		tipoDocumentoList.each{
+			documentosList.add( new DocumentoRespaldoPoderTO([
+				id: -it.id,
+				idTipoDocumento: it.id,
+				tipoDocumento: it.descripcion,
+			]) )
+		}
+		
+		//Obtiene datos de la institución en sesión
+		def grupoFinanciero = entidadFinancieraService.obtenerGrupoFinanciero(4)
+		def institucion = entidadFinancieraService.obtenerGrupoFinanciero(4).instituciones[0]
+		
+		respond new Poder(params), model:[grupoFinanciero: grupoFinanciero,
+											institucion: institucion,
+											apoderadosList: new ArrayList<ApoderadoTO>(),
+											documentosList: documentosList,
+											entidadFederativaList: sepomexService.obtenerEntidadesFederativas(),
+											gruposFinancierosList: entidadFinancieraService.obtenerGruposFinancierosVigentes(),
+											areDocumentosCompletados: false,
+											action:'createAltaInst']
+	}
+	
     @Transactional
     def save(Poder poder) {
 		//BINDINGS MANUALES
@@ -123,6 +179,7 @@ class PoderController {
 		def notarioIdEntidadFederativa = params.'notarioIdEntidadFederativa'.toInteger()
 		def jsonLstApoderadosIdAutorizadoCNBV = params.list('apoderadoIdAutorizadoCNBV')
 		def jsonLstDocumentos = params.list('documento')
+		def action = params.'action'
 		
 		List<Integer> apoderadosIdAutorizadoCNBV = new ArrayList<Integer>()
 		List<DocumentoRespaldoPoderTO> documentos = new ArrayList<DocumentoRespaldoPoderTO>()
@@ -132,6 +189,26 @@ class PoderController {
 			notFound()
 			return
 		}
+		
+		//action
+		if(action == 'createAltaGpoFin'){
+			//obtiene el dato del grupo financiero en sesión
+			//rellena datos relativos a verificación
+			poder.verificado = false
+			poder.verificadoPor = null
+			poder.aprobado = null
+			poder.motivoRechazo = null
+		}
+		else if(action == 'createAltaInst'){
+			//obtiene el dato de la institución en sesión
+			//rellena datos relativos a verificación
+			poder.verificado = false
+			poder.verificadoPor = null
+			poder.aprobado = null
+			poder.motivoRechazo = null
+		}
+		
+		
 		//obtiene de la lista de paramatros con el mismo name="apoderadoIdAutorizadoCNBV"
 		jsonLstApoderadosIdAutorizadoCNBV.each{
 			apoderadosIdAutorizadoCNBV.add(it)
@@ -146,13 +223,6 @@ class PoderController {
 			documentos.add(docTO)
 		}
 
-		//valida errores del domain
-		/*poder.validate()
-        if (poder.hasErrors()) {
-			poder.errors.allErrors.each { println it }
-            respond poder.errors, view:'create'
-            return
-        }*/
 		//manda al servicio de guardado
 		poderService.save(poder,notarioNumero,notarioIdEntidadFederativa,apoderadosIdAutorizadoCNBV,documentos)
 
@@ -164,7 +234,7 @@ class PoderController {
             '*' { respond poder, [status: CREATED] }
         }
     }
-
+	
     def edit(Poder poder) {
 		//Inicializa listados
 		def apoderadosList = new ArrayList<ApoderadoTO>()
@@ -208,21 +278,70 @@ class PoderController {
 																claveDga:it.autorizado.oficioCNBV.claveDga])
 			apoderadosList.add(apo)
 		}
-		//Inicializa entidad financiera (si esta loggeado como tal)
-		if(poder.esRegistradoPorGrupoFinanciero == true)
-			entidadFinanciera = entidadFinancieraService.obtenerGrupoFinanciero( poder.idGrupofinanciero )
-		else{
-			entidadFinanciera = entidadFinancieraService.obtenerInstitucion( poder.idInstitucion )
-		}
 		
         respond poder, model:[entidadFinanciera: entidadFinanciera,
 											apoderadosList: apoderadosList,
 											documentosList: documentosList,
 											entidadFederativaList: sepomexService.obtenerEntidadesFederativas(),
 											gruposFinancierosList: entidadFinancieraService.obtenerGruposFinancierosVigentes(),
-											areDocumentosCompletados: areDocumentosCompletados]
+											areDocumentosCompletados: areDocumentosCompletados,
+											action:'edit']
     }
 
+	//este método es copia de edit, excepto que el paramtro "action" es diferente
+	def editVerify(Poder poder){
+		//Inicializa listados
+		def apoderadosList = new ArrayList<ApoderadoTO>()
+		def documentosList = new ArrayList<DocumentoRespaldoPoderTO>()
+		def entidadFinanciera = null
+		boolean areDocumentosCompletados = true
+		
+		//Rellena listados con datos actuales dal modelo
+		//Inicializa listado de documentos
+		def tipoDocumentoList = poderService.obtenerListadoTipoDocumentoRespaldoPoder()
+		tipoDocumentoList.each{
+			def doc = poder.documentosRespaldoPoder.find{ drp -> drp.tipoDocumentoRespaldoPoder.id == it.id }
+			if(doc == null){
+				areDocumentosCompletados = false
+				documentosList.add( new DocumentoRespaldoPoderTO([
+					id: -it.id,
+					idTipoDocumento: it.id,
+					tipoDocumento: it.descripcion,
+					uuid: '',
+					nombreArchivo: ''
+				]) )
+			}
+			else{
+				documentosList.add( new DocumentoRespaldoPoderTO([
+					id: doc.id,
+					idTipoDocumento: it.id,
+					tipoDocumento: it.descripcion,
+					uuid: doc.uuidDocumentoRepositorio,
+					nombreArchivo: documentoRepositorioService.obtenerMetadatosDocumento(doc.uuidDocumentoRepositorio).nombre
+				]) )
+			}
+		}
+		//Inicializa apoderados
+		poder.apoderados.each{
+			def apo = new ApoderadoTO()
+			apo.numeroMatricula = it.autorizado.numeroMatricula
+			apo.nombreCompleto = it.autorizado.nombreCompleto
+			apo.autorizacionesCNBV = null
+			apo.autorizacionAplicada = new AutorizacionCnbvTO([idAutorizadoCNBV:it.autorizado.id,
+																idOficioCNBV:it.autorizado.oficioCNBV.id,
+																claveDga:it.autorizado.oficioCNBV.claveDga])
+			apoderadosList.add(apo)
+		}
+		
+		respond poder, model:[entidadFinanciera: entidadFinanciera,
+											apoderadosList: apoderadosList,
+											documentosList: documentosList,
+											entidadFederativaList: sepomexService.obtenerEntidadesFederativas(),
+											gruposFinancierosList: entidadFinancieraService.obtenerGruposFinancierosVigentes(),
+											areDocumentosCompletados: areDocumentosCompletados,
+											action:'editVerify']
+	}
+	
     @Transactional
     def update(Poder poder) {
         if (poder == null) {
@@ -236,6 +355,7 @@ class PoderController {
 		def notarioIdEntidadFederativa = params.'notarioIdEntidadFederativa'.toInteger()
 		def _apoderadosIdAutorizadoCNBV = params.list('apoderadoIdAutorizadoCNBV')
 		def _documentos = params.list('documento')
+		def action = params.'action'
 		
 		List<Long> apoderadosIdAutorizadoCNBV = new ArrayList<Long>()
 		List<DocumentoRespaldoPoderTO> docsNuevos = new ArrayList<DocumentoRespaldoPoderTO>()
@@ -260,11 +380,12 @@ class PoderController {
 			}
 		}
 
-        /*if (poder.hasErrors()) {
-			println (poder.errors as JSON)
-            respond poder.errors, view:'edit'
-            return
-        }*/
+        //si la accion se trata de una verificación
+		if(action == "editVerify"){
+			//debe tomar el nombre de usuario en sesión que esta verificando
+			poder.verificadoPor = 'OPERATIVO'
+		}
+		
 		poder = poderService.update(poder, notarioNumero, notarioIdEntidadFederativa,
 			apoderadosIdAutorizadoCNBV, docsActual, docsNuevos)
 

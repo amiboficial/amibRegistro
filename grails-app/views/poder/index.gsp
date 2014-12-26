@@ -125,6 +125,9 @@
 							
 							<td>
 								<button id="btnVer" onclick="btnVer_click(${poderInstance.id})" type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-eye-open"></span><span class="hidden-xs hidden-sm"> Ver detalle</span></button>
+								
+								<button id="btnRevisar" onclick="btnRevisar_click(${poderInstance.id})" type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-edit"></span><span class="hidden-xs hidden-sm"> Revisar</span></button>
+								
 								<button id="btnEditar" onclick="btnEditar_click(${poderInstance.id})" type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-pencil"></span><span class="hidden-xs hidden-sm"> Editar</span></button>
 								<button id="btnEliminar" onclick="btnEliminar_click(${poderInstance.id})" type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-trash"></span><span class="hidden-xs hidden-sm"> Eliminar</span></button>
 							</td>

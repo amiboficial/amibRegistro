@@ -67,11 +67,6 @@ class RevocacionService {
 			revocacion.idInstitucion = null
 		}
 		
-		if(revocacion.idInstitucion == null)
-			revocacion.esRegistradoPorGrupoFinanciero = true
-		else
-			revocacion.esRegistradoPorGrupoFinanciero = false
-		
 		revocacion.documentosRespaldoRevocacion = new HashSet<DocumentoRespaldoRevocacion>()
 		documentosJson.each{ String _docJson -> 
 			def parsedJson = JSON.parse(_docJson)
@@ -90,23 +85,18 @@ class RevocacionService {
 			dr.representanteLegalNombre = revocacion.representanteLegalNombre
 			dr.representanteLegalApellido1 = revocacion.representanteLegalApellido1
 			dr.representanteLegalApellido2 = revocacion.representanteLegalApellido2
-			dr.esRegistradoPorGrupoFinanciero = revocacion.esRegistradoPorGrupoFinanciero
 			dr.numeroEscritura = revocacion.numeroEscritura
 			dr.fechaRevocacion = revocacion.fechaRevocacion
 			dr.jsonRevocados = revocacion.revocados as JSON
 			dr.jsonNotario = revocacion.notario as JSON
-			if(revocacion.esRegistradoPorGrupoFinanciero == true)
-			{
-				dr.jsonGrupoFinanciero = entidadFinancieraService.obtenerGrupoFinanciero(revocacion.idGrupofinanciero) as JSON
-				dr.jsonGrupoFinanciero = StringEscapeUtils.unescapeJava(dr.jsonGrupoFinanciero)
-				dr.jsonInstitucion = null
-			}
-			else
-			{
-				dr.jsonGrupoFinanciero = null
+			
+			dr.jsonGrupoFinanciero = entidadFinancieraService.obtenerGrupoFinanciero(revocacion.idGrupofinanciero) as JSON
+			if(revocacion.idInstitucion != null || revocacion.idInstitucion !=  -1){
 				dr.jsonInstitucion = entidadFinancieraService.obtenerInstitucion(revocacion.idInstitucion) as JSON
 				dr.jsonInstitucion = StringEscapeUtils.unescapeJava(dr.jsonInstitucion)
 			}
+			dr.jsonGrupoFinanciero = StringEscapeUtils.unescapeJava(dr.jsonGrupoFinanciero)
+			
 			docsAEnviar.add(dr)
 		}
 		
@@ -175,12 +165,6 @@ class RevocacionService {
 			revocacion.idInstitucion = null
 		}
 		
-		if(revocacion.idInstitucion == null)
-			revocacion.esRegistradoPorGrupoFinanciero = true
-		else
-			revocacion.esRegistradoPorGrupoFinanciero = false
-		
-		
 		List<DocumentoRepositorioTO> docsAEnviar = new ArrayList<DocumentoRepositorioTO>()
 		List<DocumentoRepositorioTO> docsAActualizar = new ArrayList<DocumentoRepositorioTO>()
 		List<String> uuidsDocsABorrar = new ArrayList<DocumentoRepositorioTO>()
@@ -213,23 +197,18 @@ class RevocacionService {
 			dr.representanteLegalNombre = revocacion.representanteLegalNombre
 			dr.representanteLegalApellido1 = revocacion.representanteLegalApellido1
 			dr.representanteLegalApellido2 = revocacion.representanteLegalApellido2
-			dr.esRegistradoPorGrupoFinanciero = revocacion.esRegistradoPorGrupoFinanciero
 			dr.numeroEscritura = revocacion.numeroEscritura
 			dr.fechaRevocacion = revocacion.fechaRevocacion
 			dr.jsonRevocados = revocacion.revocados as JSON
 			dr.jsonNotario = revocacion.notario as JSON
-			if(revocacion.esRegistradoPorGrupoFinanciero == true)
-			{
-				dr.jsonGrupoFinanciero = entidadFinancieraService.obtenerGrupoFinanciero(revocacion.idGrupofinanciero) as JSON
-				dr.jsonGrupoFinanciero = StringEscapeUtils.unescapeJava(dr.jsonGrupoFinanciero)
-				dr.jsonInstitucion = null
-			}
-			else
-			{
-				dr.jsonGrupoFinanciero = null
+			
+			dr.jsonGrupoFinanciero = entidadFinancieraService.obtenerGrupoFinanciero(revocacion.idGrupofinanciero) as JSON
+			if(revocacion.idInstitucion != null || revocacion.idInstitucion !=  -1){
 				dr.jsonInstitucion = entidadFinancieraService.obtenerInstitucion(revocacion.idInstitucion) as JSON
 				dr.jsonInstitucion = StringEscapeUtils.unescapeJava(dr.jsonInstitucion)
 			}
+			dr.jsonGrupoFinanciero = StringEscapeUtils.unescapeJava(dr.jsonGrupoFinanciero)
+			
 			drr.toBeUpdated = true
 		}
 		revocacion.documentosRespaldoRevocacion.each{ 

@@ -1,5 +1,5 @@
 ﻿		
-		var _isAdmin = $("#hdnIsAdmin").val();
+		var _action = $("#hdnAction").val();
 		
 		//limpia mensajes de validación
 		function cleanValidationMsgs(){
@@ -20,7 +20,7 @@
 			
 			$('#divDocsCompletos').hide();
 			
-			if(_isAdmin == "true"){
+			if(_action == "create" || _action == "edit"){
 				$('#divAdmGrupoFinanciero').removeClass( 'has-error' );
 			}
 			
@@ -143,7 +143,7 @@
 				valid = false;
 			}
 			
-			if(_isAdmin == "true"){
+			if(_action == "create" || _action == "edit"){
 				if($("#selAdmIdGrupoFinanciero").val() == "-1"){
 					errorMsg.push({ errName: 'Dato requerido', errField: 'Grupo Financiero' });
 					$('#divAdmGrupoFinanciero').addClass( 'has-error' );

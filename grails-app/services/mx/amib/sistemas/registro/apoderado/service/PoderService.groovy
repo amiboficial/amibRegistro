@@ -105,12 +105,6 @@ class PoderService {
 			poder.idInstitucion = null
 		}
 		
-		if(poder.idInstitucion == null)
-			poder.esRegistradoPorGrupoFinanciero = true
-		else
-			poder.esRegistradoPorGrupoFinanciero = false
-		
-		
 		//fechas
 		poder.fechaCreacion = new Date()
 		poder.fechaModificacion = new Date()
@@ -201,12 +195,6 @@ class PoderService {
 		}
 		//poder.idInstitucion = null
 		
-		if(poder.idInstitucion == null)
-			poder.esRegistradoPorGrupoFinanciero = true
-		else
-			poder.esRegistradoPorGrupoFinanciero = false
-		
-		
 		//fechas
 		poder.fechaModificacion = new Date()
 		
@@ -235,27 +223,19 @@ class PoderService {
 			docEnviar.representanteLegalNombre = poder.representanteLegalNombre
 			docEnviar.representanteLegalApellido1 = poder.representanteLegalApellido1
 			docEnviar.representanteLegalApellido2 = poder.representanteLegalApellido2
-			docEnviar.esRegistradoPorGrupoFinanciero = poder.esRegistradoPorGrupoFinanciero
 			docEnviar.numeroEscritura = poder.numeroEscritura
 			docEnviar.fechaApoderamiento = poder.fechaApoderamiento
 			docEnviar.jsonApoderados = poder.apoderados as JSON
 			docEnviar.jsonNotario = poder.notario as JSON
-			
 			docEnviar.jsonApoderados = StringEscapeUtils.unescapeJava(docEnviar.jsonApoderados)
 			docEnviar.jsonNotario = StringEscapeUtils.unescapeJava(docEnviar.jsonNotario)
-				
-			if(poder.esRegistradoPorGrupoFinanciero == true)
-			{
-				docEnviar.jsonGrupoFinanciero = entidadFinancieraService.obtenerGrupoFinanciero(poder.idGrupofinanciero) as JSON
-				docEnviar.jsonInstitucion = null
-				docEnviar.jsonGrupoFinanciero = StringEscapeUtils.unescapeJava(docEnviar.jsonGrupoFinanciero)
-			}
-			else
-			{
-				docEnviar.jsonGrupoFinanciero = null
+			docEnviar.jsonGrupoFinanciero = entidadFinancieraService.obtenerGrupoFinanciero(poder.idGrupofinanciero) as JSON
+			if(poder.idInstitucion != null || poder.idInstitucion !=  -1){
 				docEnviar.jsonInstitucion = entidadFinancieraService.obtenerInstitucion(poder.idInstitucion) as JSON
 				docEnviar.jsonInstitucion = StringEscapeUtils.unescapeJava(docEnviar.jsonInstitucion)
-			}
+			}			
+			docEnviar.jsonGrupoFinanciero = StringEscapeUtils.unescapeJava(docEnviar.jsonGrupoFinanciero)
+			
 			docsEnviar.add(docEnviar)
 		}
 		documentoRepositorioService.actualizaMetadatosDocumentos(docsEnviar)
@@ -275,7 +255,6 @@ class PoderService {
 			docEnviar.representanteLegalNombre = poder.representanteLegalNombre
 			docEnviar.representanteLegalApellido1 = poder.representanteLegalApellido1
 			docEnviar.representanteLegalApellido2 = poder.representanteLegalApellido2
-			docEnviar.esRegistradoPorGrupoFinanciero = poder.esRegistradoPorGrupoFinanciero
 			docEnviar.numeroEscritura = poder.numeroEscritura
 			docEnviar.fechaApoderamiento = poder.fechaApoderamiento
 			docEnviar.jsonApoderados = poder.apoderados as JSON
@@ -284,18 +263,13 @@ class PoderService {
 			docEnviar.jsonApoderados = StringEscapeUtils.unescapeJava(docEnviar.jsonApoderados)
 			docEnviar.jsonNotario = StringEscapeUtils.unescapeJava(docEnviar.jsonNotario)
 				
-			if(poder.esRegistradoPorGrupoFinanciero == true)
-			{
-				docEnviar.jsonGrupoFinanciero = entidadFinancieraService.obtenerGrupoFinanciero(poder.idGrupofinanciero) as JSON
-				docEnviar.jsonInstitucion = null
-				docEnviar.jsonGrupoFinanciero = StringEscapeUtils.unescapeJava(docEnviar.jsonGrupoFinanciero)
-			}
-			else
-			{
-				docEnviar.jsonGrupoFinanciero = null
+			docEnviar.jsonGrupoFinanciero = entidadFinancieraService.obtenerGrupoFinanciero(poder.idGrupofinanciero) as JSON
+			if(poder.idInstitucion != null || poder.idInstitucion !=  -1){
 				docEnviar.jsonInstitucion = entidadFinancieraService.obtenerInstitucion(poder.idInstitucion) as JSON
 				docEnviar.jsonInstitucion = StringEscapeUtils.unescapeJava(docEnviar.jsonInstitucion)
-			}
+			}			
+			docEnviar.jsonGrupoFinanciero = StringEscapeUtils.unescapeJava(docEnviar.jsonGrupoFinanciero)
+			
 			docsEnviar.add(docEnviar)
 		}
 		documentoRepositorioService.enviarDocumentosArchivoTemporal(docsEnviar)
@@ -321,7 +295,6 @@ class PoderService {
 			docEnviar.representanteLegalNombre = it.poder.representanteLegalNombre
 			docEnviar.representanteLegalApellido1 = it.poder.representanteLegalApellido1
 			docEnviar.representanteLegalApellido2 = it.poder.representanteLegalApellido2
-			docEnviar.esRegistradoPorGrupoFinanciero = it.poder.esRegistradoPorGrupoFinanciero
 			docEnviar.numeroEscritura = it.poder.numeroEscritura
 			docEnviar.fechaApoderamiento = it.poder.fechaApoderamiento
 			docEnviar.jsonApoderados = it.poder.apoderados as JSON
@@ -330,19 +303,13 @@ class PoderService {
 			docEnviar.jsonApoderados = StringEscapeUtils.unescapeJava(docEnviar.jsonApoderados)
 			docEnviar.jsonNotario = StringEscapeUtils.unescapeJava(docEnviar.jsonNotario)
 				
-			if(it.poder.esRegistradoPorGrupoFinanciero == true)
-			{
-				docEnviar.jsonGrupoFinanciero = entidadFinancieraService.obtenerGrupoFinanciero(it.poder.idGrupofinanciero) as JSON 
-				docEnviar.jsonInstitucion = null
-				docEnviar.jsonGrupoFinanciero = StringEscapeUtils.unescapeJava(docEnviar.jsonGrupoFinanciero)
-			}
-			else
-			{				
-				docEnviar.jsonGrupoFinanciero = null
-				docEnviar.jsonInstitucion = entidadFinancieraService.obtenerInstitucion(it.poder.idInstitucion) as JSON 
+			docEnviar.jsonGrupoFinanciero = entidadFinancieraService.obtenerGrupoFinanciero(it.poder.idGrupofinanciero) as JSON
+			if(it.poder.idInstitucion != null || it.poder.idInstitucion !=  -1){
+				docEnviar.jsonInstitucion = entidadFinancieraService.obtenerInstitucion(it.poder.idInstitucion) as JSON
 				docEnviar.jsonInstitucion = StringEscapeUtils.unescapeJava(docEnviar.jsonInstitucion)
 			}
-
+			docEnviar.jsonGrupoFinanciero = StringEscapeUtils.unescapeJava(docEnviar.jsonGrupoFinanciero)
+			
 			docsEnviar.add(docEnviar)
 		}
 		documentoRepositorioService.enviarDocumentosArchivoTemporal(docsEnviar)

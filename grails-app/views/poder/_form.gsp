@@ -6,6 +6,100 @@
 			<div id="divMsgErrorServidor" class="alert alert-danger">
 				Mensajes de error de servidor.
 			</div>
+
+			<g:if test="${action == 'create' || action == 'edit' || action == 'editVerify'}">
+				<!-- INICIA: SELECCION ENTIDAD FINANCIERA - ROL DE ADMINISTRADOR -->
+				<fieldset>
+					<legend>Datos de la institución o grupo financiero</legend>
+					
+					<div id="divMsgProcesandoEntidadFinanciera" class="alert alert-info">
+						<asset:image src="spinner_alert_info.gif"/> <strong>Procesando datos, espere un momento</strong>.
+					</div>
+					<div id="divMsgErrorEntidadFinanciera" class="alert alert-danger">
+						<span class="glyphicon glyphicon-ban-circle"></span> Ha habído un error al procesar la petición.
+					</div>
+					
+					<div id="divAdmGrupoFinanciero" class="form-group">
+						<label class="col-md-2 col-sm-3 control-label">
+			            	<g:message code="poder.groupoFinanciero.label" default="Grupo financiero" /><span class="required-indicator">*</span>
+						</label>
+			            <div class="col-md-9 col-sm-9">
+							<g:select class="form-control" id="selAdmIdGrupoFinanciero" name='poder.idGrupofinanciero' value="${poderInstance?.idGrupofinanciero}"
+							noSelection="${['-1':'-Seleccione-']}"
+							from='${gruposFinancierosList}'
+							optionKey="id" optionValue="nombre"></g:select>
+			            </div>
+					</div>
+					
+					<div id="divAdmInstitucion" class="form-group">
+						<label class="col-md-2 col-sm-3 control-label">
+			            	<g:message code="poder.institucion.label" default="Institución" /><span class="required-indicator">*</span>
+						</label>
+						<div class="col-md-9 col-sm-9">
+							<select class="form-control" id="selAdmIdInstitucion" name="poder.idInstitucion" value="${poderInstance?.idInstitucion}">
+								<option value="-1">-Seleccione-</option>
+							</select>
+						</div>
+					</div>
+				</fieldset>
+				<!-- FIN: SELECCION ENTIDAD FINANCIERA - ROL DE ADMINISTRADOR -->
+			</g:if>
+			<g:if test="${action == 'createAltaGpoFin'}">	
+				<!-- INICIA: DATOS ENTIDAD FINANCIERA - ROL DE GRUPO FINANCIERO -->
+				<fieldset>
+					<legend>Datos de grupo financiero</legend>
+					
+					<div class="form-group">
+						<label class="col-md-2 col-sm-3 control-label">
+			            	<g:message code="poder.nombreGrupoFinanciero.label" default="Grupo Financiero" />
+						</label>
+			            <div class="col-md-9 col-sm-9">
+			            	<input type="text" class="form-control" required="" value="${grupoFinanciero?.nombre}" disabled="disabled"/>
+			            	<input type="hidden" name="poder.idGrupofinanciero" value="${poderInstance?.idGrupofinanciero}"/>
+			            </div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-2 col-sm-3 control-label">
+			            	<g:message code="poder.institucion.label" default="Institución" /><span class="required-indicator">*</span>
+						</label>
+			            <div class="col-md-9 col-sm-9">
+							<g:select class="form-control" id="selIdInstitucion" name='poder.idInstitucion' value="${poderInstance?.idInstitucion}"
+							noSelection="${['-1':'-Sin especificar-']}"
+							from='${institucionesList}'
+							optionKey="id" optionValue="nombre"></g:select>
+			            </div>
+					</div>
+					
+				</fieldset>
+				<!-- FIN: DATOS ENTIDAD FINANCIERA - ROL DE GRUPO FINANCIERO -->
+			</g:if>
+			<g:if test="${action == 'createAltaInst'}">
+				<!-- INICIA: DATOS ENTIDAD FINANCIERA - ROL DE INSTITUCION O GRUPO FINANCIERO -->
+				<fieldset>
+					<legend>Datos de institución</legend>
+					
+					<div class="form-group">
+						<label class="col-md-2 col-sm-3 control-label">
+			            	<g:message code="poder.nombreGrupoFinanciero.label" default="Grupo Financiero" />
+						</label>
+			            <div class="col-md-9 col-sm-9">
+			            	<input type="text" class="form-control" required="" value="${grupoFinanciero?.nombre}" disabled="disabled"/>
+			            	<input type="hidden" name="idInstitucion" value="${poderInstance?.idInstitucion}"/>
+			            </div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-2 col-sm-3 control-label">
+			            	<g:message code="poder.institucion.label" default="Institución" /><span class="required-indicator">*</span>
+						</label>
+			            <div class="col-md-9 col-sm-9">
+							<input type="text" class="form-control" required="" value="${institucion?.nombre}" disabled="disabled"/>
+							<input type="hidden" name="poder.idGrupofinanciero" value="${poderInstance?.idGrupofinanciero}"/>
+			            </div>
+					</div>
+					
+				</fieldset>
+				<!-- FIN: DATOS ENTIDAD FINANCIERA - ROL DE INSTITUCION O GRUPO FINANCIERO -->
+			</g:if>
 			
 			<fieldset>
 				<legend>Datos del representante legal</legend>
@@ -38,57 +132,6 @@
 				
 			</fieldset>
 	
-			<!-- INICIA: DATOS ENTIDAD FINANCIERA - ROL DE INSTITUCION O GRUPO FINANCIERO -->
-			<fieldset>
-				<legend>Datos de la institución o grupo financiero</legend>
-				
-				<div class="form-group">
-					<label class="col-md-2 col-sm-3 control-label">
-		            	<g:message code="poder.nombreGrupoFinancieroOrInstituto.label" default="Nombre" /><span class="required-indicator">*</span>
-					</label>
-		            <div class="col-md-9 col-sm-9">
-		            	<input type="text" class="form-control" required="" value="${entidadFinanciera?.nombre}" disabled="disabled"/>
-		            </div>
-				</div>
-			</fieldset>
-			<!-- FIN: DATOS ENTIDAD FINANCIERA - ROL DE INSTITUCION O GRUPO FINANCIERO -->
-			
-			<!-- INICIA: SELECCION ENTIDAD FINANCIERA - ROL DE ADMINISTRADOR -->
-			<fieldset>
-				<legend>Datos de la institución o grupo financiero</legend>
-				
-				<div id="divMsgProcesandoEntidadFinanciera" class="alert alert-info">
-					<asset:image src="spinner_alert_info.gif"/> <strong>Procesando datos, espere un momento</strong>.
-				</div>
-				<div id="divMsgErrorEntidadFinanciera" class="alert alert-danger">
-					<span class="glyphicon glyphicon-ban-circle"></span> Ha habído un error al procesar la petición.
-				</div>
-				
-				<div id="divAdmGrupoFinanciero" class="form-group">
-					<label class="col-md-2 col-sm-3 control-label">
-		            	<g:message code="poder.groupoFinanciero.label" default="Grupo financiero" /><span class="required-indicator">*</span>
-					</label>
-		            <div class="col-md-9 col-sm-9">
-						<g:select class="form-control" id="selAdmIdGrupoFinanciero" name='poder.idGrupofinanciero' value="${poderInstance?.idGrupofinanciero}"
-						noSelection="${['-1':'-Seleccione-']}"
-						from='${gruposFinancierosList}'
-						optionKey="id" optionValue="nombre"></g:select>
-		            </div>
-				</div>
-				
-				<div id="divAdmInstitucion" class="form-group">
-					<label class="col-md-2 col-sm-3 control-label">
-		            	<g:message code="poder.institucion.label" default="Institución" /><span class="required-indicator">*</span>
-					</label>
-					<div class="col-md-9 col-sm-9">
-						<select class="form-control" id="selAdmIdInstitucion" name="poder.idInstitucion" value="${poderInstance?.idInstitucion}">
-							<option value="-1">-Seleccione-</option>
-						</select>
-					</div>
-				</div>
-			</fieldset>
-			<!-- FIN: SELECCION ENTIDAD FINANCIERA - ROL DE ADMINISTRADOR -->
-			
 			<fieldset>
 				<legend>Datos del poder</legend>
 				
@@ -233,6 +276,68 @@
 			</fieldset>
 			<!-- FIN: SECCION DE DOCUMENTOS -->
 			
+			<!-- INICIA: SECCION DE DETALLES VERIFICACION (SOLO ADMIN)-->
+			<g:if test="${action == 'create' || action == 'edit'}">
+				<fieldset>
+					<legend>Detalles de verificación</legend>
+					<div id="divStVerificado" class="form-group">
+						<label class="col-md-2 col-sm-3 control-label">
+			            	<g:message code="poder.verificado.label" default="Verificado" />
+						</label>
+			            <div class="col-md-9 col-sm-9">
+			            	<g:checkBox id="cbxVertificado" name="poder.verificado" value="${poderInstance?.verificado}" />
+			            </div>
+					</div>
+					<div id="divVerificadoPor" class="form-group">
+						<label class="col-md-2 col-sm-3 control-label">
+			            	<g:message code="poder.verificadoPor.label" default="Vertificado por" />
+						</label>
+			            <div class="col-md-9 col-sm-9">
+			            	<g:textField id="txtVerificadoPor" maxlength="254" class="form-control" name="poder.verificadoPor" required="" value="${poderInstance?.verificadoPor}" />
+			            </div>
+					</div>
+					<div id="divStAprobado" class="form-group">
+						<label class="col-md-2 col-sm-3 control-label">
+			            	<g:message code="poder.aprobado.label" default="Aprobado" />
+						</label>
+			            <div class="col-md-9 col-sm-9">
+			            	<g:checkBox id="cbxAprobado" name="poder.aprobado" value="${poderInstance?.aprobado}" />
+			            </div>
+					</div>
+					<div id="divMotivoRechazo" class="form-group">
+						<label class="col-md-2 col-sm-3 control-label">
+			            	<g:message code="poder.motivoRechazo.label" default="Motivo de rechazo" />
+						</label>
+			            <div class="col-md-9 col-sm-9">
+			            	<g:textArea class="motivo form-control" name="poder.motivoRechazo" value="${poderInstance?.motivoRechazo}" rows="3" style="resize:none" maxlength="1000"/>
+			            </div>
+					</div>
+				</fieldset>
+			</g:if>
+			<!-- FIN: SECCION DE DETALLES VERIFICACION (SOLO ADMIN)-->
+			<g:if test="${action == 'editVerify'}">
+				<fieldset>
+					<legend>Detalles de revisión</legend>
+					<div id="divStAprobadoVer" class="form-group">
+						<label class="col-md-2 col-sm-3 control-label">
+			            	<g:message code="poder.aprobado.label" default="Aprobado" />
+						</label>
+			            <div class="col-md-9 col-sm-9">
+			            	<g:checkBox id="cbxAprobado" name="poder.aprobado" value="${poderInstance?.aprobado}" />
+			            </div>
+					</div>
+					<div id="divMotivoRechazoVer" class="form-group">
+						<label class="col-md-2 col-sm-3 control-label">
+			            	<g:message code="poder.motivoRechazo.label" default="Motivo de rechazo" />
+						</label>
+			            <div class="col-md-9 col-sm-9">
+			            	<g:textArea class="motivo form-control" name="poder.motivoRechazo" value="${poderInstance?.motivoRechazo}" rows="3" style="resize:none" maxlength="1000"/>
+			            </div>
+					</div>
+				</fieldset>
+			</g:if>
+			
+			
 			<div class="form-group">
 				<div class="col-lg-offset-5 col-md-offset-5 col-md-2 col-sm-2">
 					<button id="btnSubmit" type="button" class="btn btn-primary btn-lg btn-block">Aceptar</button>
@@ -247,5 +352,5 @@
 			<input type="hidden" id="hdnCountApoderados" value="${apoderadosList?.size()}"/>
 			<input type="hidden" id="hdnDocumentosCompletadosLoaded" value="${areDocumentosCompletados}" />
 			<input type="hidden" id="hdnDocumentosCompletados" value="${areDocumentosCompletados}" />
-			<input id="hdnIsAdmin" type="hidden" value="true" /> <!-- Para validacion de campos -->
+			<input id="hdnAction" type="hidden" name="action" value="${action}" /> <!-- Para validacion de campos -->
 			<!-- FIN: HIDDENS PARA DATOS ADICIONALES -->

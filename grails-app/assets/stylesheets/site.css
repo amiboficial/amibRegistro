@@ -209,3 +209,12 @@ fieldset{
 	position: absolute;
 	opacity: 0;
 }
+
+/* Mod. 24/12/2014 - Fix en margenes de row */
+
+.container-fluid {
+	padding-right: 0px;
+	padding-left: 0px;
+	margin-right: auto;
+	margin-left: auto;
+}

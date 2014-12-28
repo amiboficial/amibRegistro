@@ -79,7 +79,18 @@ class PoderController {
 		pivw.filterIdGrupoFinanciero = params.filterIdGrupoFinanciero?.toLong()
 		pivw.filterIdInstitucion = params.filterIdInstitucion?.toLong()
 		
+		pivw.countPendientes = Poder.findAllByVerificado(false,[cache: true]).size
+		
 		return pivw
+	}
+	
+	def indexPendientes(Integer max) {
+		params.max = Math.min(max ?: 10, 100)
+		
+		def total = Poder.findAllByVerificado(false,[cache: true]).size
+		def result = Poder.findAllByVerificado(false,[max: params.max, sort:'fechaCreacion', order:'desc',offset: params.offset, cache: true])
+				
+		respond result, model:[poderInstanceCount: total]
 	}
 	
     def show(Poder poderInstance) {
@@ -179,7 +190,7 @@ class PoderController {
 		def notarioIdEntidadFederativa = params.'notarioIdEntidadFederativa'.toInteger()
 		def jsonLstApoderadosIdAutorizadoCNBV = params.list('apoderadoIdAutorizadoCNBV')
 		def jsonLstDocumentos = params.list('documento')
-		def action = params.'action'
+		def originAction = params.'originAction'
 		
 		List<Integer> apoderadosIdAutorizadoCNBV = new ArrayList<Integer>()
 		List<DocumentoRespaldoPoderTO> documentos = new ArrayList<DocumentoRespaldoPoderTO>()
@@ -191,17 +202,22 @@ class PoderController {
 		}
 		
 		//action
-		if(action == 'createAltaGpoFin'){
+
+		if(originAction == 'createAltaGpoFin'){
 			//obtiene el dato del grupo financiero en sesión
 			//rellena datos relativos a verificación
+			poder.idGrupofinanciero = entidadFinancieraService.obtenerGrupoFinanciero(4).id
+			poder.idInstitucion = entidadFinancieraService.obtenerGrupoFinanciero(4).instituciones[0].id
 			poder.verificado = false
 			poder.verificadoPor = null
 			poder.aprobado = null
 			poder.motivoRechazo = null
 		}
-		else if(action == 'createAltaInst'){
+		else if(originAction == 'createAltaInst'){
 			//obtiene el dato de la institución en sesión
 			//rellena datos relativos a verificación
+			poder.idGrupofinanciero = entidadFinancieraService.obtenerGrupoFinanciero(4).id
+			poder.idInstitucion = entidadFinancieraService.obtenerGrupoFinanciero(4).instituciones[0].id
 			poder.verificado = false
 			poder.verificadoPor = null
 			poder.aprobado = null
@@ -344,7 +360,9 @@ class PoderController {
 	
     @Transactional
     def update(Poder poder) {
-        if (poder == null) {
+        def mensaje = null
+		
+		if (poder == null) {
             notFound()
             return
         }
@@ -355,7 +373,7 @@ class PoderController {
 		def notarioIdEntidadFederativa = params.'notarioIdEntidadFederativa'.toInteger()
 		def _apoderadosIdAutorizadoCNBV = params.list('apoderadoIdAutorizadoCNBV')
 		def _documentos = params.list('documento')
-		def action = params.'action'
+		def originAction = params.'originAction'
 		
 		List<Long> apoderadosIdAutorizadoCNBV = new ArrayList<Long>()
 		List<DocumentoRespaldoPoderTO> docsNuevos = new ArrayList<DocumentoRespaldoPoderTO>()
@@ -381,9 +399,13 @@ class PoderController {
 		}
 
         //si la accion se trata de una verificación
-		if(action == "editVerify"){
+		if(originAction == "editVerify"){
 			//debe tomar el nombre de usuario en sesión que esta verificando
 			poder.verificadoPor = 'OPERATIVO'
+			mensaje = message(code: 'mx.amib.sistemas.registro.apoderamiento.poder.update.verify.message')
+		}
+		else{
+			mensaje = message(code: 'mx.amib.sistemas.registro.apoderamiento.poder.update.message', args: [poder.numeroEscritura,poder.id])
 		}
 		
 		poder = poderService.update(poder, notarioNumero, notarioIdEntidadFederativa,
@@ -391,7 +413,7 @@ class PoderController {
 
         request.withFormat {
             form multipartForm {
-                flash.message = message(code: 'default.updated.message', args: [message(code: 'Poder.label', default: 'Poder'), poder.id])
+                flash.message = mensaje
                 redirect poder
             }
             '*'{ respond poder, [status: OK] }
@@ -561,4 +583,6 @@ class PoderIndexViewModel {
 	Integer fltFecFnYear
 	Long filterIdGrupoFinanciero
 	Long filterIdInstitucion
+	
+	Long countPendientes
 }

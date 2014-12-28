@@ -18,17 +18,22 @@
 		
 		<h2><strong>Datos del poder</strong></h2>
 		
+		<g:if test="${flash.message}">
+			<div class="alert alert-info"><span class="glyphicon glyphicon-info-sign"></span> ${flash.message}</div>
+		</g:if>
+		
 		<fieldset>
 			<legend>Acciones</legend>
 			
 			<button id="btnNuevoPoder" type="button" onclick="btnNuevoPoder_click()" class="btn btn-default btn-primary"><span class="glyphicon glyphicon-file"></span> Nuevo</button>
 			&nbsp;&nbsp;&nbsp;
+			<button id="btnRevisarPoder" type="button" onclick="btnRevisarPoder_click(${poderInstance?.id})" class="btn btn-default btn-primary"><span class="glyphicon glyphicon-edit"></span> Revisar</button>
 			<button id="btnEditarPoder" type="button" onclick="btnEditarPoder_click(${poderInstance?.id})" class="btn btn-default btn-primary"><span class="glyphicon glyphicon-pencil"></span> Editar</button>
 			<button id="btnEliminarPoder" type="button" onclick="btnEliminarPoder_click(${poderInstance?.id})" class="btn btn-default btn-primary"><span class="glyphicon glyphicon-trash"></span> Eliminar</button>
 			
 		</fieldset>
 		
-		<fieldset>
+		<fieldset class="form-horizontal">
 			<legend>Poder</legend>
 			
 			<fieldset>
@@ -174,7 +179,6 @@
 			
 			<fieldset>
 				<legend><i>Documentos de respaldo</i></legend>
-				
 				<table class="table">
 					<thead>
 						<tr>
@@ -196,6 +200,61 @@
 						</g:each>
 					</tbody>
 				</table>
+			</fieldset>
+			
+			<fieldset>
+				<legend><i>Detalles de revisión/verificación</i></legend>
+				
+				<div id="divStVerificado" class="form-group">
+					<label class="col-md-2 col-sm-3 control-label">
+		            	<g:message code="poder.verificado.label" default="Verificado" />
+					</label>
+		            <div class="col-md-9 col-sm-9">
+		            	<g:if test="${poderInstance?.verificado == true}">
+							<p class="form-control-static"><span class="glyphicon glyphicon-ok"></span></p>
+						</g:if>
+						<g:else>
+							<p class="form-control-static"><span class="glyphicon glyphicon-remove"></span></p>
+						</g:else>
+		            </div>
+				</div>
+				<div id="divVerificadoPor" class="form-group">
+					<label class="col-md-2 col-sm-3 control-label">
+		            	<g:message code="poder.verificadoPor.label" default="Vertificado por" />
+					</label>
+		            <div class="col-md-9 col-sm-9">
+		            	<p class="form-control-static">${poderInstance?.verificadoPor}</p>
+		            </div>
+				</div>
+				<div id="divStAprobado" class="form-group">
+					<label class="col-md-2 col-sm-3 control-label">
+		            	<g:message code="poder.aprobado.label" default="Aprobado" />
+					</label>
+		            <div class="col-md-9 col-sm-9">
+		            	<g:if test="${poderInstance?.aprobado == null}">
+		            		<p class="form-control-static"></p>
+		            	</g:if>
+		            	<g:elseif test="${poderInstance?.aprobado == true}">
+							<p class="form-control-static"><span class="glyphicon glyphicon-ok"></span></p>
+						</g:elseif>
+						<g:else>
+							<p class="form-control-static"><span class="glyphicon glyphicon-remove"></span></p>
+						</g:else>
+		            </div>
+				</div>
+				<div id="divMotivoRechazo" class="form-group">
+					<label class="col-md-2 col-sm-3 control-label">
+		            	<g:message code="poder.motivoRechazo.label" default="Motivo de rechazo" />
+					</label>
+		            <div class="col-md-9 col-sm-9">
+		            	<g:if test="${poderInstance?.aprobado == false}">
+		            		<p class="form-control-static">${poderInstance?.motivoRechazo}</p>
+		            	</g:if>
+		            	<g:else>
+		            		<p class="form-control-static">N/A</p>
+		            	</g:else>
+		            </div>
+				</div>
 				
 			</fieldset>
 			
@@ -205,6 +264,9 @@
 	<script>
 	function btnNuevoPoder_click(){
 		window.location.href = "<g:createLink controller="poder" action="create" />";
+	}
+	function btnRevisarPoder_click(id){
+		window.location.href = "<g:createLink controller="poder" action="editVerify" />/"+id;
 	}
 	function btnEditarPoder_click(id){
 		window.location.href = "<g:createLink controller="poder" action="edit" />/"+id;

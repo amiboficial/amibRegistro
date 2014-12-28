@@ -19,9 +19,11 @@
             	<a class="list-group-item colortitle">Gestión de catálogos</a>
             	<a href="<g:createLink controller="notario" action="index" />" class="list-group-item"><span class="glyphicon glyphicon-book"></span>&nbsp;Notarios</a>
                 <a class="list-group-item colortitle">Servicios</a>
-                <a href="<g:createLink controller="poder" action="create" />" class="list-group-item"><span class="glyphicon glyphicon-open"></span>&nbsp;Alta de poder</a>
+                <a href="<g:createLink controller="poder" action="createAltaGpoFin" />" class="list-group-item"><span class="glyphicon glyphicon-open"></span>&nbsp;Alta de poder</a>
                 <a href="<g:createLink controller="revocacion" action="create" />" class="list-group-item"><span class="glyphicon glyphicon-share-alt"></span>&nbsp;Solicitud de Revocación</a>
-                
+                <a class="list-group-item colortitle">Servicios</a>
+                <a href="<g:createLink controller="poder" action="createAltaInst" />" class="list-group-item"><span class="glyphicon glyphicon-open"></span>&nbsp;Alta de poder</a>
+                <a href="<g:createLink controller="revocacion" action="create" />" class="list-group-item"><span class="glyphicon glyphicon-share-alt"></span>&nbsp;Solicitud de Revocación</a>
                 <a href="#" class="list-group-item colortitle">Información</a>
                 <a href="#" class="list-group-item"><span class="glyphicon glyphicon-th-list"></span>&nbsp;Detalle de solicitudes</a>
                 <a href="<g:createLink controller="busqueda" action="index" />" class="list-group-item"><span class="glyphicon glyphicon-th-list"></span>&nbsp;Poderes vigentes</a>

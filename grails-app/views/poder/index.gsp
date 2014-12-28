@@ -24,6 +24,12 @@
 		<fieldset>
 			<legend>Acciones</legend>
 			<button id="btnNuevoPoder" type="button" class="btn btn-default btn-primary"><span class="glyphicon glyphicon-file"></span> Nuevo poder</button>
+			<g:if test="${viewModelInstance?.countPendientes == 0}">
+				<button id="btnPoderesPend" type="button" class="btn btn-default btn-primary"><span class="glyphicon glyphicon-edit"></span> Ver pendientes de revisión (0)</button>
+			</g:if>
+			<g:else>
+				<button id="btnPoderesPend" type="button" class="btn btn-default btn-danger"><span class="glyphicon glyphicon-edit"></span> Ver pendientes de revisión (${viewModelInstance?.countPendientes})</button>
+			</g:else>
 		</fieldset>
 		<fieldset>
 			<legend>Búsqueda de poderes</legend>
@@ -163,6 +169,9 @@
 	function btnVer_click(id){
 		window.location.href = '<g:createLink controller="poder" action="show" />/'+id;
 	}
+	function btnRevisar_click(id){
+		window.location.href = '<g:createLink controller="poder" action="editVerify" />/'+id;
+	}
 	function btnEditar_click(id){
 		window.location.href = '<g:createLink controller="poder" action="edit" />/'+id;
 	}
@@ -172,9 +181,13 @@
 		if(r == true)
 			window.location.href = url;
 	}
+	
 	//btnNuevoPoder
 	$( "#btnNuevoPoder" ).click(function() {
 		window.location.href = '<g:createLink controller="poder" action="create" />'
+	});
+	$( "#btnPoderesPend" ).click(function() {
+		window.location.href = '<g:createLink controller="poder" action="indexPendientes" />'
 	});
 	//callback al boton para limpiar
 	$( "#btnLimpiar" ).click(function() {

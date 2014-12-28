@@ -352,5 +352,5 @@
 			<input type="hidden" id="hdnCountApoderados" value="${apoderadosList?.size()}"/>
 			<input type="hidden" id="hdnDocumentosCompletadosLoaded" value="${areDocumentosCompletados}" />
 			<input type="hidden" id="hdnDocumentosCompletados" value="${areDocumentosCompletados}" />
-			<input id="hdnAction" type="hidden" name="action" value="${action}" /> <!-- Para validacion de campos -->
+			<input id="hdnAction" type="hidden" name="originAction" value="${action}" /> <!-- Para validacion de campos -->
 			<!-- FIN: HIDDENS PARA DATOS ADICIONALES -->

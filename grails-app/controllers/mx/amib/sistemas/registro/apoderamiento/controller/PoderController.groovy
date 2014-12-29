@@ -56,11 +56,14 @@ class PoderController {
 		params.fltFecFn_year = (params.fltFecFn_year==null || params.fltFecFn_year=='null')?'-1':params.fltFecFn_year
 		params.filterIdGrupoFinanciero = params.filterIdGrupoFinanciero?:'-1'
 		params.filterIdInstitucion = params.filterIdInstitucion?:'-1'
+		params.fltNoVerificado = (params.fltNoVerificado==null)?false:true
+		params.fltNoAprobado = (params.fltNoAprobado==null)?false:true
 		
 		def result = poderService.search(params.max, params.offset.toInteger(), params.sort, params.order, params.fltNumEsc?.toInteger(),
 									params.fltFecIni_day?.toInteger(), params.fltFecIni_month?.toInteger(), params.fltFecIni_year?.toInteger(), 
 									params.fltFecFn_day?.toInteger(), params.fltFecFn_month?.toInteger(), params.fltFecFn_year?.toInteger(), 
-									params.filterIdGrupoFinanciero?.toLong(), params.filterIdInstitucion?.toLong())
+									params.filterIdGrupoFinanciero?.toLong(), params.filterIdInstitucion?.toLong(),
+									params.fltNoVerificado, params.fltNoAprobado)
         respond result.list, model:[poderInstanceCount: result.count, viewModelInstance: this.getIndexViewModel(params)]
     }
 
@@ -78,6 +81,8 @@ class PoderController {
 		pivw.fltFecFnYear = params.fltFecFn_year?.toInteger()
 		pivw.filterIdGrupoFinanciero = params.filterIdGrupoFinanciero?.toLong()
 		pivw.filterIdInstitucion = params.filterIdInstitucion?.toLong()
+		pivw.fltNoVerificado = params.fltNoVerificado
+		pivw.fltNoAprobado = params.fltNoAprobado
 		
 		pivw.countPendientes = Poder.findAllByVerificado(false,[cache: true]).size
 		
@@ -210,7 +215,7 @@ class PoderController {
 			poder.idInstitucion = entidadFinancieraService.obtenerGrupoFinanciero(4).instituciones[0].id
 			poder.verificado = false
 			poder.verificadoPor = null
-			poder.aprobado = null
+			poder.aprobado = false
 			poder.motivoRechazo = null
 		}
 		else if(originAction == 'createAltaInst'){
@@ -220,7 +225,7 @@ class PoderController {
 			poder.idInstitucion = entidadFinancieraService.obtenerGrupoFinanciero(4).instituciones[0].id
 			poder.verificado = false
 			poder.verificadoPor = null
-			poder.aprobado = null
+			poder.aprobado = false
 			poder.motivoRechazo = null
 		}
 		
@@ -400,8 +405,8 @@ class PoderController {
 
         //si la accion se trata de una verificación
 		if(originAction == "editVerify"){
-			//debe tomar el nombre de usuario en sesión que esta verificando
-			poder.verificadoPor = 'OPERATIVO'
+			poder.verificado = true
+			poder.verificadoPor = 'OPERATIVO' //debe tomar el nombre de usuario en sesión que esta verificando
 			mensaje = message(code: 'mx.amib.sistemas.registro.apoderamiento.poder.update.verify.message')
 		}
 		else{
@@ -583,6 +588,9 @@ class PoderIndexViewModel {
 	Integer fltFecFnYear
 	Long filterIdGrupoFinanciero
 	Long filterIdInstitucion
+	Boolean fltNoVerificado
+	Boolean fltNoAprobado
+	
 	
 	Long countPendientes
 }

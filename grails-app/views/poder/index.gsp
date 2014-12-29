@@ -87,6 +87,35 @@
 				</div>
 			</div>
 			
+			<div id="divStVerificado" class="form-group">
+				<label class="col-md-2 col-sm-3 control-label">
+	            	<g:message code="poder.noVerificado.label" default="Pendiente de revision" />
+				</label>
+	            <div class="col-md-9 col-sm-9">
+	            	<g:if test="${viewModelInstance?.fltNoVerificado == true}">
+	            		<input type="checkbox" id="cbxNoVertificado" name="fltNoVerificado" checked/>
+	            	</g:if>
+	            	<g:else>
+	            		<input type="checkbox" id="cbxNoVertificado" name="fltNoVerificado" />
+	            	</g:else>
+	            </div>
+			</div>
+			
+			<div id="divStAprobadoVer" class="form-group">
+				<label class="col-md-2 col-sm-3 control-label">
+	            	<g:message code="poder.noAprobado.label" default="Rechazado" />
+				</label>
+	            <div class="col-md-9 col-sm-9">
+	            	<g:if test="${viewModelInstance?.fltNoAprobado == true}">
+	            		<input type="checkbox"id="cbxNoAprobado" name="fltNoAprobado" checked/>
+	            	</g:if>
+	            	<g:else>
+	            		<input type="checkbox"id="cbxNoAprobado" name="fltNoAprobado" />
+	            	</g:else>
+	            </div>
+			</div>
+
+			
 			<div id="divButtonArea" class="form-group">
 				<div class="col-md-3 col-sm-3">
 					&nbsp;
@@ -188,6 +217,16 @@
 	});
 	$( "#btnPoderesPend" ).click(function() {
 		window.location.href = '<g:createLink controller="poder" action="indexPendientes" />'
+	});
+	$( "#cbxNoVertificado" ).change(function(){
+		if( $( "#cbxNoVertificado" ).is(':checked') == true ){
+			$( "#cbxNoAprobado" ).prop('checked', false);
+		}
+	});
+	$( "#cbxNoAprobado" ).change(function(){
+		if( $( "#cbxNoAprobado" ).is(':checked') == true ){
+			$( "#cbxNoVertificado" ).prop('checked', false);
+		}
 	});
 	//callback al boton para limpiar
 	$( "#btnLimpiar" ).click(function() {

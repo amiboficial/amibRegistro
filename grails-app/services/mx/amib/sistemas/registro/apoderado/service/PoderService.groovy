@@ -310,7 +310,8 @@ class PoderService {
 	def search(Integer max, Integer offset, String sort, String order, Integer filterNumeroEscritura, 
 				Integer filterFechaDelDia, Integer filterFechaDelMes, Integer filterFechaDelAnio, 
 				Integer filterFechaAlDia, Integer filterFechaAlMes, Integer filterFechaAlAnio,
-				Long filterIdGrupoFinanciero, Long filterIdInstitucion){
+				Long filterIdGrupoFinanciero, Long filterIdInstitucion, 
+				Boolean fltNoVerificado, Boolean fltNoAprobado){
 				
 		Calendar filterCalFechaDel = null
 		Calendar filterCalFechaAl = null
@@ -321,7 +322,7 @@ class PoderService {
 		StringBuilder sbHql = new StringBuilder()
 		Map<String,Object> namedParameters = new HashMap<String,Object>()
 		String strHqlCount = null
-		
+				
 		if(max == null || max <= 0){
 			max = 10
 		}
@@ -390,6 +391,22 @@ class PoderService {
 			whereKeywordNeeded = true
 			namedParameters.put("idInstitucion",filterIdInstitucion)
 		}
+		if(fltNoVerificado != null){
+			hqlFilters.add("n.verificado != :noVerificado ")
+			namedParameters.put("noVerificado",fltNoVerificado)
+			whereKeywordNeeded = true
+			if(fltNoVerificado == false){
+				if(fltNoAprobado != null){
+					hqlFilters.add("n.aprobado != :noAprobado ")
+					namedParameters.put("noAprobado",fltNoAprobado)
+					whereKeywordNeeded = true
+				}
+			}
+		}
+		
+		/*if(fltNoVerificado != null && fltNoAprobado != null && fltNoVerificado && fltNoAprobado){
+			
+		}*/
 		
 		sbHql.append("from Poder as n ")
 		if(whereKeywordNeeded){

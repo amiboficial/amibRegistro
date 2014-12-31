@@ -7,6 +7,94 @@
 				Mensajes de error de servidor.
 			</div>
 			
+			
+			<g:if test="${viewModelInstance?.action == 'create'}">
+				<fieldset>
+					<legend>Datos de la institución o grupo financiero</legend>
+					
+					<div id="divMsgProcesandoEntidadFinanciera" class="alert alert-info">
+						<asset:image src="spinner_alert_info.gif"/> <strong>Procesando datos, espere un momento</strong>.
+					</div>
+					<div id="divMsgErrorEntidadFinanciera" class="alert alert-danger">
+						<span class="glyphicon glyphicon-ban-circle"></span> Ha habído un error al procesar la petición.
+					</div>
+					
+					<div id="divAdmGrupoFinanciero" class="form-group">
+						<label class="col-md-2 col-sm-3 control-label">
+			            	<g:message code="revocacion.groupoFinanciero.label" default="Grupo financiero" /><span class="required-indicator">*</span>
+						</label>
+			            <div class="col-md-9 col-sm-9">
+							<g:select class="form-control" id="selAdmIdGrupoFinanciero" name='revocacion.idGrupofinanciero' value="${revocacionInstance?.idGrupofinanciero}"
+							noSelection="${['-1':'-Seleccione-']}"
+							from='${viewModelInstance?.gruposFinancierosList}'
+							optionKey="id" optionValue="nombre"></g:select>
+			            </div>
+					</div>
+					
+					<div id="divAdmInstitucion" class="form-group">
+						<label class="col-md-2 col-sm-3 control-label">
+			            	<g:message code="revocacion.institucion.label" default="Institución" /><span class="required-indicator">*</span>
+						</label>
+						<div class="col-md-9 col-sm-9">
+							<select class="form-control" id="selAdmIdInstitucion" name="revocacion.idInstitucion" value="${revocacionInstance?.idInstitucion}">
+								<option value="-1">-Seleccione-</option>
+							</select>
+						</div>
+					</div>
+				</fieldset>
+			</g:if>
+			<g:elseif test="${viewModelInstance?.action == 'createSolGpoFin'}">
+				<fieldset>
+					<legend>Datos de grupo financiero</legend>
+					
+					<div class="form-group">
+						<label class="col-md-2 col-sm-3 control-label">
+			            	<g:message code="revocacion.nombreGrupoFinanciero.label" default="Grupo Financiero" />
+						</label>
+			            <div class="col-md-9 col-sm-9">
+			            	<input type="text" class="form-control" required="" value="${viewModelInstance?.grupoFinanciero?.nombre}" disabled="disabled"/>
+			            	<input type="hidden" name="revocacion.idGrupofinanciero" value="${revocacionInstance?.idGrupofinanciero}"/>
+			            </div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-2 col-sm-3 control-label">
+			            	<g:message code="revocacion.institucion.label" default="Institución" /><span class="required-indicator">*</span>
+						</label>
+			            <div class="col-md-9 col-sm-9">
+							<g:select class="form-control" id="selIdInstitucion" name='revocacion.idInstitucion' value="${revocacionInstance?.idInstitucion}"
+							noSelection="${['-1':'-Sin especificar-']}"
+							from='${viewModelInstance?.institucionesList}'
+							optionKey="id" optionValue="nombre"></g:select>
+			            </div>
+					</div>
+					
+				</fieldset>
+			</g:elseif>
+			<g:elseif test="${viewModelInstance?.action == 'createSolInst'}">
+				<fieldset>
+					<legend>Datos de institución</legend>
+					
+					<div class="form-group">
+						<label class="col-md-2 col-sm-3 control-label">
+			            	<g:message code="revocacion.nombreGrupoFinanciero.label" default="Grupo Financiero" />
+						</label>
+			            <div class="col-md-9 col-sm-9">
+			            	<input type="text" class="form-control" required="" value="${viewModelInstance?.grupoFinanciero?.nombre}" disabled="disabled"/>
+			            	<input type="hidden" name="idInstitucion" value="${revocacionInstance?.idInstitucion}"/>
+			            </div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-2 col-sm-3 control-label">
+			            	<g:message code="revocacion.institucion.label" default="Institución" /><span class="required-indicator">*</span>
+						</label>
+			            <div class="col-md-9 col-sm-9">
+							<input type="text" class="form-control" required="" value="${viewModelInstance?.institucion?.nombre}" disabled="disabled"/>
+							<input type="hidden" name="revocacion.idGrupofinanciero" value="${revocacionInstance?.idGrupofinanciero}"/>
+			            </div>
+					</div>
+				</fieldset>
+			</g:elseif>
+			
 			<fieldset>
 				<legend>Datos del representante legal</legend>
 				<div id="divRepLegalNom" class="form-group">
@@ -34,56 +122,6 @@
 					</div>
 				</div>
 			</fieldset>
-			
-			<!-- INICIA: DATOS ENTIDAD FINANCIERA - ROL DE INSTITUCION O GRUPO FINANCIERO -->
-			<fieldset>
-				<legend>Datos de la institución o grupo financiero</legend>
-				<div class="form-group">
-					<label class="col-md-2 col-sm-3 control-label">
-		            	<g:message code="revocacion.nombreGrupoFinancieroOrInstituto.label" default="Nombre" /><span class="required-indicator">*</span>
-					</label>
-		            <div class="col-md-9 col-sm-9">
-		            	<input type="text" class="form-control" required="" value="${viewModelInstance?.entidadFinanciera?.nombre}" disabled="disabled"/>
-		            </div>
-				</div>
-			</fieldset>
-			<!-- FIN: DATOS ENTIDAD FINANCIERA - ROL DE INSTITUCION O GRUPO FINANCIERO -->
-			
-			<!-- INICIA: SELECCION ENTIDAD FINANCIERA - ROL DE ADMINISTRADOR -->
-			<fieldset>
-				<legend>Datos de la institución o grupo financiero</legend>
-				
-				<div id="divMsgProcesandoEntidadFinanciera" class="alert alert-info">
-					<asset:image src="spinner_alert_info.gif"/> <strong>Procesando datos, espere un momento</strong>.
-				</div>
-				<div id="divMsgErrorEntidadFinanciera" class="alert alert-danger">
-					<span class="glyphicon glyphicon-ban-circle"></span> Ha habído un error al procesar la petición.
-				</div>
-				
-				<div id="divAdmGrupoFinanciero" class="form-group">
-					<label class="col-md-2 col-sm-3 control-label">
-		            	<g:message code="revocacion.groupoFinanciero.label" default="Grupo financiero" /><span class="required-indicator">*</span>
-					</label>
-		            <div class="col-md-9 col-sm-9">
-						<g:select class="form-control" id="selAdmIdGrupoFinanciero" name='revocacion.idGrupofinanciero' value="${revocacionInstance?.idGrupofinanciero}"
-						noSelection="${['-1':'-Seleccione-']}"
-						from='${viewModelInstance?.gruposFinancierosList}'
-						optionKey="id" optionValue="nombre"></g:select>
-		            </div>
-				</div>
-				
-				<div id="divAdmInstitucion" class="form-group">
-					<label class="col-md-2 col-sm-3 control-label">
-		            	<g:message code="revocacion.institucion.label" default="Institución" /><span class="required-indicator">*</span>
-					</label>
-					<div class="col-md-9 col-sm-9">
-						<select class="form-control" id="selAdmIdInstitucion" name="revocacion.idInstitucion" value="${revocacionInstance?.idInstitucion}">
-							<option value="-1">-Seleccione-</option>
-						</select>
-					</div>
-				</div>
-			</fieldset>
-			<!-- FIN: SELECCION ENTIDAD FINANCIERA - ROL DE ADMINISTRADOR -->
 			
 			<fieldset>
 				<legend>Datos de la revocación</legend>
@@ -242,7 +280,7 @@
 				<input type="hidden" id="hdnDocsModelValidatedMsg" value=""/>
 			</fieldset>
 			
-			<input id="hdnIsAdmin" type="hidden" value="true" /> <!-- Para validacion de campos -->
+			<input id="hdnAction" type="hidden" name="originAction" value="${viewModelInstance?.action}" />
 			
 			<div class="form-group">
 				<div class="col-lg-offset-5 col-md-offset-5 col-md-2 col-sm-2">

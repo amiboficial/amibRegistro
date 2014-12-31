@@ -96,7 +96,6 @@
 							<input type="hidden" name="poder.idGrupofinanciero" value="${poderInstance?.idGrupofinanciero}"/>
 			            </div>
 					</div>
-					
 				</fieldset>
 				<!-- FIN: DATOS ENTIDAD FINANCIERA - ROL DE INSTITUCION O GRUPO FINANCIERO -->
 			</g:if>

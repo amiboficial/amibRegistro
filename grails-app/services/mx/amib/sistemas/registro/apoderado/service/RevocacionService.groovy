@@ -349,6 +349,15 @@ class RevocacionService {
 		
 	}
 	
+	def findAllByIdGrupofinanciero(Long idGrupoFinanciero){
+		def result = Revocacion.findAllByIdGrupofinanciero(idGrupoFinanciero)
+		return result
+	}
+			
+	def findAllByIdInstitucion(Long idInstitucion){
+		def result = Revocacion.findAllByIdInstitucion(idInstitucion)
+		return result
+	}	
 }
 
 class RevocadoTO {

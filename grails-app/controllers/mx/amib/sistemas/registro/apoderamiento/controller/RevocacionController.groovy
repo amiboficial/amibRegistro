@@ -90,27 +90,63 @@ class RevocacionController {
         respond new Revocacion(params), model:[viewModelInstance: revocacionViewModel]
     }
 	
+	def createSolGpoFin(){
+		RevocacionViewModel revocacionViewModel = this.createSolGpoFinViewModel()
+		respond new Revocacion(params), model:[viewModelInstance: revocacionViewModel]
+	}
+	
+	def createSolInst(){
+		RevocacionViewModel revocacionViewModel = this.createSolInstViewModel()
+		respond new Revocacion(params), model:[viewModelInstance: revocacionViewModel]
+	}
+	
 	private RevocacionViewModel createViewModel(){
 		RevocacionViewModel revocacionViewModel = new RevocacionViewModel()
-		//este se tiene que cambiar en cuanto se tenga el rol de spring security
-		revocacionViewModel.entidadFinanciera = entidadFinancieraService.obtenerGrupoFinanciero(6)
 		revocacionViewModel.entidadFederativaList = sepomexService.obtenerEntidadesFederativas()
 		revocacionViewModel.gruposFinancierosList = entidadFinancieraService.obtenerGruposFinancierosVigentes()
 		revocacionViewModel.tipoDocumentoList = TipoDocumentoRespaldoRevocacion.findAllByVigente(true)
 		revocacionViewModel.validDocumentosCargados = false
+		revocacionViewModel.action = "create"
+		return revocacionViewModel
+	}
+	private RevocacionViewModel createSolGpoFinViewModel(){
+		RevocacionViewModel revocacionViewModel = new RevocacionViewModel()
+		revocacionViewModel.entidadFederativaList = sepomexService.obtenerEntidadesFederativas()
+		
+		//estos atributos se asignarán de acuerdo al usuario en sesión
+		revocacionViewModel.grupoFinanciero = entidadFinancieraService.obtenerGrupoFinanciero(4)
+		revocacionViewModel.institucionesList = entidadFinancieraService.obtenerGrupoFinanciero(4).instituciones
+		
+		revocacionViewModel.tipoDocumentoList = TipoDocumentoRespaldoRevocacion.findAllByVigente(true)
+		revocacionViewModel.validDocumentosCargados = false
+		revocacionViewModel.action = "createSolGpoFin"
+		return revocacionViewModel
+	}
+	private RevocacionViewModel createSolInstViewModel(){
+		RevocacionViewModel revocacionViewModel = new RevocacionViewModel()
+		revocacionViewModel.entidadFederativaList = sepomexService.obtenerEntidadesFederativas()
+		
+		//estos atributos se asignarán de acuerdo al usuario en sesión
+		revocacionViewModel.grupoFinanciero = entidadFinancieraService.obtenerGrupoFinanciero(4)
+		revocacionViewModel.institucion = entidadFinancieraService.obtenerGrupoFinanciero(4).instituciones[0]
+		
+		revocacionViewModel.tipoDocumentoList = TipoDocumentoRespaldoRevocacion.findAllByVigente(true)
+		revocacionViewModel.validDocumentosCargados = false
+		revocacionViewModel.action = "createSolInst"
 		return revocacionViewModel
 	}
 
     @Transactional
     def save(Revocacion revocacion) {
 		def revocacionInstance = revocacion
-		
+		def originAction = params.'originAction'
 		def revocadosToBind = params.list('revocado')
 		def documentosToBind = params.list('documento')
 		def documentosToEraseStrParam = params.'idsDocumentosBorrados'
 		def notarioNumero = params.'notarioNumero'.toInteger()
 		def notarioIdEntidadFederativa = params.'notarioIdEntidadFederativa'.toInteger()
         def documentosToErase = null
+		
 		if(documentosToEraseStrParam != null || documentosToEraseStrParam != ""){
 			documentosToErase = documentosToEraseStrParam.split("\\|")
 		}
@@ -120,15 +156,28 @@ class RevocacionController {
             return
         }
 
+		if(originAction == 'createSolGpoFin'){
+			//obtiene el dato del grupo financiero en sesión
+			//rellena datos relativos a verificación
+			revocacionInstance.idGrupofinanciero = entidadFinancieraService.obtenerGrupoFinanciero(4).id
+			revocacionInstance.idInstitucion = -1
+			revocacionInstance.verificado = false
+			revocacionInstance.verificadoPor = null
+			revocacionInstance.aprobado = false
+			revocacionInstance.motivoRechazo = null
+		}
+		else if(originAction == 'createSolInst'){
+			//obtiene el dato de la institución en sesión
+			//rellena datos relativos a verificación
+			revocacionInstance.idGrupofinanciero = entidadFinancieraService.obtenerGrupoFinanciero(4).id
+			revocacionInstance.idInstitucion = entidadFinancieraService.obtenerGrupoFinanciero(4).instituciones[0].id
+			revocacionInstance.verificado = false
+			revocacionInstance.verificadoPor = null
+			revocacionInstance.aprobado = false
+			revocacionInstance.motivoRechazo = null
+		}
 		revocacionService.save(revocacionInstance, revocadosToBind, documentosToBind, notarioIdEntidadFederativa, notarioNumero)
 		
-		/*
-        if (revocacionInstance.hasErrors()) {
-            respond revocacionInstance.errors, view:'create'
-            return
-        }
-        revocacionInstance.save flush:true
-		*/
         request.withFormat {
             form multipartForm {
                 flash.message = message(code: 'default.created.message', args: [message(code: 'revocacion.label', default: 'Revocacion'), revocacionInstance.id])
@@ -146,8 +195,6 @@ class RevocacionController {
 	
 	private RevocacionViewModel editViewModel(){
 		RevocacionViewModel revocacionViewModel = new RevocacionViewModel()
-		//este se tiene que cambiar en cuanto se tenga el rol de spring security
-		revocacionViewModel.entidadFinanciera = entidadFinancieraService.obtenerGrupoFinanciero(6)
 		revocacionViewModel.entidadFederativaList = sepomexService.obtenerEntidadesFederativas()
 		revocacionViewModel.gruposFinancierosList = entidadFinancieraService.obtenerGruposFinancierosVigentes()
 		revocacionViewModel.tipoDocumentoList = TipoDocumentoRespaldoRevocacion.findAllByVigente(true)
@@ -273,18 +320,24 @@ class RevocacionController {
 }
 
 class RevocacionViewModel {
-	EntidadFinancieraTO entidadFinanciera
+	GrupoFinancieroTO grupoFinanciero
+	InstitucionTO institucion
+	
 	Collection<EntidadFederativaTO> entidadFederativaList
 	Collection<GrupoFinancieroTO> gruposFinancierosList
+	Collection<InstitucionTO> institucionesList
+	
 	Collection<TipoDocumentoRespaldoRevocacion> tipoDocumentoList
 	
 	boolean validDocumentosCargados
+	
+	String action
 }
 
 class RevocacionIndexViewModel {
 	Collection<GrupoFinancieroTO> gruposFinancierosList
 	InstitucionTO[] institucionesGpoFinList
-	
+		
 	Integer fltNumEsc
 	Integer fltFecIniDay
 	Integer fltFecIniMonth
@@ -294,4 +347,6 @@ class RevocacionIndexViewModel {
 	Integer fltFecFnYear
 	Long filterIdGrupoFinanciero
 	Long filterIdInstitucion
+	
+	String action
 }

@@ -1,5 +1,5 @@
 ﻿		
-		var _isAdmin = $("#hdnIsAdmin").val();
+		var _action = $("#hdnAction").val();
 		
 		//limpia mensajes de validación
 		function cleanValidationMsgs(){
@@ -17,7 +17,7 @@
 			$('#divMsgAlMenosUnApoderado').hide();
 			$('#divMsgDocRequeridos').hide();
 			
-			if(_isAdmin == "true"){
+			if(_action == "create" || _action == "edit" || _action == "editVerify" ){
 				$('#divAdmGrupoFinanciero').removeClass( 'has-error' );
 			}
 			
@@ -30,7 +30,7 @@
 		
 		//campos que requieren reset al hacer "back" con el navegador
 		$(window).bind("pageshow", function() {
-			var _isAdmin = $("#hdnIsAdmin").val();
+			var _action = $("#hdnAction").val();
 		
 			$('#hdnCountApoderados').val( $('#hdnCountApoderadosLoaded').val() );
 			$('#hdnDocumentosCompletados').val( $('#hdnDocumentosCompletadosLoaded').val() );
@@ -126,7 +126,7 @@
 				valid = false;
 			}
 			
-			if(_isAdmin == "true"){
+			if(_action == "create" || _action == "edit" || _action == "editVerify"){
 				if($("#selAdmIdGrupoFinanciero").val() == "-1"){
 					errorMsg.push({ errName: 'Dato requerido', errField: 'Grupo Financiero' });
 					$('#divAdmGrupoFinanciero').addClass( 'has-error' );

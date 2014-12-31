@@ -212,7 +212,7 @@ class PoderController {
 			//obtiene el dato del grupo financiero en sesión
 			//rellena datos relativos a verificación
 			poder.idGrupofinanciero = entidadFinancieraService.obtenerGrupoFinanciero(4).id
-			poder.idInstitucion = entidadFinancieraService.obtenerGrupoFinanciero(4).instituciones[0].id
+			poder.idInstitucion = -1
 			poder.verificado = false
 			poder.verificadoPor = null
 			poder.aprobado = false

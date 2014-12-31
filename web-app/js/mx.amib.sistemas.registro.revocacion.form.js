@@ -20,7 +20,7 @@
 			
 			$('#divDocsCompletos').hide();
 			
-			if(_action == "create" || _action == "edit"){
+			if(_action == "create" || _action == "edit" || _action == "editVerify" ){
 				$('#divAdmGrupoFinanciero').removeClass( 'has-error' );
 			}
 			
@@ -33,7 +33,8 @@
 		
 		//campos que requieren reset al hacer "back" con el navegador
 		$(window).bind("pageshow", function() {
-			var _isAdmin = $("#hdnIsAdmin").val();
+			var _action = $("#hdnAction").val();
+			
 			$('#hdnDocsModelValidated').val( $('#hdnDocsModelValidatedLoaded').val() );
 			$('#hdnDocsIsBusy').val("false");
 			
@@ -134,7 +135,6 @@
 				errorMsg.push({ errName: 'Datos aún editandose', errField: 'Apoderados' });
 				$('#divMsgRevEditando').show();
 				valid = false;
-				console.log("EDITANDO; BUSYCOUNT: " + $('#hdnRevocadosWidgetBusyCount').val());
 			}
 			
 			if( $('#hdnDocsModelValidated').val() == 'false' ){
@@ -143,7 +143,7 @@
 				valid = false;
 			}
 			
-			if(_action == "create" || _action == "edit"){
+			if(_action == "create" || _action == "edit" || _action == "editVerify"){
 				if($("#selAdmIdGrupoFinanciero").val() == "-1"){
 					errorMsg.push({ errName: 'Dato requerido', errField: 'Grupo Financiero' });
 					$('#divAdmGrupoFinanciero').addClass( 'has-error' );

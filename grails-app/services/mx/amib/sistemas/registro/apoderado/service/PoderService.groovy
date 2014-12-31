@@ -427,6 +427,16 @@ class PoderService {
 		searchResult.list = Poder.findAll(sbHql.toString(),namedParameters,[max: max, offset: offset])
 		return searchResult
 	}
+
+	def findAllByIdGrupofinanciero(Long idGrupoFinanciero){
+		def result = Poder.findAllByIdGrupofinanciero(idGrupoFinanciero)
+		return result
+	}
+	
+	def findAllByIdInstitucion(Long idInstitucion){
+		def result = Poder.findAllByIdInstitucion(idInstitucion)
+		return result
+	}
 }
 
 class DocumentoRespaldoPoderTO {

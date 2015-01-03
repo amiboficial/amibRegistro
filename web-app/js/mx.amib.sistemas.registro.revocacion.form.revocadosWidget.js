@@ -77,6 +77,8 @@ app.Revocados = Backbone.Collection.extend({
 });
 
 app.RevocadoView = Backbone.View.extend({
+	parent: undefined,
+	
 	tagname: 'div',
 	className: 'list-group-item',
 	matriculaUrl: '',
@@ -90,9 +92,19 @@ app.RevocadoView = Backbone.View.extend({
 	
 	_busy: false,
 	
+	initialize : function (options) {
+	    this.parent = options.parent;
+	},
+	
 	render: function() {
 		if(this.model.getState() == app.RVC_NEW) {
 			this.$el.html( this.templateNew( this.model.toJSON() ) );
+			var context = this;
+			if(this.parent != undefined){
+				$('html, body').animate({
+					'scrollTop': context.parent.$('.newElementAction').offset().top - 150
+				}, 'fast');
+			}
 		}
 		else if(this.model.getState() == app.RVC_SHOW) {
 			this.$el.html( this.templateShow( this.model.toJSON() ) );
@@ -411,14 +423,12 @@ app.RevocadosView = Backbone.View.extend({
 		},this );
 	},
 	renderElement: function(item){
-		var revocadoView = new app.RevocadoView({model:item});
+		var revocadoView = new app.RevocadoView({model:item, parent:this});
 		revocadoView.matriculaUrl = this.matriculaUrl;
 		this.$(".newElementAction").before( revocadoView.render().el );
 		
 		var context = this;
-		$('html, body').animate({
-			'scrollTop': context.$('.newElementAction').offset().top - 150
-		}, 'fast');
+		
 	},
 	renderHiddenData: function(){
 		var busyCount = 0;

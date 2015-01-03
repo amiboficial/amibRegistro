@@ -10,8 +10,8 @@
 	
 	<!-- INICIA: BREADCRUMB ADMIN -->
 	<ul class="breadcrumb">
-		<li><a href="#">Gestión</a><span class="divider"></span></li>
-		<li><a href="<g:createLink controller="revocacion" action="index" />">Revocaciones</a></li>
+		<li><a href="#">Información</a><span class="divider"></span></li>
+		<li><a href="<g:createLink controller="solicitudes" action="index" />">Detalle de altas y solicitudes</a></li>
 		<li><a href="#">Datos de la revocación</a></li>
 	</ul>
 	<!-- FIN: BREADCRUMB ADMIN -->
@@ -21,18 +21,6 @@
 	<g:if test="${flash.message}">
 		<div class="alert alert-info"><span class="glyphicon glyphicon-info-sign"></span> ${flash.message}</div>
 	</g:if>
-	
-	<fieldset>
-		<legend>Acciones</legend>
-		
-		<button id="btnNuevaRevoc" type="button" onclick="btnNuevaRevoc_click()" class="btn btn-default btn-primary"><span class="glyphicon glyphicon-file"></span> Nuevo</button>
-		&nbsp;&nbsp;&nbsp;
-		<button id="btnRevisarRevoc" type="button" onclick="btnRevisarRevoc_click(${revocacionInstance?.id})" class="btn btn-default btn-primary"><span class="glyphicon glyphicon-edit"></span> Revisar</button>
-		<button id="btnEditarRevoc" type="button" onclick="btnEditarRevoc_click(${revocacionInstance?.id})" class="btn btn-default btn-primary"><span class="glyphicon glyphicon-pencil"></span> Editar</button>
-		<button id="btnEliminarRevoc" type="button" onclick="btnEliminarRevoc_click(${revocacionInstance?.id})" class="btn btn-default btn-primary"><span class="glyphicon glyphicon-trash"></span> Eliminar</button>
-		
-		
-	</fieldset>
 	
 	<fieldset class="form-horizontal">
 		<legend>Revocación</legend>
@@ -197,58 +185,49 @@
 		</fieldset>
 		
 		<fieldset>
-			<legend>Detalles de revisión/verificación</legend>
-			<div id="divStVerificado" class="form-group">
-				<label class="col-md-2 col-sm-3 control-label">
-	            	<g:message code="revocacion.verificado.label" default="Verificado" />
-				</label>
-	            <div class="col-md-9 col-sm-9">
-	            	<g:if test="${revocacionInstance?.verificado == true}">
-						<p class="form-control-static"><span class="glyphicon glyphicon-ok"></span></p>
-					</g:if>
-					<g:else>
-						<p class="form-control-static"><span class="glyphicon glyphicon-remove"></span></p>
-					</g:else>
-	            </div>
-			</div>
-			<div id="divVerificadoPor" class="form-group">
-				<label class="col-md-2 col-sm-3 control-label">
-	            	<g:message code="revocacion.verificadoPor.label" default="Vertificado por" />
-				</label>
-	            <div class="col-md-9 col-sm-9">
-	            	<p class="form-control-static">${revocacionInstance?.verificadoPor}</p>
-	            </div>
-			</div>
-			<div id="divStAprobado" class="form-group">
-				<label class="col-md-2 col-sm-3 control-label">
-	            	<g:message code="revocacion.aprobado.label" default="Aprobado" />
-				</label>
-	            <div class="col-md-9 col-sm-9">
-	            	<g:if test="${revocacionInstance?.aprobado == null}">
-	            		<p class="form-control-static"></p>
-	            	</g:if>
-	            	<g:elseif test="${revocacionInstance?.aprobado == true}">
-						<p class="form-control-static"><span class="glyphicon glyphicon-ok"></span></p>
-					</g:elseif>
-					<g:else>
-						<p class="form-control-static"><span class="glyphicon glyphicon-remove"></span></p>
-					</g:else>
-	            </div>
-			</div>
-			<div id="divMotivoRechazo" class="form-group">
-				<label class="col-md-2 col-sm-3 control-label">
-	            	<g:message code="revocacion.motivoRechazo.label" default="Motivo de rechazo" />
-				</label>
-	            <div class="col-md-9 col-sm-9">
-	            	<g:if test="${revocacionInstance?.aprobado == false}">
-	            		<p class="form-control-static">${revocacionInstance?.motivoRechazo}</p>
-	            	</g:if>
-	            	<g:else>
-	            		<p class="form-control-static">N/A</p>
-	            	</g:else>
-	            </div>
-			</div>
-		</fieldset>
+				<legend><i>Detalles de revisión/verificación</i></legend>
+				
+				<div id="divStVerificado" class="form-group">
+					<label class="col-md-2 col-sm-3 control-label">
+		            	<g:message code="revocacion.verificado.label" default="Verificado" />
+					</label>
+		            <div class="col-md-9 col-sm-9">
+		            	<g:if test="${revocacionInstance?.verificado == true}">
+							<p class="form-control-static"><span class="glyphicon glyphicon-ok"></span></p>
+						</g:if>
+						<g:else>
+							<p class="form-control-static"><span class="glyphicon glyphicon-remove"></span></p>
+						</g:else>
+		            </div>
+				</div>
+				
+				<g:if test="${poderInstance?.verificado == true}">
+					<div id="divStAprobado" class="form-group">
+						<label class="col-md-2 col-sm-3 control-label">
+			            	<g:message code="revocacion.aprobado.label" default="Aprobado" />
+						</label>
+			            <div class="col-md-9 col-sm-9">
+			            	<g:if test="${revocacionInstance?.aprobado == true}">
+								<p class="form-control-static"><span class="glyphicon glyphicon-ok"></span></p>
+							</g:if>
+							<g:else>
+								<p class="form-control-static"><span class="glyphicon glyphicon-remove"></span></p>
+							</g:else>
+			            </div>
+					</div>
+				</g:if>
+				<g:if test="${revocacionInstance?.aprobado == false && revocacionInstance?.verificado == true}">
+					<div id="divMotivoRechazo" class="form-group">
+						<label class="col-md-2 col-sm-3 control-label">
+			            	<g:message code="revocacion.motivoRechazo.label" default="Motivo de rechazo" />
+						</label>
+			            <div class="col-md-9 col-sm-9">
+			            		<p class="form-control-static">${revocacionInstance?.motivoRechazo}</p>
+			            </div>
+					</div>
+				</g:if>
+				
+			</fieldset>
 		
 	</fieldset>
 	

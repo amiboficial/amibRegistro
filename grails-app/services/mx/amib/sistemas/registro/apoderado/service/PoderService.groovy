@@ -429,13 +429,18 @@ class PoderService {
 	}
 
 	def findAllByIdGrupofinanciero(Long idGrupoFinanciero){
-		def result = Poder.findAllByIdGrupofinanciero(idGrupoFinanciero)
+		def result = Poder.findAllByIdGrupofinanciero(idGrupoFinanciero,[sort: "fechaCreacion", order: "desc"])
 		return result
 	}
 	
 	def findAllByIdInstitucion(Long idInstitucion){
-		def result = Poder.findAllByIdInstitucion(idInstitucion)
+		def result = Poder.findAllByIdInstitucion(idInstitucion,[sort: "fechaCreacion", order: "desc"])
 		return result
+	}
+	
+	def countPendientes(){
+		def strHqlCount = "select count(p) from Poder as p where p.verificado = false";
+		return (Poder.executeQuery(strHqlCount))[0]
 	}
 }
 

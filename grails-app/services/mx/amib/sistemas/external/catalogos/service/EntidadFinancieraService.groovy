@@ -36,11 +36,11 @@ class EntidadFinancieraService {
 		return gpvig
 	}
 	
-	InstitucionTO obtenerInstitucion(long id) {
+	InstitucionTO obtenerInstitucion(Long id) {
 		InstitucionTO institutcion = null
 		
-		if(this.instituciones.containsKey( Long.valueOf(id) )) {
-			institutcion = this.instituciones.get(Long.valueOf(id))
+		if(id != null && this.instituciones.containsKey( id ) ) {
+			institutcion = this.instituciones.get(id)
 		}
 		return institutcion
 	}

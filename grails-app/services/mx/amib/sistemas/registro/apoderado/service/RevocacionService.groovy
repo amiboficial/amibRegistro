@@ -248,7 +248,8 @@ class RevocacionService {
 	def search(Integer max, Integer offset, String sort, String order, Integer filterNumeroEscritura, 
 				Integer filterFechaDelDia, Integer filterFechaDelMes, Integer filterFechaDelAnio, 
 				Integer filterFechaAlDia, Integer filterFechaAlMes, Integer filterFechaAlAnio,
-				Long filterIdGrupoFinanciero, Long filterIdInstitucion){
+				Long filterIdGrupoFinanciero, Long filterIdInstitucion,
+				Boolean fltNoVerificado, Boolean fltNoAprobado){
 				
 		Calendar filterCalFechaDel = null
 		Calendar filterCalFechaAl = null
@@ -329,6 +330,19 @@ class RevocacionService {
 			namedParameters.put("idInstitucion",filterIdInstitucion)
 		}
 		
+		if(fltNoVerificado != null){
+			hqlFilters.add("n.verificado != :noVerificado ")
+			namedParameters.put("noVerificado",fltNoVerificado)
+			whereKeywordNeeded = true
+			if(fltNoVerificado == false){
+				if(fltNoAprobado != null){
+					hqlFilters.add("n.aprobado != :noAprobado ")
+					namedParameters.put("noAprobado",fltNoAprobado)
+					whereKeywordNeeded = true
+				}
+			}
+		}
+		
 		sbHql.append("from Revocacion as n ")
 		if(whereKeywordNeeded){
 			sbHql.append(whereKeyword)
@@ -350,14 +364,19 @@ class RevocacionService {
 	}
 	
 	def findAllByIdGrupofinanciero(Long idGrupoFinanciero){
-		def result = Revocacion.findAllByIdGrupofinanciero(idGrupoFinanciero)
+		def result = Revocacion.findAllByIdGrupofinanciero(idGrupoFinanciero,[sort: "fechaCreacion", order: "desc"])
 		return result
 	}
 			
 	def findAllByIdInstitucion(Long idInstitucion){
-		def result = Revocacion.findAllByIdInstitucion(idInstitucion)
+		def result = Revocacion.findAllByIdInstitucion(idInstitucion,[sort: "fechaCreacion", order: "desc"])
 		return result
-	}	
+	}
+	
+	def countPendientes(){
+		def strHqlCount = "select count(r) from Revocacion as r where r.verificado = false";
+		return (Revocacion.executeQuery(strHqlCount))[0]
+	}
 }
 
 class RevocadoTO {

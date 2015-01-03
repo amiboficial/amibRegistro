@@ -21,6 +21,12 @@
 		<fieldset>
 			<legend>Acciones</legend>
 			<button id="btnNuevaRev" type="button" class="btn btn-default btn-primary"><span class="glyphicon glyphicon-file"></span> Nueva revocación</button>
+			<g:if test="${viewModelInstance?.countPendientes == 0}">
+				<button id="btnRevsPend" type="button" class="btn btn-default btn-primary"><span class="glyphicon glyphicon-edit"></span> Ver pendientes de revisión (0)</button>
+			</g:if>
+			<g:else>
+				<button id="btnRevsPend" type="button" class="btn btn-default btn-danger"><span class="glyphicon glyphicon-edit"></span> Ver pendientes de revisión (${viewModelInstance?.countPendientes})</button>
+			</g:else>
 		</fieldset>
 		<fieldset>
 			<legend>Búsqueda de poderes</legend>
@@ -78,6 +84,34 @@
 				</div>
 			</div>
 			
+			<div id="divStVerificado" class="form-group">
+				<label class="col-md-2 col-sm-3 control-label">
+	            	<g:message code="poder.noVerificado.label" default="Pendiente de revision" />
+				</label>
+	            <div class="col-md-9 col-sm-9">
+	            	<g:if test="${viewModelInstance?.fltNoVerificado == true}">
+	            		<input type="checkbox" id="cbxNoVertificado" name="fltNoVerificado" checked/>
+	            	</g:if>
+	            	<g:else>
+	            		<input type="checkbox" id="cbxNoVertificado" name="fltNoVerificado" />
+	            	</g:else>
+	            </div>
+			</div>
+			
+			<div id="divStAprobadoVer" class="form-group">
+				<label class="col-md-2 col-sm-3 control-label">
+	            	<g:message code="poder.noAprobado.label" default="Rechazado" />
+				</label>
+	            <div class="col-md-9 col-sm-9">
+	            	<g:if test="${viewModelInstance?.fltNoAprobado == true}">
+	            		<input type="checkbox"id="cbxNoAprobado" name="fltNoAprobado" checked/>
+	            	</g:if>
+	            	<g:else>
+	            		<input type="checkbox"id="cbxNoAprobado" name="fltNoAprobado" />
+	            	</g:else>
+	            </div>
+			</div>
+			
 			<div id="divButtonArea" class="form-group">
 				<div class="col-md-3 col-sm-3">
 					&nbsp;
@@ -98,9 +132,9 @@
 				<table class="table">
 					<thead>
 						<tr>
-							<g:sortableColumn property="id" title="${message(code: 'revocacion.id.label', default: 'ID')}" params="[fltNumEsc: viewModelInstance.fltNumEsc,fltFecIni_day: viewModelInstance.fltFecIniDay,fltFecIni_month: viewModelInstance.fltFecIniMonth,fltFecIni_year: viewModelInstance.fltFecIniYear,fltFecFn_day: viewModelInstance.fltFecFnDay,fltFecFn_month: viewModelInstance.fltFecFnMonth,fltFecFn_year: viewModelInstance.fltFecFnYear,filterIdGrupoFinanciero: viewModelInstance.filterIdGrupoFinanciero,filterIdInstitucion: viewModelInstance.filterIdInstitucion]"/>
-							<g:sortableColumn property="fechaRevocacion" title="${message(code: 'revocacion.fechaRevocacion.label', default: 'Fec. Apoderamiento')}" params="[fltNumEsc: viewModelInstance.fltNumEsc,fltFecIni_day: viewModelInstance.fltFecIniDay,fltFecIni_month: viewModelInstance.fltFecIniMonth,fltFecIni_year: viewModelInstance.fltFecIniYear,fltFecFn_day: viewModelInstance.fltFecFnDay,fltFecFn_month: viewModelInstance.fltFecFnMonth,fltFecFn_year: viewModelInstance.fltFecFnYear,filterIdGrupoFinanciero: viewModelInstance.filterIdGrupoFinanciero,filterIdInstitucion: viewModelInstance.filterIdInstitucion]" />
-							<g:sortableColumn property="numeroEscritura" title="${message(code: 'revocacion.numeroEscritura.label', default: 'Num. Escritura')}" params="[fltNumEsc: viewModelInstance.fltNumEsc,fltFecIni_day: viewModelInstance.fltFecIniDay,fltFecIni_month: viewModelInstance.fltFecIniMonth,fltFecIni_year: viewModelInstance.fltFecIniYear,fltFecFn_day: viewModelInstance.fltFecFnDay,fltFecFn_month: viewModelInstance.fltFecFnMonth,fltFecFn_year: viewModelInstance.fltFecFnYear,filterIdGrupoFinanciero: viewModelInstance.filterIdGrupoFinanciero,filterIdInstitucion: viewModelInstance.filterIdInstitucion]"/>
+							<g:sortableColumn property="id" title="${message(code: 'revocacion.id.label', default: 'ID')}" params="[fltNumEsc: viewModelInstance.fltNumEsc,fltFecIni_day: viewModelInstance.fltFecIniDay,fltFecIni_month: viewModelInstance.fltFecIniMonth,fltFecIni_year: viewModelInstance.fltFecIniYear,fltFecFn_day: viewModelInstance.fltFecFnDay,fltFecFn_month: viewModelInstance.fltFecFnMonth,fltFecFn_year: viewModelInstance.fltFecFnYear,filterIdGrupoFinanciero: viewModelInstance.filterIdGrupoFinanciero,filterIdInstitucion: viewModelInstance.filterIdInstitucion, fltNoVerificado:viewModelInstance.fltNoVerificado, fltNoAprobado:viewModelInstance.fltNoAprobado]"/>
+							<g:sortableColumn property="fechaRevocacion" title="${message(code: 'revocacion.fechaRevocacion.label', default: 'Fec. Apoderamiento')}" params="[fltNumEsc: viewModelInstance.fltNumEsc,fltFecIni_day: viewModelInstance.fltFecIniDay,fltFecIni_month: viewModelInstance.fltFecIniMonth,fltFecIni_year: viewModelInstance.fltFecIniYear,fltFecFn_day: viewModelInstance.fltFecFnDay,fltFecFn_month: viewModelInstance.fltFecFnMonth,fltFecFn_year: viewModelInstance.fltFecFnYear,filterIdGrupoFinanciero: viewModelInstance.filterIdGrupoFinanciero,filterIdInstitucion: viewModelInstance.filterIdInstitucion, fltNoVerificado:viewModelInstance.fltNoVerificado, fltNoAprobado:viewModelInstance.fltNoAprobado]" />
+							<g:sortableColumn property="numeroEscritura" title="${message(code: 'revocacion.numeroEscritura.label', default: 'Num. Escritura')}" params="[fltNumEsc: viewModelInstance.fltNumEsc,fltFecIni_day: viewModelInstance.fltFecIniDay,fltFecIni_month: viewModelInstance.fltFecIniMonth,fltFecIni_year: viewModelInstance.fltFecIniYear,fltFecFn_day: viewModelInstance.fltFecFnDay,fltFecFn_month: viewModelInstance.fltFecFnMonth,fltFecFn_year: viewModelInstance.fltFecFnYear,filterIdGrupoFinanciero: viewModelInstance.filterIdGrupoFinanciero,filterIdInstitucion: viewModelInstance.filterIdInstitucion, fltNoVerificado:viewModelInstance.fltNoVerificado, fltNoAprobado:viewModelInstance.fltNoAprobado]"/>
 							<th>...</th>
 						</tr>
 					</thead>
@@ -112,6 +146,9 @@
 								<td>${fieldValue(bean: revocacionInstance, field: "numeroEscritura")}</td>
 								<td>
 									<button id="btnVer" onclick="btnVer_click(${revocacionInstance.id})" type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-eye-open"></span><span class="hidden-xs hidden-sm"> Ver detalle</span></button>
+									
+									<button id="btnRevisar" onclick="btnRevisar_click(${revocacionInstance.id})" type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-edit"></span><span class="hidden-xs hidden-sm"> Revisar</span></button>
+								
 									<button id="btnEditar" onclick="btnEditar_click(${revocacionInstance.id})" type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-pencil"></span><span class="hidden-xs hidden-sm"> Editar</span></button>
 									<button id="btnEliminar" onclick="btnEliminar_click(${revocacionInstance.id})" type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-trash"></span><span class="hidden-xs hidden-sm"> Eliminar</span></button>
 								</td>
@@ -120,7 +157,7 @@
 					</tbody>
 				</table>
 				<div class="pagination">
-					<g:paginate total="${poderInstanceCount?:0}" params="[fltNumEsc: viewModelInstance.fltNumEsc,fltFecIni_day: viewModelInstance.fltFecIniDay,fltFecIni_month: viewModelInstance.fltFecIniMonth,fltFecIni_year: viewModelInstance.fltFecIniYear,fltFecFn_day: viewModelInstance.fltFecFnDay,fltFecFn_month: viewModelInstance.fltFecFnMonth,fltFecFn_year: viewModelInstance.fltFecFnYear,filterIdGrupoFinanciero: viewModelInstance.filterIdGrupoFinanciero,filterIdInstitucion: viewModelInstance.filterIdInstitucion]" />
+					<g:paginate total="${poderInstanceCount?:0}" params="[fltNumEsc: viewModelInstance.fltNumEsc,fltFecIni_day: viewModelInstance.fltFecIniDay,fltFecIni_month: viewModelInstance.fltFecIniMonth,fltFecIni_year: viewModelInstance.fltFecIniYear,fltFecFn_day: viewModelInstance.fltFecFnDay,fltFecFn_month: viewModelInstance.fltFecFnMonth,fltFecFn_year: viewModelInstance.fltFecFnYear,filterIdGrupoFinanciero: viewModelInstance.filterIdGrupoFinanciero,filterIdInstitucion: viewModelInstance.filterIdInstitucion, fltNoVerificado:viewModelInstance.fltNoVerificado, fltNoAprobado:viewModelInstance.fltNoAprobado]" />
 				</div>
 			</div>
 		</fieldset>
@@ -145,6 +182,9 @@
 	function btnVer_click(id){
 		window.location.href = '<g:createLink controller="revocacion" action="show" />/'+id;
 	}
+	function btnRevisar_click(id){
+		window.location.href = '<g:createLink controller="revocacion" action="editVerify" />/'+id;
+	}
 	function btnEditar_click(id){
 		window.location.href = '<g:createLink controller="revocacion" action="edit" />/'+id;
 	}
@@ -157,6 +197,19 @@
 	//callbacks para barra de acciones
 	$( "#btnNuevaRev" ).click(function() {
 		window.location.href = '<g:createLink controller="revocacion" action="create" />'
+	});
+	$( "#btnRevsPend" ).click(function() {
+		window.location.href = '<g:createLink controller="revocacion" action="indexPendientes" />'
+	});
+	$( "#cbxNoVertificado" ).change(function(){
+		if( $( "#cbxNoVertificado" ).is(':checked') == true ){
+			$( "#cbxNoAprobado" ).prop('checked', false);
+		}
+	});
+	$( "#cbxNoAprobado" ).change(function(){
+		if( $( "#cbxNoAprobado" ).is(':checked') == true ){
+			$( "#cbxNoVertificado" ).prop('checked', false);
+		}
 	});
 	//callback al boton para limpiar
 	$( "#btnLimpiar" ).click(function() {

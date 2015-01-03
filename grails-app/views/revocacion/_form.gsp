@@ -8,7 +8,7 @@
 			</div>
 			
 			
-			<g:if test="${viewModelInstance?.action == 'create'}">
+			<g:if test="${viewModelInstance?.action == 'create' || viewModelInstance?.action == 'edit' || viewModelInstance?.action == 'editVerify'}">
 				<fieldset>
 					<legend>Datos de la institución o grupo financiero</legend>
 					
@@ -279,6 +279,67 @@
 				<input type="hidden" id="hdnDocsModelValidated" value="false"/>
 				<input type="hidden" id="hdnDocsModelValidatedMsg" value=""/>
 			</fieldset>
+			
+			<!-- INICIA: SECCION DE DETALLES VERIFICACION (SOLO ADMIN)-->
+			<g:if test="${viewModelInstance?.action == 'create' || viewModelInstance?.action == 'edit'}">
+				<fieldset>
+					<legend>Detalles de verificación</legend>
+					<div id="divStVerificado" class="form-group">
+						<label class="col-md-2 col-sm-3 control-label">
+			            	<g:message code="revocacion.verificado.label" default="Verificado" />
+						</label>
+			            <div class="col-md-9 col-sm-9">
+			            	<g:checkBox id="cbxVertificado" name="revocacion.verificado" value="${revocacionInstance?.verificado}" />
+			            </div>
+					</div>
+					<div id="divVerificadoPor" class="form-group">
+						<label class="col-md-2 col-sm-3 control-label">
+			            	<g:message code="revocacion.verificadoPor.label" default="Vertificado por" />
+						</label>
+			            <div class="col-md-9 col-sm-9">
+			            	<g:textField id="txtVerificadoPor" maxlength="254" class="form-control" name="revocacion.verificadoPor" required="" value="${revocacionInstance?.verificadoPor}" />
+			            </div>
+					</div>
+					<div id="divStAprobado" class="form-group">
+						<label class="col-md-2 col-sm-3 control-label">
+			            	<g:message code="revocacion.aprobado.label" default="Aprobado" />
+						</label>
+			            <div class="col-md-9 col-sm-9">
+			            	<g:checkBox id="cbxAprobado" name="revocacion.aprobado" value="${revocacionInstance?.aprobado}" />
+			            </div>
+					</div>
+					<div id="divMotivoRechazo" class="form-group">
+						<label class="col-md-2 col-sm-3 control-label">
+			            	<g:message code="revocacion.motivoRechazo.label" default="Motivo de rechazo" />
+						</label>
+			            <div class="col-md-9 col-sm-9">
+			            	<g:textArea class="motivo form-control" name="revocacion.motivoRechazo" value="${revocacionInstance?.motivoRechazo}" rows="3" style="resize:none" maxlength="1000"/>
+			            </div>
+					</div>
+				</fieldset>
+			</g:if>
+			<!-- FIN: SECCION DE DETALLES VERIFICACION (SOLO ADMIN)-->
+			<g:if test="${viewModelInstance?.action == 'editVerify'}">
+				<fieldset>
+					<legend>Detalles de revisión</legend>
+					<div id="divStAprobadoVer" class="form-group">
+						<label class="col-md-2 col-sm-3 control-label">
+			            	<g:message code="revocacion.aprobado.label" default="Aprobado" />
+						</label>
+			            <div class="col-md-9 col-sm-9">
+			            	<g:checkBox id="cbxAprobado" name="revocacion.aprobado" value="${revocacionInstance?.aprobado}" />
+			            </div>
+					</div>
+					<div id="divMotivoRechazoVer" class="form-group">
+						<label class="col-md-2 col-sm-3 control-label">
+			            	<g:message code="revocacion.motivoRechazo.label" default="Motivo de rechazo" />
+						</label>
+			            <div class="col-md-9 col-sm-9">
+			            	<g:textArea class="motivo form-control" name="revocacion.motivoRechazo" value="${revocacionInstance?.motivoRechazo}" rows="3" style="resize:none" maxlength="1000"/>
+			            </div>
+					</div>
+				</fieldset>
+			</g:if>
 			
 			<input id="hdnAction" type="hidden" name="originAction" value="${viewModelInstance?.action}" />
 			

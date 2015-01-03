@@ -47,12 +47,14 @@ class RevocacionController {
 		params.fltFecFn_year = (params.fltFecFn_year==null || params.fltFecFn_year=='null')?'-1':params.fltFecFn_year
 		params.filterIdGrupoFinanciero = params.filterIdGrupoFinanciero?:'-1'
 		params.filterIdInstitucion = params.filterIdInstitucion?:'-1'
+		params.fltNoVerificado = (params.fltNoVerificado==null||params.fltNoVerificado=='false')?false:true
+		params.fltNoAprobado = (params.fltNoAprobado==null||params.fltNoAprobado=='false')?false:true
 		
 		def result = revocacionService.search(params.max, params.offset, params.sort, params.order, params.fltNumEsc?.toInteger(),
 									params.fltFecIni_day?.toInteger(), params.fltFecIni_month?.toInteger(), params.fltFecIni_year?.toInteger(),
 									params.fltFecFn_day?.toInteger(), params.fltFecFn_month?.toInteger(), params.fltFecFn_year?.toInteger(),
-									params.filterIdGrupoFinanciero?.toLong(), params.filterIdInstitucion?.toLong())
-		
+									params.filterIdGrupoFinanciero?.toLong(), params.filterIdInstitucion?.toLong(),
+									params.fltNoVerificado, params.fltNoAprobado)
 		respond result.list, model:[revocacionInstanceCount: result.count, viewModelInstance: this.getIndexViewModel(params)]
     }
 
@@ -70,12 +72,24 @@ class RevocacionController {
 		rivw.fltFecFnYear = params.fltFecFn_year?.toInteger()
 		rivw.filterIdGrupoFinanciero = params.filterIdGrupoFinanciero?.toLong()
 		rivw.filterIdInstitucion = params.filterIdInstitucion?.toLong()
+		rivw.fltNoVerificado = params.fltNoVerificado
+		rivw.fltNoAprobado = params.fltNoAprobado
+		
+		rivw.countPendientes = revocacionService.countPendientes()
 		
 		return rivw
 	}
 	
-    def show(Revocacion revocacionInstance) {
+	def indexPendientes(Integer max) {
+		params.max = Math.min(max ?: 10, 100)
 		
+		def total = revocacionService.countPendientes()
+		def result = Revocacion.findAllByVerificado(false,[max: params.max, sort:'fechaCreacion', order:'asc',offset: params.offset, cache: true])
+				
+		respond result, model:[revocacionInstanceCount: total]
+	}
+	
+    def show(Revocacion revocacionInstance) {
 		revocacionInstance.nombreGrupoFinanciero = entidadFinancieraService.obtenerGrupoFinanciero(revocacionInstance.idGrupofinanciero)?.nombre
 		revocacionInstance.nombreInstitucion = entidadFinancieraService.obtenerInstitucion(revocacionInstance.idInstitucion)?.nombre
 		revocacionInstance.documentosRespaldoRevocacion.each{
@@ -85,6 +99,16 @@ class RevocacionController {
         respond revocacionInstance
     }
 
+	def showEntidadFinanciera(Revocacion revocacionInstance) {
+		revocacionInstance.nombreGrupoFinanciero = entidadFinancieraService.obtenerGrupoFinanciero(revocacionInstance.idGrupofinanciero)?.nombre
+		revocacionInstance.nombreInstitucion = entidadFinancieraService.obtenerInstitucion(revocacionInstance.idInstitucion)?.nombre
+		revocacionInstance.documentosRespaldoRevocacion.each{
+			it.nombreDeArchivo = documentoRepositorioService.obtenerMetadatosDocumento(it.uuidDocumentoRepositorio)?.nombre;
+		}
+		revocacionInstance.notario.nombreEntidadFederativa = sepomexService.obtenerEntidadFederativa( revocacionInstance.notario.idEntidadFederativa ).nombre
+		respond revocacionInstance
+	}
+	
     def create() {
 		RevocacionViewModel revocacionViewModel = this.createViewModel()
         respond new Revocacion(params), model:[viewModelInstance: revocacionViewModel]
@@ -140,12 +164,17 @@ class RevocacionController {
     def save(Revocacion revocacion) {
 		def revocacionInstance = revocacion
 		def originAction = params.'originAction'
+		
 		def revocadosToBind = params.list('revocado')
 		def documentosToBind = params.list('documento')
 		def documentosToEraseStrParam = params.'idsDocumentosBorrados'
 		def notarioNumero = params.'notarioNumero'.toInteger()
 		def notarioIdEntidadFederativa = params.'notarioIdEntidadFederativa'.toInteger()
         def documentosToErase = null
+		
+		String destAction = null
+		String destCtrl = null
+		String msg = null
 		
 		if(documentosToEraseStrParam != null || documentosToEraseStrParam != ""){
 			documentosToErase = documentosToEraseStrParam.split("\\|")
@@ -160,11 +189,13 @@ class RevocacionController {
 			//obtiene el dato del grupo financiero en sesión
 			//rellena datos relativos a verificación
 			revocacionInstance.idGrupofinanciero = entidadFinancieraService.obtenerGrupoFinanciero(4).id
-			revocacionInstance.idInstitucion = -1
 			revocacionInstance.verificado = false
 			revocacionInstance.verificadoPor = null
 			revocacionInstance.aprobado = false
 			revocacionInstance.motivoRechazo = null
+			destCtrl = 'solicitudes'
+			destAction = 'index'
+			msg = message(code: 'mx.amib.sistemas.registro.apoderamiento.revocacion.save.alta.message')
 		}
 		else if(originAction == 'createSolInst'){
 			//obtiene el dato de la institución en sesión
@@ -175,13 +206,21 @@ class RevocacionController {
 			revocacionInstance.verificadoPor = null
 			revocacionInstance.aprobado = false
 			revocacionInstance.motivoRechazo = null
+			destCtrl = 'solicitudes'
+			destAction = 'index'
+			msg = message(code: 'mx.amib.sistemas.registro.apoderamiento.revocacion.save.alta.message')
+		}
+		else{
+			destCtrl = 'revocacion'
+			destAction = 'show'
+			msg = message(code: 'mx.amib.sistemas.registro.apoderamiento.revocacion.save.message', args: [revocacionInstance.numeroEscritura])
 		}
 		revocacionService.save(revocacionInstance, revocadosToBind, documentosToBind, notarioIdEntidadFederativa, notarioNumero)
 		
         request.withFormat {
             form multipartForm {
-                flash.message = message(code: 'default.created.message', args: [message(code: 'revocacion.label', default: 'Revocacion'), revocacionInstance.id])
-                redirect revocacionInstance
+                flash.message = msg
+                redirect(controller: destCtrl, action: destAction, id: revocacionInstance.id)
             }
             '*' { respond revocacionInstance, [status: CREATED] }
         }
@@ -199,9 +238,26 @@ class RevocacionController {
 		revocacionViewModel.gruposFinancierosList = entidadFinancieraService.obtenerGruposFinancierosVigentes()
 		revocacionViewModel.tipoDocumentoList = TipoDocumentoRespaldoRevocacion.findAllByVigente(true)
 		revocacionViewModel.validDocumentosCargados = true
+		revocacionViewModel.action = "edit"
 		return revocacionViewModel
 	}
 
+	def editVerify(Revocacion revocacionInstance) {
+		RevocacionViewModel revocacionViewModel = this.editVerifyViewModel()
+		revocacionInstance = this.cargaNombresArchivo(revocacionInstance)
+		respond revocacionInstance, model:[viewModelInstance: revocacionViewModel]
+	}
+	
+	private RevocacionViewModel editVerifyViewModel(){
+		RevocacionViewModel revocacionViewModel = new RevocacionViewModel()
+		revocacionViewModel.entidadFederativaList = sepomexService.obtenerEntidadesFederativas()
+		revocacionViewModel.gruposFinancierosList = entidadFinancieraService.obtenerGruposFinancierosVigentes()
+		revocacionViewModel.tipoDocumentoList = TipoDocumentoRespaldoRevocacion.findAllByVigente(true)
+		revocacionViewModel.validDocumentosCargados = true
+		revocacionViewModel.action = "editVerify"
+		return revocacionViewModel
+	}
+	
 	private Revocacion cargaNombresArchivo(Revocacion revocacionInstance){
 		revocacionInstance.documentosRespaldoRevocacion.each{
 			it.nombreDeArchivo = documentoRepositorioService.obtenerMetadatosDocumento(it.uuidDocumentoRepositorio).nombre
@@ -215,27 +271,35 @@ class RevocacionController {
 		
 		def revocadosToBind = params.list('revocado')
 		def documentosToBind = params.list('documento')
-		def documentosToEraseStrParam = params.'idsDocumentosBorrados'
+
 		def notarioNumero = params.'notarioNumero'.toInteger()
 		def notarioIdEntidadFederativa = params.'notarioIdEntidadFederativa'.toInteger()
 		
-		/*
-		 * YA NO SE USO ESTE PARAMETRO - ELIMINAR DE CLIENTE
-		def documentosToErase = null
-		if(documentosToEraseStrParam != null || documentosToEraseStrParam != ""){
-			documentosToErase = documentosToEraseStrParam.split("\\|")
-		}
-		*/
+		def originAction = params.'originAction'
+		String mensaje = null
+		//String destAction = null
+		//String destCtrl = null
+		
 		if (revocacionInstance == null) {
 			notFound()
 			return
+		}
+		
+		//si la accion se trata de una verificación
+		if(originAction == "editVerify"){
+			revocacionInstance.verificado = true
+			revocacionInstance.verificadoPor = 'OPERATIVO' //debe tomar el nombre de usuario en sesión que esta verificando
+			mensaje = message(code: 'mx.amib.sistemas.registro.apoderamiento.revocacion.update.verify.message')
+		}
+		else{
+			mensaje = message(code: 'mx.amib.sistemas.registro.apoderamiento.revocacion.update.message', args: [revocacion.numeroEscritura,revocacion.id])
 		}
 
 		revocacionService.update(revocacionInstance, revocadosToBind, documentosToBind, notarioIdEntidadFederativa, notarioNumero)
 
         request.withFormat {
             form multipartForm {
-                flash.message = message(code: 'default.updated.message', args: [message(code: 'Revocacion.label', default: 'Revocacion'), revocacionInstance.id])
+                flash.message = mensaje
                 redirect revocacionInstance
             }
             '*'{ respond revocacionInstance, [status: OK] }
@@ -347,6 +411,9 @@ class RevocacionIndexViewModel {
 	Integer fltFecFnYear
 	Long filterIdGrupoFinanciero
 	Long filterIdInstitucion
+	Boolean fltNoVerificado
+	Boolean fltNoAprobado
+	Long countPendientes
 	
 	String action
 }

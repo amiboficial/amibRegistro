@@ -56,8 +56,8 @@ class PoderController {
 		params.fltFecFn_year = (params.fltFecFn_year==null || params.fltFecFn_year=='null')?'-1':params.fltFecFn_year
 		params.filterIdGrupoFinanciero = params.filterIdGrupoFinanciero?:'-1'
 		params.filterIdInstitucion = params.filterIdInstitucion?:'-1'
-		params.fltNoVerificado = (params.fltNoVerificado==null)?false:true
-		params.fltNoAprobado = (params.fltNoAprobado==null)?false:true
+		params.fltNoVerificado = (params.fltNoVerificado==null||params.fltNoVerificado=='false')?false:true
+		params.fltNoAprobado = (params.fltNoAprobado==null||params.fltNoAprobado=='false')?false:true
 		
 		def result = poderService.search(params.max, params.offset.toInteger(), params.sort, params.order, params.fltNumEsc?.toInteger(),
 									params.fltFecIni_day?.toInteger(), params.fltFecIni_month?.toInteger(), params.fltFecIni_year?.toInteger(), 
@@ -109,6 +109,18 @@ class PoderController {
         respond poderInstance
     }
 
+	//Este solo estará disponible para el rol de institución o grupo financiero
+	def showEntidadFinanciera(Poder poderInstance){
+		//obtiene nombres/descripciones de servicios
+		poderInstance.nombreGrupoFinanciero = entidadFinancieraService.obtenerGrupoFinanciero(poderInstance.idGrupofinanciero)?.nombre
+		poderInstance.nombreInstitucion = entidadFinancieraService.obtenerInstitucion(poderInstance.idInstitucion)?.nombre
+		poderInstance.documentosRespaldoPoder.each{
+			it.nombreDeArchivo = documentoRepositorioService.obtenerMetadatosDocumento(it.uuidDocumentoRepositorio)?.nombre;
+		}
+		poderInstance.notario.nombreEntidadFederativa = sepomexService.obtenerEntidadFederativa( poderInstance.notario.idEntidadFederativa ).nombre
+		respond poderInstance
+	}
+	
     def create() {
 		//Inicializa listados
 		def documentosList = new ArrayList<DocumentoRespaldoPoderTO>()
@@ -196,6 +208,9 @@ class PoderController {
 		def jsonLstApoderadosIdAutorizadoCNBV = params.list('apoderadoIdAutorizadoCNBV')
 		def jsonLstDocumentos = params.list('documento')
 		def originAction = params.'originAction'
+		String destAction = null
+		String destCtrl = null
+		String msg = null
 		
 		List<Integer> apoderadosIdAutorizadoCNBV = new ArrayList<Integer>()
 		List<DocumentoRespaldoPoderTO> documentos = new ArrayList<DocumentoRespaldoPoderTO>()
@@ -212,11 +227,13 @@ class PoderController {
 			//obtiene el dato del grupo financiero en sesión
 			//rellena datos relativos a verificación
 			poder.idGrupofinanciero = entidadFinancieraService.obtenerGrupoFinanciero(4).id
-			poder.idInstitucion = -1
 			poder.verificado = false
 			poder.verificadoPor = null
 			poder.aprobado = false
 			poder.motivoRechazo = null
+			destAction = "index"
+			destCtrl = "solicitudes"
+			msg = message(code: 'mx.amib.sistemas.registro.apoderamiento.poder.save.alta.message')
 		}
 		else if(originAction == 'createAltaInst'){
 			//obtiene el dato de la institución en sesión
@@ -227,8 +244,15 @@ class PoderController {
 			poder.verificadoPor = null
 			poder.aprobado = false
 			poder.motivoRechazo = null
+			destAction = "index"
+			destCtrl = "solicitudes"
+			msg = message(code: 'mx.amib.sistemas.registro.apoderamiento.poder.save.alta.message')
 		}
-		
+		else{
+			destAction = "show"
+			destCtrl = "poder"
+			msg = message(code: 'mx.amib.sistemas.registro.apoderamiento.poder.save.message', args: [poder.numeroEscritura])
+		}
 		
 		//obtiene de la lista de paramatros con el mismo name="apoderadoIdAutorizadoCNBV"
 		jsonLstApoderadosIdAutorizadoCNBV.each{
@@ -249,8 +273,8 @@ class PoderController {
 
         request.withFormat {
             form multipartForm {
-                flash.message = message(code: 'default.created.message', args: [message(code: 'poder.label', default: 'Poder'), poder.id])
-                redirect poder
+                flash.message = msg
+				redirect(controller: destCtrl, action: destAction, id: poder.id)
             }
             '*' { respond poder, [status: CREATED] }
         }

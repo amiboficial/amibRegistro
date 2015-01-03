@@ -41,7 +41,7 @@
 					<tbody>
 						<g:each in="${poderInstanceList}" status="i" var="poderInstance">
 							<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-								<td><g:link action="show" id="${poderInstance.id}">${poderInstance.id}</g:link></td>
+								<td><g:link controller="poder" action="showEntidadFinanciera" id="${poderInstance.id}">${poderInstance.id}</g:link></td>
 								<td><g:formatDate date="${poderInstance.fechaApoderamiento}" /></td>
 								<td>${fieldValue(bean: poderInstance, field: "numeroEscritura")}</td>
 								<td><g:formatDate date="${poderInstance.fechaCreacion}" /></td>
@@ -87,7 +87,7 @@
 					<tbody>
 						<g:each in="${revocacionInstanceList}" status="i" var="revocacionInstance">
 							<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-								<td><g:link action="show" id="${revocacionInstance.id}">${revocacionInstance.id}</g:link></td>
+								<td><g:link controller="revocacion" action="showEntidadFinanciera" id="${revocacionInstance.id}">${revocacionInstance.id}</g:link></td>
 								<td><g:formatDate date="${revocacionInstance.fechaRevocacion}" /></td>
 								<td>${fieldValue(bean: revocacionInstance, field: "numeroEscritura")}</td>
 								<td><g:formatDate date="${revocacionInstance.fechaCreacion}" /></td>
@@ -117,5 +117,16 @@
 		
 		</div>
 	</div>
+	<script>
+
+	function btnVerPoder_click(id){
+		window.location.href = '<g:createLink controller="poder" action="showEntidadFinanciera" />/'+id;
+	}
+
+	function btnVerRevocacion_click(id){
+		window.location.href = '<g:createLink controller="revocacion" action="showEntidadFinanciera" />/'+id;
+	}
+	
+	</script>
 </body>
 </html>

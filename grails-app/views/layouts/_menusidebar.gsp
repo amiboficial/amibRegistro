@@ -26,8 +26,7 @@
                 <a href="<g:createLink controller="revocacion" action="createSolInst" />" class="list-group-item"><span class="glyphicon glyphicon-share-alt"></span>&nbsp;Solicitud de Revocación</a>
                 <a href="#" class="list-group-item colortitle">Información</a>
                 <a href="<g:createLink controller="solicitudes" action="index" />" class="list-group-item"><span class="glyphicon glyphicon-th-list"></span>&nbsp;Detalle de solicitudes</a>
-                <a href="<g:createLink controller="busqueda" action="index" />" class="list-group-item"><span class="glyphicon glyphicon-th-list"></span>&nbsp;Poderes vigentes</a>
-                <a href="#" class="list-group-item"><span class="glyphicon glyphicon-th-list"></span>&nbsp;Personal apoderado</a>
+                <a href="<g:createLink controller="poderVigente" action="index" />" class="list-group-item"><span class="glyphicon glyphicon-th-list"></span>&nbsp;Personal apoderado</a>
                 <a href="#" class="list-group-item"><span class="glyphicon glyphicon-th-list"></span>&nbsp;Consulta de autorizados</a>
                 <a href="#" class="list-group-item"><span class="glyphicon glyphicon-book"></span>&nbsp;Catálogo de notarios</a>
                 <a href="#" class="list-group-item colortitle">Acciones</a>

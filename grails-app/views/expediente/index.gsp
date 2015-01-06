@@ -78,6 +78,7 @@
 							</span>
 							<g:textField name="fltSimpPalabra" id="txtSimpPalabra" class="form-control" maxlength="80" value=""/>
 						</div>
+						<span class="help-block"><i>Ejemplo: Carlos Cano Sosa, Cano Sosa, Cano, Sosa, Carlos, etc.; NO: Cano Sosa Carlos, Sosa Carlos Cano, Sosa Carlos, etc.</i></span>
 					</div>
 				</div>
 				

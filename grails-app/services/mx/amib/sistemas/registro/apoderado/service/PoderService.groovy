@@ -37,7 +37,7 @@ class PoderService {
 	Collection<TipoDocumentoRespaldoPoder> obtenerListadoTipoDocumentoRespaldoPoder() {
 		return TipoDocumentoRespaldoPoder.findAllByVigente(true)
 	}
-			
+
 	//Obtiene errores de acuerdo a validaciones de reglas de negocio
 	//Este tipo de método validaría que la información sea coherente,
 	//dado que apesar de que haya validaciones del lado del cliente
@@ -195,6 +195,8 @@ class PoderService {
 	//Actualiza los metadatos de los documentos
 	def updateDocsOnRepository(Poder poder, Collection<DocumentoRepositorioTO> drpts){
 		List<DocumentoRepositorioTO> docsEnviar = new ArrayList<DocumentoRepositorioTO>()
+		String matriculasApoderados = "";
+		String nombresApoderados = "";
 		
 		drpts.each{
 			DocumentoPoderRepositorioTO docEnviar = new DocumentoPoderRepositorioTO()
@@ -203,21 +205,18 @@ class PoderService {
 			docEnviar.uuid = it.uuid
 			
 			docEnviar.tipoDocumentoRespaldo = TipoDocumentoRespaldoPoder.get(it.idTipoDocumento).descripcion
-			docEnviar.representanteLegalNombre = poder.representanteLegalNombre
-			docEnviar.representanteLegalApellido1 = poder.representanteLegalApellido1
-			docEnviar.representanteLegalApellido2 = poder.representanteLegalApellido2
-			docEnviar.numeroEscritura = poder.numeroEscritura
-			docEnviar.fechaApoderamiento = poder.fechaApoderamiento
-			docEnviar.jsonApoderados = poder.apoderados as JSON
-			docEnviar.jsonNotario = poder.notario as JSON
-			docEnviar.jsonApoderados = StringEscapeUtils.unescapeJava(docEnviar.jsonApoderados)
-			docEnviar.jsonNotario = StringEscapeUtils.unescapeJava(docEnviar.jsonNotario)
-			docEnviar.jsonGrupoFinanciero = entidadFinancieraService.obtenerGrupoFinanciero(poder.idGrupofinanciero) as JSON
-			if(poder.idInstitucion != null && poder.idInstitucion !=  -1){
-				docEnviar.jsonInstitucion = entidadFinancieraService.obtenerInstitucion(poder.idInstitucion) as JSON
-				docEnviar.jsonInstitucion = StringEscapeUtils.unescapeJava(docEnviar.jsonInstitucion)
-			}			
-			docEnviar.jsonGrupoFinanciero = StringEscapeUtils.unescapeJava(docEnviar.jsonGrupoFinanciero)
+			docEnviar.representanteLegalNombreCompleto = poder?.representanteLegalNombre + " " + poder?.representanteLegalApellido1 + " " + poder?.representanteLegalApellido2
+			docEnviar.numeroEscritura = poder?.numeroEscritura
+			docEnviar.fechaApoderamiento = poder?.fechaApoderamiento
+			poder?.apoderados.each{ a ->
+				matriculasApoderados += a?.autorizado?.numeroMatricula + ";"
+				nombresApoderados += a?.autorizado?.nombreCompleto + ";"
+			}
+			docEnviar.matriculasApoderados = matriculasApoderados
+			docEnviar.nombresApoderados = nombresApoderados
+			docEnviar.notario = poder?.notario?.nombre + " " + poder?.notario?.apellido1 + " " + poder?.notario?.apellido2
+			docEnviar.grupoFinanciero = entidadFinancieraService.obtenerGrupoFinanciero(poder?.idGrupofinanciero)?.nombre
+			docEnviar.institucion = entidadFinancieraService.obtenerInstitucion(poder?.idGrupofinanciero)?.nombre
 			
 			docsEnviar.add(docEnviar)
 		}
@@ -227,6 +226,8 @@ class PoderService {
 	//Sube al repostorio nuevos documentos
 	def updateNewDocsOnRepository(Poder poder, Collection<DocumentoRepositorioTO> drpts){
 		List<DocumentoRepositorioTO> docsEnviar = new ArrayList<DocumentoRepositorioTO>()
+		String matriculasApoderados = "";
+		String nombresApoderados = "";
 		
 		drpts.each{
 			DocumentoPoderRepositorioTO docEnviar = new DocumentoPoderRepositorioTO()
@@ -235,23 +236,18 @@ class PoderService {
 			docEnviar.uuid = it.uuid
 			
 			docEnviar.tipoDocumentoRespaldo = TipoDocumentoRespaldoPoder.get(it.idTipoDocumento).descripcion
-			docEnviar.representanteLegalNombre = poder.representanteLegalNombre
-			docEnviar.representanteLegalApellido1 = poder.representanteLegalApellido1
-			docEnviar.representanteLegalApellido2 = poder.representanteLegalApellido2
-			docEnviar.numeroEscritura = poder.numeroEscritura
-			docEnviar.fechaApoderamiento = poder.fechaApoderamiento
-			docEnviar.jsonApoderados = poder.apoderados as JSON
-			docEnviar.jsonNotario = poder.notario as JSON
-			
-			docEnviar.jsonApoderados = StringEscapeUtils.unescapeJava(docEnviar.jsonApoderados)
-			docEnviar.jsonNotario = StringEscapeUtils.unescapeJava(docEnviar.jsonNotario)
-				
-			docEnviar.jsonGrupoFinanciero = entidadFinancieraService.obtenerGrupoFinanciero(poder.idGrupofinanciero) as JSON
-			if(poder.idInstitucion != null && poder.idInstitucion !=  -1){
-				docEnviar.jsonInstitucion = entidadFinancieraService.obtenerInstitucion(poder.idInstitucion) as JSON
-				docEnviar.jsonInstitucion = StringEscapeUtils.unescapeJava(docEnviar.jsonInstitucion)
-			}			
-			docEnviar.jsonGrupoFinanciero = StringEscapeUtils.unescapeJava(docEnviar.jsonGrupoFinanciero)
+			docEnviar.representanteLegalNombreCompleto = poder?.representanteLegalNombre + " " + poder?.representanteLegalApellido1 + " " + poder?.representanteLegalApellido2
+			docEnviar.numeroEscritura = poder?.numeroEscritura
+			docEnviar.fechaApoderamiento = poder?.fechaApoderamiento
+			poder?.apoderados.each{ a ->
+				matriculasApoderados += a?.autorizado?.numeroMatricula + ";"
+				nombresApoderados += a?.autorizado?.nombreCompleto + ";"
+			}
+			docEnviar.matriculasApoderados = matriculasApoderados
+			docEnviar.nombresApoderados = nombresApoderados
+			docEnviar.notario = poder?.notario?.nombre + " " + poder?.notario?.apellido1 + " " + poder?.notario?.apellido2
+			docEnviar.grupoFinanciero = entidadFinancieraService.obtenerGrupoFinanciero(poder?.idGrupofinanciero)?.nombre
+			docEnviar.institucion = entidadFinancieraService.obtenerInstitucion(poder?.idGrupofinanciero)?.nombre
 			
 			docsEnviar.add(docEnviar)
 		}
@@ -267,6 +263,8 @@ class PoderService {
 	def saveDocsOnRepository(Poder poder){
 		
 		List<DocumentoRepositorioTO> docsEnviar = new ArrayList<DocumentoRepositorioTO>()
+		String matriculasApoderados = "";
+		String nombresApoderados = "";
 		
 		poder.documentosRespaldoPoder.each{
 			DocumentoPoderRepositorioTO docEnviar = new DocumentoPoderRepositorioTO()
@@ -275,24 +273,18 @@ class PoderService {
 			docEnviar.uuid = it.uuidDocumentoRepositorio
 			
 			docEnviar.tipoDocumentoRespaldo = it.tipoDocumentoRespaldoPoder.descripcion
-			docEnviar.representanteLegalNombre = it.poder.representanteLegalNombre
-			docEnviar.representanteLegalApellido1 = it.poder.representanteLegalApellido1
-			docEnviar.representanteLegalApellido2 = it.poder.representanteLegalApellido2
-			docEnviar.numeroEscritura = it.poder.numeroEscritura
-			docEnviar.fechaApoderamiento = it.poder.fechaApoderamiento
-			docEnviar.jsonApoderados = it.poder.apoderados as JSON
-			docEnviar.jsonNotario = it.poder.notario as JSON
-			
-			docEnviar.jsonApoderados = StringEscapeUtils.unescapeJava(docEnviar.jsonApoderados)
-			docEnviar.jsonNotario = StringEscapeUtils.unescapeJava(docEnviar.jsonNotario)
-				
-			docEnviar.jsonGrupoFinanciero = entidadFinancieraService.obtenerGrupoFinanciero(poder.idGrupofinanciero) as JSON
-			if(poder.idInstitucion != null && poder.idInstitucion !=  -1){
-				docEnviar.jsonInstitucion = entidadFinancieraService.obtenerInstitucion(poder.idInstitucion) as JSON
-				docEnviar.jsonInstitucion = StringEscapeUtils.unescapeJava(docEnviar.jsonInstitucion)
+			docEnviar.representanteLegalNombreCompleto = it?.poder?.representanteLegalNombre + " " + it?.poder?.representanteLegalApellido1 + " " + it?.poder?.representanteLegalApellido2
+			docEnviar.numeroEscritura = it?.poder?.numeroEscritura
+			docEnviar.fechaApoderamiento = it?.poder?.fechaApoderamiento
+			it?.poder?.apoderados.each{ a ->
+				matriculasApoderados += a?.autorizado?.numeroMatricula + ";"
+				nombresApoderados += a?.autorizado?.nombreCompleto + ";"
 			}
-			docEnviar.jsonGrupoFinanciero = StringEscapeUtils.unescapeJava(docEnviar.jsonGrupoFinanciero)
-			
+			docEnviar.matriculasApoderados = matriculasApoderados
+			docEnviar.nombresApoderados = nombresApoderados
+			docEnviar.notario = it?.poder?.notario?.nombre + " " + it?.poder?.notario?.apellido1 + " " + it?.poder?.notario?.apellido2
+			docEnviar.grupoFinanciero = entidadFinancieraService.obtenerGrupoFinanciero(it?.poder?.idGrupofinanciero)?.nombre
+			docEnviar.institucion = entidadFinancieraService.obtenerInstitucion(it?.poder?.idGrupofinanciero)?.nombre
 			docsEnviar.add(docEnviar)
 		}
 		documentoRepositorioService.enviarDocumentosArchivoTemporal(docsEnviar)

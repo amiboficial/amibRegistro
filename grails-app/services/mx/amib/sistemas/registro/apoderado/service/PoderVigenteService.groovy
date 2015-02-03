@@ -78,4 +78,37 @@ class PoderVigenteService {
 		
 		return sr
 	}
+	
+	def findAll(Integer max, Integer offset, String sort, String order){
+		SearchResult sr = new SearchResult()
+		
+		if(max == null || max <= 0){
+			max = 10
+		}
+		if(offset == null || offset <= 0){
+			offset = 0
+		}
+		if(sort == null || sort == ""){
+			sort = "id"
+		}
+		else if(["id","numeroMatricula","nombreCompleto","idGrupofinanciero","idInstitucion","numeroEscritura"].find{ sort == it } == null){
+			sort = "id"
+		}
+		if(order == null || order == ""){
+			order = "asc"
+		}
+		else if(order != "desc" && order != "asc"){
+			order = "asc"
+		}
+		//try{
+			sr.count = PoderVigente.executeQuery("select count(pv) from PoderVigente as pv")
+			sr.list = PoderVigente.list([max:max, offset:offset, sort:sort, order:order])
+		//}
+		//catch(Exception e){
+		//	sr.error = true
+		//	sr.errorDetails = e.message
+		//}
+		
+		return sr
+	}
 }

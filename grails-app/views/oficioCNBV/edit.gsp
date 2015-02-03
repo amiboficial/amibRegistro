@@ -9,7 +9,7 @@
 		<a id="anchorForm"></a>
 		<ul class="breadcrumb">
 			<li><a href="#">Gestión</a><span class="divider"></span></li>
-			<li><a href="<g:createLink controller="oficioCNBV" action="index" />">Oficios CNBV</a><span class="divider"></span></li>
+			<li><a href="#">Oficios CNBV</a><span class="divider"></span></li>
 			<li><a href="#">Edición de Oficio CNBV</a></li>
 		</ul>
 	
@@ -22,3 +22,6 @@
 		
 	</body>
 </html>
+
+
+p

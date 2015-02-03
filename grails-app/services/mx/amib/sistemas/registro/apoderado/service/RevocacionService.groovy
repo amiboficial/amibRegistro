@@ -69,12 +69,14 @@ class RevocacionService {
 		
 		revocacion.documentosRespaldoRevocacion = new HashSet<DocumentoRespaldoRevocacion>()
 		documentosJson.each{ String _docJson -> 
+			String matriculasRevocados = ""
+			String nombresRevocados = ""
+			
 			def parsedJson = JSON.parse(_docJson)
 			
 			DocumentoRespaldoRevocacion drr = new DocumentoRespaldoRevocacion()
 			drr.uuidDocumentoRepositorio = parsedJson.'uuid'
 			drr.tipoDocumentoRespaldoRevocacion = TipoDocumentoRespaldoRevocacion.get( parsedJson.'idTipo' )
-			
 			drr.revocacion = revocacion
 			revocacion.documentosRespaldoRevocacion.add(drr)
 			
@@ -82,21 +84,19 @@ class RevocacionService {
 			dr.uuid = parsedJson.'uuid'
 			dr.clave = ''
 			dr.tipoDocumentoRespaldo = TipoDocumentoRespaldoRevocacion.get( parsedJson.'idTipo' ).descripcion 
-			dr.representanteLegalNombre = revocacion.representanteLegalNombre
-			dr.representanteLegalApellido1 = revocacion.representanteLegalApellido1
-			dr.representanteLegalApellido2 = revocacion.representanteLegalApellido2
+			dr.representanteLegalNombreCompleto = revocacion.representanteLegalNombre+" "+revocacion.representanteLegalApellido1+" "+revocacion.representanteLegalApellido2
 			dr.numeroEscritura = revocacion.numeroEscritura
 			dr.fechaRevocacion = revocacion.fechaRevocacion
-			dr.jsonRevocados = revocacion.revocados as JSON
-			dr.jsonNotario = revocacion.notario as JSON
-			
-			dr.jsonGrupoFinanciero = entidadFinancieraService.obtenerGrupoFinanciero(revocacion.idGrupofinanciero) as JSON
-			if(revocacion.idInstitucion != null || revocacion.idInstitucion !=  -1){
-				dr.jsonInstitucion = entidadFinancieraService.obtenerInstitucion(revocacion.idInstitucion) as JSON
-				dr.jsonInstitucion = StringEscapeUtils.unescapeJava(dr.jsonInstitucion)
+			revocacion.revocados.each{ r ->
+				matriculasRevocados += r.numeroMatricula + ";"
+				nombresRevocados += r.nombreCompleto + ";"
 			}
-			dr.jsonGrupoFinanciero = StringEscapeUtils.unescapeJava(dr.jsonGrupoFinanciero)
-			
+			dr.matriculasRevocados = matriculasRevocados
+			dr.nombresRevocados = nombresRevocados
+			dr.notario = revocacion?.notario?.nombre + " " + revocacion?.notario?.apellido1 + " " + revocacion?.notario?.apellido2
+			dr.grupoFinanciero = entidadFinancieraService.obtenerGrupoFinanciero(revocacion?.idGrupofinanciero)?.nombre
+			dr.institucion = entidadFinancieraService.obtenerInstitucion(revocacion?.idGrupofinanciero)?.nombre
+
 			docsAEnviar.add(dr)
 		}
 		
@@ -173,7 +173,9 @@ class RevocacionService {
 		revocacion.documentosRespaldoRevocacion.each{ 
 			it.toBeUpdated = false
 		}
-		documentosJson.each{ String _documentoJson -> 
+		documentosJson.each{ String _documentoJson ->
+			String matriculasRevocados = ""
+			String nombresRevocados = ""
 			DocumentoRespaldoRevocacion drr = null
 			def parsedJson = JSON.parse(_documentoJson)
 			DocumentoRevocacionRepositorioTO dr = new DocumentoRevocacionRepositorioTO()
@@ -193,21 +195,19 @@ class RevocacionService {
 			
 			dr.uuid = parsedJson.'uuid'
 			dr.clave = ''
-			dr.tipoDocumentoRespaldo = drr.tipoDocumentoRespaldoRevocacion.descripcion
-			dr.representanteLegalNombre = revocacion.representanteLegalNombre
-			dr.representanteLegalApellido1 = revocacion.representanteLegalApellido1
-			dr.representanteLegalApellido2 = revocacion.representanteLegalApellido2
+			dr.tipoDocumentoRespaldo = TipoDocumentoRespaldoRevocacion.get( parsedJson.'idTipo' ).descripcion 
+			dr.representanteLegalNombreCompleto = revocacion.representanteLegalNombre+" "+revocacion.representanteLegalApellido1+" "+revocacion.representanteLegalApellido2
 			dr.numeroEscritura = revocacion.numeroEscritura
 			dr.fechaRevocacion = revocacion.fechaRevocacion
-			dr.jsonRevocados = revocacion.revocados as JSON
-			dr.jsonNotario = revocacion.notario as JSON
-			
-			dr.jsonGrupoFinanciero = entidadFinancieraService.obtenerGrupoFinanciero(revocacion.idGrupofinanciero) as JSON
-			if(revocacion.idInstitucion != null || revocacion.idInstitucion !=  -1){
-				dr.jsonInstitucion = entidadFinancieraService.obtenerInstitucion(revocacion.idInstitucion) as JSON
-				dr.jsonInstitucion = StringEscapeUtils.unescapeJava(dr.jsonInstitucion)
+			revocacion.revocados.each{ r ->
+				matriculasRevocados += r.numeroMatricula + ";"
+				nombresRevocados += r.nombreCompleto + ";"
 			}
-			dr.jsonGrupoFinanciero = StringEscapeUtils.unescapeJava(dr.jsonGrupoFinanciero)
+			dr.matriculasRevocados = matriculasRevocados
+			dr.nombresRevocados = nombresRevocados
+			dr.notario = revocacion?.notario?.nombre + " " + revocacion?.notario?.apellido1 + " " + revocacion?.notario?.apellido2
+			dr.grupoFinanciero = entidadFinancieraService.obtenerGrupoFinanciero(revocacion?.idGrupofinanciero)?.nombre
+			dr.institucion = entidadFinancieraService.obtenerInstitucion(revocacion?.idGrupofinanciero)?.nombre
 			
 			drr.toBeUpdated = true
 		}

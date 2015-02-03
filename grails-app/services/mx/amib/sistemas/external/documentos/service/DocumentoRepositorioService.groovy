@@ -9,8 +9,8 @@ import mx.amib.sistemas.util.service.ArchivoTemporalService
 import mx.amib.sistemas.utils.AmibFechaUtils
 
 import org.codehaus.groovy.grails.web.json.JSONObject
-import org.junit.After;
-import org.springframework.aop.aspectj.RuntimeTestWalker.ThisInstanceOfResidueTestVisitor;
+import org.junit.After
+import org.springframework.aop.aspectj.RuntimeTestWalker.ThisInstanceOfResidueTestVisitor
 
 import java.io.File
 
@@ -27,8 +27,8 @@ import grails.transaction.Transactional
  * HTTP/REST al sistema de amibDocumentos
  *
  * @author Gabriel
- * @version 1.1 - (Última actualización) 22/09/2014
- *
+ * @version 1.2 - (Última actualización) 03/02/2015
+ *			1.1 - (Última actualización) 22/09/2014
  */
 @Transactional
 class DocumentoRepositorioService {
@@ -74,29 +74,44 @@ class DocumentoRepositorioService {
 				break;
 				case ClaseDocumento.OFICIO_CNBV:
 					docRep = new DocumentoOficioCnbvRespositorioTO()
-					docRep.datosAdicionales = resp.json.'datosAdicionales'
+					docRep.matriculas = resp.json.'matriculas'
+					docRep.nombres = resp.json.'nombres'
+					docRep.autorizaciones = resp.json.'autorizaciones'
 				break;
 				case ClaseDocumento.PODER:
 					docRep = new DocumentoPoderRepositorioTO()
 					docRep.tipoDocumentoRespaldo = resp.json.'tipoDocumentoRespaldo'
-					docRep.representanteLegalNombre = resp.json.'representanteLegalNombre'
-					docRep.representanteLegalApellido1 = resp.json.'representanteLegalApellido1'
-					docRep.representanteLegalApellido2 = resp.json.'representanteLegalApellido2'
-					docRep.esRegistradoPorGrupoFinanciero = resp.json.'esRegistradoPorGrupoFinanciero'
+					docRep.representanteLegalNombreCompleto = resp.json.'representanteLegalNombreCompleto'
 					docRep.numeroEscritura = resp.json.'numeroEscritura'
 					docRep.fechaApoderamiento = df.parse(resp.json.'fechaApoderamiento'.substring(0,10))
-					docRep.jsonApoderados = resp.json.'jsonApoderados'
-					docRep.jsonNotario = resp.json.'jsonNotario'
-					docRep.jsonGrupoFinanciero = resp.json.'jsonGrupoFinanciero'
-					docRep.jsonInstitucion = resp.json.'jsonInstitucion'
+					docRep.matriculasApoderados = resp.json.'matriculasApoderados'
+					docRep.nombresApoderados = resp.json.'nombresApoderados'
+					docRep.notario = resp.json.'notario'
+					docRep.grupoFinanciero = resp.json.'grupoFinanciero'
+					docRep.institucion = resp.json.'institucion'
+				break;
+				case ClaseDocumento.REVOCACION:
+					docRep = new DocumentoRevocacionRepositorioTO()
+					docRep.tipoDocumentoRespaldo = resp.json.'tipoDocumentoRespaldo'
+					docRep.representanteLegalNombreCompleto = resp.json.'representanteLegalNombreCompleto'
+					docRep.numeroEscritura = resp.json.'numeroEscritura'
+					docRep.fechaApoderamiento = df.parse(resp.json.'fechaApoderamiento'.substring(0,10))
+					docRep.matriculasRevocados = resp.json.'matriculasRevocados'
+					docRep.nombresRevocados = resp.json.'nombresRevocados'
+					docRep.notario = resp.json.'notario'
+					docRep.grupoFinanciero = resp.json.'grupoFinanciero'
+					docRep.institucion = resp.json.'institucion'
 				break;
 				case ClaseDocumento.FOTO_SUSTENTANTE:
 					docRep = new DocumentoFotoSustentanteRepositorioTO()
-					docRep.datosAdicionales = resp.json.'datosAdicionales'
+					docRep.numeroMatricula = resp.json.'numeroMatricula'
+					docRep.nombreCompleto = resp.json.'nombreCompleto'
 				break;
 				case ClaseDocumento.DOC_SUSTENTANTE:
 					docRep = new DocumentoSustentanteRepositorioTO()
-					docRep.datosAdicionales = resp.json.'datosAdicionales'
+					docRep.numeroMatricula = resp.json.'numeroMatricula'
+					docRep.tipoDocumentoSustentante = resp.json.'tipoDocumentoSustentante'
+					docRep.nombreCompleto = resp.json.'nombreCompleto'
 				break;
 			}
 			docRep.id = resp.json.'id'
@@ -273,43 +288,44 @@ class DocumentoRepositorioTO{
 }
 
 class DocumentoOficioCnbvRespositorioTO extends DocumentoRepositorioTO{
-	String datosAdicionales
+	String matriculas
+	String nombres
+	String autorizaciones
 }
 
 class DocumentoPoderRepositorioTO extends DocumentoRepositorioTO{
 	String tipoDocumentoRespaldo
-	String representanteLegalNombre
-	String representanteLegalApellido1
-	String representanteLegalApellido2
-	Boolean esRegistradoPorGrupoFinanciero
+	String representanteLegalNombreCompleto
 	Integer numeroEscritura
 	Date fechaApoderamiento
-	String jsonApoderados
-	String jsonNotario
-	String jsonGrupoFinanciero
-	String jsonInstitucion
+	String matriculasApoderados
+	String nombresApoderados
+	String notario
+	String grupoFinanciero
+	String institucion
 }
 
 class DocumentoRevocacionRepositorioTO extends DocumentoRepositorioTO{
 	String tipoDocumentoRespaldo
-	String representanteLegalNombre
-	String representanteLegalApellido1
-	String representanteLegalApellido2
-	Boolean esRegistradoPorGrupoFinanciero
+	String representanteLegalNombreCompleto
 	Integer numeroEscritura
 	Date fechaRevocacion
-	String jsonRevocados
-	String jsonNotario
-	String jsonGrupoFinanciero
-	String jsonInstitucion
+	String matriculasRevocados
+	String nombresRevocados
+	String notario
+	String grupoFinanciero
+	String institucion
 }
 
 class DocumentoFotoSustentanteRepositorioTO extends DocumentoRepositorioTO{
-	String datosAdicionales
+	Integer numeroMatricula
+	String nombreCompleto
 }
 
 class DocumentoSustentanteRepositorioTO extends DocumentoRepositorioTO{
-	String datosAdicionales
+	Integer numeroMatricula
+	String tipoDocumentoSustentante
+	String nombreCompleto
 }
 
 enum ClaseDocumento{

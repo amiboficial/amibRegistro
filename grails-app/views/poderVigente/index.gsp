@@ -74,18 +74,62 @@
 			<table class="table">
 				<thead>
 					<tr>
+						<g:sortableColumn property="numeroMatricula" title="${message(code: 'poderVigente.numeroMatricula.label', default: '# Mat.')}" />
+						<g:sortableColumn property="nombreCompleto" title="${message(code: 'poderVigente.nombreCompleto.label', default: 'Nombre Completo')}" />
+						<g:sortableColumn property="idGrupofinanciero" title="${message(code: 'poderVigente.grupofinanciero.label', default: 'Gpo. Financiero')}" />
+						<g:sortableColumn property="idInstitucion" title="${message(code: 'poderVigente.institucion.label', default: 'Institución')}" />
+						<g:sortableColumn property="numeroEscritura" title="${message(code: 'poderVigente.numeroEscritura.label', default: '# Esc.')}" />
 					</tr>
 				</thead>
+					<g:each in="${poderVigenteInstanceList}" status="i" var="poderVigenteInstance">
+						<tr>
+							<td>${fieldValue(bean: poderVigenteInstance, field: "numeroMatricula")}</td>
+							<td>${fieldValue(bean: poderVigenteInstance, field: "nombreCompleto")}</td>
+							<td>${fieldValue(bean: poderVigenteInstance, field: "idGrupofinanciero")}</td>
+							<td>${fieldValue(bean: poderVigenteInstance, field: "idInstitucion")}</td>
+							<td>${fieldValue(bean: poderVigenteInstance, field: "numeroEscritura")}</td>
+						</tr>
+					</g:each>
 				<tbody>
 					
 				</tbody>
 			</table>
 			<div class="pagination">
+				<g:paginate total="${poderInstanceCount?:0}" />
 			</div>
 		</div>
 	</fieldset>
 	
 	</form>
+	
+	<script>
+	$( "#btnLimpiar" ).click(function() {
+		limpiaCampos();
+	}
+	$( "#btnBuscar" ).click(function() {
+		limpiaValidacion();
+		var valid = validaCampos();
+		
+		if(valid)
+			$( "#frmApp" ).submit();
+	}
+	$( "#btnTodos" ).click(function() {
+		window.location.href = '<g:createLink controller="poderVigente" action="index" />'
+	}
+
+	function limpiaCampos(){
+		return false
+	}
+
+	function validaCampos(){
+		return false
+	}
+
+	function limpiaValidacion(){
+		return false
+	}
+	
+	</script>
 	
 </body>
 </html>

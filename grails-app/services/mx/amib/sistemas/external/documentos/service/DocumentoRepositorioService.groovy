@@ -26,7 +26,10 @@ import grails.transaction.Transactional
  * HTTP/REST al sistema de amibDocumentos
  *
  * @author Gabriel
- * @version 1.2 - (Última actualización) 11/02/2015 - Se añaden métodos obtenerTodosPorMatricula,
+ * @version 1.2 - 13/02/2015
+ * 					-Se añaden métodos obtenerTodos, obtenerTodosPorMatricula, 
+ * 					obtenerTodosPorNombreArchivoILike, obtenerTodosPorDescripcionILike
+ * 					-Se actualiza método obtenerMetadatosDocumento
  *			1.1 - 22/09/2014
  */
 @Transactional
@@ -35,8 +38,15 @@ class DocumentoRepositorioService {
 	ArchivoTemporalService archivoTemporalService
 	
 	String saveUrl
+	String updateUrl //TODO: asignar URL
+	String documentoOficioCnbvSaveUrl //TODO: asignar URL
+	String documentoOficioUpdateUrl //TODO: asignar URL
 	String documentoPoderSaveUrl
 	String documentoPoderUpdateUrl
+	String documentoFotoSustentanteSaveUrl //TODO: asignar URL
+	String documentoFotoSustentanteUpdateUrl //TODO: asignar URL
+	String documentoSustentanteRepositorioSaveUrl //TODO: asignar URL
+	String documentoSustentanteRepositorioUpdateUrl //TODO: asignar URL
 	String documentoRevocacionSaveUrl
 	String documentoRevocacionUpdateUrl
 	
@@ -65,78 +75,7 @@ class DocumentoRepositorioService {
 	 * @param uuid
 	 * @return Instanca de DocumentoRepositorioTO
 	 */
-	DocumentoRepositorioTO obtenerMetadatosDocumento(String uuid, ClaseDocumento cd = ClaseDocumento.DOCUMENTO){
-		def docRep = null
-		String restUrl = getUrl + uuid
-		DateFormat df = new SimpleDateFormat("yyyy-MM-dd")
-		
-		def rest = new RestBuilder()
-		def restMultipart = new RestBuilder()
-		
-		def resp = rest.get(restUrl)
-		
-		if(resp.json == null)
-			return null
-		else
-		{
-			switch(cd){
-				case ClaseDocumento.DOCUMENTO:
-					docRep = new DocumentoRepositorioTO()
-				break;
-				case ClaseDocumento.OFICIO_CNBV:
-					docRep = new DocumentoOficioCnbvRespositorioTO()
-					docRep.matriculas = resp.json.'matriculas'
-					docRep.nombres = resp.json.'nombres'
-					docRep.autorizaciones = resp.json.'autorizaciones'
-				break;
-				case ClaseDocumento.PODER:
-					docRep = new DocumentoPoderRepositorioTO()
-					docRep.tipoDocumentoRespaldo = resp.json.'tipoDocumentoRespaldo'
-					docRep.representanteLegalNombreCompleto = resp.json.'representanteLegalNombreCompleto'
-					docRep.numeroEscritura = resp.json.'numeroEscritura'
-					docRep.fechaApoderamiento = df.parse(resp.json.'fechaApoderamiento'.substring(0,10))
-					docRep.matriculasApoderados = resp.json.'matriculasApoderados'
-					docRep.nombresApoderados = resp.json.'nombresApoderados'
-					docRep.notario = resp.json.'notario'
-					docRep.grupoFinanciero = resp.json.'grupoFinanciero'
-					docRep.institucion = resp.json.'institucion'
-				break;
-				case ClaseDocumento.REVOCACION:
-					docRep = new DocumentoRevocacionRepositorioTO()
-					docRep.tipoDocumentoRespaldo = resp.json.'tipoDocumentoRespaldo'
-					docRep.representanteLegalNombreCompleto = resp.json.'representanteLegalNombreCompleto'
-					docRep.numeroEscritura = resp.json.'numeroEscritura'
-					docRep.fechaRevocacion = df.parse(resp.json.'fechaRevocacion'.substring(0,10))
-					docRep.matriculasRevocados = resp.json.'matriculasRevocados'
-					docRep.nombresRevocados = resp.json.'nombresRevocados'
-					docRep.notario = resp.json.'notario'
-					docRep.grupoFinanciero = resp.json.'grupoFinanciero'
-					docRep.institucion = resp.json.'institucion'
-				break;
-				case ClaseDocumento.FOTO_SUSTENTANTE:
-					docRep = new DocumentoFotoSustentanteRepositorioTO()
-					docRep.numeroMatricula = resp.json.'numeroMatricula'
-					docRep.nombreCompleto = resp.json.'nombreCompleto'
-				break;
-				case ClaseDocumento.DOC_SUSTENTANTE:
-					docRep = new DocumentoSustentanteRepositorioTO()
-					docRep.numeroMatricula = resp.json.'numeroMatricula'
-					docRep.tipoDocumentoSustentante = resp.json.'tipoDocumentoSustentante'
-					docRep.nombreCompleto = resp.json.'nombreCompleto'
-				break;
-			}
-			docRep.id = resp.json.'id'
-			docRep.uuid = resp.json.'uuid'
-			docRep.clave = resp.json.'clave'
-			docRep.nombre = resp.json.'nombre'
-			docRep.mimetype = resp.json.'mimetype'
-			//docRep.fechaModificacion = resp.json.'fechaModificacion'
-			//docRep.fechaCreacion = resp.json.'fechaCreacion'
-		}
-		return docRep
-	}
-	
-	DocumentoRepositorioTO obtenerMetadatosDocumentoNew(String uuid){
+	DocumentoRepositorioTO obtenerMetadatosDocumento(String uuid){
 		def docRep = null
 		String restUrl = getUrl + uuid
 		
@@ -329,12 +268,21 @@ class DocumentoRepositorioService {
 			def restMultipart = new RestBuilder()
 			String _uuid = it.uuid
 			String _json = (it as JSON)
-			
-			if( DocumentoPoderRepositorioTO.class.isInstance(it) ){
+						
+			if( DocumentoOficioCnbvRespositorioTO.class.isInstance(it) ){
+				restUrl = ""
+			}
+			else if ( DocumentoPoderRepositorioTO.class.isInstance(it) ){
 				restUrl = this.documentoPoderSaveUrl
 			}
 			else if ( DocumentoRevocacionRepositorioTO.class.isInstance(it) ){
 				restUrl = this.documentoRevocacionSaveUrl
+			}
+			else if ( DocumentoFotoSustentanteRepositorioTO.class.isInstance(it) ){
+				restUrl = ""
+			}
+			else if ( DocumentoSustentanteRepositorioTO.class.isInstance(it) ){
+				restUrl = ""
 			}
 			else{
 				restUrl = this.saveUrl
@@ -345,20 +293,13 @@ class DocumentoRepositorioService {
 				contentType "application/json;charset=UTF-8"
 				json _json
 			}
-
 			ArchivoTO arcTemp = archivoTemporalService.obtenerArchivoTemporal(_uuid)
-			if(arcTemp == null){
-				println "ESTA COSA ES NULL!"
-			}
-			else{
-				println "PUES NO ES NULL Y EL OBJETO ES: " + (arcTemp as JSON)
-			}
-			
 			def respMultipart = restMultipart.post(this.saveMultipartUrl + _uuid) {
 				contentType "multipart/form-data"
 				archivo = new File( (arcTemp.temploc) )
 			}
-
+			
+			//Elimina el archivo de los temporales
 			archivoTemporalService.eliminarArchivoTemporal(_uuid)
 		}
     }
@@ -386,12 +327,25 @@ class DocumentoRepositorioService {
 		String _uuid = doc.uuid
 		String _json = (doc as JSON)
 		
-		if( DocumentoPoderRepositorioTO.class.isInstance(doc) ){
+		if( DocumentoOficioCnbvRespositorioTO.class.isInstance(doc) ){
+			restUrl = ""
+		}
+		else if ( DocumentoPoderRepositorioTO.class.isInstance(doc) ){
 			restUrl = this.documentoPoderUpdateUrl
 		}
 		else if ( DocumentoRevocacionRepositorioTO.class.isInstance(doc) ){
 			restUrl = this.documentoRevocacionUpdateUrl
 		}
+		else if ( DocumentoFotoSustentanteRepositorioTO.class.isInstance(doc) ){
+			restUrl = ""
+		}
+		else if ( DocumentoSustentanteRepositorioTO.class.isInstance(doc) ){
+			restUrl = ""
+		}
+		else{
+			restUrl = ""
+		}
+		
 		//Envía acorde al metadato
 		def resp = rest.post(restUrl){
 			contentType "application/json;charset=UTF-8"
@@ -457,7 +411,7 @@ class DocumentoRepositorioService {
 		}
 		return dr
 	}
-	
+		
 	private DocumentoRepositorioTO llenarMetadatosJsonDocumento(def jsonObjectDoc){
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd")
 		DateFormat dftm = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")

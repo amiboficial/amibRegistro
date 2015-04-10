@@ -5,6 +5,13 @@ import mx.amib.sistemas.external.documentos.service.DocumentoRepositorioTO
 import mx.amib.sistemas.util.service.ArchivoTO
 import org.springframework.web.multipart.commons.CommonsMultipartFile
 
+/*
+ * mx.amib.sistemas.util.controller.DocumentoController 1.0
+ * 
+ * Controllador para subir y descargar documentos empleando
+ * los servicios archivoTemporalService, documentoRepositorioService
+ * 
+ */
 class DocumentoController {
 
 	def archivoTemporalService

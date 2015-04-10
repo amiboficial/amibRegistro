@@ -26,7 +26,10 @@ import grails.transaction.Transactional
  * HTTP/REST al sistema de amibDocumentos
  *
  * @author Gabriel
- * @version 1.2 - 13/02/2015
+ * @version 1.3 - 14/02/2015
+ * 					-Se cambian los tipos de retorno a SearchResult para incluir el count total
+ * 					-Se añade metodo findAll (a diferencia del index REST, este devuelve detalles adicionales)
+ * 			1.2 - 13/02/2015
  * 					-Se añaden métodos obtenerTodos, obtenerTodosPorMatricula, 
  * 					obtenerTodosPorNombreArchivoILike, obtenerTodosPorDescripcionILike
  * 					-Se actualiza método obtenerMetadatosDocumento
@@ -55,6 +58,7 @@ class DocumentoRepositorioService {
 	String findAllLikeDescripcionUrl
 	String findAllGenericUrl
 	String findAllByTypeUrl
+	String findAllUrl
 	
 	String listDocumentoUrl
 	String listCnbvDgaOficioUrl
@@ -92,18 +96,19 @@ class DocumentoRepositorioService {
 	 * Obtiene, del repositorio amibDocumentos,
 	 * los metadatos de todos documentos.
 	 *
-	 * @return Coleccion de objetos DocumentoRepositorioTO
+	 * @return SearchResult con Coleccion de objetos DocumentoRepositorioTO y el total de elementos en búsqueda
 	 *
 	 */
-	Collection<DocumentoRepositorioTO> obtenerTodos(Integer max = 10, Integer offset = 0, String sort = "id", String order = "desc"){
+	SearchResult obtenerTodos(Integer max = 10, Integer offset = 0, String sort = "id", String order = "desc"){
 		Collection<DocumentoRepositorioTO> resultCollection = new ArrayList<DocumentoRepositorioTO>()
-		String restUrl = listDocumentoUrl + "?max=" + max + "&offset=" + offset + "&sort=" + sort + "&order=" + order
+		Integer count = 0
+		String restUrl = findAllUrl + "?max=" + max + "&offset=" + offset + "&sort=" + sort + "&order=" + order
 		def rest = new RestBuilder()
 		
 		//obtiene los datos de servicio REST
 		def resp = rest.get(restUrl)
 		if(resp.json != null && resp.json instanceof JSONObject){
-			def count = resp.json.'count'
+			count = resp.json.'count'
 			if(count>0) {
 				def jsonArrayList = resp.json.'list'
 				jsonArrayList.each{	x ->
@@ -114,7 +119,12 @@ class DocumentoRepositorioService {
 			}
 		}
 		
-		return resultCollection
+		println restUrl
+		
+		SearchResult sr = new SearchResult()
+		sr.count = resp.json.'count'
+		sr.list = resultCollection
+		return sr
 	}
 	
 	/**
@@ -126,8 +136,9 @@ class DocumentoRepositorioService {
 	 * @return Coleccion de objetos DocumentoRepositorioTO
 	 *
 	 */
-	Collection<DocumentoRepositorioTO> obtenerTodos(ClaseDocumento cd, Integer max = 10, Integer offset = 0, String sort = "id", String order = "desc"){
+	SearchResult obtenerTodos(ClaseDocumento cd, Integer max = 10, Integer offset = 0, String sort = "id", String order = "desc"){
 		Collection<DocumentoRepositorioTO> resultCollection = new ArrayList<DocumentoRepositorioTO>()
+		Long count = 0
 		String restUrl = findAllByTypeUrl + "?idTipo=" + cd.getId() + "&max=" + max + "&offset=" + offset + "&sort=" + sort + "&order=" + order
 		def rest = new RestBuilder()
 		
@@ -136,7 +147,7 @@ class DocumentoRepositorioService {
 		//obtiene los datos de servicio REST
 		def resp = rest.get(restUrl)
 		if(resp.json != null && resp.json instanceof JSONObject){
-			def count = resp.json.'count'
+			count = resp.json.'count'
 			if(count>0) {
 				def jsonArrayList = resp.json.'list'
 				jsonArrayList.each{	x ->
@@ -147,7 +158,10 @@ class DocumentoRepositorioService {
 			}
 		}
 		
-		return resultCollection
+		SearchResult sr = new SearchResult()
+		sr.count = resp.json.'count'
+		sr.list = resultCollection
+		return sr
 	}
 	
 	/**
@@ -160,15 +174,16 @@ class DocumentoRepositorioService {
 	 * @return Coleccion de objetos DocumentoRepositorioTO
 	 *
 	 */
-	Collection<DocumentoRepositorioTO> obtenerTodosPorMatricula(Integer numeroMatricula, Integer max = 10, Integer offset = 0, String sort = "id", String order = "desc"){
+	SearchResult obtenerTodosPorMatricula(Integer numeroMatricula, Integer max = 10, Integer offset = 0, String sort = "id", String order = "desc"){
 		Collection<DocumentoRepositorioTO> resultCollection = new ArrayList<DocumentoRepositorioTO>()
+		Long count = 0
 		String restUrl = findAllByMatriculaUrl + "?matricula=" + numeroMatricula + "&max=" + max + "&offset=" + offset + "&sort=" + sort + "&order=" + order
 		def rest = new RestBuilder()
 		
 		//obtiene los datos de servicio REST
 		def resp = rest.get(restUrl)
 		if(resp.json != null && resp.json instanceof JSONObject){
-			def count = resp.json.'count'
+			count = resp.json.'count'
 			if(count>0) {
 				def jsonArrayList = resp.json.'list'
 				jsonArrayList.each{	x ->
@@ -179,7 +194,10 @@ class DocumentoRepositorioService {
 			}
 		}
 		
-		return resultCollection
+		SearchResult sr = new SearchResult()
+		sr.count = resp.json.'count'
+		sr.list = resultCollection
+		return sr
 	}
 	
 	/**
@@ -192,15 +210,16 @@ class DocumentoRepositorioService {
 	 * @return Coleccion de objetos DocumentoRepositorioTO
 	 *
 	 */
-	Collection<DocumentoRepositorioTO> obtenerTodosPorNombreArchivoILike(String nombreArchivo, Integer max = 10, Integer offset = 0, String sort = "id", String order = "desc"){
+	SearchResult obtenerTodosPorNombreArchivoILike(String nombreArchivo, Integer max = 10, Integer offset = 0, String sort = "id", String order = "desc"){
 		Collection<DocumentoRepositorioTO> resultCollection = new ArrayList<DocumentoRepositorioTO>()
+		Long count = 0
 		String restUrl = findAllLikeNombreArchivoUrl + "?nombreArchivo=" + nombreArchivo + "&max=" + max + "&offset=" + offset + "&sort=" + sort + "&order=" + order
 		def rest = new RestBuilder()
 		
 		//obtiene los datos de servicio REST
 		def resp = rest.get(restUrl)
 		if(resp.json != null && resp.json instanceof JSONObject){
-			def count = resp.json.'count'
+			count = resp.json.'count'
 			if(count>0) {
 				def jsonArrayList = resp.json.'list'
 				jsonArrayList.each{	x ->
@@ -211,7 +230,10 @@ class DocumentoRepositorioService {
 			}
 		}
 		
-		return resultCollection
+		SearchResult sr = new SearchResult()
+		sr.count = resp.json.'count'
+		sr.list = resultCollection
+		return sr
 	}
 	
 	/**
@@ -224,15 +246,16 @@ class DocumentoRepositorioService {
 	 * @return Coleccion de objetos DocumentoRepositorioTO
 	 *
 	 */
-	Collection<DocumentoRepositorioTO> obtenerTodosPorDescripcionILike(String descripcion, Integer max = 10, Integer offset = 0, String sort = "id", String order = "desc"){
+	SearchResult obtenerTodosPorDescripcionILike(String descripcion, Integer max = 10, Integer offset = 0, String sort = "id", String order = "desc"){
 		Collection<DocumentoRepositorioTO> resultCollection = new ArrayList<DocumentoRepositorioTO>()
+		Long count = 0
 		String restUrl = findAllLikeDescripcionUrl + "?descripcion=" + descripcion + "&max=" + max + "&offset=" + offset + "&sort=" + sort + "&order=" + order
 		def rest = new RestBuilder()
 		
 		//obtiene los datos de servicio REST
 		def resp = rest.get(restUrl)
 		if(resp.json != null && resp.json instanceof JSONObject){
-			def count = resp.json.'count'
+			count = resp.json.'count'
 			if(count>0) {
 				def jsonArrayList = resp.json.'list'
 				jsonArrayList.each{	x ->
@@ -243,7 +266,10 @@ class DocumentoRepositorioService {
 			}
 		}
 		
-		return resultCollection
+		SearchResult sr = new SearchResult()
+		sr.count = resp.json.'count'
+		sr.list = resultCollection
+		return sr
 	}
 	
 	/**
@@ -478,6 +504,11 @@ class DocumentoRepositorioService {
 			doc.fechaModificacion = dftm.parse(jsonObjectDoc.'fechaModificacion'.substring(0,19) + "-0000")
 		}
 		return doc
+	}
+	
+	class SearchResult{
+		def list
+		def count
 	}
 }
 

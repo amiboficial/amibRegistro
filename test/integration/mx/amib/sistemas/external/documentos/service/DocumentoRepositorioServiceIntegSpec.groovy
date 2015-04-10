@@ -33,7 +33,7 @@ class DocumentoRepositorioServiceIntegSpec extends Specification {
 																	new URL('http://localhost:8083/amibDocumentos/archivoDocumento/descargarArchivoDocumentoUuid?uuid=88f3b04f-1e85-4f92-b217-6d11f84a1c8a'))*/
 		//documentoRepositorioService.descargarATemporal('TEST','88f3b04f-1e85-4f92-b217-6d11f84a1c8a')
 		//println (algo as JSON)
-		def cosa = new DocumentoPoderRepositorioTO()
+		/*def cosa = new DocumentoPoderRepositorioTO()
 		cosa.id = null
 		cosa.uuid = '67b5ce76-d5a0-4d9c-a6d1-867a229f3b01'
 		cosa.tipoDocumentoRespaldo = 'TEST MOD 1'
@@ -46,8 +46,16 @@ class DocumentoRepositorioServiceIntegSpec extends Specification {
 		cosa.jsonApoderados = null
 		cosa.jsonNotario = null
 		cosa.jsonGrupoFinanciero = null
-		cosa.jsonInstitucion = null
-		documentoRepositorioService.actualizaMetadatosDocumento(cosa)
+		cosa.jsonInstitucion = null*/
+		println "== PRUEBA DEL SERVICIO =="
+		//def docsPorMatricula = documentoRepositorioService.obtenerTodosPorMatricula(2)
+		//def docsPorMatricula = documentoRepositorioService.obtenerTodosPorDescripcionILike("Esquer Aguirre")
+		/*def docsPorMatricula = documentoRepositorioService.obtenerTodos(ClaseDocumento.REVOCACION)
+		docsPorMatricula.each{
+			println (it as JSON)
+		}*/
+		def doc = documentoRepositorioService.obtenerMetadatosDocumentoNew('13ca1e9f-465e-4d7c-8514-142c757dcde0')
+		println (doc as JSON)
 		expect:
 			1==1
     }

@@ -1,4 +1,4 @@
-/* AMIB 2014 - ESTILO CSS APLICACIONES - Ult.Mod. 17/12/2014 - v1.3 */
+/* AMIB 2014 - ESTILO CSS APLICACIONES - Ult.Mod. 15/02/2015 - v1.4 */
 
 body {
     /*padding-top: 50px;*/
@@ -217,4 +217,11 @@ fieldset{
 	padding-left: 0px;
 	margin-right: auto;
 	margin-left: auto;
+}
+
+/* Mod. 15/02/2014 - Fix para pagination */
+
+.pagination {
+	margin-top: 5px;
+	margin-bottom: 5px;
 }

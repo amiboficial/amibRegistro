@@ -153,6 +153,21 @@ mx.amib.sistemas.expediente.Sustentante.obtenerSustentantePorMatricula = 'susten
 mx.amib.sistemas.documentos.Documento.save = 'documentoRestful/save'
 mx.amib.sistemas.documentos.Documento.getByUuid = 'documentoRestful/getByUuid?uuid='
 mx.amib.sistemas.documentos.Documento.deleteByUuid = 'documentoRestful/deleteByUuid?uuid='
+
+mx.amib.sistemas.documentos.Documento.findAllByMatricula = 'documentoRestful/findAllByMatricula'
+mx.amib.sistemas.documentos.Documento.findAllLikeNombreArchivo = 'documentoRestful/findAllLikeNombreArchivo'
+mx.amib.sistemas.documentos.Documento.findAllLikeDescripcion = 'documentoRestful/findAllLikeDescripcion'
+mx.amib.sistemas.documentos.Documento.findAllGeneric = 'documentoRestful/findAllGeneric'
+mx.amib.sistemas.documentos.Documento.findAllByType = 'documentoRestful/findAllByType'
+mx.amib.sistemas.documentos.Documento.findAll = 'documentoRestful/findAll'
+
+mx.amib.sistemas.documentos.Documento.list = 'documentoRestful/index'
+mx.amib.sistemas.documentos.CnbvDgaOficio.list = 'cnbvDgaOficioRestful/index'
+mx.amib.sistemas.documentos.DocumentoPoder.list = 'documentoPoderRestful/index'
+mx.amib.sistemas.documentos.FotoSustentante.list = 'fotoSustenanteRestful/index'
+mx.amib.sistemas.documentos.DocumentoSustentante.list = 'documentoSustentanteRestful/index'
+mx.amib.sistemas.documentos.DocumentoRevocacion.list = 'documentoRevocacionRestful/index'
+
 mx.amib.sistemas.documentos.DocumentoPoder.save = 'documentoPoderRestful/save'
 mx.amib.sistemas.documentos.DocumentoPoder.update = 'documentoPoderRestful/updateByUuid'
 mx.amib.sistemas.documentos.DocumentoRevocacion.save = 'documentoRevocacionRestful/save'

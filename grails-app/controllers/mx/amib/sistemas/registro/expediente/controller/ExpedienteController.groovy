@@ -5,4 +5,9 @@ class ExpedienteController {
     def index() { }
 	
 	def show(){ }
+		
+	def listEnDictamen(){}
+	
+	def listEnAutorizacion(){}
+	
 }

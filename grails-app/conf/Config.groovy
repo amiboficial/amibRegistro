@@ -143,8 +143,15 @@ mx.amib.sistemas.expediente.Sustentante.classname = 'mx.amib.sistemas.expediente
 mx.amib.sistemas.catalogos.general.GrupoFinanciero.list = 'grupoFinancieroRestful/index?max=100'
 mx.amib.sistemas.catalogos.general.GrupoFinanciero.getById = 'grupoFinancieroRestful/show/'
 mx.amib.sistemas.catalogos.general.Institucion.getById = 'institucionRestful/show/'
+mx.amib.sistemas.catalogos.general.Figura.list = 'figuraRestful/list'
+mx.amib.sistemas.catalogos.general.Figura.getById = 'figuraRestful/show/'
+mx.amib.sistemas.catalogos.personal.EstadoCivil.list = 'estadoCivilRestful/index?max=100'
+mx.amib.sistemas.catalogos.personal.EstadoCivil.getById = 'estadoCivilRestful/index/show/'
+mx.amib.sistemas.catalogos.personal.NivelEstudios.list = 'nivelEstudiosRestful/index?max=100'
+mx.amib.sistemas.catalogos.personal.Nacionalidad.list = 'nacionalidadRestful/list'
 mx.amib.sistemas.catalogos.sepomex.EntidadFederativa.list = 'entidadFederativaRestful/index?max=32'
 mx.amib.sistemas.catalogos.sepomex.Sepomex.findByCodigoPostal = 'sepomexRestful/findByCodigoPostal?cp='
+
 
 //especificaciones de rutas para servicios REST de amibExpediente
 mx.amib.sistemas.expediente.Sustentante.obtenerSustentantePorMatricula = 'sustentanteRestful/obtenerSustentantePorMatricula/'

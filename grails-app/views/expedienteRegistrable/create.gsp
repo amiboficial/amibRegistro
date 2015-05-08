@@ -24,135 +24,27 @@
 		<div class="alert alert-info"><span class="glyphicon glyphicon-info-sign"></span> Complete adecuadamenete la información del solicitante que se va añadir al registro. Una vez que toda la información proporcionada este completa, revisando el "checklist" en la parte inferior, podrá proceder a agregar la solicitud.</div>
 		
 		<ul class="nav nav-tabs" role="tablist">
-			<li role="presentation" class="active"><a href="#divGen" aria-controls="divGen" role="tab" data-toggle="tab">Datos generales</a></li>
+			<li role="presentation" class="active"><a href="#tabGen" aria-controls="tabGen" role="tab" data-toggle="tab">Datos generales</a></li>
+			<li role="presentation"><a href="#tabContacto" aria-controls="tabContacto" role="tab" data-toggle="tab">Datos de contacto</a></li>
 			<li role="presentation"><a href="#divDom" aria-controls="divDom" role="tab" data-toggle="tab">Datos de domicilio</a></li>
-			<li role="presentation"><a href="#divReg" aria-controls="divReg" role="tab" data-toggle="tab">Datos de registro</a></li>
+			<li role="presentation"><a href="#tabReg" aria-controls="tabReg" role="tab" data-toggle="tab">Datos de registro</a></li>
+			<!-- 
 			<li role="presentation"><a href="#divDoc" aria-controls="divDoc" role="tab" data-toggle="tab">Revisión de documentos</a></li>
+			 -->
 		</ul>
 		
 		<div class="tab-content">
 			<br/>
 			
-			<div role="tabpanel" class="tab-pane active" id="divGen">
-			
-				<div class="form-group">
-					<label class="col-md-2 col-sm-3 control-label">
-		            	<g:message code="expedienteRegistrable.nombre.label" default="Nombre" />
-					</label>
-		            <div class="col-md-9 col-sm-9">
-		            	<input type="text" class="form-control" name="expedienteRegistrable.nombre" value="${expedienteRegistrable?.nombre}"/>
-		            </div>
-				</div>
-				<div class="form-group">
-					<label class="col-md-2 col-sm-3 control-label">
-		            	<g:message code="expedienteRegistrable.apellido1.label" default="Primer apellido" />
-					</label>
-		            <div class="col-md-9 col-sm-9">
-		            	<input type="text" class="form-control" name="expedienteRegistrable.apellido1" value="${expedienteRegistrable?.apellido1}"/>
-		            </div>
-				</div>
-				<div class="form-group">
-					<label class="col-md-2 col-sm-3 control-label">
-		            	<g:message code="expedienteRegistrable.apellido1.label" default="Segundo apellido" />
-					</label>
-		            <div class="col-md-9 col-sm-9">
-		            	<input type="text" class="form-control" name="expedienteRegistrable.apellido2" value="${expedienteRegistrable?.apellido2}"/>
-		            </div>
-				</div>
-				<div class="form-group">
-					<label class="col-md-2 col-sm-3 control-label">
-		            	<g:message code="expedienteRegistrable.edocivil.label" default="Fecha de nacimiento" />
-					</label>
-					<div class="col-md-9 col-sm-9">
-		            	<input type="text" class="form-control"/>
-		            </div>
-				</div>
-				<div class="form-group">
-					<label class="col-md-2 col-sm-3 control-label">
-		            	<g:message code="expedienteRegistrable.genero.label" default="Género" />
-					</label>
-					<div class="col-md-9 col-sm-9">
-						<div class="radio">
-							<label>
-								<input type="radio" name="opciones" id="opciones_1" value="opcion_1" checked>
-								Masculino
-							</label>
-						</div>
-						<div class="radio">
-							<label>
-								<input type="radio" name="opciones" id="opciones_1" value="opcion_1" checked>
-								Femenino
-							</label>
-						</div>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="col-md-2 col-sm-3 control-label">
-		            	<g:message code="expedienteRegistrable.rfc.label" default="RFC" />
-					</label>
-					<div class="col-md-9 col-sm-9">
-		            	<input type="text" class="form-control"/>
-		            </div>
-				</div>
-				<div class="form-group">
-					<label class="col-md-2 col-sm-3 control-label">
-		            	<g:message code="expedienteRegistrable.curp.label" default="CURP" />
-					</label>
-					<div class="col-md-9 col-sm-9">
-		            	<input type="text" class="form-control"/>
-		            </div>
-				</div>
-				<div class="form-group">
-					<label class="col-md-2 col-sm-3 control-label">
-		            	<g:message code="expedienteRegistrable.email.label" default="Correo electrónico" />
-					</label>
-					<div class="col-md-9 col-sm-9">
-		            	<input type="text" class="form-control"/>
-		            </div>
-				</div>
-				<div class="form-group">
-					<label class="col-md-2 col-sm-3 control-label">
-		            	<g:message code="expedienteRegistrable.edocivil.label" default="Estado Civil" />
-					</label>
-					<div class="col-md-9 col-sm-9">
-		            	<input type="text" class="form-control"/>
-		            </div>
-				</div>
-				<div class="form-group">
-					<label class="col-md-2 col-sm-3 control-label">
-		            	<g:message code="expedienteRegistrable.edocivil.label" default="Nivel de estudios" />
-					</label>
-					<div class="col-md-9 col-sm-9">
-		            	<input type="text" class="form-control"/>
-		            </div>
-				</div>
-				<div class="form-group">
-					<label class="col-md-2 col-sm-3 control-label">
-		            	<g:message code="expedienteRegistrable.edocivil.label" default="Nacionalidad" />
-					</label>
-					<div class="col-md-9 col-sm-9">
-		            	<input type="text" class="form-control"/>
-		            </div>
-				</div>
-				
-				<br/>
-				
-				<div class="form-group">
-					<div class="col-md-3 col-sm-3">
-						&nbsp;
-					</div>
-					<div class="col-md-3 col-sm-3">
-						<button id="btnSubmit" type="button" class="btn btn-primary btn-block">Validar y confirmar datos generales</button>
-					</div>
-					<div class="col-md-3 col-sm-3">
-						<button id="btnCancelEdit" type="button" class="btn btn-primary btn-block">Editar datos generales</button>
-					</div>
-					<div class="col-md-3 col-sm-3">
-						&nbsp;
-					</div>
-				</div>
-				
+			<div role="tabpanel" class="tab-pane active" id="tabGen">
+				<div id="divGen"></div>
 			</div>
+			
+			<div role="tabpanel" class="tab-pane active" id="tabContacto">
+				<div id="divContacto"></div>
+			</div>
+			
+			<!-- INICIO: SECCION DE DOMICILIO EN EXPEDIENTE A REGISTRAR -->
 			
 			<div role="tabpanel" class="tab-pane" id="divDom">
 				
@@ -161,60 +53,69 @@
 					<br/>
 					<strong>Reintroduza</strong> los datos con base en esta información.
 				</div>
+				
+				<div class="alert alert-danger validationErrorMessage">
+					Se han detectado errores de entrada en los campos del formulario. Verifique cada campo según corresponda.
+					<div class="errorMessagesContainer">
+					</div>
+				</div>
+				
 				<div class="form-group">
 					<label class="col-md-2 col-sm-3 control-label">
-		            	<g:message code="expedienteRegistrable.edocivil.label" default="Código Postal" />
+		            	<g:message code="expedienteRegistrable.codigoPostal.label" default="Código Postal" />
 					</label>
 					<div class="col-md-9 col-sm-9">
-		            	<input type="text" class="form-control"/>
+		            	<input type="text" class="cp cpchange form-control"/>
 		            </div>
 				</div>
 				<div class="form-group">
 					<label class="col-md-2 col-sm-3 control-label">
-		            	<g:message code="expedienteRegistrable.edocivil.label" default="Entidad Federativa" />
+		            	<g:message code="expedienteRegistrable.entidadFederativa.label" default="Entidad Federativa" />
 					</label>
 					<div class="col-md-9 col-sm-9">
-		            	<input type="text" class="form-control"/>
+		            	<input type="text" class="ef form-control"  disabled/>
 		            </div>
 				</div>
 				<div class="form-group">
 					<label class="col-md-2 col-sm-3 control-label">
-		            	<g:message code="expedienteRegistrable.edocivil.label" default="Municipio" />
+		            	<g:message code="expedienteRegistrable.municipio.label" default="Municipio" />
 					</label>
 					<div class="col-md-9 col-sm-9">
-		            	<input type="text" class="form-control"/>
+		            	<input type="text" class="mun form-control"  disabled/>
 		            </div>
 				</div>
 				<div class="form-group">
 					<label class="col-md-2 col-sm-3 control-label">
-		            	<g:message code="expedienteRegistrable.edocivil.label" default="Asentamiento" />
+		            	<g:message code="expedienteRegistrable.asentamiento.label" default="Asentamiento" />
 					</label>
 					<div class="col-md-9 col-sm-9">
-		            	<input type="text" class="form-control"/>
+		            	<select class="form-control asen">
+		            		<option value="-1">-Seleccione-</option>
+		            	</select>
 		            </div>
 				</div>
 				<div class="form-group">
 					<label class="col-md-2 col-sm-3 control-label">
-		            	<g:message code="expedienteRegistrable.edocivil.label" default="Calle" />
+		            	<g:message code="expedienteRegistrable.calle.label" default="Calle" />
 					</label>
 					<div class="col-md-9 col-sm-9">
-		            	<input type="text" class="form-control"/>
+		            	<input type="text" class="form-control calle" maxlength="255"/>
 		            </div>
 				</div>
 				<div class="form-group">
 					<label class="col-md-2 col-sm-3 control-label">
-		            	<g:message code="expedienteRegistrable.edocivil.label" default="Número exterior" />
+		            	<g:message code="expedienteRegistrable.numeroExterior.label" default="Número exterior" />
 					</label>
 					<div class="col-md-9 col-sm-9">
-		            	<input type="text" class="form-control"/>
+		            	<input type="text" class="form-control numExt" maxlength="64"/>
 		            </div>
 				</div>
 				<div class="form-group">
 					<label class="col-md-2 col-sm-3 control-label">
-		            	<g:message code="expedienteRegistrable.edocivil.label" default="Número interior" />
+		            	<g:message code="expedienteRegistrable.numeroInterior.label" default="Número interior" />
 					</label>
 					<div class="col-md-9 col-sm-9">
-		            	<input type="text" class="form-control"/>
+		            	<input type="text" class="form-control numInt" maxlength="64"/>
 		            </div>
 				</div>
 				
@@ -225,10 +126,10 @@
 						&nbsp;
 					</div>
 					<div class="col-md-3 col-sm-3">
-						<button id="btnSubmit" type="button" class="btn btn-primary btn-block">Validar y confirmar datos de domicilio</button>
+						<button id="btnSubmitDomicilio" type="button" class="btn btn-primary btn-block submitDomicilio">Validar y confirmar datos de domicilio</button>
 					</div>
 					<div class="col-md-3 col-sm-3">
-						<button id="btnCancelEdit" type="button" class="btn btn-primary btn-block">Editar datos de domicilio</button>
+						<button id="btnEditDomicilio" type="button" class="btn btn-primary btn-block editDomicilio">Editar datos de domicilio</button>
 					</div>
 					<div class="col-md-3 col-sm-3">
 						&nbsp;
@@ -237,92 +138,12 @@
 				
 			</div>
 			
-			<div role="tabpanel" class="tab-pane" id="divReg">
-				
-				<div class="form-group">
-					<label class="col-md-2 col-sm-3 control-label">
-		            	<g:message code="expedienteRegistrable.edocivil.label" default="Actividad o profesión" />
-					</label>
-					<div class="col-md-9 col-sm-9">
-		            	<input type="text" class="form-control"/>
-		            </div>
-				</div>
-				<div class="form-group">
-					<label class="col-md-2 col-sm-3 control-label">
-		            	<g:message code="expedienteRegistrable.edocivil.label" default="Calidad migratoria" />
-					</label>
-					<div class="col-md-9 col-sm-9">
-		            	<input type="text" class="form-control"/>
-		            </div>
-				</div>
-				
-				<div class="form-group">
-					<label class="col-md-2 col-sm-3 control-label">
-		            	<g:message code="expedienteRegistrable.edocivil.label" default="Figura a la que aplicó" />
-					</label>
-					<div class="col-md-9 col-sm-9">
-		            	<input type="text" class="form-control"/>
-		            </div>
-				</div>
-				<div class="form-group">
-					<label class="col-md-2 col-sm-3 control-label">
-		            	<g:message code="expedienteRegistrable.edocivil.label" default="Fecha de certificación" />
-					</label>
-					<div class="col-md-9 col-sm-9">
-		            	<input type="text" class="form-control"/>
-		            </div>
-				</div>
-				<div class="form-group">
-					<label class="col-md-2 col-sm-3 control-label">
-		            	<g:message code="expedienteRegistrable.edocivil.label" default="Autorización solicitada" />
-					</label>
-					<div class="col-md-9 col-sm-9">
-		            	<input type="text" class="form-control"/>
-		            </div>
-				</div>
-				
-				<div class="form-group">
-					<label class="col-md-2 col-sm-3 control-label">
-		            	<g:message code="expedienteRegistrable.edocivil.label" default="Intermediario del mercado de valores o asesor de inversión contratante en que labora" />
-					</label>
-					<div class="col-md-9 col-sm-9">
-		            	<input type="text" class="form-control"/>
-		            </div>
-				</div>
-				<div class="form-group">
-					<label class="col-md-2 col-sm-3 control-label">
-		            	<g:message code="expedienteRegistrable.edocivil.label" default="Fecha a partir de la cual labora" />
-					</label>
-					<div class="col-md-9 col-sm-9">
-		            	<input type="text" class="form-control"/>
-		            </div>
-				</div>
-				<div class="form-group">
-					<label class="col-md-2 col-sm-3 control-label">
-		            	<g:message code="expedienteRegistrable.edocivil.label" default="Puesto actual" />
-					</label>
-					<div class="col-md-9 col-sm-9">
-		            	<input type="text" class="form-control"/>
-		            </div>
-				</div>
-				
-				<br/>
-				<div class="form-group">
-					<div class="col-md-3 col-sm-3">
-						&nbsp;
-					</div>
-					<div class="col-md-3 col-sm-3">
-						<button id="btnSubmit" type="button" class="btn btn-primary btn-block">Validar y confirmar datos de registro</button>
-					</div>
-					<div class="col-md-3 col-sm-3">
-						<button id="btnCancelEdit" type="button" class="btn btn-primary btn-block">Editar datos de registro</button>
-					</div>
-					<div class="col-md-3 col-sm-3">
-						&nbsp;
-					</div>
-				</div>
-				
+			<!-- FIN: SECCION DE DOMICILIO EN EXPEDIENTE A REGISTRAR -->
+			
+			<div role="tabpanel" class="tab-pane" id="tabReg">
+				<div id="divReg"></div>
 			</div>
+			
 			
 			<div role="tabpanel" class="tab-pane" id="divDoc">
 			
@@ -511,9 +332,9 @@
 			<div class="panel-body">
 				<ul style="list-style-type:none">
 					<li><span class="glyphicon glyphicon-unchecked"></span> Datos generales</li>
+					<li><span class="glyphicon glyphicon-unchecked"></span> Datos de contacto</li>
 					<li><span class="glyphicon glyphicon-unchecked"></span> Datos de domicilio</li>
 					<li><span class="glyphicon glyphicon-unchecked"></span> Datos de registro</li>
-					<li><span class="glyphicon glyphicon-unchecked"></span> Revisión de la documentos</li>
 				</ul>
 			</div>
 		</div>
@@ -532,6 +353,23 @@
 		
 	</form>
 	
-
+	<g:render template="../common/expedienteGenerales"/>
+	<g:javascript src="mx.amib.sistemas.registro.expediente.form.generales.js" />
+	<script>
+	var generalesView = new app.GeneralesView(new app.Generales());
+	</script>
+	
+	<g:javascript src="mx.amib.sistemas.registro.expediente.form.domicilio.js" />
+	<script>
+	var sepomexView = new app.SepomexView(new Array(),new app.Domicilio(), '<g:createLink controller="Sepomex" action="obtenerDatosSepomex"/>');
+	</script>
+	
+	<g:render template="../common/expedienteDatosRegistro"/>
+	<g:javascript src="mx.amib.sistemas.registro.expediente.form.registro.js" />
+	<script>
+	var registroView = new app.RegistroView(new app.Registro());
+	</script>
+	
+	
 </body>
 </html>

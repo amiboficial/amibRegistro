@@ -45,6 +45,10 @@ class EntidadFinancieraService {
 		return institutcion
 	}
 
+	Collection<InstitucionTO> obtenerInstituciones() {
+		return this.instituciones.values().sort{it.nombre}.findAll{it.vigente == true};
+	}
+	
 	void descargarCatalogo(){
 		String restUrl = grailsApplication.config.mx.amib.sistemas.catalogos.resthttpURL + grailsApplication.config.mx.amib.sistemas.catalogos.general.GrupoFinanciero.list
 		

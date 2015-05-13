@@ -41,7 +41,36 @@
 			</div>
 			
 			<div role="tabpanel" class="tab-pane active" id="tabContacto">
-				<div id="divContacto"></div>
+				<div id="divContacto">
+				
+					<div class="alert alert-danger validationErrorMessage" style="display: none;">
+						Se han detectado errores de entrada en los campos del formulario. Verifique cada campo según corresponda.
+						<div class="errorMessagesContainer">
+						</div>
+					</div>
+					
+					<div class="form-group">
+					
+					<div id="divTelefonos"></div>
+		            
+		            <div class="form-group">
+						<div class="col-md-3 col-sm-3">
+							&nbsp;
+						</div>
+						<div class="col-md-3 col-sm-3">
+							<button type="button" class="btn btn-primary btn-block submit">Validar y confirmar datos de contacto</button>
+						</div>
+						<div class="col-md-3 col-sm-3">
+							<button type="button" class="btn btn-primary btn-block edit">Editar datos de contacto</button>
+						</div>
+						<div class="col-md-3 col-sm-3">
+							&nbsp;
+						</div>
+					</div>
+		            
+				</div>
+				
+				</div>
 			</div>
 			
 			<!-- INICIO: SECCION DE DOMICILIO EN EXPEDIENTE A REGISTRAR -->
@@ -357,6 +386,12 @@
 	<g:javascript src="mx.amib.sistemas.registro.expediente.form.generales.js" />
 	<script>
 	var generalesView = new app.GeneralesView(new app.Generales());
+	</script>
+	
+	<g:render template="../common/expedienteTelefonos"/>
+	<g:javascript src="mx.amib.sistemas.registro.expediente.form.telefonos.js" />
+	<script>
+	var telefonosView = new app.TelefonosView();
 	</script>
 	
 	<g:javascript src="mx.amib.sistemas.registro.expediente.form.domicilio.js" />

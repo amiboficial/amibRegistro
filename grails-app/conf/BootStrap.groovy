@@ -6,6 +6,7 @@ class BootStrap {
 	def figuraService
 	def nacionalidadService
 	def nivelEstudiosService
+	def tipoTelefonoService
 	
     def init = { servletContext ->
 		//descarga los catálogos necesarios de AMIB Catálogos en memoria
@@ -18,9 +19,9 @@ class BootStrap {
 		figuraService.descargarCatalogo()
 		nacionalidadService.descargarCatalogo()
 		nivelEstudiosService.descargarCatalogo()
+		tipoTelefonoService.descargarCatalogo()
 		//descarga catálogo de sepomex
 		sepomexService.descargarCatalogoEntidadFederativa()
-		
     }
     def destroy = {
 		

@@ -30,8 +30,6 @@ class FiguraService {
     void descargarCatalogo(){
 		String restUrl = grailsApplication.config.mx.amib.sistemas.catalogos.resthttpURL + grailsApplication.config.mx.amib.sistemas.catalogos.general.Figura.list
 		
-		println restUrl
-		
 		def rest = new RestBuilder()
 		def resp = rest.get(restUrl)
 		resp.json instanceof JSONObject

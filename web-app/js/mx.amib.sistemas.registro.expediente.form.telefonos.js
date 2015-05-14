@@ -3,6 +3,8 @@
 app.EXP_TEL_DISABLED = 0;
 app.EXP_TEL_ENABLED = 1;
 
+app.EXP_TEL_ERRMSG_NOLADA = "EXP_TEL_ERRMSG_NOLADA";
+
 app.Telefono = Backbone.Model.extend({
 	defaults: {
 		grailsId: -1,
@@ -75,15 +77,29 @@ app.TelefonosView = Backbone.View.extend({
 	
 	agregarTelefono: function(e){
 		e.preventDefault();
-		console.log("EJECUTA ARGREGAR TELEFONO");
-		
-		var tel = new app.Telefono();
-		tel.set('lada',this.$('.lada').val());
-		tel.set('telefono',this.$('.telefono').val());
-		tel.set('extension',this.$('.extension').val());
-		tel.set('idTipoTelefono',this.$('.tipo').val());
-		tel.set('dsTipoTelefono',this.$('.tipo [option="' + this.$('.tipo').val() + '"]').text());
-		this.collection.add(tel);
+		if(this.validarEntrada() && this.state == app.EXP_TEL_ENABLED){
+			var tel = new app.Telefono();
+			tel.set('lada',this.$('.lada').val());
+			tel.set('telefono',this.$('.telefono').val());
+			tel.set('extension',this.$('.extension').val());
+			tel.set('idTipoTelefono',this.$('.tipo').val());
+			tel.set('dsTipoTelefono',this.$('.tipo option:selected').text());
+			this.collection.add(tel);
+		}
 	},
 	
+	validarEntrada: function(){
+		var valid = true;
+		if($.trim(this.$('.telefono').val()).length == 0){
+			valid = false;
+		}
+		if(this.$('.tipo').val() == -1){
+			valid = false;
+		}
+		var matchesList = this.collection.findWhere({lada:$.trim(this.$('.lada').val()), telefono:$.trim(this.$('.telefono').val()), extension:$.trim(this.$('.extension').val())});
+		if(matchesList != undefined){
+			valid = false;
+		}
+		return valid;
+	},
 });

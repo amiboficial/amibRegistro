@@ -56,13 +56,13 @@ grails.project.dependency.resolution = {
     plugins {
         // plugins for the build system only
         build ":tomcat:7.0.54"
-		
-		
+
         // plugins for the compile step
         compile ":scaffolding:2.1.2"
         compile ':cache:1.1.7'
         compile ":asset-pipeline:1.8.11"
-		
+        compile ":rest:0.8"
+
         // plugins needed at runtime but not for compilation
         runtime ":hibernate4:4.3.5.4" 
 		//runtime ":hibernate:3.6.10.16"
@@ -71,7 +71,7 @@ grails.project.dependency.resolution = {
 		runtime ':twitter-bootstrap:3.2.0'
 		//runtime ':db-reverse-engineer:0.5'
 		runtime ":rest-client-builder:2.0.0"
-		
+
         // Uncomment these to enable additional asset-pipeline capabilities
         //compile ":sass-asset-pipeline:1.7.4"
         //compile ":less-asset-pipeline:1.7.0"

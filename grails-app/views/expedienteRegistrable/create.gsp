@@ -40,7 +40,7 @@
 				<div id="divGen"></div>
 			</div>
 			
-			<div role="tabpanel" class="tab-pane active" id="tabContacto">
+			<div role="tabpanel" class="tab-pane" id="tabContacto">
 				<div id="divContacto">
 				
 					<div class="alert alert-danger validationErrorMessage" style="display: none;">

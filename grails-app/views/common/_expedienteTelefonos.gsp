@@ -26,13 +26,6 @@
 					</td>
 					<td><button type="button" class="add btn btn-success btn-sm">Agregar</button></td>
 				</tr>
-				<tr>
-					<td>+44</td>
-					<td>1234567890</td>
-					<td>2547</td>
-					<td>Móvil</td>
-					<td><button type="button" class="remove btn btn-success btn-sm">Quitar</button></td>
-				</tr>
 			</table>
 		</div>
 	</script>

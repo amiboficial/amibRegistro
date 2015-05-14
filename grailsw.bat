@@ -173,6 +173,7 @@ set JAVA_OPTS=%JAVA_OPTS% -Dgrails.version=2.4.2
 set JAVA_OPTS=%JAVA_OPTS% -Dbase.dir=.
 set JAVA_OPTS=%JAVA_OPTS% -Dtools.jar="%TOOLS_JAR%"
 set JAVA_OPTS=%JAVA_OPTS% -Dgroovy.starter.conf="%STARTER_CONF%"
+set JAVA_OPTS=%JAVA_OPTS%' -Dfile.encoding=UTF-8'
 
 if exist "%USERPROFILE%/.groovy/postinit.bat" call "%USERPROFILE%/.groovy/postinit.bat"
 

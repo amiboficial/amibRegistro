@@ -9,8 +9,8 @@ class BootStrap {
 	def tipoTelefonoService
 	
     def init = { servletContext ->
+		groovyx.net.http.ParserRegistry.setDefaultCharset("UTF-8");
 		//descarga los catálogos necesarios de AMIB Catálogos en memoria
-		
 		//descarga catálogo de estado civil
 		estadoCivilService.descargarCatalogo()
 		//descarga catálogos de grupos financieros e instituciones

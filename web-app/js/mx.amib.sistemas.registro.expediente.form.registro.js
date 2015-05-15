@@ -11,7 +11,6 @@ app.EXP_REG_ERRMSG_NOFECLAB = "EXP_REG_ERRMSG_NOFECLAB";
 app.EXP_REG_ERRMSG_NOVALFECLAB = "EXP_REG_ERRMSG_NOVALFECLAB";
 app.EXP_REG_ERRMSG_NOPUESTOACT = "EXP_REG_ERRMSG_NOPUESTOACT";
 
-
 app.Registro = Backbone.Model.extend({
 	defaults: {
 		_printName: "registro",
@@ -22,10 +21,10 @@ app.Registro = Backbone.Model.extend({
 		idInstitucion: -1,
 		idVarianteFigura: -1,
 		descVarianteFigura: "",
-		fechaObtencionDay: -1,
-		fechaObtencionDay: -2,
-		fechaObtencionDay: -3,
 		descAutorizacion: "",
+		fechaObtencionDay: -1,
+		fechaObtencionMonth: -1,
+		fechaObtencionYear: -1,
 	},
 });
 
@@ -48,6 +47,50 @@ app.RegistroView = Backbone.View.extend({
 	
 	render: function(){
 		this.$el.html( this.template( this.model.toJSON() ) );
+
+		this.$(".fechaCertificacionDay").val(this.model.get("fechaObtencionDay"));
+		this.$(".fechaCertificacionMonth").val(this.model.get("fechaObtencionMonth"));
+		this.$(".fechaCertificacionYear").val(this.model.get("fechaObtencionYear"));
+		this.$(".intermediario").val(this.model.get("idInstitucion"));
+
+		this.$(".fechaLaboraDay").val(this.model.get("fechaInicioDay"));
+		this.$(".fechaLaboraMonth").val(this.model.get("fechaInicioMonth"));
+		this.$(".fechaLaboraYear").val(this.model.get("fechaInicioYear"));
+		this.$(".puestoActual").val(this.model.get("nombrePuesto"));
+
+		//this.$(".idVarianteFigura").val(this.model.get("idVarianteFigura"));
+		//this.$(".descVarianteFigura").val(this.model.get("descVarianteFigura"));
+		//this.$(".descAutorizacion").val(this.model.get("descAutorizacion"));
+
+		if(this.state == app.EXP_REG_OPEN) {
+			this.$(".fechaCertificacionDay").prop( "disabled", false );
+			this.$(".fechaCertificacionMonth").prop( "disabled", false );
+			this.$(".fechaCertificacionYear").prop( "disabled", false );
+			this.$(".intermediario").prop( "disabled", false );
+
+			this.$(".fechaLaboraDay").prop( "disabled", false );
+			this.$(".fechaLaboraMonth").prop( "disabled", false );
+			this.$(".fechaLaboraYear").prop( "disabled", false );
+			this.$(".puestoActual").prop( "disabled", false );
+
+			this.$(".submit").prop( "disabled", false );
+			this.$(".edit").prop( "disabled", true );
+		}
+		else{
+			this.$(".fechaCertificacionDay").prop( "disabled", true );
+			this.$(".fechaCertificacionMonth").prop( "disabled", true );
+			this.$(".fechaCertificacionYear").prop( "disabled", true );
+			this.$(".intermediario").prop( "disabled", true );
+
+			this.$(".fechaLaboraDay").prop( "disabled", true );
+			this.$(".fechaLaboraMonth").prop( "disabled", true );
+			this.$(".fechaLaboraYear").prop( "disabled", true );
+			this.$(".puestoActual").prop( "disabled", true );
+
+			this.$(".submit").prop( "disabled", true );
+			this.$(".edit").prop( "disabled", false );
+		}
+		return this;
 	},
 	
 	renderErrorMsgs: function(){
@@ -64,6 +107,24 @@ app.RegistroView = Backbone.View.extend({
 	},
 	
 	establecerDatos: function(){
+		this.validarDatos();
+		if(this.errors.length > 0){
+			this.renderErrorMsgs();
+		}
+		else {
+			this.model.set("fechaObtencionDay",$.trim(this.$(".fechaCertificacionDay").val()));
+			this.model.set("fechaObtencionMonth",$.trim(this.$(".fechaCertificacionMonth").val()));
+			this.model.set("fechaObtencionYear",$.trim(this.$(".fechaCertificacionYear").val()));
+			this.model.set("idInstitucion",$.trim(this.$(".intermediario").val()));
+
+			this.model.set("fechaInicioDay",$.trim(this.$(".fechaLaboraDay").val()));
+			this.model.set("fechaInicioMonth",$.trim(this.$(".fechaLaboraMonth").val()));
+			this.model.set("fechaInicioYear",$.trim(this.$(".fechaLaboraYear").val()));
+			this.model.set("nombrePuesto",$.trim(this.$(".puestoActual").val()));
+
+			this.state = app.EXP_REG_VALIDATED;
+			this.render();
+		}
 	},
 	
 	habilitarEdicionDatos: function(){
@@ -72,7 +133,19 @@ app.RegistroView = Backbone.View.extend({
 	},
 	
 	validarDatos: function(){
-		
+		this.errors = new Array();
+		if(this.$(".fechaCertificacionDay").val() <= 0 || this.$(".fechaCertificacionMonth").val() <= 0 || this.$(".fechaCertificacionYear").val() <= 0){
+			this.errors.push(app.EXP_REG_ERRMSG_NOFECCERT);
+		}
+		if(this.$(".intermediario").val() == -1){
+			this.errors.push(app.EXP_REG_ERRMSG_NOINST);
+		}
+		if(this.$(".fechaLaboraDay").val() <= 0 || this.$(".fechaLaboraMonth").val() <= 0 || this.$(".fechaLaboraYear").val() <= 0){
+			this.errors.push(app.EXP_REG_ERRMSG_NOFECLAB);
+		}
+		if($.trim(this.$(".puestoActual").val()).length == 0){
+			this.errors.push(app.EXP_REG_ERRMSG_NOPUESTOACT);
+		}
 	},
 	
 	

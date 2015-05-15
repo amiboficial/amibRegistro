@@ -8,7 +8,7 @@
 
 				<div class="form-group">
 					<label class="col-md-2 col-sm-3 control-label">
-		            	<g:message code="expedienteRegistrable.figura.label" default="Figura a la que aplicó" />
+		            	<g:message code="datosRegistro.figura.label" default="Figura a la que aplicó" />
 					</label>
 					<div class="col-md-9 col-sm-9">
 		            	<p class="form-control-static">${varianteFiguraInstance.nombre}</p>
@@ -16,7 +16,7 @@
 				</div>
 				<div class="form-group">
 					<label class="col-md-2 col-sm-3 control-label">
-		            	<g:message code="expedienteRegistrable.fechaCertificacion.label" default="Fecha de certificación" />
+		            	<g:message code="datosRegistro.fechaCertificacion.label" default="Fecha de certificación" />
 					</label>
 		            <div class="col-md-5 col-sm-5">
 						<select style="width: 28%;" class="form-control col-md-4 fechaCertificacionDay">
@@ -156,7 +156,7 @@
 				</div>
 				<div class="form-group">
 					<label class="col-md-2 col-sm-3 control-label">
-		            	<g:message code="expedienteRegistrable.autorizacionSolicitada.label" default="Autorización solicitada" />
+		            	<g:message code="datosRegistro.autorizacionSolicitada.label" default="Autorización solicitada" />
 					</label>
 					<div class="col-md-9 col-sm-9">
 						<p class="form-control-static">${varianteFiguraInstance.figura.tipoAutorizacion}</p>
@@ -165,7 +165,7 @@
 				
 				<div class="form-group">
 					<label class="col-md-2 col-sm-3 control-label">
-		            	<g:message code="expedienteRegistrable.intermediario.label" default="Intermediario del mercado de valores o asesor de inversión contratante en que labora" />
+		            	<g:message code="datosRegistro.intermediario.label" default="Intermediario del mercado de valores o asesor de inversión contratante en que labora" />
 					</label>
 					<div class="col-md-9 col-sm-9">
 		            	<g:select class="form-control intermediario" name='aW5zdGl0dWNpb25lcw' 
@@ -176,7 +176,7 @@
 				</div>
 				<div class="form-group">
 					<label class="col-md-2 col-sm-3 control-label">
-		            	<g:message code="expedienteRegistrable.fechaLabora.label" default="Fecha a partir de la cual labora" />
+		            	<g:message code="datosRegistro.fechaLabora.label" default="Fecha a partir de la cual labora" />
 					</label>
 					<div class="col-md-5 col-sm-5">
 						<select style="width: 28%;" class="form-control col-md-4 fechaLaboraDay">
@@ -316,7 +316,7 @@
 				</div>
 				<div class="form-group">
 					<label class="col-md-2 col-sm-3 control-label">
-		            	<g:message code="expedienteRegistrable.puestoActual.label" default="Puesto actual" />
+		            	<g:message code="datosRegistro.puestoActual.label" default="Puesto actual" />
 					</label>
 					<div class="col-md-9 col-sm-9">
 		            	<input type="text" class="form-control puestoActual"/>
@@ -329,10 +329,10 @@
 						&nbsp;
 					</div>
 					<div class="col-md-3 col-sm-3">
-						<button id="btnSubmit" type="button" class="btn btn-primary btn-block">Validar y confirmar datos de registro</button>
+						<button id="btnSubmit" type="button" class="submit btn btn-primary btn-block">Validar y confirmar datos de registro</button>
 					</div>
 					<div class="col-md-3 col-sm-3">
-						<button id="btnCancelEdit" type="button" class="btn btn-primary btn-block">Editar datos de registro</button>
+						<button id="btnCancelEdit" type="button" class="edit btn btn-primary btn-block">Editar datos de registro</button>
 					</div>
 					<div class="col-md-3 col-sm-3">
 						&nbsp;

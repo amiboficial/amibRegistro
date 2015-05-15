@@ -38,7 +38,8 @@ app.SepomexView = Backbone.View.extend({
 	ajaxUrl: '',
 	state: app.EXP_SEPOMEX_OPEN,
 	errors: [],
-	
+	template: _.template( $('#expedienteDomicilio').html() ),
+
 	initialize: function( initialSepomexArray, initialDomicilio , ajaxUrl ){
 		this.ajaxUrl = ajaxUrl;
 		this.errors = new Array();
@@ -49,13 +50,15 @@ app.SepomexView = Backbone.View.extend({
 
 	events: {
 		'change .cpchange':'procesarCodigoPostal',
-		'click .submitDomicilio':'establecerDatos',
-		'click .editDomicilio':'habilitarEdicionDatos'
+		'click .submit':'establecerDatos',
+		'click .edit':'habilitarEdicionDatos'
 	},
 
 	render: function(){
+		this.$el.html( this.template( this.model.toJSON() ) );
+
 		if(this.state == app.EXP_SEPOMEX_OPEN){
-			if(this.collection.length > 0){
+			if(this.collection.length >	 0){
 				if(_.size(this.errors) > 0){
 					this.$(".validationErrorMessage").show();
 				}
@@ -77,8 +80,8 @@ app.SepomexView = Backbone.View.extend({
 			else
 				this.blankFields();
 			
-			this.$(".submitDomicilio").prop( "disabled", false );
-			this.$(".editDomicilio").prop( "disabled", true );
+			this.$(".submit").prop( "disabled", false );
+			this.$(".edit").prop( "disabled", true );
 			
 			this.$(".cpchange").prop( "disabled", false );
 			this.$(".asen").prop( "disabled", false );
@@ -87,8 +90,8 @@ app.SepomexView = Backbone.View.extend({
 			this.$(".numInt").prop( "disabled", false );
 		}
 		else if(this.state == app.EXP_SEPOMEX_PROCESSING){
-			this.$(".submitDomicilio").prop( "disabled", true );
-			this.$(".editDomicilio").prop( "disabled", true );
+			this.$(".submit").prop( "disabled", true );
+			this.$(".edit").prop( "disabled", true );
 			
 			this.$(".cpchange").prop( "disabled", true );
 			this.$(".asen").prop( "disabled", true );
@@ -97,8 +100,8 @@ app.SepomexView = Backbone.View.extend({
 			this.$(".numInt").prop( "disabled", true );
 		}
 		else if(this.state == app.EXP_SEPOMEX_VALIDATED){
-			this.$(".submitDomicilio").prop( "disabled", true );
-			this.$(".editDomicilio").prop( "disabled", false );
+			this.$(".submit").prop( "disabled", true );
+			this.$(".edit").prop( "disabled", false );
 			
 			this.$(".cpchange").prop( "disabled", true );
 			this.$(".asen").prop( "disabled", true );

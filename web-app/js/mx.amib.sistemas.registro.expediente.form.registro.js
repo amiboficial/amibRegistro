@@ -29,6 +29,7 @@ app.Registro = Backbone.Model.extend({
 });
 
 app.RegistroView = Backbone.View.extend({
+	checkId: -1,
 	el: '#divReg',
 	state: app.EXP_REG_OPEN,
 	errors: [],
@@ -105,7 +106,26 @@ app.RegistroView = Backbone.View.extend({
 	renderNoErrorMsgs: function(){
 		this.$(".validationErrorMessage").hide();
 	},
-	
+
+	//métodos para setear estatus
+
+	setOpenState: function(){
+		this.state = app.EXP_REG_OPEN;
+		this.trigger("stateChange","OPEN",this.checkId);
+	},
+
+	setValidatedState: function(){
+		this.state = app.EXP_REG_VALIDATED;
+		this.trigger("stateChange","VALIDATED",this.checkId);
+	},
+
+	setCheckId: function(checkId){
+		this.checkId = checkId;
+	},
+	getCheckId: function(){
+		return this.checkId;
+	},
+
 	establecerDatos: function(){
 		this.validarDatos();
 		if(this.errors.length > 0){
@@ -122,13 +142,13 @@ app.RegistroView = Backbone.View.extend({
 			this.model.set("fechaInicioYear",$.trim(this.$(".fechaLaboraYear").val()));
 			this.model.set("nombrePuesto",$.trim(this.$(".puestoActual").val()));
 
-			this.state = app.EXP_REG_VALIDATED;
+			this.setValidatedState();
 			this.render();
 		}
 	},
 	
 	habilitarEdicionDatos: function(){
-		this.state = app.EXP_REG_OPEN;
+		this.setOpenState();
 		this.render();
 	},
 	

@@ -116,7 +116,7 @@
 
 		app.CheckSubmit = Backbone.Model.extend({
 			defaults: {
-				checkarray: [true,true,true,true],
+				checkarray: [false,false,false,false],
 				viewsarray: [undefined,undefined,undefined,undefined]
 			}
 		});
@@ -185,10 +185,26 @@
 
 			setViewInstance: function(viewIndex,viewInstance){
 				var arr = this.model.get('viewsarray');
+				var context = this;
+
+				viewInstance.setCheckId(viewIndex); // <- setea el viewIndex como checkId
 				arr[viewIndex] = viewInstance;
+
+				viewInstance.on("stateChange",function(newState, checkId){
+					context.checkElement(newState,checkId); //<- usa el checkId como viewIndex
+				});
 			},
 
 			//TODO: EVENTS, EL SUBMIT CON TODOS LOS DATOS PARA EL REGISTRO
+			checkElement: function(newState,viewIndex){
+				var checkarr = this.model.get('checkarray');
+				if(newState == "VALIDATED")
+					checkarr[viewIndex] = true;
+				else
+					checkarr[viewIndex] = false;
+				this.render();
+			},
+
 			submitDatos: function(){
 				var arr = this.model.get('viewsarray');
 				//El método introduce los datos en campos "hidden" con los que se hará POST
@@ -234,10 +250,17 @@
 		});
 
 		var checkSubmitView = new app.CheckSubmitView();
+		checkSubmitView.setViewInstance(app.EXP_REG_CHK_GRALES,generalesView);
+		checkSubmitView.setViewInstance(app.EXP_REG_CHK_TELS,telefonosView);
+		checkSubmitView.setViewInstance(app.EXP_REG_CHK_SEPOMEX,sepomexView);
+		checkSubmitView.setViewInstance(app.EXP_REG_CHK_REGISTRO,registroView);
+
+		/*
 		checkSubmitView.model.get('viewsarray')[app.EXP_REG_CHK_GRALES] = generalesView;
 		checkSubmitView.model.get('viewsarray')[app.EXP_REG_CHK_TELS] = telefonosView;
 		checkSubmitView.model.get('viewsarray')[app.EXP_REG_CHK_SEPOMEX] = sepomexView;
-		checkSubmitView.model.get('viewsarray')[app.EXP_REG_CHK_REGISTRO] = registroView;
+		checkSubmitView.model.get('viewsarray')[app.EXP_REG_CHK_REGISTRO] = registroView;*/
+		//generalesView.on("stateChange",function(newState){ alert("generalesView cambia a estado: " + newState); });
 
 	</script>
 	

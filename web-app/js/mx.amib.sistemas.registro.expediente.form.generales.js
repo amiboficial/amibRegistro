@@ -41,6 +41,7 @@ app.Generales = Backbone.Model.extend({
 });
 
 app.GeneralesView = Backbone.View.extend({
+	checkId: -1,
 	el: '#divGen',
 	ajaxUrl: '',
 	state: app.EXP_GRAL_OPEN,
@@ -58,7 +59,9 @@ app.GeneralesView = Backbone.View.extend({
 		'click .submit':'establecerDatos',
 		'click .edit':'habilitarEdicionDatos'
 	},
-	
+
+	//métodos para rendereo
+
 	render: function(){
 		
 		this.$el.html( this.template( this.model.toJSON() ) );
@@ -156,6 +159,27 @@ app.GeneralesView = Backbone.View.extend({
 		this.$(".validationErrorMessage").hide();
 	},
 
+	//métodos para setear estatus
+
+	setOpenState: function(){
+		this.state = app.EXP_GRAL_OPEN;
+		this.trigger("stateChange","OPEN",this.checkId);
+	},
+
+	setValidatedState: function(){
+		this.state = app.EXP_GRAL_VALIDATED;
+		this.trigger("stateChange","VALIDATED",this.checkId);
+	},
+
+	setCheckId: function(checkId){
+		this.checkId = checkId;
+	},
+	getCheckId: function(){
+		return this.checkId;
+	},
+
+	//métodos de control
+
 	establecerDatos: function(){
 		this.validarDatos();
 		
@@ -181,13 +205,13 @@ app.GeneralesView = Backbone.View.extend({
 			this.model.set("nivelEstudios",$.trim(this.$(".nivelEstudios").val()));
 			this.model.set("nacionalidad",$.trim(this.$(".nacionalidad").val()));
 
-			this.state = app.EXP_GRAL_VALIDATED;
+			this.setValidatedState();
 			this.render();
 		}
 	},
 	
 	habilitarEdicionDatos: function(){
-		this.state = app.EXP_GRAL_OPEN;
+		this.setOpenState();
 		this.render();
 	},
 	

@@ -34,6 +34,7 @@ app.SepomexCollection = Backbone.Collection.extend({
 });
 
 app.SepomexView = Backbone.View.extend({
+	checkId: -1,
 	el: '#divDom',
 	ajaxUrl: '',
 	state: app.EXP_SEPOMEX_OPEN,
@@ -126,7 +127,31 @@ app.SepomexView = Backbone.View.extend({
 	renderNoErrorMsgs: function(){
 		this.$(".validationErrorMessage").hide();
 	},
-	
+
+	//métodos para setear estatus
+
+	setOpenState: function(){
+		this.state = app.EXP_SEPOMEX_OPEN;
+		this.trigger("stateChange","OPEN",this.checkId);
+	},
+
+	setValidatedState: function(){
+		this.state = app.EXP_SEPOMEX_VALIDATED;
+		this.trigger("stateChange","VALIDATED",this.checkId);
+	},
+
+	setProcessingState: function(){
+		this.state = app.EXP_SEPOMEX_PROCESSING;
+		this.trigger("stateChange","PROCESSING",this.checkId);
+	},
+
+	setCheckId: function(checkId){
+		this.checkId = checkId;
+	},
+	getCheckId: function(){
+		return this.checkId;
+	},
+
 	blankFields: function(){
 		this.$(".validationErrorMessage").hide();
 		
@@ -154,7 +179,7 @@ app.SepomexView = Backbone.View.extend({
 		this.model.set("numeroInt", $.trim(this.$(".numInt").val()));
 		this.model.set("numeroExt", $.trim(this.$(".numExt").val()));
 	
-		this.state = app.EXP_SEPOMEX_PROCESSING;
+		this.setProcessingState();
 		this.render();
 		var context = this;
 		$.ajax({
@@ -173,7 +198,7 @@ app.SepomexView = Backbone.View.extend({
 			catch(err){
 				context.collection = new app.SepomexCollection(new Array());
 			}
-			context.state = app.EXP_SEPOMEX_OPEN;
+			context.setOpenState();
 			context.render();
 		});
 		
@@ -192,14 +217,14 @@ app.SepomexView = Backbone.View.extend({
 			this.model.set("numeroInt", $.trim(this.$(".numInt").val()));
 			this.model.set("numeroExt", $.trim(this.$(".numExt").val()));
 			
-			this.state = app.EXP_SEPOMEX_VALIDATED;
+			this.setValidatedState();
 			this.renderNoErrorMsgs();
 			this.render();
 		}
 	},
 	
 	habilitarEdicionDatos: function(){
-		this.state = app.EXP_SEPOMEX_OPEN;
+		this.setOpenState();
 		this.render();
 	},
 	

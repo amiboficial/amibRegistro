@@ -46,6 +46,7 @@ app.TelefonoView = Backbone.View.extend({
 });
 
 app.TelefonosView = Backbone.View.extend({
+	checkId: -1,
 	el: '#divTelefonos',
 	state: app.EXP_TEL_OPEN,
 	template: _.template( $('#expedienteTelefonos').html() ),
@@ -111,6 +112,25 @@ app.TelefonosView = Backbone.View.extend({
 		this.$(".validationErrorMessage").hide();
 	},
 
+	//métodos para setear estatus
+
+	setOpenState: function(){
+		this.state = app.EXP_TEL_OPEN;
+		this.trigger("stateChange","OPEN",this.checkId);
+	},
+
+	setValidatedState: function(){
+		this.state = app.EXP_TEL_VALIDATED;
+		this.trigger("stateChange","VALIDATED",this.checkId);
+	},
+
+	setCheckId: function(checkId){
+		this.checkId = checkId;
+	},
+	getCheckId: function(){
+		return this.checkId;
+	},
+
 	events: {
 		'click .add':'agregarTelefono',
 		'click .submit': 'establecerDatos',
@@ -158,7 +178,7 @@ app.TelefonosView = Backbone.View.extend({
 		else{
 			//en este caso los telefonos ya se encuentran agregados al modelo
 			//por lo que no es necesario "establecer los datos"
-			this.state = app.EXP_TEL_VALIDATED;
+			this.setValidatedState();
 			this.render();
 		}
 	},
@@ -172,7 +192,7 @@ app.TelefonosView = Backbone.View.extend({
 	},
 
 	habilitarEdicionDatos: function(){
-		this.state = app.EXP_TEL_OPEN;
+		this.setOpenState();
 		this.render();
 	},
 });

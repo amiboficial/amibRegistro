@@ -64,7 +64,6 @@
 					<li><span id="spnCheckRegistro" class="glyphicon glyphicon-unchecked"></span> Datos de registro</li>
 				</ul>
 			</div>
-
 			<div class="form-group">
 				<div class="col-md-3 col-sm-3">
 					&nbsp;
@@ -118,6 +117,7 @@
 		app.CheckSubmit = Backbone.Model.extend({
 			defaults: {
 				checkarray: [true,true,true,true],
+				viewsarray: [undefined,undefined,undefined,undefined]
 			}
 		});
 
@@ -128,6 +128,10 @@
 
 			initialize: function(){
 				this.render();
+			},
+
+			events: {
+				'click .submit': 'submitDatos',
 			},
 
 			render: function(){
@@ -177,11 +181,63 @@
 				else{
 					this.$(".submit").prop( "disabled", false );
 				}
-			}
+			},
+
+			setViewInstance: function(viewIndex,viewInstance){
+				var arr = this.model.get('viewsarray');
+				arr[viewIndex] = viewInstance;
+			},
+
 			//TODO: EVENTS, EL SUBMIT CON TODOS LOS DATOS PARA EL REGISTRO
+			submitDatos: function(){
+				var arr = this.model.get('viewsarray');
+				//El método introduce los datos en campos "hidden" con los que se hará POST
+				//datos generales
+				this.$el.append('<input type="hidden" name="sustentante.nombre" value="' + arr[app.EXP_REG_CHK_GRALES].model.get('nombre') + '" />');
+				this.$el.append('<input type="hidden" name="sustentante.primerApellido" value="' + arr[app.EXP_REG_CHK_GRALES].model.get('primerApellido') + '" />');
+				this.$el.append('<input type="hidden" name="sustentante.segundoApellido" value="' + arr[app.EXP_REG_CHK_GRALES].model.get('segundoApellido') + '" />');
+				this.$el.append('<input type="hidden" name="sustentante.genero" value="' + arr[app.EXP_REG_CHK_GRALES].model.get('genero') + '" />');
+				this.$el.append('<input type="hidden" name="sustentante.rfc" value="' + arr[app.EXP_REG_CHK_GRALES].model.get('rfc') + '" />');
+				this.$el.append('<input type="hidden" name="sustentante.curp" value="' + arr[app.EXP_REG_CHK_GRALES].model.get('curp') + '" />');
+				this.$el.append('<input type="hidden" name="sustentante.fechaNacimiento_day" value="' + arr[app.EXP_REG_CHK_GRALES].model.get('fechaNacimientoDay') + '" />');
+				this.$el.append('<input type="hidden" name="sustentante.fechaNacimiento_month" value="' + arr[app.EXP_REG_CHK_GRALES].model.get('fechaNacimientoMonth') + '" />');
+				this.$el.append('<input type="hidden" name="sustentante.fechaNacimiento_year" value="' + arr[app.EXP_REG_CHK_GRALES].model.get('fechaNacimientoYear') + '" />');
+				this.$el.append('<input type="hidden" name="sustentante.correoElectronico" value="' + arr[app.EXP_REG_CHK_GRALES].model.get('correoElectronico') + '" />');
+				this.$el.append('<input type="hidden" name="sustentante.calidadMigratoria" value="' + arr[app.EXP_REG_CHK_GRALES].model.get('calidadMigratoria') + '" />');
+				this.$el.append('<input type="hidden" name="sustentante.profesion" value="' + arr[app.EXP_REG_CHK_GRALES].model.get('profesion') + '" />');
+				this.$el.append('<input type="hidden" name="sustentante.nacionalidad_id" value="' + arr[app.EXP_REG_CHK_GRALES].model.get('nacionalidad') + '" />');
+				this.$el.append('<input type="hidden" name="sustentante.nivelEstudios_id" value="' + arr[app.EXP_REG_CHK_GRALES].model.get('nivelEstudios') + '" />');
+				this.$el.append('<input type="hidden" name="sustentante.estadoCivil_id" value="' + arr[app.EXP_REG_CHK_GRALES].model.get('estadoCivil') + '" />');
+				//datos de telefonos
+				var telsJson = "[";
+				arr[app.EXP_REG_CHK_TELS].collection.each(function(item){
+					telsJson += JSON.stringify(item) + ",";
+				}, this);
+				telsJson += "]";
+				this.$el.append('<input type="hidden" name="sustentante.telefonos_json" value=\'' + telsJson + '\' />');
+				//datos de sepomex
+				this.$el.append('<input type="hidden" name="sustentante.idSepomex" value="' + arr[app.EXP_REG_CHK_SEPOMEX].model.get('sepomexId') + '" />');
+				this.$el.append('<input type="hidden" name="sustentante.calle" value="' + arr[app.EXP_REG_CHK_SEPOMEX].model.get('calle') + '" />');
+				this.$el.append('<input type="hidden" name="sustentante.numeroInt" value="' + arr[app.EXP_REG_CHK_SEPOMEX].model.get('numeroInt') + '" />');
+				this.$el.append('<input type="hidden" name="sustentante.numeroExt" value="' + arr[app.EXP_REG_CHK_SEPOMEX].model.get('numeroExt') + '" />');
+				//datos de registro
+				this.$el.append('<input type="hidden" name="registro.nombrePuesto" value="' + arr[app.EXP_REG_CHK_REGISTRO].model.get('nombrePuesto') + '" />');
+				this.$el.append('<input type="hidden" name="registro.fechaInicio_day" value="' + arr[app.EXP_REG_CHK_REGISTRO].model.get('fechaInicioDay') + '" />');
+				this.$el.append('<input type="hidden" name="registro.fechaInicio_month" value="' + arr[app.EXP_REG_CHK_REGISTRO].model.get('fechaInicioMonth') + '" />');
+				this.$el.append('<input type="hidden" name="registro.fechaInicio_year" value="' + arr[app.EXP_REG_CHK_REGISTRO].model.get('fechaInicioYear') + '" />');
+				this.$el.append('<input type="hidden" name="registro.idInstitucion" value="' + arr[app.EXP_REG_CHK_REGISTRO].model.get('idInstitucion') + '" />');
+				this.$el.append('<input type="hidden" name="registro.fechaObtencion_day" value="' + arr[app.EXP_REG_CHK_REGISTRO].model.get('fechaObtencionDay') + '" />');
+				this.$el.append('<input type="hidden" name="registro.fechaObtencion_month" value="' + arr[app.EXP_REG_CHK_REGISTRO].model.get('fechaObtencionMonth') + '" />');
+				this.$el.append('<input type="hidden" name="registro.fechaObtencion_year" value="' + arr[app.EXP_REG_CHK_REGISTRO].model.get('fechaObtencionYear') + '" />');
+				//$("#frmApp").submit();
+			},
 		});
 
 		var checkSubmitView = new app.CheckSubmitView();
+		checkSubmitView.model.get('viewsarray')[app.EXP_REG_CHK_GRALES] = generalesView;
+		checkSubmitView.model.get('viewsarray')[app.EXP_REG_CHK_TELS] = telefonosView;
+		checkSubmitView.model.get('viewsarray')[app.EXP_REG_CHK_SEPOMEX] = sepomexView;
+		checkSubmitView.model.get('viewsarray')[app.EXP_REG_CHK_REGISTRO] = registroView;
 
 	</script>
 	

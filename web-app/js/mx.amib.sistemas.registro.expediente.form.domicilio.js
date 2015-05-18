@@ -56,30 +56,26 @@ app.SepomexView = Backbone.View.extend({
 
 	render: function(){
 		this.$el.html( this.template( this.model.toJSON() ) );
+		this.$(".asen").empty();
+		this.$(".asen").append($("<option></option>").attr("value","-1").text("-Seleccione-"));
+		if(this.collection.length >	 0){
+			if(_.size(this.errors) > 0){
+				this.$(".validationErrorMessage").show();
+			}
+			else{
+				this.$(".validationErrorMessage").hide();
+			}
+			this.collection.each(function(item){
+				this.$(".asen").append($("<option></option>").attr("value",item.get('id')).text(item.get('asentamiento').nombre));
+			},this);
+			var curElement = this.collection.sample();
+			this.$(".ef").val(curElement.get('asentamiento').municipio.entidadFederativa.nombre);
+			this.$(".mun").val(curElement.get('asentamiento').municipio.nombre);
+		}
+		else
+			this.blankFields();
 
 		if(this.state == app.EXP_SEPOMEX_OPEN){
-			if(this.collection.length >	 0){
-				if(_.size(this.errors) > 0){
-					this.$(".validationErrorMessage").show();
-				}
-				else{
-					this.$(".validationErrorMessage").hide();
-				}
-				
-				var curElement = this.collection.sample();
-				this.$(".ef").val(curElement.get('asentamiento').municipio.entidadFederativa.nombre);
-				this.$(".mun").val(curElement.get('asentamiento').municipio.nombre);
-
-				this.$(".asen").empty();
-				this.$(".asen").append($("<option></option>").attr("value","-1").text("-Seleccione-"));
-				
-				this.collection.each(function(item){
-					this.$(".asen").append($("<option></option>").attr("value",item.get('id')).text(item.get('asentamiento').nombre));
-				},this);				
-			}
-			else
-				this.blankFields();
-			
 			this.$(".submit").prop( "disabled", false );
 			this.$(".edit").prop( "disabled", true );
 			
@@ -109,7 +105,8 @@ app.SepomexView = Backbone.View.extend({
 			this.$(".numExt").prop( "disabled", true );
 			this.$(".numInt").prop( "disabled", true );
 		}
-		
+
+
 		this.$(".cp").val(this.model.get("codigoPostal"));
 		this.$(".asen").val(this.model.get("sepomexId"));
 		this.$(".calle").val(this.model.get("calle"));

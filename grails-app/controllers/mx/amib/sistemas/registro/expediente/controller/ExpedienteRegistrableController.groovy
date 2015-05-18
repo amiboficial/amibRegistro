@@ -1,6 +1,7 @@
 package mx.amib.sistemas.registro.expediente.controller
 
 import grails.converters.JSON
+import mx.amib.sistemas.external.expediente.persona.service.SustentanteTO
 
 class ExpedienteRegistrableController {
 
@@ -27,5 +28,20 @@ class ExpedienteRegistrableController {
 										estadoCivilList:estadoCivilList, institucionesList: institucionesList, nacionalidadList:nacionalidadList, 
 										nivelEstudiosList:nivelEstudiosList, tipoTelefonoList: tipoTelefonoList]
 	}
-	
+
+	def save(SustentanteTO sustentante) {
+		println "Se obtuvo la siguiente información"
+
+		println "* " + sustentante.nombre
+		println "* " + sustentante.primerApellido
+		println "* " + sustentante.segundoApellido
+		println "* " + sustentante.genero
+		println "(de params): " + params.'sustentante.fechaNacimiento_year'
+
+		println "* " + sustentante.fechaNacimiento.toString()
+
+
+
+		respond new Object()
+	}
 }

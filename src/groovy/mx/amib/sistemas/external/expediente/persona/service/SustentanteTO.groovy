@@ -14,17 +14,17 @@ class SustentanteTO {
 	String rfc
 	String curp
 	Date fechaNacimiento
-	
+
 	String correoElectronico
 	String calidadMigratoria
 	String profesion
 	String calle
 	String numero
 	Long idSepomex
-	
+
 	Date fechaCreacion
 	Date fechaModificacion
-	
+
 	NacionalidadTO nacionalidad
 	NivelEstudiosTO nivelEstudios
 	EstadoCivilTO estadoCivil

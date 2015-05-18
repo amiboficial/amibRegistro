@@ -17,18 +17,18 @@
 				</div>
 				<div class="form-group">
 					<label class="col-md-2 col-sm-3 control-label">
-		            	<g:message code="expediente.apellido1.label" default="Primer apellido" />
+		            	<g:message code="expediente.primerApellido.label" default="Primer apellido" />
 					</label>
 		            <div class="col-md-9 col-sm-9">
-		            	<input type="text" class="form-control apellido1" maxlength="80" value="{{=apellido1}}"/>
+		            	<input type="text" class="form-control primerApellido" maxlength="80" value="{{=primerApellido}}"/>
 		            </div>
 				</div>
 				<div class="form-group">
 					<label class="col-md-2 col-sm-3 control-label">
-		            	<g:message code="expediente.apellido1.label" default="Segundo apellido" />
+		            	<g:message code="expediente.segundoApellido.label" default="Segundo apellido" />
 					</label>
 		            <div class="col-md-9 col-sm-9">
-		            	<input type="text" class="form-control apellido2" maxlength="80" value="{{=apellido2}}"/>
+		            	<input type="text" class="form-control segundoApellido" maxlength="80" value="{{=segundoApellido}}"/>
 		            </div>
 				</div>
 				<div class="form-group">

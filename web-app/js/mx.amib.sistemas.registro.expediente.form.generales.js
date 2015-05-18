@@ -22,12 +22,12 @@ app.Generales = Backbone.Model.extend({
 	defaults: {
 		grailsId: -1,
 		nombre: "",
-		apellido1: "",
-		apellido2: "",
+		primerApellido: "",
+		segundoApellido: "",
 		fechaNacimientoDay: -1,
 		fechaNacimientoMonth: -1,
 		fechaNacimientoYear: -1,
-		genero: "",
+		genero: "M",
 		rfc: "",
 		curp: "",
 		correoElectronico: "",
@@ -62,9 +62,23 @@ app.GeneralesView = Backbone.View.extend({
 	render: function(){
 		
 		this.$el.html( this.template( this.model.toJSON() ) );
+		this.$(".nombre").val(this.model.get("nombre"));
+		this.$(".primerApellido").val(this.model.get("primerApellido"));
+		this.$(".segundoApellido").val(this.model.get("segundoApellido"));
 		this.$(".fechaNacimientoDay").val(this.model.get("fechaNacimientoDay"));
 		this.$(".fechaNacimientoMonth").val(this.model.get("fechaNacimientoMonth"));
 		this.$(".fechaNacimientoYear").val(this.model.get("fechaNacimientoYear"));
+		this.$(".rfc").val(this.model.get("rfc"));
+		this.$(".curp").val(this.model.get("curp"));
+		this.$(".correoElectronico").val(this.model.get("correoElectronico"));
+		if(this.model.get("genero") == "M"){
+			this.$(".generoM").prop( "checked", true );
+			//this.$(".generoF").prop( "checked", false );
+		}
+		else{
+			//this.$(".generoM").prop( "checked", false );
+			this.$(".generoF").prop( "checked", true );
+		}
 		this.$(".estadoCivil").val(this.model.get("estadoCivil"));
 		this.$(".nivelEstudios").val(this.model.get("nivelEstudios"));
 		this.$(".nacionalidad").val(this.model.get("nacionalidad"));
@@ -73,8 +87,8 @@ app.GeneralesView = Backbone.View.extend({
 		
 		if(this.state == app.EXP_GRAL_OPEN){
 			this.$(".nombre").prop( "disabled", false );
-			this.$(".apellido1").prop( "disabled", false );
-			this.$(".apellido2").prop( "disabled", false );
+			this.$(".primerApellido").prop( "disabled", false );
+			this.$(".segundoApellido").prop( "disabled", false );
 			
 			this.$(".fechaNacimientoDay").prop( "disabled", false );
 			this.$(".fechaNacimientoMonth").prop( "disabled", false );
@@ -100,8 +114,8 @@ app.GeneralesView = Backbone.View.extend({
 		
 		else if(this.state == app.EXP_GRAL_VALIDATED){
 			this.$(".nombre").prop( "disabled", true );
-			this.$(".apellido1").prop( "disabled", true );
-			this.$(".apellido2").prop( "disabled", true );
+			this.$(".primerApellido").prop( "disabled", true );
+			this.$(".segundoApellido").prop( "disabled", true );
 			
 			this.$(".fechaNacimientoDay").prop( "disabled", true );
 			this.$(".fechaNacimientoMonth").prop( "disabled", true );
@@ -152,15 +166,15 @@ app.GeneralesView = Backbone.View.extend({
 
 			//captura lso datos al modelo
 			this.model.set("nombre",$.trim(this.$(".nombre").val()));
-			this.model.set("apellido1",$.trim(this.$(".apellido1").val()));
-			this.model.set("apellido2",$.trim(this.$(".apellido2").val()));
+			this.model.set("primerApellido",$.trim(this.$(".primerApellido").val()));
+			this.model.set("segundoApellido",$.trim(this.$(".segundoApellido").val()));
 			this.model.set("fechaNacimientoDay",$.trim(this.$(".fechaNacimientoDay").val()));
 			this.model.set("fechaNacimientoMonth",$.trim(this.$(".fechaNacimientoMonth").val()));
 			this.model.set("fechaNacimientoYear",$.trim(this.$(".fechaNacimientoYear").val()));
 			this.model.set("rfc",$.trim(this.$(".rfc").val()));
 			this.model.set("curp",$.trim(this.$(".curp").val()));
 			this.model.set("correoElectronico",$.trim(this.$(".correoElectronico").val()));
-			//genero selected
+			this.model.set("genero",this.$('input[name=ZXhwZWRpZW50ZS5nZW5lcm8]:checked').val());
 			this.model.set("profesion",$.trim(this.$(".profesion").val()));
 			this.model.set("calidadMigratoria",$.trim(this.$(".calidadMigratoria").val()));
 			this.model.set("estadoCivil",$.trim(this.$(".estadoCivil").val()));
@@ -183,7 +197,7 @@ app.GeneralesView = Backbone.View.extend({
 		if($.trim(this.$(".nombre").val()).length == 0){
 			this.errors.push(app.EXP_GRAL_ERRMSG_NONOMBRE);
 		}
-		if($.trim(this.$(".apellido1").val()).length == 0){
+		if($.trim(this.$(".primerApellido").val()).length == 0){
 			this.errors.push(app.EXP_GRAL_ERRMSG_NOAP1);
 		}
 		if(this.$(".fechaNacimientoDay").val() <= 0 || this.$(".fechaNacimientoMonth").val() <= 0 || this.$(".fechaNacimientoYear").val() <= 0){

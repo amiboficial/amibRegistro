@@ -38,7 +38,6 @@ app.TelefonoView = Backbone.View.extend({
 	
 	eliminarTelefono: function(e){
 		e.preventDefault();
-		console.log("EJECUTA QUITAR TELEFONO");
 		if(this.state == app.EXP_TEL_OPEN){
 			this.model.destroy();
 			this.remove();
@@ -128,6 +127,11 @@ app.TelefonosView = Backbone.View.extend({
 			tel.set('idTipoTelefono',this.$('.tipo').val());
 			tel.set('dsTipoTelefono',this.$('.tipo option:selected').text());
 			this.collection.add(tel);
+			//limpia campos
+			this.$(".lada").val( "" );
+			this.$(".telefono").val( "" );
+			this.$(".extension").val( "" );
+			this.$(".tipo").val( "-1" );
 		}
 	},
 	

@@ -12,10 +12,10 @@ app.EXP_SEPOMEX_ERRMSG_NONUMINT = "EXP_SEPOMEX_ERRMSG_NONUMINT";
 app.Domicilio = Backbone.Model.extend({
 	defaults: {
 		codigoPostal: "",
-		sepomexId: -1,
+		idSepomex: -1,
 		calle: "",
-		numeroInt: "",
-		numeroExt: "",
+		numeroInterior: "",
+		numeroExterior: "",
 	},
 });
 
@@ -109,10 +109,10 @@ app.SepomexView = Backbone.View.extend({
 
 
 		this.$(".cp").val(this.model.get("codigoPostal"));
-		this.$(".asen").val(this.model.get("sepomexId"));
+		this.$(".asen").val(this.model.get("idSepomex"));
 		this.$(".calle").val(this.model.get("calle"));
-		this.$(".numInt").val(this.model.get("numeroInt"));
-		this.$(".numExt").val(this.model.get("numeroExt"));
+		this.$(".numInt").val(this.model.get("numeroInterior"));
+		this.$(".numExt").val(this.model.get("numeroExterior"));
 	},
 
 	renderErrorMsgs: function(){
@@ -176,8 +176,8 @@ app.SepomexView = Backbone.View.extend({
 	
 		this.model.set("codigoPostal", $.trim(this.$(".cp").val()));
 		this.model.set("calle", $.trim(this.$(".calle").val()) );
-		this.model.set("numeroInt", $.trim(this.$(".numInt").val()));
-		this.model.set("numeroExt", $.trim(this.$(".numExt").val()));
+		this.model.set("numeroInterior", $.trim(this.$(".numInt").val()));
+		this.model.set("numeroExterior", $.trim(this.$(".numExt").val()));
 	
 		this.setProcessingState();
 		this.render();
@@ -212,10 +212,10 @@ app.SepomexView = Backbone.View.extend({
 		else{
 			
 			this.model.set("codigoPostal", $.trim(this.$(".cp").val()));
-			this.model.set("sepomexId", parseInt(this.$(".asen").val()));
+			this.model.set("idSepomex", parseInt(this.$(".asen").val()));
 			this.model.set("calle", $.trim(this.$(".calle").val()) );
-			this.model.set("numeroInt", $.trim(this.$(".numInt").val()));
-			this.model.set("numeroExt", $.trim(this.$(".numExt").val()));
+			this.model.set("numeroInterior", $.trim(this.$(".numInt").val()));
+			this.model.set("numeroExterior", $.trim(this.$(".numExt").val()));
 			
 			this.setValidatedState();
 			this.renderNoErrorMsgs();

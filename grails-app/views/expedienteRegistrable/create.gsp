@@ -232,10 +232,10 @@
 				telsJson += "]";
 				this.$el.append('<input type="hidden" name="sustentante.telefonos_json" value=\'' + telsJson + '\' />');
 				//datos de sepomex
-				this.$el.append('<input type="hidden" name="sustentante.idSepomex" value="' + arr[app.EXP_REG_CHK_SEPOMEX].model.get('sepomexId') + '" />');
+				this.$el.append('<input type="hidden" name="sustentante.idSepomex" value="' + arr[app.EXP_REG_CHK_SEPOMEX].model.get('idSepomex') + '" />');
 				this.$el.append('<input type="hidden" name="sustentante.calle" value="' + arr[app.EXP_REG_CHK_SEPOMEX].model.get('calle') + '" />');
-				this.$el.append('<input type="hidden" name="sustentante.numeroInt" value="' + arr[app.EXP_REG_CHK_SEPOMEX].model.get('numeroInt') + '" />');
-				this.$el.append('<input type="hidden" name="sustentante.numeroExt" value="' + arr[app.EXP_REG_CHK_SEPOMEX].model.get('numeroExt') + '" />');
+				this.$el.append('<input type="hidden" name="sustentante.numeroInterior" value="' + arr[app.EXP_REG_CHK_SEPOMEX].model.get('numeroInterior') + '" />');
+				this.$el.append('<input type="hidden" name="sustentante.numeroExterior" value="' + arr[app.EXP_REG_CHK_SEPOMEX].model.get('numeroExterior') + '" />');
 				//datos de registro
 				this.$el.append('<input type="hidden" name="registro.nombrePuesto" value="' + arr[app.EXP_REG_CHK_REGISTRO].model.get('nombrePuesto') + '" />');
 				this.$el.append('<input type="hidden" name="registro.fechaInicio_day" value="' + arr[app.EXP_REG_CHK_REGISTRO].model.get('fechaInicioDay') + '" />');

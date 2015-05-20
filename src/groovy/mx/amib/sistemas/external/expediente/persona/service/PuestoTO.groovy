@@ -3,7 +3,9 @@ package mx.amib.sistemas.external.expediente.persona.service
 import java.util.Date;
 
 class PuestoTO {
-	String empresa
+	Long id
+
+	Long idInstitucion
 	Date fechaInicio
 	Date fechaFin
 	String nombrePuesto

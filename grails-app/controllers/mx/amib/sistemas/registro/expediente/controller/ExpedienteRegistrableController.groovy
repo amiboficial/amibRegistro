@@ -61,6 +61,7 @@ class ExpedienteRegistrableController {
 		sustentante.documentos = new ArrayList<DocumentoSustentanteTO>()
 		sustentante.puestos = new ArrayList<PuestoTO>()
 		PuestoTO p = new PuestoTO()
+		p.idInstitucion = Long.parseLong(params.'registro.idInstitucion')
 		p.fechaInicio = sdf.parse(params.'registro.fechaInicio_day' + '-' + params.'registro.fechaInicio_month' + '-' + params.'registro.fechaInicio_year')
 		p.nombrePuesto = params.'registro.nombrePuesto'
 		p.esActual = true

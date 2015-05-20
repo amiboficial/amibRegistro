@@ -19,7 +19,8 @@ class SustentanteTO {
 	String calidadMigratoria
 	String profesion
 	String calle
-	String numero
+	String numeroExterior
+	String numeroInterior
 	Long idSepomex
 
 	Date fechaCreacion

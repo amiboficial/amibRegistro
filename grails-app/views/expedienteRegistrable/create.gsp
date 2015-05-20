@@ -245,7 +245,8 @@
 				this.$el.append('<input type="hidden" name="registro.fechaObtencion_day" value="' + arr[app.EXP_REG_CHK_REGISTRO].model.get('fechaObtencionDay') + '" />');
 				this.$el.append('<input type="hidden" name="registro.fechaObtencion_month" value="' + arr[app.EXP_REG_CHK_REGISTRO].model.get('fechaObtencionMonth') + '" />');
 				this.$el.append('<input type="hidden" name="registro.fechaObtencion_year" value="' + arr[app.EXP_REG_CHK_REGISTRO].model.get('fechaObtencionYear') + '" />');
-				//$("#frmApp").submit();
+
+				$("#frmApp").submit();
 			},
 		});
 
@@ -254,13 +255,6 @@
 		checkSubmitView.setViewInstance(app.EXP_REG_CHK_TELS,telefonosView);
 		checkSubmitView.setViewInstance(app.EXP_REG_CHK_SEPOMEX,sepomexView);
 		checkSubmitView.setViewInstance(app.EXP_REG_CHK_REGISTRO,registroView);
-
-		/*
-		checkSubmitView.model.get('viewsarray')[app.EXP_REG_CHK_GRALES] = generalesView;
-		checkSubmitView.model.get('viewsarray')[app.EXP_REG_CHK_TELS] = telefonosView;
-		checkSubmitView.model.get('viewsarray')[app.EXP_REG_CHK_SEPOMEX] = sepomexView;
-		checkSubmitView.model.get('viewsarray')[app.EXP_REG_CHK_REGISTRO] = registroView;*/
-		//generalesView.on("stateChange",function(newState){ alert("generalesView cambia a estado: " + newState); });
 
 	</script>
 	

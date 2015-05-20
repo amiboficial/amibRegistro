@@ -95,13 +95,13 @@ class EntidadFinancieraService {
 interface EntidadFinancieraTO {
 	long id
 	String nombre
-	boolean vigente
+	Boolean vigente
 }
 
 class GrupoFinancieroTO implements EntidadFinancieraTO {
 	long id
 	String nombre
-	boolean vigente
+	Boolean vigente
 	
 	InstitucionTO[] instituciones
 }
@@ -109,7 +109,7 @@ class GrupoFinancieroTO implements EntidadFinancieraTO {
 class InstitucionTO implements EntidadFinancieraTO {
 	long id
 	String nombre
-	boolean vigente
+	Boolean vigente
 	
 	long idTipoInstitucion
 	

@@ -12,11 +12,11 @@ class TipoTelefonoService {
     def grailsApplication
 	
 	def get(Long id){
-		TipoTelefonoCatalog.getInstance().getElement(id)
+		return TipoTelefonoCatalog.getInstance().getElement(id)
 	}
 	
     def list(){
-		TipoTelefonoCatalog.getInstance().getAllElements()
+		return TipoTelefonoCatalog.getInstance().getAllElements()
     }
 	
 	void descargarCatalogo(){
@@ -79,5 +79,5 @@ class TipoTelefonoCatalog{
 class TipoTelefonoTO{
 	Long id
 	String descripcion
-	boolean vigente
+	Boolean vigente
 }

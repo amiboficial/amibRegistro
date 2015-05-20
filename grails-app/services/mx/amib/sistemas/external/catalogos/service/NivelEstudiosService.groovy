@@ -12,11 +12,11 @@ class NivelEstudiosService {
 	def grailsApplication
 	
 	def get(Long id){
-		NivelEstudiosCatalog.getInstance().getElement(id)
+		return NivelEstudiosCatalog.getInstance().getElement(id)
 	}
 	
 	def list(){
-		NivelEstudiosCatalog.getInstance().getAllElements()
+		return NivelEstudiosCatalog.getInstance().getAllElements()
 	}
 	
     void descargarCatalogo(){
@@ -72,5 +72,5 @@ class NivelEstudiosCatalog{
 class NivelEstudiosTO{
 	Long id
 	String descripcion
-	boolean vigente
+	Boolean vigente
 }

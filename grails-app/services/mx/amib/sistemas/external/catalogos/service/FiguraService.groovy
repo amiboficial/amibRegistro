@@ -12,19 +12,19 @@ class FiguraService {
 	def grailsApplication
 	
 	def get(Long id){
-		FiguraCatalog.getInstance().getElement(id)
+		return FiguraCatalog.getInstance().getElement(id)
 	}
 	
 	def list(){
-		FiguraCatalog.getInstance().getAllElements()
+		return FiguraCatalog.getInstance().getAllElements()
 	}
 	
 	def getVariante(Long id){
-		VarianteFiguraCatalog.getInstance().getElement(id)
+		return VarianteFiguraCatalog.getInstance().getElement(id)
 	}
 	
 	def listVariantes(){
-		VarianteFiguraCatalog.getInstance().getAllElements()
+		return VarianteFiguraCatalog.getInstance().getAllElements()
 	}
 	
     void descargarCatalogo(){

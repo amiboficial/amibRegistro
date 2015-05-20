@@ -15,11 +15,11 @@ class NacionalidadService {
 	def grailsApplication
 	
 	def get(Long id){
-		NacionalidadCatalog.getInstance().getElement(id)
+		return NacionalidadCatalog.getInstance().getElement(id)
 	}
 	
 	def list(){
-		NacionalidadCatalog.getInstance().getAllElements()
+		return NacionalidadCatalog.getInstance().getAllElements()
 	}
 	
 	void descargarCatalogo(){
@@ -83,5 +83,5 @@ class NacionalidadCatalog{
 class NacionalidadTO{
 	Long id
 	String descripcion
-	boolean vigente
+	Boolean vigente
 }

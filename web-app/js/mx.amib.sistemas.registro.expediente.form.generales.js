@@ -21,6 +21,7 @@ app.EXP_GRAL_ERRMSG_NONAL = "EXP_GRAL_ERRMSG_NONAL";
 app.Generales = Backbone.Model.extend({
 	defaults: {
 		grailsId: -1,
+		numeroMatricula: -1,
 		nombre: "",
 		primerApellido: "",
 		segundoApellido: "",

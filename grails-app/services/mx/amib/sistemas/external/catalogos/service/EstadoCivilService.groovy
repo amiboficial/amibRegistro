@@ -78,5 +78,5 @@ class EstadoCivilCatalog{
 class EstadoCivilTO{
 	Long id
 	String descripcion
-	boolean vigente
+	Boolean vigente
 }

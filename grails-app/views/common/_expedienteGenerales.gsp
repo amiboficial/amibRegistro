@@ -9,6 +9,14 @@
 
 				<div class="form-group">
 					<label class="col-md-2 col-sm-3 control-label">
+						<g:message code="expediente.matricula.label" default="Matrícula" />
+					</label>
+					<div class="col-md-9 col-sm-9">
+						<input type="text" class="form-control numeroMatricula" maxlength="11" value="{{=numeroMatricula}}" disabled=""/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-md-2 col-sm-3 control-label">
 		            	<g:message code="expediente.nombre.label" default="Nombre" />
 					</label>
 		            <div class="col-md-9 col-sm-9">

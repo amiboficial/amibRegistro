@@ -21,6 +21,7 @@ import mx.amib.sistemas.external.expediente.persona.service.*
  * @author Gabriel
  * @version 1.0 - (Última actualización) 13/09/2014
  *			1.1 - TODO: Se tiene que cambiar de paquete
+ *			1.2 - Se agrega metodo save
  */
 @Transactional
 class SustentanteService {
@@ -75,4 +76,16 @@ class SustentanteService {
 		}
 		return sustenante
     }
+
+	/**
+	 * Guarda los datos de un nuevo sustentante
+	 * en el sistema de expediente. Los detalles de certificación,
+	 * puestos, certificaciones y puestos también son incluidos.
+	 *
+	 * @param sustentante
+	 *
+	 */
+	void guardarNuevo(SustentanteTO sustentante){
+		sustentante.id = -1
+	}
 }

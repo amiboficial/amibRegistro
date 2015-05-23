@@ -8,6 +8,7 @@ class TelefonoSustentanteTO {
 	String extension
 
 	TipoTelefonoTO tipoTelefonoSustentante
-	
+	Long idTipoTelefonoSustentante
+
 	SustentanteTO sustentante
 }

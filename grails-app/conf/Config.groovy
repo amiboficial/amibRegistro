@@ -76,6 +76,7 @@ grails.hibernate.osiv.readonly = false
 
 environments {
     development {
+        grails.converters.json.pretty.print = true
         grails.logging.jul.usebridge = true
 		
 		mx.amib.sistemas.catalogos.resthttpURL = 'http://bimalatrop.no-ip.biz:8080/amibCatalogos-0.1/'
@@ -153,9 +154,12 @@ mx.amib.sistemas.catalogos.personal.TipoTelefono.list = 'tipoTelefonoRestful/lis
 mx.amib.sistemas.catalogos.sepomex.EntidadFederativa.list = 'entidadFederativaRestful/index?max=32'
 mx.amib.sistemas.catalogos.sepomex.Sepomex.findByCodigoPostal = 'sepomexRestful/findByCodigoPostal?cp='
 
-
 //especificaciones de rutas para servicios REST de amibExpediente
 mx.amib.sistemas.expediente.Sustentante.obtenerSustentantePorMatricula = 'sustentanteRestful/obtenerSustentantePorMatricula/'
+mx.amib.sistemas.expediente.Sustentante.save = 'sustentanteRestful/save'
+mx.amib.sistemas.expediente.certificacion.MetodoCertificacion.list = 'metodoCertificacionRestful/index?max=100'
+mx.amib.sistemas.expediente.certificacion.StatusAutorizacion.list = 'statusAutorizacionRestful/index?max=100'
+mx.amib.sistemas.expediente.certificacion.StatusCertificacion.list = 'statusCertificacionRestful/index?max=100'
 
 //especificaciones de rutas para servicios REST de amibDocumentos
 mx.amib.sistemas.documentos.Documento.save = 'documentoRestful/save'

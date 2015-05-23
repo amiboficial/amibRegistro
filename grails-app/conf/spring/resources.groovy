@@ -38,5 +38,6 @@ beans = {
 	}
 	sustentanteService(mx.amib.sistemas.external.expediente.service.SustentanteService) {
 		getByNumeroMatriculaUrl = application.config.mx.amib.sistemas.expediente.resthttpURL + application.config.mx.amib.sistemas.expediente.Sustentante.obtenerSustentantePorMatricula
+		saveUrl = application.config.mx.amib.sistemas.expediente.resthttpURL + application.config.mx.amib.sistemas.expediente.Sustentante.save
 	}
 }

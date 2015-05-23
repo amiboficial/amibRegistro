@@ -29,7 +29,10 @@ class SustentanteTO {
 	NacionalidadTO nacionalidad
 	NivelEstudiosTO nivelEstudios
 	EstadoCivilTO estadoCivil
-	
+	Long idNacionalidad
+	Long idNivelEstudios
+	Long idEstadoCivil
+
 	List<TelefonoSustentanteTO> telefonos
 	List<DocumentoSustentanteTO> documentos
 	List<PuestoTO> puestos

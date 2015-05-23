@@ -4,6 +4,7 @@ import java.util.Date
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import org.codehaus.groovy.grails.web.json.JSONObject
+import grails.converters.JSON
 import grails.plugins.rest.client.RestBuilder
 import grails.transaction.Transactional
 import mx.amib.sistemas.external.expediente.certificacion.service.CertificacionTO
@@ -27,7 +28,8 @@ import mx.amib.sistemas.external.expediente.persona.service.*
 class SustentanteService {
 
 	String getByNumeroMatriculaUrl
-	
+	String saveUrl
+
 	/**
 	 * Obtiene los datos de un sustentante dado su 
 	 * número de matrícula
@@ -41,8 +43,7 @@ class SustentanteService {
 		SustentanteTO sustenante = null
 		def rest = new RestBuilder()
 		def resp = rest.get(getByNumeroMatriculaUrl + numeroMatricula)
-		resp.json instanceof JSONObject
-		
+
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd")
 		
 		if(resp.json != null){
@@ -87,5 +88,13 @@ class SustentanteService {
 	 */
 	void guardarNuevo(SustentanteTO sustentante){
 		sustentante.id = -1
+
+		println saveUrl
+
+		def rest = new RestBuilder()
+		def resp = rest.put(saveUrl){
+			contentType "application/json;charset=UTF-8"
+			json (sustentante as JSON)
+		}
 	}
 }

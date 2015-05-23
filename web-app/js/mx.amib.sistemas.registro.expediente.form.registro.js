@@ -19,7 +19,7 @@ app.Registro = Backbone.Model.extend({
 		fechaInicioMonth: -1,
 		fechaInicioYear: -1,
 		idInstitucion: -1,
-		idVarianteFigura: -1,
+		idVarianteFigura: 195, //solo por propositos de test
 		descVarianteFigura: "",
 		descAutorizacion: "",
 		fechaObtencionDay: -1,

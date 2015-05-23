@@ -21,9 +21,13 @@ class CertificacionTO {
 	StatusAutorizacionTO statusAutorizacion
 	StatusCertificacionTO statusCertificacion
 	MetodoCertificacionTO metodoCertificacion
-	
+	Long idVarianteFigura
+	Long idStatusAutorizacion
+	Long idStatusCertificacion
+	Long idMetodoCertificacion
+
 	SustentanteTO sustentante
-	CambioStatusTO cambioStatus
-	EventoPuntosTO eventoPuntos
+	List<CambioStatusTO> cambioStatus
+	List<EventoPuntosTO> eventoPuntos
 	
 }

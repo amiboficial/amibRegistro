@@ -7,7 +7,12 @@ class BootStrap {
 	def nacionalidadService
 	def nivelEstudiosService
 	def tipoTelefonoService
-	
+
+	//CATALOGOS PROPIOS DE EXPEDIENTE
+	def metodoCertificacionService
+	def statusAutorizacionService
+	def statusCertificacionService
+
     def init = { servletContext ->
 		groovyx.net.http.ParserRegistry.setDefaultCharset("UTF-8");
 		//descarga los catálogos necesarios de AMIB Catálogos en memoria
@@ -22,6 +27,11 @@ class BootStrap {
 		tipoTelefonoService.descargarCatalogo()
 		//descarga catálogo de sepomex
 		sepomexService.descargarCatalogoEntidadFederativa()
+
+		//Descarga catálogos propios del sistema de expediente
+		metodoCertificacionService.descargarCatalogo()
+		statusAutorizacionService.descargarCatalogo()
+		statusCertificacionService.descargarCatalogo()
     }
     def destroy = {
 		

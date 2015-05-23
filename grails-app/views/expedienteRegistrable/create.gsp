@@ -221,9 +221,9 @@
 				this.$el.append('<input type="hidden" name="sustentante.correoElectronico" value="' + arr[app.EXP_REG_CHK_GRALES].model.get('correoElectronico') + '" />');
 				this.$el.append('<input type="hidden" name="sustentante.calidadMigratoria" value="' + arr[app.EXP_REG_CHK_GRALES].model.get('calidadMigratoria') + '" />');
 				this.$el.append('<input type="hidden" name="sustentante.profesion" value="' + arr[app.EXP_REG_CHK_GRALES].model.get('profesion') + '" />');
-				this.$el.append('<input type="hidden" name="sustentante.nacionalidad_id" value="' + arr[app.EXP_REG_CHK_GRALES].model.get('nacionalidad') + '" />');
-				this.$el.append('<input type="hidden" name="sustentante.nivelEstudios_id" value="' + arr[app.EXP_REG_CHK_GRALES].model.get('nivelEstudios') + '" />');
-				this.$el.append('<input type="hidden" name="sustentante.estadoCivil_id" value="' + arr[app.EXP_REG_CHK_GRALES].model.get('estadoCivil') + '" />');
+				this.$el.append('<input type="hidden" name="sustentante.idNacionalidad" value="' + arr[app.EXP_REG_CHK_GRALES].model.get('nacionalidad') + '" />');
+				this.$el.append('<input type="hidden" name="sustentante.idNivelEstudios" value="' + arr[app.EXP_REG_CHK_GRALES].model.get('nivelEstudios') + '" />');
+				this.$el.append('<input type="hidden" name="sustentante.idEstadoCivil" value="' + arr[app.EXP_REG_CHK_GRALES].model.get('estadoCivil') + '" />');
 				//datos de telefonos
 				var telsJson = "[";
 				arr[app.EXP_REG_CHK_TELS].collection.each(function(item){
@@ -242,9 +242,11 @@
 				this.$el.append('<input type="hidden" name="registro.fechaInicio_month" value="' + arr[app.EXP_REG_CHK_REGISTRO].model.get('fechaInicioMonth') + '" />');
 				this.$el.append('<input type="hidden" name="registro.fechaInicio_year" value="' + arr[app.EXP_REG_CHK_REGISTRO].model.get('fechaInicioYear') + '" />');
 				this.$el.append('<input type="hidden" name="registro.idInstitucion" value="' + arr[app.EXP_REG_CHK_REGISTRO].model.get('idInstitucion') + '" />');
+
 				this.$el.append('<input type="hidden" name="registro.fechaObtencion_day" value="' + arr[app.EXP_REG_CHK_REGISTRO].model.get('fechaObtencionDay') + '" />');
 				this.$el.append('<input type="hidden" name="registro.fechaObtencion_month" value="' + arr[app.EXP_REG_CHK_REGISTRO].model.get('fechaObtencionMonth') + '" />');
 				this.$el.append('<input type="hidden" name="registro.fechaObtencion_year" value="' + arr[app.EXP_REG_CHK_REGISTRO].model.get('fechaObtencionYear') + '" />');
+				this.$el.append('<input type="hidden" name="registro.idVarianteFigura" value="' + arr[app.EXP_REG_CHK_REGISTRO].model.get('idVarianteFigura') + '" />');
 
 				$("#frmApp").submit();
 			},

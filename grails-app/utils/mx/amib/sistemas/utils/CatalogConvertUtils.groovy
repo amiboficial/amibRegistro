@@ -36,4 +36,17 @@ class CatalogConvertUtils {
         newObj.vigente = oldObj.vigente
         return newObj
     }
+    public static mx.amib.sistemas.external.expediente.certificacion.catalog.service.VarianteFiguraTO fromCatalogosToExpediente(mx.amib.sistemas.external.catalogos.service.VarianteFiguraTO oldObj){
+        mx.amib.sistemas.external.expediente.certificacion.catalog.service.VarianteFiguraTO newObj = new mx.amib.sistemas.external.expediente.certificacion.catalog.service.VarianteFiguraTO()
+        newObj.id = oldObj.id
+        newObj.nombre = oldObj.nombre
+        newObj.vigente = oldObj.vigente
+        newObj.idFigura = oldObj.figura.id
+        newObj.nombreFigura = oldObj.figura.nombre
+        newObj.nombreAcuseFigura = oldObj.figura.nombreAcuse
+        newObj.esAutorizableFigura = oldObj.figura.esAutorizable
+        newObj.tipoAutorizacionFigura = oldObj.figura.tipoAutorizacion
+        newObj.inicialesFigura = oldObj.figura.iniciales
+        return newObj
+    }
 }

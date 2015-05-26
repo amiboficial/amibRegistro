@@ -32,7 +32,7 @@
 			<div role="tabpanel" class="tab-pane active" id="divBusqSimple">
 				<div id="divSimpMatricula" class="form-group">
 					<label class="col-md-2 col-sm-3 control-label">
-						<g:message code="registrable.matricula.label" default="Matricula" />
+						<g:message code="expedienteRegistrable.matricula.label" default="Matricula" />
 					</label>
 					<div class="col-md-9 col-sm-9">
 						<g:textField name="fltSimpMat" id="txtSimpMatricula" class="form-control" maxlength="10" value="" />
@@ -57,7 +57,7 @@
 			
 				<div id="divAvNombre" class="form-group">
 					<label class="col-md-2 col-sm-3 control-label">
-						<g:message code="registrable.nombre.label" default="Nombre" />
+						<g:message code="expedienteRegistrable.nombre.label" default="Nombre" />
 					</label>
 					<div class="col-md-9 col-sm-9">
 						<g:textField id="txtAvNombre" maxlength="80" class="form-control" name="fltAvNombre" value="" />
@@ -66,7 +66,7 @@
 				
 				<div id="divAvApellido1" class="form-group">
 					<label class="col-md-2 col-sm-3 control-label">
-						<g:message code="registrable.primerApellido.label" default="Primer apellido" />
+						<g:message code="expedienteRegistrable.primerApellido.label" default="Primer apellido" />
 					</label>
 					<div class="col-md-9 col-sm-9">
 						<g:textField id="txtAvPrimerApellido" maxlength="100" class="form-control" name="fltAvPrimerApellido" value="" />
@@ -75,7 +75,7 @@
 				
 				<div id="divAvApellido2" class="form-group">
 					<label class="col-md-2 col-sm-3 control-label">
-						<g:message code="registrable.segundoApellido.label" default="Segundo apellido" />
+						<g:message code="expedienteRegistrable.segundoApellido.label" default="Segundo apellido" />
 					</label>
 					<div class="col-md-9 col-sm-9">
 						<g:textField id="txtAvSegundoApellido" maxlength="100" class="form-control" name="fltAvSegundoApellido" value="" />
@@ -84,7 +84,7 @@
 				
 				<div id="divAv" class="form-group">
 					<label class="col-md-2 col-sm-3 control-label">
-						<g:message code="registrable.figura.label" default="Figura" />
+						<g:message code="expedienteRegistrable.figura.label" default="Figura" />
 					</label>
 					<div class="col-md-9 col-sm-9">
 						<g:select name='fltAvVarFigura' class="form-control" id="selAvIdVarFigura"
@@ -121,11 +121,11 @@
 			<table class="table">
 				<thead>
 					<tr>
-						<th>${message(code: 'registrable.matricula.label', default: 'Matrícula')}</th>
-						<th>${message(code: 'registrable.nombre.label', default: 'Nombre')}</th>
-						<th>${message(code: 'registrable.primerApellido.label', default: 'Primer Apellido')}</th>
-						<th>${message(code: 'registrable.segundoApellido.label', default: 'Segundo Apellido')}</th>
-						<th>${message(code: 'registrable.fechaExamen.label', default: 'Fecha de exámen')}</th>
+						<th>${message(code: 'expedienteRegistrable.matricula.label', default: 'Matrícula')}</th>
+						<th>${message(code: 'expedienteRegistrable.nombre.label', default: 'Nombre')}</th>
+						<th>${message(code: 'expedienteRegistrable.primerApellido.label', default: 'Primer Apellido')}</th>
+						<th>${message(code: 'expedienteRegistrable.segundoApellido.label', default: 'Segundo Apellido')}</th>
+						<th>${message(code: 'expedienteRegistrable.fechaExamen.label', default: 'Fecha de exámen')}</th>
 						<th>...</th>
 					</tr>
 					<tr>
@@ -136,6 +136,16 @@
 						<td>17/06/1990</td>
 						<td><button class="btn btn-default btn-xs">Registrar</button></td>
 					</tr>
+					<g:each in="${viewModelInstance.searchResults}">
+						<tr>
+							<td>${it.numeroMatricula}</td>
+							<td>${it.nombre}</td>
+							<td>${it.primerApellido}</td>
+							<td>${it.segundoApellido}</td>
+							<td>${it.fechaAplicacionExamenDay}/${it.fechaAplicacionExamenMonth}/${it.fechaAplicacionExamenYear}</td>
+							<td><button class="btn btn-default btn-xs">Registrar</button></td>
+						</tr>
+					</g:each>
 				</thead>
 				<tbody>
 					

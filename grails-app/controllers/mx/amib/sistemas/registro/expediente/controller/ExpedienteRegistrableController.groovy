@@ -6,6 +6,7 @@ import mx.amib.sistemas.external.expediente.certificacion.service.CertificacionT
 import mx.amib.sistemas.external.expediente.persona.service.DocumentoSustentanteTO
 import mx.amib.sistemas.external.expediente.persona.service.PuestoTO
 import mx.amib.sistemas.external.expediente.persona.service.TelefonoSustentanteTO
+import mx.amib.sistemas.registro.legacy.saaec.RegistroExamenTO
 import mx.amib.sistemas.utils.CatalogConvertUtils
 import org.codehaus.groovy.grails.web.json.JSONArray
 
@@ -20,22 +21,24 @@ class ExpedienteRegistrableController {
 	def nacionalidadService
 	def nivelEstudiosService
 	def figuraService
-	def tipoTelefonoService
+	def registroExamenService
 	def sustentanteService
+	def tipoTelefonoService
+
 
 	def metodoCertificacionService
 	def statusAutorizacionService
 	def statusCertificacionService
 
     def index() {
-		def viewModelInstance = this.getIndexViewModel()
-
+		def viewModelInstance = this.getIndexViewModel(params)
 		respond new Object(),model: [viewModelInstance:viewModelInstance]
 	}
 
-	private IndexViewModel getIndexViewModel(){
+	private IndexViewModel getIndexViewModel(Map params){
 		IndexViewModel vm = new IndexViewModel()
 		vm.varFiguraList = figuraService.listVariantes().findAll{ it.vigente == true }.sort{ it.nombre }
+		vm.searchResults = registroExamenService.findAllRegistrable("C","C","",null)
 		return vm
 	}
 
@@ -128,5 +131,8 @@ class ExpedienteRegistrableController {
 		String fltAvPrimerApellido
 		String fltAvSegundoApellido
 		Long fltAvVarFigura //id de variante figura
+
+		Collection<RegistroExamenTO> searchResults = new ArrayList<RegistroExamenTO>()
+
 	}
 }

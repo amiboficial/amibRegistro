@@ -1,5 +1,7 @@
 package mx.amib.sistemas.registro.expediente.controller
 
+import mx.amib.sistemas.external.catalogos.service.FiguraTO
+import mx.amib.sistemas.external.catalogos.service.VarianteFiguraTO
 import mx.amib.sistemas.external.expediente.certificacion.service.CertificacionTO
 import mx.amib.sistemas.external.expediente.persona.service.DocumentoSustentanteTO
 import mx.amib.sistemas.external.expediente.persona.service.PuestoTO
@@ -25,8 +27,18 @@ class ExpedienteRegistrableController {
 	def statusAutorizacionService
 	def statusCertificacionService
 
-    def index() { }
-	
+    def index() {
+		def viewModelInstance = this.getIndexViewModel()
+
+		respond new Object(),model: [viewModelInstance:viewModelInstance]
+	}
+
+	private IndexViewModel getIndexViewModel(){
+		IndexViewModel vm = new IndexViewModel()
+		vm.varFiguraList = figuraService.listVariantes().findAll{ it.vigente == true }.sort{ it.nombre }
+		return vm
+	}
+
 	def create() {
 		def estadoCivilList = estadoCivilService.list()
 		def institucionesList = entidadFinancieraService.obtenerInstituciones()
@@ -106,5 +118,15 @@ class ExpedienteRegistrableController {
 		//sustentanteService.guardarNuevo(sustentante)
 
 		respond new Object()
+	}
+
+	class IndexViewModel{
+		Collection<VarianteFiguraTO> varFiguraList //listado de variantes figuras
+
+		String fltSimpMat
+		String fltAvNombre
+		String fltAvPrimerApellido
+		String fltAvSegundoApellido
+		Long fltAvVarFigura //id de variante figura
 	}
 }

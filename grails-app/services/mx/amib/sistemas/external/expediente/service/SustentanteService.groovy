@@ -35,29 +35,29 @@ class SustentanteService {
 	 * número de matrícula
 	 * 
 	 * @param numeroMatricula
-	 * @return Instancia de SustentanteTO con datos del 
+	 * @return Instancia de sustentanteTO con datos del 
 	 * 			sustentante. Si no se encontró, entonces
 	 * 			regresa nulo.
 	 */
     SustentanteTO obtenerPorMatricula(int numeroMatricula) {
-		SustentanteTO sustenante = null
+		SustentanteTO sustentante = null
 		def rest = new RestBuilder()
 		def resp = rest.get(getByNumeroMatriculaUrl + numeroMatricula)
 
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd")
 		
 		if(resp.json != null){
-			sustenante = new SustentanteTO()
-			sustenante.id = resp.json.'id'
-			sustenante.numeroMatricula = resp.json.'numeroMatricula'
-			sustenante.nombre = resp.json.'nombre'
-			sustenante.primerApellido = resp.json.'primerApellido'
-			sustenante.segundoApellido = resp.json.'segundoApellido'
-			sustenante.genero = resp.json.'genero'
-			sustenante.rfc = resp.json.'rfc'
-			sustenante.curp = resp.json.'curp'
-			sustenante.fechaNacimiento = df.parse(resp.json.'fechaNacimiento'.substring(0,10))
-			sustenante.correoElectronico = resp.json.'correoElectronico'
+			sustentante = new SustentanteTO()
+			sustentante.id = resp.json.'id'
+			sustentante.numeroMatricula = resp.json.'numeroMatricula'
+			sustentante.nombre = resp.json.'nombre'
+			sustentante.primerApellido = resp.json.'primerApellido'
+			sustentante.segundoApellido = resp.json.'segundoApellido'
+			sustentante.genero = resp.json.'genero'
+			sustentante.rfc = resp.json.'rfc'
+			sustentante.curp = resp.json.'curp'
+			sustentante.fechaNacimiento = df.parse(resp.json.'fechaNacimiento'.substring(0,10))
+			sustentante.correoElectronico = resp.json.'correoElectronico'
 			sustentante.nacionalidad = new NacionalidadTO()
 			if(resp.json.'nacionalidad' instanceof JSONObject && JSONObject.NULL.equals(resp.json.'nacionalidad')){
 				sustentante.nacionalidad.id = resp.json.'nacionalidad'.'id'
@@ -75,7 +75,7 @@ class SustentanteService {
 			sustentante.puestos = new ArrayList<PuestoTO>()
 			sustentante.certificaciones = new ArrayList<CertificacionTO>()
 		}
-		return sustenante
+		return sustentante
     }
 
 	/**

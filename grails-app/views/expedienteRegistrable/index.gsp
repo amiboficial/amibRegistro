@@ -32,7 +32,7 @@
 			<div role="tabpanel" class="tab-pane active" id="divBusqSimple">
 				<div id="divSimpMatricula" class="form-group">
 					<label class="col-md-2 col-sm-3 control-label">
-						<g:message code="expediente.matricula.label" default="Matricula" />
+						<g:message code="registrable.matricula.label" default="Matricula" />
 					</label>
 					<div class="col-md-9 col-sm-9">
 						<g:textField name="fltSimpMat" id="txtSimpMatricula" class="form-control" maxlength="10" value="" />
@@ -57,7 +57,7 @@
 			
 				<div id="divAvNombre" class="form-group">
 					<label class="col-md-2 col-sm-3 control-label">
-						<g:message code="notario.nombre.label" default="Nombre" />
+						<g:message code="registrable.nombre.label" default="Nombre" />
 					</label>
 					<div class="col-md-9 col-sm-9">
 						<g:textField id="txtAvNombre" maxlength="80" class="form-control" name="fltAvNombre" value="" />
@@ -66,32 +66,32 @@
 				
 				<div id="divAvApellido1" class="form-group">
 					<label class="col-md-2 col-sm-3 control-label">
-						<g:message code="notario.apellido1.label" default="Primer apellido" />
+						<g:message code="registrable.primerApellido.label" default="Primer apellido" />
 					</label>
 					<div class="col-md-9 col-sm-9">
-						<g:textField id="txtAvApellido1" maxlength="100" class="form-control" name="fltAvApellido1" value="" />
+						<g:textField id="txtAvPrimerApellido" maxlength="100" class="form-control" name="fltAvPrimerApellido" value="" />
 					</div>
 				</div>
 				
 				<div id="divAvApellido2" class="form-group">
 					<label class="col-md-2 col-sm-3 control-label">
-						<g:message code="notario.apellido1.label" default="Segundo apellido" />
+						<g:message code="registrable.segundoApellido.label" default="Segundo apellido" />
 					</label>
 					<div class="col-md-9 col-sm-9">
-						<g:textField id="txtAvApellido2" maxlength="100" class="form-control" name="fltAvApellido2" value="" />
+						<g:textField id="txtAvSegundoApellido" maxlength="100" class="form-control" name="fltAvSegundoApellido" value="" />
 					</div>
 				</div>
 				
 				<div id="divAv" class="form-group">
 					<label class="col-md-2 col-sm-3 control-label">
-						<g:message code="notario.figura.label" default="Figura" />
+						<g:message code="registrable.figura.label" default="Figura" />
 					</label>
 					<div class="col-md-9 col-sm-9">
-						<g:select name='fltAvFigura' class="form-control" id="selAvIdFigura" 
-						value="${viewModelInstance?.fltAvFigura}"
+						<g:select name='fltAvVarFigura' class="form-control" id="selAvIdVarFigura"
+						value="${viewModelInstance?.fltAvVarFigura}"
 						noSelection="${['-1':'-Seleccione-']}"
-						from='${viewModelInstance?.figuraList}'
-						optionKey="id" optionValue="descripcion"></g:select>
+						from='${viewModelInstance?.varFiguraList}'
+						optionKey="id" optionValue="nombre"></g:select>
 					</div>
 				</div>
 				
@@ -121,10 +121,11 @@
 			<table class="table">
 				<thead>
 					<tr>
-						<g:sortableColumn property="matricula" title="${message(code: 'registrable.matricula.label', default: 'Matrícula')}" />
-						<g:sortableColumn property="nombre" title="${message(code: 'registrable.nombre.label', default: 'Nombre')}" />
-						<g:sortableColumn property="apellido1" title="${message(code: 'registrable.apellido1.label', default: 'Primer Apellido')}" />
-						<g:sortableColumn property="apellido2" title="${message(code: 'registrable.apellido2.label', default: 'Segundo Apellido')}" />
+						<th>${message(code: 'registrable.matricula.label', default: 'Matrícula')}</th>
+						<th>${message(code: 'registrable.nombre.label', default: 'Nombre')}</th>
+						<th>${message(code: 'registrable.primerApellido.label', default: 'Primer Apellido')}</th>
+						<th>${message(code: 'registrable.segundoApellido.label', default: 'Segundo Apellido')}</th>
+						<th>${message(code: 'registrable.fechaExamen.label', default: 'Fecha de exámen')}</th>
 						<th>...</th>
 					</tr>
 					<tr>
@@ -132,6 +133,7 @@
 						<td>Daniel</td>
 						<td>López</td>
 						<td>Pérez</td>
+						<td>17/06/1990</td>
 						<td><button class="btn btn-default btn-xs">Registrar</button></td>
 					</tr>
 				</thead>

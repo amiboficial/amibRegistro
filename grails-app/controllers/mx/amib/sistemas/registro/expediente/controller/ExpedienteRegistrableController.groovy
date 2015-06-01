@@ -1,12 +1,20 @@
 package mx.amib.sistemas.registro.expediente.controller
 
+import mx.amib.sistemas.external.catalogos.service.EstadoCivilTO
 import mx.amib.sistemas.external.catalogos.service.FiguraTO
+import mx.amib.sistemas.external.catalogos.service.InstitucionTO
+import mx.amib.sistemas.external.catalogos.service.NacionalidadTO
+import mx.amib.sistemas.external.catalogos.service.NivelEstudiosTO
 import mx.amib.sistemas.external.catalogos.service.VarianteFiguraTO
+import mx.amib.sistemas.external.catalogos.service.TipoTelefonoTO
+
 import mx.amib.sistemas.external.expediente.certificacion.service.CertificacionTO
 import mx.amib.sistemas.external.expediente.persona.service.DocumentoSustentanteTO
 import mx.amib.sistemas.external.expediente.persona.service.PuestoTO
 import mx.amib.sistemas.external.expediente.persona.service.TelefonoSustentanteTO
+
 import mx.amib.sistemas.registro.legacy.saaec.RegistroExamenTO
+
 import mx.amib.sistemas.utils.CatalogConvertUtils
 import org.codehaus.groovy.grails.web.json.JSONArray
 
@@ -25,36 +33,77 @@ class ExpedienteRegistrableController {
 	def sustentanteService
 	def tipoTelefonoService
 
-
 	def metodoCertificacionService
 	def statusAutorizacionService
 	def statusCertificacionService
 
     def index() {
 		def viewModelInstance = this.getIndexViewModel(params)
-		respond new Object(),model: [viewModelInstance:viewModelInstance]
+		respond new Object(), model: [viewModelInstance:viewModelInstance]
 	}
 
 	private IndexViewModel getIndexViewModel(Map params){
 		IndexViewModel vm = new IndexViewModel()
+
+		vm.fltTipoBusqueda = (params.'fltTipoBusqueda'==null)?"":params.'fltTipoBusqueda'
+		vm.fltSimpMat = (params.'fltSimpMat'==null||params.'fltSimpMat'=="")?null:params.'fltSimpMat'.toInteger()
+		vm.fltAvNombre = (params.'fltAvNombre'==null)?"":params.'fltAvNombre'
+		vm.fltAvPrimerApellido = (params.'fltAvPrimerApellido'==null)?"":params.'fltAvPrimerApellido'
+		vm.fltAvSegundoApellido = (params.'fltAvSegundoApellido'==null)?"":params.'fltAvSegundoApellido'
+		vm.fltAvVarFigura = (params.'fltAvVarFigura'==null||params.'fltAvVarFigura'=="")?-1:params.'fltAvVarFigura'.toLong()
+
+		//SOLO LOS PRIMEROS 25 RESULTADOS SON MOSTRADOS
+		if(vm.fltTipoBusqueda == 'S'){ //simple
+			vm.searchResults = registroExamenService.findAllRegistrableByNumeroMatricula(vm.fltSimpMat)
+		}
+		else if(vm.fltTipoBusqueda == 'A'){ //avanzada
+			vm.searchResults = registroExamenService.findAllRegistrable(vm.fltAvNombre,vm.fltAvPrimerApellido,vm.fltAvSegundoApellido,vm.fltAvVarFigura)
+		}
+		else if(vm.fltTipoBusqueda == 'T'){ //mostrar los mas recientes
+			vm.searchResults = registroExamenService.findAllRegistrable("","","",null)
+		}
+
+		//carga la lista de variantes de figura
 		vm.varFiguraList = figuraService.listVariantes().findAll{ it.vigente == true }.sort{ it.nombre }
-		vm.searchResults = registroExamenService.findAllRegistrable("C","C","",null)
+
 		return vm
 	}
 
-	def create() {
-		def estadoCivilList = estadoCivilService.list()
-		def institucionesList = entidadFinancieraService.obtenerInstituciones()
-		def nacionalidadList = nacionalidadService.list()
-		def nivelEstudiosList = nivelEstudiosService.list()
-		def tipoTelefonoList = tipoTelefonoService.list()
-		
-		def institutoInstance = entidadFinancieraService.obtenerInstitucion(4) //<-se obtiene del elemento "registrable"
-		def varianteFiguraInstance = figuraService.getVariante(195) //<-se obtiene del elemento "registrable"
+	def create(Integer id) {
+		def viewModelInstance = this.getCreateViewModel(id)
 
-		respond new Object(), model:[institutoInstance: institutoInstance, varianteFiguraInstance: varianteFiguraInstance, 
-										estadoCivilList:estadoCivilList, institucionesList: institucionesList, nacionalidadList:nacionalidadList, 
-										nivelEstudiosList:nivelEstudiosList, tipoTelefonoList: tipoTelefonoList]
+		respond new Object(), model:[viewModelInstance:viewModelInstance]
+	}
+
+	private CreateViewModel getCreateViewModel(Integer id){
+		CreateViewModel cvm = new CreateViewModel()
+		if(id != null){
+			def res = registroExamenService.findAllRegistrableByNumeroMatricula(id)
+			if(res.size() > 0){
+				cvm.registroExamenInstance = res.first()
+				cvm.institutoInstance = entidadFinancieraService.obtenerInstitucion(4) //<-se obtiene del elemento "registrable"
+				cvm.varianteFiguraInstance = figuraService.getVariante(cvm.registroExamenInstance.idFigura) //<-se obtiene del elemento "registrable"
+			}
+			else{
+				cvm.registroExamenInstance = new RegistroExamenTO()
+				cvm.registroExamenInstance.numeroMatricula = -1
+				cvm.institutoInstance = entidadFinancieraService.obtenerInstitucion(4) //<-se obtiene del elemento "registrable"
+				cvm.varianteFiguraInstance = figuraService.getVariante(195) //<-se obtiene del elemento "registrable"
+			}
+		}
+		else{
+			cvm.registroExamenInstance = new RegistroExamenTO()
+			cvm.registroExamenInstance.numeroMatricula = -1
+			cvm.institutoInstance = entidadFinancieraService.obtenerInstitucion(4) //<-se obtiene del elemento "registrable"
+			cvm.varianteFiguraInstance = figuraService.getVariante(195) //<-se obtiene del elemento "registrable"
+		}
+		cvm.estadoCivilList = estadoCivilService.list()
+		cvm.institucionesList = entidadFinancieraService.obtenerInstituciones()
+		cvm.nacionalidadList = nacionalidadService.list()
+		cvm.nivelEstudiosList = nivelEstudiosService.list()
+		cvm.tipoTelefonoList = tipoTelefonoService.list()
+
+		return cvm
 	}
 
 	def save(SustentanteTO sustentante) {
@@ -126,13 +175,25 @@ class ExpedienteRegistrableController {
 	class IndexViewModel{
 		Collection<VarianteFiguraTO> varFiguraList //listado de variantes figuras
 
-		String fltSimpMat
+		String fltTipoBusqueda //'S' simple -'A' avanzada - 'T' los mas recientes
+		Integer fltSimpMat
 		String fltAvNombre
 		String fltAvPrimerApellido
 		String fltAvSegundoApellido
 		Long fltAvVarFigura //id de variante figura
 
 		Collection<RegistroExamenTO> searchResults = new ArrayList<RegistroExamenTO>()
+	}
 
+	class CreateViewModel{
+		RegistroExamenTO registroExamenInstance
+
+		Collection<EstadoCivilTO> estadoCivilList
+		Collection<InstitucionTO> institucionesList
+		Collection<NacionalidadTO> nacionalidadList
+		Collection<NivelEstudiosTO> nivelEstudiosList
+		Collection<TipoTelefonoTO> tipoTelefonoList
+		InstitucionTO institutoInstance
+		VarianteFiguraTO varianteFiguraInstance
 	}
 }

@@ -83,7 +83,31 @@
 	<g:render template="../common/expedienteGenerales"/>
 	<g:javascript src="mx.amib.sistemas.registro.expediente.form.generales.js" />
 	<script>
-	var generalesView = new app.GeneralesView(new app.Generales());
+
+	var generalesModel = new app.Generales();
+	generalesModel.set("numeroMatricula",${viewModelInstance?.registroExamenInstance?.numeroMatricula});
+	generalesModel.set("nombre","${raw(viewModelInstance?.registroExamenInstance?.nombre)}");
+	generalesModel.set("primerApellido","${raw(viewModelInstance?.registroExamenInstance?.primerApellido)}");
+	generalesModel.set("segundoApellido","${raw(viewModelInstance?.registroExamenInstance?.segundoApellido)}");
+
+	generalesModel.set("fechaNacimientoDay",-1);
+	generalesModel.set("fechaNacimientoMonth",-1);
+	generalesModel.set("fechaNacimientoYear",-1);
+
+	generalesModel.set("genero","${viewModelInstance?.registroExamenInstance?.genero}");
+	generalesModel.set("rfc","${viewModelInstance?.registroExamenInstance?.rfc}");
+	generalesModel.set("curp","${viewModelInstance?.registroExamenInstance?.curp}");
+	generalesModel.set("correoElectronico","${viewModelInstance?.registroExamenInstance?.correoElectronico}");
+
+	generalesModel.set("estadoCivil",${viewModelInstance?.registroExamenInstance?.idEstadoCivil});
+	generalesModel.set("nivelEstudios",${viewModelInstance?.registroExamenInstance?.idNivelEstudios});
+	generalesModel.set("nacionalidad",${viewModelInstance?.registroExamenInstance?.idNacionalidad});
+
+	generalesModel.set("calidadMigratoria","");
+	generalesModel.set("profesion","");
+
+	var generalesView = new app.GeneralesView(generalesModel);
+
 	</script>
 	
 	<g:render template="../common/expedienteTelefonos"/>

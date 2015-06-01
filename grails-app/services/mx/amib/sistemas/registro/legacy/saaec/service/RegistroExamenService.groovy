@@ -9,7 +9,7 @@ import mx.amib.sistemas.registro.legacy.saaec.RegistroExamenTO
 @Transactional
 class RegistroExamenService {
 
-    private static final Integer MAX_RESULTS = 25
+    private static final Integer MAX_RESULTS = 100
 
     static HashMap<String,Long> tablaNacionalidades = new HashMap<String,Long>()
 
@@ -90,18 +90,21 @@ class RegistroExamenService {
         StringBuilder dynFiltersStr = new StringBuilder()
         StringBuilder baseSqlQuery = new StringBuilder()
         Map<String,Object> namedParameters = new HashMap<String,Object>()
+        List<Integer> matriculasEnSaaec = new ArrayList<Integer>()
+        List<Integer> matriculasNoEnExpediente = new ArrayList<Integer>()
+
         //Añade el filtro
-        if(nombre != null && nombre.trim().compareToIgnoreCase("") == 0){
-            dynFilters.add(" USU_NOMBRE LIKE :nombre ")
-            namedParameters.put("nombre",nombre+"%")
+        if(nombre != null && nombre.trim().compareToIgnoreCase("") != 0){
+            dynFilters.add(" UPPER(USU_NOMBRE) LIKE :nombre ")
+            namedParameters.put("nombre",nombre.toUpperCase()+"%")
         }
-        if(primerApellido != null && primerApellido.trim().compareToIgnoreCase("") == 0){
-            dynFilters.add(" USU_APE_PATERNO LIKE :primerApellido ")
-            namedParameters.put("primerApellido",primerApellido+"%")
+        if(primerApellido != null && primerApellido.trim().compareToIgnoreCase("") != 0){
+            dynFilters.add(" UPPER(USU_APE_PATERNO) LIKE :primerApellido ")
+            namedParameters.put("primerApellido",primerApellido.toUpperCase()+"%")
         }
-        if(segundoApellido != null && segundoApellido.trim().compareToIgnoreCase("") == 0){
-            dynFilters.add(" USU_APE_MATERNO LIKE :segundoApellido ")
-            namedParameters.put("segundoApellido",segundoApellido+"%")
+        if(segundoApellido != null && segundoApellido.trim().compareToIgnoreCase("") != 0){
+            dynFilters.add(" UPPER(USU_APE_MATERNO) LIKE :segundoApellido ")
+            namedParameters.put("segundoApellido",segundoApellido.toUpperCase()+"%")
         }
         if(idFigura != null && idFigura > 0){
             dynFilters.add(" ER.IDE_CON_FIGURA = :idFigura ")
@@ -151,16 +154,24 @@ class RegistroExamenService {
                                     JOIN FIGURA F ON CF.IDE_FIGURA = F.IDE_FIGURA
                                 WHERE  (ER.IDE_EST_EXAMEN = 3 OR ER.IDE_EST_EXAMEN = 7) """)
         baseSqlQuery.append(dynFiltersStr.toString())
-        baseSqlQuery.append("ORDER BY EC.EXA_CAL_FEC_APLICACION, USU_NOMBRE, USU_APE_PATERNO, USU_APE_MATERNO")
-        saecRowRegs = sql.rows(namedParameters,baseSqlQuery.toString())
-        saecRowRegs.each {
-            RegistroExamenTO registro = this.groovyRowResultToRegistroExamenTO(it)
-            //println "R -> " + (registro as JSON)
-            //revisa si el registrode la matrícula se encuentra ya en expediente
-            //TODO: Se puede mejorar el rendimiento si se revisa todo un lote de numeros de matricula
-            def sustentante = sustentanteService.obtenerPorMatricula(registro.numeroMatricula)
-            if(sustentante == null){
-                registros.add(registro)
+        baseSqlQuery.append(" ORDER BY EC.EXA_CAL_FEC_APLICACION DESC, USU_NOMBRE, USU_APE_PATERNO, USU_APE_MATERNO")
+
+        if(namedParameters.size() > 0)
+            saecRowRegs = sql.rows(namedParameters,baseSqlQuery.toString())
+        else
+            saecRowRegs = sql.rows(baseSqlQuery.toString())
+
+        //Revisa si las matriculas recuperadas ya se encuentran en expediente
+        saecRowRegs.each { row ->
+            matriculasEnSaaec.add((Integer)row.get("IDE_USUARIO"))
+        }
+        matriculasNoEnExpediente = sustentanteService.comprobarMatriculasNotIn(matriculasEnSaaec)
+
+        //Descarta el registro si la matricula ya se encuentra en expediente
+        saecRowRegs.each { row ->
+            Integer matriculaReg = (Integer)row.get("IDE_USUARIO")
+            if( matriculasNoEnExpediente.contains(matriculaReg) ){
+                registros.add( this.groovyRowResultToRegistroExamenTO(row) )
             }
         }
         return registros
@@ -222,7 +233,7 @@ class RegistroExamenService {
         re.nombre = grr.get("USU_NOMBRE")
         re.primerApellido = grr.get("USU_APE_PATERNO")
         re.segundoApellido = grr.get("USU_APE_MATERNO")
-        re.genero = grr.get("USU_SEXO")
+        re.genero = ( grr.get("USU_SEXO") == true )?'M':'F'
         re.rfc = grr.get("USU_RFC")
         re.curp = grr.get("USU_CURP")
         re.domicilio = grr.get("USU_DOMICILIO1") + " " + grr.get("USU_DOMICILIO2")
@@ -235,7 +246,7 @@ class RegistroExamenService {
         re.correoElectronico = grr.get("USU_EMAIL")
         re.idEstadoCivil = (Long)grr.get("IDE_EST_CIVIL")
         re.idNivelEstudios = (Long)grr.get("IDE_NIV_ESTUDIO")
-        re.idNacionalidad = this.oldNacionalidadToNewIdNacionalidad(grr.get("USU_NACIONALIDAD"))
+        re.idNacionalidad = this.oldNacionalidadToNewIdNacionalidad( grr.get("USU_NACIONALIDAD")?:"Mexicana" )
         re.oldNacionalidad = grr.get("USU_NACIONALIDAD")
         return re
     }

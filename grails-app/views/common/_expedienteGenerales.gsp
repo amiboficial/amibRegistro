@@ -255,7 +255,7 @@
 					<div class="col-md-9 col-sm-9">
 						<g:select class="form-control estadoCivil" name='ZXhwZWRpZW50ZS5lc3RhZG9DaXZpbA' 
 						noSelection="${['-1':'-Seleccione-']}"
-						from='${estadoCivilList}'
+						from='${viewModelInstance.estadoCivilList}'
 						optionKey="id" optionValue="descripcion"></g:select>
 		            </div>
 				</div>
@@ -267,7 +267,7 @@
 					<div class="col-md-9 col-sm-9">
 		            	<g:select class="form-control nivelEstudios" name='ZXhwZWRpZW50ZS5uaXZlbEVzdHVkaW9z' 
 						noSelection="${['-1':'-Seleccione-']}"
-						from='${nivelEstudiosList}'
+						from='${viewModelInstance.nivelEstudiosList}'
 						optionKey="id" optionValue="descripcion"></g:select>
 		            </div>
 				</div>
@@ -278,7 +278,7 @@
 					<div class="col-md-9 col-sm-9">
 		            	<g:select class="form-control nacionalidad" name='ZXhwZWRpZW50ZS5uYWNpb25hbGlkYWQ' 
 						noSelection="${['-1':'-Seleccione-']}"
-						from='${nacionalidadList}'
+						from='${viewModelInstance.nacionalidadList}'
 						optionKey="id" optionValue="descripcion"></g:select>
 		            </div>
 				</div>

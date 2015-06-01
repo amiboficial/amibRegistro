@@ -155,6 +155,8 @@ mx.amib.sistemas.catalogos.sepomex.EntidadFederativa.list = 'entidadFederativaRe
 mx.amib.sistemas.catalogos.sepomex.Sepomex.findByCodigoPostal = 'sepomexRestful/findByCodigoPostal?cp='
 
 //especificaciones de rutas para servicios REST de amibExpediente
+mx.amib.sistemas.expediente.Sustentante.comprobarMatriculas = 'sustentanteRestful/comprobarMatriculas/'
+mx.amib.sistemas.expediente.Sustentante.comprobarMatriculasNotIn = 'sustentanteRestful/comprobarMatriculasNotIn/'
 mx.amib.sistemas.expediente.Sustentante.obtenerSustentantePorMatricula = 'sustentanteRestful/obtenerSustentantePorMatricula/'
 mx.amib.sistemas.expediente.Sustentante.save = 'sustentanteRestful/save'
 mx.amib.sistemas.expediente.certificacion.MetodoCertificacion.list = 'metodoCertificacionRestful/index?max=100'

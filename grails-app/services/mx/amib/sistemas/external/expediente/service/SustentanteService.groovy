@@ -1,5 +1,7 @@
 package mx.amib.sistemas.external.expediente.service
 
+import org.hibernate.dialect.Ingres10Dialect
+
 import java.util.Date
 import java.text.DateFormat
 import java.text.SimpleDateFormat
@@ -23,12 +25,43 @@ import mx.amib.sistemas.external.expediente.persona.service.*
  * @version 1.0 - (Última actualización) 13/09/2014
  *			1.1 - TODO: Se tiene que cambiar de paquete
  *			1.2 - Se agrega metodo save
+ *			1.3 - Se agrega metodo para comprobar matriculas
  */
 @Transactional
 class SustentanteService {
 
+	String comprobarMatriculasUrl
+	String comprobarMatriculasNotInUrl
 	String getByNumeroMatriculaUrl
 	String saveUrl
+
+	Collection<Integer> comprobarMatriculas(Collection<Integer> matriculasComprobar){
+		Collection<Integer> result = new ArrayList<Integer>()
+		def rest = new RestBuilder()
+		def resp = rest.post(comprobarMatriculasUrl){
+			json {
+				matriculas = matriculasComprobar
+			}
+		}
+		if(resp.json != null) {
+			result = new ArrayList<Integer>( resp.json )
+		}
+		return result
+	}
+
+	Collection<Integer> comprobarMatriculasNotIn(Collection<Integer> matriculasComprobar){
+		Collection<Integer> result = new ArrayList<Integer>()
+		def rest = new RestBuilder()
+		def resp = rest.post(comprobarMatriculasNotInUrl){
+			json {
+				matriculas = matriculasComprobar
+			}
+		}
+		if(resp.json != null) {
+			result = new ArrayList<Integer>( resp.json )
+		}
+		return result
+	}
 
 	/**
 	 * Obtiene los datos de un sustentante dado su 
@@ -77,6 +110,8 @@ class SustentanteService {
 		}
 		return sustentante
     }
+
+
 
 	/**
 	 * Guarda los datos de un nuevo sustentante

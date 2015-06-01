@@ -17,25 +17,35 @@
 	<g:if test="${flash.message}">
 		<div class="alert alert-info"><span class="glyphicon glyphicon-info-sign"></span> ${flash.message}</div>
 	</g:if>
-	
+
+	<div id="divErrorMsg" class="alert alert-danger" style="display: none"><span class="glyphicon glyphicon-info-sign"></span>
+		Se han presentado los siguientes errores:<br/>
+		<span id="spnErrorMsg"></span>
+	</div>
+
 	<form id="frmApp" class="form-horizontal" role="form" action="<g:createLink controller="expedienteRegistrable" action="index" />" method="get">
-	
+	<input id="hdnTipoBusqueda" name="fltTipoBusqueda" type="hidden" value="T" />
 	<fieldset>
 		<legend>Búsqueda de autorizables</legend>
 		
 		<ul class="nav nav-tabs" role="tablist">
-			<li role="presentation" class="active"><a href="#divBusqSimple" aria-controls="divBusqSimple" role="tab" data-toggle="tab">Por matrícula</a></li>
-			<li role="presentation"><a href="#divBusqAv" aria-controls="divBusqAv" role="tab" data-toggle="tab">Búsqueda avanzada</a></li>
+			<li role="presentation" class="<g:if test="${viewModelInstance?.fltTipoBusqueda == 'S' || viewModelInstance?.fltTipoBusqueda == null || viewModelInstance?.fltTipoBusqueda == ''|| viewModelInstance?.fltTipoBusqueda == 'M'}">active</g:if>" >
+				<a href="#divBusqSimple" aria-controls="divBusqSimple" role="tab" data-toggle="tab">Por matrícula</a>
+			</li>
+			<li role="presentation" class="<g:if test="${viewModelInstance?.fltTipoBusqueda == 'A'}">active</g:if>" >
+				<a href="#divBusqAv" aria-controls="divBusqAv" role="tab" data-toggle="tab">Búsqueda avanzada</a>
+			</li>
 		</ul>
 		<br/>
 		<div class="tab-content">
-			<div role="tabpanel" class="tab-pane active" id="divBusqSimple">
+			<div role="tabpanel" class="tab-pane <g:if test="${viewModelInstance?.fltTipoBusqueda == 'S' || viewModelInstance?.fltTipoBusqueda == null || viewModelInstance?.fltTipoBusqueda == ''|| viewModelInstance?.fltTipoBusqueda == 'M'}">active</g:if>" id="divBusqSimple">
 				<div id="divSimpMatricula" class="form-group">
 					<label class="col-md-2 col-sm-3 control-label">
 						<g:message code="expedienteRegistrable.matricula.label" default="Matricula" />
 					</label>
 					<div class="col-md-9 col-sm-9">
-						<g:textField name="fltSimpMat" id="txtSimpMatricula" class="form-control" maxlength="10" value="" />
+						<g:textField name="fltSimpMat" id="txtSimpMatricula" class="form-control" maxlength="10"
+									 value="${viewModelInstance?.fltSimpMat}" />
 					</div>
 				</div>
 				<div id="divSimpButtonArea" class="form-group">
@@ -44,7 +54,7 @@
 					</div>
 					<div class="col-md-6 col-sm-6" style="text-align: center">
 						<button id="btnSimpLimpiar" type="button" class="btn btn-default btn-primary">Limpiar campos</button>
-						<button id="btnSimpMostrarTodos" type="button" class="btn btn-default btn-primary">Mostrar todos</button>
+						<button id="btnSimpMostrarRecientes" type="button" class="btn btn-default btn-primary">Mostrar recientes</button>
 						<button id="btnSimpBuscar" type="button" class="btn btn-default btn-primary"><span class="glyphicon glyphicon-search"></span> Realizar búsqueda</button>
 					</div>
 					<div class="col-md-3 col-sm-3">
@@ -53,32 +63,32 @@
 				</div>
 			</div>
 			
-			<div role="tabpanel" class="tab-pane" id="divBusqAv">
+			<div role="tabpanel" class="tab-pane <g:if test="${viewModelInstance?.fltTipoBusqueda == 'A'}">active</g:if>" id="divBusqAv">
 			
 				<div id="divAvNombre" class="form-group">
 					<label class="col-md-2 col-sm-3 control-label">
 						<g:message code="expedienteRegistrable.nombre.label" default="Nombre" />
 					</label>
 					<div class="col-md-9 col-sm-9">
-						<g:textField id="txtAvNombre" maxlength="80" class="form-control" name="fltAvNombre" value="" />
+						<g:textField id="txtAvNombre" maxlength="80" class="form-control" name="fltAvNombre" value="${viewModelInstance?.fltAvNombre}" />
 					</div>
 				</div>
 				
-				<div id="divAvApellido1" class="form-group">
+				<div id="divAvPrimerApellido" class="form-group">
 					<label class="col-md-2 col-sm-3 control-label">
 						<g:message code="expedienteRegistrable.primerApellido.label" default="Primer apellido" />
 					</label>
 					<div class="col-md-9 col-sm-9">
-						<g:textField id="txtAvPrimerApellido" maxlength="100" class="form-control" name="fltAvPrimerApellido" value="" />
+						<g:textField id="txtAvPrimerApellido" maxlength="100" class="form-control" name="fltAvPrimerApellido" value="${viewModelInstance?.fltAvPrimerApellido}" />
 					</div>
 				</div>
 				
-				<div id="divAvApellido2" class="form-group">
+				<div id="divAvSegundoApellido" class="form-group">
 					<label class="col-md-2 col-sm-3 control-label">
 						<g:message code="expedienteRegistrable.segundoApellido.label" default="Segundo apellido" />
 					</label>
 					<div class="col-md-9 col-sm-9">
-						<g:textField id="txtAvSegundoApellido" maxlength="100" class="form-control" name="fltAvSegundoApellido" value="" />
+						<g:textField id="txtAvSegundoApellido" maxlength="100" class="form-control" name="fltAvSegundoApellido" value="${viewModelInstance?.fltAvSegundoApellido}" />
 					</div>
 				</div>
 				
@@ -101,7 +111,7 @@
 					</div>
 					<div class="col-md-6 col-sm-6" style="text-align: center">
 						<button id="btnAvLimpiar" type="button" class="btn btn-default btn-primary">Limpiar campos</button>
-						<button id="btnSimpMostrarTodos" type="button" class="btn btn-default btn-primary">Mostrar todos</button>
+						<button id="btnAvMostrarRecientes" type="button" class="btn btn-default btn-primary">Mostrar recientes</button>
 						<button id="btnAvBuscar" type="button" class="btn btn-default btn-primary"><span class="glyphicon glyphicon-search"></span> Realizar búsqueda</button>
 					</div>
 					<div class="col-md-3 col-sm-3">
@@ -128,14 +138,6 @@
 						<th>${message(code: 'expedienteRegistrable.fechaExamen.label', default: 'Fecha de exámen')}</th>
 						<th>...</th>
 					</tr>
-					<tr>
-						<td>123456</td>
-						<td>Daniel</td>
-						<td>López</td>
-						<td>Pérez</td>
-						<td>17/06/1990</td>
-						<td><button class="btn btn-default btn-xs">Registrar</button></td>
-					</tr>
 					<g:each in="${viewModelInstance.searchResults}">
 						<tr>
 							<td>${it.numeroMatricula}</td>
@@ -143,7 +145,7 @@
 							<td>${it.primerApellido}</td>
 							<td>${it.segundoApellido}</td>
 							<td>${it.fechaAplicacionExamenDay}/${it.fechaAplicacionExamenMonth}/${it.fechaAplicacionExamenYear}</td>
-							<td><button class="btn btn-default btn-xs">Registrar</button></td>
+							<td><button class="registrar btn btn-default btn-xs" data-numeroMatricula="${it.numeroMatricula}">Registrar</button></td>
 						</tr>
 					</g:each>
 				</thead>
@@ -158,6 +160,118 @@
 	
 	</form>
 
+	<script>
+
+		var app = app || {};
+
+		app.ERROR_MSG_MATRICULA = "ERROR_MSG_MATRICULA";
+		app.ERROR_MSG_NO_ELEM_BUSQ_AV = "ERROR_MSG_NO_ELEM_BUSQ_AV";
+
+		app.errorList = new Array();
+
+		$(".registrar").click(function(e){
+			e.preventDefault();
+			window.location.href = '<g:createLink controller="expedienteRegistrable" action="create" />/' + $(this).attr('data-numeroMatricula')
+		});
+
+		$("#btnSimpLimpiar").click(function(e){
+			e.preventDefault();
+			$("#txtSimpMatricula").val("");
+		});
+		$("#btnSimpMostrarRecientes").click(function(e){
+			e.preventDefault();
+
+			$("#txtSimpMatricula").val("");
+			$("#txtAvNombre").val("");
+			$("#txtAvPrimerApellido").val("");
+			$("#txtAvSegundoApellido").val("");
+			$("#selAvIdVarFigura").val("-1");
+
+			$('#hdnTipoBusqueda').val('T');
+			$("#frmApp").submit();
+		});
+		$("#btnSimpBuscar").click(function(e){
+			e.preventDefault();
+			$('#hdnTipoBusqueda').val('S');
+			if(validarCamposBusquedaSimple() == true){
+				$("#frmApp").submit();
+			}
+		});
+		$("#btnAvLimpiar").click(function(e){
+			e.preventDefault();
+			$("#txtAvNombre").val("");
+			$("#txtAvPrimerApellido").val("");
+			$("#txtAvSegundoApellido").val("");
+			$("#selAvIdVarFigura").val("-1");
+		});
+		$("#btnAvMostrarRecientes").click(function(e){
+			e.preventDefault();
+
+			$("#txtSimpMatricula").val("");
+			$("#txtAvNombre").val("");
+			$("#txtAvPrimerApellido").val("");
+			$("#txtAvSegundoApellido").val("");
+			$("#selAvIdVarFigura").val("-1");
+
+			$('#hdnTipoBusqueda').val('T');
+			$("#frmApp").submit();
+		});
+		$("#btnAvBuscar").click(function(e){
+			e.preventDefault();
+			$('#hdnTipoBusqueda').val('A');
+			if(validarCamposBusquedaAvanzada() == true){
+				$("#frmApp").submit();
+			}
+		});
+
+		function validarCamposBusquedaSimple(){
+			var matricula = $.trim( $("#txtSimpMatricula").val() );
+			var valid = true;
+
+			app.errorList = new Array();
+
+			if(matricula == "" || isNaN(matricula)){
+				app.errorList.append(app.ERROR_MSG_MATRICULA);
+				valid = false;
+			}
+
+			if(!valid){
+				$("#spnErrorMsg").html("");
+				$("#divErrorMsg").show();
+				var msgText = "";
+				for(var i=0;i<app.errorList.length;i++){
+					msgText += app.errorList[i] + "\r\n";
+				}
+			}
+			return valid;
+		}
+
+		function validarCamposBusquedaAvanzada(){
+			var nombre = $.trim( $("#txtAvNombre").val() );
+			var apellido1 = $.trim( $("#txtAvPrimerApellido").val() );
+			var apellido2 = $.trim( $("#txtAvSegundoApellido").val() );
+			var idFigura = $("#selAvIdVarFigura").val();
+			var valid = true;
+
+			app.errorList = new Array();
+			if(nombre == "" && apellido1 == "" && idFigura == "-1"){
+				console.log("el mensaje es: " + app.ERROR_MSG_NO_ELEM_BUSQ_AV);
+				app.errorList.push(app.ERROR_MSG_NO_ELEM_BUSQ_AV);
+				valid = false;
+			}
+			if(!valid){
+				$("#spnErrorMsg").html("");
+				$("#divErrorMsg").show();
+				var msgText = "";
+				for(var i=0;i<app.errorList.length;i++){
+					msgText += app.errorList[i] + "<br/>";
+				}
+				$("#spnErrorMsg").html(msgText);
+			}
+			return valid;
+		}
+
+	</script>
 
 </body>
 </html>

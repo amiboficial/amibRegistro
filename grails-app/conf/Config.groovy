@@ -159,7 +159,7 @@ mx.amib.sistemas.expediente.Sustentante.comprobarMatriculas = 'sustentanteRestfu
 mx.amib.sistemas.expediente.Sustentante.comprobarMatriculasNotIn = 'sustentanteRestful/comprobarMatriculasNotIn/'
 mx.amib.sistemas.expediente.Sustentante.obtenerSustentantePorMatricula = 'sustentanteRestful/obtenerSustentantePorMatricula/'
 mx.amib.sistemas.expediente.Sustentante.save = 'sustentanteRestful/save'
-mx.amib.sistemas.expediente.certificacion.MetodoCertificacion.list = 'metodoCertificacionRestful/index?max=100'
+mx.amib.sistemas.expediente.certificacion.MetodoValidacion.list = 'metodoValidacionRestful/index?max=100'
 mx.amib.sistemas.expediente.certificacion.StatusAutorizacion.list = 'statusAutorizacionRestful/index?max=100'
 mx.amib.sistemas.expediente.certificacion.StatusCertificacion.list = 'statusCertificacionRestful/index?max=100'
 

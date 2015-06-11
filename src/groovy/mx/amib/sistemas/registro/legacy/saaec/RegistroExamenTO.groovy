@@ -28,4 +28,7 @@ class RegistroExamenTO {
     Long idNivelEstudios
     Long idNacionalidad
     String oldNacionalidad
+
+    Long idInstitucion
+    String puesto
 }

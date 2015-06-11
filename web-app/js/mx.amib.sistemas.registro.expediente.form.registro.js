@@ -13,7 +13,6 @@ app.EXP_REG_ERRMSG_NOPUESTOACT = "EXP_REG_ERRMSG_NOPUESTOACT";
 
 app.Registro = Backbone.Model.extend({
 	defaults: {
-		_printName: "registro",
 		nombrePuesto: "",
 		fechaInicioDay: -1,
 		fechaInicioMonth: -1,

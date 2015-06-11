@@ -52,7 +52,9 @@ class RegistroExamenService {
                                     USU_EMAIL,
                                     IDE_EST_CIVIL,
                                     IDE_NIV_ESTUDIO,
-                                    USU_NACIONALIDAD
+                                    USU_NACIONALIDAD,
+                                    ER.EXA_RES_INS_TRABAJA,
+                                    USU_PUESTO
                                 FROM USUARIO U
                                     JOIN EXAMEN_RESERVACION ER ON U.IDE_USUARIO = ER.IDE_USUARIO
                                     JOIN EXAMEN_CALENDARIO EC ON ER.IDE_EXA_CALENDARIO = EC.IDE_EXA_CALENDARIO
@@ -146,7 +148,9 @@ class RegistroExamenService {
                                     USU_EMAIL,
                                     IDE_EST_CIVIL,
                                     IDE_NIV_ESTUDIO,
-                                    USU_NACIONALIDAD
+                                    USU_NACIONALIDAD,
+                                    ER.EXA_RES_INS_TRABAJA,
+                                    USU_PUESTO
                                 FROM USUARIO U
                                     JOIN EXAMEN_RESERVACION ER ON U.IDE_USUARIO = ER.IDE_USUARIO
                                     JOIN EXAMEN_CALENDARIO EC ON ER.IDE_EXA_CALENDARIO = EC.IDE_EXA_CALENDARIO
@@ -248,6 +252,8 @@ class RegistroExamenService {
         re.idNivelEstudios = (Long)grr.get("IDE_NIV_ESTUDIO")
         re.idNacionalidad = this.oldNacionalidadToNewIdNacionalidad( grr.get("USU_NACIONALIDAD")?:"Mexicana" )
         re.oldNacionalidad = grr.get("USU_NACIONALIDAD")
+        re.idInstitucion = grr.get("EXA_RES_INS_TRABAJA")
+        re.puesto = grr.get("USU_PUESTO")
         return re
     }
 

@@ -9,7 +9,7 @@ class BootStrap {
 	def tipoTelefonoService
 
 	//CATALOGOS PROPIOS DE EXPEDIENTE
-	def metodoCertificacionService
+	def metodoValidacionService
 	def statusAutorizacionService
 	def statusCertificacionService
 
@@ -29,7 +29,7 @@ class BootStrap {
 		sepomexService.descargarCatalogoEntidadFederativa()
 
 		//Descarga catálogos propios del sistema de expediente
-		metodoCertificacionService.descargarCatalogo()
+		metodoValidacionService.descargarCatalogo()
 		statusAutorizacionService.descargarCatalogo()
 		statusCertificacionService.descargarCatalogo()
     }

@@ -11,7 +11,7 @@
 		            	<g:message code="datosRegistro.figura.label" default="Figura a la que aplicó" />
 					</label>
 					<div class="col-md-9 col-sm-9">
-		            	<p class="form-control-static">${viewModelInstance.varianteFiguraInstance.nombre}</p>
+		            	<p class="form-control-static">${viewModelInstance?.varianteFiguraInstance?.nombre}</p>
 		            </div>
 				</div>
 				<div class="form-group">
@@ -159,7 +159,7 @@
 		            	<g:message code="datosRegistro.autorizacionSolicitada.label" default="Autorización solicitada" />
 					</label>
 					<div class="col-md-9 col-sm-9">
-						<p class="form-control-static">${viewModelInstance.varianteFiguraInstance.figura.tipoAutorizacion}</p>
+						<p class="form-control-static">${viewModelInstance?.varianteFiguraInstance?.figura?.tipoAutorizacion}</p>
 		            </div>
 				</div>
 				
@@ -170,7 +170,7 @@
 					<div class="col-md-9 col-sm-9">
 		            	<g:select class="form-control intermediario" name='aW5zdGl0dWNpb25lcw' 
 						noSelection="${['-1':'-Seleccione-']}"
-						from='${viewModelInstance.institucionesList}'
+						from='${viewModelInstance?.institucionesList}'
 						optionKey="id" optionValue="nombre"></g:select>
 		            </div>
 				</div>

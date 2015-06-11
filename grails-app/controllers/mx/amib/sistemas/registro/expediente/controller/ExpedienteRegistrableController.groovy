@@ -9,6 +9,7 @@ import mx.amib.sistemas.external.catalogos.service.VarianteFiguraTO
 import mx.amib.sistemas.external.catalogos.service.TipoTelefonoTO
 
 import mx.amib.sistemas.external.expediente.certificacion.service.CertificacionTO
+import mx.amib.sistemas.external.expediente.certificacion.service.ValidacionTO
 import mx.amib.sistemas.external.expediente.persona.service.DocumentoSustentanteTO
 import mx.amib.sistemas.external.expediente.persona.service.PuestoTO
 import mx.amib.sistemas.external.expediente.persona.service.TelefonoSustentanteTO
@@ -123,7 +124,7 @@ class ExpedienteRegistrableController {
 				t.lada = it.'lada'
 				t.telefono = it.'telefono'
 				t.extension = it.'extension'
-				t.idTipoTelefonoSustentante = Long.parseLong(it.'idTipoTelefono')
+				t.idTipoTelefonoSustentante = (Long)it.'idTipoTelefono'
 				//t.tipoTelefonoSustentante = CatalogConvertUtils.fromCatalogosToExpediente( tipoTelefonoService.get() )
 				sustentante.telefonos.add(t)
 			}
@@ -146,20 +147,35 @@ class ExpedienteRegistrableController {
 		fechaFinCalendar.add(Calendar.YEAR,3)
 		c.fechaFin = fechaFinCalendar.getTime()
 		c.fechaObtencion = sdf.parse(params.'registro.fechaObtencion_day' + '-' + params.'registro.fechaObtencion_month' + '-' + params.'registro.fechaObtencion_year')
-		c.nombreUsuarioActualizo = "USUARIO_QUE_ACTUALIZO"
-		c.esLaActual = true
-		c.fechaUltimoCambioStatusEsLaActual = new Date()
-		c.varianteFigura = CatalogConvertUtils.fromCatalogosToExpediente( figuraService.getVariante(Long.parseLong(params.'registro.idVarianteFigura')) ) //TODO: Importar catálogo
+		//c.esLaActual = true
+		//c.fechaUltimoCambioStatusEsLaActual = new Date()
+		//c.varianteFigura = CatalogConvertUtils.fromCatalogosToExpediente( figuraService.getVariante(Long.parseLong(params.'registro.idVarianteFigura')) ) //TODO: Importar catálogo
 		//c.statusAutorizacion = statusAutorizacionService.get(2)
 		//c.statusCertificacion = statusCertificacionService.get(2)
 		//c.metodoCertificacion = metodoCertificacionService.get(1)
+		c.idVarianteFigura = Long.parseLong(params.'registro.idVarianteFigura')
 		c.idStatusAutorizacion = 2 //En dictamen previo
 		c.idStatusCertificacion = 2 //Certificado
-		c.idMetodoCertificacion = 1 //Exámen
+		c.isApoderado = false
+		c.isAutorizado = false
+
+		ValidacionTO v = new ValidacionTO()
+		v.fechaAplicacion = new Date()
+		v.fechaInicio = new Date()
+		v.fechaFin = fechaFinCalendar.getTime()
+		v.autorizadoPorUsuario = "REGISTRO_DESDE_SAEEC"
+		v.idMetodoValidacion = 1 //Exámen
+		v.fechaCreacion = new Date()
+		v.fechaModificacion = new Date()
+		v.certificacion = null
+
+		//c.idMetodoCertificacion = 1 //Exámen
 		c.fechaCreacion = new Date()
 		c.fechaModificacion = new Date()
-		sustentante.certificaciones.add(c)
+		c.validaciones = new ArrayList<ValidacionTO>()
+		c.validaciones.add(v)
 
+		sustentante.certificaciones.add(c)
 		sustentante.fechaCreacion = new Date()
 		sustentante.fechaModificacion = new Date()
 

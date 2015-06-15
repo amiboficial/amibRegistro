@@ -614,7 +614,6 @@ class PoderIndexViewModel {
 	Long filterIdInstitucion
 	Boolean fltNoVerificado
 	Boolean fltNoAprobado
-	
-	
+
 	Long countPendientes
 }

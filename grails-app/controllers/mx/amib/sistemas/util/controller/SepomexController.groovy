@@ -15,7 +15,7 @@ class SepomexController {
 		{
 			sepomexData = sepomexService.obtenerDatosSepomexPorCodigoPostal(id)
 			if(sepomexData != null && sepomexData.size() > 0)
-				res = [ status: 'OK', object: sepomexData ]
+				res = [ status: 'OK', object: sepomexData.sort{ it.asentamiento.nombre } ]
 			else
 			res = [ status: 'NO_DATA' ]
 		}

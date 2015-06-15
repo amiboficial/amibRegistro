@@ -5,6 +5,7 @@ import grails.transaction.Transactional
 import groovy.sql.GroovyRowResult
 import groovy.sql.Sql
 import mx.amib.sistemas.registro.legacy.saaec.RegistroExamenTO
+import mx.amib.sistemas.utils.StringUtils
 
 @Transactional
 class RegistroExamenService {
@@ -241,7 +242,7 @@ class RegistroExamenService {
         re.rfc = grr.get("USU_RFC")
         re.curp = grr.get("USU_CURP")
         re.domicilio = grr.get("USU_DOMICILIO1") + " " + grr.get("USU_DOMICILIO2")
-        re.codigoPostal = grr.get("USU_COD_POSTAL")
+        re.codigoPostal = StringUtils.padLeft('0' as char,grr.get("USU_COD_POSTAL").toString(),5)
         re.ciudad = grr.get("USU_CIUDAD")
         re.entidadFederativa = (Long)grr.get("IDE_ESTADO")
         re.telefonoCasa = grr.get("USU_TEL_CASA")

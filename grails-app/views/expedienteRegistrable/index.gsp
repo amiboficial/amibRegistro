@@ -18,6 +18,14 @@
 		<div class="alert alert-info"><span class="glyphicon glyphicon-info-sign"></span> ${flash.message}</div>
 	</g:if>
 
+	<g:if test="${flash.successMessage}">
+		<div class="alert alert-success"><span class="glyphicon glyphicon-info-sign"></span> ${flash.successMessage}</div>
+	</g:if>
+
+	<g:if test="${flash.errorMessage}">
+		<div class="alert alert-danger"><span class="glyphicon glyphicon-info-sign"></span> ${flash.errorMessage}</div>
+	</g:if>
+
 	<div id="divErrorMsg" class="alert alert-danger" style="display: none"><span class="glyphicon glyphicon-info-sign"></span>
 		Se han presentado los siguientes errores:<br/>
 		<span id="spnErrorMsg"></span>

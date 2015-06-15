@@ -51,6 +51,7 @@ class FiguraService {
 					snewobj.nombre = sobjjson.'nombre'
 					snewobj.vigente = sobjjson.'vigente'.toBoolean()
 					snewobj.figura = newobj
+					newobj.variantes.add(snewobj)
 					VarianteFiguraCatalog.getInstance().addElement(snewobj)
 				}
 				FiguraCatalog.getInstance().addElement(newobj)
@@ -135,7 +136,7 @@ class FiguraTO{
 	String tipoAutorizacion
 	String iniciales
 	Boolean vigente
-	VarianteFiguraTO[] variantes
+	List<VarianteFiguraTO> variantes
 }
 
 class VarianteFiguraTO{

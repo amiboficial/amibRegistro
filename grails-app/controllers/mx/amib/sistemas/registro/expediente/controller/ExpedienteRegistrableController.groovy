@@ -113,9 +113,6 @@ class ExpedienteRegistrableController {
 
 		//bindings manuales
 		sustentante.fechaNacimiento = sdf.parse(params.'sustentante.fechaNacimiento_day' + '-' + params.'sustentante.fechaNacimiento_month' + '-' + params.'sustentante.fechaNacimiento_year')
-		//sustentante.nacionalidad = CatalogConvertUtils.fromCatalogosToExpediente(nacionalidadService.get(Long.parseLong(params.'sustentante.nacionalidad_id')))
-		//sustentante.nivelEstudios = CatalogConvertUtils.fromCatalogosToExpediente(nivelEstudiosService.get(Long.parseLong(params.'sustentante.nivelEstudios_id')))
-		//sustentante.estadoCivil = CatalogConvertUtils.fromCatalogosToExpediente(estadoCivilService.get(Long.parseLong(params.'sustentante.estadoCivil_id')))
 		sustentante.telefonos = new ArrayList<TelefonoSustentanteTO>()
 		if(telefonosJsonElement != null && telefonosJsonElement instanceof JSONArray){
 			def telefonosJsonArray = (JSONArray)telefonosJsonElement
@@ -125,7 +122,6 @@ class ExpedienteRegistrableController {
 				t.telefono = it.'telefono'
 				t.extension = it.'extension'
 				t.idTipoTelefonoSustentante = (Long)it.'idTipoTelefono'
-				//t.tipoTelefonoSustentante = CatalogConvertUtils.fromCatalogosToExpediente( tipoTelefonoService.get() )
 				sustentante.telefonos.add(t)
 			}
 		}
@@ -147,12 +143,6 @@ class ExpedienteRegistrableController {
 		fechaFinCalendar.add(Calendar.YEAR,3)
 		c.fechaFin = fechaFinCalendar.getTime()
 		c.fechaObtencion = sdf.parse(params.'registro.fechaObtencion_day' + '-' + params.'registro.fechaObtencion_month' + '-' + params.'registro.fechaObtencion_year')
-		//c.esLaActual = true
-		//c.fechaUltimoCambioStatusEsLaActual = new Date()
-		//c.varianteFigura = CatalogConvertUtils.fromCatalogosToExpediente( figuraService.getVariante(Long.parseLong(params.'registro.idVarianteFigura')) ) //TODO: Importar catálogo
-		//c.statusAutorizacion = statusAutorizacionService.get(2)
-		//c.statusCertificacion = statusCertificacionService.get(2)
-		//c.metodoCertificacion = metodoCertificacionService.get(1)
 		c.idVarianteFigura = Long.parseLong(params.'registro.idVarianteFigura')
 		c.idStatusAutorizacion = 2 //En dictamen previo
 		c.idStatusCertificacion = 2 //Certificado
@@ -169,13 +159,13 @@ class ExpedienteRegistrableController {
 		v.fechaModificacion = new Date()
 		v.certificacion = null
 
-		//c.idMetodoCertificacion = 1 //Exámen
 		c.fechaCreacion = new Date()
 		c.fechaModificacion = new Date()
+
 		c.validaciones = new ArrayList<ValidacionTO>()
 		c.validaciones.add(v)
-
 		sustentante.certificaciones.add(c)
+
 		sustentante.fechaCreacion = new Date()
 		sustentante.fechaModificacion = new Date()
 
@@ -183,9 +173,15 @@ class ExpedienteRegistrableController {
 		println (sustentante as JSON)
 
 		//se guarda el sustentante con todos los datos bindeados
-		//sustentanteService.guardarNuevo(sustentante)
+		try {
+			sustentanteService.guardarNuevo(sustentante)
+			flash.successMessage = "El registro de sustentante de \"" + sustentante.nombre + " " + sustentante.primerApellido + "\" ha sido guardado satisfactoriamente"
+		}
+		catch (Exception e){
+			flash.errorMessage = "Ha ocurrido un error al guardar la información, los detalles son los siguientes: " + e.message.substring(0, Math.min(e.message.length(),256)  )
+		}
 
-		respond new Object()
+		redirect (action: "index")
 	}
 
 	class IndexViewModel{

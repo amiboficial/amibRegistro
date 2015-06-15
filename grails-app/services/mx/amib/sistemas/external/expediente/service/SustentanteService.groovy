@@ -1,6 +1,6 @@
 package mx.amib.sistemas.external.expediente.service
 
-import org.hibernate.dialect.Ingres10Dialect
+import org.apache.http.HttpStatus
 
 import java.util.Date
 import java.text.DateFormat
@@ -32,6 +32,7 @@ class SustentanteService {
 
 	String comprobarMatriculasUrl
 	String comprobarMatriculasNotInUrl
+	String findAllUrl
 	String getByNumeroMatriculaUrl
 	String saveUrl
 
@@ -79,7 +80,7 @@ class SustentanteService {
 
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd")
 		
-		if(resp.json != null){
+		if(resp.json != null && resp.json instanceof JSONObject){
 			sustentante = new SustentanteTO()
 			sustentante.id = resp.json.'id'
 			sustentante.numeroMatricula = resp.json.'numeroMatricula'
@@ -122,14 +123,67 @@ class SustentanteService {
 	 *
 	 */
 	void guardarNuevo(SustentanteTO sustentante){
-		sustentante.id = -1
+		sustentante.id = null
 
 		println saveUrl
 
 		def rest = new RestBuilder()
-		def resp = rest.put(saveUrl){
+		def resp = rest.post(saveUrl){
 			contentType "application/json;charset=UTF-8"
 			json (sustentante as JSON)
 		}
+
+		if(resp.statusCode.value() != HttpStatus.SC_CREATED )
+			throw new Exception("STATUS CODE: " + resp.statusCode)
 	}
+	
+	SustentanteTO get(long id){
+		
+	}
+	
+	SustentanteTO findByMatricula(int numeroMatricula){
+		return this.obtenerPorMatricula(numeroMatricula)
+	}
+	
+	SearchResult findAll(Integer max, Integer offset, String sort, String order){
+		SearchResult sr = new SearchResult()
+		def rest = new RestBuilder()
+		def resp = rest.post(findAllUrl){
+			order = order
+			sort = sort
+			offset = offset
+			max = max
+		}
+		if(resp.json != null && resp.json instanceof JSONObject) {
+			def lista = new ArrayList<SustentanteTO>()
+			resp.json.'list'.each{
+				SustentanteTO s = new SustentanteTO()
+				
+				//Solo añade datos relevantes a una búsqueda de resultados
+				s.id = it.'id'
+				s.numeroMatricula = it.'numeroMatricula'
+				s.nombre = it.'nombre'
+				s.primerApellido = it.'primerApellido'
+				s.segundoApellido = it.'segundoApellido'
+				
+				lista.add(s)
+			}
+			sr.list = lista
+			sr.count = resp.json.'count'
+			sr.error = resp.json.'error'
+			sr.errorDetails = resp.json.'errorDetails'
+		}
+		else{
+			sr.error = true
+			sr.errorDetails = "NON_JSON_RESPONSE"
+		}
+		return sr
+	}
+}
+
+class SearchResult {
+	List<SustentanteTO> list
+	Integer count
+	boolean error
+	String errorDetails
 }

@@ -34,7 +34,16 @@ class ExpedienteController {
 			
 		}
 		else if(vm.fltTB == 'F'){
-			//TODO: busqueda por numero de folio
+			def result = sustentanteService.get(vm.fltFol)
+			vm.resultList = new ArrayList<SustentanteTO>()
+			
+			if(result == null){
+				vm.count = 0
+			}
+			else{
+				vm.count = 1
+				vm.resultList.add(result)
+			}
 		}
 		else if(vm.fltTB == 'A'){
 			//TODO: busqueda avanzada

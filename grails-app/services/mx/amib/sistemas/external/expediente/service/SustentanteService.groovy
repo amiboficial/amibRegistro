@@ -33,6 +33,7 @@ class SustentanteService {
 	String comprobarMatriculasUrl
 	String comprobarMatriculasNotInUrl
 	String findAllUrl
+	String getUrl
 	String getByNumeroMatriculaUrl
 	String saveUrl
 
@@ -81,33 +82,7 @@ class SustentanteService {
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd")
 		
 		if(resp.json != null && resp.json instanceof JSONObject){
-			sustentante = new SustentanteTO()
-			sustentante.id = resp.json.'id'
-			sustentante.numeroMatricula = resp.json.'numeroMatricula'
-			sustentante.nombre = resp.json.'nombre'
-			sustentante.primerApellido = resp.json.'primerApellido'
-			sustentante.segundoApellido = resp.json.'segundoApellido'
-			sustentante.genero = resp.json.'genero'
-			sustentante.rfc = resp.json.'rfc'
-			sustentante.curp = resp.json.'curp'
-			sustentante.fechaNacimiento = df.parse(resp.json.'fechaNacimiento'.substring(0,10))
-			sustentante.correoElectronico = resp.json.'correoElectronico'
-			sustentante.nacionalidad = new NacionalidadTO()
-			if(resp.json.'nacionalidad' instanceof JSONObject && JSONObject.NULL.equals(resp.json.'nacionalidad')){
-				sustentante.nacionalidad.id = resp.json.'nacionalidad'.'id'
-				sustentante.nacionalidad.descripcion = resp.json.'nacionalidad'.'descripcion'
-				sustentante.nacionalidad.vigente = resp.json.'nacionalidad'.'vigente'
-			}
-			sustentante.nivelEstudios = new NivelEstudiosTO()
-			if(resp.json.'nivelEstudios' instanceof JSONObject && JSONObject.NULL.equals(resp.json.'nivelEstudios')){
-				sustentante.nivelEstudios.id = resp.json.'nivelEstudios'.'id'
-				sustentante.nivelEstudios.descripcion = resp.json.'nivelEstudios'.'descripcion'
-				sustentante.nivelEstudios.vigente = resp.json.'nivelEstudios'.'vigente'
-			}
-			sustentante.telefonos = new ArrayList<TelefonoSustentanteTO>()
-			sustentante.documentos = new ArrayList<DocumentoSustentanteTO>()
-			sustentante.puestos = new ArrayList<PuestoTO>()
-			sustentante.certificaciones = new ArrayList<CertificacionTO>()
+			sustentante = this.obtenerSustentanteFromJSON(resp.json)
 		}
 		return sustentante
     }
@@ -138,7 +113,18 @@ class SustentanteService {
 	}
 	
 	SustentanteTO get(long id){
+		SustentanteTO sustentante = null 
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd")
 		
+		def rest = new RestBuilder()
+		def resp = rest.post(getUrl + "/" + id){
+		}
+		
+		if(resp.json != null && resp.json instanceof JSONObject) {
+			sustentante = this.obtenerSustentanteFromJSON(resp.json)
+		}
+		
+		return sustentante
 	}
 	
 	SustentanteTO findByMatricula(int numeroMatricula){
@@ -157,16 +143,8 @@ class SustentanteService {
 		if(resp.json != null && resp.json instanceof JSONObject) {
 			def lista = new ArrayList<SustentanteTO>()
 			resp.json.'list'.each{
-				SustentanteTO s = new SustentanteTO()
-				
-				//Solo añade datos relevantes a una búsqueda de resultados
-				s.id = it.'id'
-				s.numeroMatricula = it.'numeroMatricula'
-				s.nombre = it.'nombre'
-				s.primerApellido = it.'primerApellido'
-				s.segundoApellido = it.'segundoApellido'
-				
-				lista.add(s)
+				SustentanteTO sustentante = this.obtenerSustentanteFromJSON(it)
+				lista.add(sustentante)
 			}
 			sr.list = lista
 			sr.count = resp.json.'count'
@@ -178,6 +156,37 @@ class SustentanteService {
 			sr.errorDetails = "NON_JSON_RESPONSE"
 		}
 		return sr
+	}
+	
+	private SustentanteTO obtenerSustentanteFromJSON(JSONObject data){
+		SustentanteTO sustentante = new SustentanteTO()
+		sustentante.id = data.'id'
+		sustentante.numeroMatricula = data.'numeroMatricula'
+		sustentante.nombre = data.'nombre'
+		sustentante.primerApellido = data.'primerApellido'
+		sustentante.segundoApellido = data.'segundoApellido'
+		sustentante.genero = data.'genero'
+		sustentante.rfc = data.'rfc'
+		sustentante.curp = data.'curp'
+		sustentante.fechaNacimiento = df.parse(data.'fechaNacimiento'.substring(0,10))
+		sustentante.correoElectronico = data.'correoElectronico'
+		sustentante.nacionalidad = new NacionalidadTO()
+		if(data.'nacionalidad' instanceof JSONObject && JSONObject.NULL.equals(data.'nacionalidad')){
+			sustentante.nacionalidad.id = data.'nacionalidad'.'id'
+			sustentante.nacionalidad.descripcion = data.'nacionalidad'.'descripcion'
+			sustentante.nacionalidad.vigente = data.'nacionalidad'.'vigente'
+		}
+		sustentante.nivelEstudios = new NivelEstudiosTO()
+		if(data.'nivelEstudios' instanceof JSONObject && JSONObject.NULL.equals(data.'nivelEstudios')){
+			sustentante.nivelEstudios.id = data.'nivelEstudios'.'id'
+			sustentante.nivelEstudios.descripcion = data.'nivelEstudios'.'descripcion'
+			sustentante.nivelEstudios.vigente = data.'nivelEstudios'.'vigente'
+		}
+		sustentante.telefonos = new ArrayList<TelefonoSustentanteTO>()
+		sustentante.documentos = new ArrayList<DocumentoSustentanteTO>()
+		sustentante.puestos = new ArrayList<PuestoTO>()
+		sustentante.certificaciones = new ArrayList<CertificacionTO>()
+		return sustentante
 	}
 }
 

@@ -78,8 +78,6 @@ class SustentanteService {
 		SustentanteTO sustentante = null
 		def rest = new RestBuilder()
 		def resp = rest.get(getByNumeroMatriculaUrl + numeroMatricula)
-
-		DateFormat df = new SimpleDateFormat("yyyy-MM-dd")
 		
 		if(resp.json != null && resp.json instanceof JSONObject){
 			sustentante = this.obtenerSustentanteFromJSON(resp.json)
@@ -114,7 +112,6 @@ class SustentanteService {
 	
 	SustentanteTO get(long id){
 		SustentanteTO sustentante = null 
-		DateFormat df = new SimpleDateFormat("yyyy-MM-dd")
 		
 		def rest = new RestBuilder()
 		def resp = rest.post(getUrl + "/" + id){
@@ -159,6 +156,7 @@ class SustentanteService {
 	}
 	
 	private SustentanteTO obtenerSustentanteFromJSON(JSONObject data){
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd")
 		SustentanteTO sustentante = new SustentanteTO()
 		sustentante.id = data.'id'
 		sustentante.numeroMatricula = data.'numeroMatricula'

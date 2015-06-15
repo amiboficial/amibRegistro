@@ -3,6 +3,8 @@ package mx.amib.sistemas.registro.expediente.controller
 import grails.converters.JSON
 import mx.amib.sistemas.external.catalogos.service.FiguraTO
 import mx.amib.sistemas.external.catalogos.service.VarianteFiguraTO
+import mx.amib.sistemas.external.expediente.certificacion.catalog.service.StatusAutorizacionTO
+import mx.amib.sistemas.external.expediente.certificacion.catalog.service.StatusCertificacionTO
 import mx.amib.sistemas.external.expediente.persona.service.SustentanteTO
 
 class ExpedienteController {
@@ -10,6 +12,8 @@ class ExpedienteController {
 	def figuraService
 	
 	def sustentanteService
+	def statusAutorizacionService
+	def statusCertificacionService
 	
     def index() {
 		IndexViewModel vm = this.getIndexViewModel(params)
@@ -47,11 +51,12 @@ class ExpedienteController {
 		}
 		else if(vm.fltTB == 'A'){
 			//TODO: busqueda avanzada
+			//def result = sustentanteService.findAll
 		}
 		
-		println (vm as JSON)
+		//println (vm as JSON)
 		
-		respond vm
+		render(view:'index', model: [viewModelInstance:vm])
 	}
 
 	private IndexViewModel getIndexViewModel(Map params){
@@ -61,6 +66,9 @@ class ExpedienteController {
 		
 		//Carga listas
 		vm.figuraList = figuraService.list()
+		vm.statusAutorizacionList = statusAutorizacionService.list()
+		vm.statusCertificacionList = statusCertificacionService.list()
+		
 		if(vm.fltFig != null && vm.fltFig > 0)
 			vm.varianteFiguraList = figuraService.get(fltFig).variantes
 		
@@ -121,6 +129,8 @@ class IndexViewModel{
 	//No bindeables
 	Collection<VarianteFiguraTO> varianteFiguraList
 	Collection<FiguraTO> figuraList
+	Collection<StatusCertificacionTO> statusCertificacionList
+	Collection<StatusAutorizacionTO> statusAutorizacionList
 	
 	Collection<SustentanteTO> resultList
 	Integer count

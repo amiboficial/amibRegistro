@@ -146,6 +146,8 @@
 						<th>${message(code: 'expedienteRegistrable.fechaExamen.label', default: 'Fecha de exámen')}</th>
 						<th>...</th>
 					</tr>
+				</thead>
+				<tbody>
 					<g:each in="${viewModelInstance.searchResults}">
 						<tr>
 							<td>${it.numeroMatricula}</td>
@@ -156,9 +158,6 @@
 							<td><button class="registrar btn btn-default btn-xs" data-numeroMatricula="${it.numeroMatricula}">Registrar</button></td>
 						</tr>
 					</g:each>
-				</thead>
-				<tbody>
-					
 				</tbody>
 			</table>
 			<div class="pagination">

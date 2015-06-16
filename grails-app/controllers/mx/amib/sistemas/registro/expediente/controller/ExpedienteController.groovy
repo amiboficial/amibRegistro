@@ -28,6 +28,8 @@ class ExpedienteController {
 			def result = sustentanteService.findByMatricula(vm.fltMat.value)
 			vm.resultList = new ArrayList<SustentanteTO>()
 			
+			vm.offset = 0
+			
 			if(result == null){
 				vm.count = 0
 			}
@@ -50,8 +52,9 @@ class ExpedienteController {
 			}
 		}
 		else if(vm.fltTB == 'A'){
-			//TODO: busqueda avanzada
-			//def result = sustentanteService.findAll
+			def sr = sustentanteService.findAllAdvancedSearch(vm.fltNom, vm.fltAp1, vm.fltAp2, vm.fltFig, vm.fltVFig, vm.fltStCt, vm.fltStAt, vm.max, vm.offset, vm.sort, vm.order)
+			vm.resultList = sr.list
+			vm.count = sr.count
 		}
 		
 		//println (vm as JSON)
@@ -81,37 +84,22 @@ class ExpedienteController {
 			vm.order = "asc"
 			
 		if(vm.max == null || vm.max <= 0)	
-			vm.max = 100
+			vm.max = 10
 			
 		if(vm.offset == null || vm.offset <= 0)
 			vm.offset = 0
 		
 		if(vm.fltTB == null || vm.fltTB == '' || (vm.fltTB != 'A' && vm.fltTB != 'M' && vm.fltTB != 'F' && vm.fltTB != 'T'))
 			vm.fltTB='T'
+	
+		if(vm.fltNom == null) vm.fltNom = ""
+		if(vm.fltAp1 == null) vm.fltAp1 = "" 
+		if(vm.fltAp2 == null) vm.fltAp2 = ""
 			
-		/*
-		if(params.fltTB != null && params.fltTB != ""){
-			if(params.fltTB != 'A' && params.fltTB != 'M' && params.fltTB != 'F')
-				vm.fltTB = 'A'
-			else
-				vm.fltTB = params.fltTB
-			
-			vm.fltMat = params.fltMat //Matrícula
-			vm.fltFol = params.fltFol //Folio
-			vm.fltNom = params.fltNom //Nombre
-			vm.fltAp1 = params.fltAp1 //Primer apellido
-			vm.fltAp2 = params.fltAp2 //Segundo apellido
-			vm.fltFig = params.fltFig //Identificador de figura
-			vm.fltVFig = params.fltVFig //Identificador de variante de figura
-			vm.fltStCt = params.fltStCt //Identificador de estatus de certificacion
-			vm.fltStAt = params.fltStAt //Identificador de estatus de autorizacion
-		
-			vm.sort = params.sort
-			vm.max = params.max
-			vm.order = params.order
-		}
-		*/
-		
+		if(vm.fltFig == null) vm.fltFig = -1 
+		if(vm.fltVFig == null) vm.fltVFig = -1
+		if(vm.fltStCt == null) vm.fltStCt = -1
+		if(vm.fltStAt == null) vm.fltStAt = -1
 		
 		return vm
 	}

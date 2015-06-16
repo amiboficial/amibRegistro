@@ -157,7 +157,8 @@ mx.amib.sistemas.catalogos.sepomex.Sepomex.findByCodigoPostal = 'sepomexRestful/
 //especificaciones de rutas para servicios REST de amibExpediente
 mx.amib.sistemas.expediente.Sustentante.comprobarMatriculas = 'sustentanteRestful/comprobarMatriculas/'
 mx.amib.sistemas.expediente.Sustentante.comprobarMatriculasNotIn = 'sustentanteRestful/comprobarMatriculasNotIn/'
-mx.amib.sistemas.expediente.Sustentante.findAll = 'sustentanteRestful/findAll/'
+mx.amib.sistemas.expediente.Sustentante.findAll = 'sustentanteRestful/findAll'
+mx.amib.sistemas.expediente.Sustentante.findAllAdvancedSearchUrl = 'sustentanteRestful/findAllAdvancedSearch'
 mx.amib.sistemas.expediente.Sustentante.obtenerSustentantePorMatricula = 'sustentanteRestful/obtenerSustentantePorMatricula/'
 mx.amib.sistemas.expediente.Sustentante.get = 'sustentanteRestful/show/'
 mx.amib.sistemas.expediente.Sustentante.save = 'sustentanteRestful/save'

@@ -33,6 +33,7 @@ class SustentanteService {
 	String comprobarMatriculasUrl
 	String comprobarMatriculasNotInUrl
 	String findAllUrl
+	String findAllAdvancedSearchUrl
 	String getUrl
 	String getByNumeroMatriculaUrl
 	String saveUrl
@@ -130,13 +131,44 @@ class SustentanteService {
 	
 	SearchResult findAll(Integer max, Integer offset, String sort, String order){
 		SearchResult sr = new SearchResult()
-		def rest = new RestBuilder()
-		def resp = rest.post(findAllUrl){
-			order = order
-			sort = sort
-			offset = offset
-			max = max
+		String url = findAllUrl + "?max=" + max + "&offset=" + offset + "&sort=" + sort + "&order=" + order
+		
+		println "La url es: " + url
+		
+		def rest = new RestBuilder() 
+		def resp = rest.get(url)
+		
+		if(resp.json != null && resp.json instanceof JSONObject) {
+			def lista = new ArrayList<SustentanteTO>()
+			resp.json.'list'.each{
+				SustentanteTO sustentante = this.obtenerSustentanteFromJSON(it)
+				lista.add(sustentante)
+			}
+			sr.list = lista
+			sr.count = resp.json.'count'
+			sr.error = resp.json.'error'
+			sr.errorDetails = resp.json.'errorDetails'
 		}
+		else{
+			sr.error = true
+			sr.errorDetails = "NON_JSON_RESPONSE"
+		}
+		return sr
+	}
+	
+	SearchResult findAllAdvancedSearch(String nom, String ap1, String ap2, 
+		Long idfig, Long idvarfig, Long stcert, Long staut, 
+		Integer max, Integer offset, String sort, String order){
+		
+		SearchResult sr = new SearchResult()
+		String url = findAllAdvancedSearchUrl + "?max=" + max + "&offset=" + offset + "&sort=" + sort + "&order=" + order + 
+						"&nom=" + nom + "&ap1=" + ap1 + "&ap2=" + ap2 + "&idfig=" + idfig + "&idvarfig=" + idvarfig + 
+						"&stcert=" + stcert + "&staut=" + staut
+		println "La url es: " + url
+		
+		def rest = new RestBuilder()
+		def resp = rest.get(url)
+		
 		if(resp.json != null && resp.json instanceof JSONObject) {
 			def lista = new ArrayList<SustentanteTO>()
 			resp.json.'list'.each{

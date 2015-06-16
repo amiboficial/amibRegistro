@@ -20,6 +20,8 @@
 
 	<form id="frmApp" class="form-horizontal" role="form" action="<g:createLink controller="expediente" action="index" />" method="get">
 	
+		<input type="hidden" name="fltTB" value="${viewModelInstance?.fltTB}" />
+	
 		<fieldset>
 			<legend>Acciones</legend>
 			<button id="btnNuevo" type="button" class="btn btn-default btn-primary"><span class="glyphicon glyphicon-file"></span> Nuevo expediente</button>
@@ -59,8 +61,8 @@
 							&nbsp;
 						</div>
 						<div class="col-md-6 col-sm-6" style="text-align: center">
-							<button type="button" class="limpiar btn btn-default btn-primary">Limpiar campos</button>
-							<button type="button" class="buscar btn btn-default btn-primary"><span class="glyphicon glyphicon-search"></span> Realizar búsqueda</button>
+							<button type="button" class="limpiar btn btn-default btn-primary" data-tab="M">Limpiar campos</button>
+							<button type="button" class="buscar btn btn-default btn-primary" data-tab="M"><span class="glyphicon glyphicon-search"></span> Realizar búsqueda</button>
 						</div>
 						<div class="col-md-3 col-sm-3">
 							&nbsp;
@@ -83,8 +85,8 @@
 							&nbsp;
 						</div>
 						<div class="col-md-6 col-sm-6" style="text-align: center">
-							<button type="button" class="limpiar btn btn-default btn-primary">Limpiar campos</button>
-							<button type="button" class="buscar btn btn-default btn-primary"><span class="glyphicon glyphicon-search"></span> Realizar búsqueda</button>
+							<button type="button" class="limpiar btn btn-default btn-primary" data-tab="F" >Limpiar campos</button>
+							<button type="button" class="buscar btn btn-default btn-primary" data-tab="F" ><span class="glyphicon glyphicon-search"></span> Realizar búsqueda</button>
 						</div>
 						<div class="col-md-3 col-sm-3">
 							&nbsp;
@@ -178,8 +180,8 @@
 							&nbsp;
 						</div>
 						<div class="col-md-6 col-sm-6" style="text-align: center">
-							<button type="button" class="limpiar btn btn-default btn-primary">Limpiar campos</button>
-							<button type="button" class="buscar btn btn-default btn-primary"><span class="glyphicon glyphicon-search"></span> Realizar búsqueda</button>
+							<button type="button" class="limpiar btn btn-default btn-primary" data-tab="A">Limpiar campos</button>
+							<button type="button" class="buscar btn btn-default btn-primary" data-tab="A"><span class="glyphicon glyphicon-search"></span> Realizar búsqueda</button>
 						</div>
 						<div class="col-md-3 col-sm-3">
 							&nbsp;
@@ -202,20 +204,76 @@
 			<legend>Resultados de búsqueda</legend>
 			<div id="list-expediente" class="content scaffold-list" role="main">
 				<table class="table">
+				
 					<thead>
 						<tr>
+							<th>${message(code: 'expediente.folio.label', default: 'Folio')}</th>
+							<th>${message(code: 'expediente.matricula.label', default: 'Matrícula')}</th>
+							<th>${message(code: 'expediente.nombre.label', default: 'Nombre')}</th>
+							<th>${message(code: 'expediente.primerApellido.label', default: '1er Apellido')}</th>
+							<th>${message(code: 'expediente.segundoApellido.label', default: '2do Apellido')}</th>
+							<th>...</th>
 						</tr>
 					</thead>
+					
 					<tbody>
-						
+						<g:each in="${viewModelInstance?.resultList}">
+							<tr>
+								<td>${it.id}</td>
+								<td>${it.numeroMatricula}</td>
+								<td>${it.nombre}</td>
+								<td>${it.primerApellido}</td>
+								<td>${it.segundoApellido}</td>
+								<td><button class="revisar btn btn-default btn-xs" data-id="${it.id}">Revisar expediente</button></td>
+							</tr>
+						</g:each>
 					</tbody>
+					
 				</table>
 				<div class="pagination">
+					<g:paginate total="${viewModelInstance.count?:0}" params="[fltTB:viewModelInstance.fltTB,fltMat:viewModelInstance.fltMat,fltFol:viewModelInstance.fltFol,fltNom:viewModelInstance.fltNom,fltAp1:viewModelInstance.fltAp1,fltAp2:viewModelInstance.fltAp2,fltFig:viewModelInstance.fltFig,fltVFig:viewModelInstance.fltVFig,fltStCt:viewModelInstance.fltStCt,fltStAt:viewModelInstance.fltStAt,sort:viewModelInstance.sort,max:viewModelInstance.max,order:viewModelInstance.order,offset:viewModelInstance.offset]"/>
 				</div>
 			</div>
 		</fieldset>
 	
 	</form>
+
+	<script type="text/javascript">
+	var app = app || {};
+
+	$('.limpiar').click(function(e){
+		e.preventDefault();
+		var tipoBusqueda = $(this).attr("data-tab")
+		if(tipoBusqueda == 'M'){
+			//Limpiar campos por matricula
+		}
+		else if(tipoBusqueda == 'F'){
+			//Limpiar campos por folio
+		}
+		else if(tipoBusqueda == 'A'){
+			//Limpiar campos avanzados
+		}
+		alert("limpiar:" + $(this).attr("data-tab"));
+	});
+	$('.buscar').click(function(e){
+		e.preventDefault();
+		var tipoBusqueda = $(this).attr("data-tab")
+		
+		$("fltTB").value(tipoBusqueda) //es del atributo
+		$("#frmApp").submit() //checkar submit
+		
+		/*if(tipoBusqueda == 'M'){
+			
+		}
+		else if(tipoBusqueda == 'F'){
+			
+		}
+		else if(tipoBusqueda == 'A'){
+			
+		}*/
+		alert("buscar:" + $(this).attr("data-tab"));
+	});
+	</script>
 
 </body>
 </html>

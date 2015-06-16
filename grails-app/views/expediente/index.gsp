@@ -45,11 +45,13 @@
 				<br/>
 			
 				<div role="tabpanel" id="bmat" class="tab-pane <g:if test="${viewModelInstance?.fltTB == 'M' || viewModelInstance?.fltTB == null || viewModelInstance?.fltTB == ''|| viewModelInstance?.fltTB == 'T'}">active</g:if>" >
-					<label class="col-md-2 col-sm-3 control-label">
-						<g:message code="expediente.matricula.label" default="Matricula" />
-					</label>
-					<div class="col-md-9 col-sm-9">
-						<g:textField name="fltMat" id="txtFltMat" class="form-control" maxlength="10" value="${viewModelInstance?.fltMat}"/>
+					<div class="form-group">
+						<label class="col-md-2 col-sm-3 control-label">
+							<g:message code="expediente.matricula.label" default="Matricula" />
+						</label>
+						<div class="col-md-9 col-sm-9">
+							<g:textField name="fltMat" id="txtFltMat" class="form-control" maxlength="10" value="${viewModelInstance?.fltMat}"/>
+						</div>
 					</div>
 					<br/>
 					<div class="form-group">
@@ -67,11 +69,13 @@
 				</div>
 			
 				<div role="tabpanel" id="bid" class="tab-pane <g:if test="${viewModelInstance?.fltTB == 'F'}">active</g:if>">
-					<label class="col-md-2 col-sm-3 control-label">
-						<g:message code="expediente.id.label" default="Folio" />
-					</label>
-					<div class="col-md-9 col-sm-9">
-						<g:textField name="fltFol" id="txtFltFol" class="form-control" maxlength="10" value="${viewModelInstance?.fltFol}"/>
+					<div class="form-group">
+						<label class="col-md-2 col-sm-3 control-label">
+							<g:message code="expediente.id.label" default="Folio" />
+						</label>
+						<div class="col-md-9 col-sm-9">
+							<g:textField name="fltFol" id="txtFltFol" class="form-control" maxlength="10" value="${viewModelInstance?.fltFol}"/>
+						</div>
 					</div>
 					<br/>
 					<div class="form-group">

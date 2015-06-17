@@ -52,7 +52,11 @@ class ExpedienteController {
 			}
 		}
 		else if(vm.fltTB == 'A'){
-			def sr = sustentanteService.findAllAdvancedSearch(vm.fltNom, vm.fltAp1, vm.fltAp2, vm.fltFig, vm.fltVFig, vm.fltStCt, vm.fltStAt, vm.max, vm.offset, vm.sort, vm.order)
+			def sr = null
+			if(vm.fltCrt == true)
+				sr = sustentanteService.findAllAdvancedSearchWithCertificacion(vm.fltNom, vm.fltAp1, vm.fltAp2, vm.fltFig, vm.fltVFig, vm.fltStCt, vm.fltStAt, vm.max, vm.offset, vm.sort, vm.order)
+			else	
+				sr = sustentanteService.findAllAdvancedSearch(vm.fltNom, vm.fltAp1, vm.fltAp2, vm.max, vm.offset, vm.sort, vm.order)
 			vm.resultList = sr.list
 			vm.count = sr.count
 		}
@@ -64,16 +68,7 @@ class ExpedienteController {
 
 	private IndexViewModel getIndexViewModel(Map params){
 		IndexViewModel vm = new IndexViewModel();
-		
 		bindData(vm,params)
-		
-		//Carga listas
-		vm.figuraList = figuraService.list()
-		vm.statusAutorizacionList = statusAutorizacionService.list()
-		vm.statusCertificacionList = statusCertificacionService.list()
-		
-		if(vm.fltFig != null && vm.fltFig > 0)
-			vm.varianteFiguraList = figuraService.get(fltFig).variantes
 		
 		if(vm.sort == null || vm.sort == ''|| 
 			(vm.sort != 'id' && vm.sort != 'numeroMatricula' && vm.sort != 'nombre' 
@@ -92,15 +87,40 @@ class ExpedienteController {
 		if(vm.fltTB == null || vm.fltTB == '' || (vm.fltTB != 'A' && vm.fltTB != 'M' && vm.fltTB != 'F' && vm.fltTB != 'T'))
 			vm.fltTB='T'
 	
-		if(vm.fltNom == null) vm.fltNom = ""
-		if(vm.fltAp1 == null) vm.fltAp1 = "" 
-		if(vm.fltAp2 == null) vm.fltAp2 = ""
+		if(vm.fltTB == 'M' || vm.fltTB == 'A') vm.fltFol = null
+		if(vm.fltTB == 'F' || vm.fltTB == 'A') vm.fltMat = null
 			
-		if(vm.fltFig == null) vm.fltFig = -1 
-		if(vm.fltVFig == null) vm.fltVFig = -1
-		if(vm.fltStCt == null) vm.fltStCt = -1
-		if(vm.fltStAt == null) vm.fltStAt = -1
+		if(vm.fltNom == null || vm.fltTB != 'A') vm.fltNom = ""
+		if(vm.fltAp1 == null || vm.fltTB != 'A') vm.fltAp1 = "" 
+		if(vm.fltAp2 == null || vm.fltTB != 'A') vm.fltAp2 = ""
 		
+		if(vm.fltCrt == null || vm.fltTB != 'A') vm.fltCrt = true
+			
+		if(vm.fltFig == null || vm.fltTB != 'A') vm.fltFig = -1 
+		if(vm.fltVFig == null || vm.fltTB != 'A') vm.fltVFig = -1
+		if(vm.fltStCt == null || vm.fltTB != 'A') vm.fltStCt = -1
+		if(vm.fltStAt == null || vm.fltTB != 'A') vm.fltStAt = -1
+		
+		//Carga listas
+		vm.figuraList = figuraService.list()
+		vm.statusAutorizacionList = statusAutorizacionService.list()
+		vm.statusCertificacionList = statusCertificacionService.list()
+		if(vm.fltFig != null && vm.fltFig > 0)
+			vm.varianteFiguraList = figuraService.get(vm.fltFig).variantes
+		vm.variantesFiguraMap = new HashMap<Long,String>()
+		vm.figuraList.each{
+			def sb = new StringBuilder()
+			sb.append("[")
+			def variantesIterator = it.variantes.sort{ vf0 -> vf0.nombre }.iterator()
+			while(variantesIterator.hasNext()){
+				def vf = variantesIterator.next()
+				sb.append('{ "id":"'+ vf.id +'" , "nombre":"'+ vf.nombre +'" }')
+				if(variantesIterator.hasNext())
+					sb.append(',')
+			}
+			sb.append("]")
+			vm.variantesFiguraMap.put(it.id,sb.toString())
+		}
 		return vm
 	}
 	
@@ -116,6 +136,7 @@ class IndexViewModel{
 	
 	//No bindeables
 	Collection<VarianteFiguraTO> varianteFiguraList
+	Map<Long,String> variantesFiguraMap
 	Collection<FiguraTO> figuraList
 	Collection<StatusCertificacionTO> statusCertificacionList
 	Collection<StatusAutorizacionTO> statusAutorizacionList
@@ -130,6 +151,7 @@ class IndexViewModel{
 	String fltNom //Nombre
 	String fltAp1 //Primer apellido
 	String fltAp2 //Segundo apellido
+	Boolean fltCrt //Certificado?
 	Long fltFig //Identificador de figura
 	Long fltVFig //Identificador de variante de figura
 	Long fltStCt //Identificador de estatus de certificacion

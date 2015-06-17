@@ -123,6 +123,17 @@
 						</div>
 					</div>
 					
+					<div id="divFltAp2" class="form-group">
+						<label class="col-md-2 col-sm-3 control-label">
+							<g:message code="expediente.apellido1.label" default="Certificado" />
+						</label>
+						<div class="col-md-9 col-sm-9">
+							<g:radioGroup name="fltCrt" labels="['Si','No']" values="[true,false]" value="${viewModelInstance?.fltCrt}">
+								${it.label} ${it.radio} &nbsp;&nbsp;
+							</g:radioGroup>
+						</div>
+					</div>
+					
 					<div id="divAv" class="form-group">
 						<label class="col-md-2 col-sm-3 control-label">
 							<g:message code="expediente.figura.label" default="Figura" />
@@ -146,6 +157,9 @@
 							noSelection="${['-1':'-Seleccione-']}"
 							from='${viewModelInstance?.varianteFiguraList}'
 							optionKey="id" optionValue="nombre"></g:select>
+							<g:each in="${viewModelInstance.variantesFiguraMap}">
+								<input type="hidden" id="${it.key}_vfigs" value='${it.value}' />
+							</g:each>
 						</div>
 					</div>
 					
@@ -192,12 +206,6 @@
 				
 			</div>
 			
-			<div id="divBusqAv">
-				
-				
-				
-			</div>
-			
 		</fieldset>
 	
 		<fieldset>
@@ -231,7 +239,7 @@
 					
 				</table>
 				<div class="pagination">
-					<g:paginate total="${viewModelInstance.count?:0}" params="[fltTB:viewModelInstance.fltTB,fltMat:viewModelInstance.fltMat,fltFol:viewModelInstance.fltFol,fltNom:viewModelInstance.fltNom,fltAp1:viewModelInstance.fltAp1,fltAp2:viewModelInstance.fltAp2,fltFig:viewModelInstance.fltFig,fltVFig:viewModelInstance.fltVFig,fltStCt:viewModelInstance.fltStCt,fltStAt:viewModelInstance.fltStAt,sort:viewModelInstance.sort,max:viewModelInstance.max,order:viewModelInstance.order,offset:viewModelInstance.offset]"/>
+					<g:paginate total="${viewModelInstance.count?:0}" params="[fltTB:viewModelInstance.fltTB,fltMat:viewModelInstance.fltMat,fltFol:viewModelInstance.fltFol,fltNom:viewModelInstance.fltNom,fltAp1:viewModelInstance.fltAp1,fltAp2:viewModelInstance.fltAp2,fltCrt:viewModelInstance.fltCrt,fltFig:viewModelInstance.fltFig,fltVFig:viewModelInstance.fltVFig,fltStCt:viewModelInstance.fltStCt,fltStAt:viewModelInstance.fltStAt,sort:viewModelInstance.sort,max:viewModelInstance.max,order:viewModelInstance.order,offset:viewModelInstance.offset]"/>
 				</div>
 			</div>
 		</fieldset>
@@ -259,7 +267,7 @@
 		e.preventDefault();
 		var tipoBusqueda = $(this).attr("data-tab")
 		
-		$("fltTB").value(tipoBusqueda) //es del atributo
+		$("[name='fltTB']").val(tipoBusqueda) //es del atributo
 		$("#frmApp").submit() //checkar submit
 		
 		/*if(tipoBusqueda == 'M'){
@@ -271,8 +279,53 @@
 		else if(tipoBusqueda == 'A'){
 			
 		}*/
-		alert("buscar:" + $(this).attr("data-tab"));
+		//alert("buscar:" + $(this).attr("data-tab"));
 	});
+	$("[name='fltFig']").change(function(e){
+		var idFigura = $("[name='fltFig']").val();
+		if(idFigura != "-1"){
+			var strJsonVFig = $("#" + idFigura + "_vfigs").val();
+			console.log(strJsonVFig)
+			var parsedArray = JSON.parse(strJsonVFig);
+			$("[name='fltVFig']").html("")
+			for(var i = 0; i<parsedArray.length ;i++){
+				$("[name='fltVFig']").append("<option value='"+ parsedArray[i].id +"'>"+ parsedArray[i].nombre +"</option>")
+			}
+		}
+		$("[name='fltVFig']").prepend("<option value='-1' selected>-Seleccione-</option>")
+	});
+	$("[name='fltCrt']").click(function(){
+		if($( "[name='fltCrt']:checked" ).val() == "false"){
+			disableCamposCertificacion();
+		}
+		else{
+			enableCamposCertificacion();
+		}
+	});
+
+	function disableCamposCertificacion(){
+		$("[name='fltFig']").attr("disabled","disabled");
+		$("[name='fltVFig']").attr("disabled","disabled");
+		$("[name='fltStCt']").attr("disabled","disabled");
+		$("[name='fltStAt']").attr("disabled","disabled");
+	}
+	function enableCamposCertificacion(){
+		$("[name='fltFig']").removeAttr("disabled");
+		$("[name='fltVFig']").removeAttr("disabled");
+		$("[name='fltStCt']").removeAttr("disabled");
+		$("[name='fltStAt']").removeAttr("disabled");
+	}
+
+	//A ejectuar en cuento se muestre le página
+	$(window).bind("pageshow", function(){
+		if($( "[name='fltCrt']:checked" ).val() == "false"){
+			disableCamposCertificacion();
+		}
+		else{
+			enableCamposCertificacion();
+		}
+	});
+	
 	</script>
 
 </body>

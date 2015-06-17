@@ -159,6 +159,7 @@ mx.amib.sistemas.expediente.Sustentante.comprobarMatriculas = 'sustentanteRestfu
 mx.amib.sistemas.expediente.Sustentante.comprobarMatriculasNotIn = 'sustentanteRestful/comprobarMatriculasNotIn/'
 mx.amib.sistemas.expediente.Sustentante.findAll = 'sustentanteRestful/findAll'
 mx.amib.sistemas.expediente.Sustentante.findAllAdvancedSearchUrl = 'sustentanteRestful/findAllAdvancedSearch'
+mx.amib.sistemas.expediente.Sustentante.findAllAdvancedSearchWithCertificacionUrl = 'sustentanteRestful/findAllAdvancedSearchWithCertificacion'
 mx.amib.sistemas.expediente.Sustentante.obtenerSustentantePorMatricula = 'sustentanteRestful/obtenerSustentantePorMatricula/'
 mx.amib.sistemas.expediente.Sustentante.get = 'sustentanteRestful/show/'
 mx.amib.sistemas.expediente.Sustentante.save = 'sustentanteRestful/save'

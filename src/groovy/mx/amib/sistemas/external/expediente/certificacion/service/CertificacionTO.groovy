@@ -9,6 +9,7 @@ class CertificacionTO {
 	Date fechaObtencion
 	Boolean isAutorizado
 	Boolean isApoderado
+	Boolean isUltima
 	
 	Date fechaCreacion
 	Date fechaModificacion

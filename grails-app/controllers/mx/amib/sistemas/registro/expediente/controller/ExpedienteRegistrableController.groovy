@@ -148,13 +148,14 @@ class ExpedienteRegistrableController {
 		c.idStatusCertificacion = 2 //Certificado
 		c.isApoderado = false
 		c.isAutorizado = false
-
+		c.isUltima = true
+		
 		ValidacionTO v = new ValidacionTO()
 		v.fechaAplicacion = new Date()
 		v.fechaInicio = new Date()
 		v.fechaFin = fechaFinCalendar.getTime()
 		v.autorizadoPorUsuario = "REGISTRO_DESDE_SAEEC"
-		v.idMetodoValidacion = 1 //Exámen
+		v.idMetodoValidacion = 1 //Exï¿½men
 		v.fechaCreacion = new Date()
 		v.fechaModificacion = new Date()
 		v.certificacion = null
@@ -169,7 +170,7 @@ class ExpedienteRegistrableController {
 		sustentante.fechaCreacion = new Date()
 		sustentante.fechaModificacion = new Date()
 
-		println "Se enviará el siguiente JSON: "
+		println "Se enviarï¿½ el siguiente JSON: "
 		println (sustentante as JSON)
 
 		//se guarda el sustentante con todos los datos bindeados
@@ -178,7 +179,7 @@ class ExpedienteRegistrableController {
 			flash.successMessage = "El registro de sustentante de \"" + sustentante.nombre + " " + sustentante.primerApellido + "\" ha sido guardado satisfactoriamente"
 		}
 		catch (Exception e){
-			flash.errorMessage = "Ha ocurrido un error al guardar la información, los detalles son los siguientes: " + e.message.substring(0, Math.min(e.message.length(),256)  )
+			flash.errorMessage = "Ha ocurrido un error al guardar la informaciï¿½n, los detalles son los siguientes: " + e.message.substring(0, Math.min(e.message.length(),256)  )
 		}
 
 		redirect (action: "index")

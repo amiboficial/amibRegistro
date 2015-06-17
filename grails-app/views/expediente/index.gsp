@@ -125,7 +125,7 @@
 					
 					<div id="divFltAp2" class="form-group">
 						<label class="col-md-2 col-sm-3 control-label">
-							<g:message code="expediente.apellido1.label" default="Certificado" />
+							<g:message code="expediente.apellido1.label" default="Incluir datos de certificación" />
 						</label>
 						<div class="col-md-9 col-sm-9">
 							<g:radioGroup name="fltCrt" labels="['Si','No']" values="[true,false]" value="${viewModelInstance?.fltCrt}">
@@ -251,35 +251,53 @@
 
 	$('.limpiar').click(function(e){
 		e.preventDefault();
-		var tipoBusqueda = $(this).attr("data-tab")
+		var tipoBusqueda = $(this).attr("data-tab");
 		if(tipoBusqueda == 'M'){
 			//Limpiar campos por matricula
+			$("[name='fltMat']").val("");
 		}
 		else if(tipoBusqueda == 'F'){
 			//Limpiar campos por folio
+			$("[name='fltFol']").val("");
 		}
 		else if(tipoBusqueda == 'A'){
 			//Limpiar campos avanzados
+			$("[name='fltNom']").val("");
+			$("[name='fltAp1']").val("");
+			$("[name='fltAp2']").val("");
+			
+			$("[name='fltFig']").val("-1");
+			$("[name='fltVFig']").val("-1");
+			$("[name='fltStCt']").val("-1");
+			$("[name='fltStAt']").val("-1");
 		}
-		alert("limpiar:" + $(this).attr("data-tab"));
 	});
 	$('.buscar').click(function(e){
 		e.preventDefault();
 		var tipoBusqueda = $(this).attr("data-tab")
-		
 		$("[name='fltTB']").val(tipoBusqueda) //es del atributo
-		$("#frmApp").submit() //checkar submit
+
+		if(tipoBusqueda != 'M'){
+			//Limpiar campos por matricula
+			$("[name='fltMat']").val("");
+		}
+		else if(tipoBusqueda != 'F'){
+			//Limpiar campos por folio
+			$("[name='fltFol']").val("");
+		}
+		else if(tipoBusqueda != 'A'){
+			//Limpiar campos avanzados
+			$("[name='fltNom']").val("");
+			$("[name='fltAp1']").val("");
+			$("[name='fltAp2']").val("");
+			
+			$("[name='fltFig']").val("-1");
+			$("[name='fltVFig']").val("-1");
+			$("[name='fltStCt']").val("-1");
+			$("[name='fltStAt']").val("-1");
+		}
 		
-		/*if(tipoBusqueda == 'M'){
-			
-		}
-		else if(tipoBusqueda == 'F'){
-			
-		}
-		else if(tipoBusqueda == 'A'){
-			
-		}*/
-		//alert("buscar:" + $(this).attr("data-tab"));
+		$("#frmApp").submit() //checkar submit
 	});
 	$("[name='fltFig']").change(function(e){
 		var idFigura = $("[name='fltFig']").val();

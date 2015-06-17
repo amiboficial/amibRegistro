@@ -27,29 +27,29 @@ environments {
 	development {
 			dataSource {
 				dbCreate = "validate" // one of 'create', 'create-drop', 'update', 'validate', ''
-				url = "jdbc:sqlserver://bima-devqa-serv:1433;databaseName=dbamibregistro"
+				url = "jdbc:sqlserver://localhost:1433;databaseName=dbamibregistro"
 				logSql = true
 			}
 			dataSource_legacySaeec {
 				dbCreate = "validate" // one of 'create', 'create-drop', 'update', 'validate', ''
-				url = "jdbc:sqlserver://bima-devqa-serv:1433;databaseName=certificacion"
+				url = "jdbc:sqlserver://bimalatrop.no-ip.biz:1433;databaseName=certificacion"
 				logSql = true
 			}
 	}
 	test {
 			dataSource {
 				dbCreate = "validate"
-				url = "jdbc:sqlserver://bima-devqa-serv:1433;databaseName=dbamibregistro"
+				url = "jdbc:sqlserver://bimalatrop.no-ip.biz:1433;databaseName=dbamibregistro"
 			}
 			dataSource_legacySaeec {
 				dbCreate = "validate"
-				url = "jdbc:sqlserver://bima-devqa-serv:1433;databaseName=certificacion"
+				url = "jdbc:sqlserver://bimalatrop.no-ip.biz:1433;databaseName=certificacion"
 			}
 	}
 	production {
 			dataSource {
 				dbCreate = "validate"
-				url = "jdbc:sqlserver://bima-devqa-serv:1433;databaseName=dbamibregistro"
+				url = "jdbc:sqlserver://bimalatrop.no-ip.biz:1433;databaseName=dbamibregistro"
 				properties {
 					// See http://grails.org/doc/latest/guide/conf.html#dataSource for documentation
 					jmxEnabled = true
@@ -73,7 +73,7 @@ environments {
 			}
 			dataSource_legacySaeec {
 				dbCreate = "validate"
-				url = "jdbc:sqlserver://bima-devqa-serv:1433;databaseName=certificacion"
+				url = "jdbc:sqlserver://bimalatrop.no-ip.biz:1433;databaseName=certificacion"
 				properties {
 					// See http://grails.org/doc/latest/guide/conf.html#dataSource for documentation
 					jmxEnabled = true

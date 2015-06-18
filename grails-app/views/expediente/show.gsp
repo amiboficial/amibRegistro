@@ -20,7 +20,8 @@
 	<fieldset>
 		<legend>Acciones</legend>
 		
-		<button id="btnEditar" type="button" onclick="btnEditar_click(${expedienteInstance?.id})" class="btn btn-default btn-primary"><span class="glyphicon glyphicon-pencil"></span> Editar</button>
+		<button id="btnEditar" type="button" onclick="btnEditar_click(${expedienteInstance?.id})" class="btn btn-default btn-primary"><span class="glyphicon glyphicon-pencil"></span> Editar datos personales</button>
+		<button id="btnEditar" type="button" onclick="btnEditar_click(${expedienteInstance?.id})" class="btn btn-default btn-primary"><span class="glyphicon glyphicon-pencil"></span> Gestión de documentación</button>
 		<button id="btnEliminar" type="button" onclick="btnEliminar_click(${expedienteInstance?.id})" class="btn btn-default btn-primary"><span class="glyphicon glyphicon-trash"></span> Eliminar</button>
 		<!-- 
 		<button id="btnRevalidarPuntos" type="button" onclick="btnRevalidarPuntos_click(${expedienteInstance?.id})" class="btn btn-default btn-primary"><span class="glyphicon glyphicon-pencil"></span> Revalidar por puntos</button>
@@ -262,6 +263,7 @@
 						</div>
 						<div class="row">
 							<div style="text-align:center; margin-top: 0.75em;">
+								<button type="button" class="edit btn btn-info"><span class="glyphicon glyphicon-pencil"></span> Emitir dictamen</button>
 								<button type="button" class="edit btn btn-info"><span class="glyphicon glyphicon-pencil"></span> Revalidar por puntos</button>
 								<button type="button" class="edit btn btn-info"><span class="glyphicon glyphicon-pencil"></span> Revalidar por experiencia</button>
 								<button type="button" class="edit btn btn-info"><span class="glyphicon glyphicon-pencil"></span> Autorizar</button>
@@ -299,6 +301,7 @@
 						</div>
 						<div class="row">
 							<div style="text-align:center; margin-top: 0.75em;">
+								<button type="button" class="edit btn btn-info"><span class="glyphicon glyphicon-pencil"></span> Emitir dictamen</button>
 								<button type="button" class="edit btn btn-info"><span class="glyphicon glyphicon-pencil"></span> Revalidar por puntos</button>
 								<button type="button" class="edit btn btn-info"><span class="glyphicon glyphicon-pencil"></span> Revalidar por experiencia</button>
 								<button type="button" class="edit btn btn-info"><span class="glyphicon glyphicon-pencil"></span> Autorizar</button>
@@ -336,6 +339,7 @@
 						</div>
 						<div class="row">
 							<div style="text-align:center; margin-top: 0.75em;">
+								<button type="button" class="edit btn btn-info"><span class="glyphicon glyphicon-pencil"></span> Emitir dictamen</button>
 								<button type="button" class="edit btn btn-info"><span class="glyphicon glyphicon-pencil"></span> Revalidar por puntos</button>
 								<button type="button" class="edit btn btn-info"><span class="glyphicon glyphicon-pencil"></span> Revalidar por experiencia</button>
 								<button type="button" class="edit btn btn-info"><span class="glyphicon glyphicon-pencil"></span> Autorizar</button>

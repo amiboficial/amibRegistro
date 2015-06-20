@@ -27,7 +27,7 @@
 						<td style="width:20%">
 							<select class="form-control tipo">
 								<option value="-1">-Seleccione-</option>
-								<g:each in="${viewModelInstance.tipoTelefonoList}">
+								<g:each in="${viewModelInstance?.tipoTelefonoList}">
 									<option value="${it.id}">${it.descripcion}</option>
 								</g:each>
 							</select>

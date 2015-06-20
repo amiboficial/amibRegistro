@@ -1,14 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
     <script type="text/template" id="expedienteDomicilio">
 
-        <g:if test="${viewModelInstance?.registroExamenInstance != null && viewModelInstance?.registroExamenInstance?.domicilio != null && viewModelInstance?.registroExamenInstance.domicilio != ""}">
-            <div class="alert alert-warning">
-                La siguiente <strong>información del domicilio</strong> ha sido proporcionada por el solicitante:<br/>
-                <span style="font-style: italic; font-size: 150%;">${viewModelInstance?.registroExamenInstance?.domicilio} , <strong>Código Postal:</strong> ${viewModelInstance?.registroExamenInstance?.codigoPostal}</span> <br/>
-                <strong>Reintroduza</strong> los datos con base en esta información. El código postal debe proporcionar información que coincida con la entidad federativa y el municipio del solicitante.
-            </div>
-        </g:if>
-
         <div class="alert alert-danger validationErrorMessage">
             Se han detectado errores de entrada en los campos del formulario. Verifique cada campo según corresponda.
             <div class="errorMessagesContainer">

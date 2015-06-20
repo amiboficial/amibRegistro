@@ -1,19 +1,36 @@
 package mx.amib.sistemas.registro.expediente.controller
 
+import java.util.Collection
+
 import grails.converters.JSON
+import mx.amib.sistemas.external.catalogos.service.EstadoCivilTO
 import mx.amib.sistemas.external.catalogos.service.FiguraTO
+import mx.amib.sistemas.external.catalogos.service.InstitucionTO
+import mx.amib.sistemas.external.catalogos.service.NacionalidadTO
+import mx.amib.sistemas.external.catalogos.service.NivelEstudiosTO
+import mx.amib.sistemas.external.catalogos.service.SepomexTO
+import mx.amib.sistemas.external.catalogos.service.TipoTelefonoTO
 import mx.amib.sistemas.external.catalogos.service.VarianteFiguraTO
 import mx.amib.sistemas.external.expediente.certificacion.catalog.service.StatusAutorizacionTO
 import mx.amib.sistemas.external.expediente.certificacion.catalog.service.StatusCertificacionTO
 import mx.amib.sistemas.external.expediente.persona.service.SustentanteTO
+import mx.amib.sistemas.registro.legacy.saaec.RegistroExamenTO
 
 class ExpedienteController {
 
 	def figuraService
 	
+	def entidadFinancieraService
+	def estadoCivilService
+	def nacionalidadService
+	def nivelEstudiosService
+	def tipoTelefonoService
+	
 	def sustentanteService
 	def statusAutorizacionService
 	def statusCertificacionService
+	
+	def sepomexService
 	
     def index() {
 		IndexViewModel vm = this.getIndexViewModel(params)
@@ -128,8 +145,48 @@ class ExpedienteController {
 	
 	def listEnAutorizacion(){}
 
+	def edit(Long id){
+		def s = sustentanteService.get(id)
+		FormViewModel vm = this.getFormViewModel(s)
+		
+		render(view:"edit",model:[viewModelInstance: vm])
+	}
+	
+	private FormViewModel getFormViewModel(SustentanteTO s){
+		FormViewModel vm = new FormViewModel()
+		vm.estadoCivilList = estadoCivilService.list()
+		vm.institucionesList = entidadFinancieraService.obtenerInstituciones()
+		vm.nacionalidadList = nacionalidadService.list()
+		vm.nivelEstudiosList = nivelEstudiosService.list()
+		vm.tipoTelefonoList = tipoTelefonoService.list()
+		vm.sustentanteInstance = s
+		if(s.idSepomex != null){
+			vm.codigoPostal = sepomexService.obtenerCodigoPostalDeIdSepomex(s.idSepomex)
+			vm.sepomexJsonList = (sepomexService.obtenerDatosSepomexPorCodigoPostal(vm.codigoPostal) as JSON)
+		}
+		return vm
+	}
+	
 	def show(){ }
 
+}
+
+class FormViewModel{
+	//Bindeables
+	SustentanteTO sustentanteInstance
+	
+	//No bindeables
+	Collection<EstadoCivilTO> estadoCivilList
+	Collection<InstitucionTO> institucionesList
+	Collection<NacionalidadTO> nacionalidadList
+	Collection<NivelEstudiosTO> nivelEstudiosList
+	Collection<TipoTelefonoTO> tipoTelefonoList
+	String sepomexJsonList
+	
+	InstitucionTO institutoInstance
+	VarianteFiguraTO varianteFiguraInstance
+	
+	String codigoPostal
 }
 
 class IndexViewModel{

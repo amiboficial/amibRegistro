@@ -4,6 +4,8 @@ import mx.amib.sistemas.external.expediente.certificacion.catalog.service.*
 import mx.amib.sistemas.external.expediente.persona.service.*
 
 class CertificacionTO {
+	Long id
+	
 	Date fechaInicio
 	Date fechaFin
 	Date fechaObtencion

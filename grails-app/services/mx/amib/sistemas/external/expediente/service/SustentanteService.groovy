@@ -3,15 +3,23 @@ package mx.amib.sistemas.external.expediente.service
 import org.apache.http.HttpStatus
 
 import java.util.Date
+import java.util.List;
 import java.text.DateFormat
 import java.text.SimpleDateFormat
+
 import org.codehaus.groovy.grails.web.json.JSONObject
+
 import grails.converters.JSON
 import grails.plugins.rest.client.RestBuilder
 import grails.transaction.Transactional
+import mx.amib.sistemas.external.expediente.certificacion.catalog.service.MetodoValidacionTO;
+import mx.amib.sistemas.external.expediente.certificacion.catalog.service.StatusAutorizacionTO;
+import mx.amib.sistemas.external.expediente.certificacion.catalog.service.StatusCertificacionTO;
+import mx.amib.sistemas.external.expediente.certificacion.catalog.service.VarianteFiguraTO;
 import mx.amib.sistemas.external.expediente.certificacion.service.CertificacionTO
-import mx.amib.sistemas.external.expediente.persona.catalog.service.NacionalidadTO
-import mx.amib.sistemas.external.expediente.persona.catalog.service.NivelEstudiosTO
+import mx.amib.sistemas.external.expediente.certificacion.service.EventoPuntosTO;
+import mx.amib.sistemas.external.expediente.certificacion.service.ValidacionTO;
+import mx.amib.sistemas.external.expediente.persona.catalog.service.*
 import mx.amib.sistemas.external.expediente.persona.service.*
 
 //NOTA: Este servicio esta presente en:
@@ -29,7 +37,7 @@ import mx.amib.sistemas.external.expediente.persona.service.*
  */
 @Transactional
 class SustentanteService {
-
+	
 	String comprobarMatriculasUrl
 	String comprobarMatriculasNotInUrl
 	String findAllUrl
@@ -100,7 +108,7 @@ class SustentanteService {
 	void guardarNuevo(SustentanteTO sustentante){
 		sustentante.id = null
 
-		println saveUrl
+		println "SaveUrl: " + saveUrl
 
 		def rest = new RestBuilder()
 		def resp = rest.post(saveUrl){
@@ -224,28 +232,149 @@ class SustentanteService {
 		sustentante.numeroMatricula = data.'numeroMatricula'
 		sustentante.nombre = data.'nombre'
 		sustentante.primerApellido = data.'primerApellido'
-		sustentante.segundoApellido = data.'segundoApellido'
+		if(!JSONObject.NULL.equals(data.'segundoApellido')) sustentante.segundoApellido = data.'segundoApellido'
 		sustentante.genero = data.'genero'
 		sustentante.rfc = data.'rfc'
-		sustentante.curp = data.'curp'
+		if(!JSONObject.NULL.equals(data.'curp')) sustentante.curp = data.'curp'
 		sustentante.fechaNacimiento = df.parse(data.'fechaNacimiento'.substring(0,10))
 		sustentante.correoElectronico = data.'correoElectronico'
+		
+		sustentante.calle = data.'calle'
+		if(!JSONObject.NULL.equals(data.'numeroExterior')) sustentante.numeroExterior = data.'numeroExterior'
+		if(!JSONObject.NULL.equals(data.'numeroInterior')) sustentante.numeroInterior = data.'numeroInterior'
+		if(!JSONObject.NULL.equals(data.'idSepomex')) sustentante.idSepomex = data.'idSepomex'
+		
 		sustentante.nacionalidad = new NacionalidadTO()
-		if(data.'nacionalidad' instanceof JSONObject && JSONObject.NULL.equals(data.'nacionalidad')){
+		if(data.'nacionalidad' instanceof JSONObject && !JSONObject.NULL.equals(data.'nacionalidad')){
 			sustentante.nacionalidad.id = data.'nacionalidad'.'id'
 			sustentante.nacionalidad.descripcion = data.'nacionalidad'.'descripcion'
 			sustentante.nacionalidad.vigente = data.'nacionalidad'.'vigente'
+			sustentante.idNacionalidad = sustentante.nacionalidad.id
 		}
 		sustentante.nivelEstudios = new NivelEstudiosTO()
-		if(data.'nivelEstudios' instanceof JSONObject && JSONObject.NULL.equals(data.'nivelEstudios')){
+		if(data.'nivelEstudios' instanceof JSONObject && !JSONObject.NULL.equals(data.'nivelEstudios')){
 			sustentante.nivelEstudios.id = data.'nivelEstudios'.'id'
 			sustentante.nivelEstudios.descripcion = data.'nivelEstudios'.'descripcion'
 			sustentante.nivelEstudios.vigente = data.'nivelEstudios'.'vigente'
+			sustentante.idNivelEstudios = sustentante.nivelEstudios.id
 		}
+		sustentante.estadoCivil = new EstadoCivilTO()
+		if(data.'estadoCivil' instanceof JSONObject && !JSONObject.NULL.equals(data.'estadoCivil')){
+			sustentante.estadoCivil.id = data.'estadoCivil'.'id'
+			sustentante.estadoCivil.descripcion = data.'estadoCivil'.'descripcion'
+			sustentante.estadoCivil.vigente = data.'estadoCivil'.'vigente'
+			sustentante.idEstadoCivil = sustentante.estadoCivil.id
+		}
+		
 		sustentante.telefonos = new ArrayList<TelefonoSustentanteTO>()
+		data.'telefonos'.each {
+			TelefonoSustentanteTO ts = new TelefonoSustentanteTO()
+			ts.id = it.'id'
+			if(JSONObject.NULL.equals(it.'extension')) ts.extension = null
+			else ts.extension = it.'extension'
+			ts.telefono = it.'telefono'
+			if(JSONObject.NULL.equals(it.'lada')) ts.lada = null
+			else ts.lada = it.'lada'
+			ts.idTipoTelefonoSustentante = it.'idTipoTelefonoSustentante'
+			ts.tipoTelefonoSustentante = new TipoTelefonoTO()
+			ts.tipoTelefonoSustentante.id = it.'tipoTelefonoSustentante'.'id'
+			ts.tipoTelefonoSustentante.descripcion = it.'tipoTelefonoSustentante'.'descripcion'
+			ts.tipoTelefonoSustentante.vigente = it.'tipoTelefonoSustentante'.'vigente'
+			ts.sustentante = sustentante
+			sustentante.telefonos.add(ts)
+		}
 		sustentante.documentos = new ArrayList<DocumentoSustentanteTO>()
+		data.'documentos'.each {
+			DocumentoSustentanteTO ds = new DocumentoSustentanteTO()
+			ds.uuid = it.'uuid'
+			ds.vigente = it.'vigente'
+			
+			ds.tipoDocumentoSustentate = new TipoDocumentoTO()
+			ds.tipoDocumentoSustentate.id = it.'tipoDocumentoSustentate'.'id'
+			ds.tipoDocumentoSustentate.descripcion = it.'tipoDocumentoSustentate'.'descripcion'
+			ds.tipoDocumentoSustentate.vigente = it.'tipoDocumentoSustentate'.'vigente'
+			
+			ds.sustentante = sustentante
+		}
 		sustentante.puestos = new ArrayList<PuestoTO>()
+		data.'puestos'.each {
+			PuestoTO p = new PuestoTO()
+			p.id = it.'id'
+			
+			p.idInstitucion = it.'idInstitucion'
+			if(!JSONObject.NULL.equals(it.'fechaInicio')) p.fechaInicio = df.parse(it.'fechaInicio'.substring(0,10))
+			if(!JSONObject.NULL.equals(it.'fechaFin')) p.fechaFin = df.parse(it.'fechaFin'.substring(0,10))
+			p.nombrePuesto = it.'nombrePuesto'
+			p.esActual = it.'esActual'
+			
+			if(!JSONObject.NULL.equals(it.'fechaCreacion')) p.fechaCreacion = df.parse(it.'fechaCreacion'.substring(0,10))
+			if(!JSONObject.NULL.equals(it.'fechaModificacion')) p.fechaModificacion = df.parse(it.'fechaModificacion'.substring(0,10))
+			
+			p.sustentante = sustentante
+		}
 		sustentante.certificaciones = new ArrayList<CertificacionTO>()
+		data.'certificaciones'.each {
+			CertificacionTO c = new CertificacionTO()
+			c.id = it.'id'
+			
+			if(!JSONObject.NULL.equals(it.'fechaInicio')) c.fechaInicio = df.parse(it.'fechaInicio'.substring(0,10))
+			if(!JSONObject.NULL.equals(it.'fechaObtencion')) c.fechaFin = df.parse(it.'fechaFin'.substring(0,10))
+			if(!JSONObject.NULL.equals(it.'fechaCreacion')) c.fechaObtencion = df.parse(it.'fechaObtencion'.substring(0,10))
+			c.isAutorizado = it.'isAutorizado'
+			c.isApoderado = it.'isApoderado'
+			c.isUltima = it.'isUltima'
+			
+			if(!JSONObject.NULL.equals(it.'fechaCreacion')) c.fechaCreacion = df.parse(it.'fechaCreacion'.substring(0,10))
+			if(!JSONObject.NULL.equals(it.'fechaModificacion')) c.fechaModificacion = df.parse(it.'fechaModificacion'.substring(0,10))
+			
+			c.varianteFigura = new VarianteFiguraTO()
+			c.varianteFigura.id = it.'varianteFigura'.'id'
+			c.varianteFigura.nombre = it.'varianteFigura'.'nombre'
+			c.varianteFigura.vigente = it.'varianteFigura'.'vigente'
+			c.varianteFigura.numeroVersion = it.'varianteFigura'.'numeroVersion'
+			c.varianteFigura.idFigura = it.'varianteFigura'.'idFigura'
+			c.varianteFigura.nombreFigura = it.'varianteFigura'.'nombreFigura'
+			c.varianteFigura.nombreAcuseFigura = it.'varianteFigura'.'nombreAcuseFigura'
+			c.varianteFigura.esAutorizableFigura = it.'varianteFigura'.'esAutorizableFigura'
+			c.varianteFigura.tipoAutorizacionFigura = it.'varianteFigura'.'tipoAutorizacionFigura'
+			c.varianteFigura.inicialesFigura = it.'varianteFigura'.'inicialesFigura'
+
+			c.statusAutorizacion = new StatusAutorizacionTO()
+			c.statusAutorizacion.id = it.'statusAutorizacion'.'id'
+			c.statusAutorizacion.descripcion = it.'statusAutorizacion'.'descripcion'
+			c.statusAutorizacion.vigente = it.'statusAutorizacion'.'vigente'
+			
+			c.statusCertificacion = new StatusCertificacionTO()
+			c.statusCertificacion.id = it.'statusCertificacion'.'id'
+			c.statusCertificacion.descripcion = it.'statusCertificacion'.'descripcion'
+			c.statusCertificacion.vigente = it.'statusCertificacion'.'vigente'
+			
+			c.idVarianteFigura = it.'idVarianteFigura'
+			c.idStatusAutorizacion = it.'idStatusAutorizacion'
+			c.idStatusCertificacion = it.'idStatusCertificacion'
+		
+			c.sustentante = sustentante
+			c.validaciones = new ArrayList<ValidacionTO>()
+			it.'validaciones'.each{ x ->
+				ValidacionTO v = new ValidacionTO()
+				if(!JSONObject.NULL.equals(it.'fechaAplicacion')) v.fechaAplicacion = df.parse(x.'fechaAplicacion'.substring(0,10))
+				if(!JSONObject.NULL.equals(it.'fechaInicio')) v.fechaInicio = df.parse(x.'fechaInicio'.substring(0,10))
+				if(!JSONObject.NULL.equals(it.'fechaFin')) v.fechaFin = df.parse(x.'fechaFin'.substring(0,10))
+				v.autorizadoPorUsuario = x.'autorizadoPorUsuario'
+				
+				v.eventosPuntos = new ArrayList<EventoPuntosTO>()
+				//aqui van el registro de los eventos que generaron puntos
+				
+				v.metodoValidacion = new MetodoValidacionTO()
+				v.idMetodoValidacion = x.'idMetodoValidacion'
+			
+				if(!JSONObject.NULL.equals(it.'fechaCreacion'))  v.fechaCreacion = df.parse(x.'fechaCreacion'.substring(0,10))
+				if(!JSONObject.NULL.equals(it.'fechaModificacion'))  v.fechaModificacion = df.parse(x.'fechaModificacion'.substring(0,10))
+				
+				v.certificacion = c
+			}
+			
+		}
 		return sustentante
 	}
 }

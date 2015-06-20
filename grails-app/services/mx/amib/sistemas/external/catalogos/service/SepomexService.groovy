@@ -129,6 +129,12 @@ class SepomexService {
 			
 		return listaSepomex
 	}
+	
+	String obtenerCodigoPostalDeIdSepomex(Long idSepomex){
+		String s = idSepomex.toString()
+		s = s.reverse().substring(0, 5).reverse()
+		return s
+	}
 }
 
 /**

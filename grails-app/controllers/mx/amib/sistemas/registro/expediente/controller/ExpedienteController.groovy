@@ -1,7 +1,8 @@
 package mx.amib.sistemas.registro.expediente.controller
 
+import java.text.SimpleDateFormat
 import java.util.Collection
-
+import org.codehaus.groovy.grails.web.json.JSONObject
 import grails.converters.JSON
 import mx.amib.sistemas.external.catalogos.service.EstadoCivilTO
 import mx.amib.sistemas.external.catalogos.service.FiguraTO
@@ -13,8 +14,13 @@ import mx.amib.sistemas.external.catalogos.service.TipoTelefonoTO
 import mx.amib.sistemas.external.catalogos.service.VarianteFiguraTO
 import mx.amib.sistemas.external.expediente.certificacion.catalog.service.StatusAutorizacionTO
 import mx.amib.sistemas.external.expediente.certificacion.catalog.service.StatusCertificacionTO
+import mx.amib.sistemas.external.expediente.certificacion.service.CertificacionTO
+import mx.amib.sistemas.external.expediente.persona.service.DocumentoSustentanteTO
+import mx.amib.sistemas.external.expediente.persona.service.PuestoTO
 import mx.amib.sistemas.external.expediente.persona.service.SustentanteTO
+import mx.amib.sistemas.external.expediente.persona.service.TelefonoSustentanteTO
 import mx.amib.sistemas.registro.legacy.saaec.RegistroExamenTO
+import org.codehaus.groovy.grails.web.json.JSONArray
 
 class ExpedienteController {
 
@@ -162,13 +168,54 @@ class ExpedienteController {
 		vm.sustentanteInstance = s
 		if(s.idSepomex != null){
 			vm.codigoPostal = sepomexService.obtenerCodigoPostalDeIdSepomex(s.idSepomex)
-			vm.sepomexJsonList = (sepomexService.obtenerDatosSepomexPorCodigoPostal(vm.codigoPostal) as JSON)
+			vm.sepomexJsonList = (sepomexService.obtenerDatosSepomexPorCodigoPostal(vm.codigoPostal).sort{ it.asentamiento?.nombre } as JSON)
 		}
 		return vm
 	}
 	
 	def show(){ }
 
+	
+	//Métodos de guardado de datos
+	def updateDatosPersonales(SustentanteTO sustentante){
+		SimpleDateFormat sdf = new SimpleDateFormat("dd-M-yyyy")
+		def telefonosJsonElement = JSON.parse(params.'sustentante.telefonos_json')
+		
+		//bindings manuales
+		//sustentante.id = params.'sustentante.id'
+		sustentante.fechaNacimiento = sdf.parse(params.'sustentante.fechaNacimiento_day' + '-' + params.'sustentante.fechaNacimiento_month' + '-' + params.'sustentante.fechaNacimiento_year')
+		sustentante.telefonos = new ArrayList<TelefonoSustentanteTO>()
+		if(telefonosJsonElement != null && telefonosJsonElement instanceof JSONArray){
+			def telefonosJsonArray = (JSONArray)telefonosJsonElement
+			telefonosJsonArray.each{
+				TelefonoSustentanteTO t = new TelefonoSustentanteTO()
+				if(JSONObject.NULL.equals(it.'grailsId') || it.'grailsId' == -1) t.id = null
+				else t.id = it.'grailsId'
+				t.lada = it.'lada'
+				t.telefono = it.'telefono'
+				t.extension = it.'extension'
+				t.idTipoTelefonoSustentante = (Long)it.'idTipoTelefono'
+				sustentante.telefonos.add(t)
+			}
+		}
+		sustentante.documentos = new ArrayList<DocumentoSustentanteTO>()
+		sustentante.puestos = new ArrayList<PuestoTO>()
+		sustentante.certificaciones = new ArrayList<CertificacionTO>()
+		
+		println "Se enviara el siguiente JSON (editar): "
+		println (sustentante as JSON)
+
+		//se guarda el sustentante con todos los datos bindeados
+		try {
+			//sustentanteService.guardarNuevo(sustentante)
+			flash.successMessage = "El registro de sustentante de \"" + sustentante.nombre + " " + sustentante.primerApellido + "\" ha sido guardado satisfactoriamente"
+		}
+		catch (Exception e){
+			flash.errorMessage = "Ha ocurrido un error al guardar la informaci�n, los detalles son los siguientes: " + e.message.substring(0, Math.min(e.message.length(),256)  )
+		}
+
+		redirect (action: "index")
+	}
 }
 
 class FormViewModel{

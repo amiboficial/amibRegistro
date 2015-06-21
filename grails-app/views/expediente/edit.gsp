@@ -21,7 +21,7 @@
 		<div class="alert alert-info"><span class="glyphicon glyphicon-info-sign"></span> ${flash.message}</div>
 	</g:if>
 	
-	<form id="frmApp" class="form-horizontal" role="form" action=<g:createLink controller="expediente" action="save"/> method="post">
+	<form id="frmApp" class="form-horizontal" role="form" action=<g:createLink controller="expediente" action="updateDatosPersonales"/> method="post">
 	
 		<div class="alert alert-info"><span class="glyphicon glyphicon-info-sign"></span> Edite adecuadamenete la información del solicitante. Una vez que toda la información proporcionada este completa, revisando el "checklist" en la parte inferior, podrá proceder a confirmar los cambios.</div>
 		
@@ -225,6 +225,7 @@
 				var arr = this.model.get('viewsarray');
 				//El método introduce los datos en campos "hidden" con los que se hará POST
 				//datos generales
+				this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.id" value="' + arr[app.EXP_EDT_CHK_GRALES].model.get('grailsId') + '" />');
 				this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.numeroMatricula" value="' + arr[app.EXP_EDT_CHK_GRALES].model.get('numeroMatricula') + '" />');
 				this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.nombre" value="' + arr[app.EXP_EDT_CHK_GRALES].model.get('nombre') + '" />');
 				this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.primerApellido" value="' + arr[app.EXP_EDT_CHK_GRALES].model.get('primerApellido') + '" />');

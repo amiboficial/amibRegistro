@@ -13,7 +13,7 @@ app.Telefono = Backbone.Model.extend({
 		lada: "",
 		telefono: "",
 		extension: "",
-		idTipoTelefono: "",
+		idTipoTelefono: -1,
 		dsTipoTelefono: "",
 	},
 });
@@ -144,7 +144,7 @@ app.TelefonosView = Backbone.View.extend({
 			tel.set('lada',$.trim(this.$('.lada').val()));
 			tel.set('telefono',$.trim(this.$('.telefono').val()));
 			tel.set('extension',$.trim(this.$('.extension').val()));
-			tel.set('idTipoTelefono',this.$('.tipo').val());
+			tel.set('idTipoTelefono', parseInt(this.$('.tipo').val()) );
 			tel.set('dsTipoTelefono',this.$('.tipo option:selected').text());
 			this.collection.add(tel);
 			//limpia campos

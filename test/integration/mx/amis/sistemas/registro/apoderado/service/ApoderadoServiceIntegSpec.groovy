@@ -24,7 +24,7 @@ class ApoderadoServiceIntegSpec extends Specification {
 			//def matricula1 = apoderadoService.obtenerDatosMatriculaDgaValido(1)
 			//def testobj = registroExamenService.findAllRegistrable("Carlos","","",null)
 			//def testobj = .comprobarMatriculas([2,3,4,5,6,7,8,9,10,23,217,218])
-			def testobj = sustentanteService.findAll(5, 0, null, null)
+			def testobj = sustentanteService.get(1)
 			println (testobj as JSON)
 	/*if(matricula1.nombreCompleto == "Carlos Cano Sosa"){
 		assertTrue()

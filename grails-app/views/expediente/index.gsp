@@ -249,6 +249,12 @@
 	<script type="text/javascript">
 	var app = app || {};
 
+	$(".revisar").click(function(e){ 
+		e.preventDefault();
+		var folio = $(this).attr("data-id");
+		window.location.href = '<g:createLink controller="expediente" action="show" id="' + folio + '"/>'
+	});
+	
 	$('.limpiar').click(function(e){
 		e.preventDefault();
 		var tipoBusqueda = $(this).attr("data-tab");

@@ -10,8 +10,8 @@
 	<!-- INICIA: BREADCRUMB ADMIN -->
 	<ul class="breadcrumb">
 		<li><a href="#">Gestión de expedientes</a><span class="divider"></span></li>
-		<li><a href="<g:createLink controller="expedientes" action="index" />">Expedientes</a></li>
-		<li><a href="#">Vista del expediente</a></li>
+		<li><a href="<g:createLink controller="expediente" action="index" />">Expedientes</a></li>
+		<li><a href="<g:createLink controller="expediente" action="show" id="${viewModelInstance?.sustentanteInstance?.id}"/>">Vista de expediente</a></li>
 		<li><a href="#">Editar datos personales</a></li>
 	</ul>
 	<!-- FIN: BREADCRUMB ADMIN -->

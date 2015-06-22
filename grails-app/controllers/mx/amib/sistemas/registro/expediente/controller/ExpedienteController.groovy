@@ -173,8 +173,19 @@ class ExpedienteController {
 		return vm
 	}
 	
-	def show(){ }
+	def show(Long id){ 
+		def s = sustentanteService.get(id)
+		ShowViewModel vm = new ShowViewModel()
+		
+		vm.sustentanteInstance = s
+		vm.nombreCompleto = s.nombre + " " + s.primerApellido + " " + s.segundoApellido
+		if(s.idSepomex != null)
+			vm.sepomexData = sepomexService.get(s.idSepomex)
+		
+		render(view:"show",model:[viewModelInstance: vm])
+	}
 
+	def showDemo() { }
 	
 	//Métodos de guardado de datos
 	def updateDatosPersonales(SustentanteTO sustentante){
@@ -207,7 +218,7 @@ class ExpedienteController {
 
 		//se guarda el sustentante con todos los datos bindeados
 		try {
-			//sustentanteService.guardarNuevo(sustentante)
+			sustentanteService.updateDatosPersonales(sustentante)
 			flash.successMessage = "El registro de sustentante de \"" + sustentante.nombre + " " + sustentante.primerApellido + "\" ha sido guardado satisfactoriamente"
 		}
 		catch (Exception e){
@@ -216,6 +227,12 @@ class ExpedienteController {
 
 		redirect (action: "index")
 	}
+}
+
+class ShowViewModel{
+	SustentanteTO sustentanteInstance
+	SepomexTO sepomexData
+	String nombreCompleto
 }
 
 class FormViewModel{

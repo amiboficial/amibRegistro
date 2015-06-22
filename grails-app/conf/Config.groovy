@@ -153,6 +153,7 @@ mx.amib.sistemas.catalogos.personal.Nacionalidad.list = 'nacionalidadRestful/lis
 mx.amib.sistemas.catalogos.personal.TipoTelefono.list = 'tipoTelefonoRestful/list'
 mx.amib.sistemas.catalogos.sepomex.EntidadFederativa.list = 'entidadFederativaRestful/index?max=32'
 mx.amib.sistemas.catalogos.sepomex.Sepomex.findByCodigoPostal = 'sepomexRestful/findByCodigoPostal?cp='
+mx.amib.sistemas.catalogos.sepomex.Sepomex.get = "sepomexRestful/show/"
 
 //especificaciones de rutas para servicios REST de amibExpediente
 mx.amib.sistemas.expediente.Sustentante.comprobarMatriculas = 'sustentanteRestful/comprobarMatriculas/'
@@ -163,6 +164,7 @@ mx.amib.sistemas.expediente.Sustentante.findAllAdvancedSearchWithCertificacionUr
 mx.amib.sistemas.expediente.Sustentante.obtenerSustentantePorMatricula = 'sustentanteRestful/obtenerSustentantePorMatricula/'
 mx.amib.sistemas.expediente.Sustentante.get = 'sustentanteRestful/show/'
 mx.amib.sistemas.expediente.Sustentante.save = 'sustentanteRestful/save'
+mx.amib.sistemas.expediente.Sustentante.updateDatosPersonales = 'sustentanteRestful/updateDatosPersonales'
 mx.amib.sistemas.expediente.certificacion.MetodoValidacion.list = 'metodoValidacionRestful/index?max=100'
 mx.amib.sistemas.expediente.certificacion.StatusAutorizacion.list = 'statusAutorizacionRestful/index?max=100'
 mx.amib.sistemas.expediente.certificacion.StatusCertificacion.list = 'statusCertificacionRestful/index?max=100'

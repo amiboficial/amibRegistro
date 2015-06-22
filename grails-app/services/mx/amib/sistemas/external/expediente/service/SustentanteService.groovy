@@ -46,7 +46,8 @@ class SustentanteService {
 	String getUrl
 	String getByNumeroMatriculaUrl
 	String saveUrl
-
+	String updateDatosPersonalesUrl
+	
 	Collection<Integer> comprobarMatriculas(Collection<Integer> matriculasComprobar){
 		Collection<Integer> result = new ArrayList<Integer>()
 		def rest = new RestBuilder()
@@ -112,6 +113,26 @@ class SustentanteService {
 
 		def rest = new RestBuilder()
 		def resp = rest.post(saveUrl){
+			contentType "application/json;charset=UTF-8"
+			json (sustentante as JSON)
+		}
+
+		if(resp.statusCode.value() != HttpStatus.SC_CREATED )
+			throw new Exception("STATUS CODE: " + resp.statusCode)
+	}
+	
+	/**
+	 * Guarda unicamente los datos personales sustentante
+	 * en el sistema de expediente. Los detalles de certificación,
+	 * puestos son omitidos.
+	 *
+	 * @param sustentante
+	 *
+	 */
+	void updateDatosPersonales(SustentanteTO sustentante){
+		println "updateDatosPersonalesUrl: " + updateDatosPersonalesUrl
+		def rest = new RestBuilder()
+		def resp = rest.post(updateDatosPersonalesUrl){
 			contentType "application/json;charset=UTF-8"
 			json (sustentante as JSON)
 		}

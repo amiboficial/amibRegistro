@@ -11,19 +11,22 @@
 	<ul class="breadcrumb">
 		<li><a href="#">Gestión de expedientes</a><span class="divider"></span></li>
 		<li><a href="<g:createLink controller="expediente" action="index" />">Expedientes</a></li>
-		<li><a href="#">Vista de expediente</a></li>
+		<li><a href="#">Vista de Expediente</a></li>
 	</ul>
 	<!-- FIN: BREADCRUMB ADMIN -->
 	<h2><strong>Datos de expediente</strong></h2>
-	<h4>${raw(viewModelInstance?.nombreCompleto)} (Matricula: ${viewModelInstance?.sustentanteInstance?.numeroMatricula}, Folio: ${viewModelInstance?.sustentanteInstance?.id})</h4>
+	<h4>Juan Perez López (Matricula: 1, Folio:1)</h4>
 	
 	<fieldset>
 		<legend>Acciones</legend>
 		
-		<button type="button" data-id="${viewModelInstance?.sustentanteInstance?.id}" data-url="<g:createLink controller="expediente" action="edit" id="${viewModelInstance?.sustentanteInstance?.id}"/>" class="editar btn btn-default btn-primary"><span class="glyphicon glyphicon-pencil"></span> Editar datos personales</button>
-		<button type="button" data-id="${viewModelInstance?.sustentanteInstance?.id}" data-url="<g:createLink controller="expediente" action="editDoc" id="${viewModelInstance?.sustentanteInstance?.id}"/>" class="editarDoc btn btn-default btn-primary"><span class="glyphicon glyphicon-pencil"></span> Gestión de documentación</button>
-		<button type="button" data-id="${viewModelInstance?.sustentanteInstance?.id}" data-url="<g:createLink controller="expediente" action="remove" id="${viewModelInstance?.sustentanteInstance?.id}"/>" class="eliminar btn btn-default btn-primary"><span class="glyphicon glyphicon-trash"></span> Eliminar</button>
-		
+		<button id="btnEditar" type="button" onclick="btnEditar_click(${expedienteInstance?.id})" class="btn btn-default btn-primary"><span class="glyphicon glyphicon-pencil"></span> Editar datos personales</button>
+		<button id="btnEditar" type="button" onclick="btnEditar_click(${expedienteInstance?.id})" class="btn btn-default btn-primary"><span class="glyphicon glyphicon-pencil"></span> Gestión de documentación</button>
+		<button id="btnEliminar" type="button" onclick="btnEliminar_click(${expedienteInstance?.id})" class="btn btn-default btn-primary"><span class="glyphicon glyphicon-trash"></span> Eliminar</button>
+		<!-- 
+		<button id="btnRevalidarPuntos" type="button" onclick="btnRevalidarPuntos_click(${expedienteInstance?.id})" class="btn btn-default btn-primary"><span class="glyphicon glyphicon-pencil"></span> Revalidar por puntos</button>
+		<button id="btnRevalidarExp" type="button" onclick="btnRevalidarExp_click(${expedienteInstance?.id})" class="btn btn-default btn-primary"><span class="glyphicon glyphicon-pencil"></span> Revalidar por experiencia</button>
+		 -->
 	</fieldset>
 	
 	<fieldset class="form-horizontal">
@@ -41,184 +44,131 @@
 		<div class="tab-content">
 			<div role="tabpanel" class="tab-pane active" id="divDatosPersonales">
 				<br/>
-				
-				<legend><i>Información personal</i></legend>
-				
-				<div class="form-group">
+				<div id="divRepLegalNom" class="form-group">
 					<label class="col-md-2 col-sm-3 control-label">
 		            	<g:message code="revocacion.representanteLegalNombre.label" default="Nombre" />
 					</label>
 		            <div class="col-md-9 col-sm-9">
-		            	<p class="form-control-static">${viewModelInstance?.sustentanteInstance?.nombre}&nbsp;</p>
+		            	<p class="form-control-static">Lorem Ipsum&nbsp;</p>
 		            </div>
 				</div>
-				<div class="form-group">
+				<div id="divAp1" class="form-group">
 					<label class="col-md-2 col-sm-3 control-label">
 						<g:message code="revocacion.representanteLegalApellido1.label" default="Primer apellido" />
 					</label>
 					<div class="col-md-9 col-sm-9">
-						<p class="form-control-static">${viewModelInstance?.sustentanteInstance?.primerApellido}&nbsp;</p>
+						<p class="form-control-static">Dolor sit amet&nbsp;</p>
 					</div>
 				</div>
-				<div class="form-group">
+				<div id="divAp2" class="form-group">
 					<label class="col-md-2 col-sm-3 control-label">
 						<g:message code="revocacion.representanteLegalApellido2.label" default="Segundo apellido" />					
 					</label>
 					<div class="col-md-9 col-sm-9">
-						<p class="form-control-static">${viewModelInstance?.sustentanteInstance?.segundoApellido}&nbsp;</p>
+						<p class="form-control-static">Notaris pubrota&nbsp;</p>
 					</div>
 				</div>
 				
-				<div class="form-group">
+				<div id="divRepLegalNom" class="form-group">
 					<label class="col-md-2 col-sm-3 control-label">
 		            	<g:message code="revocacion.representanteLegalNombre.label" default="Género" />
 					</label>
 		            <div class="col-md-9 col-sm-9">
-		            	<p class="form-control-static">${viewModelInstance?.sustentanteInstance?.genero}&nbsp;</p>
+		            	<p class="form-control-static">Lorem Ipsum&nbsp;</p>
 		            </div>
 				</div>
-				<div class="form-group">
+				<div id="divAp1" class="form-group">
 					<label class="col-md-2 col-sm-3 control-label">
 						<g:message code="revocacion.representanteLegalApellido1.label" default="RFC" />
 					</label>
 					<div class="col-md-9 col-sm-9">
-						<p class="form-control-static">${viewModelInstance?.sustentanteInstance?.rfc}&nbsp;</p>
+						<p class="form-control-static">Dolor sit amet&nbsp;</p>
 					</div>
 				</div>
-				<div class="form-group">
+				<div id="divAp2" class="form-group">
 					<label class="col-md-2 col-sm-3 control-label">
 						<g:message code="revocacion.representanteLegalApellido2.label" default="CURP" />					
 					</label>
 					<div class="col-md-9 col-sm-9">
-						<p class="form-control-static">${viewModelInstance?.sustentanteInstance?.curp}&nbsp;</p>
+						<p class="form-control-static">Notaris pubrota&nbsp;</p>
 					</div>
 				</div>
 				
-				<div class="form-group">
+				<div id="divRepLegalNom" class="form-group">
 					<label class="col-md-2 col-sm-3 control-label">
 		            	<g:message code="revocacion.representanteLegalNombre.label" default="Fecha de nacimiento" />
 					</label>
 		            <div class="col-md-9 col-sm-9">
-		            	<p class="form-control-static">${viewModelInstance?.sustentanteInstance?.fechaNacimiento}&nbsp;</p>
+		            	<p class="form-control-static">Lorem Ipsum&nbsp;</p>
 		            </div>
 				</div>
-				<div class="form-group">
-					<label class="col-md-2 col-sm-3 control-label">
-						<g:message code="revocacion.representanteLegalApellido2.label" default="Nacionalidad" />					
-					</label>
-					<div class="col-md-9 col-sm-9">
-						<p class="form-control-static">${viewModelInstance?.sustentanteInstance?.nacionalidad?.descripcion}&nbsp;</p>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="col-md-2 col-sm-3 control-label">
-						<g:message code="revocacion.representanteLegalApellido2.label" default="Nivel de estudios" />					
-					</label>
-					<div class="col-md-9 col-sm-9">
-						<p class="form-control-static">${viewModelInstance?.sustentanteInstance?.nivelEstudios?.descripcion}&nbsp;</p>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="col-md-2 col-sm-3 control-label">
-						<g:message code="revocacion.representanteLegalApellido2.label" default="Calidad Migratoria" />					
-					</label>
-					<div class="col-md-9 col-sm-9">
-						<p class="form-control-static">${viewModelInstance?.sustentanteInstance?.calidadMigratoria?.descripcion}&nbsp;</p>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="col-md-2 col-sm-3 control-label">
-						<g:message code="revocacion.representanteLegalApellido2.label" default="Profesion" />					
-					</label>
-					<div class="col-md-9 col-sm-9">
-						<p class="form-control-static">${viewModelInstance?.sustentanteInstance?.profesion?.descripcion}&nbsp;</p>
-					</div>
-				</div>
-				
-				<legend><i>Domicilio</i></legend>
-				
-				<div class="form-group">
-					<label class="col-md-2 col-sm-3 control-label">
-						<g:message code="revocacion.representanteLegalApellido2.label" default="C.P." />					
-					</label>
-					<div class="col-md-9 col-sm-9">
-						<p class="form-control-static">${viewModelInstance?.sepomexData?.codigoPostal}&nbsp;</p>
-					</div>
-				</div>
-				
-				<div class="form-group">
-					<label class="col-md-2 col-sm-3 control-label">
-						<g:message code="revocacion.representanteLegalApellido2.label" default="Entidad Federativa" />					
-					</label>
-					<div class="col-md-9 col-sm-9">
-						<p class="form-control-static">${viewModelInstance?.sepomexData?.asentamiento?.municipio?.entidadFederativa?.nombre}&nbsp;</p>
-					</div>
-				</div>
-				
-				<div class="form-group">
-					<label class="col-md-2 col-sm-3 control-label">
-						<g:message code="revocacion.representanteLegalApellido2.label" default="Delegación o Municipio" />					
-					</label>
-					<div class="col-md-9 col-sm-9">
-						<p class="form-control-static">${viewModelInstance?.sepomexData?.asentamiento?.municipio?.nombre}&nbsp;</p>
-					</div>
-				</div>
-				
-				<div class="form-group">
-					<label class="col-md-2 col-sm-3 control-label">
-						<g:message code="revocacion.representanteLegalApellido2.label" default="Asentamiento (Colonia)" />					
-					</label>
-					<div class="col-md-9 col-sm-9">
-						<p class="form-control-static">${viewModelInstance?.sepomexData?.asentamiento?.nombre}&nbsp;</p>
-					</div>
-				</div>
-				
-				<div class="form-group">
-					<label class="col-md-2 col-sm-3 control-label">
-						<g:message code="revocacion.representanteLegalApellido2.label" default="Calle" />					
-					</label>
-					<div class="col-md-9 col-sm-9">
-						<p class="form-control-static">${viewModelInstance?.sustentanteInstance?.calle}&nbsp;</p>
-					</div>
-				</div>
-				
-				<div class="form-group">
-					<label class="col-md-2 col-sm-3 control-label">
-						<g:message code="revocacion.representanteLegalApellido2.label" default="Numero Exterior" />					
-					</label>
-					<div class="col-md-9 col-sm-9">
-						<p class="form-control-static">${viewModelInstance?.sustentanteInstance?.numeroExterior}&nbsp;</p>
-					</div>
-				</div>
-				
-				<div class="form-group">
-					<label class="col-md-2 col-sm-3 control-label">
-						<g:message code="revocacion.representanteLegalApellido2.label" default="Numero Interior" />					
-					</label>
-					<div class="col-md-9 col-sm-9">
-						<p class="form-control-static">${viewModelInstance?.sustentanteInstance?.numeroInterior}&nbsp;</p>
-					</div>
-				</div>
-				
-				<legend><i>Contacto</i></legend>
-				
-				<div class="form-group">
+				<div id="divAp1" class="form-group">
 					<label class="col-md-2 col-sm-3 control-label">
 						<g:message code="revocacion.representanteLegalApellido1.label" default="Correo electrónico" />
 					</label>
 					<div class="col-md-9 col-sm-9">
-						<p class="form-control-static">${viewModelInstance?.sustentanteInstance?.correoElectronico}&nbsp;</p>
+						<p class="form-control-static">Dolor sit amet&nbsp;</p>
 					</div>
 				</div>
-				<div class="form-group">
+				<div id="divAp2" class="form-group">
 					<label class="col-md-2 col-sm-3 control-label">
-						<g:message code="revocacion.representanteLegalApellido2.label" default="Teléfono(s)" />					
+						<g:message code="revocacion.representanteLegalApellido2.label" default="Nacionalidad" />					
 					</label>
 					<div class="col-md-9 col-sm-9">
-						<p class="form-control-static">
-							53194722 (Casa) <br/>
-							54676532 (Móvil)<br/>
-						</p>
+						<p class="form-control-static">Notaris pubrota&nbsp;</p>
+					</div>
+				</div>
+				<div id="divAp2" class="form-group">
+					<label class="col-md-2 col-sm-3 control-label">
+						<g:message code="revocacion.representanteLegalApellido2.label" default="Nivel de estudios" />					
+					</label>
+					<div class="col-md-9 col-sm-9">
+						<p class="form-control-static">&nbsp;</p>
+					</div>
+				</div>
+				
+				<div id="divAp2" class="form-group">
+					<label class="col-md-2 col-sm-3 control-label">
+						<g:message code="revocacion.representanteLegalApellido2.label" default="C.P." />					
+					</label>
+					<div class="col-md-9 col-sm-9">
+						<p class="form-control-static">&nbsp;</p>
+					</div>
+				</div>
+				
+				<div id="divAp2" class="form-group">
+					<label class="col-md-2 col-sm-3 control-label">
+						<g:message code="revocacion.representanteLegalApellido2.label" default="Entidad Federativa" />					
+					</label>
+					<div class="col-md-9 col-sm-9">
+						<p class="form-control-static">&nbsp;</p>
+					</div>
+				</div>
+				
+				<div id="divAp2" class="form-group">
+					<label class="col-md-2 col-sm-3 control-label">
+						<g:message code="revocacion.representanteLegalApellido2.label" default="Delegación o Municipio" />					
+					</label>
+					<div class="col-md-9 col-sm-9">
+						<p class="form-control-static">&nbsp;</p>
+					</div>
+				</div>
+				
+				<div id="divAp2" class="form-group">
+					<label class="col-md-2 col-sm-3 control-label">
+						<g:message code="revocacion.representanteLegalApellido2.label" default="Asentamiento (Colonia)" />					
+					</label>
+					<div class="col-md-9 col-sm-9">
+						<p class="form-control-static">&nbsp;</p>
+					</div>
+				</div>
+				
+				<div id="divAp2" class="form-group">
+					<label class="col-md-2 col-sm-3 control-label">
+						<g:message code="revocacion.representanteLegalApellido2.label" default="Calle y Número" />					
+					</label>
+					<div class="col-md-9 col-sm-9">
+						<p class="form-control-static">&nbsp;</p>
 					</div>
 				</div>
 				
@@ -563,28 +513,5 @@
 	<g:if test="${flash.message}">
 		<div class="alert alert-info"><span class="glyphicon glyphicon-info-sign"></span> ${flash.message}</div>
 	</g:if>
-	
-	<script>
-	
-	$(".editar").click(function(e){
-		e.preventDefault();
-		var id = $(this).attr("data-id");
-		var url = $(this).attr("data-url");
-		window.location.href = url;
-	});
-	$(".editarDoc").click(function(e){
-		e.preventDefault();
-		var id = $(this).attr("data-id");
-		var url = $(this).attr("data-url");
-		window.location.href = url;
-	});
-	$(".eliminar").click(function(e){
-		e.preventDefault();
-		var id = $(this).attr("data-id");
-		var url = $(this).attr("data-url");
-		window.location.href = url;
-	});
-	</script>
-	
 </body>
 </html>

@@ -19,9 +19,11 @@ import org.codehaus.groovy.grails.web.json.JSONObject
  */
 @Transactional
 class SepomexService {
-		
+	
+	String getUrl
 	String listEntidadFederativaUrl
 	String findByCodigoPostalUrl
+	
 	
 	/**
 	 * Obtiene una instancia de EntidadFederativaTO de acuerdo
@@ -134,6 +136,46 @@ class SepomexService {
 		String s = idSepomex.toString()
 		s = s.reverse().substring(0, 5).reverse()
 		return s
+	}
+	
+	SepomexTO get(Long id){
+		String restUrl = getUrl + id
+		SepomexTO spmx = null
+		def catef = EntidadFederativaCatalog.getInstance()
+		def rest = new RestBuilder()
+		def resp = rest.get(restUrl)
+		
+		if(resp.json instanceof JSONObject && !JSONObject.NULL.equals(resp.json)){
+			spmx = new SepomexTO()
+			spmx.id = resp.json.'id'
+			spmx.codigoPostal = resp.json.'codigoPostal'
+			spmx.vigente = true
+			
+			spmx.asentamiento = new AsentamientoTO()
+			spmx.asentamiento.id = resp.json.'asentamiento'.'id'
+			spmx.asentamiento.clave = resp.json.'asentamiento'.'clave'
+			spmx.asentamiento.nombre = resp.json.'asentamiento'.'nombre'
+			spmx.asentamiento.vigente = resp.json.'asentamiento'.'vigente'
+			
+			spmx.ciudad = new CiudadTO()
+			spmx.ciudad.id = resp.json.'ciudad'.'id'
+			spmx.ciudad.clave = resp.json.'ciudad'.'clave'
+			spmx.ciudad.nombre = resp.json.'ciudad'.'nombre'
+			spmx.ciudad.vigente = resp.json.'ciudad'.'vigente'
+		
+			//rellena datos de municipio
+			MunicipioTO mun = new MunicipioTO()
+			mun.id = resp.json.'asentamiento'.'municipio'.'id'
+			mun.clave = resp.json.'asentamiento'.'municipio'.'clave'
+			mun.nombre = resp.json.'asentamiento'.'municipio'.'nombre'
+			mun.vigente = resp.json.'asentamiento'.'municipio'.'vigente'
+			mun.entidadFederativa = catef.obtenerEntidadFederativa( (resp.json.'asentamiento'.'municipio'.'idEntidadFederativa').toInteger() )
+			
+			spmx.asentamiento.municipio = mun
+			spmx.ciudad.municipio = mun
+		}
+		
+		return spmx
 	}
 }
 

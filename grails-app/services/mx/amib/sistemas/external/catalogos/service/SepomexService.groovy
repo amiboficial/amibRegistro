@@ -139,6 +139,7 @@ class SepomexService {
 	}
 	
 	SepomexTO get(Long id){
+		
 		String restUrl = getUrl + id
 		SepomexTO spmx = null
 		def catef = EntidadFederativaCatalog.getInstance()

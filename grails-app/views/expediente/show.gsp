@@ -30,23 +30,23 @@
 		<legend>Expediente</legend>
 		
 		<ul class="nav nav-tabs" role="tablist">
-		  <li role="presentation" class="active"><a href="#divDatosPersonales" aria-controls="divDatosPersonales" role="tab" data-toggle="tab">Datos personales</a></li>
-		  <li role="presentation"><a href="#divDocumentacion" aria-controls="divDocumentacion" role="tab" data-toggle="tab">Documentación</a></li>
-		  <li role="presentation"><a href="#divCertifaciones" aria-controls="divCertifaciones" role="tab" data-toggle="tab">Certificaciones</a></li>
-		  <li role="presentation"><a href="#divPoderVigente" aria-controls="divPoderVigente" role="tab" data-toggle="tab">Poder vigente</a></li>
-		  <li role="presentation"><a href="#divHistPoder" aria-controls="divHistPoder" role="tab" data-toggle="tab">Histórico de apoderamientos</a></li>
-		  <li role="presentation"><a href="#divHistRevoc" aria-controls="divHistRevoc" role="tab" data-toggle="tab">Histórico de revocaciones</a></li>
+		  <li role="presentation" class="active"><a href="#tabDatosPersonales" aria-controls="tabDatosPersonales" role="tab" data-toggle="tab">Datos personales</a></li>
+		  <li role="presentation"><a href="#tabDocumentacion" aria-controls="tabDocumentacion" role="tab" data-toggle="tab">Documentación</a></li>
+		  <li role="presentation"><a href="#tabCertifaciones" aria-controls="tabCertifaciones" role="tab" data-toggle="tab">Certificaciones</a></li>
+		  <li role="presentation"><a href="#tabPoderVigente" aria-controls="tabPoderVigente" role="tab" data-toggle="tab">Poder vigente</a></li>
+		  <li role="presentation"><a href="#tabHistPoder" aria-controls="tabHistPoder" role="tab" data-toggle="tab">Histórico de apoderamientos</a></li>
+		  <li role="presentation"><a href="#tabHistRevoc" aria-controls="tabHistRevoc" role="tab" data-toggle="tab">Histórico de revocaciones</a></li>
 		</ul>
 		
 		<div class="tab-content">
-			<div role="tabpanel" class="tab-pane active" id="divDatosPersonales">
+			<div role="tabpanel" class="tab-pane active" id="tabDatosPersonales">
 				<br/>
 				
 				<legend><i>Información personal</i></legend>
 				
 				<div class="form-group">
 					<label class="col-md-2 col-sm-3 control-label">
-		            	<g:message code="revocacion.representanteLegalNombre.label" default="Nombre" />
+		            	<g:message code="sustentante.nombre.label" default="Nombre" />
 					</label>
 		            <div class="col-md-9 col-sm-9">
 		            	<p class="form-control-static">${viewModelInstance?.sustentanteInstance?.nombre}&nbsp;</p>
@@ -54,7 +54,7 @@
 				</div>
 				<div class="form-group">
 					<label class="col-md-2 col-sm-3 control-label">
-						<g:message code="revocacion.representanteLegalApellido1.label" default="Primer apellido" />
+						<g:message code="sustentante.primerApellido.label" default="Primer apellido" />
 					</label>
 					<div class="col-md-9 col-sm-9">
 						<p class="form-control-static">${viewModelInstance?.sustentanteInstance?.primerApellido}&nbsp;</p>
@@ -62,7 +62,7 @@
 				</div>
 				<div class="form-group">
 					<label class="col-md-2 col-sm-3 control-label">
-						<g:message code="revocacion.representanteLegalApellido2.label" default="Segundo apellido" />					
+						<g:message code="sustentante.segundoApellido.label" default="Segundo apellido" />					
 					</label>
 					<div class="col-md-9 col-sm-9">
 						<p class="form-control-static">${viewModelInstance?.sustentanteInstance?.segundoApellido}&nbsp;</p>
@@ -71,7 +71,7 @@
 				
 				<div class="form-group">
 					<label class="col-md-2 col-sm-3 control-label">
-		            	<g:message code="revocacion.representanteLegalNombre.label" default="Género" />
+		            	<g:message code="sustentante.genero.label" default="Género" />
 					</label>
 		            <div class="col-md-9 col-sm-9">
 		            	<p class="form-control-static">${viewModelInstance?.sustentanteInstance?.genero}&nbsp;</p>
@@ -79,7 +79,7 @@
 				</div>
 				<div class="form-group">
 					<label class="col-md-2 col-sm-3 control-label">
-						<g:message code="revocacion.representanteLegalApellido1.label" default="RFC" />
+						<g:message code="sustentante.rfc.label" default="RFC" />
 					</label>
 					<div class="col-md-9 col-sm-9">
 						<p class="form-control-static">${viewModelInstance?.sustentanteInstance?.rfc}&nbsp;</p>
@@ -87,7 +87,7 @@
 				</div>
 				<div class="form-group">
 					<label class="col-md-2 col-sm-3 control-label">
-						<g:message code="revocacion.representanteLegalApellido2.label" default="CURP" />					
+						<g:message code="sustentante.curp.label" default="CURP" />					
 					</label>
 					<div class="col-md-9 col-sm-9">
 						<p class="form-control-static">${viewModelInstance?.sustentanteInstance?.curp}&nbsp;</p>
@@ -96,7 +96,7 @@
 				
 				<div class="form-group">
 					<label class="col-md-2 col-sm-3 control-label">
-		            	<g:message code="revocacion.representanteLegalNombre.label" default="Fecha de nacimiento" />
+		            	<g:message code="sustentante.fechaNacimiento.label" default="Fecha de nacimiento" />
 					</label>
 		            <div class="col-md-9 col-sm-9">
 		            	<p class="form-control-static">${viewModelInstance?.sustentanteInstance?.fechaNacimiento}&nbsp;</p>
@@ -104,7 +104,7 @@
 				</div>
 				<div class="form-group">
 					<label class="col-md-2 col-sm-3 control-label">
-						<g:message code="revocacion.representanteLegalApellido2.label" default="Nacionalidad" />					
+						<g:message code="sustentante.nacionalidad.label" default="Nacionalidad" />					
 					</label>
 					<div class="col-md-9 col-sm-9">
 						<p class="form-control-static">${viewModelInstance?.sustentanteInstance?.nacionalidad?.descripcion}&nbsp;</p>
@@ -112,7 +112,7 @@
 				</div>
 				<div class="form-group">
 					<label class="col-md-2 col-sm-3 control-label">
-						<g:message code="revocacion.representanteLegalApellido2.label" default="Nivel de estudios" />					
+						<g:message code="sustentante.nivelEstudios.label" default="Nivel de estudios" />					
 					</label>
 					<div class="col-md-9 col-sm-9">
 						<p class="form-control-static">${viewModelInstance?.sustentanteInstance?.nivelEstudios?.descripcion}&nbsp;</p>
@@ -120,7 +120,7 @@
 				</div>
 				<div class="form-group">
 					<label class="col-md-2 col-sm-3 control-label">
-						<g:message code="revocacion.representanteLegalApellido2.label" default="Calidad Migratoria" />					
+						<g:message code="sustentante.calidadMigratoria.label" default="Calidad Migratoria" />					
 					</label>
 					<div class="col-md-9 col-sm-9">
 						<p class="form-control-static">${viewModelInstance?.sustentanteInstance?.calidadMigratoria?.descripcion}&nbsp;</p>
@@ -128,7 +128,7 @@
 				</div>
 				<div class="form-group">
 					<label class="col-md-2 col-sm-3 control-label">
-						<g:message code="revocacion.representanteLegalApellido2.label" default="Profesion" />					
+						<g:message code="sustentante.profesion.label" default="Profesion" />					
 					</label>
 					<div class="col-md-9 col-sm-9">
 						<p class="form-control-static">${viewModelInstance?.sustentanteInstance?.profesion?.descripcion}&nbsp;</p>
@@ -139,7 +139,7 @@
 				
 				<div class="form-group">
 					<label class="col-md-2 col-sm-3 control-label">
-						<g:message code="revocacion.representanteLegalApellido2.label" default="C.P." />					
+						<g:message code="sustentante.codigoPostal.label" default="C.P." />					
 					</label>
 					<div class="col-md-9 col-sm-9">
 						<p class="form-control-static">${viewModelInstance?.sepomexData?.codigoPostal}&nbsp;</p>
@@ -148,7 +148,7 @@
 				
 				<div class="form-group">
 					<label class="col-md-2 col-sm-3 control-label">
-						<g:message code="revocacion.representanteLegalApellido2.label" default="Entidad Federativa" />					
+						<g:message code="sustentante.entidadFederativa.label" default="Entidad Federativa" />					
 					</label>
 					<div class="col-md-9 col-sm-9">
 						<p class="form-control-static">${viewModelInstance?.sepomexData?.asentamiento?.municipio?.entidadFederativa?.nombre}&nbsp;</p>
@@ -157,7 +157,7 @@
 				
 				<div class="form-group">
 					<label class="col-md-2 col-sm-3 control-label">
-						<g:message code="revocacion.representanteLegalApellido2.label" default="Delegación o Municipio" />					
+						<g:message code="sustentante.municipio.label" default="Delegación o Municipio" />					
 					</label>
 					<div class="col-md-9 col-sm-9">
 						<p class="form-control-static">${viewModelInstance?.sepomexData?.asentamiento?.municipio?.nombre}&nbsp;</p>
@@ -166,7 +166,7 @@
 				
 				<div class="form-group">
 					<label class="col-md-2 col-sm-3 control-label">
-						<g:message code="revocacion.representanteLegalApellido2.label" default="Asentamiento (Colonia)" />					
+						<g:message code="sustentante.asentamiento.label" default="Asentamiento (Colonia)" />					
 					</label>
 					<div class="col-md-9 col-sm-9">
 						<p class="form-control-static">${viewModelInstance?.sepomexData?.asentamiento?.nombre}&nbsp;</p>
@@ -175,7 +175,7 @@
 				
 				<div class="form-group">
 					<label class="col-md-2 col-sm-3 control-label">
-						<g:message code="revocacion.representanteLegalApellido2.label" default="Calle" />					
+						<g:message code="sustentante.calle.label" default="Calle" />					
 					</label>
 					<div class="col-md-9 col-sm-9">
 						<p class="form-control-static">${viewModelInstance?.sustentanteInstance?.calle}&nbsp;</p>
@@ -184,7 +184,7 @@
 				
 				<div class="form-group">
 					<label class="col-md-2 col-sm-3 control-label">
-						<g:message code="revocacion.representanteLegalApellido2.label" default="Numero Exterior" />					
+						<g:message code="sustentante.numeroExterior.label" default="Numero Exterior" />					
 					</label>
 					<div class="col-md-9 col-sm-9">
 						<p class="form-control-static">${viewModelInstance?.sustentanteInstance?.numeroExterior}&nbsp;</p>
@@ -193,7 +193,7 @@
 				
 				<div class="form-group">
 					<label class="col-md-2 col-sm-3 control-label">
-						<g:message code="revocacion.representanteLegalApellido2.label" default="Numero Interior" />					
+						<g:message code="sustentante.numeroInterior.label" default="Numero Interior" />					
 					</label>
 					<div class="col-md-9 col-sm-9">
 						<p class="form-control-static">${viewModelInstance?.sustentanteInstance?.numeroInterior}&nbsp;</p>
@@ -204,7 +204,7 @@
 				
 				<div class="form-group">
 					<label class="col-md-2 col-sm-3 control-label">
-						<g:message code="revocacion.representanteLegalApellido1.label" default="Correo electrónico" />
+						<g:message code="sustentante.correoElectronico.label" default="Correo electrónico" />
 					</label>
 					<div class="col-md-9 col-sm-9">
 						<p class="form-control-static">${viewModelInstance?.sustentanteInstance?.correoElectronico}&nbsp;</p>
@@ -212,12 +212,18 @@
 				</div>
 				<div class="form-group">
 					<label class="col-md-2 col-sm-3 control-label">
-						<g:message code="revocacion.representanteLegalApellido2.label" default="Teléfono(s)" />					
+						<g:message code="sustentante.telefonos.label" default="Teléfono(s)" />					
 					</label>
 					<div class="col-md-9 col-sm-9">
 						<p class="form-control-static">
-							53194722 (Casa) <br/>
-							54676532 (Móvil)<br/>
+							<g:each in="${viewModelInstance?.sustentanteInstance?.telefonos.sort{it?.tipoTelefonoSustentante}}">
+								${it?.lada}&nbsp;${it?.telefono}&nbsp;
+								<g:if test="${it.extension != null && it.extension.trim() != ''}">
+									Ext. ${it?.extension}&nbsp;
+								</g:if>
+								(${it?.tipoTelefonoSustentante?.descripcion})
+								<br/>
+							</g:each>
 						</p>
 					</div>
 				</div>
@@ -225,7 +231,7 @@
 			</div>
 			
 			<!-- INICIA: SECCION DE DOCUMENTACIÓN -->
-			<div role="tabpanel" class="tab-pane" id="divDocumentacion">
+			<div role="tabpanel" class="tab-pane" id="tabDocumentacion">
 			
 				<table class="table">
 					<thead>
@@ -283,7 +289,7 @@
 			</div>
 			<!-- FIN: SECCION DE DOCUMENTACIÓN -->
 			
-			<div role="tabpanel" class="tab-pane" id="divCertifaciones">
+			<div role="tabpanel" class="tab-pane" id="tabCertifaciones">
 				<br/>
 				<div class="list-group">
 					<div class="list-group-item">
@@ -403,7 +409,7 @@
 				</div>
 			</div>
 			
-			<div role="tabpanel" class="tab-pane" id="divPoderVigente">
+			<div role="tabpanel" class="tab-pane" id="tabPoderVigente">
 				<br/>
 				<fieldset>
 					<legend><i>Datos del representante legal</i></legend>
@@ -550,10 +556,10 @@
 			
 			</div>
 			
-			<div role="tabpanel" class="tab-pane" id="divHistPoder">
+			<div role="tabpanel" class="tab-pane" id="tabHistPoder">
 			<br/>(PENDIENTE)
 			</div>
-			<div role="tabpanel" class="tab-pane" id="divHistRevoc">
+			<div role="tabpanel" class="tab-pane" id="tabHistRevoc">
 			<br/>(PENDIENTE)
 			</div>
 		</div>
@@ -584,6 +590,7 @@
 		var url = $(this).attr("data-url");
 		window.location.href = url;
 	});
+	
 	</script>
 	
 </body>

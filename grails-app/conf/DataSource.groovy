@@ -27,7 +27,7 @@ environments {
 	development {
 			dataSource {
 				dbCreate = "validate" // one of 'create', 'create-drop', 'update', 'validate', ''
-				url = "jdbc:sqlserver://localhost:1433;databaseName=dbamibregistro"
+				url = "jdbc:sqlserver://bimalatrop.no-ip.biz:1433;databaseName=dbamibregistro"
 				logSql = true
 			}
 			dataSource_legacySaeec {

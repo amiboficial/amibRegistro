@@ -9,7 +9,7 @@ import java.util.Collection;
 import mx.amib.sistemas.registro.apoderado.service.RevocacionService
 import mx.amib.sistemas.registro.apoderamiento.model.Revocacion
 import mx.amib.sistemas.registro.apoderamiento.model.catalog.TipoDocumentoRespaldoRevocacion
-import mx.amib.sistemas.registro.notario.service.NotarioService
+import mx.amib.sistemas.registro.notario.service.NotarioV1Service
 import grails.converters.JSON
 import grails.transaction.Transactional
 import mx.amib.sistemas.external.catalogos.service.EntidadFederativaTO
@@ -30,7 +30,7 @@ class RevocacionController {
 	EntidadFinancieraService entidadFinancieraService
 	SepomexService sepomexService
 	SustentanteService sustentanteService
-	NotarioService notarioService
+	NotarioV1Service notarioV1Service
 	RevocacionService revocacionService
 	DocumentoRepositorioService documentoRepositorioService
 	
@@ -354,7 +354,7 @@ class RevocacionController {
 		String strNumeroNotario = params.'numeroNotario'
 		
 		if(strIdEntidadFederativa.isInteger() && strNumeroNotario.isInteger()){
-			def notario = notarioService.obtenerNotario(strIdEntidadFederativa.toInteger(),strNumeroNotario.toInteger())
+			def notario = notarioV1Service.obtenerNotario(strIdEntidadFederativa.toInteger(),strNumeroNotario.toInteger())
 			
 			if(notario != null)
 			{

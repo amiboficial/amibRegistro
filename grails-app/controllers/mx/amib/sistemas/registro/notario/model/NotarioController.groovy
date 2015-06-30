@@ -12,7 +12,7 @@ class NotarioController {
     static allowedMethods = [save: "POST", update: "PUT", delete: ["DELETE","GET"]]
 
 	def sepomexService
-	def notarioService
+	def notarioV1Service
 	
     def index(Integer max) {
 		
@@ -25,7 +25,7 @@ class NotarioController {
 		
 		NotarioIndexViewModel nivm = this.getIndexViewModel(params)
 		
-		def result = notarioService.search(params.max, params.offset.toInteger(), params.sort, params.order, params.filterIdEntidadFederativa?.toInteger(),
+		def result = notarioV1Service.search(params.max, params.offset.toInteger(), params.sort, params.order, params.filterIdEntidadFederativa?.toInteger(),
 										params.filterNombre, params.filterApellido1, params.filterApellido2, params.filterNumero?.toInteger())
         respond result.list, model:[notarioInstanceCount: result.count, viewModelInstance:nivm]
     }
@@ -70,7 +70,7 @@ class NotarioController {
             return
         }
 
-		notarioService.save(notarioInstance)
+		notarioV1Service.save(notarioInstance)
 
         request.withFormat {
             form multipartForm {
@@ -99,7 +99,7 @@ class NotarioController {
             return
         }*/
 
-		notarioService.update(notarioInstance)
+		notarioV1Service.update(notarioInstance)
 
         request.withFormat {
             form multipartForm {

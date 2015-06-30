@@ -14,7 +14,7 @@ import mx.amib.sistemas.registro.apoderamiento.model.Poder;
 import mx.amib.sistemas.registro.apoderamiento.model.Revocacion
 import mx.amib.sistemas.registro.apoderamiento.model.Revocado
 import mx.amib.sistemas.registro.apoderamiento.model.catalog.TipoDocumentoRespaldoRevocacion
-import mx.amib.sistemas.registro.notario.service.NotarioService;
+import mx.amib.sistemas.registro.notario.service.NotarioV1Service;
 import groovy.json.StringEscapeUtils
 
 @Transactional
@@ -26,14 +26,14 @@ class RevocacionService {
 	}
 	
 	def sustentanteService
-	def notarioService
+	def notarioV1Service
 	def entidadFinancieraService
 	def documentoRepositorioService
 	
 	def save(Revocacion revocacion, List<String> revocadosJson, List<String> documentosJson, int notarioIdEntidadFederativa, int notarioNumero ){
 		List<DocumentoRepositorioTO> docsAEnviar = new ArrayList<DocumentoRepositorioTO>()
 		
-		def n = notarioService.obtenerNotario(notarioIdEntidadFederativa, notarioNumero)
+		def n = notarioV1Service.obtenerNotario(notarioIdEntidadFederativa, notarioNumero)
 		revocacion.notario = n
 		
 		revocacion.revocados = new HashSet<Revocado>()
@@ -112,7 +112,7 @@ class RevocacionService {
 	
 	def update(Revocacion revocacion, List<String> revocadosJson, List<String> documentosJson, int notarioIdEntidadFederativa, int notarioNumero ){
 	
-		def n = notarioService.obtenerNotario(notarioIdEntidadFederativa, notarioNumero)
+		def n = notarioV1Service.obtenerNotario(notarioIdEntidadFederativa, notarioNumero)
 		revocacion.notario = n
 
 		List<Revocado> revocadosToDelete = new ArrayList<Revocado>()

@@ -18,7 +18,7 @@ import mx.amib.sistemas.external.documentos.service.DocumentoPoderRepositorioTO;
 import mx.amib.sistemas.external.documentos.service.DocumentoRepositorioService;
 import mx.amib.sistemas.external.documentos.service.DocumentoRepositorioTO;
 import mx.amib.sistemas.registro.notario.model.Notario
-import mx.amib.sistemas.registro.notario.service.NotarioService
+import mx.amib.sistemas.registro.notario.service.NotarioV1Service
 import groovy.json.StringEscapeUtils
 
 @Transactional
@@ -29,7 +29,7 @@ class PoderService {
 		def count
 	}
 	
-	NotarioService notarioService
+	NotarioV1Service notarioV1Service
 	DocumentoRepositorioService documentoRepositorioService
 	SepomexService sepomexService
 	EntidadFinancieraService entidadFinancieraService
@@ -66,7 +66,7 @@ class PoderService {
 		if(poder.idGrupofinanciero==-1){ poder.idGrupofinanciero=null }
 		if(poder.idInstitucion==-1){ poder.idInstitucion=null }
 		
-		Notario n = notarioService.obtenerNotario(notarioIdEntidadFederativa, notarioNumero)
+		Notario n = notarioV1Service.obtenerNotario(notarioIdEntidadFederativa, notarioNumero)
 		poder.notario = n
 		
 		poder.apoderados = new HashSet<Apoderado>()
@@ -111,7 +111,7 @@ class PoderService {
 		if(poder.idGrupofinanciero==-1){ poder.idGrupofinanciero=null }
 		if(poder.idInstitucion==-1){ poder.idInstitucion=null }
 								
-		Notario n = notarioService.obtenerNotario(notarioIdEntidadFederativa, notarioNumero)
+		Notario n = notarioV1Service.obtenerNotario(notarioIdEntidadFederativa, notarioNumero)
 		poder.notario = n
 		
 		//borra apoderados que no se hayan guardado y conserva los que no se modificaron
@@ -395,10 +395,6 @@ class PoderService {
 				}
 			}
 		}
-		
-		/*if(fltNoVerificado != null && fltNoAprobado != null && fltNoVerificado && fltNoAprobado){
-			
-		}*/
 		
 		sbHql.append("from Poder as n ")
 		if(whereKeywordNeeded){

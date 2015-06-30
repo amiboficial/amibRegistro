@@ -17,7 +17,7 @@ import mx.amib.sistemas.external.catalogos.service.SepomexService
 import mx.amib.sistemas.external.documentos.service.DocumentoRepositorioService
 import mx.amib.sistemas.external.documentos.service.DocumentoRepositorioTO
 import mx.amib.sistemas.external.documentos.service.ClaseDocumento
-import mx.amib.sistemas.registro.notario.service.NotarioService
+import mx.amib.sistemas.registro.notario.service.NotarioV1Service
 import mx.amib.sistemas.registro.apoderado.service.PoderService
 import mx.amib.sistemas.util.service.*
 
@@ -39,7 +39,7 @@ class PoderController {
 	ArchivoTemporalService archivoTemporalService
 	DocumentoRepositorioService documentoRepositorioService
 	SepomexService sepomexService
-	NotarioService notarioService
+	NotarioV1Service notarioV1Service
 	PoderService poderService
 	
     def index(Integer max) {
@@ -483,7 +483,7 @@ class PoderController {
 		String strNumeroNotario = params.'numeroNotario'
 		
 		if(strIdEntidadFederativa.isInteger() && strNumeroNotario.isInteger()){
-			def notario = notarioService.obtenerNotario(strIdEntidadFederativa.toInteger(),strNumeroNotario.toInteger())
+			def notario = notarioV1Service.obtenerNotario(strIdEntidadFederativa.toInteger(),strNumeroNotario.toInteger())
 			
 			if(notario != null)
 			{

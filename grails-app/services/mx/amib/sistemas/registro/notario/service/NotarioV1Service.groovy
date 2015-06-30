@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Isolation
 import mx.amib.sistemas.registro.notario.model.Notario
 
 
-class NotarioService {
+class NotarioV1Service {
 	class SearchResult {
 		def list
 		def count

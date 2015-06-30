@@ -11,7 +11,7 @@ class OficioCNBVController {
     static allowedMethods = [save: "POST", update: "PUT", delete: ["DELETE","GET"]]
 
 	def sustentanteService
-	def oficioCNBVService
+	def oficioCNBVV1Service
 	
 	// fltType (filtro de búsqueda)
 	// 'DO' -> Datos de OficioCNBV
@@ -39,7 +39,7 @@ class OficioCNBVController {
 			params.fltDOFhAl_month = (params.fltDOFhAl_month==null || params.fltDOFhAl_month=='null')?'-1':params.fltDOFhAl_month
 			params.fltDOFhAl_year = (params.fltDOFhAl_year==null || params.fltDOFhAl_year=='null')?'-1':params.fltDOFhAl_year
 			
-			result = oficioCNBVService.searchByDatosOficio(params.max, params.offset.toInteger(), params.sort, params.order, params.fltDODga, 
+			result = oficioCNBVV1Service.searchByDatosOficio(params.max, params.offset.toInteger(), params.sort, params.order, params.fltDODga, 
 																params.fltDOFhDel_day.toInteger(), params.fltDOFhDel_month.toInteger(), params.fltDOFhDel_year.toInteger(), 
 																params.fltDOFhAl_day.toInteger(), params.fltDOFhAl_month.toInteger(), params.fltDOFhAl_year.toInteger())
 			resultList = result.list
@@ -47,13 +47,13 @@ class OficioCNBVController {
 		}
 		else if(params.fltType == 'AMAT'){
 			params.fltAMat = params.fltAMat?:'-1'
-			result = oficioCNBVService.searchByMatricula(params.max, params.offset.toInteger(), params.sort, params.order, params.fltAMat.toInteger())
+			result = oficioCNBVV1Service.searchByMatricula(params.max, params.offset.toInteger(), params.sort, params.order, params.fltAMat.toInteger())
 			resultList = result.list
 			resultListCount = result.count
 		}
 		else if(params.fltType == 'ANOM'){
 			params.fltANom = params.fltANom?:""
-			result = oficioCNBVService.searchByNombre(params.max, params.offset.toInteger(), params.sort, params.order, params.fltANom)
+			result = oficioCNBVV1Service.searchByNombre(params.max, params.offset.toInteger(), params.sort, params.order, params.fltANom)
 			resultList = result.list
 			resultListCount = result.count
 		}
@@ -97,7 +97,7 @@ class OficioCNBVController {
             notFound()
             return
         }
-		oficioCNBVService.save(oficioCNBVInstance, jsonStrLstAutorizados)
+		oficioCNBVV1Service.save(oficioCNBVInstance, jsonStrLstAutorizados)
 		
 		/*
 		if (oficioCNBVInstance.hasErrors()) {
@@ -129,7 +129,7 @@ class OficioCNBVController {
             return
         }
 		
-		def tr = oficioCNBVService.update(oficioCNBVInstance, jsonStrLstAutorizados)
+		def tr = oficioCNBVV1Service.update(oficioCNBVInstance, jsonStrLstAutorizados)
 		oficioCNBVInstance = tr.instance
 		
 		if(tr.valid == true){
@@ -158,7 +158,7 @@ class OficioCNBVController {
             return
         }
 
-		def tr = oficioCNBVService.delete(oficioCNBVInstance)
+		def tr = oficioCNBVV1Service.delete(oficioCNBVInstance)
 		if(tr.valid == true){
 			request.withFormat {
 				'*' {

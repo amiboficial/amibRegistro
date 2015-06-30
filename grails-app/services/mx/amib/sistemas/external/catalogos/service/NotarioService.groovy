@@ -26,7 +26,7 @@ class NotarioService {
 	String deleteUrl = "http://bimalatrop.no-ip.biz:8080/amibCatalogos-0.1/notarioRestful/delete/"
 	String findAllByUrl = "http://bimalatrop.no-ip.biz:8080/amibCatalogos-0.1/notarioRestful/findAllBy"
 	
-	def list(Integer max, Integer offset, String sort, String order){
+	SearchResult list(Integer max, Integer offset, String sort, String order){
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssX")
 		SearchResult sr = new SearchResult()
 		
@@ -35,18 +35,12 @@ class NotarioService {
 		def resp = rest.get(listUrl + qs.toString())
 		
 		if(resp.json instanceof JSONObject && !JSONObject.NULL.equals(resp.json)){
-			resp.json.remove('class')
-			resp.json.'list'.each{
-				it.remove('class')
-				it.'fechaCreacion' = df.parse(it.'fechaCreacion')
-				it.'fechaModificacion' = df.parse(it.'fechaModificacion')
-			}
-			sr = new SearchResult(resp.json)
+			sr = this.searchResultFromRespJSON(resp.json)
 		}
 		return sr
 	}
 	
-    def get(Long id) {
+    NotarioTO get(Long id) {
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssX")
 		NotarioTO n = new NotarioTO()
 		n.id = -1
@@ -55,15 +49,12 @@ class NotarioService {
 		def resp = rest.get(getUrl + id)
 		
 		if(resp.json instanceof JSONObject && !JSONObject.NULL.equals(resp.json)){
-			resp.json.remove('class')
-			resp.json.'fechaCreacion' = df.parse(resp.json.'fechaCreacion')
-			resp.json.'fechaModificacion' = df.parse(resp.json.'fechaModificacion')
-			n = new NotarioTO(resp.json)
+			n = this.notarioTOFromRespJSON(resp.json)
 		}
 		return n
     }
 	
-	def save(NotarioTO n){
+	NotarioTO save(NotarioTO n){
 		n.id = null
 		
 		def rest = new RestBuilder()
@@ -74,9 +65,14 @@ class NotarioService {
 		
 		if(resp.statusCode.value() != HttpStatus.SC_CREATED )
 			throw new Exception("STATUS CODE: " + resp.statusCode)
+			
+		if(resp.json instanceof JSONObject && !JSONObject.NULL.equals(resp.json)){
+			n = this.notarioTOFromRespJSON(resp.json)
+		}
+		return n
 	}
 	
-	def update(NotarioTO n){
+	NotarioTO update(NotarioTO n){
 		def rest = new RestBuilder()
 		def resp = rest.put(updateUrl + n.id){
 			contentType "application/json;charset=UTF-8"
@@ -85,19 +81,29 @@ class NotarioService {
 		
 		if(resp.statusCode.value() != HttpStatus.SC_OK )
 			throw new Exception("STATUS CODE: " + resp.statusCode)
+			
+		if(resp.json instanceof JSONObject && !JSONObject.NULL.equals(resp.json)){
+			n = this.notarioTOFromRespJSON(resp.json)
+		}
+		return n
 	}
 	
-	def delete(Long id){
-		def rest = new RestBuilder( + n.id)
-		def resp = rest.put(deleteUrl + n.id)
+	Boolean delete(Long id){
+		Boolean result
 		
+		def rest = new RestBuilder()
+		def resp = rest.delete(deleteUrl + id)
 		
 		if(resp.statusCode.value() != HttpStatus.SC_NO_CONTENT )
-			throw new Exception("STATUS CODE: " + resp.statusCode)
+			//throw new Exception("STATUS CODE: " + resp.statusCode)
+			result = false
+		else
+			result = true
 		
+		return result
 	}
 	
-	def findAllBy(Integer max, Integer offset, String sort, String order, 
+	SearchResult findAllBy(Integer max, Integer offset, String sort, String order, 
 					Long idEntidadFederativa, Integer numeroNotario, String nombreCompleto) {
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssX")
 		SearchResult sr = new SearchResult()
@@ -107,15 +113,31 @@ class NotarioService {
 		def resp = rest.get(listUrl + qs.toString())
 		
 		if(resp.json instanceof JSONObject && !JSONObject.NULL.equals(resp.json)){
-			resp.json.remove('class')
-			resp.json.'list'.each{
-				it.remove('class')
-				it.'fechaCreacion' = df.parse(it.'fechaCreacion')
-				it.'fechaModificacion' = df.parse(it.'fechaModificacion')
-			}
-			sr = new SearchResult(resp.json)
+			sr = this.searchResultFromRespJSON(resp.json)
 		}
 		return sr
+	}
+	
+	private SearchResult searchResultFromRespJSON(JSONObject jsonObject){
+		jsonObject.remove('class')
+		jsonObject.'list'.each{
+			it = this.notarioTOFromRespJSON(it)
+		}
+		return new SearchResult(jsonObject)
+	}
+	
+	private NotarioTO notarioTOFromRespJSON(JSONObject jsonObject){
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssX")
+		jsonObject = this.fixNotarioResp(jsonObject)
+		return new NotarioTO(jsonObject)
+	}
+	
+	private JSONObject fixNotarioResp(JSONObject jsonObject){
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssX")
+		jsonObject.remove('class')
+		jsonObject.'fechaCreacion' = df.parse(jsonObject.'fechaCreacion')
+		jsonObject.'fechaModificacion' = df.parse(jsonObject.'fechaModificacion')
+		return jsonObject
 	}
 	
 }
@@ -124,7 +146,7 @@ class SearchResult {
 	List<NotarioTO> list
 	Integer count
 	Boolean error
-	String errorDetails
+	String errorMessage
 }
 
 class NotarioTO {

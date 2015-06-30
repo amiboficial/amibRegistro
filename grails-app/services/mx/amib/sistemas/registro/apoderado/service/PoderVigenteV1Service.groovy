@@ -4,7 +4,7 @@ import grails.transaction.Transactional
 import mx.amib.sistemas.registro.apoderamiento.model.view.PoderVigente
 
 @Transactional
-class PoderVigenteService {
+class PoderVigenteV1Service {
 	class SearchResult {
 		def list
 		def count

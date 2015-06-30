@@ -7,7 +7,7 @@ import mx.amib.sistemas.registro.apoderamiento.model.AutorizadoCNBV
 import mx.amib.sistemas.registro.apoderamiento.model.OficioCNBV
 
 @Transactional
-class OficioCNBVService {
+class OficioCNBVV1Service {
 	class SearchResult {
 		def list
 		def count

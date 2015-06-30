@@ -6,7 +6,7 @@ import static org.springframework.http.HttpStatus.*
 
 import java.util.Collection;
 
-import mx.amib.sistemas.registro.apoderado.service.RevocacionService
+import mx.amib.sistemas.registro.apoderado.service.RevocacionV1Service
 import mx.amib.sistemas.registro.apoderamiento.model.Revocacion
 import mx.amib.sistemas.registro.apoderamiento.model.catalog.TipoDocumentoRespaldoRevocacion
 import mx.amib.sistemas.registro.notario.service.NotarioV1Service
@@ -31,7 +31,7 @@ class RevocacionController {
 	SepomexService sepomexService
 	SustentanteService sustentanteService
 	NotarioV1Service notarioV1Service
-	RevocacionService revocacionService
+	RevocacionV1Service revocacionV1Service
 	DocumentoRepositorioService documentoRepositorioService
 	
     def index(Integer max) {
@@ -50,7 +50,7 @@ class RevocacionController {
 		params.fltNoVerificado = (params.fltNoVerificado==null||params.fltNoVerificado=='false')?false:true
 		params.fltNoAprobado = (params.fltNoAprobado==null||params.fltNoAprobado=='false')?false:true
 		
-		def result = revocacionService.search(params.max, params.offset, params.sort, params.order, params.fltNumEsc?.toInteger(),
+		def result = revocacionV1Service.search(params.max, params.offset, params.sort, params.order, params.fltNumEsc?.toInteger(),
 									params.fltFecIni_day?.toInteger(), params.fltFecIni_month?.toInteger(), params.fltFecIni_year?.toInteger(),
 									params.fltFecFn_day?.toInteger(), params.fltFecFn_month?.toInteger(), params.fltFecFn_year?.toInteger(),
 									params.filterIdGrupoFinanciero?.toLong(), params.filterIdInstitucion?.toLong(),
@@ -75,7 +75,7 @@ class RevocacionController {
 		rivw.fltNoVerificado = params.fltNoVerificado
 		rivw.fltNoAprobado = params.fltNoAprobado
 		
-		rivw.countPendientes = revocacionService.countPendientes()
+		rivw.countPendientes = revocacionV1Service.countPendientes()
 		
 		return rivw
 	}
@@ -83,7 +83,7 @@ class RevocacionController {
 	def indexPendientes(Integer max) {
 		params.max = Math.min(max ?: 10, 100)
 		
-		def total = revocacionService.countPendientes()
+		def total = revocacionV1Service.countPendientes()
 		def result = Revocacion.findAllByVerificado(false,[max: params.max, sort:'fechaCreacion', order:'asc',offset: params.offset, cache: true])
 				
 		respond result, model:[revocacionInstanceCount: total]
@@ -215,7 +215,7 @@ class RevocacionController {
 			destAction = 'show'
 			msg = message(code: 'mx.amib.sistemas.registro.apoderamiento.revocacion.save.message', args: [revocacionInstance.numeroEscritura])
 		}
-		revocacionService.save(revocacionInstance, revocadosToBind, documentosToBind, notarioIdEntidadFederativa, notarioNumero)
+		revocacionV1Service.save(revocacionInstance, revocadosToBind, documentosToBind, notarioIdEntidadFederativa, notarioNumero)
 		
         request.withFormat {
             form multipartForm {
@@ -295,7 +295,7 @@ class RevocacionController {
 			mensaje = message(code: 'mx.amib.sistemas.registro.apoderamiento.revocacion.update.message', args: [revocacion.numeroEscritura,revocacion.id])
 		}
 
-		revocacionService.update(revocacionInstance, revocadosToBind, documentosToBind, notarioIdEntidadFederativa, notarioNumero)
+		revocacionV1Service.update(revocacionInstance, revocadosToBind, documentosToBind, notarioIdEntidadFederativa, notarioNumero)
 
         request.withFormat {
             form multipartForm {
@@ -315,7 +315,7 @@ class RevocacionController {
         }
 
         //revocacionInstance.delete flush:true
-		revocacionService.delete(revocacionInstance)
+		revocacionV1Service.delete(revocacionInstance)
 		
         request.withFormat {
             '*'{

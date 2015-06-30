@@ -8,7 +8,7 @@ import grails.plugins.rest.client.RestBuilder
 import org.codehaus.groovy.grails.web.json.JSONObject
 
 @Transactional
-class ApoderadoService {
+class ApoderadoV1Service {
 
 	def grailsApplication
 	

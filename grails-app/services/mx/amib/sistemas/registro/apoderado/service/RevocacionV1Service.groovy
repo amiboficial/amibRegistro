@@ -18,7 +18,7 @@ import mx.amib.sistemas.registro.notario.service.NotarioV1Service;
 import groovy.json.StringEscapeUtils
 
 @Transactional
-class RevocacionService {
+class RevocacionV1Service {
 
 	class SearchResult {
 		def list

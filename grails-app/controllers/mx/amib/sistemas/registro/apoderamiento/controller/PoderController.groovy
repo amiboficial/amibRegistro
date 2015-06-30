@@ -5,7 +5,7 @@ import static org.springframework.http.HttpStatus.*
 import java.util.Collection;
 import java.util.List;
 
-import mx.amib.sistemas.registro.apoderado.service.ApoderadoService
+import mx.amib.sistemas.registro.apoderado.service.ApoderadoV1Service
 import mx.amib.sistemas.registro.apoderado.service.ApoderadoTO
 import mx.amib.sistemas.registro.apoderado.service.AutorizacionCnbvTO;
 import mx.amib.sistemas.registro.apoderado.service.DocumentoRespaldoPoderTO
@@ -18,7 +18,7 @@ import mx.amib.sistemas.external.documentos.service.DocumentoRepositorioService
 import mx.amib.sistemas.external.documentos.service.DocumentoRepositorioTO
 import mx.amib.sistemas.external.documentos.service.ClaseDocumento
 import mx.amib.sistemas.registro.notario.service.NotarioV1Service
-import mx.amib.sistemas.registro.apoderado.service.PoderService
+import mx.amib.sistemas.registro.apoderado.service.PoderV1Service
 import mx.amib.sistemas.util.service.*
 
 import org.codehaus.groovy.grails.web.json.JSONObject
@@ -35,12 +35,12 @@ class PoderController {
 
 	//servicios
 	EntidadFinancieraService entidadFinancieraService
-	ApoderadoService apoderadoService
+	ApoderadoV1Service apoderadoV1Service
 	ArchivoTemporalService archivoTemporalService
 	DocumentoRepositorioService documentoRepositorioService
 	SepomexService sepomexService
 	NotarioV1Service notarioV1Service
-	PoderService poderService
+	PoderV1Service poderV1Service
 	
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
@@ -59,7 +59,7 @@ class PoderController {
 		params.fltNoVerificado = (params.fltNoVerificado==null||params.fltNoVerificado=='false')?false:true
 		params.fltNoAprobado = (params.fltNoAprobado==null||params.fltNoAprobado=='false')?false:true
 		
-		def result = poderService.search(params.max, params.offset.toInteger(), params.sort, params.order, params.fltNumEsc?.toInteger(),
+		def result = poderV1Service.search(params.max, params.offset.toInteger(), params.sort, params.order, params.fltNumEsc?.toInteger(),
 									params.fltFecIni_day?.toInteger(), params.fltFecIni_month?.toInteger(), params.fltFecIni_year?.toInteger(), 
 									params.fltFecFn_day?.toInteger(), params.fltFecFn_month?.toInteger(), params.fltFecFn_year?.toInteger(), 
 									params.filterIdGrupoFinanciero?.toLong(), params.filterIdInstitucion?.toLong(),
@@ -126,7 +126,7 @@ class PoderController {
 		def documentosList = new ArrayList<DocumentoRespaldoPoderTO>()
 		
 		//Inicializa listado de documento con sus respectivos tipos
-		def tipoDocumentoList = poderService.obtenerListadoTipoDocumentoRespaldoPoder()
+		def tipoDocumentoList = poderV1Service.obtenerListadoTipoDocumentoRespaldoPoder()
 		tipoDocumentoList.each{
 			documentosList.add( new DocumentoRespaldoPoderTO([ 
 				id: -it.id,
@@ -148,7 +148,7 @@ class PoderController {
 		def documentosList = new ArrayList<DocumentoRespaldoPoderTO>()
 		
 		//Inicializa listado de documento con sus respectivos tipos
-		def tipoDocumentoList = poderService.obtenerListadoTipoDocumentoRespaldoPoder()
+		def tipoDocumentoList = poderV1Service.obtenerListadoTipoDocumentoRespaldoPoder()
 		tipoDocumentoList.each{
 			documentosList.add( new DocumentoRespaldoPoderTO([
 				id: -it.id,
@@ -176,7 +176,7 @@ class PoderController {
 		def documentosList = new ArrayList<DocumentoRespaldoPoderTO>()
 		
 		//Inicializa listado de documento con sus respectivos tipos
-		def tipoDocumentoList = poderService.obtenerListadoTipoDocumentoRespaldoPoder()
+		def tipoDocumentoList = poderV1Service.obtenerListadoTipoDocumentoRespaldoPoder()
 		tipoDocumentoList.each{
 			documentosList.add( new DocumentoRespaldoPoderTO([
 				id: -it.id,
@@ -269,7 +269,7 @@ class PoderController {
 		}
 
 		//manda al servicio de guardado
-		poderService.save(poder,notarioNumero,notarioIdEntidadFederativa,apoderadosIdAutorizadoCNBV,documentos)
+		poderV1Service.save(poder,notarioNumero,notarioIdEntidadFederativa,apoderadosIdAutorizadoCNBV,documentos)
 
         request.withFormat {
             form multipartForm {
@@ -289,7 +289,7 @@ class PoderController {
 		
 		//Rellena listados con datos actuales dal modelo
 		//Inicializa listado de documentos
-		def tipoDocumentoList = poderService.obtenerListadoTipoDocumentoRespaldoPoder()
+		def tipoDocumentoList = poderV1Service.obtenerListadoTipoDocumentoRespaldoPoder()
 		tipoDocumentoList.each{
 			def doc = poder.documentosRespaldoPoder.find{ drp -> drp.tipoDocumentoRespaldoPoder.id == it.id }
 			if(doc == null){
@@ -343,7 +343,7 @@ class PoderController {
 		
 		//Rellena listados con datos actuales dal modelo
 		//Inicializa listado de documentos
-		def tipoDocumentoList = poderService.obtenerListadoTipoDocumentoRespaldoPoder()
+		def tipoDocumentoList = poderV1Service.obtenerListadoTipoDocumentoRespaldoPoder()
 		tipoDocumentoList.each{
 			def doc = poder.documentosRespaldoPoder.find{ drp -> drp.tipoDocumentoRespaldoPoder.id == it.id }
 			if(doc == null){
@@ -437,7 +437,7 @@ class PoderController {
 			mensaje = message(code: 'mx.amib.sistemas.registro.apoderamiento.poder.update.message', args: [poder.numeroEscritura,poder.id])
 		}
 		
-		poder = poderService.update(poder, notarioNumero, notarioIdEntidadFederativa,
+		poder = poderV1Service.update(poder, notarioNumero, notarioIdEntidadFederativa,
 			apoderadosIdAutorizadoCNBV, docsActual, docsNuevos)
 
         request.withFormat {
@@ -456,7 +456,7 @@ class PoderController {
             notFound()
             return
         }
-        poderService.delete(poderInstance)
+        poderV1Service.delete(poderInstance)
 		
         request.withFormat {
             '*'{
@@ -510,7 +510,7 @@ class PoderController {
 		//print "el numero de matricula es: "
 		//print numeroMatricula
 		
-		ApoderadoTO apoderado = apoderadoService.obtenerDatosMatriculaDgaValido(id)
+		ApoderadoTO apoderado = apoderadoV1Service.obtenerDatosMatriculaDgaValido(id)
 		
 		if(apoderado == null){
 			apoderado = new ApoderadoTO()

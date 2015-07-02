@@ -1,6 +1,6 @@
 package mx.amib.sistemas.external.expediente.service
 
-import org.apache.http.HttpStatus
+import org.springframework.http.HttpStatus
 
 import java.util.Date
 import java.util.List;
@@ -117,7 +117,7 @@ class SustentanteService {
 			json (sustentante as JSON)
 		}
 
-		if(resp.statusCode.value() != HttpStatus.SC_CREATED )
+		if(resp.statusCode.value() != HttpStatus.CREATED.value )
 			throw new Exception("STATUS CODE: " + resp.statusCode)
 	}
 	
@@ -137,7 +137,7 @@ class SustentanteService {
 			json (sustentante as JSON)
 		}
 
-		if(resp.statusCode.value() != HttpStatus.SC_CREATED )
+		if(resp.statusCode.value() != HttpStatus.CREATED.value )
 			throw new Exception("STATUS CODE: " + resp.statusCode)
 	}
 	

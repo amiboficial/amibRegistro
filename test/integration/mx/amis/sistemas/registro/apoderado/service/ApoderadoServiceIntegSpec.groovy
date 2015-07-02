@@ -14,7 +14,8 @@ class ApoderadoServiceIntegSpec extends Specification {
 	//mx.amib.sistemas.registro.legacy.saaec.service.RegistroExamenService registroExamenService
 	//def sustentanteService
 	//mx.amib.sistemas.external.catalogos.service.NotarioService notarioService
-	def poderService
+	//def poderService
+	def autorizacionService
 	
     def setup() {
     }
@@ -41,8 +42,9 @@ class ApoderadoServiceIntegSpec extends Specification {
 			//refobj.nombreCompleto = "AAAA BBBB CCCC DDDD XMOD"
 			//def testobj = notarioService.delete(28)
 			//def testobj = notarioService.findAllBy(10,0,'id','asc',9,-1,"AD")
-			//println (testobj.fechaCreacion.toString())
-			def testobj = poderService.get(1)
+			//println (testobj.fechaCreacion.toString()
+			def testobj = autorizacionService.autorizar([4L,5L,8L,9L,18L])
+			//def testobj = poderService.get(1)
 			println (testobj as JSON)
 			//println testobj
 	/*if(matricula1.nombreCompleto == "Carlos Cano Sosa"){

@@ -1,6 +1,8 @@
 package mx.amib.sistemas.external.oficios.service
 
-import org.codehaus.groovy.grails.web.json.JSONObject;
+import java.util.List
+import org.springframework.http.HttpStatus
+import org.codehaus.groovy.grails.web.json.JSONObject
 
 import grails.converters.JSON
 import grails.plugins.rest.client.RestBuilder
@@ -16,7 +18,7 @@ class PoderService {
 	String findAllByUrl = "http://localhost:8085/poder/findAllBy"
 	String getUrl = "http://localhost:8085/poder/show/"
 	String saveUrl = "http://localhost:8085/poder/save"
-	String updateUrl = "http://localhost:8085/update/"
+	String updateUrl = "http://localhost:8085/poder/update/"
 	
 	public PoderService.SearchResult list(Integer max, Integer offset, String sort, String order){
 		PoderService.SearchResult sr = new PoderService.SearchResult()
@@ -26,6 +28,7 @@ class PoderService {
 		if(resp.json instanceof JSONObject && !JSONObject.NULL.equals(resp.json)){
 			sr = new PoderService.SearchResult(resp.json)
 		}
+		return sr
 	}
 	public PoderService.SearchResult findAllBy(Integer max, Integer offset, String sort, String order,
 			Integer numeroEscritura, Integer fechaDelDia, Integer fechaDelMes, Integer fechaDelAnio,
@@ -34,10 +37,11 @@ class PoderService {
 		PoderService.SearchResult sr = new PoderService.SearchResult()
 		def qs = "?max=${max}&offset=${offset}&sort=${sort}&order=${order}&numeroEscritura=${numeroEscritura}&fechaDelDia=${fechaDelDia}&fechaDelMes=${fechaDelMes}&fechaDelAnio=${fechaDelAnio}&fechaAlDia=${fechaAlDia}&fechaAlMes=${fechaAlMes}&fechaAlAnio=${fechaAlAnio}&idGrupoFinanciero=${idGrupoFinanciero}&idInstitucion=${idInstitucion}"
 		def rest = new RestBuilder()
-		def resp = rest.get(listUrl + qs.toString())
+		def resp = rest.get(findAllByUrl + qs.toString())
 		if(resp.json instanceof JSONObject && !JSONObject.NULL.equals(resp.json)){
 			sr = new PoderService.SearchResult(resp.json)
 		}
+		return sr
 	}
 	public PoderTO get(Long id){
 		PoderTO p = new PoderTO()
@@ -60,7 +64,7 @@ class PoderService {
 			json (p as JSON)
 		}
 		
-		if(resp.statusCode.value() != HttpStatus.SC_CREATED )
+		if(resp.statusCode.value() != HttpStatus.CREATED.value )
 			throw new Exception("STATUS CODE: " + resp.statusCode)
 			
 		if(resp.json instanceof JSONObject && !JSONObject.NULL.equals(resp.json)){
@@ -70,12 +74,12 @@ class PoderService {
 	}
 	public PoderTO update(PoderTO p){
 		def rest = new RestBuilder()
-		def resp = rest.put(updateUrl + n.id){
+		def resp = rest.put(updateUrl + p.id){
 			contentType "application/json;charset=UTF-8"
 			json (p as JSON)
 		}
 		
-		if(resp.statusCode.value() != HttpStatus.SC_OK )
+		if(resp.statusCode.value() != HttpStatus.OK.value )
 			throw new Exception("STATUS CODE: " + resp.statusCode)
 			
 		if(resp.json instanceof JSONObject && !JSONObject.NULL.equals(resp.json)){

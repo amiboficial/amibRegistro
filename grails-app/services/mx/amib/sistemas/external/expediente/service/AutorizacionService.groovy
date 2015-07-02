@@ -14,14 +14,14 @@ import grails.transaction.Transactional
 class AutorizacionService {
 
 	String aprobarDictamenUrl = "http://localhost:8084/amibExpediente/autorizacionRestful/aprobarDictamen"
-	String autorizarUrl = "http://localhost:8084/amibExpediente/autorizacionRestful/autorizarUrl"
-	String deshacerAutorizacionSinPoderesUrl = "http://localhost:8084/amibExpediente/autorizacionRestful/deshacerAutorizacionSinPoderesUrl"
-	String apoderarUrl = "http://localhost:8084/amibExpediente/autorizacionRestful/apoderarUrl"
-	String deshacerApoderarUrl = "http://localhost:8084/amibExpediente/autorizacionRestful/deshacerApoderarUrl"
-	String suspenderUrl = "http://localhost:8084/amibExpediente/autorizacionRestful/suspenderUrl"
-	String revocarUrl = "http://localhost:8084/amibExpediente/autorizacionRestful/revocarUrl"
-	String deshacerRevocarUrl = "http://localhost:8084/amibExpediente/autorizacionRestful/deshacerRevocarUrl"
-	String expirarUrl = "http://localhost:8084/amibExpediente/autorizacionRestful/expirarUrl"
+	String autorizarUrl = "http://localhost:8084/amibExpediente/autorizacionRestful/autorizar"
+	String deshacerAutorizacionSinPoderesUrl = "http://localhost:8084/amibExpediente/autorizacionRestful/deshacerAutorizacionSinPoderes"
+	String apoderarUrl = "http://localhost:8084/amibExpediente/autorizacionRestful/apoderar"
+	String deshacerApoderarUrl = "http://localhost:8084/amibExpediente/autorizacionRestful/deshacerApoderar"
+	String suspenderUrl = "http://localhost:8084/amibExpediente/autorizacionRestful/suspender"
+	String revocarUrl = "http://localhost:8084/amibExpediente/autorizacionRestful/revocar"
+	String deshacerRevocarUrl = "http://localhost:8084/amibExpediente/autorizacionRestful/deshacerRevocar"
+	String expirarUrl = "http://localhost:8084/amibExpediente/autorizacionRestful/expirar"
 	
 	def aprobarDictamen(List<Long> idCertificacionList) {
 		return this.sendIdJSONArray(aprobarDictamenUrl, idCertificacionList)

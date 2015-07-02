@@ -1,8 +1,10 @@
 package mx.amib.sistemas.external.oficios.service
 
 import java.util.List
+
 import org.springframework.http.HttpStatus
 
+import mx.amib.sistemas.external.oficios.poder.PoderTO;
 import mx.amib.sistemas.external.oficios.revocacion.RevocacionTO
 
 import org.codehaus.groovy.grails.web.json.JSONObject
@@ -21,7 +23,7 @@ class RevocacionService {
 	String updateUrl = "http://localhost:8085/revocacion/update/"
 	
     public RevocacionService.SearchResult list(Integer max, Integer offset, String sort, String order){
-		RevocacionService.SearchResult sr = new RevocacionService.SearchResult()
+		SearchResult<RevocacionTO> sr = new Revocacion()
 		def qs = "?max=${max}&offset=${offset}&sort=${sort}&order=${order}"
 		def rest = new RestBuilder()
 		def resp = rest.get(listUrl + qs.toString())
@@ -88,9 +90,15 @@ class RevocacionService {
 		return r
 	}
 	
-	class SearchResult{
-		List<RevocacionTO> list;
-		Long count;
-		Boolean error;
+	private JSON customServiceJson(RevocacionTO r){
+		def pMap = r.properties
+		pMap.'fechaApoderamiento' = r.fechaRevocacion.getTime()
+		pMap.'fechaCreacion' = null
+		pMap.'fechaModificacion' = null
+		pMap.'apoderados'.each{
+			it.'fechaCreacion' = null
+			it.'fechaModificacion' = null
+		}
+		return new JSON(pMap)
 	}
 }

@@ -32,6 +32,7 @@ class BootStrap {
 		metodoValidacionService.descargarCatalogo()
 		statusAutorizacionService.descargarCatalogo()
 		statusCertificacionService.descargarCatalogo()
+		
     }
     def destroy = {
 		

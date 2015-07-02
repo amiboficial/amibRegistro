@@ -27,7 +27,7 @@ class OficioCnbvService {
 		def rest = new RestBuilder()
 		def resp = rest.get(listUrl + qs.toString())
 		if(resp.json instanceof JSONObject && !JSONObject.NULL.equals(resp.json)){
-			sr = new PoderService.SearchResult(resp.json)
+			sr = new OficioCnbvService.SearchResult(resp.json)
 		}
 		return sr
     }

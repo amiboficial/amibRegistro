@@ -21,7 +21,7 @@ class RevocacionService {
 	String updateUrl = "http://localhost:8085/revocacion/update/"
 	
     public RevocacionService.SearchResult list(Integer max, Integer offset, String sort, String order){
-		RevocacionService.SearchResult sr = new PoderService.SearchResult()
+		RevocacionService.SearchResult sr = new RevocacionService.SearchResult()
 		def qs = "?max=${max}&offset=${offset}&sort=${sort}&order=${order}"
 		def rest = new RestBuilder()
 		def resp = rest.get(listUrl + qs.toString())

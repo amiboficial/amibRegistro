@@ -2,8 +2,10 @@ package mx.amib.sistemas.external.oficios.service
 
 import java.util.List
 import org.springframework.http.HttpStatus
+import org.codehaus.groovy.grails.web.json.JSONElement
 import org.codehaus.groovy.grails.web.json.JSONObject
 
+import groovy.json.*
 import grails.converters.JSON
 import grails.plugins.rest.client.RestBuilder
 import grails.transaction.Transactional
@@ -20,26 +22,28 @@ class PoderService {
 	String saveUrl = "http://localhost:8085/poder/save"
 	String updateUrl = "http://localhost:8085/poder/update/"
 	
-	public PoderService.SearchResult list(Integer max, Integer offset, String sort, String order){
-		PoderService.SearchResult sr = new PoderService.SearchResult()
+	public SearchResult list(Integer max, Integer offset, String sort, String order){
+		SearchResult sr = new SearchResult()
 		def qs = "?max=${max}&offset=${offset}&sort=${sort}&order=${order}"
 		def rest = new RestBuilder()
 		def resp = rest.get(listUrl + qs.toString())
 		if(resp.json instanceof JSONObject && !JSONObject.NULL.equals(resp.json)){
-			sr = new PoderService.SearchResult(resp.json)
+			println "el recibido es: " + resp.json.toString()
+			def j = this.fixSearchResultJsonObject(resp.json)
+			sr = new SearchResult( j )
 		}
 		return sr
 	}
-	public PoderService.SearchResult findAllBy(Integer max, Integer offset, String sort, String order,
+	public SearchResult findAllBy(Integer max, Integer offset, String sort, String order,
 			Integer numeroEscritura, Integer fechaDelDia, Integer fechaDelMes, Integer fechaDelAnio,
 			Integer fechaAlDia, Integer fechaAlMes, Integer fechaAlAnio,
 			Long idGrupoFinanciero, Long idInstitucion){
-		PoderService.SearchResult sr = new PoderService.SearchResult()
+		SearchResult sr = new SearchResult()
 		def qs = "?max=${max}&offset=${offset}&sort=${sort}&order=${order}&numeroEscritura=${numeroEscritura}&fechaDelDia=${fechaDelDia}&fechaDelMes=${fechaDelMes}&fechaDelAnio=${fechaDelAnio}&fechaAlDia=${fechaAlDia}&fechaAlMes=${fechaAlMes}&fechaAlAnio=${fechaAlAnio}&idGrupoFinanciero=${idGrupoFinanciero}&idInstitucion=${idInstitucion}"
 		def rest = new RestBuilder()
 		def resp = rest.get(findAllByUrl + qs.toString())
 		if(resp.json instanceof JSONObject && !JSONObject.NULL.equals(resp.json)){
-			sr = new PoderService.SearchResult(resp.json)
+			sr = new SearchResult( this.fixSearchResultJsonObject(resp.json) )
 		}
 		return sr
 	}
@@ -51,7 +55,7 @@ class PoderService {
 		def resp = rest.get(getUrl + id)
 		
 		if(resp.json instanceof JSONObject && !JSONObject.NULL.equals(resp.json)){
-			p = new PoderTO(resp.json)
+			p = new PoderTO( this.fixPoderJsonObject(resp.json) )
 		}
 		return p
 	}
@@ -61,36 +65,70 @@ class PoderService {
 		def rest = new RestBuilder()
 		def resp = rest.post(saveUrl){
 			contentType "application/json;charset=UTF-8"
-			json (p as JSON)
+			json this.customServiceJson(p)
 		}
 		
 		if(resp.statusCode.value() != HttpStatus.CREATED.value )
 			throw new Exception("STATUS CODE: " + resp.statusCode)
 			
 		if(resp.json instanceof JSONObject && !JSONObject.NULL.equals(resp.json)){
-			p = new PoderTO(resp.json)
+			p = new PoderTO( this.fixPoderJsonObject(resp.json) )
 		}
+		
 		return p
 	}
 	public PoderTO update(PoderTO p){
 		def rest = new RestBuilder()
 		def resp = rest.put(updateUrl + p.id){
 			contentType "application/json;charset=UTF-8"
-			json (p as JSON)
+			json this.customServiceJson(p)
 		}
 		
 		if(resp.statusCode.value() != HttpStatus.OK.value )
 			throw new Exception("STATUS CODE: " + resp.statusCode)
 			
 		if(resp.json instanceof JSONObject && !JSONObject.NULL.equals(resp.json)){
-			p = new PoderTO(resp.json)
+			p = new PoderTO( this.fixPoderJsonObject(resp.json) )
 		}
 		return p
 	}
 	
-	class SearchResult{
-		List<PoderTO> list;
-		Long count;
-		Boolean error;
+	private JSON customServiceJson(PoderTO p){
+		def pMap = p.properties
+		pMap.'fechaApoderamiento' = p.fechaApoderamiento.getTime()
+		pMap.'fechaCreacion' = null
+		pMap.'fechaModificacion' = null
+		pMap.'apoderados'.each{
+			it.'fechaCreacion' = null
+			it.'fechaModificacion' = null
+		}
+		return new JSON(pMap)
 	}
+	private JSONObject fixPoderJsonObject(JSONObject je){
+		
+		je.remove('class')
+		je.'fechaApoderamiento' = new Date(je.'fechaApoderamiento')
+		je.'fechaCreacion' = new Date(je.'fechaCreacion')
+		je.'fechaModificacion' = new Date(je.'fechaModificacion')
+		je.'apoderados'.each{
+			it.'fechaCreacion' = new Date(it.'fechaCreacion')
+			it.'fechaModificacion' = new Date(it.'fechaModificacion')
+		}
+		
+		return je
+	}
+	private JSONObject fixSearchResultJsonObject(JSONObject je){
+		je.remove('class')
+		je.'list'.each{
+			it = this.fixPoderJsonObject(it)
+		}
+		return je
+	}
+	
+}
+
+class SearchResult{
+	List<PoderTO> list;
+	Integer count;
+	Boolean error;
 }

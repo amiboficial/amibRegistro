@@ -41,7 +41,7 @@
 					<tbody>
 						<g:each in="${poderInstanceList}" status="i" var="poderInstance">
 							<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-								<td><g:link controller="poder" action="showEntidadFinanciera" id="${poderInstance.id}">${poderInstance.id}</g:link></td>
+								<td><g:link controller="poderOld" action="showEntidadFinanciera" id="${poderInstance.id}">${poderInstance.id}</g:link></td>
 								<td><g:formatDate date="${poderInstance.fechaApoderamiento}" /></td>
 								<td>${fieldValue(bean: poderInstance, field: "numeroEscritura")}</td>
 								<td><g:formatDate date="${poderInstance.fechaCreacion}" /></td>

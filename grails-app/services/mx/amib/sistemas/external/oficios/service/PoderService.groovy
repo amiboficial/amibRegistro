@@ -10,6 +10,7 @@ import grails.converters.JSON
 import grails.plugins.rest.client.RestBuilder
 import grails.transaction.Transactional
 import mx.amib.sistemas.external.oficios.poder.PoderTO
+import mx.amib.sistemas.utils.SearchResult
 
 @Transactional
 class PoderService {
@@ -22,28 +23,28 @@ class PoderService {
 	String saveUrl = "http://localhost:8085/poder/save"
 	String updateUrl = "http://localhost:8085/poder/update/"
 	
-	public SearchResult list(Integer max, Integer offset, String sort, String order){
-		SearchResult sr = new SearchResult()
+	public SearchResult<PoderTO> list(Integer max, Integer offset, String sort, String order){
+		SearchResult<PoderTO> sr = new SearchResult<PoderTO>()
 		def qs = "?max=${max}&offset=${offset}&sort=${sort}&order=${order}"
 		def rest = new RestBuilder()
 		def resp = rest.get(listUrl + qs.toString())
 		if(resp.json instanceof JSONObject && !JSONObject.NULL.equals(resp.json)){
 			println "el recibido es: " + resp.json.toString()
 			def j = this.fixSearchResultJsonObject(resp.json)
-			sr = new SearchResult( j )
+			sr = new SearchResult<PoderTO>( j )
 		}
 		return sr
 	}
-	public SearchResult findAllBy(Integer max, Integer offset, String sort, String order,
+	public SearchResult<PoderTO> findAllBy(Integer max, Integer offset, String sort, String order,
 			Integer numeroEscritura, Integer fechaDelDia, Integer fechaDelMes, Integer fechaDelAnio,
 			Integer fechaAlDia, Integer fechaAlMes, Integer fechaAlAnio,
 			Long idGrupoFinanciero, Long idInstitucion){
-		SearchResult sr = new SearchResult()
+		SearchResult<PoderTO> sr = new SearchResult<PoderTO>()
 		def qs = "?max=${max}&offset=${offset}&sort=${sort}&order=${order}&numeroEscritura=${numeroEscritura}&fechaDelDia=${fechaDelDia}&fechaDelMes=${fechaDelMes}&fechaDelAnio=${fechaDelAnio}&fechaAlDia=${fechaAlDia}&fechaAlMes=${fechaAlMes}&fechaAlAnio=${fechaAlAnio}&idGrupoFinanciero=${idGrupoFinanciero}&idInstitucion=${idInstitucion}"
 		def rest = new RestBuilder()
 		def resp = rest.get(findAllByUrl + qs.toString())
 		if(resp.json instanceof JSONObject && !JSONObject.NULL.equals(resp.json)){
-			sr = new SearchResult( this.fixSearchResultJsonObject(resp.json) )
+			sr = new SearchResult<PoderTO>( this.fixSearchResultJsonObject(resp.json) )
 		}
 		return sr
 	}
@@ -125,10 +126,4 @@ class PoderService {
 		return je
 	}
 	
-}
-
-class SearchResult{
-	List<PoderTO> list;
-	Integer count;
-	Boolean error;
 }

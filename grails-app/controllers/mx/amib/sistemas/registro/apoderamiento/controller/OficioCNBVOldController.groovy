@@ -6,7 +6,7 @@ import grails.converters.JSON
 import grails.transaction.Transactional
 
 @Transactional(readOnly = true)
-class OficioCNBVController {
+class OficioCNBVOldController {
 
     static allowedMethods = [save: "POST", update: "PUT", delete: ["DELETE","GET"]]
 

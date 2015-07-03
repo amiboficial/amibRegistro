@@ -2,7 +2,7 @@ package mx.amib.sistemas.util.controller
 
 import grails.converters.JSON
 import mx.amib.sistemas.external.documentos.service.DocumentoRepositorioTO
-import mx.amib.sistemas.util.service.ArchivoTO
+import mx.amib.sistemas.utils.service.ArchivoTO
 import org.springframework.web.multipart.commons.CommonsMultipartFile
 
 /*

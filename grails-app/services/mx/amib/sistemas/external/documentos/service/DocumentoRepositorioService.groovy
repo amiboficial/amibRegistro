@@ -5,8 +5,8 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.ArrayList
 
-import mx.amib.sistemas.util.service.ArchivoTO
-import mx.amib.sistemas.util.service.ArchivoTemporalService
+import mx.amib.sistemas.utils.service.ArchivoTO
+import mx.amib.sistemas.utils.service.ArchivoTemporalService
 import mx.amib.sistemas.utils.AmibFechaUtils
 
 import org.codehaus.groovy.grails.web.json.JSONObject

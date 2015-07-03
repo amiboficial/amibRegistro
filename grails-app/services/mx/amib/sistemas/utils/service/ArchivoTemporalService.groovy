@@ -1,4 +1,4 @@
-package mx.amib.sistemas.util.service
+package mx.amib.sistemas.utils.service
 
 import groovy.transform.AutoClone
 import grails.transaction.Transactional

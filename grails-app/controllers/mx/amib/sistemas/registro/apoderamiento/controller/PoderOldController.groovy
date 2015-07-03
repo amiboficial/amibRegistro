@@ -7,7 +7,7 @@ import java.util.List;
 
 import mx.amib.sistemas.registro.apoderado.service.ApoderadoV1Service
 import mx.amib.sistemas.registro.apoderado.service.ApoderadoTO
-import mx.amib.sistemas.registro.apoderado.service.AutorizacionCnbvTO;
+import mx.amib.sistemas.registro.apoderado.service.AutorizacionCnbvTO
 import mx.amib.sistemas.registro.apoderado.service.DocumentoRespaldoPoderTO
 import mx.amib.sistemas.registro.apoderamiento.model.Poder
 import mx.amib.sistemas.external.catalogos.service.EntidadFinancieraService
@@ -19,7 +19,7 @@ import mx.amib.sistemas.external.documentos.service.DocumentoRepositorioTO
 import mx.amib.sistemas.external.documentos.service.ClaseDocumento
 import mx.amib.sistemas.registro.notario.service.NotarioV1Service
 import mx.amib.sistemas.registro.apoderado.service.PoderV1Service
-import mx.amib.sistemas.util.service.*
+import mx.amib.sistemas.utils.service.*
 
 import org.codehaus.groovy.grails.web.json.JSONObject
 import org.junit.After

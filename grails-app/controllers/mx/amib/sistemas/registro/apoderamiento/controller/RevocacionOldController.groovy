@@ -22,7 +22,7 @@ import mx.amib.sistemas.external.documentos.service.DocumentoRepositorioService
 import mx.amib.sistemas.external.expediente.service.SustentanteService
 
 @Transactional(readOnly = true)
-class RevocacionController {
+class RevocacionOldController {
 
     static allowedMethods = [save: "POST", update: "PUT", delete: ["DELETE","GET"]]
 

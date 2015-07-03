@@ -1,6 +1,6 @@
 package mx.amib.sistemas.registro.apoderamiento.controller
 
-class PoderVigenteController {
+class PoderVigenteOldController {
 
 	def poderVigenteV1Service
 	

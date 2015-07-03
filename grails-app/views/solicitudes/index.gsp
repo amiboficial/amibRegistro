@@ -87,7 +87,7 @@
 					<tbody>
 						<g:each in="${revocacionInstanceList}" status="i" var="revocacionInstance">
 							<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-								<td><g:link controller="revocacion" action="showEntidadFinanciera" id="${revocacionInstance.id}">${revocacionInstance.id}</g:link></td>
+								<td><g:link controller="revocacionOld" action="showEntidadFinanciera" id="${revocacionInstance.id}">${revocacionInstance.id}</g:link></td>
 								<td><g:formatDate date="${revocacionInstance.fechaRevocacion}" /></td>
 								<td>${fieldValue(bean: revocacionInstance, field: "numeroEscritura")}</td>
 								<td><g:formatDate date="${revocacionInstance.fechaCreacion}" /></td>

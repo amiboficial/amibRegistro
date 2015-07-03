@@ -80,7 +80,7 @@ class PoderService {
 	}
 	public PoderTO update(PoderTO p){
 		def rest = new RestBuilder()
-		def resp = rest.post(updateUrl + p.id){
+		def resp = rest.put(updateUrl + p.id){
 			contentType "application/json;charset=UTF-8"
 			json this.customServiceJson(p)
 		}

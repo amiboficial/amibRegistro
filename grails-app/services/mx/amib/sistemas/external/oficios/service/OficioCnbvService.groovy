@@ -103,7 +103,7 @@ class OficioCnbvService {
 		}
 		return o
 	}
-	public OficioCnbvTO update(OficioCnbvTO o){
+	public OficioCnbvTO put(OficioCnbvTO o){
 		
 		def rest = new RestBuilder()
 		def resp = rest.post(updateUrl + o.id){

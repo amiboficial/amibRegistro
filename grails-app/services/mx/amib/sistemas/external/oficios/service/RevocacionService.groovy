@@ -76,7 +76,7 @@ class RevocacionService {
 	}
 	public RevocacionTO update(RevocacionTO r){
 		def rest = new RestBuilder()
-		def resp = rest.post(updateUrl + r.id){
+		def resp = rest.put(updateUrl + r.id){
 			contentType "application/json;charset=UTF-8"
 			json (r as JSON)
 		}

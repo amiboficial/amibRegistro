@@ -108,6 +108,7 @@ class PoderService {
 	private JSONObject fixPoderJsonObject(JSONObject je){
 		
 		je.remove('class')
+		
 		je.'fechaApoderamiento' = new Date(je.'fechaApoderamiento')
 		je.'fechaCreacion' = new Date(je.'fechaCreacion')
 		je.'fechaModificacion' = new Date(je.'fechaModificacion')
@@ -119,7 +120,9 @@ class PoderService {
 		return je
 	}
 	private JSONObject fixSearchResultJsonObject(JSONObject je){
+		
 		je.remove('class')
+		
 		je.'list'.each{
 			it = this.fixPoderJsonObject(it)
 		}

@@ -104,8 +104,9 @@ class OficioCnbvService {
 		return o
 	}
 	public OficioCnbvTO update(OficioCnbvTO o){
+		
 		def rest = new RestBuilder()
-		def resp = rest.put(updateUrl + o.id){
+		def resp = rest.post(updateUrl + o.id){
 			contentType "application/json;charset=UTF-8"
 			json this.customServiceJson(o)
 		}

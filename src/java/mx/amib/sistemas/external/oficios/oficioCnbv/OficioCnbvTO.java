@@ -3,16 +3,11 @@ package mx.amib.sistemas.external.oficios.oficioCnbv;
 import java.util.Date;
 import java.util.List;
 
-/**
- * Clase para objeto de transporte de OficioCnbvTO
- * 
- * @author Gabriel
- * @version 1.0 - Primera versi�n (30/JUN/2015)
- * 
- */
+
 public class OficioCnbvTO {
 	
 	private Long id;
+	private Long version;
 	
 	private String claveDga;
 	private Date fechaInicioVigencia;
@@ -29,6 +24,12 @@ public class OficioCnbvTO {
 	}
 	public void setId(Long id) {
 		this.id = id;
+	}
+	public Long getVersion() {
+		return version;
+	}
+	public void setVersion(Long version) {
+		this.version = version;
 	}
 	
 	public String getClaveDga() {

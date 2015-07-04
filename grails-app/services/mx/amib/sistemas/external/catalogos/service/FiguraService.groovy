@@ -94,7 +94,7 @@ class FiguraCatalog{
 	}
 	
 	public Collection<FiguraTO> getAllElements(){
-		return _map.values()
+		return _map.values().toList()
 	}
 }
 

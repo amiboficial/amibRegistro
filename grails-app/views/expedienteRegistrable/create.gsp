@@ -31,6 +31,7 @@
 			<!-- 
 			<li role="presentation"><a href="#divDoc" aria-controls="divDoc" role="tab" data-toggle="tab">Revisión de documentos</a></li>
 			 -->
+			 <li role="presentation"><a href="#tabCheckSubmit" aria-controls="tabCheckSubmit" role="tab" data-toggle="tab">Agregar solicitud</a></li>
 		</ul>
 		
 		<div class="tab-content">
@@ -56,36 +57,41 @@
 				<div id="divReg"></div>
 			</div>
 
-			<br/>
+			<div role="tabpanel" class="tab-pane" id="tabCheckSubmit">
+			
+				<div id="divCheckSubmit" class="panel panel-default">
+					<span id="spnHdnPostData">
+					</span>
+					<div class="panel-heading">Checklist de validación de información</div>
+					<div class="panel-body">
+						<ul style="list-style-type:none">
+							<li><span id="spnCheckGrales" class="glyphicon glyphicon-unchecked"></span> Datos generales</li>
+							<li><span id="spnCheckTels" class="glyphicon glyphicon-unchecked"></span> Datos de teléfonos</li>
+							<li><span id="spnCheckSepomex" class="glyphicon glyphicon-unchecked"></span> Datos de domicilio</li>
+							<li><span id="spnCheckRegistro" class="glyphicon glyphicon-unchecked"></span> Datos de registro</li>
+						</ul>
+					</div>
+					<div class="form-group">
+						<div class="col-md-3 col-sm-3">
+							&nbsp;
+						</div>
+						<div class="col-md-6 col-sm-6" style="text-align: center">
+							<button id="btnSubmit" type="button" class="submit btn btn-primary btn-block">Agregar solicitud</button>
+						</div>
+						<div class="col-md-3 col-sm-3">
+							&nbsp;
+						</div>
+					</div>
+					<br/>
+				</div>
+				
+			</div>
+
 		</div>
 		
 		<br/>
 		
-		<div id="divCheckSubmit" class="panel panel-default">
-			<span id="spnHdnPostData">
-			</span>
-			<div class="panel-heading">Checklist de validación de información</div>
-			<div class="panel-body">
-				<ul style="list-style-type:none">
-					<li><span id="spnCheckGrales" class="glyphicon glyphicon-unchecked"></span> Datos generales</li>
-					<li><span id="spnCheckTels" class="glyphicon glyphicon-unchecked"></span> Datos de teléfonos</li>
-					<li><span id="spnCheckSepomex" class="glyphicon glyphicon-unchecked"></span> Datos de domicilio</li>
-					<li><span id="spnCheckRegistro" class="glyphicon glyphicon-unchecked"></span> Datos de registro</li>
-				</ul>
-			</div>
-			<div class="form-group">
-				<div class="col-md-3 col-sm-3">
-					&nbsp;
-				</div>
-				<div class="col-md-6 col-sm-6" style="text-align: center">
-					<button id="btnSubmit" type="button" class="submit btn btn-primary btn-block">Agregar solicitud</button>
-				</div>
-				<div class="col-md-3 col-sm-3">
-					&nbsp;
-				</div>
-			</div>
-			<br/>
-		</div>
+				
 
 	</form>
 	

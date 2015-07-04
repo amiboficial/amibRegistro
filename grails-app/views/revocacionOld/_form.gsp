@@ -275,7 +275,6 @@
 					<input type="hidden" id="hdnDocsModelValidatedLoaded" value="false"/>
 				</g:else>
 				
-				
 				<input type="hidden" id="hdnDocsModelValidated" value="false"/>
 				<input type="hidden" id="hdnDocsModelValidatedMsg" value=""/>
 			</fieldset>

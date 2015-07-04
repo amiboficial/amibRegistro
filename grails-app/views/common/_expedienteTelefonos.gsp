@@ -7,7 +7,6 @@
 		</div>
 
 		<div class="form-group">
-
 			<label class="col-md-2 col-sm-3 control-label">
 				<g:message code="expediente.telefonos.label" default="Telefonos" />
 			</label>
@@ -36,21 +35,24 @@
 					</tr>
 				</table>
 			</div>
-			<div class="form-group">
-				<div class="col-md-3 col-sm-3">
-					&nbsp;
-				</div>
-				<div class="col-md-3 col-sm-3">
-					<button type="button" class="submit btn btn-primary btn-block">Validar y confirmar datos de telefonos</button>
-				</div>
-				<div class="col-md-3 col-sm-3">
-					<button type="button" class="edit btn btn-primary btn-block">Editar datos de telefonos</button>
-				</div>
-				<div class="col-md-3 col-sm-3">
-					&nbsp;
-				</div>
+			
+		</div>
+
+		<div class="form-group">
+			<div class="col-md-3 col-sm-3">
+				&nbsp;
+			</div>
+			<div class="col-md-3 col-sm-3">
+				<button type="button" class="submit btn btn-primary btn-block">Validar y confirmar</button>
+			</div>
+			<div class="col-md-3 col-sm-3">
+				<button type="button" class="edit btn btn-primary btn-block">Editar</button>
+			</div>
+			<div class="col-md-3 col-sm-3">
+				&nbsp;
 			</div>
 		</div>
+
 	</script>
 
 	<script type="text/template" id="expedienteTelefono">

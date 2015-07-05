@@ -104,13 +104,13 @@ class NotarioService {
 	}
 	
 	SearchResult findAllBy(Integer max, Integer offset, String sort, String order, 
-					Long idEntidadFederativa, Integer numeroNotario, String nombreCompleto) {
+					Long idEntidadFederativa, Integer numeroNotaria, String nombreCompleto) {
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssX")
 		SearchResult sr = new SearchResult()
 		
-		def qs = "?max=${max}&offset=${offset}&sort=${sort}&order=${order}&idEntidadFederativa=${idEntidadFederativa}&numeroNotario=${numeroNotario}&nombreCompleto=${nombreCompleto}"
+		def qs = "?max=${max}&offset=${offset}&sort=${sort}&order=${order}&idEntidadFederativa=${idEntidadFederativa}&numeroNotaria=${numeroNotaria}&nombreCompleto=${nombreCompleto}"
 		def rest = new RestBuilder()
-		def resp = rest.get(listUrl + qs.toString())
+		def resp = rest.get(findAllByUrl + qs.toString())
 		
 		if(resp.json instanceof JSONObject && !JSONObject.NULL.equals(resp.json)){
 			sr = this.searchResultFromRespJSON(resp.json)
@@ -119,7 +119,7 @@ class NotarioService {
 	}
 	
 	private SearchResult searchResultFromRespJSON(JSONObject jsonObject){
-		jsonObject.remove('class')
+		//jsonObject.remove('class')
 		jsonObject.'list'.each{
 			it = this.notarioTOFromRespJSON(it)
 		}

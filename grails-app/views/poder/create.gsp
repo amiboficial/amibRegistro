@@ -81,6 +81,10 @@
 		
 		var poderModel = new app.Poder();
 		var poderView = new app.PoderView(poderModel);
+		
+		poderView.setNotarioFindUrl('<g:createLink action="getNotario" />');
+		poderView.setGrupoFinancieroGetUrl('<g:createLink action="getInstituciones" />');
+		
 	</script>
 	
 	<!-- INICIA: SCRIPT PARA DOCUMENTOS -->

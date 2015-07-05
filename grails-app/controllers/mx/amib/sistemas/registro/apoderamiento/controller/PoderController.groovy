@@ -56,14 +56,28 @@ class PoderController {
 	}
 	
 	def getNotario(){
-		Map res = null
+		def res = null
 		long idEntidadFederativa = -1L
-		int numeroNotario = -1
+		int numeroNotaria = -1
 		
 		try{
-			idEntidadFederativa = params.'idEntidadFederativa'
-			numeroNotario = params.'numeroNotario'
-			res = [ 'status':'OK', 'object': notarioService.findAllBy(100,0,"desc","nombreCompleto",idEntidadFederativa,numeroNotario,"") ]
+			idEntidadFederativa = Long.parseLong(params.'idEntidadFederativa'?:"-1")
+			numeroNotaria = Integer.parseInt(params.'numeroNotaria'?:"-1")
+			res = [ 'status':'OK', 'object': notarioService.findAllBy(25,0,"desc","nombreCompleto",idEntidadFederativa,numeroNotaria,"") ]
+		}
+		catch(Exception ex) {
+			res = [ 'status': 'ERROR', 'object': ex.message ]
+		}
+		render res as JSON
+	}
+	
+	def getInstituciones(){
+		def res = null
+		long idGrupoFinanciero = -1L
+		
+		try{
+			idGrupoFinanciero = Long.parseLong(params.'idGrupoFinanciero'?:"-1")
+			res = [ 'status':'OK', 'object': entidadFinancieraService.obtenerGrupoFinanciero(idGrupoFinanciero).instituciones.sort{ it.nombre } ]
 		}
 		catch(Exception ex) {
 			res = [ 'status': 'ERROR', 'object': ex.message ]

@@ -2,6 +2,10 @@
 
 <script type="text/template" id="poder">
 
+<div class="errorValidacion alert alert-danger">
+	<span class="glyphicon glyphicon-ban-circle"></span><span class="msgErrorValidacion" ></span>
+</div>
+
 <fieldset>
 	<legend>Datos de la institución o grupo financiero</legend>
 	
@@ -9,7 +13,7 @@
 			<asset:image src="spinner_alert_info.gif"/><strong>Procesando datos, espere un momento</strong>.
 		</div>
 		<div class="errorInstituciones alert alert-danger">
-			<span class="glyphicon glyphicon-ban-circle"></span> Ha habído un error al procesar la petición.
+			<span class="glyphicon glyphicon-ban-circle"></span><span class="msgErrorInstituciones" ></span>
 		</div>
 		
 		<div class="div-groupoFinanciero form-group">
@@ -17,7 +21,7 @@
 				<g:message code="poder.groupoFinanciero.label" default="Grupo financiero" /><span class="required-indicator">*</span>
 			</label>
 			<div class="col-md-9 col-sm-9">
-				<g:select class="field form-control" name='poder.idGrupoFinanciero' value="{{=idGrupoFinanciero}}"
+				<g:select class="field idGrupoFinanciero form-control" name='poder.idGrupoFinanciero' value="{{=idGrupoFinanciero}}"
 				noSelection="${['-1':'-Seleccione-']}"
 				from='${viewModelInstance.gruposFinancieroList}'
 				optionKey="id" optionValue="nombre" data-field="idGrupoFinanciero"></g:select>
@@ -29,8 +33,11 @@
 				<g:message code="poder.institucion.label" default="Institución" /><span class="required-indicator">*</span>
 			</label>
 			<div class="col-md-9 col-sm-9">
-				<select class="field form-control" name="poder.idInstitucion" value="{{=idInstitucion}}" data-field="idInstitucion">
+				<select class="field idInstitucion form-control" name="poder.idInstitucion" value="{{=idInstitucion}}" data-field="idInstitucion">
 					<option value="-1">-Seleccione-</option>
+					{{ _.each(institucionList,function(item){ }}
+						<option value="{{=item.id}}">{{=item.nombre}}</option>
+					{{ },this); }}
 				</select>
 			</div>
 		</div>
@@ -43,7 +50,7 @@
 				<g:message code="poder.representanteLegalNombre.label" default="Nombre" /><span class="required-indicator">*</span>
 			</label>
 			<div class="col-md-9 col-sm-9">
-				<input type="text" data-field="representanteLegalNombre" maxlength="100" class="field form-control" name="poder.representanteLegalNombre" value="{{=representanteLegalNombre}}" />
+				<input type="text" data-field="representanteLegalNombre" maxlength="100" class="field representanteLegalNombre form-control" name="poder.representanteLegalNombre" value="{{=representanteLegalNombre}}" />
 			</div>
 		</div>
 
@@ -52,7 +59,7 @@
 				<g:message code="poder.representanteLegalApellido1.label" default="Primer apellido" /><span class="required-indicator">*</span>
 			</label>
 			<div class="col-md-9 col-sm-9">
-				<input type="text"data-field="representanteLegalApellido1" maxlength="80" class="field form-control" name="poder.representanteLegalApellido1" value="{{=representanteLegalApellido1}}" />
+				<input type="text"data-field="representanteLegalApellido1" maxlength="80" class="field representanteLegalApellido1 form-control" name="poder.representanteLegalApellido1" value="{{=representanteLegalApellido1}}" />
 			</div>
 		</div>
 		<div class="div-representanteLegalApellido2 form-group">
@@ -60,7 +67,7 @@
 				<g:message code="poder.representanteLegalApellido2.label" default="Segundo apellido" /><span class="required-indicator">*</span>						
 			</label>
 			<div class="col-md-9 col-sm-9">
-				<input type="text" data-field="representanteLegalApellido2" maxlength="80" class="field form-control" name="poder.representanteLegalApellido2" value="{{=representanteLegalApellido2}}" />
+				<input type="text" data-field="representanteLegalApellido2" maxlength="80" class="field representanteLegalApellido2 form-control" name="poder.representanteLegalApellido2" value="{{=representanteLegalApellido2}}" />
 			</div>
 		</div>
 </fieldset>
@@ -72,7 +79,7 @@
 				<g:message code="poder.numeroEscritura.label" default="Numero de escritura" /><span class="required-indicator">*</span>
 			</label>
 			<div class="col-md-2 col-sm-2">
-				<input type="text" data-field="numeroEscritura" maxlength="10" class="field form-control" name="poder.numeroEscritura" required="" value="{{=numeroEscritura}}" />
+				<input type="text" data-field="numeroEscritura" maxlength="10" class="field numeroEscritura form-control" name="poder.numeroEscritura" required="" value="{{=numeroEscritura}}" />
 			</div>
 		</div>
 		<div class="div-fechaApoderamiento">
@@ -82,7 +89,7 @@
 			<div class="col-md-4 col-sm-4">
 				
 				<!-- asignar por backbone -->
-				<select data-field="fechaApoderamiento_day" name="poder.fechaApoderamiento_day" id="poder.fechaApoderamiento_day" class="field form-control col-md-4" style="width: 25%;"><option value="-1">-Seleccione-</option>
+				<select data-field="fechaApoderamiento_day" name="poder.fechaApoderamiento_day" id="poder.fechaApoderamiento_day" class="field fechaApoderamiento_day form-control col-md-4" style="width: 25%;"><option value="-1">-Seleccione-</option>
 					<option value="1">1</option>
 					<option value="2">2</option>
 					<option value="3">3</option>
@@ -115,7 +122,7 @@
 					<option value="30">30</option>
 					<option value="31">31</option>
 				</select>
-				<select data-field="fechaApoderamiento_month" name="poder.fechaApoderamiento_month" id="poder.fechaApoderamiento_month" class="field form-control col-md-4" style="width: 40%;"><option value="-1">-Seleccione-</option>
+				<select data-field="fechaApoderamiento_month" name="poder.fechaApoderamiento_month" id="poder.fechaApoderamiento_month" class="field fechaApoderamiento_month form-control col-md-4" style="width: 40%;"><option value="-1">-Seleccione-</option>
 					<option value="1">enero</option>
 					<option value="2">febrero</option>
 					<option value="3">marzo</option>
@@ -129,7 +136,7 @@
 					<option value="11">noviembre</option>
 					<option value="12">diciembre</option>
 				</select>
-				<select data-field="fechaApoderamiento_year" name="poder.fechaApoderamiento_year" id="poder.fechaApoderamiento_year" class="field form-control col-md-4" style="width: 35%;"><option value="-1">-Seleccione-</option>
+				<select data-field="fechaApoderamiento_year" name="poder.fechaApoderamiento_year" id="poder.fechaApoderamiento_year" class="field fechaApoderamiento_year form-control col-md-4" style="width: 35%;"><option value="-1">-Seleccione-</option>
 					<option value="1990">1990</option>
 					<option value="1991">1991</option>
 					<option value="1992">1992</option>
@@ -185,7 +192,7 @@
 		<asset:image src="spinner_alert_info.gif"/><strong>Procesando datos, espere un momento</strong>.
 	</div>
 	<div class="errorNotario alert alert-danger">
-		<span class="glyphicon glyphicon-ban-circle"></span> Ha habído un error al procesar la petición.
+		<span class="glyphicon glyphicon-ban-circle"></span><span class="msgErrorNotario" > </span>
 	</div>
 	
 	<div class="div-notario form-group">
@@ -194,7 +201,7 @@
 				<g:message code="notario.numeroNotaria.label" default="Número" /><span class="required-indicator">*</span>
 			</label>
 			<div class="col-md-2 col-sm-2">
-				<input type="text" data-field="numeroNotaria" maxlength="10" class="field form-control" name="notario.numeroNotaria" value="{{=numeroNotariaNotario}}" />
+				<input type="text" data-field="numeroNotariaNotario" maxlength="10" class="field numeroNotariaNotario form-control" name="notario.numeroNotaria" value="{{=numeroNotariaNotario}}" />
 			</div>
 		</div>
 		<div class="div-idEntidadFederativa">
@@ -202,8 +209,8 @@
 				<g:message code="notario.idEntidadFederativa.label" default="Entidad Federativa" /><span class="required-indicator">*</span>						
 			</label>
 			<div class="col-md-4 col-sm-4">
-				<g:select data-field="idEntidadFederativaNotario" class="field form-control" name='notario.idEntidadFederativa' value="{{=idEntidadFederativaNotario}}"
-					noSelection="${['null':'-Seleccione-']}"
+				<g:select data-field="idEntidadFederativaNotario" class="field idEntidadFederativaNotario form-control" name='notario.idEntidadFederativa' value="{{=idEntidadFederativaNotario}}"
+					noSelection="${['-1':'-Seleccione-']}"
 					from='${viewModelInstance.entidadFederativaList}'
 					optionKey="id" optionValue="nombre"></g:select>
 			</div>
@@ -216,8 +223,11 @@
 		</label>
 		<div class="col-md-9 col-sm-9">
 			<!-- setear por backbone -->
-			<select class="form-control" name="notario.id">
+			<select data-field="idNotario" class="field idNotario form-control" name="notario.id" value="{{=idNotario}}">
 				<option value="-1">-Seleccione-</option>
+				{{ _.each(notarioList,function(item){ }}
+					<option value="{{=item.id}}">{{=item.nombreCompleto}}</option>
+				{{ },this); }}
 			</select>
 		</div>
 	</div>

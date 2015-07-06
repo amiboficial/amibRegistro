@@ -3,7 +3,9 @@
 <script type="text/template" id="poder">
 
 <div class="errorValidacion alert alert-danger">
-	<span class="glyphicon glyphicon-ban-circle"></span><span class="msgErrorValidacion" ></span>
+	<span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span class="msgErrorValidacion" ></span><br/>
+	<ul class="validationErrorMsgs">
+	</ul>
 </div>
 
 <fieldset>
@@ -16,7 +18,7 @@
 			<span class="glyphicon glyphicon-ban-circle"></span><span class="msgErrorInstituciones" ></span>
 		</div>
 		
-		<div class="div-groupoFinanciero form-group">
+		<div class="div-idGrupoFinanciero form-group">
 			<label class="col-md-2 col-sm-3 control-label">
 				<g:message code="poder.groupoFinanciero.label" default="Grupo financiero" /><span class="required-indicator">*</span>
 			</label>
@@ -28,7 +30,7 @@
 			</div>
 		</div>
 		
-		<div class="div-institucion form-group">
+		<div class="div-idInstitucion form-group">
 			<label class="col-md-2 col-sm-3 control-label">
 				<g:message code="poder.institucion.label" default="Institución" /><span class="required-indicator">*</span>
 			</label>
@@ -64,7 +66,7 @@
 		</div>
 		<div class="div-representanteLegalApellido2 form-group">
 			<label class="col-md-2 col-sm-3 control-label">
-				<g:message code="poder.representanteLegalApellido2.label" default="Segundo apellido" /><span class="required-indicator">*</span>						
+				<g:message code="poder.representanteLegalApellido2.label" default="Segundo apellido" />						
 			</label>
 			<div class="col-md-9 col-sm-9">
 				<input type="text" data-field="representanteLegalApellido2" maxlength="80" class="field representanteLegalApellido2 form-control" name="poder.representanteLegalApellido2" value="{{=representanteLegalApellido2}}" />

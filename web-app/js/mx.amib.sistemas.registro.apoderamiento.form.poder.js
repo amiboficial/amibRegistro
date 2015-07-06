@@ -11,12 +11,14 @@ app.PODER_ERRMSG_NUMNOTARIO_NOVALID = "PODER_ERRMSG_NUMNOTARIO_NOVALID";
 app.PODER_ERRMSG_NOTARIO_NOTFOUND = "PODER_ERRMSG_NOTARIO_NOTFOUND";
 app.PODER_ERRMSG_NOTARIO_REQUESTERROR = "PODER_ERRMSG_NOTARIO_REQUESTERROR";
 
+app.PODER_ERRMSG_NOVALID = "PODER_ERRMSG_NOVALID";
 app.PODER_ERRMSG_NOGPOFIN = "PODER_ERRMSG_NOGPOFIN";
-app.PODER_ERRMSG_NONOTARIO = "PODER_ERRMSG_NONOTARIO";
-app.PODER_ERRMSG_NONUMESC = "PODER_ERRMSG_NONUMESC";
 app.PODER_ERRMSG_NORLNOM = "PODER_ERRMSG_NORLNOM";
 app.PODER_ERRMSG_NORLAP1 = "PODER_ERRMSG_NORLAP1";
+app.PODER_ERRMSG_NUMESC_NOVALID = "PODER_ERRMSG_NONUMESC_NOVALID";
+app.PODER_ERRMSG_NONUMESC = "PODER_ERRMSG_NONUMESC";
 app.PODER_ERRMSG_NOFECAP = "PODER_ERRMSG_NOFECAP";
+app.PODER_ERRMSG_NONOTARIO = "PODER_ERRMSG_NONOTARIO";
 app.PODER_ERRMSG_NODOCRESP = "PODER_ERRMSG_NODOCRESP";
 
 app.Poder = Backbone.Model.extend ({
@@ -57,9 +59,9 @@ app.PoderView = Backbone.View.extend({
 	errorNotario: false,
 	msgErrorNotario: "",
 	errorValidacion: false,
-	msgErrorValidacion: "",
+	msgErrorValidacion: app.PODER_ERRMSG_NOVALID,
 	validationErrorMsgs: [],
-	validationErrorDivs: [],
+	validationErrorFields: [],
 	
 	grupoFinancieroGetUrl: "",
 	notarioFindUrl: "",
@@ -76,8 +78,8 @@ app.PoderView = Backbone.View.extend({
 		'change .idGrupoFinanciero':'cargarInstituciones',
 		'change .numeroNotariaNotario':'cargarNotarios',
 		'change .idEntidadFederativaNotario':'cargarNotarios',
-		'click .submit':'establecerDatos',
-		'click .edit':'habilitarEdicionDatos',
+		'click .submit':'submit',
+		'click .edit':'edit',
 	},
 	
 	render: function(){
@@ -85,8 +87,15 @@ app.PoderView = Backbone.View.extend({
 		//rendering inicial del modelo
 		var clonedModel = JSON.parse( JSON.stringify(this.model) ); //se obtiene una "copia" el modelo debido a que al setear el template se sobreescribirá por los callbacks "change"
 		this.$el.html( this.template( this.model.toJSON() ) ); //se setea el modelo al template
-		$(".idEntidadFederativaNotario").val( clonedModel.idEntidadFederativaNotario ); //se setean los valores que no se pudieron setear por template
-		$(".idGrupoFinanciero").val( clonedModel.idGrupoFinanciero ); //se setean los valores que no se pudieron setear por template
+		this.$(".idEntidadFederativaNotario").val( clonedModel.idEntidadFederativaNotario ); //se setean los valores que no se pudieron setear por template
+		//se setean los valores que no se pudieron setear por template
+		// - por lo general, todos los "select" se han de setear de esta forma
+		this.$(".idGrupoFinanciero").val( clonedModel.idGrupoFinanciero ); 
+		this.$(".idInstitucion").val( clonedModel.idInstitucion );
+		this.$(".fechaApoderamiento_day").val( clonedModel.fechaApoderamiento_day );
+		this.$(".fechaApoderamiento_month").val( clonedModel.fechaApoderamiento_month );
+		this.$(".fechaApoderamiento_year").val( clonedModel.fechaApoderamiento_year );
+		this.$(".idNotario").val( clonedModel.idNotario );
 		
 		//oculta todos los mensajes de error
 		this.$('.errorInstituciones').hide();
@@ -115,6 +124,13 @@ app.PoderView = Backbone.View.extend({
 			
 			if(this.errorValidacion){
 				this.$('.msgErrorValidacion').text(this.msgErrorValidacion);
+				
+				var msg = "";
+				_.each(this.validationErrorMsgs,function(item){
+					msg += "<li>" + item + "</li>";
+				},this);
+				this.$('.validationErrorMsgs').html(msg);
+				
 				this.$('.errorValidacion').show();
 			}
 			
@@ -138,6 +154,12 @@ app.PoderView = Backbone.View.extend({
 			this.disableSubmitEnableEdit();
 		}
 	},
+	clearErrorsOnFilds: function(){
+		
+	},
+	showErrorsOnFields: function(){
+		
+	},
 	
 	disableFields: function(){
 		this.$(".idGrupoFinanciero").attr("disabled","disabled");
@@ -149,9 +171,10 @@ app.PoderView = Backbone.View.extend({
 		this.$(".fechaApoderamiento_day").attr("disabled","disabled");
 		this.$(".fechaApoderamiento_month").attr("disabled","disabled");
 		this.$(".fechaApoderamiento_year").attr("disabled","disabled");
+		
 		this.$(".numeroNotariaNotario").attr("disabled","disabled");
 		this.$(".idEntidadFederativaNotario").attr("disabled","disabled");
-		this.$(".nombreCompletro").attr("disabled","disabled");
+		this.$(".idNotario ").attr("disabled","disabled");
 		
 		this.$(".submit").attr("disabled","disabled");
 		this.$(".edit").attr("disabled","disabled");
@@ -169,7 +192,7 @@ app.PoderView = Backbone.View.extend({
 		this.$(".fechaApoderamiento_year").removeAttr("disabled");
 		this.$(".numeroNotariaNotario").removeAttr("disabled");
 		this.$(".idEntidadFederativaNotario").removeAttr("disabled");
-		this.$(".nombreCompletro").removeAttr("disabled");
+		this.$(".idNotario ").removeAttr("disabled");
 		
 		this.$(".submit").removeAttr("disabled");
 		this.$(".edit").removeAttr("disabled");
@@ -214,6 +237,20 @@ app.PoderView = Backbone.View.extend({
 		this.errorInstituciones = false;
 		this.msgErrorInstituciones = "";
 	},
+	hasErrorValidacion: function(){
+		return this.errorValidacion;
+	},
+	setErrorValidacion: function(field, fieldErrorMsg){
+		this.errorValidacion = true;
+		this.validationErrorFields.push(field);
+		this.validationErrorMsgs.push(fieldErrorMsg);
+	},
+	clearErrorValidacion: function(){
+		this.errorValidacion = false;
+		this.validationErrorMsgs = new Array();
+		this.validationErrorFields = new Array();
+	},
+	
 	
 	//Cambios de estado con rendereo consecuente
 	setReady: function(){
@@ -263,16 +300,19 @@ app.PoderView = Backbone.View.extend({
 					if(data.status == "OK"){
 						if(data.object.length > 0){
 							//rellena el select con instituciones de la entidad federativa
+							view.model.set('idInstitucion',-1);
 							view.model.set('institucionList',data.object);
 						}
 						else{
 							//deja solo la opcion "seleccionar"
+							view.model.set('idInstitucion',-1);
 							view.model.set('institucionList',new Array());
 							//view.setErrorNotario(app.PODER_ERRMSG_INSTIT_REQUESTERROR);
 						}
 					}
 					else{
 						//deja solo la opcion "seleccionar"
+						view.model.set('idInstitucion',-1);
 						view.model.set('institucionList',new Array());
 						view.setErrorInstitucioneses(app.PODER_ERRMSG_INSTIT_REQUESTERROR);
 					}
@@ -291,7 +331,7 @@ app.PoderView = Backbone.View.extend({
 	cargarNotarios: function(){
 		
 		var view = this;
-		var numericRegEx = /[0-9]{1,10}/;
+		var numericRegEx = /^[0-9]{1,10}$/;
 	
 		var numeroNotariaNotario = $(".numeroNotariaNotario").val().trim();
 		var idEntidadFederativaNotario = $(".idEntidadFederativaNotario").val();
@@ -340,8 +380,60 @@ app.PoderView = Backbone.View.extend({
 		
 	},
 	
-	submit: function(){},
-	edit: function(){}
+	submit: function(e){
+		e.preventDefault();
+		//El modelo ya se encuentra en objeto, solo procedera a validar la información
+		console.log("HACIENDO SUBMIT");
+		if( this.validate() ){
+			console.log("LOS DATOS FUERON VALIDOS");
+			this.setValidated();
+		}
+		else{
+			this.setReady();
+		}
+	},
+	
+	//En caso de requerirse, aquí se agregan expresiones regulares
+	validate: function(){
+		var num10CarExp = /^[0-9]{1,10}$/
+		
+	
+		this.clearErrorValidacion();
+		
+		if(this.model.get("idGrupoFinanciero") == -1){
+			this.setErrorValidacion("idGrupoFinanciero",app.PODER_ERRMSG_NOGPOFIN);
+		}
+		if(this.model.get("representanteLegalApellido1") == ""){
+			this.setErrorValidacion("representanteLegalApellido1",app.PODER_ERRMSG_NORLNOM);
+		}
+		if(this.model.get("representanteLegalApellido2") == ""){
+			this.setErrorValidacion("representanteLegalApellido2",app.PODER_ERRMSG_NORLAP1);
+		}
+		
+		if(this.model.get("numeroEscritura") == ""){
+			this.setErrorValidacion("numeroEscritura",app.PODER_ERRMSG_NONUMESC);
+		}
+		//app.PODER_ERRMSG_NUMESC_NOVALID
+		else if(num10CarExp.test(this.model.get("numeroEscritura")) == false){
+			this.setErrorValidacion("numeroEscritura",app.PODER_ERRMSG_NUMESC_NOVALID);
+		}
+		
+		if(this.model.get("fechaApoderamiento_day") == -1 || this.model.get("fechaApoderamiento_month") == -1 || 
+			this.model.get("fechaApoderamiento_year") == -1 ){
+			this.setErrorValidacion("fechaApoderamiento",app.PODER_ERRMSG_NOFECAP);
+		}
+		
+		if(this.model.get("idNotario") == -1){
+			this.setErrorValidacion("idNotario",app.PODER_ERRMSG_NONOTARIO);
+		}
+		
+		return !this.hasErrorValidacion();
+	},
+	edit: function(e){
+		e.preventDefault();
+	
+		this.setReady();
+	}
 	
 });
 

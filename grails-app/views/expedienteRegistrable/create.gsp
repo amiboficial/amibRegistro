@@ -247,12 +247,12 @@
 				viewInstance.setCheckId(viewIndex); // <- setea el viewIndex como checkId
 				arr[viewIndex] = viewInstance;
 
+				//aqui es donde se "suscribe" el método "checkElement" a la llamada "stateChange" de cualquier componente validable
 				viewInstance.on("stateChange",function(newState, checkId){
 					context.checkElement(newState,checkId); //<- usa el checkId como viewIndex
 				});
 			},
 
-			//TODO: EVENTS, EL SUBMIT CON TODOS LOS DATOS PARA EL REGISTRO
 			checkElement: function(newState,viewIndex){
 				var checkarr = this.model.get('checkarray');
 				if(newState == "VALIDATED")

@@ -87,25 +87,26 @@
 		
 	</script>
 	
-	<!-- INICIA: SCRIPT PARA DOCUMENTOS -->
-	<g:render template="../common/multiDocs"/>
-	<g:javascript src="mx.amib.sistemas.registro.form.docsMultiWidget.js" />
-	<!--<g:javascript src="mx.amib.sistemas.registro.revocacion.form.docsValidator.js" />-->
+	<g:javascript src="mx.amib.sistemas.registro.apoderamiento.form.poder.create.checklist.js" />
 	<script type="text/javascript">
-
-		var app = app || {};
 		
-		var docs = []
-		var docsView = new app.DocsView(docs);
-		docsView.validator = app.DocsValidator;
+		var checkSubmitView = new app.CheckSubmitView();
+		checkSubmitView.setViewInstance(app.PODER_CREATE_CHKIDX_PODER,poderView);
+		/*
 
-		docsView.viewModel.set('urlUpload','<g:createLink controller="documento" action="upload" />');
-		docsView.viewModel.set('urlDownloadNew','<g:createLink controller="documento" action="downloadNew"/>');
-		docsView.viewModel.set('urlDeleteNew','<g:createLink controller="documento" action="delete"/>');
+		Ejemplo de instanciamineto en el GSP,JSP,etc..-
 
+		var checkSubmitView = new app.CheckSubmitView();
+		checkSubmitView.setViewInstance(app.EXP_REG_CHK_GRALES,generalesView);
+		checkSubmitView.setViewInstance(app.EXP_REG_CHK_TELS,telefonosView);
+		checkSubmitView.setViewInstance(app.EXP_REG_CHK_SEPOMEX,sepomexView);
+		checkSubmitView.setViewInstance(app.EXP_REG_CHK_REGISTRO,registroView);
+
+		$(window).bind("pageshow", function(){
+			$('#spnHdnPostData').html("");
+		});
+		*/
 	</script>
-	<!-- FIN: SCRIPT PARA DOCUMENTOS  -->
-	
 	
 	</body>
 </html>

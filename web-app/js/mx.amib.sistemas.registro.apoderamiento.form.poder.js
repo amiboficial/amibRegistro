@@ -158,7 +158,7 @@ app.PoderView = Backbone.View.extend({
 		
 	},
 	showErrorsOnFields: function(){
-		
+		//TODO: MARCA CON "ROJITO" LOS CAMPOS FALTANTES
 	},
 	
 	disableFields: function(){
@@ -208,6 +208,14 @@ app.PoderView = Backbone.View.extend({
 		this.$(".edit").removeAttr("disabled");
 	},
 	
+	//metodos para el checklist
+	setCheckId: function(checkId){
+		this.checkId = checkId;
+	},
+	getCheckId: function(checkId){
+		return checkId;
+	},
+	
 	//actualiza el modelo ante cualquier cambio en campos indicados con clase field
 	updateModel: function(ev){
 		var fieldName = this.$(ev.currentTarget).data("field");
@@ -255,6 +263,7 @@ app.PoderView = Backbone.View.extend({
 	//Cambios de estado con rendereo consecuente
 	setReady: function(){
 		this.state = app.PODER_READY;
+		this.trigger("stateChange","READY",this.checkId);
 		this.render();
 	},
 	setProcessingNotario: function(){
@@ -267,6 +276,7 @@ app.PoderView = Backbone.View.extend({
 	},
 	setValidated: function(){
 		this.state = app.PODER_VALIDATED;
+		this.trigger("stateChange","VALIDATED",this.checkId);
 		this.render();
 	},
 	
@@ -403,11 +413,11 @@ app.PoderView = Backbone.View.extend({
 		if(this.model.get("idGrupoFinanciero") == -1){
 			this.setErrorValidacion("idGrupoFinanciero",app.PODER_ERRMSG_NOGPOFIN);
 		}
-		if(this.model.get("representanteLegalApellido1") == ""){
-			this.setErrorValidacion("representanteLegalApellido1",app.PODER_ERRMSG_NORLNOM);
+		if(this.model.get("representanteLegalNombre") == ""){
+			this.setErrorValidacion("representanteLegalNombre",app.PODER_ERRMSG_NORLNOM);
 		}
-		if(this.model.get("representanteLegalApellido2") == ""){
-			this.setErrorValidacion("representanteLegalApellido2",app.PODER_ERRMSG_NORLAP1);
+		if(this.model.get("representanteLegalApellido1") == ""){
+			this.setErrorValidacion("representanteLegalApellido1",app.PODER_ERRMSG_NORLAP1);
 		}
 		
 		if(this.model.get("numeroEscritura") == ""){

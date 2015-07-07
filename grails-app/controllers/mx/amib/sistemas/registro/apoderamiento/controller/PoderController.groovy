@@ -6,6 +6,7 @@ import mx.amib.sistemas.external.catalogos.service.FiguraTO
 import mx.amib.sistemas.external.catalogos.service.GrupoFinancieroTO
 import mx.amib.sistemas.external.catalogos.service.InstitucionTO
 import mx.amib.sistemas.external.catalogos.service.NotarioTO
+import mx.amib.sistemas.external.expediente.persona.service.SustentanteTO
 import mx.amib.sistemas.external.oficios.poder.PoderTO
 import mx.amib.sistemas.utils.service.ArchivoTO
 
@@ -15,6 +16,8 @@ class PoderController {
 	def entidadFinancieraService
 	def notarioService
 	def sepomexService
+	
+	def apoderamientoService
 	
     def index() { 
 		
@@ -83,6 +86,27 @@ class PoderController {
 			res = [ 'status': 'ERROR', 'object': ex.message ]
 		}
 		
+		render res as JSON
+	}
+	
+	def getApoderable(){
+		int numeroMatricula = -1
+		def res = null
+		SustentanteTO sustentanteApoderable = null
+		
+		try{
+			numeroMatricula = Integer.parseInt(params.'numeroMatricula'?:"-1")
+			sustentanteApoderable = apoderamientoService.obtenerApoderable(numeroMatricula)
+			if(sustentanteApoderable == null){
+				res = [ 'status': 'NOT_FOUND' ]
+			}
+			else{
+				res = [ 'status': 'OK', 'object': [ 'sustentante': sustentanteApoderable,'certificacion':sustentanteApoderable.certificaciones.last() ] ]
+			}
+		}
+		catch(Exception ex) {
+			res = [ 'status': 'ERROR', 'object': ex.message ]
+		}
 		render res as JSON
 	}
 	

@@ -374,7 +374,6 @@ class SustentanteService {
 			c.idStatusAutorizacion = it.'idStatusAutorizacion'
 			c.idStatusCertificacion = it.'idStatusCertificacion'
 		
-			c.sustentante = sustentante
 			c.validaciones = new ArrayList<ValidacionTO>()
 			it.'validaciones'.each{ x ->
 				ValidacionTO v = new ValidacionTO()
@@ -393,8 +392,11 @@ class SustentanteService {
 				if(!JSONObject.NULL.equals(it.'fechaModificacion'))  v.fechaModificacion = df.parse(x.'fechaModificacion'.substring(0,10))
 				
 				v.certificacion = c
+				c.validaciones.add(v)
 			}
 			
+			c.sustentante = sustentante
+			sustentante.certificaciones.add(c)
 		}
 		return sustentante
 	}

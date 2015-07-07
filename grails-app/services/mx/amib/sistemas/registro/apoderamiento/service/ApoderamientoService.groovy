@@ -1,15 +1,21 @@
 package mx.amib.sistemas.registro.apoderamiento.service
 
+import grails.converters.JSON
 import grails.transaction.Transactional
+import mx.amib.sistemas.external.expediente.certificacion.catalog.service.StatusAutorizacionTypes
+import mx.amib.sistemas.external.expediente.certificacion.service.CertificacionTO
+import mx.amib.sistemas.external.expediente.persona.service.SustentanteTO
 import mx.amib.sistemas.external.oficios.oficioCnbv.OficioCnbvTO
 import mx.amib.sistemas.external.oficios.poder.PoderTO
 import mx.amib.sistemas.external.oficios.revocacion.RevocacionTO
-import mx.amib.sistemas.registro.apoderado.service.ApoderadoTO;
-import mx.amib.sistemas.registro.apoderado.service.RevocadoTO;
+import mx.amib.sistemas.registro.apoderado.service.ApoderadoTO
+import mx.amib.sistemas.registro.apoderado.service.RevocadoTO
 
 @Transactional
 class ApoderamientoService {
 
+	def sustentanteService
+	
 	def autorizacionService
 	def poderService
 	def revocacionService
@@ -20,6 +26,31 @@ class ApoderamientoService {
 		autorizacionService.apoderar(listIdCerts)
 		return poderService.save(poder)
     }
+	SustentanteTO obtenerApoderable(int numeroMatricula){
+		SustentanteTO s = sustentanteService.findByMatricula(numeroMatricula)
+		boolean isApoderable = false
+		
+		//println (s as JSON)
+		
+		if(s != null){
+			if(s.certificaciones.size() > 0){
+				//ordena las certificaciones por fecha
+				s.certificaciones = s.certificaciones.sort{it.fechaFin}
+				//revisa la ultima certificación
+				CertificacionTO c = s.certificaciones.last()
+				//revisa que sea vigente
+				if(Calendar.getInstance().getTime().before(c.fechaFin)){
+					//revisa que el status se encuentre en autorizado sin poderes
+					if(c.statusAutorizacion.id.value == StatusAutorizacionTypes.AUTORIZADO_SIN_PODERES){
+						isApoderable = true
+					}	
+				}
+			}
+		}
+		if(!isApoderable) s = null 
+		
+		return s
+	}
 	PoderTO editarDatosPoder(PoderTO poder) {
 		def modobj = poderService.get(poder.id)
 		//Edita solo los datos de poder y no sus apoderados

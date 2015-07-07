@@ -308,12 +308,12 @@ app.PoderView = Backbone.View.extend({
 					if(data.status == "OK"){
 						if(data.object.length > 0){
 							//rellena el select con instituciones de la entidad federativa
-							view.model.set('idInstitucion',-1);
 							view.model.set('institucionList',data.object);
+							view.model.set('idInstitucion',-1);
 						}
 						else{
 							//deja solo la opcion "seleccionar"
-							view.model.set('idInstitucion',-1);
+							
 							view.model.set('institucionList',new Array());
 							//view.setErrorNotario(app.PODER_ERRMSG_INSTIT_REQUESTERROR);
 						}
@@ -368,16 +368,19 @@ app.PoderView = Backbone.View.extend({
 						if(data.object.count > 0){
 							//rellena el select con instituciones de la entidad federativa
 							view.model.set('notarioList',data.object.list);
+							view.model.set('idInstitucion',-1);
 						}
 						else{
 							//deja solo la opcion "seleccionar"
 							view.model.set('notarioList',new Array());
+							view.model.set('idInstitucion',-1);
 							view.setErrorNotario(app.PODER_ERRMSG_NOTARIO_NOTFOUND);
 						}
 					}
 					else{
 						//deja solo la opcion "seleccionar"
 						view.model.set('notarioList',new Array());
+						view.model.set('idInstitucion',-1);
 						view.setErrorNotario(app.PODER_ERRMSG_NOTARIO_REQUESTERROR);
 					}
 					

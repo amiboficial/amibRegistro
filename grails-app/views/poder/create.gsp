@@ -33,7 +33,49 @@
 					<div id="divPoder"></div>
 				</div>
 				<div role="tabpanel" class="tab-pane" id="tabApoderados">
-					<div id="divApoderados"></div>
+					<div id="divApoderados">
+					
+					<div class="errorValidacion alert alert-danger">
+						<span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span class="msgErrorValidacion" ></span><br/>
+						<ul class="validationErrorMsgs">
+						</ul>
+					</div>
+					
+					<fieldset>
+						<legend>Datos de apoderados</legend>
+					
+						<div class="procNumeroMatriculaBuscar alert alert-info">
+							<asset:image src="spinner_alert_info.gif"/><strong>Procesando datos, espere un momento</strong>.
+						</div>
+						<div class="errorNumeroMatriculaBuscar alert alert-danger">
+							<span class="glyphicon glyphicon-ban-circle"></span><span class="msgErrorNumeroMatriculaBuscar" ></span>
+						</div>
+					
+						<div class="div-numeroMatriculaBuscar form-group">
+							<label class="col-md-2 col-sm-3 control-label">
+								<g:message code="apoderados.numeroMatriculaBuscar.label" default="Matrícula" /><span class="required-indicator">*</span>
+							</label>
+							<div class="col-md-9 col-sm-9">
+								<input type="text" data-field="numeroMatriculaBuscar" maxlength="10" class="field numeroMatriculaBuscar form-control" name="apoderados.numeroMatriculaBuscar" />
+							</div>
+						</div>
+						
+						<div class="div-nombreCompletoSustentanteBuscar form-group">
+							
+						</div>
+						
+						<div class="div-nombreFiguraBuscar form-group">
+							
+						</div>
+						
+						<div class="div-nombreVarianteFiguraBuscar form-group">
+							
+						</div>
+						
+						
+					</fieldset>
+					
+					</div>
 				</div>
 				<div role="tabpanel" class="tab-pane" id="tabDoc">
 					<div id="divDoc">

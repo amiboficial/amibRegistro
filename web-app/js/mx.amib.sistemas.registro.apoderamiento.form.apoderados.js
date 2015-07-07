@@ -160,9 +160,9 @@ app.ApoderadosView = Backbone.View.extend({
 	buscarApoderable: function(){
 		var view = this;
 		var numericRegEx = /^[0-9]{1,10}$/;
-		
+
 		var numeroMatricula = $(".numeroMatriculaBuscar").val().trim();
-		
+
 		if( !numericRegEx.test(numeroMatricula) ){
 			//console.log("NO PASO LA 1ERA VALIDACION");
 			this.setErrorNotario(app.PODER_ERRMSG_NUMNOTARIO_NOVALID);

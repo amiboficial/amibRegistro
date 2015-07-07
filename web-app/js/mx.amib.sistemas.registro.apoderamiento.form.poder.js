@@ -50,8 +50,6 @@ app.Poder = Backbone.Model.extend ({
 app.PoderView = Backbone.View.extend({
 	checkId: -1,
 	el: '#divPoder',
-	ajaxDocumentoRespaldoUrl: '',
-	ajaxNotario: '',
 	
 	state: app.PODER_READY,
 	errorInstituciones: false,
@@ -154,7 +152,7 @@ app.PoderView = Backbone.View.extend({
 			this.disableSubmitEnableEdit();
 		}
 	},
-	clearErrorsOnFilds: function(){
+	clearErrorsOnFields: function(){
 		
 	},
 	showErrorsOnFields: function(){

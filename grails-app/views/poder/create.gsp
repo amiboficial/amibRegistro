@@ -42,7 +42,7 @@
 					</div>
 					
 					<fieldset>
-						<legend>Datos de apoderados</legend>
+						<legend>Búsqueda de apoderable</legend>
 					
 						<div class="procNumeroMatriculaBuscar alert alert-info">
 							<asset:image src="spinner_alert_info.gif"/><strong>Procesando datos, espere un momento</strong>.
@@ -55,25 +55,92 @@
 							<label class="col-md-2 col-sm-3 control-label">
 								<g:message code="apoderados.numeroMatriculaBuscar.label" default="Matrícula" /><span class="required-indicator">*</span>
 							</label>
-							<div class="col-md-9 col-sm-9">
+							<div class="col-md-2 col-sm-2">
 								<input type="text" data-field="numeroMatriculaBuscar" maxlength="10" class="field numeroMatriculaBuscar form-control" name="apoderados.numeroMatriculaBuscar" />
 							</div>
 						</div>
 						
-						<div class="div-nombreCompletoSustentanteBuscar form-group">
-							
+						<div class="div-nombreCompletoBuscar form-group">
+							<label class="col-md-2 col-sm-3 control-label">
+								<g:message code="apoderados.nombreCompletoBuscar.label" default="Nombre completo" /><span class="required-indicator">*</span>
+							</label>
+							<div class="col-md-9 col-sm-9">
+								<input type="text" data-field="nombreCompletoBuscar" maxlength="10" class="field nombreCompletoBuscar form-control" name="apoderados.nombreCompletoBuscar" disabled/>
+							</div>
 						</div>
 						
 						<div class="div-nombreFiguraBuscar form-group">
-							
+							<label class="col-md-2 col-sm-3 control-label">
+								<g:message code="apoderados.nombreFiguraBuscar.label" default="Figura" /><span class="required-indicator">*</span>
+							</label>
+							<div class="col-md-9 col-sm-9">
+								<input type="text" data-field="nombreFiguraBuscar" maxlength="10" class="field nombreFiguraBuscar form-control" name="apoderados.nombreFiguraBuscar" disabled/>
+							</div>
 						</div>
 						
 						<div class="div-nombreVarianteFiguraBuscar form-group">
-							
+							<label class="col-md-2 col-sm-3 control-label">
+								<g:message code="apoderados.nombreVarianteFiguraBuscar.label" default="Variante" /><span class="required-indicator">*</span>
+							</label>
+							<div class="col-md-9 col-sm-9">
+								<input type="text" data-field="nombreVarianteFiguraBuscar" maxlength="10" class="field nombreVarianteFiguraBuscar form-control" name="apoderados.nombreVarianteFiguraBuscar" disabled/>
+							</div>
 						</div>
 						
-						
 					</fieldset>
+					
+					<fieldset>
+						<legend>Listado de apoderados</legend>
+						<div class="list-group">
+							<div class="list-group-item">
+								<div class="div-numeroMatricula div-nombreCompleto row">
+									<label class="col-sm-2 control-label">Matrícula</label>
+									<div class="col-sm-2"><p>24455</p></div>
+									<label class="col-sm-3 control-label">Nombre completo</label>
+									<div class="col-sm-5"><p>AAAAAAAAAAA BBBBBBB CCCCCCCC EEEEEEEEEEE</p></div>
+								</div>
+								<div class="div-nombreFigura row">
+									<label class="col-sm-2 control-label">Figura</label>
+									<div class="col-sm-9"><p>24455</p></div>
+								</div>
+								<div class="div-nombreVarianteFigura row">
+									<label class="col-sm-2 control-label">Variante de figura</label>
+									<div class="col-sm-9"><p>24455</p></div>
+								</div>
+							</div>
+							<div class="list-group-item">
+								<div class="div-numeroMatricula div-nombreCompleto row">
+									<label class="col-sm-2 control-label">Matrícula</label>
+									<div class="col-sm-2"><p>24455</p></div>
+									<label class="col-sm-3 control-label">Nombre completo</label>
+									<div class="col-sm-5"><p>AAAAAAAAAAA BBBBBBB CCCCCCCC EEEEEEEEEEE</p></div>
+								</div>
+								<div class="div-nombreFigura row">
+									<label class="col-sm-2 control-label">Figura</label>
+									<div class="col-sm-9"><p>24455</p></div>
+								</div>
+								<div class="div-nombreVarianteFigura row">
+									<label class="col-sm-2 control-label">Variante de figura</label>
+									<div class="col-sm-9"><p>24455</p></div>
+								</div>
+							</div>
+						</div>
+					</fieldset>
+					
+					<div class="form-group">
+						<div class="col-md-3 col-sm-3">
+							&nbsp;
+						</div>
+						<div class="col-md-3 col-sm-3">
+							<button type="button" class="btn btn-primary btn-block submit">Validar y confirmar datos de apoderados</button>
+						</div>
+						<div class="col-md-3 col-sm-3">
+							<button type="button" class="btn btn-primary btn-block edit">Editar datos de apoderados</button>
+						</div>
+						<div class="col-md-3 col-sm-3">
+							&nbsp;
+						</div>
+					</div>
 					
 					</div>
 				</div>

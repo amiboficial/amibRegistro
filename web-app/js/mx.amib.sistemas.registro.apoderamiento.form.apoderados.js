@@ -12,7 +12,7 @@ app.Apoderado = Backbone.Model.extend ({
 	defaults: {
 		grailsId: -1,
 		numeroMatricula: -1,
-		nombreCompletoSustentante: "",
+		nombreCompleto: "",
 		nombreFigura: "",
 		nombreVarianteFigura: "",
 		idCertificacion: -1

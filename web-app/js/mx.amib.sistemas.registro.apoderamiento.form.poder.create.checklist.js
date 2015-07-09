@@ -42,7 +42,6 @@ app.CheckSubmitView = Backbone.View.extend({
 			this.$("#spnCheckApoderados").addClass("glyphicon-unchecked");
 		}
 		else{
-			console.log("fue true el de telefonos");
 			this.$("#spnCheckApoderados").removeClass("glyphicon-unchecked");
 			this.$("#spnCheckApoderados").addClass("glyphicon-check");
 		}

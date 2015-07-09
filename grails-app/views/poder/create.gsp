@@ -104,6 +104,7 @@
 		
 		var checkSubmitView = new app.CheckSubmitView();
 		checkSubmitView.setViewInstance(app.PODER_CREATE_CHKIDX_PODER,poderView);
+		checkSubmitView.setViewInstance(app.PODER_CREATE_CHKIDX_APODERADOS,apoderadosView);
 		/*
 
 		Ejemplo de instanciamineto en el GSP,JSP,etc..-

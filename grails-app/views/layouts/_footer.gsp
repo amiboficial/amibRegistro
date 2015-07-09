@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 
-    <footer>
+    <!-- <footer>
     	<div class="navbar navbar-default1 navbar-fixed-bottom" role="navigation">
 	    	<div class="container">
 	        	<div class="navbar-text pull-left">
@@ -13,4 +13,4 @@
 	        	</div>                        
 	     	</div>     
     	</div>
-    </footer>
+    </footer> -->

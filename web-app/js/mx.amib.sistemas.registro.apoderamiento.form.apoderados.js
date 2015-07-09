@@ -293,9 +293,9 @@ app.ApoderadosView = Backbone.View.extend({
 			
 			//limpiar los errores que hayas sido causado por la busqueda
 			this.clearErrorBusqueda();
+			this.clearErrorValidacion();
 			//limpiar el modelo usado en la busqueda
 			this.model = new app.Apoderado();
-			
 			this.setValidated();
 		}
 		else{
@@ -309,6 +309,10 @@ app.ApoderadosView = Backbone.View.extend({
 	
 	//funciones adicionales
 	validate: function(){
-		return true;
+		//checar que haya al menos un apoderado en la collections
+		if(this.collection.size() < 1){
+			this.setErrorValidacion();
+		}
+		return !this.hasErrorValidacion();;
 	},
 });

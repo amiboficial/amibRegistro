@@ -153,7 +153,7 @@ app.PoderView = Backbone.View.extend({
 		}
 	},
 	clearErrorsOnFields: function(){
-		
+		//TODO: LIMPIA LA MARCA CON "ROJITO" DE LOS CAMPOS CON ERROR
 	},
 	showErrorsOnFields: function(){
 		//TODO: MARCA CON "ROJITO" LOS CAMPOS FALTANTES
@@ -404,6 +404,12 @@ app.PoderView = Backbone.View.extend({
 		}
 	},
 	
+	edit: function(e){
+		e.preventDefault();
+	
+		this.setReady();
+	},
+	
 	//En caso de requerirse, aquí se agregan expresiones regulares
 	validate: function(){
 		var num10CarExp = /^[0-9]{1,10}$/
@@ -439,11 +445,6 @@ app.PoderView = Backbone.View.extend({
 		}
 		
 		return !this.hasErrorValidacion();
-	},
-	edit: function(e){
-		e.preventDefault();
-	
-		this.setReady();
 	}
 	
 });

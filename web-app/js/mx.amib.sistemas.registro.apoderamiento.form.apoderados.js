@@ -49,10 +49,12 @@ app.ApoderadoView = Backbone.View.extend({
 app.ApoderadosView = Backbone.View.extend({
 	checkId: -1,
 	el: '#divApoderados',
+	tagName: 'div',
+	className: 'list-group-item',
 	
 	state: app.APODERADOS_READY,
-	errorNumeroMatriculaBuscar: false,
-	msgErrorNumeroMatriculaBuscar: "",
+	errorBusqueda: false,
+	msgErrorBusqueda: "",
 	errorValidacion: false,
 	msgErrorValidacion: app.APODERADOS_ERRMSG_NOAPO,
 	
@@ -68,7 +70,7 @@ app.ApoderadosView = Backbone.View.extend({
 	
 	events: {
 		'change .numeroMatriculaBuscar':'buscarApoderable',
-		'click .add','add',
+		'click .add','agregarApoderable',
 		'click .submit':'submit',
 		'click .edit':'edit',
 	},
@@ -78,6 +80,17 @@ app.ApoderadosView = Backbone.View.extend({
 		if(this.getState() == app.APODERADOS_READY){
 			//hablitar todos los campos
 			this.enableFields();
+			this.enableSubmitDisableEdit();
+			
+			//si hay algun error, renderea errores correspondiente
+			if(this.errorBusqueda){
+				this.$('.msgErrorBusqueda').text(this.msgErrorInstituciones);
+				this.$('.errorBusqueda').show();
+			}
+			if(this.errorValidacion){
+				this.$('.msgErrorValidacion').text(this.msgErrorValidacion);
+				this.$('.errorValidacion').show();
+			}
 			this.enableSubmitDisableEdit();
 		}
 		else if(this.getState() == app.APODERADOS_PROC){
@@ -100,12 +113,22 @@ app.ApoderadosView = Backbone.View.extend({
 	},
 	
 	disableFields: function(){
+		this.$(".numeroMatriculaBuscar").prop( "disable", true );
+		this.$(".add").prop( "disable", true );
+		this.$(".delete").prop( "disable", true );
 	},
-	enableFields: function(){	
+	enableFields: function(){
+		this.$(".numeroMatriculaBuscar").prop( "disable", false );
+		this.$(".add").prop( "disable", false );
+		this.$(".delete").prop( "disable", false );
 	},
 	enableSubmitDisableEdit: function() {
+		this.$(".submit").prop( "disable", false );
+		this.$(".edit").prop( "disable", true );
 	},
 	disableSubmitEnableEdit: function(){
+		this.$(".submit").prop( "disable", true );
+		this.$(".edit").prop( "disable", false );
 	},
 	
 	//metodos para el checklist
@@ -117,13 +140,13 @@ app.ApoderadosView = Backbone.View.extend({
 	},
 	
 	//Cambios en status de errores
-	setErrorNumeroMatriculaBuscar: function(msgErrorNumeroMatriculaBuscar){
-		this.errorNumeroMatriculaBuscar = true;
-		this.msgErrorNumeroMatriculaBuscar = msgErrorNumeroMatriculaBuscar;
+	setErrorBusqueda: function(msgErrorBusqueda){
+		this.errorBusqueda = true;
+		this.msgErrorBusqueda = msgErrorBusqueda;
 	},
-	clearErrorNumeroMatriculaBuscar: function(){
-		this.errorNumeroMatriculaBuscar = false;
-		this.msgErrorNumeroMatriculaBuscar = "";
+	clearErrorBusqueda: function(){
+		this.errorBusqueda = false;
+		this.msgErrorBusqueda = "";
 	},
 	hasErrorValidacion: function(){
 		return this.errorValidacion;
@@ -168,13 +191,59 @@ app.ApoderadosView = Backbone.View.extend({
 			this.setErrorNotario(app.PODER_ERRMSG_NUMNOTARIO_NOVALID);
 			view.setReady();
 		}
+		else{
+			//carga a un apoderableGetUrl
+			$.ajax({
+				url: view.apoderableGetUrl, 
+				beforeSend: function(xhr){
+					view.clearErrorBusqueda();
+					view.setProcessing();
+				},
+				data: { numeroMatricula:numeroMatricula }
+			}).done( function(data){
+				if(data.status == "OK"){
+					//si encontro el apoderado
+					view.model = new app.Apoderado();
+					view.model.set("numeroMatricula",data.object.sustentante.numeroMatricula);
+					view.model.set("nombreCompleto",data.object.sustentante.nombre + " " + data.object.sustentante.primerApellido + " " + data.object.sustentante.segundoApellido);
+					view.model.set("nombreFigura",data.object.certificacion.varianteFigura.nombre);
+					view.model.set("nombreVarianteFigura",data.object.certificacion.varianteFigura.nombreFigura);
+					view.model.set("idCertificacion",data.object.certificacion.id);
+					
+				}
+				else if(data.status == "NOT_FOUND"){
+					//no encontrado
+					
+				}
+				else{
+					//error alguno
+					
+				}
+			} );
+		}
 	},
-	submit: function(){
+	agregarApoderable: function(){
+		
 	},
-	edit: function(){
+	submit: function(e){
+		e.preventDefault();
+		//El modelo ya se encuentra en objeto, solo procedera a validar la información
+		console.log("HACIENDO SUBMIT");
+		if( this.validate() ){
+			console.log("LOS DATOS FUERON VALIDOS");
+			this.setValidated();
+		}
+		else{
+			this.setReady();
+		}
+	},
+	edit: function(e){
+		e.preventDefault();
+		this.setReady();
 	},
 	
 	//funciones adicionales
 	validate: function(){
+		return true;
 	},
 });

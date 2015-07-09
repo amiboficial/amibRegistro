@@ -47,8 +47,8 @@
 						<div class="procNumeroMatriculaBuscar alert alert-info">
 							<asset:image src="spinner_alert_info.gif"/><strong>Procesando datos, espere un momento</strong>.
 						</div>
-						<div class="errorNumeroMatriculaBuscar alert alert-danger">
-							<span class="glyphicon glyphicon-ban-circle"></span><span class="msgErrorNumeroMatriculaBuscar" ></span>
+						<div class="errorBusqueda alert alert-danger">
+							<span class="glyphicon glyphicon-ban-circle"></span><span class="msgErrorBusqueda" ></span>
 						</div>
 					
 						<div class="div-numeroMatriculaBuscar form-group">
@@ -57,6 +57,9 @@
 							</label>
 							<div class="col-md-2 col-sm-2">
 								<input type="text" data-field="numeroMatriculaBuscar" maxlength="10" class="field numeroMatriculaBuscar form-control" name="apoderados.numeroMatriculaBuscar" />
+							</div>
+							<div class="col-md-3 col-sm-3">
+								<button type="button" class="btn btn-primary btn-block add"> <span class="glyphicon glyphicon-plus" aria-hidden="true"></span><span class="glyphicon glyphicon-list" aria-hidden="true"></span> Agregar</button>
 							</div>
 						</div>
 						
@@ -97,33 +100,56 @@
 									<label class="col-sm-2 control-label">Matrícula</label>
 									<div class="col-sm-2"><p>24455</p></div>
 									<label class="col-sm-3 control-label">Nombre completo</label>
-									<div class="col-sm-5"><p>AAAAAAAAAAA BBBBBBB CCCCCCCC EEEEEEEEEEE</p></div>
+									<div class="col-sm-5"><p class="form-control-static">AAAAAAAAAAA BBBBBBB CCCCCCCC EEEEEEEEEEE</p></div>
 								</div>
 								<div class="div-nombreFigura row">
 									<label class="col-sm-2 control-label">Figura</label>
-									<div class="col-sm-9"><p>24455</p></div>
+									<div class="col-sm-9"><p class="form-control-static">24455</p></div>
 								</div>
 								<div class="div-nombreVarianteFigura row">
 									<label class="col-sm-2 control-label">Variante de figura</label>
-									<div class="col-sm-9"><p>24455</p></div>
+									<div class="col-sm-9"><p class="form-control-static">24455</p></div>
+								</div>
+								<div class="row">
+									<div class="col-sm-9">
+										&nbsp;
+									</div>
+									<div class="col-sm-2">
+										<button type="button" class="btn btn-default btn-danger"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Quitar de la lista</button>
+									</div>
+								</div>
+								<div class="row">
+									&nbsp;
 								</div>
 							</div>
 							<div class="list-group-item">
 								<div class="div-numeroMatricula div-nombreCompleto row">
 									<label class="col-sm-2 control-label">Matrícula</label>
-									<div class="col-sm-2"><p>24455</p></div>
+									<div class="col-sm-2"><p class="form-control-static">24455</p></div>
 									<label class="col-sm-3 control-label">Nombre completo</label>
-									<div class="col-sm-5"><p>AAAAAAAAAAA BBBBBBB CCCCCCCC EEEEEEEEEEE</p></div>
+									<div class="col-sm-5"><p class="form-control-static">AAAAAAAAAAA BBBBBBB CCCCCCCC EEEEEEEEEEE</p></div>
 								</div>
 								<div class="div-nombreFigura row">
 									<label class="col-sm-2 control-label">Figura</label>
-									<div class="col-sm-9"><p>24455</p></div>
+									<div class="col-sm-9"><p class="form-control-static">24455</p></div>
 								</div>
 								<div class="div-nombreVarianteFigura row">
 									<label class="col-sm-2 control-label">Variante de figura</label>
-									<div class="col-sm-9"><p>24455</p></div>
+									<div class="col-sm-9"><p class="form-control-static">24455</p></div>
+								</div>
+								<div class="row">
+									<div class="col-sm-9">
+										&nbsp;
+									</div>
+									<div class="col-sm-2">
+										<button type="button" class="btn btn-default btn-danger delete"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Quitar de la lista</button>
+									</div>
+								</div>
+								<div class="row">
+									&nbsp;
 								</div>
 							</div>
+							
 						</div>
 					</fieldset>
 					
@@ -132,10 +158,10 @@
 							&nbsp;
 						</div>
 						<div class="col-md-3 col-sm-3">
-							<button type="button" class="btn btn-primary btn-block submit">Validar y confirmar datos de apoderados</button>
+							<button type="button" class="btn btn-primary btn-block submit">Validar y confirmar apoderados</button>
 						</div>
 						<div class="col-md-3 col-sm-3">
-							<button type="button" class="btn btn-primary btn-block edit">Editar datos de apoderados</button>
+							<button type="button" class="btn btn-primary btn-block edit">Editar apoderados</button>
 						</div>
 						<div class="col-md-3 col-sm-3">
 							&nbsp;

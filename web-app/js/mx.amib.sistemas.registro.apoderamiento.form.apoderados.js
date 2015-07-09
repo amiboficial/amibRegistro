@@ -4,9 +4,12 @@ app.APODERADOS_READY = 0;
 app.APODERADOS_VALIDATED = 1;
 app.APODERADOS_PROC = 2;
 
-app.APODERADOS_ERRMSG_NOAPO = "";
-app.APODERADOS_ERRMSG_NOTFOUND = "";
-app.APODERADOS_ERRMSG_ALREADY = "";
+app.APODERADOS_ERRMSG_NOAPOINLIST = "APODERADOS_ERRMSG_NOAPOINLIST";
+
+app.APODERADOS_ERRMSG_NMINVALID = "APODERADOS_ERRMSG_NMINVALID"; //NUMERO DE MATRICULA NO VALIDO
+app.APODERADOS_ERRMSG_NOTFOUND = "APODERADOS_ERRMSG_NOTFOUND"; //NO ENCONTRADO
+app.APODERADOS_ERRMSG_EPROC = "APODERADOS_ERRMSG_EPROC"; //ERROR AL PROCESAR LA PETICION
+app.APODERADOS_ERRMSG_ALREADY = "APODERADOS_ERRMSG_ALREADY ";
 
 app.Apoderado = Backbone.Model.extend ({
 	defaults: {
@@ -56,7 +59,9 @@ app.ApoderadosView = Backbone.View.extend({
 	errorBusqueda: false,
 	msgErrorBusqueda: "",
 	errorValidacion: false,
-	msgErrorValidacion: app.APODERADOS_ERRMSG_NOAPO,
+	msgErrorValidacion: app.APODERADOS_ERRMSG_NOAPOINLIST,
+	
+	//modelLoaded: false,
 	
 	apoderableGetUrl: "",
 	
@@ -64,19 +69,33 @@ app.ApoderadosView = Backbone.View.extend({
 	
 	initialize: function( initialCollection ){
 		this.collection = initialCollection;
+		this.model = new app.Apoderado();
 		this.render();
 		this.listenTo( this.collection, 'add', this.renderElement );
 	},
 	
 	events: {
 		'change .numeroMatriculaBuscar':'buscarApoderable',
-		'click .add','agregarApoderable',
+		'click .add':'agregarApoderable',
 		'click .submit':'submit',
 		'click .edit':'edit',
 	},
 	
 	render: function(){
 		this.$el.html( this.template( this.model.toJSON() ) );
+		
+		//oculta todos los mensajes de error
+		this.$('.errorBusqueda ').hide();
+		this.$('.errorValidacion').hide();
+		
+		//oculta todos los mensajes de procesamiento
+		this.$('.procBusqueda').hide();
+		
+		//rendera cada uno de los apoderados
+		this.collection.each( function(item){
+			this.renderElement(item);
+		},this );
+		
 		if(this.getState() == app.APODERADOS_READY){
 			//hablitar todos los campos
 			this.enableFields();
@@ -84,16 +103,27 @@ app.ApoderadosView = Backbone.View.extend({
 			
 			//si hay algun error, renderea errores correspondiente
 			if(this.errorBusqueda){
-				this.$('.msgErrorBusqueda').text(this.msgErrorInstituciones);
+				this.$('.add').prop("disable",true);
+				this.$('.msgErrorBusqueda').text(this.msgErrorBusqueda);
 				this.$('.errorBusqueda').show();
 			}
 			if(this.errorValidacion){
 				this.$('.msgErrorValidacion').text(this.msgErrorValidacion);
 				this.$('.errorValidacion').show();
 			}
+			
+			//si el modelo de busqueda tiene una matricula menor que 0, entonces
+			//no se ha cargado ningun modelo y se quedo el modelo vacion, por tanto, agregar esta
+			//deshabilitado
+			//así mismo, si hubo un error en la busqueda se deshabilita
+			if(this.model.get("numeroMatricula") <= 0 || this.hasErrorBusqueda() ) {
+				this.$('.add').prop("disabled",true);
+			}
+			
 			this.enableSubmitDisableEdit();
 		}
 		else if(this.getState() == app.APODERADOS_PROC){
+			this.$('.procBusqueda').show();
 			this.disableFields();
 		}
 		else if(this.getState() == app.APODERADOS_VALIDATED){
@@ -113,22 +143,22 @@ app.ApoderadosView = Backbone.View.extend({
 	},
 	
 	disableFields: function(){
-		this.$(".numeroMatriculaBuscar").prop( "disable", true );
-		this.$(".add").prop( "disable", true );
-		this.$(".delete").prop( "disable", true );
+		this.$(".numeroMatriculaBuscar").prop( "disabled", true );
+		this.$(".add").prop( "disabled", true );
+		this.$(".delete").prop( "disabled", true );
 	},
 	enableFields: function(){
-		this.$(".numeroMatriculaBuscar").prop( "disable", false );
-		this.$(".add").prop( "disable", false );
-		this.$(".delete").prop( "disable", false );
+		this.$(".numeroMatriculaBuscar").prop( "disabled", false );
+		this.$(".add").prop( "disabled", false );
+		this.$(".delete").prop( "disabled", false );
 	},
 	enableSubmitDisableEdit: function() {
-		this.$(".submit").prop( "disable", false );
-		this.$(".edit").prop( "disable", true );
+		this.$(".submit").prop( "disabled", false );
+		this.$(".edit").prop( "disabled", true );
 	},
 	disableSubmitEnableEdit: function(){
-		this.$(".submit").prop( "disable", true );
-		this.$(".edit").prop( "disable", false );
+		this.$(".submit").prop( "disabled", true );
+		this.$(".edit").prop( "disabled", false );
 	},
 	
 	//metodos para el checklist
@@ -143,6 +173,9 @@ app.ApoderadosView = Backbone.View.extend({
 	setErrorBusqueda: function(msgErrorBusqueda){
 		this.errorBusqueda = true;
 		this.msgErrorBusqueda = msgErrorBusqueda;
+	},
+	hasErrorBusqueda: function(){
+		return this.errorBusqueda;
 	},
 	clearErrorBusqueda: function(){
 		this.errorBusqueda = false;
@@ -159,6 +192,9 @@ app.ApoderadosView = Backbone.View.extend({
 	},
 	
 	//Cambios de estado con rendereo consecuente
+	getState: function(){
+		return this.state;
+	},
 	setReady: function(){
 		this.state = app.APODERADOS_READY;
 		this.trigger("stateChange","READY",this.checkId);
@@ -188,42 +224,65 @@ app.ApoderadosView = Backbone.View.extend({
 
 		if( !numericRegEx.test(numeroMatricula) ){
 			//console.log("NO PASO LA 1ERA VALIDACION");
-			this.setErrorNotario(app.PODER_ERRMSG_NUMNOTARIO_NOVALID);
-			view.setReady();
+			view.model = new app.Apoderado();
+			this.setErrorBusqueda(app.APODERADOS_ERRMSG_NMINVALID);
+			this.setReady();
 		}
 		else{
 			//carga a un apoderableGetUrl
 			$.ajax({
 				url: view.apoderableGetUrl, 
 				beforeSend: function(xhr){
+				
+					//En lo que se carga el apoderado, muetra el número de matricula
+					//a buscar, dado que este modelo es rendereado cuando se cambia
+					//al estado de processing
+					view.model = new app.Apoderado();
+					view.model.set("numeroMatricula",numeroMatricula);
+					
 					view.clearErrorBusqueda();
 					view.setProcessing();
 				},
 				data: { numeroMatricula:numeroMatricula }
 			}).done( function(data){
 				if(data.status == "OK"){
+				
+					//revisa si la matricula del apoderado ya se encuentra en la coleccion
+					view.collection.each(function(item){
+						if(item.get("numeroMatricula") == data.object.sustentante.numeroMatricula){
+							view.setErrorBusqueda(app.APODERADOS_ERRMSG_ALREADY);
+						}
+					},view);
+				
 					//si encontro el apoderado
 					view.model = new app.Apoderado();
+					//view.model.set("id",data.object.sustentante.numeroMatricula);
 					view.model.set("numeroMatricula",data.object.sustentante.numeroMatricula);
 					view.model.set("nombreCompleto",data.object.sustentante.nombre + " " + data.object.sustentante.primerApellido + " " + data.object.sustentante.segundoApellido);
 					view.model.set("nombreFigura",data.object.certificacion.varianteFigura.nombre);
 					view.model.set("nombreVarianteFigura",data.object.certificacion.varianteFigura.nombreFigura);
 					view.model.set("idCertificacion",data.object.certificacion.id);
-					
+					view.setReady();
 				}
 				else if(data.status == "NOT_FOUND"){
 					//no encontrado
-					
+					view.model = new app.Apoderado();
+					view.setErrorBusqueda(app.APODERADOS_ERRMSG_NOTFOUND);
+					view.setReady();
 				}
 				else{
 					//error alguno
-					
+					view.model = new app.Apoderado();
+					view.setErrorBusqueda(app.APODERADOS_ERRMSG_EPROC);
+					view.setReady();
 				}
 			} );
 		}
 	},
 	agregarApoderable: function(){
-		
+		//se agrega el modelo a la colleccion
+		this.collection.add(this.model);
+		this.render();
 	},
 	submit: function(e){
 		e.preventDefault();
@@ -231,6 +290,12 @@ app.ApoderadosView = Backbone.View.extend({
 		console.log("HACIENDO SUBMIT");
 		if( this.validate() ){
 			console.log("LOS DATOS FUERON VALIDOS");
+			
+			//limpiar los errores que hayas sido causado por la busqueda
+			this.clearErrorBusqueda();
+			//limpiar el modelo usado en la busqueda
+			this.model = new app.Apoderado();
+			
 			this.setValidated();
 		}
 		else{

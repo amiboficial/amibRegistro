@@ -61,6 +61,7 @@ app.PoderView = Backbone.View.extend({
 	validationErrorMsgs: [],
 	validationErrorFields: [],
 	
+	
 	grupoFinancieroGetUrl: "",
 	notarioFindUrl: "",
 	

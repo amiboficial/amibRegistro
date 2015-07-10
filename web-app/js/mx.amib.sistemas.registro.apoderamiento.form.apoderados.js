@@ -259,8 +259,8 @@ app.ApoderadosView = Backbone.View.extend({
 					//view.model.set("id",data.object.sustentante.numeroMatricula);
 					view.model.set("numeroMatricula",data.object.sustentante.numeroMatricula);
 					view.model.set("nombreCompleto",data.object.sustentante.nombre + " " + data.object.sustentante.primerApellido + " " + data.object.sustentante.segundoApellido);
-					view.model.set("nombreFigura",data.object.certificacion.varianteFigura.nombre);
-					view.model.set("nombreVarianteFigura",data.object.certificacion.varianteFigura.nombreFigura);
+					view.model.set("nombreFigura",data.object.certificacion.varianteFigura.nombreFigura);
+					view.model.set("nombreVarianteFigura",data.object.certificacion.varianteFigura.nombre);
 					view.model.set("idCertificacion",data.object.certificacion.id);
 					view.setReady();
 				}

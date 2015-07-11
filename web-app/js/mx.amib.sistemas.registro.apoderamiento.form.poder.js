@@ -1,3 +1,5 @@
+//En este componente TODOS los cambios en los campos automáticamente entran al modelo
+
 var app = app || {};
 
 app.PODER_READY = 0;

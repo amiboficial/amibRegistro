@@ -146,11 +146,15 @@ app.ApoderadosView = Backbone.View.extend({
 		this.$(".numeroMatriculaBuscar").prop( "disabled", true );
 		this.$(".add").prop( "disabled", true );
 		this.$(".delete").prop( "disabled", true );
+		this.$(".submit").prop( "disabled", true );
+		this.$(".edit").prop( "disabled", true );
 	},
 	enableFields: function(){
 		this.$(".numeroMatriculaBuscar").prop( "disabled", false );
 		this.$(".add").prop( "disabled", false );
 		this.$(".delete").prop( "disabled", false );
+		this.$(".submit").prop( "disabled", false );
+		this.$(".edit").prop( "disabled", false );
 	},
 	enableSubmitDisableEdit: function() {
 		this.$(".submit").prop( "disabled", false );

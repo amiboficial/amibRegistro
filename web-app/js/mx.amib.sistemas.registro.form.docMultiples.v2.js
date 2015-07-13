@@ -11,17 +11,17 @@ app.DOCMULTI2_ERRMSG_TYPE_NOT_ALLOWED = "DOCMULTI2_ERRMSG_TYPE_NOT_ALLOWED"; //t
 app.DOCMULTI2_ERRMSG_CANT_MAX = "DOCMULTI2_ERRMSG_CANT_MAX"; //se ha sobrepasado la cantidad máxima de documentos del mismo tipo permitidos
 app.DOCMULTI2_ERRMSG_ERRMSG_EPROC = "DOCMULTI2_ERRMSG_ERRMSG_EPROC"; //error al procesar la peticion
 
-app.TipoDocumento = Backbone.Model.extend ({
+
+/*app.TipoDocumento = Backbone.Model.extend ({
 	defaults: {
 		grailsId: -1,
 		descripcion: "",
 		vigente: false,
-		cantidadRequeridaVigente: 0,
-		cantidadMaximaVigente: 0,
-		cantidadMaximaNoVigente: 0,
-		manejaVigencia: false
+		cantidadRequerida: 0,
+		cantidadMaxima: 0,
+		manejaVigencia: true
 	}
-});
+});*/
 
 app.Documento = Backbone.Model.extend ({
 	defaults: {
@@ -32,7 +32,8 @@ app.Documento = Backbone.Model.extend ({
 		mimeType: "",
 		idTipoDocumento: -1,
 		descripcionTipoDocumento: "",
-		fecha: new Date(1436480714000)
+		manejaVigenciaTipoDocumento: true,
+		fecha: new Date()
 	}
 });
 
@@ -180,9 +181,6 @@ app.DocumentosView = Backbone.View.extend({
 		this.tiposDocumento = options.tiposDocumento;
 		this.collection = options.initialDocumentos;
 		this.render();
-		
-		//callbacks a realizar en cambios al modelo
-		this.listenTo( this.collection, 'add', this.renderElement );
 	},
 
 	//CHECKLIST ID ATTRIBUTES
@@ -204,11 +202,31 @@ app.DocumentosView = Backbone.View.extend({
 	template: _.template( $('#documentos').html() ),
 	render: function(){
 		//this.$el.html( this.template( this.model.toJSON() ) );
-		this.$el.html( this.template() );
+		this.$el.html( this.template( { tiposDocumento:this.tiposDocumento } ) );
 		//rendera cada uno de los documentos 
 		this.collection.each( function(item){
 			this.renderElement(item);
 		},this );
+		//renderea errores
+		this.renderErrors();
+		
+		this.$(".procUpload").hide();
+		
+		if(this.getState() == app.DOCMULTI2_READY){
+			this.enableFields();
+			this.enableSubmitDisableEdit();
+		}
+		else if(this.getState() == app.DOCMULTI2_PROC){
+			this.$(".procUpload").show();
+			this.disableFields();
+		}
+		else if(this.getState() == app.DOCMULTI2_VALIDATED){
+			//deshabilitar todos los campos
+			this.disableFields();
+			//solo dejar "editar" habilidado
+			this.disableSubmitEnableEdit();
+		}
+		
 		return this;
 	},
 	renderElement: function(item){
@@ -218,6 +236,35 @@ app.DocumentosView = Backbone.View.extend({
 		elementView.setDeleteNewUrl(this._deleteNewUrl);
 		this.$(".listaDocumentos").append( elementView.render().el );
 	},
+	renderErrors: function(){
+		var view = this
+	
+		this.$(".errorValidacion").hide();
+		this.$(".errorUpload").hide();
+		this.$(".successUpload").hide();
+		
+		if(this.hasErrorUpload()){
+			this.$(".errorUpload").show(100);
+			this.$(".msgErrorUpload").text(this.msgErrorUpload);
+			//window.setTimeout( function(){ view.$(".errorUpload").hide(100); }, 3000 );
+		}
+		if(this.hasErrorValidacion()){
+			var msg = "";
+			_.each(this.msgsErrorValidacion,function(item){
+				msg += "<li>" + item + "</li>";
+			},this);
+			this.$('.validationErrorMsgs').html(msg);
+			this.$('.msgErrorValidacion').text(this.msgErrorValidacion);
+			this.$(".errorValidacion").show(100);
+			//window.setTimeout( function(){ view.$(".errorValidacion").hide(100); }, 3000 );
+		}
+	},
+	renderSuccessAddElement: function(){
+		var view = this;
+		this.$(".successUpload").show(100);
+		window.setTimeout( function(){ view.$(".successUpload").hide(100); }, 2500 );
+	},
+	
 	clearErrorsOnFields: function(){
 		//TODO: LIMPIA LA MARCA CON "ROJITO" DE LOS CAMPOS CON ERROR
 	},
@@ -225,10 +272,26 @@ app.DocumentosView = Backbone.View.extend({
 		//TODO: MARCA CON "ROJITO" LOS CAMPOS CON ERROR
 	},
 	disableFields: function(){
-		
+		this.$(".archivo").prop( "disabled", true );
+		this.$(".idTipoDocumento").prop( "disabled", true );
+		this.$(".add").prop( "disabled", true );
+		this.$(".download").prop( "disabled", true );
+		this.$(".delete").prop( "disabled", true );
+		this.$(".setVigenciaFalse").prop( "disabled", true );
+		this.$(".setVigenciaTrue").prop( "disabled", true );
+		this.$(".submit").prop( "disabled", true );
+		this.$(".edit").prop( "disabled", true );
 	},
 	enableFields: function(){
-
+		this.$(".archivo").prop( "disabled", false );
+		this.$(".idTipoDocumento").prop( "disabled", false );
+		this.$(".add").prop( "disabled", false );
+		this.$(".download").prop( "disabled", false );
+		this.$(".delete").prop( "disabled", false );
+		this.$(".setVigenciaFalse").prop( "disabled", false );
+		this.$(".setVigenciaTrue").prop( "disabled", false );
+		this.$(".submit").prop( "disabled", false );
+		this.$(".edit").prop( "disabled", false );
 	},
 	enableSubmitDisableEdit: function() {
 		this.$(".submit").prop( "disabled", false );
@@ -267,24 +330,34 @@ app.DocumentosView = Backbone.View.extend({
 	msgErrorUpload: "",
 	errorValidacion: false,
 	msgErrorValidacion: "",
+	msgsErrorValidacion: [],
 	hasErrorUpload: function(){
 		return this.errorUpload;
 	},
 	setErrorUpload: function(msgErrorUpload){
 		this.errorUpload = true;
 		this.msgErrorUpload = msgErrorUpload;
+		this.renderErrors();
 	},
 	clearErrorUpload: function(){
 		this.errorUpload = false;
+		this.renderErrors();
 	},
 	hasErrorValidacion: function(){
 		return this.errorValidacion;
 	},
-	setErrorValidacion: function(){
+	setErrorValidacion: function(msgError){
 		this.errorValidacion = true;
+		this.msgsErrorValidacion.push(msgError);
+		this.renderErrors();
 	},
 	clearErrorValidacion: function(){
 		this.errorValidacion = false;
+		this.msgsErrorValidacion = new Array();
+		this.renderErrors();
+	},
+	setSuccessUpload: function(){
+		this.renderSuccessAddElement();
 	},
 	
 	//AJAX URLS
@@ -308,81 +381,127 @@ app.DocumentosView = Backbone.View.extend({
 	
 	//CALLBACKS
 	events: {
-		'click .add':'agregarDocumento'
+		'click .add':'agregarDocumento',
+		'click .submit':'submit',
+		'click .edit':'edit',
 	},
 	agregarDocumento: function(){
 		var view = this;
 		var archivo = this.$(".archivo").val();
 		var idTipoDocumento = this.$(".idTipoDocumento").val();
+		var tipoDocumento = {};
 		
+		//Se obtiene la instancia del tipo de documento a agregar
+		for(var i=0;i<this.tiposDocumento.length;i++){
+			if(this.tiposDocumento[i].grailsId == idTipoDocumento){
+				tipoDocumento = this.tiposDocumento[i];
+				break;
+			}
+		}
+		
+		//limpiea cualquier error
+		this.clearErrorUpload();
+		//valida que ninguno de los campos este "vacio"
 		if(archivo == "" || idTipoDocumento < 1){
 			this.setErrorUpload(app.DOCMULTI2_ERRMSG_NOINPUT);
 		}
 		else{
-			console.log("paso valida");
-			//valida de acuerdo a los criterios de la lista de tipos documentos:
-			//validar por tiposDocumento 
-		
-			//paso la validación
-			
-			//entonces recupera el archivo
-			var file = this.$(".archivo")[0].files[0];
-			
-			var xhr = new XMLHttpRequest();
-			
-			if (xhr.upload) {
-				//prepara el callbcack que recibira cuando se reba el archvo
-				xhr.addEventListener('readystatechange', function(evnt){ 
-					
-					if(xhr.readyState == 4 && xhr.status != 200 )
-					{
-						view.setErrorUpload(app.DOCMULTI2_ERRMSG_ERRUPLD);
-						view.setReady();
-					}
-					else if(xhr.readyState == 4 && xhr.status == 200)
-					{
-						var respuestaJson = JSON.parse(xhr.responseText);
-						var doc = new app.Documento();
-						doc.set(
-							{
-								grailsId: -1,
-								uuid: respuestaJson.uuid, 
-								nombreArchivo : respuestaJson.filename,
-								mimeType: respuestaJson.mimetype,
-								idTipoDocumento: idTipoDocumento,
-								descripcionTipoDocumento: 'obtenerDeCollecion',
-								fecha: new Date(),
-								vigente: true
-							}
-						);
-						view.collection.add(doc);
-						
-						//Esto debe ser limpiado en algun otro metodo, nada de dom aqui
-						view.$(".archivo").val("");
-						view.$(".idTipoDocumento").val('-1');
-						view.setReady();
-					}
-						
-				}, false);
-				
-				xhr.open('POST', this._uploadUrl, true);
-				try
-				{
-					var formData = new FormData();
-					formData.append("archivo", file);
-					xhr.send(formData);
-					//setea el status del componentente como "en progreso"
-					this.setProcessing();
+			//valida de acuerdo a los criterios de la lista de tipos documentos
+			//cuenta el tipoDocumento en la coleccion actual
+			var countTD = 0;
+			this.collection.each(function(item){
+				if(item.get("idTipoDocumento") == idTipoDocumento){
+					countTD++;
 				}
-				catch(err)
-				{
-					this.setErrorUpload(app.DOCMULTI2_ERRMSG_ERRUPLD);
-					this.setReady();
+			},this);
+			//comprueba que esa cantidad no se haya pasado
+			if(countTD >= tipoDocumento.cantidadMaxima){
+				this.setErrorUpload(app.DOCMULTI2_ERRMSG_CANT_MAX);
+			}
+			else{
+			
+				//paso la validación
+				//entonces recupera el archivo
+				var file = this.$(".archivo")[0].files[0];
+				var xhr = new XMLHttpRequest();
+				if (xhr.upload) {
+					//prepara el callbcack que recibira cuando se reba el archvo
+					xhr.addEventListener('readystatechange', function(evnt){ 
+						
+						if(xhr.readyState == 4 && xhr.status != 200 )
+						{
+							view.setErrorUpload(app.DOCMULTI2_ERRMSG_ERRUPLD);
+							view.setReady();
+						}
+						else if(xhr.readyState == 4 && xhr.status == 200)
+						{
+							var respuestaJson = JSON.parse(xhr.responseText);
+							var doc = new app.Documento();
+							doc.set(
+								{
+									grailsId: -1,
+									uuid: respuestaJson.uuid, 
+									nombreArchivo : respuestaJson.filename,
+									mimeType: respuestaJson.mimetype,
+									idTipoDocumento: idTipoDocumento,
+									descripcionTipoDocumento: tipoDocumento.descripcion,
+									manejaVigenciaTipoDocumento: tipoDocumento.manejaVigencia,
+									fecha: new Date(),
+									vigente: true
+								}
+							);
+							view.collection.add(doc);
+							
+							//Esto debe ser limpiado en algun otro metodo, nada de dom aqui
+							view.$(".archivo").val("");
+							view.$(".idTipoDocumento").val('-1');
+							view.setReady();
+							view.setSuccessUpload();
+						}
+							
+					}, false);
+					
+					xhr.open('POST', this._uploadUrl, true);
+					try
+					{
+						var formData = new FormData();
+						formData.append("archivo", file);
+						xhr.send(formData);
+						//setea el status del componentente como "en progreso"
+						this.setProcessing();
+					}
+					catch(err)
+					{
+						this.setErrorUpload(app.DOCMULTI2_ERRMSG_ERRUPLD);
+						this.setReady();
+					}
 				}
 			}
 		}
 		
 	},
+	submit: function(e){
+		e.preventDefault();
+		//El modelo ya se encuentra en objeto, solo procedera a validar la información
+		console.log("HACIENDO SUBMIT");
+		if( this.validate() ){
+			console.log("LOS DATOS FUERON VALIDOS");
+			this.setValidated();
+		}
+		else{
+			this.setReady();
+		}
+	},
+	
+	edit: function(e){
+		e.preventDefault();
+	
+		this.setReady();
+	},
 	
 	//VALIDACIONES
+	//En caso de requerirse, aquí se agregan expresiones regulares
+	validate: function(){
+		return true;
+	}
 });

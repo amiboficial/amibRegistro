@@ -105,15 +105,23 @@
 		var documentosView = new app.DocumentosView({
 			tiposDocumento: [
 				{
-					grailsId: 999999999,
-					descripcion: "Documento de respaldo de poder",
+					grailsId: 1,
+					descripcion: "Documento de respaldo de poder 1",
 					vigente: true,
-					cantidadRequeridaVigente: 1,
-					cantidadMaximaVigente: 1,
-					cantidadMaximaNoVigente: 0,
+					cantidadRequerida: 1,
+					cantidadMaxima: 1,
 					manejaVigencia: false
-				}
+				},
+				{
+					grailsId: 2,
+					descripcion: "Documento de respaldo de poder 2",
+					vigente: true,
+					cantidadRequerida: 1,
+					cantidadMaxima: 1,
+					manejaVigencia: true
+				},
 			],
+			manejaVigencia: true,
 			initialDocumentos: new app.Documentos()
 		});
 		

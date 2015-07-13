@@ -20,7 +20,7 @@
 				<g:message code="archivo.label" default="Archivo" /><span class="required-indicator">*</span>
 			</label>
 			<div class="col-md-2 col-sm-2">
-				<input type="file" data-field="archivo" class="field archivo" name="archivo" />
+				<input type="file" data-field="archivo" class="field archivo" name="archivo" id="ed333dd0286c11e5b345feff819cdc9f" />
 			</div>
 		</div>
 		
@@ -30,10 +30,10 @@
 			</label>
 			<div class="col-md-9 col-sm-9" >
 				<select class="field idTipoDocumento form-control" data-field="idTipoDocumento">
-					<option>-Seleccione-</option>
-					<option>Tipo AAA</option>
-					<option>Tipo BBB</option>
-					<option>Tipo CCC</option>
+					<option value="-1">-Seleccione-</option>
+					<option value="1">Tipo AAA</option>
+					<option value="2">Tipo BBB</option>
+					<option value="3">Tipo CCC</option>
 				</select>
 			</div>
 		</div>
@@ -89,7 +89,7 @@
 	</div>
 	<div class="div-tipoDocumento row">
 		<label class="col-sm-2 control-label">Tipo</label>
-		<div class="col-sm-9"><p>{{=tipoDocumento.get("descripcion")}}</p></div>
+		<div class="col-sm-9"><p>{{=idTipoDocumento}}</p></div>
 	</div>
 	<div class="div-fecha row">
 		<label class="col-sm-2 control-label">Fecha</label>
@@ -101,7 +101,16 @@
 	</div>
 	<div class="row">
 		<div class="col-sm-5">
+
 			&nbsp;
+			<div class="errorProcArc alert alert-danger">
+				<span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span class="msgErrorProcArc">Error en procesamiento</span>
+			</div>
+			
+			<div class="procArc alert alert-info">
+				<asset:image src="spinner_alert_info.gif"/>&nbsp;<strong>Procesando...</strong>
+			</div>
+
 		</div>
 		<div class="col-sm-2">
 			<button type="button" class="download btn btn-sm btn-block btn-default btn-primary"><span class="glyphicon glyphicon-save" aria-hidden="true"></span> Descargar</button>

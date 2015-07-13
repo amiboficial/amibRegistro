@@ -4,6 +4,8 @@ app.DOCMULTI2_READY = 0;
 app.DOCMULTI2_VALIDATED = 1;
 app.DOCMULTI2_PROC = 2;
 
+app.DOCMULTI2_ERRMSG_NOINPUT = "DOCMULTI2_ERRMSG_NOINPUT"; //no ha introducido información del tipo ni y/o el archivo
+app.DOCMULTI2_ERRMSG_ERRUPLD = "DOCMULTI2_ERRMSG_ERRUPLD"; //error al subir archivo (general)
 app.DOCMULTI2_ERRMSG_MAXSIZE = "DOCMULTI2_ERRMSG_MAXSIZE"; //tamaño máximo de archivo superado
 app.DOCMULTI2_ERRMSG_TYPE_NOT_ALLOWED = "DOCMULTI2_ERRMSG_TYPE_NOT_ALLOWED"; //tipo de archivo no permitido
 app.DOCMULTI2_ERRMSG_CANT_MAX = "DOCMULTI2_ERRMSG_CANT_MAX"; //se ha sobrepasado la cantidad máxima de documentos del mismo tipo permitidos
@@ -50,11 +52,125 @@ app.DocumentoView = Backbone.View.extend({
 	tagName: 'div',
 	className: 'list-group-item',
 	template: _.template( $('#documento').html() ),
+	
 	render: function(){
 		//this.$el.html( this.template( this.model.toJSON() ) );
-		this.$el.html( this.template() );
+		this.$el.html( this.template( this.model.toJSON() ) );
+		
+		//limpia mensajes
+		this.$(".errorProcArc").hide();
+		this.$(".procArc").hide();
+		
+		//de acuerdo al estatus de la vista
+		if(this.state == app.DOCMULTI2_READY){
+			if(this.hasErrorProcArc()){
+				this.$(".errorProcArc").show();
+			}
+		}
+		else if(this.state == app.DOCMULTI2_PROC){
+			this.$(".procArc").show();
+		}
+		
 		return this;
-	}
+	},
+	disableFields: function(){
+		this.$('.download').prop("disabled",true);
+		this.$('.setVigenciaTrue').prop("disabled",true);
+		this.$('.setVigenciaFalse').prop("disabled",true);
+		this.$('.delete').prop("disabled",true);
+	},
+	enableFields: function(){
+		this.$('.download').prop("disabled",false);
+		this.$('.setVigenciaTrue').prop("disabled",false);
+		this.$('.setVigenciaFalse').prop("disabled",false);
+		this.$('.delete').prop("disabled",false);
+	},
+	
+	//VIEW STATUS
+	//estatus y errores de vista
+	state: app.DOCMULTI2_READY,
+	getState: function(){
+		return this.state;
+	},
+	setReady: function(){
+		this.state = app.DOCMULTI2_READY;
+		this.render();
+	},
+	setProcessing: function(){
+		this.state = app.DOCMULTI2_PROC;
+		this.render();
+	},
+	setValidated: function(){
+		this.state = app.DOCMULTI2_VALIDATED;
+		this.render();
+	},
+	
+	//ERRORS
+	errorProcArc: false,
+	hasErrorProcArc: function(){
+		return this.errorProcArc;
+	},
+	setErrorProcArc: function(){
+		this.errorProcArc = true;
+	},
+	clearErrorProcArc: function(){
+		this.errorProcArc = false;
+	},
+	
+	//AJAX URLS
+	//Urls para el procesamiento AJAX
+	_downloadNewUrl: "",
+	_downloadUrl: "",
+	_deleteNewUrl: "",
+	setDownloadNewUrl: function(downloadNewUrl){
+		this._downloadNewUrl = downloadNewUrl;
+	},
+	setDownloadUrl: function(downloadUrl){
+		this._downloadUrl = downloadUrl;
+	},
+	setDeleteNewUrl: function(deleteNewUrl){
+		this._deleteNewUrl = deleteNewUrl;
+	},
+	
+	//CALLBACKS
+	events: {
+		'click .delete':'borrarDocumento'
+	},
+	borrarDocumento: function(e){
+		e.preventDefault();
+		var view = this;
+		
+		if(this.model.get("grailsId") == -1){
+			console.log("se debe mandar borrar al servidor");
+			
+			$.ajax({
+				url: view._deleteNewUrl + "/" + this.model.get("uuid"), 
+				beforeSend: function(xhr){
+					//view.clearErrorProc();
+					//view.setProcessing();
+				}
+			}).done( function(data){
+				if(data.status == "OK"){
+				
+					//si lo ejecuta el borrado desde el servidor:
+					//Borra el model
+					view.model.destroy();
+					//Destruye esta vista
+					view.remove();
+					
+					//view.setReady();
+				}
+				else{
+					//error alguno
+					//view.setErrorProc();
+					//view.setReady();
+				}
+			} );
+			
+		}
+		
+		
+	},
 });
 
 app.DocumentosView = Backbone.View.extend({
@@ -89,10 +205,17 @@ app.DocumentosView = Backbone.View.extend({
 	render: function(){
 		//this.$el.html( this.template( this.model.toJSON() ) );
 		this.$el.html( this.template() );
+		//rendera cada uno de los documentos 
+		this.collection.each( function(item){
+			this.renderElement(item);
+		},this );
 		return this;
 	},
 	renderElement: function(item){
-		var elementView = new app.ApoderadoView({model:item});
+		var elementView = new app.DocumentoView({model:item});
+		elementView.setDownloadNewUrl(this._downloadNewUrl);
+		elementView.setDownloadUrl(this._downloadUrl);
+		elementView.setDeleteNewUrl(this._deleteNewUrl);
 		this.$(".listaDocumentos").append( elementView.render().el );
 	},
 	clearErrorsOnFields: function(){
@@ -147,8 +270,9 @@ app.DocumentosView = Backbone.View.extend({
 	hasErrorUpload: function(){
 		return this.errorUpload;
 	},
-	setErrorUpload: function(){
+	setErrorUpload: function(msgErrorUpload){
 		this.errorUpload = true;
+		this.msgErrorUpload = msgErrorUpload;
 	},
 	clearErrorUpload: function(){
 		this.errorUpload = false;
@@ -167,19 +291,19 @@ app.DocumentosView = Backbone.View.extend({
 	//Urls para el procesamiento AJAX
 	_uploadUrl: "",
 	_downloadNewUrl: "",
-	_download: "",
-	_deleteNew: "",
+	_downloadUrl: "",
+	_deleteNewUrl: "",
 	setUploadUrl: function(uploadUrl){
 		this._uploadUrl = uploadUrl;
 	},
 	setDownloadNewUrl: function(downloadNewUrl){
 		this._downloadNewUrl = downloadNewUrl;
 	},
-	setDownload: function(download){
-		this._download = download;
+	setDownloadUrl: function(downloadUrl){
+		this._downloadUrl = downloadUrl;
 	},
-	setDeleteNew: function(deleteNew){
-		this._deleteNew = deleteNew;
+	setDeleteNewUrl: function(deleteNewUrl){
+		this._deleteNewUrl = deleteNewUrl;
 	},
 	
 	//CALLBACKS
@@ -187,7 +311,77 @@ app.DocumentosView = Backbone.View.extend({
 		'click .add':'agregarDocumento'
 	},
 	agregarDocumento: function(){
-		alert("VALIDA EL ARCHIVO Y SUBE EL ARCHIVO AL SERVER");
+		var view = this;
+		var archivo = this.$(".archivo").val();
+		var idTipoDocumento = this.$(".idTipoDocumento").val();
+		
+		if(archivo == "" || idTipoDocumento < 1){
+			this.setErrorUpload(app.DOCMULTI2_ERRMSG_NOINPUT);
+		}
+		else{
+			console.log("paso valida");
+			//valida de acuerdo a los criterios de la lista de tipos documentos:
+			//validar por tiposDocumento 
+		
+			//paso la validación
+			
+			//entonces recupera el archivo
+			var file = this.$(".archivo")[0].files[0];
+			
+			var xhr = new XMLHttpRequest();
+			
+			if (xhr.upload) {
+				//prepara el callbcack que recibira cuando se reba el archvo
+				xhr.addEventListener('readystatechange', function(evnt){ 
+					
+					if(xhr.readyState == 4 && xhr.status != 200 )
+					{
+						view.setErrorUpload(app.DOCMULTI2_ERRMSG_ERRUPLD);
+						view.setReady();
+					}
+					else if(xhr.readyState == 4 && xhr.status == 200)
+					{
+						var respuestaJson = JSON.parse(xhr.responseText);
+						var doc = new app.Documento();
+						doc.set(
+							{
+								grailsId: -1,
+								uuid: respuestaJson.uuid, 
+								nombreArchivo : respuestaJson.filename,
+								mimeType: respuestaJson.mimetype,
+								idTipoDocumento: idTipoDocumento,
+								descripcionTipoDocumento: 'obtenerDeCollecion',
+								fecha: new Date(),
+								vigente: true
+							}
+						);
+						view.collection.add(doc);
+						
+						//Esto debe ser limpiado en algun otro metodo, nada de dom aqui
+						view.$(".archivo").val("");
+						view.$(".idTipoDocumento").val('-1');
+						view.setReady();
+					}
+						
+				}, false);
+				
+				xhr.open('POST', this._uploadUrl, true);
+				try
+				{
+					var formData = new FormData();
+					formData.append("archivo", file);
+					xhr.send(formData);
+					//setea el status del componentente como "en progreso"
+					this.setProcessing();
+				}
+				catch(err)
+				{
+					this.setErrorUpload(app.DOCMULTI2_ERRMSG_ERRUPLD);
+					this.setReady();
+				}
+			}
+		}
+		
 	},
 	
 	//VALIDACIONES

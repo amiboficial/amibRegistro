@@ -7,7 +7,7 @@ import grails.converters.JSON
 import java.net.URL
 import java.util.Date;
 
-import mx.amib.sistemas.util.service.ArchivoTemporalService
+import mx.amib.sistemas.utils.service.ArchivoTemporalService
 import spock.lang.*
 
 /**

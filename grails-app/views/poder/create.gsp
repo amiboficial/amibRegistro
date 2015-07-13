@@ -102,7 +102,7 @@
 	<script type="text/javascript">
 		var app = app || {};
 		
-		var documentosViews = new app.DocumentosView({
+		var documentosView = new app.DocumentosView({
 			tiposDocumento: [
 				{
 					grailsId: 999999999,
@@ -114,8 +114,13 @@
 					manejaVigencia: false
 				}
 			],
-			initialDocumentos: {}
+			initialDocumentos: new app.Documentos()
 		});
+		
+		documentosView.setUploadUrl('<g:createLink controller="documento" action="upload" />');
+		documentosView.setDownloadNewUrl('<g:createLink controller="documento" action="downloadNew" />');
+		documentosView.setDownloadUrl('<g:createLink controller="documento" action="download" />');
+		documentosView.setDeleteNewUrl('<g:createLink controller="documento" action="delete" />');
 	</script>
 	
 	<g:javascript src="mx.amib.sistemas.registro.apoderamiento.form.poder.create.checklist.js" />

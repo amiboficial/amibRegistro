@@ -25,6 +25,10 @@ class PoderController {
 		
 	}
 	
+	private IndexViewModel getIndexViewModel(){
+		
+	}
+	
 	def show(){ 
 		
 	}
@@ -149,6 +153,25 @@ class PoderController {
 	
 }
 
+class IndexViewModel{
+	Integer max
+	Integer offset
+	
+	//filtros empleados en los parametros
+	Integer fne //numero de escritura
+	Integer ffpdd //fecha de apoderamiento del (dia)
+	Integer ffpdm //fecha de apoderamiento del (mes)
+	Integer ffpdy //fecha de apoderamiento del (año)
+	Integer ffpad //fecha de apoderamiento al (dia)
+	Integer ffpam //fecha de apoderamiento al (mes)
+	Integer ffpay //fecha de apoderamiento al (año)
+	Long fgf //grupo financiero
+	Long fi //institucion
+	
+	Collection<EntidadFederativaTO> entidadFederativaList
+	Collection<GrupoFinancieroTO> gruposFinancieroList
+}
+
 class CreateViewModel{
 	PoderTO poderInstance
 	
@@ -160,3 +183,6 @@ class CreateViewModel{
 	Collection<GrupoFinancieroTO> gruposFinancieroList
 	Collection<InstitucionTO> institucionList
 }
+
+
+

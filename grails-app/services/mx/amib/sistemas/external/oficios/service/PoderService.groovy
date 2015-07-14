@@ -46,6 +46,9 @@ class PoderService {
 		if(resp.json instanceof JSONObject && !JSONObject.NULL.equals(resp.json)){
 			sr = new SearchResult<PoderTO>( this.fixSearchResultJsonObject(resp.json) )
 		}
+		
+		println "LA URL ES: " + findAllByUrl + qs.toString()
+		
 		return sr
 	}
 	public PoderTO get(Long id){

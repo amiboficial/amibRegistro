@@ -20,13 +20,76 @@ class PoderController {
 	def sepomexService
 	
 	def apoderamientoService
+	def poderService
 	
     def index() { 
-		
+		IndexViewModel ivm = this.getIndexViewModel(params)
+		render(view: "index", model: [ viewModelInstance : ivm ])
 	}
 	
-	private IndexViewModel getIndexViewModel(){
+	private IndexViewModel getIndexViewModel(def params){
+		IndexViewModel ivm = new IndexViewModel()
+		Calendar c = null
 		
+		ivm.max = Integer.parseInt( params.max ?: '10' )
+		ivm.offset = Integer.parseInt( params.offset ?: '0' )
+		ivm.sort = params.sort ?: 'id'
+		ivm.order = params.order ?: 'asc'
+		
+		ivm.fne = Integer.parseInt( params.offset ?: '-1' )
+		ivm.ffpd_day = Integer.parseInt( params.offset ?: '-1' )
+		ivm.ffpd_month = Integer.parseInt( params.offset ?: '-1' )
+		ivm.ffpd_year = Integer.parseInt( params.offset ?: '-1' )
+		ivm.ffpa_day = Integer.parseInt( params.offset ?: '-1' )
+		ivm.ffpa_month = Integer.parseInt( params.offset ?: '-1' )
+		ivm.ffpa_year = Integer.parseInt( params.offset ?: '-1' )
+		ivm.fgf = Integer.parseInt( params.offset ?: '-1' )
+		ivm.fi = Integer.parseInt( params.offset ?: '-1' )
+		
+		//setea la fecha con un calendar
+		c = Calendar.getInstance()
+		if(ivm.ffpd_year > 0){
+			c.set(ivm.ffpd_year, ivm.ffpd_month-1, ivm.ffpd_day)
+			ivm.ffpd = c.getTime()
+		}
+		c = Calendar.getInstance()
+		if(ivm.ffpa_year > 0){
+			c.set(ivm.ffpa_year, ivm.ffpa_month-1, ivm.ffpa_day)
+			ivm.ffpa = c.getTime()
+		}
+		
+		//Si hubo un grupo financiero seleccionado
+		if(ivm.fgf > 0)
+			ivm.institucionList = entidadFinancieraService.obtenerGrupoFinanciero(ivm.fi).instituciones.sort{ it.nombre }
+		ivm.gruposFinancieroList = entidadFinancieraService.obtenerGruposFinancierosVigentes().sort{ it.nombre }
+		
+		//Filtra parámetros de sort y order fuera de "rango"
+		if(ivm.sort != 'id' && ivm.sort != 'numeroEscritura' && ivm.sort != 'fechaApoderamiento' && 
+			ivm.sort != 'representanteLegalNombre' && ivm.sort != 'representanteLegalApellido1' &&
+			ivm.sort != 'representanteLegalApellido2' ){
+			ivm.sort = 'id'
+		}
+		if(ivm.order != "asc" && ivm.order != "desc"){
+			ivm.order = 'asc'
+		}
+		
+		def res = poderService.findAllBy(ivm.max, ivm.offset, ivm.sort, ivm.order, ivm.fne, 
+													ivm.ffpd_day, ivm.ffpd_month, ivm.ffpd_year,
+													ivm.ffpa_day, ivm.ffpa_month, ivm.ffpa_year, 
+													ivm.fgf, ivm.fi)
+		ivm.poderResults = res.list
+		ivm.count = res.count
+		//Obtiene los notarios
+		//TODO: hacer un metodo getAll para obtner notarios de una sola llamada
+		ivm.notariosMap = new TreeMap<Long,NotarioTO>();
+		ivm.poderResults.each { x ->
+			NotarioTO n = notarioService.get(x.idNotario)
+			if(n.id>0){
+				ivm.notariosMap.put(n.id, n)
+			}
+		}
+		
+		return ivm
 	}
 	
 	def show(){ 
@@ -156,20 +219,29 @@ class PoderController {
 class IndexViewModel{
 	Integer max
 	Integer offset
+	String sort
+	String order
+	Integer count
 	
 	//filtros empleados en los parametros
 	Integer fne //numero de escritura
-	Integer ffpdd //fecha de apoderamiento del (dia)
-	Integer ffpdm //fecha de apoderamiento del (mes)
-	Integer ffpdy //fecha de apoderamiento del (año)
-	Integer ffpad //fecha de apoderamiento al (dia)
-	Integer ffpam //fecha de apoderamiento al (mes)
-	Integer ffpay //fecha de apoderamiento al (año)
+	Integer ffpd_day //fecha de apoderamiento del (dia)
+	Integer ffpd_month //fecha de apoderamiento del (mes)
+	Integer ffpd_year //fecha de apoderamiento del (año)
+	Integer ffpa_day //fecha de apoderamiento al (dia)
+	Integer ffpa_month //fecha de apoderamiento al (mes)
+	Integer ffpa_year //fecha de apoderamiento al (año)
 	Long fgf //grupo financiero
 	Long fi //institucion
 	
-	Collection<EntidadFederativaTO> entidadFederativaList
+	Date ffpd
+	Date ffpa
+	
+	Collection<InstitucionTO> institucionList
 	Collection<GrupoFinancieroTO> gruposFinancieroList
+	
+	Collection<PoderTO> poderResults
+	Map<Long,NotarioTO> notariosMap
 }
 
 class CreateViewModel{

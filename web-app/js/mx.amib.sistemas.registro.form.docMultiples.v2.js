@@ -11,6 +11,8 @@ app.DOCMULTI2_ERRMSG_TYPE_NOT_ALLOWED = "DOCMULTI2_ERRMSG_TYPE_NOT_ALLOWED"; //t
 app.DOCMULTI2_ERRMSG_CANT_MAX = "DOCMULTI2_ERRMSG_CANT_MAX"; //se ha sobrepasado la cantidad máxima de documentos del mismo tipo permitidos
 app.DOCMULTI2_ERRMSG_ERRMSG_EPROC = "DOCMULTI2_ERRMSG_ERRMSG_EPROC"; //error al procesar la peticion
 
+app.DOCMULTI2_ERRMSG_SUBMITVAL = "DOCMULTI2_ERRMSG_SUBMITVAL"; //mensaje de validación al hacer submit
+app.DOCMULTI2_ERRMSG_CANT_REQ = "DOCMULTI2_ERRMSG_CANT_REQ"; //no se cumplió con la cantidad de documentos requeridos
 
 /*app.TipoDocumento = Backbone.Model.extend ({
 	defaults: {
@@ -135,7 +137,10 @@ app.DocumentoView = Backbone.View.extend({
 	
 	//CALLBACKS
 	events: {
-		'click .delete':'borrarDocumento'
+		'click .delete':'borrarDocumento',
+		'click .setVigenciaFalse':'hacerNoVigente',
+		'click .setVigenciaTrue':'hacerVigente',
+		'click .download':'descargarDocumento'
 	},
 	borrarDocumento: function(e){
 		e.preventDefault();
@@ -147,8 +152,8 @@ app.DocumentoView = Backbone.View.extend({
 			$.ajax({
 				url: view._deleteNewUrl + "/" + this.model.get("uuid"), 
 				beforeSend: function(xhr){
-					//view.clearErrorProc();
-					//view.setProcessing();
+					view.clearErrorProcArc();
+					view.setProcessing();
 				}
 			}).done( function(data){
 				if(data.status == "OK"){
@@ -163,15 +168,39 @@ app.DocumentoView = Backbone.View.extend({
 				}
 				else{
 					//error alguno
-					//view.setErrorProc();
-					//view.setReady();
+					view.setErrorProc();
+					view.setReady();
 				}
 			} );
 			
 		}
-		
-		
+
 	},
+	hacerVigente: function(e){
+		e.preventDefault();
+		var view = this;
+		
+		this.model.set("vigente", true);
+		this.setReady();
+		console.log("se supone se hizo vigente");
+	},
+	hacerNoVigente: function(e){
+		e.preventDefault();
+		var view = this;
+		
+		this.model.set("vigente", false);
+		this.setReady();
+		console.log("se supone se hizo no vigente");
+	},
+	descargarDocumento: function(e){
+		e.preventDefault();
+		if(this.model.get("grailsId") > 0){
+			window.open(this._downloadUrl + "/" + this.model.get("uuid"));
+		}
+		else{
+			window.open(this._downloadNewUrl + "/" + this.model.get("uuid"));
+		}
+	}
 });
 
 app.DocumentosView = Backbone.View.extend({
@@ -279,6 +308,9 @@ app.DocumentosView = Backbone.View.extend({
 		this.$(".delete").prop( "disabled", true );
 		this.$(".setVigenciaFalse").prop( "disabled", true );
 		this.$(".setVigenciaTrue").prop( "disabled", true );
+		this.$(".orderByNombreArchivo").prop( "disabled", true );
+		this.$(".orderByIdTipoDocumento").prop( "disabled", true );
+		this.$(".orderByFecha").prop( "disabled", true );
 		this.$(".submit").prop( "disabled", true );
 		this.$(".edit").prop( "disabled", true );
 	},
@@ -290,6 +322,9 @@ app.DocumentosView = Backbone.View.extend({
 		this.$(".delete").prop( "disabled", false );
 		this.$(".setVigenciaFalse").prop( "disabled", false );
 		this.$(".setVigenciaTrue").prop( "disabled", false );
+		this.$(".orderByNombreArchivo").prop( "disabled", false );
+		this.$(".orderByIdTipoDocumento").prop( "disabled", false );
+		this.$(".orderByFecha").prop( "disabled", false );
 		this.$(".submit").prop( "disabled", false );
 		this.$(".edit").prop( "disabled", false );
 	},
@@ -329,7 +364,7 @@ app.DocumentosView = Backbone.View.extend({
 	errorUpload: false,
 	msgErrorUpload: "",
 	errorValidacion: false,
-	msgErrorValidacion: "",
+	msgErrorValidacion: app.DOCMULTI2_ERRMSG_SUBMITVAL,
 	msgsErrorValidacion: [],
 	hasErrorUpload: function(){
 		return this.errorUpload;
@@ -356,9 +391,14 @@ app.DocumentosView = Backbone.View.extend({
 		this.msgsErrorValidacion = new Array();
 		this.renderErrors();
 	},
+	clearAllErrors: function(){
+		this.clearErrorUpload();
+		this.clearErrorValidacion();
+	},
 	setSuccessUpload: function(){
 		this.renderSuccessAddElement();
 	},
+	
 	
 	//AJAX URLS
 	//Urls para el procesamiento AJAX
@@ -381,11 +421,14 @@ app.DocumentosView = Backbone.View.extend({
 	
 	//CALLBACKS
 	events: {
-		'click .add':'agregarDocumento',
+		'click .add':'addDocumento',
+		'click .orderByNombreArchivo':'orderByNombreArchivo',
+		'click .orderByIdTipoDocumento':'orderByIdTipoDocumento',
+		'click .orderByFecha':'orderByFecha',
 		'click .submit':'submit',
 		'click .edit':'edit',
 	},
-	agregarDocumento: function(){
+	addDocumento: function(){
 		var view = this;
 		var archivo = this.$(".archivo").val();
 		var idTipoDocumento = this.$(".idTipoDocumento").val();
@@ -400,7 +443,7 @@ app.DocumentosView = Backbone.View.extend({
 		}
 		
 		//limpiea cualquier error
-		this.clearErrorUpload();
+		this.clearAllErrors();
 		//valida que ninguno de los campos este "vacio"
 		if(archivo == "" || idTipoDocumento < 1){
 			this.setErrorUpload(app.DOCMULTI2_ERRMSG_NOINPUT);
@@ -480,6 +523,25 @@ app.DocumentosView = Backbone.View.extend({
 		}
 		
 	},
+	orderByNombreArchivo: function(e){
+		e.preventDefault();
+		this.collection.comparator = 'nombreArchivo';
+		this.collection.sort();
+		this.setReady();
+		console.log("NO HACE NADA EN ORDER POR ARCHIVO!!");
+	},
+	orderByIdTipoDocumento: function(e){
+		e.preventDefault();
+		this.collection.comparator = 'descripcionTipoDocumento';
+		this.collection.sort();
+		this.setReady();
+	},
+	orderByFecha: function(e){
+		e.preventDefault();
+		this.collection.comparator = 'fecha';
+		this.collection.sort();
+		this.setReady();
+	},
 	submit: function(e){
 		e.preventDefault();
 		//El modelo ya se encuentra en objeto, solo procedera a validar la información
@@ -502,6 +564,24 @@ app.DocumentosView = Backbone.View.extend({
 	//VALIDACIONES
 	//En caso de requerirse, aquí se agregan expresiones regulares
 	validate: function(){
-		return true;
+		var valid = true;
+		//validar las cantidades requeridas por cada tipo de documento
+		var currCantReq = 0;
+		var colInArray = this.collection.toJSON();
+		this.clearAllErrors();
+		
+		for(var i=0; i<this.tiposDocumento.length; i++){
+			currCantReq = 0;
+			for(var j=0; j<colInArray.length; j++){
+				if(colInArray[j].idTipoDocumento == this.tiposDocumento[i].grailsId){
+					currCantReq++;
+				}
+			}
+			if(currCantReq < this.tiposDocumento[i].cantidadRequerida){
+				valid = false;
+				this.setErrorValidacion(app.DOCMULTI2_ERRMSG_CANT_REQ + ":" + this.tiposDocumento[i].descripcion);
+			}
+		}
+		return valid;
 	}
 });

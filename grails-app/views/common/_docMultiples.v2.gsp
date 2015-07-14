@@ -65,6 +65,11 @@
 	<fieldset>
 		<legend>Listado de archivos</legend>
 		
+		<div class="btn-group" role="group" aria-label="...">
+			<button type="button" class="orderByNombreArchivo btn btn-default">Ordernar por <strong>nombre</strong></button>
+			<button type="button" class="orderByIdTipoDocumento btn btn-default">Ordernar por <strong>tipo</strong></button>
+			<button type="button" class="orderByFecha btn btn-default">Ordernar por <strong>fecha</strong></button>
+		</div>
 		<div class="listaDocumentos list-group"></div>
 		
 		<div class="form-group">
@@ -103,12 +108,16 @@
 	{{ if(manejaVigenciaTipoDocumento){ }}
 		<div class="div-vigente row">
 			<label class="col-sm-2 control-label">Vigente</label>
-			<div class="col-sm-9"><p>{{=vigente}}</p></div>
+			{{ if(vigente){ }}
+				<div class="col-sm-9"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span><p></p></div>
+			{{ } else{ }}
+				<div class="col-sm-9"><p><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></p></div>
+			{{ } }}
 		</div>
 	{{ } }}
 	<div class="row">
 		<div class="col-sm-5">
-
+	
 			&nbsp;
 			<div class="errorProcArc alert alert-danger">
 				<span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span class="msgErrorProcArc">Error en procesamiento</span>
@@ -119,10 +128,7 @@
 			</div>
 
 		</div>
-		<div class="col-sm-2">
-			<button type="button" class="download btn btn-sm btn-block btn-default btn-primary"><span class="glyphicon glyphicon-save" aria-hidden="true"></span> Descargar</button>
-		</div>
-		
+
 		{{ if(manejaVigenciaTipoDocumento){ }}
 			{{ if(vigente){ }}
 				<div class="col-sm-2">
@@ -133,9 +139,14 @@
 					<button type="button" class="setVigenciaTrue btn btn-sm btn-block btn-default btn-primary"><span class="glyphicon glyphicon-star" aria-hidden="true"></span> Hacer vigente</button>
 				</div>
 			{{ } }}
+		{{ } else{ }}
+			<div class="col-sm-2">
+				&nbsp;
+			</div>
 		{{ } }}
-		
-		
+		<div class="col-sm-2">
+			<button type="button" class="download btn btn-sm btn-block btn-default btn-primary"><span class="glyphicon glyphicon-save" aria-hidden="true"></span> Descargar</button>
+		</div>
 		<div class="col-sm-2">
 			<button type="button" class="delete btn btn-sm btn-block btn-default btn-danger"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Quitar de la lista</button>
 		</div>

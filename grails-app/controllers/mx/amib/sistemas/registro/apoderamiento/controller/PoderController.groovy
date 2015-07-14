@@ -7,8 +7,10 @@ import mx.amib.sistemas.external.catalogos.service.GrupoFinancieroTO
 import mx.amib.sistemas.external.catalogos.service.InstitucionTO
 import mx.amib.sistemas.external.catalogos.service.NotarioTO
 import mx.amib.sistemas.external.expediente.persona.service.SustentanteTO
+import mx.amib.sistemas.external.oficios.poder.ApoderadoTO
 import mx.amib.sistemas.external.oficios.poder.PoderTO
 import mx.amib.sistemas.utils.service.ArchivoTO
+import org.codehaus.groovy.grails.web.json.JSONArray
 
 class PoderController {
 
@@ -58,6 +60,41 @@ class PoderController {
 		
 	}
 	
+	def save(PoderTO poder){
+		
+		//Seteo de fechas en poder
+		Calendar c = Calendar.getInstance()
+		int faDay = Integer.parseInt(params.'poder.fechaApoderamiento_day')
+		int faMonth = Integer.parseInt(params.'poder.fechaApoderamiento_month') - 0
+		int faYear = Integer.parseInt(params.'poder.fechaApoderamiento_year')
+		c.set(faYear,faMonth,faDay);
+		poder.fechaApoderamiento = c.getTime()
+		
+		//Recuperacion de datos de apoderados a traves de un JSON
+		List<ApoderadoTO> apoderadosList = new ArrayList()
+		String apoderadosStrJson = params.'apoderados.json'
+		def apoderadosJson = JSON.parse(apoderadosStrJson)
+		if(apoderadosJson != null && apoderadosJson instanceof JSONArray){
+			apoderadosJson.each { x ->
+				ApoderadoTO apoderado = new ApoderadoTO()
+				apoderado.idCertificacion = x.'idCertificacion'
+				apoderado.idPoder = x.'idPoder'
+				apoderadosList.add(apoderado)
+			}
+		}
+		poder.apoderados = apoderadosList
+		
+		try{
+			apoderamientoService.altaPoder(poder)
+			flash.successMessage = "El poder ha sido dado de alta"
+		}
+		catch(Exception e){
+			flash.errorMessage = "Ha ocurrido un error al dar de alta el poder"
+		}
+		
+		redirect (action: "index")
+	}
+		
 	def getNotario(){
 		def res = null
 		long idEntidadFederativa = -1L

@@ -117,7 +117,7 @@
 					descripcion: "Documento de respaldo de poder 2",
 					vigente: true,
 					cantidadRequerida: 1,
-					cantidadMaxima: 1,
+					cantidadMaxima: 3,
 					manejaVigencia: true
 				},
 			],
@@ -137,6 +137,8 @@
 		var checkSubmitView = new app.CheckSubmitView();
 		checkSubmitView.setViewInstance(app.PODER_CREATE_CHKIDX_PODER,poderView);
 		checkSubmitView.setViewInstance(app.PODER_CREATE_CHKIDX_APODERADOS,apoderadosView);
+		checkSubmitView.setViewInstance(app.PODER_CREATE_CHKIDX_DOCS,documentosView);
+		
 		/*
 
 		Ejemplo de instanciamineto en el GSP,JSP,etc..-

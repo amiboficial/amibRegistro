@@ -85,10 +85,30 @@ app.CheckSubmitView = Backbone.View.extend({
 		this.render();
 	},
 
-	submitDatos: function(){
+	submitDatos: function(e){
+		e.preventDefault();
 		var arr = this.model.get('viewsarray');
 		//Limpia los datos del "span" donde se introducirán los hiddens
 		$('#spnHdnPostData').html("");
+		
+		//Datos del poder
+		this.$("#spnHdnPostData").append('<input type="hidden" name="poder.idGrupoFinanciero" value="' + arr[app.PODER_CREATE_CHKIDX_PODER].model.get('idGrupoFinanciero') + '" />');
+		this.$("#spnHdnPostData").append('<input type="hidden" name="poder.idInstitucion" value="' + arr[app.PODER_CREATE_CHKIDX_PODER].model.get('idInstitucion') + '" />');
+		this.$("#spnHdnPostData").append('<input type="hidden" name="poder.idNotario" value="' + arr[app.PODER_CREATE_CHKIDX_PODER].model.get('idNotario') + '" />');
+		this.$("#spnHdnPostData").append('<input type="hidden" name="poder.numeroEscritura" value="' + arr[app.PODER_CREATE_CHKIDX_PODER].model.get('numeroEscritura') + '" />');
+		this.$("#spnHdnPostData").append('<input type="hidden" name="poder.representanteLegalNombre" value="' + arr[app.PODER_CREATE_CHKIDX_PODER].model.get('representanteLegalNombre') + '" />');
+		this.$("#spnHdnPostData").append('<input type="hidden" name="poder.representanteLegalApellido1" value="' + arr[app.PODER_CREATE_CHKIDX_PODER].model.get('representanteLegalApellido1') + '" />');
+		this.$("#spnHdnPostData").append('<input type="hidden" name="poder.representanteLegalApellido2" value="' + arr[app.PODER_CREATE_CHKIDX_PODER].model.get('representanteLegalApellido2') + '" />');
+		this.$("#spnHdnPostData").append('<input type="hidden" name="poder.fechaApoderamiento_day" value="' + arr[app.PODER_CREATE_CHKIDX_PODER].model.get('fechaApoderamiento_day') + '" />');
+		this.$("#spnHdnPostData").append('<input type="hidden" name="poder.fechaApoderamiento_month" value="' + arr[app.PODER_CREATE_CHKIDX_PODER].model.get('fechaApoderamiento_month') + '" />');
+		this.$("#spnHdnPostData").append('<input type="hidden" name="poder.fechaApoderamiento_year" value="' + arr[app.PODER_CREATE_CHKIDX_PODER].model.get('fechaApoderamiento_year') + '" />');
+		//Datos de apoderados
+		this.$("#spnHdnPostData").append('<input type="hidden" name="apoderados.json" value=\'' + 
+			JSON.stringify(arr[app.PODER_CREATE_CHKIDX_APODERADOS].collection.toJSON())
+		+ '\' />');
+		//Datos de documentos
+		this.$("#spnHdnPostData").append('<input type="hidden" name="poder.uuidDocumentoRespaldo" value="' + arr[app.PODER_CREATE_CHKIDX_DOCS].collection.at(0).get("uuid") + '" />');
+		
 		//El método introduce los datos en campos "hidden" con los que se hará POST
 		//datos generales
 		//this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.numeroMatricula" value="' + arr[app.EXP_REG_CHK_GRALES].model.get('numeroMatricula') + '" />');
@@ -101,8 +121,9 @@ app.CheckSubmitView = Backbone.View.extend({
 		//	telsJson += JSON.stringify(item) + ",";
 		//}, this);
 		//telsJson += "]";
-
-		//$("#frmApp").submit();
+		
+		alert('Se ha hecho el submit de los elementos');
+		$("#frmApp").submit();
 	},
 });
 

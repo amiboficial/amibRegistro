@@ -71,7 +71,7 @@ app.ApoderadosView = Backbone.View.extend({
 		this.collection = initialCollection;
 		this.model = new app.Apoderado();
 		this.render();
-		this.listenTo( this.collection, 'add', this.renderElement );
+		//this.listenTo( this.collection, 'add', this.renderElement );
 	},
 	
 	events: {
@@ -286,6 +286,7 @@ app.ApoderadosView = Backbone.View.extend({
 	agregarApoderable: function(){
 		//se agrega el modelo a la colleccion
 		this.collection.add(this.model);
+		this.model = new app.Apoderado();
 		this.render();
 	},
 	submit: function(e){

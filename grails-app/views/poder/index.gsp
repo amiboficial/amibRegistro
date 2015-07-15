@@ -121,7 +121,7 @@
 				</tbody>
 			</table>
 			<div class="pagination">
-
+				<g:paginate total="${viewModelInstance?.count?:0}"  />
 			</div>
 		</div>
 		
@@ -131,7 +131,14 @@
 
 	var app = app || {}
 
+	app.PODER_CREATE_URL = '<g:createLink action="create" />';
 	app.INSTITUCIONES_URL = '<g:createLink action="getInstituciones" />';
+
+	$("#btnNuevoPoder").click(function(e){
+		e.preventDefault();
+
+		window.open(app.PODER_CREATE_URL,"_self");
+	});
 	
 	$("#selAdmIdGrupoFinanciero").change(function(){
 		var selectOptionsHtml = "<option value='-1'>-Seleccione-</option>";
@@ -176,7 +183,28 @@
 		e.preventDefault();
 		alert("Aqui va a hacer submit");
 	});
-	
+
+	//fixes para selects de fechas con boostrap
+	$("#ffpd_day").addClass( 'form-control' );
+	$("#ffpd_month").addClass( 'form-control' );
+	$("#ffpd_year").addClass( 'form-control' );
+	$("#ffpa_day").addClass( 'form-control' );
+	$("#ffpa_month").addClass( 'form-control' );
+	$("#ffpa_year").addClass( 'form-control' );
+
+	$("#ffpd_day").addClass( 'col-md-4' );
+	$("#ffpd_month").addClass( 'col-md-4' );
+	$("#ffpd_year").addClass( 'col-md-4' );
+	$("#ffpa_day").addClass( 'col-md-4' );
+	$("#ffpa_month").addClass( 'col-md-4' );
+	$("#ffpa_year").addClass( 'col-md-4' );
+
+	$("#ffpd_day").css( 'width', '28%' );
+	$("#ffpd_month").css( 'width', '38%' );
+	$("#ffpd_year").css( 'width', '34%' );
+	$("#ffpa_day").css( 'width', '28%' );
+	$("#ffpa_month").css( 'width', '38%' );
+	$("#ffpa_year").css( 'width', '34%' );
 	</script>
 	
 </body>

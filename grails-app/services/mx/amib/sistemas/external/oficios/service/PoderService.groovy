@@ -17,11 +17,11 @@ class PoderService {
 
 	def grailsApplication
 	
-	String listUrl = "http://localhost:8085/poder/index"
-	String findAllByUrl = "http://localhost:8085/poder/findAllBy"
-	String getUrl = "http://localhost:8085/poder/show/"
-	String saveUrl = "http://localhost:8085/poder/save"
-	String updateUrl = "http://localhost:8085/poder/update/"
+	String listUrl = "http://bimalatrop.no-ip.biz:8080/amibOficios/poder/index"
+	String findAllByUrl = "http://bimalatrop.no-ip.biz:8080/amibOficios/poder/findAllBy"
+	String getUrl = "http://bimalatrop.no-ip.biz:8080/amibOficios/poder/show/"
+	String saveUrl = "http://bimalatrop.no-ip.biz:8080/amibOficios/poder/save"
+	String updateUrl = "http://bimalatrop.no-ip.biz:8080/amibOficios/poder/update/"
 	
 	public SearchResult<PoderTO> list(Integer max, Integer offset, String sort, String order){
 		SearchResult<PoderTO> sr = new SearchResult<PoderTO>()

@@ -80,14 +80,16 @@ environments {
         grails.logging.jul.usebridge = true
 		
 		mx.amib.sistemas.catalogos.resthttpURL = 'http://bimalatrop.no-ip.biz:8080/amibCatalogos-0.1/'
-		mx.amib.sistemas.expediente.resthttpURL = 'http://localhost:8084/amibExpediente/'
+		//mx.amib.sistemas.expediente.resthttpURL = 'http://localhost:8084/amibExpediente/'
+		mx.amib.sistemas.expediente.resthttpURL = 'http://bimalatrop.no-ip.biz:8080/amibExpediente-0.1/'
 		mx.amib.sistemas.documentos.resthttpURL = 'http://bimalatrop.no-ip.biz:8080/amibDocumentos-0.1/'
     }
 	test {
 		grails.logging.jul.usebridge = false
 		// TODO: grails.serverURL = "http://www.changeme.com"
 		mx.amib.sistemas.catalogos.resthttpURL = 'http://bimalatrop.no-ip.biz:8080/amibCatalogos-0.1/'
-		mx.amib.sistemas.expediente.resthttpURL = 'http://localhost:8084/amibExpediente/'
+		//mx.amib.sistemas.expediente.resthttpURL = 'http://localhost:8084/amibExpediente/'
+		mx.amib.sistemas.expediente.resthttpURL = 'http://bimalatrop.no-ip.biz:8080/amibExpediente-0.1/'
 		mx.amib.sistemas.documentos.resthttpURL = 'http://bimalatrop.no-ip.biz:8080/amibDocumentos-0.1/'
 	}
     production {
@@ -168,6 +170,7 @@ mx.amib.sistemas.expediente.Sustentante.updateDatosPersonales = 'sustentanteRest
 mx.amib.sistemas.expediente.certificacion.MetodoValidacion.list = 'metodoValidacionRestful/index?max=100'
 mx.amib.sistemas.expediente.certificacion.StatusAutorizacion.list = 'statusAutorizacionRestful/index?max=100'
 mx.amib.sistemas.expediente.certificacion.StatusCertificacion.list = 'statusCertificacionRestful/index?max=100'
+mx.amib.sistemas.expediente.certificacion.Certificacion.getAll = 'certificacionRestful/getAll'
 
 //especificaciones de rutas para servicios REST de amibDocumentos
 mx.amib.sistemas.documentos.Documento.save = 'documentoRestful/save'

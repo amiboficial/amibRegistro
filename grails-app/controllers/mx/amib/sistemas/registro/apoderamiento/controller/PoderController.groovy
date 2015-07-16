@@ -6,6 +6,8 @@ import mx.amib.sistemas.external.catalogos.service.FiguraTO
 import mx.amib.sistemas.external.catalogos.service.GrupoFinancieroTO
 import mx.amib.sistemas.external.catalogos.service.InstitucionTO
 import mx.amib.sistemas.external.catalogos.service.NotarioTO
+import mx.amib.sistemas.external.documentos.service.DocumentoRepositorioTO
+import mx.amib.sistemas.external.expediente.certificacion.service.CertificacionTO
 import mx.amib.sistemas.external.expediente.persona.service.SustentanteTO
 import mx.amib.sistemas.external.oficios.poder.ApoderadoTO
 import mx.amib.sistemas.external.oficios.poder.PoderTO
@@ -18,9 +20,13 @@ class PoderController {
 	def entidadFinancieraService
 	def notarioService
 	def sepomexService
+	def documentoRepositorioService
 	
 	def apoderamientoService
 	def poderService
+	
+	def autorizacionService
+	def certificacionService
 	
     def index() { 
 		IndexViewModel ivm = this.getIndexViewModel(params)
@@ -36,15 +42,15 @@ class PoderController {
 		ivm.sort = params.sort ?: 'id'
 		ivm.order = params.order ?: 'asc'
 		
-		ivm.fne = Integer.parseInt( params.offset ?: '-1' )
-		ivm.ffpd_day = Integer.parseInt( params.offset ?: '-1' )
-		ivm.ffpd_month = Integer.parseInt( params.offset ?: '-1' )
-		ivm.ffpd_year = Integer.parseInt( params.offset ?: '-1' )
-		ivm.ffpa_day = Integer.parseInt( params.offset ?: '-1' )
-		ivm.ffpa_month = Integer.parseInt( params.offset ?: '-1' )
-		ivm.ffpa_year = Integer.parseInt( params.offset ?: '-1' )
-		ivm.fgf = Integer.parseInt( params.offset ?: '-1' )
-		ivm.fi = Integer.parseInt( params.offset ?: '-1' )
+		ivm.fne = Integer.parseInt( params.fne ?: '-1' )
+		ivm.ffpd_day = Integer.parseInt( params.ffpd_day ?: '-1' )
+		ivm.ffpd_month = Integer.parseInt( params.ffpd_month ?: '-1' )
+		ivm.ffpd_year = Integer.parseInt( params.ffpd_year ?: '-1' )
+		ivm.ffpa_day = Integer.parseInt( params.ffpa_day ?: '-1' )
+		ivm.ffpa_month = Integer.parseInt( params.ffpa_month ?: '-1' )
+		ivm.ffpa_year = Integer.parseInt( params.ffpa_year ?: '-1' )
+		ivm.fgf = Integer.parseInt( params.fgf ?: '-1' )
+		ivm.fi = Integer.parseInt( params.fi ?: '-1' )
 		
 		//setea la fecha con un calendar
 		c = Calendar.getInstance()
@@ -60,7 +66,7 @@ class PoderController {
 		
 		//Si hubo un grupo financiero seleccionado
 		if(ivm.fgf > 0)
-			ivm.institucionList = entidadFinancieraService.obtenerGrupoFinanciero(ivm.fi).instituciones.sort{ it.nombre }
+			ivm.institucionList = entidadFinancieraService.obtenerGrupoFinanciero(ivm.fgf).instituciones.sort{ it.nombre }
 		ivm.gruposFinancieroList = entidadFinancieraService.obtenerGruposFinancierosVigentes().sort{ it.nombre }
 		
 		//Filtra parámetros de sort y order fuera de "rango"
@@ -92,8 +98,26 @@ class PoderController {
 		return ivm
 	}
 	
-	def show(){ 
+	def show(Long id){ 
+		ShowViewModel svm = null
 		
+		if(id != null && id > 0)
+			svm = this.getShowViewModel(id)
+			
+		render(view:'show', model: [viewModelInstance:svm])
+	}
+	
+	private ShowViewModel getShowViewModel(Long idPoder){
+		ShowViewModel svm = new ShowViewModel()
+		svm.poder = poderService.get(idPoder)
+		svm.notario = notarioService.get(svm.poder.idNotario)
+		svm.certificacionesApoderados = certificacionService.getAll( svm.poder.apoderados.collect{it.idCertificacion} ).sort{ it.sustentante.numeroMatricula }
+		println "EL UUID ES: " + svm.poder.uuidDocumentoRespaldo
+		svm.documentoRespaldo = documentoRepositorioService.obtenerMetadatosDocumento(svm.poder.uuidDocumentoRespaldo)
+		println "METADATOS DEL DOCUMENTOS: " + (svm.documentoRespaldo as JSON)
+		svm.grupoFinanciero = entidadFinancieraService.obtenerGrupoFinanciero(svm.poder.idGrupoFinanciero)
+		svm.institucion = entidadFinancieraService.obtenerInstitucion(svm.poder.idInstitucion)
+		return svm
 	}
 	
 	def create() { 
@@ -150,10 +174,15 @@ class PoderController {
 			}
 		}
 		poder.apoderados = apoderadosList
+		/*
+		def listIdCerts = poder.apoderados.collect{ it.idCertificacion }
+		autorizacionService.apoderar(listIdCerts)
 		
-		try{
-			apoderamientoService.altaPoder(poder)
-			flash.successMessage = "El poder ha sido dado de alta"
+		render poder as JSON*/
+		
+		try{	
+			poder = apoderamientoService.altaPoder(poder)
+			flash.successMessage = "El poder con el número de escritura " + poder.numeroEscritura + " ha sido dado de alta [ID:" + poder.id + "]"
 		}
 		catch(Exception e){
 			flash.errorMessage = "Ha ocurrido un error al dar de alta el poder"
@@ -256,5 +285,13 @@ class CreateViewModel{
 	Collection<InstitucionTO> institucionList
 }
 
+class ShowViewModel{
+	PoderTO poder
+	NotarioTO notario
+	Collection<CertificacionTO> certificacionesApoderados
+	DocumentoRepositorioTO documentoRespaldo
+	GrupoFinancieroTO grupoFinanciero
+	InstitucionTO institucion
+}
 
 

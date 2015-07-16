@@ -13,15 +13,15 @@ import grails.transaction.Transactional
 @Transactional
 class AutorizacionService {
 
-	String aprobarDictamenUrl = "http://localhost:8084/amibExpediente/autorizacionRestful/aprobarDictamen"
-	String autorizarUrl = "http://localhost:8084/amibExpediente/autorizacionRestful/autorizar"
-	String deshacerAutorizacionSinPoderesUrl = "http://localhost:8084/amibExpediente/autorizacionRestful/deshacerAutorizacionSinPoderes"
-	String apoderarUrl = "http://localhost:8084/amibExpediente/autorizacionRestful/apoderar"
-	String deshacerApoderarUrl = "http://localhost:8084/amibExpediente/autorizacionRestful/deshacerApoderar"
-	String suspenderUrl = "http://localhost:8084/amibExpediente/autorizacionRestful/suspender"
-	String revocarUrl = "http://localhost:8084/amibExpediente/autorizacionRestful/revocar"
-	String deshacerRevocarUrl = "http://localhost:8084/amibExpediente/autorizacionRestful/deshacerRevocar"
-	String expirarUrl = "http://localhost:8084/amibExpediente/autorizacionRestful/expirar"
+	String aprobarDictamenUrl = "http://bimalatrop.no-ip.biz:8080/amibExpediente-0.1/autorizacionRestful/aprobarDictamen"
+	String autorizarUrl = "http://bimalatrop.no-ip.biz:8080/amibExpediente-0.1/autorizacionRestful/autorizar"
+	String deshacerAutorizacionSinPoderesUrl = "http://bimalatrop.no-ip.biz:8080/amibExpediente-0.1/autorizacionRestful/deshacerAutorizacionSinPoderes"
+	String apoderarUrl = "http://bimalatrop.no-ip.biz:8080/amibExpediente-0.1/autorizacionRestful/apoderar"
+	String deshacerApoderarUrl = "http://bimalatrop.no-ip.biz:8080/amibExpediente-0.1/autorizacionRestful/deshacerApoderar"
+	String suspenderUrl = "http://bimalatrop.no-ip.biz:8080/amibExpediente-0.1/autorizacionRestful/suspender"
+	String revocarUrl = "http://bimalatrop.no-ip.biz:8080/amibExpediente-0.1/autorizacionRestful/revocar"
+	String deshacerRevocarUrl = "http://bimalatrop.no-ip.biz:8080/amibExpediente-0.1/autorizacionRestful/deshacerRevocar"
+	String expirarUrl = "http://bimalatrop.no-ip.biz:8080/amibExpediente-0.1/autorizacionRestful/expirar"
 	
 	def aprobarDictamen(List<Long> idCertificacionList) {
 		return this.sendIdJSONArray(aprobarDictamenUrl, idCertificacionList)

@@ -246,7 +246,7 @@ class SustentanteService {
 		return sr
 	}
 	
-	private SustentanteTO obtenerSustentanteFromJSON(JSONObject data){
+	public static SustentanteTO obtenerSustentanteFromJSON(JSONObject data){
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd")
 		SustentanteTO sustentante = new SustentanteTO()
 		sustentante.id = data.'id'

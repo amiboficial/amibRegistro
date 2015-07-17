@@ -31,7 +31,7 @@
 		<legend>Poder</legend>
 		
 		<fieldset>
-			<legend><span class="glyphicon glyphicon-plus-sign"></span>&nbsp;<i>Datos de la institución o grupo financiero</i></legend>
+			<legend><span id="#spnTglDi" class="toggle glyphicon glyphicon-plus-sign handCursor"></span>&nbsp;<i>Datos de la institución o grupo financiero</i></legend>
 		
 			<div id="divAdmGrupoFinanciero" class="form-group">
 				<label class="col-md-2 col-sm-3 control-label">
@@ -55,7 +55,7 @@
 		</fieldset>
 		
 		<fieldset>
-			<legend><span class="glyphicon glyphicon-plus-sign"></span>&nbsp;<i>Datos del representante legal</i></legend>
+			<legend><span id="#spnTglRlgl" class="glyphicon glyphicon-plus-sign handCursor"></span>&nbsp;<i>Datos del representante legal</i></legend>
 		
 			<div id="divRepLegalNom" class="form-group">
 				<label class="col-md-2 col-sm-3 control-label">
@@ -87,7 +87,7 @@
 		</fieldset>
 		
 		<fieldset>
-			<legend><span class="glyphicon glyphicon-plus-sign"></span>&nbsp;<i>Datos del oficio</i></legend>
+			<legend><span id="#spnTglOfi" class="glyphicon glyphicon-plus-sign handCursor"></span>&nbsp;<i>Datos del oficio</i></legend>
 			
 			<div id="divPdrNumEscrit" class="form-group">
 				<label class="col-md-2 col-sm-3 control-label">
@@ -111,7 +111,7 @@
 		</fieldset>
 		
 		<fieldset>
-			<legend><span class="glyphicon glyphicon-plus-sign"></span>&nbsp;<i>Datos del notario</i></legend>
+			<legend><span id="#spnTglNot" class="glyphicon glyphicon-plus-sign handCursor"></span>&nbsp;<i>Datos del notario</i></legend>
 		
 			<div id="divNumNotario" class="form-group">
 				<label class="col-md-2 col-sm-3 control-label">
@@ -146,7 +146,7 @@
 		</fieldset>
 		
 		<fieldset>
-			<legend><span class="glyphicon glyphicon-plus-sign"></span>&nbsp;<i>Apoderados</i></legend>
+			<legend><span id="#spnTflApos" class="glyphicon glyphicon-plus-sign handCursor"></span>&nbsp;<i>Apoderados</i></legend>
 			
 			<g:each in="${viewModelInstance?.certificacionesApoderados}" var="x">
 				<div class="list-group-item" >
@@ -172,7 +172,7 @@
 		</fieldset>
 		
 		<fieldset>
-			<legend><span class="glyphicon glyphicon-plus-sign"></span>&nbsp;<i>Documento de respaldo</i></legend>
+			<legend><span id="#spnTglDr" class="glyphicon glyphicon-plus-sign handCursor"></span>&nbsp;<i>Documento de respaldo</i></legend>
 		
 			<div class="list-group-item">
 				<div class="div-nombreArchivo row">
@@ -202,6 +202,140 @@
 		</fieldset>
 		
 	</fieldset>
+	
+	<script>
+	var app = app || {};
+
+	app.PoderShowViewModel = Backbone.Model.extend({
+		defaults: {
+			showFieldsetInstitucion : true,
+			showFieldsetRepLegal : true,
+			showFieldsetOficio : true,
+			showFieldsetNotario : true,
+			showFieldsetApoderado : true,
+			showFieldsetDocs : true
+		}
+	});
+		
+	app.PoderShowView = Backbone.View.extend({
+		el:'body',
+		
+		initialize: function(initialModel){
+			this.model = initialModel;
+			this.listenTo(this.model, 'change:showFieldsetInstitucion', this.render );
+			this.listenTo(this.model, 'change:showFieldsetRepLegal', this.render );
+			this.listenTo(this.model, 'change:showFieldsetOficio', this.render );
+			this.listenTo(this.model, 'change:showFieldsetNotario', this.render );
+			this.listenTo(this.model, 'change:showFieldsetApoderado', this.render );
+			this.listenTo(this.model, 'change:showFieldsetDocs', this.render );
+			this.render();
+		},
+
+		render: function(){
+			if(this.model.get("showFieldsetInstitucion") == true){
+				$("#spnTglDi").removeClass( "glyphicon-minus-sign" ).addClass( "glyphicon-plus-sign" );
+			}
+			else{
+				$("#spnTglDi").removeClass( "glyphicon-plus-sign" ).addClass( "glyphicon-minus-sign" );
+			}
+			if(this.model.get("showFieldsetRepLegal") == true){
+				this.$("#spnTglRlgl").removeClass( "glyphicon-minus-sign" ).addClass( "glyphicon-plus-sign" );
+			}
+			else{
+				this.$("#spnTglRlgl").removeClass( "glyphicon-plus-sign" ).addClass( "glyphicon-minus-sign" );
+			}
+			if(this.model.get("showFieldsetOficio") == true){
+				this.$("#spnTglOfi").removeClass( "glyphicon-minus-sign" ).addClass( "glyphicon-plus-sign" );
+			}
+			else{
+				this.$("#spnTglOfi").removeClass( "glyphicon-plus-sign" ).addClass( "glyphicon-minus-sign" );
+			}
+			if(this.model.get("showFieldsetNotario") == true){
+				this.$("#spnTglNot").removeClass( "glyphicon-minus-sign" ).addClass( "glyphicon-plus-sign" );
+			}
+			else{
+				this.$("#spnTglNot").removeClass( "glyphicon-plus-sign" ).addClass( "glyphicon-minus-sign" );
+			}
+			if(this.model.get("showFieldsetApoderado") == true){
+				this.$("#spnTflApos").removeClass( "glyphicon-minus-sign" ).addClass( "glyphicon-plus-sign" );
+			}
+			else{
+				this.$("#spnTflApos").removeClass( "glyphicon-plus-sign" ).addClass( "glyphicon-minus-sign" );
+			}
+			if(this.model.get("showFieldsetDocs") == true){
+				this.$("#spnTglDr").removeClass( "glyphicon-minus-sign" ).addClass( "glyphicon-plus-sign" );
+			}
+			else{
+				this.$("#spnTglDr").removeClass( "glyphicon-plus-sign" ).addClass( "glyphicon-minus-sign" );
+			}			
+			return this;
+		},
+		
+		events: {
+			'click .toggleInstitucion':'toggleInstitucion',
+			'click .toggleRepLegal':'toggleRepLegal',
+			'click .toggleOficio':'toggleOficio',
+			'click .toggleNotario':'toggleNotario',
+			'click .toggleApoderado':'toggleApoderado',
+			'click .toggleDocs':'toggleDocs',
+			'click .toggleExpandAll':'toggleExpandAll',
+			'click .toggleRetractAll':'toggleRetractAll'
+		},
+
+		toggleInstitucion: function(e){
+			e.preventDefault();
+			this.model.set("showFieldsetInstitucion", !this.model.get("showFieldsetInstitucion") );
+		},
+		
+		toggleRepLegal: function(e){
+			e.preventDefault();
+			this.model.set("showFieldsetRepLegal", !this.model.get("showFieldsetRepLegal"));
+		},
+
+		toggleOficio: function(e){
+			e.preventDefault();
+			this.model.set("showFieldsetOficio", !this.model.get("showFieldsetOficio"));
+		},
+
+		toggleNotario: function(e){
+			e.preventDefault();
+			this.model.set("showFieldsetNotario", !this.model.get("showFieldsetNotario"));
+		},
+
+		toggleApoderado: function(e){
+			e.preventDefault();
+			this.model.set("showFieldsetApoderado", !this.model.get("showFieldsetApoderado"));
+		},
+
+		toggleDocs: function(e){
+			e.preventDefault();
+			this.model.set("showFieldsetDocs", !this.model.get("showFieldsetDocs"));
+		},
+		
+		toggleExpandAll: function(e){
+			e.preventDefault();
+			this.model.set("showFieldsetInstitucion", true );
+			this.model.set("showFieldsetRepLegal", true );
+			this.model.set("showFieldsetOficio", true );
+			this.model.set("showFieldsetNotario", true );
+			this.model.set("showFieldsetApoderado", true );
+			this.model.set("showFieldsetDocs", true );
+		},
+
+		toggleRetractAll: function(e){
+			e.preventDefault();
+			this.model.set("showFieldsetInstitucion", false );
+			this.model.set("showFieldsetRepLegal", false );
+			this.model.set("showFieldsetOficio", false );
+			this.model.set("showFieldsetNotario", false );
+			this.model.set("showFieldsetApoderado", false );
+			this.model.set("showFieldsetDocs", false );
+		}
+	});
+
+	var poderShowView = new app.PoderShowView(new app.PoderShowViewModel());
+	
+	</script>
 	
 </body>
 </html>

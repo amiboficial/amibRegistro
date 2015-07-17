@@ -225,3 +225,9 @@ fieldset{
 	margin-top: 5px;
 	margin-bottom: 5px;
 }
+
+/* Mod 16/07/2014 */
+
+.handCursor{
+	cursor: pointer;
+}

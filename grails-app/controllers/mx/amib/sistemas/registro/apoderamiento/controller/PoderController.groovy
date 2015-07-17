@@ -112,9 +112,9 @@ class PoderController {
 		svm.poder = poderService.get(idPoder)
 		svm.notario = notarioService.get(svm.poder.idNotario)
 		svm.certificacionesApoderados = certificacionService.getAll( svm.poder.apoderados.collect{it.idCertificacion} ).sort{ it.sustentante.numeroMatricula }
-		println "EL UUID ES: " + svm.poder.uuidDocumentoRespaldo
+		//println "EL UUID ES: " + svm.poder.uuidDocumentoRespaldo
 		svm.documentoRespaldo = documentoRepositorioService.obtenerMetadatosDocumento(svm.poder.uuidDocumentoRespaldo)
-		println "METADATOS DEL DOCUMENTOS: " + (svm.documentoRespaldo as JSON)
+		//println "METADATOS DEL DOCUMENTOS: " + (svm.documentoRespaldo as JSON)
 		svm.grupoFinanciero = entidadFinancieraService.obtenerGrupoFinanciero(svm.poder.idGrupoFinanciero)
 		svm.institucion = entidadFinancieraService.obtenerInstitucion(svm.poder.idInstitucion)
 		return svm

@@ -35,7 +35,7 @@
 				<g:message code="poder.institucion.label" default="Institución" /><span class="required-indicator">*</span>
 			</label>
 			<div class="col-md-9 col-sm-9">
-				<select class="field idInstitucion form-control" name="poder.idInstitucion" value="{{=idInstitucion}}" data-field="idInstitucion">
+				<select class="field idInstitucion form-control" name="poder.idInstitucion" data-field="idInstitucion">
 					<option value="-1">-Seleccione-</option>
 					{{ _.each(institucionList,function(item){ }}
 						<option value="{{=item.id}}">{{=item.nombre}}</option>
@@ -225,7 +225,7 @@
 		</label>
 		<div class="col-md-9 col-sm-9">
 			<!-- setear por backbone -->
-			<select data-field="idNotario" class="field idNotario form-control" name="notario.id" value="{{=idNotario}}">
+			<select data-field="idNotario" class="field idNotario form-control" name="notario.id">
 				<option value="-1">-Seleccione-</option>
 				{{ _.each(notarioList,function(item){ }}
 					<option value="{{=item.id}}">{{=item.nombreCompleto}}</option>

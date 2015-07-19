@@ -2,6 +2,8 @@ package mx.amib.sistemas.registro.apoderamiento.service
 
 import grails.converters.JSON
 import grails.transaction.Transactional
+import mx.amib.sistemas.external.documentos.service.DocumentoPoderRepositorioTO
+import mx.amib.sistemas.external.documentos.service.DocumentoRepositorioTO
 import mx.amib.sistemas.external.expediente.certificacion.catalog.service.StatusAutorizacionTypes
 import mx.amib.sistemas.external.expediente.certificacion.service.CertificacionTO
 import mx.amib.sistemas.external.expediente.persona.service.SustentanteTO
@@ -11,10 +13,14 @@ import mx.amib.sistemas.external.oficios.revocacion.RevocacionTO
 import mx.amib.sistemas.registro.apoderado.service.ApoderadoTO
 import mx.amib.sistemas.registro.apoderado.service.RevocadoTO
 
+// TODO: Implementar logging en este servicio dado que en estos métodos se hace 
+// llamada a múltiples servicios, si alguno falla, se rastrea inmediatamente el 
+// error. (cuestiones de integridad en "transacciones distribuidas")
 @Transactional
 class ApoderamientoService {
 
 	def sustentanteService
+	def documentoRepositorioService
 	
 	def autorizacionService
 	def poderService
@@ -22,9 +28,23 @@ class ApoderamientoService {
 	def revocadoService
 	
     PoderTO altaPoder(PoderTO poder) {
+		//Llama al servicio de oficios donde guarda los datos del poder
+		PoderTO savedPoder = poderService.save(poder)
+		
+		//Llama al servicio de autorizacion (amibExpediente) para apoderar las autorizaciones correspondientes
+		//a una determinada certificación
 		def listIdCerts = poder.apoderados.collect{ it.idCertificacion }
 		autorizacionService.apoderar(listIdCerts)
-		return poderService.save(poder)
+		
+		//Llama al servicio de repositorio de documentos (amibDocumentos) para
+		//enviar el documento de respaldo que ha sido cargado previamiente
+		//en el espacio temporal otorgado por el servicio de Archivos Temporales
+		def documentoCol = new ArrayList<DocumentoRepositorioTO>()
+		documentoCol.add( this.obtenerDocumentoConMetadatos(poder) )
+		documentoRepositorioService.enviarDocumentosArchivoTemporal( documentoCol )
+		
+		//Regresa una instancia con el poder ya guardado
+		return savedPoder
     }
 	SustentanteTO obtenerApoderable(int numeroMatricula){
 		SustentanteTO s = sustentanteService.findByMatricula(numeroMatricula)
@@ -140,5 +160,29 @@ class ApoderamientoService {
 		autorizacionService.revocar(listIdCerts)
 		
 		return newRevocacion
+	}
+	
+	private DocumentoPoderRepositorioTO obtenerDocumentoConMetadatos(PoderTO poder){
+		//TODO: Llamar a otros servicios para complementar los metadatos
+		
+		DocumentoPoderRepositorioTO d = new DocumentoPoderRepositorioTO()
+		
+		d.id = null
+		d.uuid = poder.uuidDocumentoRespaldo
+		d.tipoDocumentoRespaldo = "Escrito de apoderamiento"
+		d.representanteLegalNombreCompleto = poder?.representanteLegalNombre + " " + poder?.representanteLegalApellido1 + " " + poder?.representanteLegalApellido2
+		d.numeroEscritura = poder.numeroEscritura
+		d.fechaApoderamiento = poder.fechaApoderamiento
+		d.matriculasApoderados = ""
+		d.nombresApoderados = ""
+		poder.apoderados.each{ x ->
+			d.matriculasApoderados += "X" + ";"
+			d.nombresApoderados += "Y" + ";"
+		}
+		d.notario = "Número: " + "X" + "; " + "Nombre: " + "X" + "Y" + "Z"
+		d.grupoFinanciero = poder.idGrupoFinanciero
+		d.institucion = poder.idInstitucion
+		
+		return d
 	}
 }

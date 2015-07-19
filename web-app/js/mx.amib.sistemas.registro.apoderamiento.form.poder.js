@@ -86,16 +86,20 @@ app.PoderView = Backbone.View.extend({
 	render: function(){
 	
 		//rendering inicial del modelo
-		var clonedModel = JSON.parse( JSON.stringify(this.model) ); //se obtiene una "copia" el modelo debido a que al setear el template se sobreescribirá por los callbacks "change"
+		var clonedModel = this.model.toJSON(); //se obtiene una "copia" el modelo debido a que al setear el template se sobreescribirá por los callbacks "change"
+		
 		this.$el.html( this.template( this.model.toJSON() ) ); //se setea el modelo al template
-		this.$(".idEntidadFederativaNotario").val( clonedModel.idEntidadFederativaNotario ); //se setean los valores que no se pudieron setear por template
+		
 		//se setean los valores que no se pudieron setear por template
 		// - por lo general, todos los "select" se han de setear de esta forma
+		//console.dir(clonedModel);
+		this.$(".idEntidadFederativaNotario").val( clonedModel.idEntidadFederativaNotario );
 		this.$(".idGrupoFinanciero").val( clonedModel.idGrupoFinanciero ); 
-		this.$(".idInstitucion").val( clonedModel.idInstitucion );
 		this.$(".fechaApoderamiento_day").val( clonedModel.fechaApoderamiento_day );
 		this.$(".fechaApoderamiento_month").val( clonedModel.fechaApoderamiento_month );
 		this.$(".fechaApoderamiento_year").val( clonedModel.fechaApoderamiento_year );
+		//console.dir(clonedModel);
+		this.$(".idInstitucion").val( clonedModel.idInstitucion );
 		this.$(".idNotario").val( clonedModel.idNotario );
 		
 		//oculta todos los mensajes de error
@@ -371,19 +375,19 @@ app.PoderView = Backbone.View.extend({
 						if(data.object.count > 0){
 							//rellena el select con instituciones de la entidad federativa
 							view.model.set('notarioList',data.object.list);
-							view.model.set('idInstitucion',-1);
+							view.model.set('idNotario',-1);
 						}
 						else{
 							//deja solo la opcion "seleccionar"
 							view.model.set('notarioList',new Array());
-							view.model.set('idInstitucion',-1);
+							view.model.set('idNotario',-1);
 							view.setErrorNotario(app.PODER_ERRMSG_NOTARIO_NOTFOUND);
 						}
 					}
 					else{
 						//deja solo la opcion "seleccionar"
 						view.model.set('notarioList',new Array());
-						view.model.set('idInstitucion',-1);
+						view.model.set('idNotario',-1);
 						view.setErrorNotario(app.PODER_ERRMSG_NOTARIO_REQUESTERROR);
 					}
 					

@@ -102,6 +102,8 @@
 	<script type="text/javascript">
 		var app = app || {};
 		
+		/*
+		EJEMPLO DE INSTANCIAMIENTO
 		var documentosView = new app.DocumentosView({
 			tiposDocumento: [
 				{
@@ -119,6 +121,22 @@
 					cantidadRequerida: 1,
 					cantidadMaxima: 3,
 					manejaVigencia: true
+				},
+			],
+			manejaVigencia: true,
+			initialDocumentos: new app.Documentos()
+		});
+		*/
+		
+		var documentosView = new app.DocumentosView({
+			tiposDocumento: [
+				{
+					grailsId: 1,
+					descripcion: "Escrito de apoderamineto",
+					vigente: true,
+					cantidadRequerida: 1,
+					cantidadMaxima: 1,
+					manejaVigencia: false
 				},
 			],
 			manejaVigencia: true,

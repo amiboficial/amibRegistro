@@ -1,5 +1,7 @@
 var app = app || {};
 
+app.PODER_CREATE_CONFIRM_MSG = "PODER_CREATE_CONFIRM_MSG";
+
 app.PODER_CREATE_CHKIDX_PODER = 0;
 app.PODER_CREATE_CHKIDX_APODERADOS = 1;
 app.PODER_CREATE_CHKIDX_DOCS = 2;
@@ -122,8 +124,8 @@ app.CheckSubmitView = Backbone.View.extend({
 		//}, this);
 		//telsJson += "]";
 		
-		alert('Se ha hecho el submit de los elementos');
-		$("#frmApp").submit();
+		if(confirm(app.PODER_CREATE_CONFIRM_MSG))
+			$("#frmApp").submit();
 	},
 });
 

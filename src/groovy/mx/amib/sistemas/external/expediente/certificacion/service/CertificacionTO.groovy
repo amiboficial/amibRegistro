@@ -13,6 +13,13 @@ class CertificacionTO {
 	Boolean isApoderado
 	Boolean isUltima
 	
+	Long statusEntHistorialInforme
+	String obsEntHistorialInforme
+	Long statusEntCartaRec
+	String obsEntCartaRec
+	Long statusConstBolVal
+	String obsConstBolVal
+	
 	Date fechaCreacion
 	Date fechaModificacion
 	

@@ -11,6 +11,13 @@ class PuestoTO {
 	String nombrePuesto
 	Boolean esActual
 	
+	Long statusEntHistorialInforme
+	String obsEntHistorialInforme
+	Long statusEntCartaRec
+	String obsEntCartaRec
+	Long statusConstBolVal
+	String obsConstBolVal
+	
 	Date fechaCreacion
 	Date fechaModificacion
 	

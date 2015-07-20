@@ -84,7 +84,7 @@
 		
 		poderView.setNotarioFindUrl('<g:createLink action="getNotario" />');
 		poderView.setGrupoFinancieroGetUrl('<g:createLink action="getInstituciones" />');
-		
+		poderView.setIsNumeroEscrituraAvailableUrl('<g:createLink action="isNumeroEscrituraAvailable" />');
 	</script>
 	
 	<g:render template="formApoderados"/>

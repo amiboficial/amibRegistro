@@ -243,6 +243,26 @@ class PoderController {
 		render res as JSON
 	}
 	
+	def isNumeroEscrituraAvailable(){
+		int numeroEscritura = -1
+		boolean resultado
+		def responseObj = null
+		
+		try{
+			numeroEscritura = Integer.parseInt(params.'numeroEscritura'?:"-1")
+			resultado = poderService.isNumeroEscrituraAvailable(numeroEscritura)
+			if(resultado == true){
+				responseObj = [ 'status': 'OK', 'object': [ 'isNumeroEscrituraAvailable': true ] ]
+			}
+			else{
+				responseObj = [ 'status': 'OK', 'object': [ 'isNumeroEscrituraAvailable': false ] ]
+			}
+		}
+		catch(Exception ex) {
+			responseObj = [ 'status': 'ERROR', 'object': ex.message ]
+		}
+		render responseObj as JSON
+	}
 }
 
 class IndexViewModel{

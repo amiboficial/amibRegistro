@@ -6,12 +6,25 @@ app.PODER_READY = 0;
 app.PODER_VALIDATED = 1;
 app.PODER_PROC_INST = 2;
 app.PODER_PROC_NOT = 3;
+app.PODER_PROC_NUMESC = 4;
+
+//Estatus para el campo validacionDisponiblidadNumeroEscritura
+app.PODER_NUMESC_EMPTY = 0;
+app.PODER_NUMESC_AVAILABLE = 1;
+app.PODER_NUMESC_NON_AVAILABLE = 2;
+app.PODER_NUMESC_NONCHECKED = 3;
+app.PODER_NUMESC_CHECKING = 4;
+
+app.PODER_ERRMSG_NUMESC_NON_AVAILABLE = "PODER_ERRMSG_NUMESC_NON_AVAILABLE";
+app.PODER_ERRMSG_NUMESC_NONCHECKED = "PODER_ERRMSG_NUMESC_NONCHECKED";
 
 app.PODER_ERRMSG_INSTIT_REQUESTERROR = "PODER_ERRMSG_INSTIT_REQUESTERROR";
 
 app.PODER_ERRMSG_NUMNOTARIO_NOVALID = "PODER_ERRMSG_NUMNOTARIO_NOVALID";
 app.PODER_ERRMSG_NOTARIO_NOTFOUND = "PODER_ERRMSG_NOTARIO_NOTFOUND";
 app.PODER_ERRMSG_NOTARIO_REQUESTERROR = "PODER_ERRMSG_NOTARIO_REQUESTERROR";
+
+app.PODER_ERRMSG_NUMESCREP = "PODER_ERRMSG_NONUMESCREP"; //El número de escritura no ha sido validado correctamente
 
 app.PODER_ERRMSG_NOVALID = "PODER_ERRMSG_NOVALID";
 app.PODER_ERRMSG_NOGPOFIN = "PODER_ERRMSG_NOGPOFIN";
@@ -43,6 +56,7 @@ app.Poder = Backbone.Model.extend ({
 		fechaApoderamiento_year: -1,
 		
 		numeroEscritura: "",
+		dispNumeroEscritura: app.PODER_NUMESC_EMPTY,
 		representanteLegalNombre: "",
 		representanteLegalApellido1: "",
 		representanteLegalApellido2: "",
@@ -63,15 +77,17 @@ app.PoderView = Backbone.View.extend({
 	validationErrorMsgs: [],
 	validationErrorFields: [],
 	
-	
 	grupoFinancieroGetUrl: "",
 	notarioFindUrl: "",
+	isNumeroEscrituraAvailableUrl: "",
 	
 	template: _.template( $('#poder').html() ),
 	
 	initialize: function( initialModel ){
 		this.model = initialModel;
 		this.render();
+		
+		this.listenTo(this.model, 'change:numeroEscritura', this.valDispNumeroEscritura );
 	},
 	
 	events: {
@@ -106,10 +122,12 @@ app.PoderView = Backbone.View.extend({
 		this.$('.errorInstituciones').hide();
 		this.$('.errorNotario').hide();
 		this.$('.errorValidacion').hide();
+		this.$('.errorNumeroEscritura').hide();
 		
 		//oculta todos los mensajes de procesamiento
 		this.$('.procInstituciones').hide();
 		this.$('.procNotario').hide();
+		this.$('.procNumeroEscritura').hide();
 		
 		if(this.state == app.PODER_READY){
 			//habilitar todos los campos
@@ -139,9 +157,19 @@ app.PoderView = Backbone.View.extend({
 				this.$('.errorValidacion').show();
 			}
 			
+			if(this.model.get("dispNumeroEscritura") == app.PODER_NUMESC_NON_AVAILABLE){
+				this.$('.msgErrorNumeroEscritura').text(app.PODER_ERRMSG_NUMESC_NON_AVAILABLE);
+				this.$('.errorNumeroEscritura').show();
+			}
+			
+			if(this.model.get("dispNumeroEscritura") == app.PODER_NUMESC_NONCHECKED){
+				this.$('.msgErrorNumeroEscritura').text(app.PODER_ERRMSG_NUMESC_NONCHECKED);
+				this.$('.errorNumeroEscritura').show();
+			}
+			
 			this.enableSubmitDisableEdit();
 		}
-		else if(this.state == app.PODER_PROC_INST || this.state == app.PODER_PROC_NOT){
+		else if(this.state == app.PODER_PROC_INST || this.state == app.PODER_PROC_NOT || this.state == app.PODER_PROC_NUMESC){
 			//desahibilitar todos campos
 			this.disableFields();
 			//dependiendo del tipo de proceso, mostrar mensaje
@@ -150,6 +178,9 @@ app.PoderView = Backbone.View.extend({
 			}
 			else if(this.state == app.PODER_PROC_NOT){
 				this.$('.procNotario').show();
+			}
+			else if(this.state == app.PODER_PROC_NUMESC){
+				this.$('.procNumeroEscritura').show();
 			}
 		}
 		else if(this.state == app.PODER_VALIDATED){
@@ -279,6 +310,10 @@ app.PoderView = Backbone.View.extend({
 		this.state = app.PODER_PROC_INST;
 		this.render();
 	},
+	setProcessingNumeroEscritura: function(){
+		this.state = app.PODER_PROC_NUMESC;
+		this.render();
+	},
 	setValidated: function(){
 		this.state = app.PODER_VALIDATED;
 		this.trigger("stateChange","VALIDATED",this.checkId);
@@ -291,6 +326,9 @@ app.PoderView = Backbone.View.extend({
 	},
 	setNotarioFindUrl: function(notarioFindUrl){
 		this.notarioFindUrl = notarioFindUrl;
+	},
+	setIsNumeroEscrituraAvailableUrl: function(isNumeroEscrituraAvailableUrl){
+		this.isNumeroEscrituraAvailableUrl = isNumeroEscrituraAvailableUrl;
 	},
 	
 	cargarInstituciones: function(){
@@ -421,7 +459,6 @@ app.PoderView = Backbone.View.extend({
 	validate: function(){
 		var num10CarExp = /^[0-9]{1,10}$/
 		
-	
 		this.clearErrorValidacion();
 		
 		if(this.model.get("idGrupoFinanciero") == -1){
@@ -441,6 +478,12 @@ app.PoderView = Backbone.View.extend({
 		else if(num10CarExp.test(this.model.get("numeroEscritura")) == false){
 			this.setErrorValidacion("numeroEscritura",app.PODER_ERRMSG_NUMESC_NOVALID);
 		}
+		else{
+			//revisa si el numero de matrícula ya fue revisado de disponibilidad
+			if(this.model.get("dispNumeroEscritura") != app.PODER_NUMESC_AVAILABLE){
+				this.setErrorValidacion("numeroEscritura",app.PODER_ERRMSG_NUMESCREP);
+			}
+		}
 		
 		if(this.model.get("fechaApoderamiento_day") == -1 || this.model.get("fechaApoderamiento_month") == -1 || 
 			this.model.get("fechaApoderamiento_year") == -1 ){
@@ -452,8 +495,57 @@ app.PoderView = Backbone.View.extend({
 		}
 		
 		return !this.hasErrorValidacion();
-	}
+	},
 	
+	//funciones "privadas"
+	
+	//valida si el id de escritura esta disponible
+	//nota: esta función en syncrona
+	_isNumeroEscrituraAvailable: function(){
+		var view = this;
+		var gresult = false;
+		$.ajax({
+			url: view.isNumeroEscrituraAvailableUrl + "?numeroEscritura=" + view.model.get("numeroEscritura") ,
+			async: false,
+			success: function(result){
+				if(result.status == "OK")
+					gresult = result.object.isNumeroEscrituraAvailable;
+			}
+		});
+		
+		if(gresult == true){
+			return true;
+		}
+		else{
+			return false;
+		}
+	},
+	
+	valDispNumeroEscritura: function(){
+		var view = this;
+		
+		if($.trim(this.model.get("dispNumeroEscritura")) == ""){
+			view.model.set("dispNumeroEscritura",app.PODER_NUMESC_EMPTY);
+		}
+		
+		$.ajax({
+			url: view.isNumeroEscrituraAvailableUrl + "?numeroEscritura=" + view.model.get("numeroEscritura") ,
+			beforeSend: function(){
+				view.model.set("dispNumeroEscritura",app.PODER_NUMESC_NONCHECKED);
+				view.setProcessingNumeroEscritura();
+			},
+			success: function(result){
+				if(result.status == "OK")
+					if(result.object.isNumeroEscrituraAvailable == true)
+						view.model.set("dispNumeroEscritura",app.PODER_NUMESC_AVAILABLE);
+					else
+						view.model.set("dispNumeroEscritura",app.PODER_NUMESC_NON_AVAILABLE);
+				else
+					view.model.set("dispNumeroEscritura",app.PODER_NUMESC_NONCHECKED);
+				view.setReady();
+			}
+		});
+	}
 });
 
 

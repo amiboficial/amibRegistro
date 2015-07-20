@@ -76,6 +76,15 @@
 <fieldset>
 	<legend>Datos de oficio</legend>
 	<div class="div-datosPoder form-group">
+	
+		<div class="procNumeroEscritura alert alert-info">
+			<asset:image src="spinner_alert_info.gif"/><strong>Procesando datos, espere un momento</strong>.
+		</div>
+	
+		<div class="errorNumeroEscritura alert alert-danger">
+			<span class="glyphicon glyphicon-ban-circle"></span><span class="msgErrorNumeroEscritura" ></span>
+		</div>
+	
 		<div class="div-numeroEscritura">
 			<label class="col-md-2 col-sm-3 control-label">
 				<g:message code="poder.numeroEscritura.label" default="Numero de escritura" /><span class="required-indicator">*</span>

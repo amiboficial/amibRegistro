@@ -22,6 +22,7 @@ class PoderService {
 	String getUrl = "http://bimalatrop.no-ip.biz:8080/amibOficios/poder/show/"
 	String saveUrl = "http://bimalatrop.no-ip.biz:8080/amibOficios/poder/save"
 	String updateUrl = "http://bimalatrop.no-ip.biz:8080/amibOficios/poder/update/"
+	String isNumeroEscrituraAvailableUrl = "http://bimalatrop.no-ip.biz:8080/amibOficios/poder/isNumeroEscrituraAvailable/"
 	
 	public SearchResult<PoderTO> list(Integer max, Integer offset, String sort, String order){
 		SearchResult<PoderTO> sr = new SearchResult<PoderTO>()
@@ -95,6 +96,25 @@ class PoderService {
 			p = new PoderTO( this.fixPoderJsonObject(resp.json) )
 		}
 		return p
+	}
+	
+	public boolean isNumeroEscrituraAvailable(int numeroEscritura){
+		
+		def rest = new RestBuilder()
+		
+		
+		println isNumeroEscrituraAvailableUrl + numeroEscritura
+		
+		def resp = rest.get(isNumeroEscrituraAvailableUrl + numeroEscritura)
+		
+		println resp.text
+		
+		if(resp.text == "true"){
+			return true
+		}
+		else{
+			return false
+		}
 	}
 	
 	private JSON customServiceJson(PoderTO p){

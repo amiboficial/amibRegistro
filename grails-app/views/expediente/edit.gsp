@@ -29,6 +29,7 @@
 			<li role="presentation" class="active"><a href="#tabGen" aria-controls="tabGen" role="tab" data-toggle="tab">Datos generales</a></li>
 			<li role="presentation"><a href="#tabTels" aria-controls="tabTels" role="tab" data-toggle="tab">Datos de teléfonos</a></li>
 			<li role="presentation"><a href="#tabDom" aria-controls="tabDom" role="tab" data-toggle="tab">Datos de domicilio</a></li>
+			<li role="presentation"><a href="#tabCheckSubmit" aria-controls="tabCheckSubmit" role="tab" data-toggle="tab">Editar datos personales</a></li>
 		</ul>
 	
 		<div class="tab-content">
@@ -43,36 +44,41 @@
 			<div role="tabpanel" class="tab-pane" id="tabDom">
 				<div id="divDom"></div>
 			</div>
-
+			<div role="tabpanel" class="tab-pane" id="tabCheckSubmit">
+				
+				<div id="divCheckSubmit" class="panel panel-default">
+					<span id="spnHdnPostData">
+					</span>
+					<div class="panel-heading">Checklist de validación de información</div>
+					<div class="panel-body">
+						<ul style="list-style-type:none">
+							<li><span id="spnCheckGrales" class="glyphicon glyphicon-unchecked"></span> Datos generales</li>
+							<li><span id="spnCheckTels" class="glyphicon glyphicon-unchecked"></span> Datos de teléfonos</li>
+							<li><span id="spnCheckSepomex" class="glyphicon glyphicon-unchecked"></span> Datos de domicilio</li>
+						</ul>
+					</div>
+					<div class="form-group">
+						<div class="col-md-3 col-sm-3">
+							&nbsp;
+						</div>
+						<div class="col-md-6 col-sm-6" style="text-align: center">
+							<button id="btnSubmit" type="button" class="submit btn btn-primary btn-block">Confirmar edición de información</button>
+						</div>
+						<div class="col-md-3 col-sm-3">
+							&nbsp;
+						</div>
+					</div>
+					<br/>
+				</div>
+				
+			</div>
+			
 			<br/>
 		</div>
 	
 		<br/>
 		
-		<div id="divCheckSubmit" class="panel panel-default">
-			<span id="spnHdnPostData">
-			</span>
-			<div class="panel-heading">Checklist de validación de información</div>
-			<div class="panel-body">
-				<ul style="list-style-type:none">
-					<li><span id="spnCheckGrales" class="glyphicon glyphicon-unchecked"></span> Datos generales</li>
-					<li><span id="spnCheckTels" class="glyphicon glyphicon-unchecked"></span> Datos de teléfonos</li>
-					<li><span id="spnCheckSepomex" class="glyphicon glyphicon-unchecked"></span> Datos de domicilio</li>
-				</ul>
-			</div>
-			<div class="form-group">
-				<div class="col-md-3 col-sm-3">
-					&nbsp;
-				</div>
-				<div class="col-md-6 col-sm-6" style="text-align: center">
-					<button id="btnSubmit" type="button" class="submit btn btn-primary btn-block">Confirmar edición de información</button>
-				</div>
-				<div class="col-md-3 col-sm-3">
-					&nbsp;
-				</div>
-			</div>
-			<br/>
-		</div>
+		
 	
 	</form>
 	

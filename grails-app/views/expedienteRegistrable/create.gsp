@@ -150,9 +150,9 @@
 	<script>
 	var registroModel = new app.Registro();
 	registroModel.set("nombrePuesto","${viewModelInstance?.registroExamenInstance?.puesto}");
-	registroModel.set("fechaInicioDay",-1);
-	registroModel.set("fechaInicioMonth",-1);
-	registroModel.set("fechaInicioYear",-1);
+	//registroModel.set("fechaInicioDay",-1);
+	//registroModel.set("fechaInicioMonth",-1);
+	//registroModel.set("fechaInicioYear",-1);
 	registroModel.set("idInstitucion","${viewModelInstance?.registroExamenInstance?.idInstitucion}");
 	registroModel.set("idVarianteFigura","${viewModelInstance?.registroExamenInstance?.idFigura}");
 	registroModel.set("descAutorizacion","${viewModelInstance?.registroExamenInstance?.descripcionFigura}");
@@ -301,11 +301,23 @@
 				this.$("#spnHdnPostData").append('<input type="hidden" name="registro.fechaInicio_year" value="' + arr[app.EXP_REG_CHK_REGISTRO].model.get('fechaInicioYear') + '" />');
 				this.$("#spnHdnPostData").append('<input type="hidden" name="registro.idInstitucion" value="' + arr[app.EXP_REG_CHK_REGISTRO].model.get('idInstitucion') + '" />');
 
+				this.$("#spnHdnPostData").append('<input type="hidden" name="registro.statusEntManifProtesta" value="' + arr[app.EXP_REG_CHK_REGISTRO].model.get('statusEntManifProtesta') + '" />');
+				this.$("#spnHdnPostData").append('<input type="hidden" name="registro.obsEntManifProtesta" value="' + arr[app.EXP_REG_CHK_REGISTRO].model.get('obsEntManifProtesta') + '" />');
+				this.$("#spnHdnPostData").append('<input type="hidden" name="registro.statusEntCartaInter" value="' + arr[app.EXP_REG_CHK_REGISTRO].model.get('statusEntCartaInter') + '" />');
+				this.$("#spnHdnPostData").append('<input type="hidden" name="registro.obsEntCartaInter" value="' + arr[app.EXP_REG_CHK_REGISTRO].model.get('obsEntCartaInter') + '" />');
+				
 				this.$("#spnHdnPostData").append('<input type="hidden" name="registro.fechaObtencion_day" value="' + arr[app.EXP_REG_CHK_REGISTRO].model.get('fechaObtencionDay') + '" />');
 				this.$("#spnHdnPostData").append('<input type="hidden" name="registro.fechaObtencion_month" value="' + arr[app.EXP_REG_CHK_REGISTRO].model.get('fechaObtencionMonth') + '" />');
 				this.$("#spnHdnPostData").append('<input type="hidden" name="registro.fechaObtencion_year" value="' + arr[app.EXP_REG_CHK_REGISTRO].model.get('fechaObtencionYear') + '" />');
 				this.$("#spnHdnPostData").append('<input type="hidden" name="registro.idVarianteFigura" value="' + arr[app.EXP_REG_CHK_REGISTRO].model.get('idVarianteFigura') + '" />');
 
+				this.$("#spnHdnPostData").append('<input type="hidden" name="registro.statusEntHistorialInforme" value="' + arr[app.EXP_REG_CHK_REGISTRO].model.get('statusEntHistorialInforme') + '" />');
+				this.$("#spnHdnPostData").append('<input type="hidden" name="registro.obsEntHistorialInforme" value="' + arr[app.EXP_REG_CHK_REGISTRO].model.get('obsEntHistorialInforme') + '" />');
+				this.$("#spnHdnPostData").append('<input type="hidden" name="registro.statusEntCartaRec" value="' + arr[app.EXP_REG_CHK_REGISTRO].model.get('statusEntCartaRec') + '" />');
+				this.$("#spnHdnPostData").append('<input type="hidden" name="registro.obsEntCartaRec" value="' + arr[app.EXP_REG_CHK_REGISTRO].model.get('obsEntCartaRec') + '" />');
+				this.$("#spnHdnPostData").append('<input type="hidden" name="registro.statusConstBolVal" value="' + arr[app.EXP_REG_CHK_REGISTRO].model.get('statusConstBolVal') + '" />');
+				this.$("#spnHdnPostData").append('<input type="hidden" name="registro.obsConstBolVal" value="' + arr[app.EXP_REG_CHK_REGISTRO].model.get('obsConstBolVal') + '" />');
+				
 				$("#frmApp").submit();
 			},
 		});

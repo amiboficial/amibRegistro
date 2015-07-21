@@ -328,6 +328,11 @@ class SustentanteService {
 			p.nombrePuesto = it.'nombrePuesto'
 			p.esActual = it.'esActual'
 			
+			p.statusEntManifProtesta = it.'statusEntManifProtesta'
+			p.obsEntManifProtesta = it.'obsEntManifProtesta'
+			p.statusEntCartaInter = it.'statusEntCartaInter'
+			p.obsEntCartaInter = it.'obsEntCartaInter'
+			
 			if(!JSONObject.NULL.equals(it.'fechaCreacion')) p.fechaCreacion = df.parse(it.'fechaCreacion'.substring(0,10))
 			if(!JSONObject.NULL.equals(it.'fechaModificacion')) p.fechaModificacion = df.parse(it.'fechaModificacion'.substring(0,10))
 			
@@ -374,6 +379,13 @@ class SustentanteService {
 			c.idStatusAutorizacion = it.'idStatusAutorizacion'
 			c.idStatusCertificacion = it.'idStatusCertificacion'
 		
+			c.statusEntHistorialInforme = it.'statusEntHistorialInforme'
+			c.obsEntHistorialInforme = it.'obsEntHistorialInforme'
+			c.statusEntCartaRec = it.'statusEntCartaRec'
+			c.obsEntCartaRec = it.'obsEntCartaRec'
+			c.statusConstBolVal = it.'statusConstBolVal'
+			c.obsConstBolVal = it.'obsConstBolVal'
+			
 			c.validaciones = new ArrayList<ValidacionTO>()
 			it.'validaciones'.each{ x ->
 				ValidacionTO v = new ValidacionTO()

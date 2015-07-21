@@ -168,67 +168,67 @@
 			
 			<div class="form-group">
 				<label class="col-md-2 col-sm-3 control-label">
-					<g:message code="datosRegistro.historialInformeStatus.label" default="Informe proporcionado por una sociedad de información crediticia son su historial de cuando menos 5 años" />
+					<g:message code="datosRegistro.statusEntHistorialInforme.label" default="Informe proporcionado por una sociedad de información crediticia son su historial de cuando menos 5 años" />
 				</label>
 				<div class="col-md-9 col-sm-9">
-					<input type="radio" name="historialInformeStatus" value="1" checked>&nbsp;Entregó
+					<input type="radio" class="statusEntHistorialInforme" name="statusEntHistorialInforme" value="1">&nbsp;Entregó
 					<br/>
-					<input type="radio" name="historialInformeStatus" value="2">&nbsp;No entregó
+					<input type="radio" class="statusEntHistorialInforme" name="statusEntHistorialInforme" value="2">&nbsp;No entregó
 					<br/>
-					<input type="radio" name="historialInformeStatus" value="3">&nbsp;No aplica
+					<input type="radio" class="statusEntHistorialInforme" name="statusEntHistorialInforme" value="0" checked>&nbsp;No aplica
 				</div>
 			</div>
 			
 			<div class="form-group">
 				<label class="col-md-2 col-sm-3 control-label">
-					<g:message code="datosRegistro.historialInformeObs.label" default="(Observaciones)" />
+					<g:message code="datosRegistro.obsEntHistorialInforme.label" default="(Observaciones)" />
 				</label>
 				<div class="col-md-9 col-sm-9">
-					<input type="text" class="form-control"/>
+					<input type="text" class="obsEntHistorialInforme form-control"/>
 				</div>
 			</div>
 			
 			<div class="form-group">
 				<label class="col-md-2 col-sm-3 control-label">
-					<g:message code="datosRegistro.cartaRecStatus.label" default="Cartas de Recomendación" />
+					<g:message code="datosRegistro.statusEntCartaRec.label" default="Cartas de Recomendación" />
 				</label>
 				<div class="col-md-9 col-sm-9">
-					<input type="radio" name="cartaRecStatus" value="1" checked>&nbsp;Entregó
+					<input type="radio" class="statusEntCartaRec" name="statusEntCartaRec" value="1">&nbsp;Entregó
 					<br/>
-					<input type="radio" name="cartaRecStatus" value="2">&nbsp;No entregó
+					<input type="radio" class="statusEntCartaRec" name="statusEntCartaRec" value="2">&nbsp;No entregó
 					<br/>
-					<input type="radio" name="cartaRecStatus" value="3">&nbsp;No aplica
+					<input type="radio" class="statusEntCartaRec" name="statusEntCartaRec" value="0" checked>&nbsp;No aplica
 				</div>
 			</div>
 			
 			<div class="form-group">
 				<label class="col-md-2 col-sm-3 control-label">
-					<g:message code="datosRegistro.cartaRecObs.label" default="(Observaciones)" />
+					<g:message code="datosRegistro.obsEntCartaRec.label" default="(Observaciones)" />
 				</label>
 				<div class="col-md-9 col-sm-9">
-					<input type="text" class="form-control"/>
+					<input type="text" class="obsEntCartaRec form-control"/>
 				</div>
 			</div>
 			
 			<div class="form-group">
 				<label class="col-md-2 col-sm-3 control-label">
-					<g:message code="datosRegistro.constBolValStatus.label" default="Constancias de las Bolsas de Valores" />
+					<g:message code="datosRegistro.statusConstBolVal.label" default="Constancias de las Bolsas de Valores" />
 				</label>
 				<div class="col-md-9 col-sm-9">
-					<input type="radio" name="constBolValStatus" value="1" checked>&nbsp;Entregó
+					<input type="radio" class="statusConstBolVal" name="statusConstBolVal" value="1">&nbsp;Entregó
 					<br/>
-					<input type="radio" name="constBolValStatus" value="2">&nbsp;No entregó
+					<input type="radio" class="statusConstBolVal" name="statusConstBolVal" value="2">&nbsp;No entregó
 					<br/>
-					<input type="radio" name="constBolValStatus" value="3">&nbsp;No aplica
+					<input type="radio" class="statusConstBolVal" name="statusConstBolVal" value="0" checked>&nbsp;No aplica
 				</div>
 			</div>
 			
 			<div class="form-group">
 				<label class="col-md-2 col-sm-3 control-label">
-					<g:message code="datosRegistro.constBolValObs.label" default="(Observaciones)" />
+					<g:message code="datosRegistro.obsConstBolVal.label" default="(Observaciones)" />
 				</label>
 				<div class="col-md-9 col-sm-9">
-					<input type="text" class="form-control"/>
+					<input type="text" class="obsConstBolVal form-control"/>
 				</div>
 			</div>
 			
@@ -399,45 +399,45 @@
 			
 			<div class="form-group">
 				<label class="col-md-2 col-sm-3 control-label">
-					<g:message code="datosRegistro.manifStatus.label" default="Manifestación ''bajo protesta de decir la verdad'' de acuerdo al formato entregado por AMIB" />
+					<g:message code="datosRegistro.statusEntManifProtesta.label" default="Manifestación ''bajo protesta de decir la verdad'' de acuerdo al formato entregado por AMIB" />
 				</label>
 				<div class="col-md-9 col-sm-9">
-					<input type="radio" name="manifStatus" value="1" checked>&nbsp;Entregó
+					<input type="radio" class="statusEntManifProtesta" name="statusEntManifProtesta" value="1">&nbsp;Entregó
 					<br/>
-					<input type="radio" name="manifStatus" value="2">&nbsp;No entregó
+					<input type="radio" class="statusEntManifProtesta" name="statusEntManifProtesta" value="2">&nbsp;No entregó
 					<br/>
-					<input type="radio" name="manifStatus" value="3">&nbsp;No aplica
+					<input type="radio" class="statusEntManifProtesta" name="statusEntManifProtesta" value="0" checked>&nbsp;No aplica
 				</div>
 			</div>
 			
 			<div class="form-group">
 				<label class="col-md-2 col-sm-3 control-label">
-					<g:message code="datosRegistro.manifObs.label" default="(Observaciones)" />
+					<g:message code="datosRegistro.obsEntManifProtesta.label" default="(Observaciones)" />
 				</label>
 				<div class="col-md-9 col-sm-9">
-					<input type="text" class="form-control"/>
+					<input type="text" class="obsEntManifProtesta form-control"/>
 				</div>
 			</div>
 			
 			<div class="form-group">
 				<label class="col-md-2 col-sm-3 control-label">
-					<g:message code="datosRegistro.cartasInterStatus.label" default="Cartas de los intermediarios del mercado de valores o asesores de inversión relativas a su contratación" />
+					<g:message code="datosRegistro.statusEntCartaInter.label" default="Cartas de los intermediarios del mercado de valores o asesores de inversión relativas a su contratación" />
 				</label>
 				<div class="col-md-9 col-sm-9">
-					<input type="radio" name="cartasInterStatus" value="1" checked>&nbsp;Entregó
+					<input type="radio" class="statusEntCartaInter" name="statusEntCartaInter" value="1">&nbsp;Entregó
 					<br/>
-					<input type="radio" name="cartasInterStatus" value="2">&nbsp;No entregó
+					<input type="radio" class="statusEntCartaInter" name="statusEntCartaInter" value="2">&nbsp;No entregó
 					<br/>
-					<input type="radio" name="cartasInterStatus" value="3">&nbsp;No aplica
+					<input type="radio" class="statusEntCartaInter" name="statusEntCartaInter" value="0" checked>&nbsp;No aplica
 				</div>
 			</div>
 			
 			<div class="form-group">
 				<label class="col-md-2 col-sm-3 control-label">
-					<g:message code="datosRegistro.cartasInterObs.label" default="(Observaciones)" />
+					<g:message code="datosRegistro.obsEntCartaInter.label" default="(Observaciones)" />
 				</label>
 				<div class="col-md-9 col-sm-9">
-					<input type="text" class="form-control"/>
+					<input type="text" class="obsEntCartaInter form-control"/>
 				</div>
 			</div>
 			

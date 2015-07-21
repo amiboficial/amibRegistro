@@ -3,6 +3,7 @@ package mx.amis.sistemas.registro.apoderado.service
 import grails.converters.JSON
 import mx.amib.sistemas.external.catalogos.service.NotarioTO
 import mx.amib.sistemas.external.oficios.poder.PoderTO
+import mx.amib.sistemas.external.oficios.revocacion.RevocacionTO
 import mx.amib.sistemas.registro.apoderado.service.ApoderadoV1Service
 import spock.lang.*
 
@@ -18,6 +19,8 @@ class ApoderadoServiceIntegSpec extends Specification {
 	def poderService
 	//def autorizacionService
 	def apoderamientoService
+	def revocacionService
+	def oficioCnbvService
 	
     def setup() {
     }
@@ -91,11 +94,72 @@ class ApoderadoServiceIntegSpec extends Specification {
 			//p = poderService.save(p)
 			//def testobj = poderService.findAllBy(10,0,'id','desc',77,
 			//																	-1,-1,-1,-1,-1,-1,-1,-1)
-			def testobj = poderService.update(p)
-			println (testobj as JSON)
+			//def testobj = poderService.update(p)
+			//def testobj = revocacionService.list(10,0,'id','desc')
+			/*def testobj = revocacionService.get(3)
+			testobj.representanteLegalApellido1 = "PRUEBA 1"
+			testobj.representanteLegalApellido2 = "PRUEBA 2"
+			
+			testobj.revocados.get(0).motivo = "MODIFICACION EN ENTORNO DE PRUEBA"
+			
+			testobj = revocacionService.update(testobj)
+			println (testobj as JSON)*/
+			
+			//def testobj = oficioCnbvService.get(1)
+			//testobj.claveDga = "DGA-1337TT"
+			//testobj = oficioCnbvService.update(testobj)
+			
 			//def testobj = autorizacionService.autorizar([4L,5L,8L,9L,18L])
 			//def testobj = poderService.get(1)
-			//println (testobj as JSON)
+			//def 
+			//def testobj = autorizacionService.quitarAutorizadosCnbv()
+			
+			
+			jsonElement =  JSON.parse("""{
+										   "id": -1,
+										   "version": -1,
+										   "idGrupoFinanciero": 88888,
+										   "idInstitucion": 88888,
+										   "idNotario": 1,
+										   "numeroEscritura": 3344,
+										   "representanteLegalNombre": "AAAA",
+										   "representanteLegalApellido1": "BBBB",
+										   "representanteLegalApellido2": "CCCC",
+										   "fechaRevocacion": new Date(1435885349000),
+										   "uuidDocumentoRespaldo": "e18f019a-eb91-4979-83fd-0b98d1a9604e",
+										   "revocados": [
+												{
+												   "id": -1,
+												   "idRevocacion": -1,
+												   "idApoderado": 10088,
+												   "motivo": "PRUEBA DE REVOCACION CON PROCESO 1",
+												   "fechaBaja": new Date(1435885349000),
+												   "fechaCreacion": new Date(1435885349000),
+												   "fechaModificacion": new Date(1435885349000)
+												},
+												{
+												   "id": -1,
+												   "idRevocacion": -1,
+												   "idApoderado": 10090,
+												   "motivo": "PRUEBA DE REVOCACION CON PROCESO 2",
+												   "fechaBaja": new Date(1435885349000),
+												   "fechaCreacion": new Date(1435885349000),
+												   "fechaModificacion": new Date(1435885349000)
+												},
+										   ],
+										   "fechaCreacion": new Date(1435885349000),
+										   "fechaModificacion": new Date(1435885349000)
+										}""")
+			//def objToSend = new RevocacionTO(jsonElement);
+			//objToSend = revocacionService.save(objToSend)
+			
+			def r = revocacionService.get(7)
+			r.representanteLegalApellido1 = "FILTH"
+			revocacionService.update(r)
+			
+			
+			println (r as JSON)
+			
 			//println testobj
 	/*if(matricula1.nombreCompleto == "Carlos Cano Sosa"){
 		assertTrue()

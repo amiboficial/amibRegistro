@@ -7,19 +7,18 @@ import mx.amib.sistemas.external.catalogos.service.NacionalidadTO
 import mx.amib.sistemas.external.catalogos.service.NivelEstudiosTO
 import mx.amib.sistemas.external.catalogos.service.VarianteFiguraTO
 import mx.amib.sistemas.external.catalogos.service.TipoTelefonoTO
-
 import mx.amib.sistemas.external.expediente.certificacion.service.CertificacionTO
 import mx.amib.sistemas.external.expediente.certificacion.service.ValidacionTO
 import mx.amib.sistemas.external.expediente.persona.service.DocumentoSustentanteTO
 import mx.amib.sistemas.external.expediente.persona.service.PuestoTO
 import mx.amib.sistemas.external.expediente.persona.service.TelefonoSustentanteTO
-
 import mx.amib.sistemas.registro.legacy.saaec.RegistroExamenTO
-
 import mx.amib.sistemas.utils.CatalogConvertUtils
+
 import org.codehaus.groovy.grails.web.json.JSONArray
 
 import java.text.SimpleDateFormat
+
 import grails.converters.JSON
 import mx.amib.sistemas.external.expediente.persona.service.SustentanteTO
 
@@ -133,6 +132,10 @@ class ExpedienteRegistrableController {
 		p.fechaFin = null
 		p.nombrePuesto = params.'registro.nombrePuesto'
 		p.esActual = true
+		p.statusEntManifProtesta = Long.parseLong(params.'registro.statusEntManifProtesta')
+		p.obsEntManifProtesta = params.'registro.obsEntManifProtesta'
+		p.statusEntCartaInter = Long.parseLong(params.'registro.statusEntCartaInter')
+		p.obsEntCartaInter = params.'registro.obsEntCartaInter'
 		sustentante.puestos.add(p)
 		sustentante.certificaciones = new ArrayList<CertificacionTO>()
 
@@ -149,6 +152,13 @@ class ExpedienteRegistrableController {
 		c.isApoderado = false
 		c.isAutorizado = false
 		c.isUltima = true
+		c.statusEntHistorialInforme = Long.parseLong(params.'registro.statusEntHistorialInforme')
+		c.obsEntHistorialInforme = params.'registro.obsEntHistorialInforme'
+		c.statusEntCartaRec = Long.parseLong(params.'registro.statusEntCartaRec')
+		c.obsEntCartaRec = params.'registro.obsEntCartaRec'
+		c.statusConstBolVal = Long.parseLong(params.'registro.statusConstBolVal')
+		c.obsConstBolVal = params.'registro.obsConstBolVal'
+		
 		
 		ValidacionTO v = new ValidacionTO()
 		v.fechaAplicacion = new Date()

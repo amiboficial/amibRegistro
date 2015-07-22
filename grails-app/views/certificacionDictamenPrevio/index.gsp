@@ -202,6 +202,11 @@
 				
 				</table>
 				<div class="pagination">
+					<g:paginate total="${viewModelInstance.count?:0}" 
+						params="[fltTB:viewModelInstance.fltTB,fltMat:viewModelInstance.fltMat,fltFol:viewModelInstance.fltFol,fltNom:viewModelInstance.fltNom,
+								fltAp1:viewModelInstance.fltAp1,fltAp2:viewModelInstance.fltAp2,fltFig:viewModelInstance.fltFig,
+								fltVFig:viewModelInstance.fltVFig,
+								sort:viewModelInstance.sort,max:viewModelInstance.max,order:viewModelInstance.order,offset:viewModelInstance.offset]"/>
 				</div>
 			</div>
 		</fieldset>

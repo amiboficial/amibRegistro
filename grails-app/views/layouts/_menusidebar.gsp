@@ -12,8 +12,10 @@
             <div class="list-group" >
             	<a class="list-group-item colortitle">Gestión de expediente</a>
             	<a href="<g:createLink controller="expedienteRegistrable" action="index" />" class="list-group-item"><span class="glyphicon glyphicon-share-alt"></span>&nbsp;Solicitud de registro</a>
-            	<a href="<g:createLink controller="expedienteRegistrable" action="index" />" class="list-group-item"><span class="glyphicon glyphicon-share-alt"></span>&nbsp;Pendientes de dictamen</a>
-            	<a href="<g:createLink controller="expedienteRegistrable" action="index" />" class="list-group-item"><span class="glyphicon glyphicon-share-alt"></span>&nbsp;Pendientes a autorizar</a>
+            	<a href="<g:createLink controller="expedienteRegistrable" action="index" />" class="list-group-item"><span class="glyphicon glyphicon-refresh"></span>&nbsp;Actualización de la autorización</a>
+            	<a href="<g:createLink controller="expedienteRegistrable" action="index" />" class="list-group-item"><span class="glyphicon glyphicon-retweet"></span>&nbsp;Reposición de la autorización</a>
+            	<a href="<g:createLink controller="certificacionDictamenPrevio" action="index" />" class="list-group-item"><span class="glyphicon glyphicon-edit"></span>&nbsp;Dictamen previo</a>
+            	<a href="<g:createLink controller="expedienteRegistrable" action="index" />" class="list-group-item"><span class="glyphicon glyphicon-inbox"></span>&nbsp;Pendientes a autorizar</a>
             	<a href="<g:createLink controller="expediente" action="index" />" class="list-group-item"><span class="glyphicon glyphicon-book"></span>&nbsp;Búsqueda de expedientes</a></a>
             	<a class="list-group-item colortitle">Gestión de oficios</a>
             	<a href="<g:createLink controller="poder" action="index" />" class="list-group-item"><span class="glyphicon glyphicon-open"></span>&nbsp;Poderes</a>

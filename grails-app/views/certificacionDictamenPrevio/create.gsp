@@ -93,6 +93,13 @@
 		
 	</form>
 	
+	<g:render template="../common/expedientePuestos"/>
+	<g:javascript src="mx.amib.sistemas.registro.expediente.form.puestos.js" />
+	<script>
+		var app = app || {};
+		var puestosArray = new Array();
+		var puestosView = new app.PuestosView(puestosArray);
+	</script>
 		
 	
 </body>

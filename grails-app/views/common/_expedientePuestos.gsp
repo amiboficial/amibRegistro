@@ -250,7 +250,7 @@
 				<button type="button" class="cancelNew btn btn-danger"><span class="glyphicon glyphicon-remove"></span> Cancelar</button>
 			{{ } }}
 			{{ if(viewStatus == app.EXP_PUES_ST_VALIDATED){ }}
-				<button type="button" class="edit btn btn-primary"><span class="glyphicon glyphicon-pencil"></span> Editar</button>
+				<button type="button" class="editElement btn btn-primary"><span class="glyphicon glyphicon-pencil"></span> Editar</button>
 				<button type="button" class="delete btn btn-danger"><span class="glyphicon glyphicon-trash"></span> Borrar</button>
 			{{ } }}
 		</div>
@@ -262,11 +262,17 @@
 
 	<fieldset>
 		<legend>Datos de relación laboral con institución</legend>
+		
+		<div class="alert alert-danger validationViewErrorMessage" style="display:none;">
+			Se han detectado errores de entrada en los campos del formulario. Verifique cada campo según corresponda.
+			<div class="errorViewMessagesContainer">
+			</div>
+		</div>
+		
 		<div class="list-group">
 			<div class="list-group-item">
 				<div class="row" style="padding-left:0.75em;">
 					<button type="button" class="add btn btn-success " ><span class="glyphicon glyphicon-plus"></span> Agregar nuevo</button>
-					<button type="button" class="add btn btn-info " ><span class="glyphicon glyphicon-refresh"></span> Actualizar orden de elementos</button>
 				</div>
 			</div>
 			<div class="listaPuestos">
@@ -274,4 +280,19 @@
 		</div>
 	</fieldset>
 
+	<div class="form-group">
+		<div class="col-md-3 col-sm-3">
+			&nbsp;
+		</div>
+		<div class="col-md-3 col-sm-3">
+			<button id="btnSubmit" type="button" class="submit btn btn-primary btn-block">Validar y confirmar datos</button>
+		</div>
+		<div class="col-md-3 col-sm-3">
+			<button id="btnCancelEdit" type="button" class="edit btn btn-primary btn-block">Editar datos</button>
+		</div>
+		<div class="col-md-3 col-sm-3">
+			&nbsp;
+		</div>
+	</div>
+	
 </script>

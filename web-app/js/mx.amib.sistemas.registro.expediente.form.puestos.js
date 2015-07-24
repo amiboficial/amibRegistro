@@ -20,7 +20,13 @@ app.EXP_PUES_ERR_NOMPUES_BLANK = "EXP_PUES_ERR_NOMPUES_BLANK";
 app.EXP_PUES_ERR_STMANIFPROT_BLANK = "EXP_PUES_ERR_STMANIFPROT_BLANK";
 app.EXP_PUES_ERR_STCARTINTER_BLANK = "EXP_PUES_ERR_STCARTINTER_BLANK";
 
-app.EXP_PUES_ERR_FECINI_NON_GREATER_THAN_FECFIN = "EXP_PUES_ERR_FECINI_NON_GREATER_THAN_FECFIN";
+app.EXP_PUES_ERR_FECINI_NON_GREATER_THAN_FECFIN = "EXP_PUES_ERR_FECINI_NON_GREATER_THAN_FECFIN"; //La fecha de inicio no puede ser mayor a la fecha fin
+
+app.EXP_PUES_ERR_SUBMITVAL = "EXP_PUES_ERR_SUBMITVAL";//Mensaje de error al haber error al establecer datos
+app.EXP_PUES_ERR_NOELEMENTS = "EXP_PUES_ERR_NOELEMENTS";//No hay elementos en lista
+app.EXP_PUES_ERR_STILLOPEN = "EXP_PUES_ERR_STILLOPEN";//Hay al menos un elemento sin confirmar edición
+
+app.EXP_PUES_DELETE_CONF = "¿Esta seguro de eliminar el puesto?";//Mensaje de confirmación de borrado
 
 app.EXP_PUES_MAXVAL_DATE_COMPARATOR = 7258143600; //Wed, 01 Jan 2200 07:00:00 GMT
 
@@ -195,7 +201,7 @@ app.PuestoView = Backbone.View.extend({
 	
 	events: {
 		'click .cancelNew': 'cancelNew',
-		'click .edit': 'edit',
+		'click .editElement': 'edit',
 		'click .cancelEdit': 'cancelEdit',
 		'click .update': 'update',
 		'click .save': 'save',
@@ -262,9 +268,9 @@ app.PuestoView = Backbone.View.extend({
 		//validar campos
 		var valid = this.validate();
 		if(valid){
-			//this.model.collection.sort();
 			this.model.set("viewMode",app.EXP_PUES_MODE_NONEDIT);
 			this.model.set("viewStatus",app.EXP_PUES_ST_VALIDATED);
+			this.parentView.actualizarOrden();
 		}
 	},
 	
@@ -273,17 +279,21 @@ app.PuestoView = Backbone.View.extend({
 		//validar campos
 		var valid = this.validate();
 		if(valid){
-			//this.model.collection.sort();
 			this.model.set("viewMode",app.EXP_PUES_MODE_NONEDIT);
 			this.model.set("viewStatus",app.EXP_PUES_ST_VALIDATED);
+			this.parentView.actualizarOrden();
 		}
 	},
 	
 	delete: function(e){
 		e.preventDefault();
-		if(this.model.get("viewStatus") == app.EXP_PUES_ST_VALIDATED){
-			this.model.destroy();
-			this.remove();
+		//un mal necesario...
+		var conf = confirm(app.EXP_PUES_DELETE_CONF);
+		if(conf){
+			if(this.model.get("viewStatus") == app.EXP_PUES_ST_VALIDATED){
+				this.model.destroy();
+				this.remove();
+			}
 		}
 	},
 	
@@ -387,6 +397,7 @@ app.PuestosView = Backbone.View.extend({
 		this.render();
 		
 		this.listenTo( this.collection, 'add', this.renderList );
+		
 		//this.listenTo( this.collection, 'sort', this.renderList );
 	},
 	
@@ -394,6 +405,16 @@ app.PuestosView = Backbone.View.extend({
 	render: function(){
 		this.$el.html( this.template() );
 		this.renderList();
+		
+		if(this.state == app.EXP_PUES_ST_OPEN){
+			this.enableFields();
+			this.enableSubmitDisableEdit();
+		}
+		else{
+			this.disableFields();
+			this.disableSubmitEnableEdit();
+		}
+		
 		return this;
 	},
 	renderList: function(){
@@ -408,27 +429,31 @@ app.PuestosView = Backbone.View.extend({
 		elementView.viewModel = this.viewModel;
 		this.$(".listaPuestos").append( elementView.render().el );
 	},
-	renderErrorMsgs: function(){
-		this.$(".validationErrorMessage").show();
-		this.$(".errorMessagesContainer").text("");
-		_.each(this.errors,function(item){
-			this.$(".errorMessagesContainer").append(item);
-			this.$(".errorMessagesContainer").append("<br/>");
-		},this);
-	},
-	renderCleanErrorMsgs: function(){
-		this.$(".validationErrorMessage").hide();
+	renderErrMessages: function(){
+		if(this.errorValidacion)
+		{
+			this.$(".validationViewErrorMessage").show();
+			this.$(".errorViewMessagesContainer").text("");
+			_.each(this.msgsErrorValidacion,function(item){
+				this.$(".errorViewMessagesContainer").append(item);
+				this.$(".errorViewMessagesContainer").append("<br/>");
+			},this);
+		}
+		else{
+			this.$(".validationViewErrorMessage").hide();
+		}
 	},
 	
 	//métodos indicados para cambiar estatus
 	setOpenState: function(){
 		this.state = app.EXP_PUES_ST_OPEN;
 		this.trigger("stateChange","OPEN",this.checkId);
+		this.render();
 	},
-
 	setValidatedState: function(){
 		this.state = app.EXP_PUES_ST_VALIDATED;
 		this.trigger("stateChange","VALIDATED",this.checkId);
+		this.render();
 	},
 	
 	//métodos para cambiar el identificador de elemento en checklist
@@ -439,9 +464,60 @@ app.PuestosView = Backbone.View.extend({
 		return this.checkId;
 	},
 	
+	//métodos para habilitar y deshabilitar campos
+	disableFields: function(){
+		this.$(".field").prop( "disabled", true );
+		this.$(".update").prop( "disabled", true );
+		this.$(".cancelEdit").prop( "disabled", true );
+		this.$(".save").prop( "disabled", true );
+		this.$(".cancelNew").prop( "disabled", true );
+		this.$(".edit").prop( "disabled", true );
+		this.$(".delete").prop( "disabled", true );
+		this.$(".editElement").prop( "disabled", true );
+		this.$(".add").prop( "disabled", true );
+	},
+	enableFields: function(){
+		this.$(".field").prop( "disabled", false );
+		this.$(".update").prop( "disabled", false );
+		this.$(".cancelEdit").prop( "disabled", false );
+		this.$(".save").prop( "disabled", false );
+		this.$(".cancelNew").prop( "disabled", false );
+		this.$(".edit").prop( "disabled", false );
+		this.$(".delete").prop( "disabled", false );
+		this.$(".editElement").prop( "disabled", false );
+		this.$(".add").prop( "disabled", false );
+	},
+	enableSubmitDisableEdit: function() {
+		this.$(".submit").prop( "disabled", false );
+		this.$(".edit").prop( "disabled", true );
+	},
+	disableSubmitEnableEdit: function(){
+		this.$(".submit").prop( "disabled", true );
+		this.$(".edit").prop( "disabled", false );
+	},
+	
+	//validacion y errores
+	errorValidacion: false,
+	msgErrorValidacion: app.EXP_PUES_ERR_SUBMITVAL,
+	msgsErrorValidacion: [],
+	hasErrorValidacion: function(){
+		return this.errorValidacion;
+	},
+	setErrorValidacion: function(msgError){
+		this.errorValidacion = true;
+		this.msgsErrorValidacion.push(msgError);
+		this.renderErrMessages();
+	},
+	clearErrorValidacion: function(){
+		this.errorValidacion = false;
+		this.msgsErrorValidacion = new Array();
+		this.renderErrMessages();
+	},
+	
 	//eventos
 	events: {
 		'click .add':'agregarNuevoElemento',
+		'click .refresh':'actualizarOrden',
 		'click .submit': 'establecerDatos',
 		'click .edit': 'habilitarEdicionDatos'
 	},
@@ -457,6 +533,49 @@ app.PuestosView = Backbone.View.extend({
 		}
 	},
 	
+	actualizarOrden: function(){
+		//e.preventDefault();
+		if(this.validarSiPuedeEditarElemento()){
+			this.collection.sort();
+			this.renderList();
+		}
+	},
+	
+	establecerDatos: function(e){
+		if( this.validarTodo() ){
+			this.setValidatedState();
+		}
+	},
+	habilitarEdicionDatos: function(e){
+		e.preventDefault();
+		this.setOpenState();
+	},
+	
+	validarTodo: function(){
+		//limpia errores de validación
+		this.clearErrorValidacion();
+		//valida que no haya nada en estado de "edición"
+		// y valida que haya al menos uno en estado de valido
+		var hasOpenElem = false; //tiene algun elemento en modo nuevo?
+		var hasValidElem = false;
+		this.collection.each(function(item){
+			if(item.get("viewStatus") == app.EXP_PUES_ST_OPEN){
+				hasOpenElem = true;
+			}
+			else{
+				hasValidElem = true;
+			}
+		},this);
+		
+		if(!hasValidElem){
+			this.setErrorValidacion(app.EXP_PUES_ERR_NOELEMENTS);
+		}
+		if(hasOpenElem){
+			this.setErrorValidacion(app.EXP_PUES_ERR_STILLOPEN);
+		}
+		
+		return hasValidElem && (!hasOpenElem);
+	},
 	validarSiPuedeEditarElemento: function(){
 		var hasOpenElem = false; //tiene algun elemento en modo nuevo?
 		this.collection.each(function(item){

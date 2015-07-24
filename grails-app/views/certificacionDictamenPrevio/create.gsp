@@ -97,7 +97,14 @@
 	<g:javascript src="mx.amib.sistemas.registro.expediente.form.puestos.js" />
 	<script>
 		var app = app || {};
+		
 		var puestosArray = new Array();
+		
+		app.instituciones = new Array();
+		<g:each var="x" in="${viewModelInstance?.institucionesList}">
+			app.instituciones.push( (new app.Institucion(${x?.id},"${x?.nombre}")) );
+		</g:each>
+		
 		var puestosView = new app.PuestosView(puestosArray);
 	</script>
 		

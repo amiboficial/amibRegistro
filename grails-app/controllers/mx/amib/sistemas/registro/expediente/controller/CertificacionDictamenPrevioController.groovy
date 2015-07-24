@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Map;
 
 import mx.amib.sistemas.external.catalogos.service.FiguraTO;
+import mx.amib.sistemas.external.catalogos.service.InstitucionTO
 import mx.amib.sistemas.external.catalogos.service.VarianteFiguraTO
 import mx.amib.sistemas.external.expediente.certificacion.catalog.service.*
 import mx.amib.sistemas.external.expediente.certificacion.service.CertificacionTO
@@ -13,6 +14,7 @@ class CertificacionDictamenPrevioController {
 
 	def figuraService
 	def sustentanteService
+	def entidadFinancieraService
 	
 	//Muestra certificaciones en status de "en dictamen"
     def index() {
@@ -140,7 +142,17 @@ class CertificacionDictamenPrevioController {
 	}
 	
 	//Muestra datos de expediente a editar de acuerdo al proceso de dictamen
-	def create() { }
+	def create(Long id) {
+		CreateViewModel cvm = this.getCreateViewModel(id)
+		
+		render(view:'create', model: [viewModelInstance:cvm])
+	}
+	
+	private CreateViewModel getCreateViewModel(Long id){
+		CreateViewModel cvm = new CreateViewModel()
+		cvm.institucionesList = entidadFinancieraService.obtenerInstituciones()
+		return cvm
+	}
 	
 	//Envía a autorización 
 	def save() { }
@@ -171,6 +183,7 @@ class CertificacionDictamenPrevioController {
 	}
 	
 	public static class CreateViewModel{
-		
+		//No bindeables
+		Collection<InstitucionTO> institucionesList
 	}
 }

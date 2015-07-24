@@ -77,7 +77,11 @@
 		</label>
 		<div class="col-md-5 col-sm-5">
 			{{ if(viewStatus == app.EXP_PUES_ST_VALIDATED){ }}
-				<p class="form-control-static fechaFin">{{=fechaFin_day}}/{{=fechaFin_month}}/{{=fechaFin_year}}</p>
+				{{ if(fechaFin_year != -1 && fechaFin_month != -1 && fechaFin_day != -1){ }}
+					<p class="form-control-static fechaFin">{{=fechaFin_day}}/{{=fechaFin_month}}/{{=fechaFin_year}}</p>
+				{{ } else{ }}
+					<p class="form-control-static fechaFin">(Puesto Actual)</p>
+				{{ } }}
 			{{ } else{ }}
 				
 				<select style="width: 28%;" class="form-control col-md-4 fechaFin_day field" data-field="fechaFin_day">
@@ -116,7 +120,7 @@
 	</div>
 	<div class="form-group div-nombrePuesto">
 		<label class="col-md-2 col-sm-3 control-label">
-			<g:message code="puesto.nombrePuesto.label" default="Puesto actual" />
+			<g:message code="puesto.nombrePuesto.label" default="Puesto" />
 		</label>
 		<div class="col-md-9 col-sm-9">
 			{{ if(viewStatus == app.EXP_PUES_ST_VALIDATED){ }}
@@ -262,6 +266,7 @@
 			<div class="list-group-item">
 				<div class="row" style="padding-left:0.75em;">
 					<button type="button" class="add btn btn-success " ><span class="glyphicon glyphicon-plus"></span> Agregar nuevo</button>
+					<button type="button" class="add btn btn-info " ><span class="glyphicon glyphicon-refresh"></span> Actualizar orden de elementos</button>
 				</div>
 			</div>
 			<div class="listaPuestos">

@@ -2,6 +2,7 @@ var app = app || {};
 
 app.EXP_PUES_MODE_NEW = 0;
 app.EXP_PUES_MODE_EDIT = 1;
+app.EXP_PUES_MODE_NONEDIT = 2;
 
 app.EXP_PUES_ST_OPEN = 0;
 app.EXP_PUES_ST_VALIDATED = 1;
@@ -18,6 +19,10 @@ app.EXP_PUES_ERR_FECFIN_NONVAL = "EXP_PUES_ERR_FECFIN_NONVAL";
 app.EXP_PUES_ERR_NOMPUES_BLANK = "EXP_PUES_ERR_NOMPUES_BLANK";
 app.EXP_PUES_ERR_STMANIFPROT_BLANK = "EXP_PUES_ERR_STMANIFPROT_BLANK";
 app.EXP_PUES_ERR_STCARTINTER_BLANK = "EXP_PUES_ERR_STCARTINTER_BLANK";
+
+app.EXP_PUES_ERR_FECINI_NON_GREATER_THAN_FECFIN = "EXP_PUES_ERR_FECINI_NON_GREATER_THAN_FECFIN";
+
+app.EXP_PUES_MAXVAL_DATE_COMPARATOR = 7258143600; //Wed, 01 Jan 2200 07:00:00 GMT
 
 //no se crea como backbone model porque no requiere de listeners
 app.Institucion = function(id,nombre){
@@ -82,18 +87,18 @@ app.PuestoViewModelCollection = Backbone.Collection.extend({
 		var d = {};
 		var milis = 0;
 		
-		if(item.get("fechaInicio_day") == -1 || 
-			item.get("fechaInicio_month") == -1 || 
-			item.get("fechaInicio_year") == -1){
-		
-			milis = Number.MIN_VALUE;
-			
+		if(item.get("viewMode") == app.EXP_PUES_MODE_NEW || 
+				(item.get("fechaInicio_year") == -1 || 
+				item.get("fechaInicio_month") == -1 || 
+				item.get("fechaInicio_day") == -1) ){
+				
+			milis = -app.EXP_PUES_MAXVAL_DATE_COMPARATOR;
 		}
 		else{
-			milis = (new Date(item.get("fechaInicio_year"), 
+			milis = -(new Date(item.get("fechaInicio_year"), 
 							item.get("fechaInicio_month"), 
 							item.get("fechaInicio_day"), 
-							0, 0, 0, 0)).getTime() * -1;
+							0, 0, 0, 0)).getTime()/1000.0;
 		}
 		return milis;
 	}
@@ -248,6 +253,7 @@ app.PuestoView = Backbone.View.extend({
 			"obsEntCartaInter": this.undoModel.obsEntCartaInter
 		}
 		, { silent:true } );
+		this.model.set("viewMode",app.EXP_PUES_MODE_NONEDIT);
 		this.model.set("viewStatus",app.EXP_PUES_ST_VALIDATED);
 	},
 
@@ -256,7 +262,8 @@ app.PuestoView = Backbone.View.extend({
 		//validar campos
 		var valid = this.validate();
 		if(valid){
-			this.model.collection.sort();
+			//this.model.collection.sort();
+			this.model.set("viewMode",app.EXP_PUES_MODE_NONEDIT);
 			this.model.set("viewStatus",app.EXP_PUES_ST_VALIDATED);
 		}
 	},
@@ -266,7 +273,8 @@ app.PuestoView = Backbone.View.extend({
 		//validar campos
 		var valid = this.validate();
 		if(valid){
-			this.model.collection.sort();
+			//this.model.collection.sort();
+			this.model.set("viewMode",app.EXP_PUES_MODE_NONEDIT);
 			this.model.set("viewStatus",app.EXP_PUES_ST_VALIDATED);
 		}
 	},
@@ -304,15 +312,45 @@ app.PuestoView = Backbone.View.extend({
 			
 			this.model.get("viewErrMessages").push(app.EXP_PUES_ERR_FECINI_NONVAL);
 			this.model.set("errFechaInicio", true);
+			
 			valid = false;
+		}
+		else{
+			//si hay una fecha de fin
+			if( !(this.model.get("fechaFin_day") == -1 && 
+				this.model.get("fechaFin_month") == -1 && 
+				this.model.get("fechaFin_year") == -1) ){
+				
+				var fechaInicioTime = (new Date(this.model.get("fechaInicio_year"), 
+												this.model.get("fechaInicio_month"), 
+												this.model.get("fechaInicio_day"), 
+												0, 0, 0, 0)).getTime()/1000.0;
+				var fechaFinTime = (new Date(this.model.get("fechaFin_year"), 
+												this.model.get("fechaFin_month"), 
+												this.model.get("fechaFin_day"), 
+												0, 0, 0, 0)).getTime()/1000.0;
+												
+				if(fechaFinTime < fechaInicioTime){
+					this.model.get("viewErrMessages").push(app.EXP_PUES_ERR_FECINI_NON_GREATER_THAN_FECFIN);
+					this.model.set("errFechaInicio", true);
+					valid = false;
+				}
+				
+			}
 		}
 		if(this.model.get("fechaFin_day") == -1 || 
 			this.model.get("fechaFin_month") == -1 || 
 			this.model.get("fechaFin_year") == -1){
 			
-			this.model.get("viewErrMessages").push(app.EXP_PUES_ERR_FECFIN_NONVAL);
-			this.model.set("errFechaFin", true);
-			valid = false;
+			if( !(this.model.get("fechaFin_day") == -1 && 
+				this.model.get("fechaFin_month") == -1 && 
+				this.model.get("fechaFin_year") == -1) ){
+				
+				this.model.get("viewErrMessages").push(app.EXP_PUES_ERR_FECFIN_NONVAL);
+				this.model.set("errFechaFin", true);
+				valid = false;
+			}
+			
 		}
 		if(this.model.get("nombrePuesto") == ""){
 			this.model.get("viewErrMessages").push(app.EXP_PUES_ERR_NOMPUES_BLANK);
@@ -349,7 +387,7 @@ app.PuestosView = Backbone.View.extend({
 		this.render();
 		
 		this.listenTo( this.collection, 'add', this.renderList );
-		this.listenTo( this.collection, 'sort', this.renderList );
+		//this.listenTo( this.collection, 'sort', this.renderList );
 	},
 	
 	//métodos de rendereo
@@ -411,7 +449,7 @@ app.PuestosView = Backbone.View.extend({
 	agregarNuevoElemento: function(e){
 		e.preventDefault();
 		if(this.state == app.EXP_PUES_ST_OPEN){
-			if(this.validarAgregarNuevoElemento()){
+			if(this.validarSiPuedeEditarElemento()){
 				var elem = new app.PuestoViewModel();
 				this.collection.add(elem);
 				elem.collection = this.collection;
@@ -419,17 +457,14 @@ app.PuestosView = Backbone.View.extend({
 		}
 	},
 	
-	validarAgregarNuevoElemento: function(){
-		var hasNewElem = false; //tiene algun elemento en modo nuevo?
+	validarSiPuedeEditarElemento: function(){
+		var hasOpenElem = false; //tiene algun elemento en modo nuevo?
 		this.collection.each(function(item){
-			if(item.get("viewMode") == app.EXP_PUES_MODE_NEW &&
-				item.get("viewStatus") == app.EXP_PUES_ST_OPEN){
-				
-				hasNewElem = true;
-				
+			if(item.get("viewStatus") == app.EXP_PUES_ST_OPEN){
+				hasOpenElem = true;
 			}
 		},this);
-		return !hasNewElem;
+		return !hasOpenElem;
 	}
 	
 });

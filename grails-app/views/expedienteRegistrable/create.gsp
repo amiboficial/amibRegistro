@@ -141,7 +141,6 @@
 	<g:render template="../common/expedienteDomicilio"/>
 	<g:javascript src="mx.amib.sistemas.registro.expediente.form.domicilio.js" />
 	<script>
-	// TODO: RECIBIR CADENA CON ANTIGUO FORMATO DE DOMICILIO
 	var sepomexView = new app.SepomexView(new Array(),new app.Domicilio(), '<g:createLink controller="Sepomex" action="obtenerDatosSepomex"/>');
 	</script>
 	

@@ -1,10 +1,15 @@
 package mx.amib.sistemas.registro.expediente.controller
 
+import grails.converters.JSON
 import java.util.Collection;
 import java.util.Map;
 
+import mx.amib.sistemas.external.catalogos.service.EstadoCivilTO;
 import mx.amib.sistemas.external.catalogos.service.FiguraTO;
 import mx.amib.sistemas.external.catalogos.service.InstitucionTO
+import mx.amib.sistemas.external.catalogos.service.NacionalidadTO;
+import mx.amib.sistemas.external.catalogos.service.NivelEstudiosTO;
+import mx.amib.sistemas.external.catalogos.service.TipoTelefonoTO;
 import mx.amib.sistemas.external.catalogos.service.VarianteFiguraTO
 import mx.amib.sistemas.external.expediente.certificacion.catalog.service.*
 import mx.amib.sistemas.external.expediente.certificacion.service.CertificacionTO
@@ -15,6 +20,11 @@ class CertificacionDictamenPrevioController {
 	def figuraService
 	def sustentanteService
 	def entidadFinancieraService
+	
+	def estadoCivilService
+	def nacionalidadService
+	def nivelEstudiosService
+	def tipoTelefonoService
 	
 	//Muestra certificaciones en status de "en dictamen"
     def index() {
@@ -150,7 +160,23 @@ class CertificacionDictamenPrevioController {
 	
 	private CreateViewModel getCreateViewModel(Long id){
 		CreateViewModel cvm = new CreateViewModel()
+		
 		cvm.institucionesList = entidadFinancieraService.obtenerInstituciones()
+		
+		cvm.estadoCivilList = estadoCivilService.list()
+		cvm.institucionesList = entidadFinancieraService.obtenerInstituciones()
+		cvm.nacionalidadList = nacionalidadService.list()
+		cvm.nivelEstudiosList = nivelEstudiosService.list()
+		cvm.tipoTelefonoList = tipoTelefonoService.list()
+		
+		/*
+		cvm.sustentanteInstance = s
+		if(s.idSepomex != null){
+			cvm.codigoPostal = sepomexService.obtenerCodigoPostalDeIdSepomex(s.idSepomex)
+			cvm.sepomexJsonList = (sepomexService.obtenerDatosSepomexPorCodigoPostal(cvm.codigoPostal).sort{ it.asentamiento?.nombre } as JSON)
+		}
+		*/
+		
 		return cvm
 	}
 	
@@ -185,5 +211,10 @@ class CertificacionDictamenPrevioController {
 	public static class CreateViewModel{
 		//No bindeables
 		Collection<InstitucionTO> institucionesList
+		Collection<EstadoCivilTO> estadoCivilList
+		Collection<NacionalidadTO> nacionalidadList
+		Collection<NivelEstudiosTO> nivelEstudiosList
+		Collection<TipoTelefonoTO> tipoTelefonoList
+		String sepomexJsonList
 	}
 }

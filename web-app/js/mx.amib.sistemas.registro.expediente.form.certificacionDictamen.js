@@ -3,7 +3,12 @@ var app = app || {};
 app.CERTDICT_CERT_ST_OPEN = 0;
 app.CERTDICT_CERT_ST_VALIDATED = 1;
 
-app.EXP_PUES_ERR_SUBMITVAL = "EXP_PUES_ERR_SUBMITVAL";
+app.CERTDICT_ST_ENTREGA_NOAPLICA = 0;
+app.CERTDICT_ST_ENTREGA_ENTREGO = 1;
+app.CERTDICT_ST_ENTREGA_NOENTREGO = 2;
+app.CERTDICT_ST_ENTREGA_MSGS = ["No aplica","Entregó","No entregó"];
+
+app.CERTDICT_ERR_SUBMITVAL = "EXP_CERTDICT_ERR_SUBMITVAL";
 
 app.MESES = [
 	{ id: 1, nombre: "enero" },
@@ -24,8 +29,9 @@ app.CertificacionViewModel = Backbone.Model.extend({
 	defaults: { 
 		grailsId: -1,
 		
-		dsFigura: "",
-		dsVarianteFigura: "",
+		nombreFigura: "XXXXXXXXXXXXXXXX",
+		nombreVarianteFigura: "XXXXXXXXXXXXXXXXXXXXXXX",
+		tipoAutorizacionFigura: "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
 		
 		fechaInicio_day: -1,
 		fechaInicio_month: -1,
@@ -38,11 +44,11 @@ app.CertificacionViewModel = Backbone.Model.extend({
 		fechaObtencion_year: -1,
 		
 		statusEntHistorialInforme: -1,
-		obsEntHistorialInforme: "",
+		obsEntHistorialInforme: "AAAAAAA",
 		statusEntCartaRec: -1,
-		obsEntCartaRec: "",
+		obsEntCartaRec: "AAAAAAAAAAAAAAAA",
 		statusConstBolVal: -1,
-		obsConstBolVal: "",
+		obsConstBolVal: "AAAAAAAAAAAAAAAAAA",
 		
 		errFechaObtencion: false,
 		errStatusEntHistorialInforme: false,
@@ -58,10 +64,12 @@ app.CertificacionView = Backbone.View.extend({
 	
 	initialize: function(options){
 		this.model = options.model;
+		this.render();
 	},
 	
 	render: function(){
 		this.$el.html( this.template( this.model.toJSON() ) );
+		return this;
 	},
 	
 	renderErrMessages: function(){

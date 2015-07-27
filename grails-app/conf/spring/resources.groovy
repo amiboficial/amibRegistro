@@ -51,5 +51,6 @@ beans = {
 	}
 	certificacionService(mx.amib.sistemas.external.expediente.service.CertificacionService){
 		getAllUrl = application.config.mx.amib.sistemas.expediente.resthttpURL + application.config.mx.amib.sistemas.expediente.certificacion.Certificacion.getAll
+		getWithSustentante = application.config.mx.amib.sistemas.expediente.resthttpURL + application.config.mx.amib.sistemas.expediente.certificacion.Certificacion.getWithSustentante
 	}
 }

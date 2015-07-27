@@ -1,6 +1,7 @@
 package mx.amib.sistemas.registro.expediente.controller
 
 import grails.converters.JSON
+
 import java.util.Collection;
 import java.util.Map;
 
@@ -14,13 +15,18 @@ import mx.amib.sistemas.external.catalogos.service.VarianteFiguraTO
 import mx.amib.sistemas.external.expediente.certificacion.catalog.service.*
 import mx.amib.sistemas.external.expediente.certificacion.service.CertificacionTO
 import mx.amib.sistemas.external.expediente.persona.service.SustentanteTO
+import mx.amib.sistemas.registro.expediente.service.CertificacionDictamenPrevioService
 
 class CertificacionDictamenPrevioController {
 
+	CertificacionDictamenPrevioService certificacionDictamenPrevioService
+	
 	def figuraService
 	def sustentanteService
+	def certificacionService
 	def entidadFinancieraService
 	
+	def sepomexService
 	def estadoCivilService
 	def nacionalidadService
 	def nivelEstudiosService
@@ -169,13 +175,15 @@ class CertificacionDictamenPrevioController {
 		cvm.nivelEstudiosList = nivelEstudiosService.list()
 		cvm.tipoTelefonoList = tipoTelefonoService.list()
 		
-		/*
-		cvm.sustentanteInstance = s
-		if(s.idSepomex != null){
-			cvm.codigoPostal = sepomexService.obtenerCodigoPostalDeIdSepomex(s.idSepomex)
-			cvm.sepomexJsonList = (sepomexService.obtenerDatosSepomexPorCodigoPostal(cvm.codigoPostal).sort{ it.asentamiento?.nombre } as JSON)
+		cvm.certificacionInstance = certificacionDictamenPrevioService.obtenerParaEmisionDictamen(id)
+		
+		if(cvm.certificacionInstance != null){
+			cvm.sustentanteInstance = cvm.certificacionInstance.sustentante
+			if(cvm.sustentanteInstance.idSepomex != null){
+				cvm.codigoPostal = sepomexService.obtenerCodigoPostalDeIdSepomex(cvm.sustentanteInstance.idSepomex)
+				cvm.sepomexJsonList = (sepomexService.obtenerDatosSepomexPorCodigoPostal(cvm.codigoPostal).sort{ it.asentamiento?.nombre } as JSON)
+			}
 		}
-		*/
 		
 		return cvm
 	}
@@ -209,6 +217,10 @@ class CertificacionDictamenPrevioController {
 	}
 	
 	public static class CreateViewModel{
+		//Bindeables
+		SustentanteTO sustentanteInstance
+		CertificacionTO certificacionInstance
+		
 		//No bindeables
 		Collection<InstitucionTO> institucionesList
 		Collection<EstadoCivilTO> estadoCivilList
@@ -216,5 +228,10 @@ class CertificacionDictamenPrevioController {
 		Collection<NivelEstudiosTO> nivelEstudiosList
 		Collection<TipoTelefonoTO> tipoTelefonoList
 		String sepomexJsonList
+		
+		InstitucionTO institutoInstance
+		VarianteFiguraTO varianteFiguraInstance
+		
+		String codigoPostal
 	}
 }

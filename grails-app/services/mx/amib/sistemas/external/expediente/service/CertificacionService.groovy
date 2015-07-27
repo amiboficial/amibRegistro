@@ -11,6 +11,21 @@ import org.codehaus.groovy.grails.web.json.JSONObject
 class CertificacionService {
 
 	String getAllUrl
+	String getWithSustentante
+	
+	CertificacionTO get(Long id){
+		CertificacionTO c = null
+		def rest = new RestBuilder()
+		def resp = rest.post( this.getWithSustentante + id ){
+			contentType "application/json;charset=UTF-8"
+		}
+		if(resp.json instanceof JSONObject && !JSONObject.NULL.equals(resp.json)){
+			SustentanteTO s = SustentanteService.obtenerSustentanteFromJSON(resp.json.'sustentante')
+			c = s.certificaciones.find{ it.id = id }
+		}
+		
+		return c
+	}
 	
     List<CertificacionTO> getAll(List<Long> ids) {
 		List<Long> idsCerts = new ArrayList<Long>()

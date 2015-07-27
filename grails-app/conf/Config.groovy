@@ -171,6 +171,7 @@ mx.amib.sistemas.expediente.certificacion.MetodoValidacion.list = 'metodoValidac
 mx.amib.sistemas.expediente.certificacion.StatusAutorizacion.list = 'statusAutorizacionRestful/index?max=100'
 mx.amib.sistemas.expediente.certificacion.StatusCertificacion.list = 'statusCertificacionRestful/index?max=100'
 mx.amib.sistemas.expediente.certificacion.Certificacion.getAll = 'certificacionRestful/getAll'
+mx.amib.sistemas.expediente.certificacion.Certificacion.getWithSustentante = 'certificacionRestful/getWithSustentante/'
 
 //especificaciones de rutas para servicios REST de amibDocumentos
 mx.amib.sistemas.documentos.Documento.save = 'documentoRestful/save'

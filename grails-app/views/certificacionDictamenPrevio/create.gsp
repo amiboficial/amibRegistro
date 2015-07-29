@@ -100,6 +100,29 @@
 		var app = app || {};
 		
 		var generalesModel = new app.Generales();
+
+		generalesModel.set("grailsId",${viewModelInstance?.sustentanteInstance?.id}-0);
+		generalesModel.set("numeroMatricula",${viewModelInstance?.sustentanteInstance?.numeroMatricula}-0);
+		generalesModel.set("nombre","${raw(viewModelInstance?.sustentanteInstance?.nombre)}");
+		generalesModel.set("primerApellido","${raw(viewModelInstance?.sustentanteInstance?.primerApellido)}");
+		generalesModel.set("segundoApellido","${raw(viewModelInstance?.sustentanteInstance?.segundoApellido)}");
+
+		generalesModel.set("fechaNacimientoDay", ${viewModelInstance?.sustentanteInstance?.fechaNacimiento[Calendar.DATE]});
+		generalesModel.set("fechaNacimientoMonth", ${viewModelInstance?.sustentanteInstance?.fechaNacimiento[Calendar.MONTH]+1});
+		generalesModel.set("fechaNacimientoYear", ${viewModelInstance?.sustentanteInstance?.fechaNacimiento[Calendar.YEAR]});
+
+		generalesModel.set("genero","${viewModelInstance?.sustentanteInstance?.genero}");
+		generalesModel.set("rfc","${viewModelInstance?.sustentanteInstance?.rfc}");
+		generalesModel.set("curp","${viewModelInstance?.sustentanteInstance?.curp}");
+		generalesModel.set("correoElectronico","${viewModelInstance?.sustentanteInstance?.correoElectronico}");
+
+		generalesModel.set("estadoCivil",${viewModelInstance?.sustentanteInstance?.idEstadoCivil}-0);
+		generalesModel.set("nivelEstudios",${viewModelInstance?.sustentanteInstance?.idNivelEstudios}-0);
+		generalesModel.set("nacionalidad",${viewModelInstance?.sustentanteInstance?.idNacionalidad}-0);
+
+		generalesModel.set("calidadMigratoria","${viewModelInstance?.sustentanteInstance?.calidadMigratoria}");
+		generalesModel.set("profesion","${viewModelInstance?.sustentanteInstance?.profesion}");
+		
 		var generalesView = new app.GeneralesView(generalesModel);
 	</script>
 	

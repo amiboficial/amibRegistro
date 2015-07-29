@@ -51,5 +51,8 @@ beans = {
 	}
 	certificacionService(mx.amib.sistemas.external.expediente.service.CertificacionService){
 		getAllUrl = application.config.mx.amib.sistemas.expediente.resthttpURL + application.config.mx.amib.sistemas.expediente.certificacion.Certificacion.getAll
+		findAllEnDictamenPrevioUrl = application.config.mx.amib.sistemas.expediente.resthttpURL + application.config.mx.amib.sistemas.expediente.certificacion.Certificacion.findAllEnDictamenPrevio
+		findAllEnDictamenPrevioByMatriculaUrl = application.config.mx.amib.sistemas.expediente.resthttpURL + application.config.mx.amib.sistemas.expediente.certificacion.Certificacion.findAllEnDictamenPrevioByMatricula
+		findAllEnDictamenPrevioByFolioUrl = application.config.mx.amib.sistemas.expediente.resthttpURL + application.config.mx.amib.sistemas.expediente.certificacion.Certificacion.findAllEnDictamenPrevioByFolio
 	}
 }

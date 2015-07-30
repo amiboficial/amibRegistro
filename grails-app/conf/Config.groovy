@@ -174,6 +174,7 @@ mx.amib.sistemas.expediente.certificacion.Certificacion.getAll = 'certificacionR
 mx.amib.sistemas.expediente.certificacion.Certificacion.getWithSustentante = 'certificacionRestful/getWithSustentante/'
 mx.amib.sistemas.expediente.certificacion.Certificacion.findAllEnDictamenPrevio = 'certificacionRestful/findAllEnDictamenPrevio/'
 mx.amib.sistemas.expediente.certificacion.Certificacion.findAllEnDictamenPrevioByMatricula = 'certificacionRestful/findAllEnDictamenPrevioByMatricula/'
+mx.amib.sistemas.expediente.certificacion.Certificacion.findAllEnDictamenPrevioByFolio = 'certificacionRestful/findAllEnDictamenPrevioByFolio/'
 
 //especificaciones de rutas para servicios REST de amibDocumentos
 mx.amib.sistemas.documentos.Documento.save = 'documentoRestful/save'

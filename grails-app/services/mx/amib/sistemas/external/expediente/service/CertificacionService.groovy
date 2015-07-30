@@ -21,7 +21,7 @@ class CertificacionService {
 	String getAllUrl
 
 	String getWithSustentante
-	String findAllEnDictamenPrevioUrl
+	String findAllEnDictamenPrevioUrl 
 	String findAllEnDictamenPrevioByMatriculaUrl
 	String findAllEnDictamenPrevioByFolioUrl
 	CertificacionTO get(Long id){
@@ -178,6 +178,8 @@ class CertificacionService {
 		def listSustentantesJson = null
 		
 		def getUrl = this.findAllEnDictamenPrevioByFolioUrl + idSustentante
+		
+		println "URL A SOLICITAR: " + getUrl
 		
 		def rest = new RestBuilder()
 		def resp = rest.get( getUrl )

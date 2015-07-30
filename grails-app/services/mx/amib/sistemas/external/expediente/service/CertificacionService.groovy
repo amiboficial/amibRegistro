@@ -10,7 +10,13 @@ import org.codehaus.groovy.grails.web.json.JSONObject
 @Transactional
 class CertificacionService {
 
-	//TODO: Hacer test de integración para certificación service
+	public static class ResultSet{
+		List<CertificacionTO> list
+		List<SustentanteTO> sustentantes
+		long count
+		boolean error
+		String errorDetails
+	}
 	
 	String getAllUrl
 
@@ -62,12 +68,15 @@ class CertificacionService {
 		return certificaciones
     }
 	
-	List<CertificacionTO> findAllEnDictamenPrevio(Integer max, Integer offset, String sort, String order, 
+	CertificacionService.ResultSet findAllEnDictamenPrevio(Integer max, Integer offset, String sort, String order, 
 											String nom, String ap1, String ap2, 
 											Long idfig, Long idvarfig){
 		
+		CertificacionService.ResultSet rs = new CertificacionService.ResultSet()
+											
 		List<SustentanteTO> sustentantes = new ArrayList<SustentanteTO>()
 		List<CertificacionTO> certificaciones = new ArrayList<CertificacionTO>()
+		List<Long> ids = new ArrayList<Long>()
 		
 		def listCertificacionesJson = null
 		def listSustentantesJson = null
@@ -78,10 +87,15 @@ class CertificacionService {
 		def resp = rest.get( getUrl )
 		
 		if(resp.json instanceof JSONObject && !JSONObject.NULL.equals(resp.json)){
+			
+			resp.json.'list'.each{ x ->
+				ids.add(x.id)
+			}
+			
 			resp.json.'sustentantes'.each{ x ->
 				SustentanteTO s = null
 				s = SustentanteService.obtenerSustentanteFromJSON(x)
-				
+				sustentantes.add(s)
 				s.certificaciones.each { y ->
 					ids.each{ z ->
 						if(z.value == y.id.value){
@@ -90,14 +104,27 @@ class CertificacionService {
 					}
 				}
 			}
+			rs.list = certificaciones
+			rs.sustentantes = sustentantes
+			rs.count = resp.json.'count'
+			rs.error = false
+			rs.errorDetails = ""
+		}
+		else{
+			rs.error = true
+			rs.errorDetails = "NO_JSON_RESP"
 		}
 		
-		return certificaciones
+		return rs
 	}
 	
-	List<CertificacionTO> findAllEnDictamenPrevioByMatricula(Integer numeroMatricula){
+	CertificacionService.ResultSet findAllEnDictamenPrevioByMatricula(Integer numeroMatricula){
+		
+		CertificacionService.ResultSet rs = new CertificacionService.ResultSet()
+		
 		List<SustentanteTO> sustentantes = new ArrayList<SustentanteTO>()
 		List<CertificacionTO> certificaciones = new ArrayList<CertificacionTO>()
+		List<Long> ids = new ArrayList<Long>()
 		
 		def listCertificacionesJson = null
 		def listSustentantesJson = null
@@ -108,10 +135,15 @@ class CertificacionService {
 		def resp = rest.get( getUrl )
 		
 		if(resp.json instanceof JSONObject && !JSONObject.NULL.equals(resp.json)){
+			
+			resp.json.'list'.each{ x ->
+				ids.add(x.id)
+			}
+			
 			resp.json.'sustentantes'.each{ x ->
 				SustentanteTO s = null
 				s = SustentanteService.obtenerSustentanteFromJSON(x)
-				
+				sustentantes.add(s)
 				s.certificaciones.each { y ->
 					ids.each{ z ->
 						if(z.value == y.id.value){
@@ -120,14 +152,27 @@ class CertificacionService {
 					}
 				}
 			}
+			rs.list = certificaciones
+			rs.sustentantes = sustentantes
+			rs.count = resp.json.'count'
+			rs.error = false
+			rs.errorDetails = ""
+		}
+		else{
+			rs.error = true
+			rs.errorDetails = "NO_JSON_RESP"
 		}
 		
-		return certificaciones
+		return rs
 	}
 	
-	List<CertificacionTO> findAllEnDictamenPrevioByFolio(Long idSustentante){
+	CertificacionService.ResultSet findAllEnDictamenPrevioByFolio(Long idSustentante){
+		
+		CertificacionService.ResultSet rs = new CertificacionService.ResultSet()
+		
 		List<SustentanteTO> sustentantes = new ArrayList<SustentanteTO>()
 		List<CertificacionTO> certificaciones = new ArrayList<CertificacionTO>()
+		List<Long> ids = new ArrayList<Long>()
 		
 		def listCertificacionesJson = null
 		def listSustentantesJson = null
@@ -138,10 +183,15 @@ class CertificacionService {
 		def resp = rest.get( getUrl )
 		
 		if(resp.json instanceof JSONObject && !JSONObject.NULL.equals(resp.json)){
+			
+			resp.json.'list'.each{ x ->
+				ids.add(x.id)
+			}
+			
 			resp.json.'sustentantes'.each{ x ->
 				SustentanteTO s = null
 				s = SustentanteService.obtenerSustentanteFromJSON(x)
-				
+				sustentantes.add(s)
 				s.certificaciones.each { y ->
 					ids.each{ z ->
 						if(z.value == y.id.value){
@@ -150,7 +200,18 @@ class CertificacionService {
 					}
 				}
 			}
+			rs.list = certificaciones
+			rs.sustentantes = sustentantes
+			rs.count = resp.json.'count'
+			rs.error = false
+			rs.errorDetails = ""
 		}
+		else{
+			rs.error = true
+			rs.errorDetails = "NO_JSON_RESP"
+		}
+		
+		return rs
 	}
 
 }

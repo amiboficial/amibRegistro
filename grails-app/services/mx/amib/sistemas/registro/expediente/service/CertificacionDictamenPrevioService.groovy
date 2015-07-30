@@ -16,8 +16,8 @@ class CertificacionDictamenPrevioService {
 		boolean estaCertificado
 		
 		//revisa que este en estatus de dictaminable
-		enDictamenPrevio = c.statusAutorizacion == StatusAutorizacionTypes.DICTAMEN_PREVIO
-		estaCertificado = c.statusCertificacion == StatusCertificacionTypes.CERTIFICADO
+		enDictamenPrevio = (c.statusAutorizacion.id.value == StatusAutorizacionTypes.DICTAMEN_PREVIO)
+		estaCertificado = (c.statusCertificacion.id.value == StatusCertificacionTypes.CERTIFICADO)
 		
 		if(!(enDictamenPrevio && estaCertificado))
 			c = null

@@ -94,64 +94,28 @@ class CertificacionDictamenPrevioController {
 		
 		//Realiza búsquedas
 		if(vm.fltTB == 'T'){
-			def sr = null
-
-			sr = sustentanteService.findAllAdvancedSearchWithCertificacion("", "", "", -1, -1, 
-																			StatusCertificacionTypes.CERTIFICADO, 
-																			StatusAutorizacionTypes.DICTAMEN_PREVIO, 
-																			vm.max, vm.offset, vm.sort, vm.order)
-			vm.resultList = sr.list
-			vm.count = sr.count
+			def rs = certificacionService.findAllEnDictamenPrevio(vm.max, vm.offset, vm.sort, vm.order,
+																"","","",-1,-1)
+			vm.resultList = rs.list
+			vm.count = rs.count
 		}
 		else if(vm.fltTB == 'M'){
-			def result = sustentanteService.findByMatricula(vm.fltMat.value)
-			vm.resultList = new ArrayList<SustentanteTO>()
+			def rs = certificacionService.findAllEnDictamenPrevioByMatricula(vm.fltMat.value)
 			
-			//checa si la última certificación es candidata a un dictamen
-			SustentanteTO s = result
-			CertificacionTO c = s.certificaciones.find{ x ->
-				x.isUltima == true && x.statusAutorizacion.id == StatusAutorizacionTypes.DICTAMEN_PREVIO && x.statusCertificacion.id == StatusCertificacionTypes.CERTIFICADO
-			}
-
-			vm.offset = 0
-			if(c == null){
-				vm.count = 0
-			}
-			else{
-				vm.count = 1
-				vm.resultList.add(result)
-			}
-			
+			vm.resultList = rs.list
+			vm.count = rs.count
 		}
-		else if(vm.fltTB == 'F'){
-			def result = sustentanteService.get(vm.fltFol)
-			vm.resultList = new ArrayList<SustentanteTO>()
+		else if(vm.fltTB == 'F'){			
+			def rs = certificacionService.findAllEnDictamenPrevioByFolio(vm.fltFol.value)
 			
-			//checa si la última certificación es candidata a un dictamen
-			SustentanteTO s = result
-			CertificacionTO c = s.certificaciones.find{ x ->
-				x.isUltima == true && x.statusAutorizacion.id == StatusAutorizacionTypes.DICTAMEN_PREVIO && x.statusCertificacion.id == StatusCertificacionTypes.CERTIFICADO
-			}
-			
-			if(c == null){
-				vm.count = 0
-			}
-			else{
-				vm.count = 1
-				vm.resultList.add(result)
-			}
+			vm.resultList = rs.list
+			vm.count = rs.count
 		}
 		else if(vm.fltTB == 'A'){
-			def sr = null
-
-			sr = sustentanteService.findAllAdvancedSearchWithCertificacion(vm.fltNom, vm.fltAp1, vm.fltAp2, 
-																			vm.fltFig, vm.fltVFig, 
-																			StatusCertificacionTypes.CERTIFICADO, 
-																			StatusAutorizacionTypes.DICTAMEN_PREVIO, 
-																			vm.max, vm.offset, vm.sort, vm.order)
-
-			vm.resultList = sr.list
-			vm.count = sr.count
+			def rs = certificacionService.findAllEnDictamenPrevio(vm.max, vm.offset, vm.sort, vm.order,
+						vm.fltNom, vm.fltAp1, vm.fltAp2,vm.fltFig, vm.fltVFig)
+			vm.resultList = rs.list
+			vm.count = rs.count
 		}
 		
 		return vm
@@ -208,7 +172,8 @@ class CertificacionDictamenPrevioController {
 		Long fltVFig //Identificador de variante de figura
 		
 		//De resultado
-		Collection<SustentanteTO> resultList
+		//Collection<SustentanteTO> resultList
+		Collection<CertificacionTO> resultList
 		Integer count
 		String sort
 		Integer max

@@ -190,12 +190,12 @@
 					<tbody>
 						<g:each in="${viewModelInstance?.resultList}">
 							<tr>
-								<td>${it.id}</td>
-								<td>${it.numeroMatricula}</td>
-								<td>${it.nombre}</td>
-								<td>${it.primerApellido}</td>
-								<td>${it.segundoApellido}</td>
-								<td><button class="edictamen btn btn-default btn-xs" data-id="${it.id}">Emitir dictamen</button></td>
+								<td>${it?.sustentante?.id}</td>
+								<td>${it?.sustentante?.numeroMatricula}</td>
+								<td>${it?.sustentante?.nombre}</td>
+								<td>${it?.sustentante?.primerApellido}</td>
+								<td>${it?.sustentante?.segundoApellido}</td>
+								<td><button class="edictamen btn btn-default btn-xs" data-id="${it?.id}">Emitir dictamen</button></td>
 							</tr>
 						</g:each>
 					</tbody>

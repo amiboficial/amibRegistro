@@ -106,11 +106,11 @@
 		generalesModel.set("nombre","${raw(viewModelInstance?.sustentanteInstance?.nombre)}");
 		generalesModel.set("primerApellido","${raw(viewModelInstance?.sustentanteInstance?.primerApellido)}");
 		generalesModel.set("segundoApellido","${raw(viewModelInstance?.sustentanteInstance?.segundoApellido)}");
-
+		/*
 		generalesModel.set("fechaNacimientoDay", ${viewModelInstance?.sustentanteInstance?.fechaNacimiento[Calendar.DATE]});
 		generalesModel.set("fechaNacimientoMonth", ${viewModelInstance?.sustentanteInstance?.fechaNacimiento[Calendar.MONTH]+1});
 		generalesModel.set("fechaNacimientoYear", ${viewModelInstance?.sustentanteInstance?.fechaNacimiento[Calendar.YEAR]});
-
+		*/
 		generalesModel.set("genero","${viewModelInstance?.sustentanteInstance?.genero}");
 		generalesModel.set("rfc","${viewModelInstance?.sustentanteInstance?.rfc}");
 		generalesModel.set("curp","${viewModelInstance?.sustentanteInstance?.curp}");

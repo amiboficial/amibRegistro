@@ -106,11 +106,11 @@
 		generalesModel.set("nombre","${raw(viewModelInstance?.sustentanteInstance?.nombre)}");
 		generalesModel.set("primerApellido","${raw(viewModelInstance?.sustentanteInstance?.primerApellido)}");
 		generalesModel.set("segundoApellido","${raw(viewModelInstance?.sustentanteInstance?.segundoApellido)}");
-		/*
+		
 		generalesModel.set("fechaNacimientoDay", ${viewModelInstance?.sustentanteInstance?.fechaNacimiento[Calendar.DATE]});
 		generalesModel.set("fechaNacimientoMonth", ${viewModelInstance?.sustentanteInstance?.fechaNacimiento[Calendar.MONTH]+1});
 		generalesModel.set("fechaNacimientoYear", ${viewModelInstance?.sustentanteInstance?.fechaNacimiento[Calendar.YEAR]});
-		*/
+		
 		generalesModel.set("genero","${viewModelInstance?.sustentanteInstance?.genero}");
 		generalesModel.set("rfc","${viewModelInstance?.sustentanteInstance?.rfc}");
 		generalesModel.set("curp","${viewModelInstance?.sustentanteInstance?.curp}");
@@ -132,13 +132,30 @@
 		var app = app || {};
 	
 		var telefonosModel = new Array();
+
+		<g:if test="${viewModelInstance?.sustentanteInstance?.telefonos != null && viewModelInstance?.sustentanteInstance?.telefonos?.size() > 0}">
+			<g:each var="x" in="${viewModelInstance?.sustentanteInstance?.telefonos}">
+			telefonosModel.push({ grailsId: ${x.id} ,lada:'${x.lada}',telefono:'${x.telefono}',extension:'${x.extension}', idTipoTelefono:${x.idTipoTelefonoSustentante},dsTipoTelefono:'${x.tipoTelefonoSustentante?.descripcion}' })
+			</g:each>
+		</g:if>
+		
 		var telefonosView = new app.TelefonosView(telefonosModel);
 	</script>
 	
 	<g:render template="../common/expedienteDomicilio"/>
 	<g:javascript src="mx.amib.sistemas.registro.expediente.form.domicilio.js" />
 	<script>
-	var sepomexView = new app.SepomexView(new Array(),new app.Domicilio(), '<g:createLink controller="Sepomex" action="obtenerDatosSepomex"/>');
+	var domicilioModel = new app.Domicilio()
+	var sepomexArray = new Array()
+	<g:if test="${viewModelInstance?.sustentanteInstance?.idSepomex != null}">
+		domicilioModel.set("codigoPostal","${viewModelInstance?.codigoPostal}");
+		domicilioModel.set("idSepomex",${viewModelInstance?.sustentanteInstance?.idSepomex});
+		domicilioModel.set("calle","${raw(viewModelInstance?.sustentanteInstance?.calle)}");
+		domicilioModel.set("numeroInterior","${viewModelInstance?.sustentanteInstance?.numeroInterior}");
+		domicilioModel.set("numeroExterior","${viewModelInstance?.sustentanteInstance?.numeroExterior}");
+		sepomexArray = ${raw(viewModelInstance?.sepomexJsonList)};
+	</g:if>
+	var sepomexView = new app.SepomexView(sepomexArray, domicilioModel, '<g:createLink controller="Sepomex" action="obtenerDatosSepomex"/>');
 	</script>
 	
 	

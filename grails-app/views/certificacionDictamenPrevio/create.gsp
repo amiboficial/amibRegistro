@@ -158,19 +158,44 @@
 	var sepomexView = new app.SepomexView(sepomexArray, domicilioModel, '<g:createLink controller="Sepomex" action="obtenerDatosSepomex"/>');
 	</script>
 	
-	
-	
 	<g:render template="../common/expedientePuestos"/>
 	<g:javascript src="mx.amib.sistemas.registro.expediente.form.puestos.js" />
 	<script>
 		var app = app || {};
 		
-		var puestosArray = new Array();
-		
 		app.instituciones = new Array();
 		<g:each var="x" in="${viewModelInstance?.institucionesList}">
 			app.instituciones.push( (new app.Institucion(${x?.id},"${x?.nombre}")) );
 		</g:each>
+
+		var puestosArray = [
+			<g:each status="i" var="x" in="${viewModelInstance?.sustentanteInstance?.puestos}">
+				{
+					grailsId: ${x?.id},
+					idInstitucion: ${x?.idInstitucion},
+					dsInstitucion: app.getInstitucionById(${x?.idInstitucion}).nombre,
+					fechaInicio_day: ${x?.fechaInicio[Calendar.DATE]},
+					fechaInicio_month: ${x?.fechaInicio[Calendar.MONTH]+1},
+					fechaInicio_year: ${x?.fechaInicio[Calendar.YEAR]},
+					<g:if test="${x.fechaFin != null}">
+						fechaFin_day: ${x.fechaFin[Calendar.DATE]},
+						fechaFin_month: ${x.fechaFin[Calendar.MONTH]+1},
+						fechaFin_year: ${x.fechaFin[Calendar.YEAR]},
+					</g:if>
+					nombrePuesto: "${x?.nombrePuesto}",
+					statusEntManifProtesta:  ${x?.statusEntManifProtesta},
+					obsEntManifProtesta: "${x?.obsEntManifProtesta?:''}",
+					statusEntCartaInter:  ${x?.statusEntCartaInter},
+					obsEntCartaInter: "${x?.obsEntCartaInter?:''}",
+
+					viewStatus: app.EXP_PUES_ST_VALIDATED,
+					viewMode: app.EXP_PUES_MODE_NONEDIT,
+				}
+				<g:if test="${i == viewModelInstance?.sustentanteInstance?.puestos?.size() - 1 }" >
+				,
+				</g:if>
+			</g:each>			
+		];
 		
 		var puestosView = new app.PuestosView(puestosArray);
 	</script>
@@ -181,9 +206,32 @@
 		var app = app || {};
 
 		var cert = new app.CertificacionViewModel();
-		var certView = new app.CertificacionView({model:cert});
 
+		cert.set("grailsId",${viewModelInstance?.certificacionInstance?.id}-0);
+
+		cert.set("nombreFigura","${viewModelInstance?.certificacionInstance?.varianteFigura?.nombreFigura}");
+		cert.set("nombreVarianteFigura","${viewModelInstance?.certificacionInstance?.varianteFigura?.nombre}");
+		cert.set("tipoAutorizacionFigura","${viewModelInstance?.certificacionInstance?.varianteFigura?.tipoAutorizacionFigura}");
+
+		cert.set("fechaInicio_day",${viewModelInstance?.certificacionInstance?.fechaInicio[Calendar.DATE]});
+		cert.set("fechaInicio_month",${viewModelInstance?.certificacionInstance?.fechaInicio[Calendar.MONTH]+1});
+		cert.set("fechaInicio_year",${viewModelInstance?.certificacionInstance?.fechaInicio[Calendar.YEAR]});
+		cert.set("fechaFin_day",${viewModelInstance?.certificacionInstance?.fechaFin[Calendar.DATE]});
+		cert.set("fechaFin_month",${viewModelInstance?.certificacionInstance?.fechaFin[Calendar.MONTH]+1});
+		cert.set("fechaFin_year",${viewModelInstance?.certificacionInstance?.fechaFin[Calendar.YEAR]});
+
+		cert.set("fechaObtencion_day",${viewModelInstance?.certificacionInstance?.fechaObtencion[Calendar.DATE]});
+		cert.set("fechaObtencion_month",${viewModelInstance?.certificacionInstance?.fechaObtencion[Calendar.MONTH]+1});
+		cert.set("fechaObtencion_year",${viewModelInstance?.certificacionInstance?.fechaObtencion[Calendar.YEAR]});
 		
+		cert.set("statusEntHistorialInforme",${viewModelInstance?.certificacionInstance?.statusEntHistorialInforme}-0);
+		cert.set("obsEntHistorialInforme","${viewModelInstance?.certificacionInstance?.obsEntHistorialInforme}");
+		cert.set("statusEntCartaRec",${viewModelInstance?.certificacionInstance?.statusEntCartaRec}-0);
+		cert.set("obsEntCartaRec","${viewModelInstance?.certificacionInstance?.obsEntCartaRec}");
+		cert.set("statusConstBolVal",${viewModelInstance?.certificacionInstance?.statusConstBolVal}-0);
+		cert.set("obsConstBolVal","${viewModelInstance?.certificacionInstance?.obsConstBolVal}");
+		
+		var certView = new app.CertificacionView({model:cert});
 	</script>
 		
 	<!-- INICIA: COMPONENTE CHECKsLIST -->
@@ -298,6 +346,7 @@
 			submitDatos: function(){
 				var arr = this.model.get('viewsarray');
 				//El método introduce los datos en campos "hidden" con los que se hará POST
+				this.$("#spnHdnPostData").html("");
 				//datos generales
 				this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.id" value="' + arr[app.EXP_EDT_CHK_GRALES].model.get('grailsId') + '" />');
 				this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.numeroMatricula" value="' + arr[app.EXP_EDT_CHK_GRALES].model.get('numeroMatricula') + '" />');
@@ -328,7 +377,20 @@
 				this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.calle" value="' + arr[app.EXP_EDT_CHK_SEPOMEX].model.get('calle') + '" />');
 				this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.numeroInterior" value="' + arr[app.EXP_EDT_CHK_SEPOMEX].model.get('numeroInterior') + '" />');
 				this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.numeroExterior" value="' + arr[app.EXP_EDT_CHK_SEPOMEX].model.get('numeroExterior') + '" />');
-
+				//datos de certificacion
+				this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.id" value="' + arr[app.EXP_EDT_CHK_CERT].model.get('grailsId') + '" />');
+				this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.fechaObtencion_day" value="' + arr[app.EXP_EDT_CHK_CERT].model.get('fechaObtencion_day') + '" />');
+				this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.fechaObtencion_month" value="' + arr[app.EXP_EDT_CHK_CERT].model.get('fechaObtencion_month') + '" />');
+				this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.fechaObtencion_year" value="' + arr[app.EXP_EDT_CHK_CERT].model.get('fechaObtencion_year') + '" />');
+				this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.statusEntHistorialInforme" value="' + arr[app.EXP_EDT_CHK_CERT].model.get('statusEntHistorialInforme') + '" />');
+				this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.obsEntHistorialInforme" value="' + arr[app.EXP_EDT_CHK_CERT].model.get('obsEntHistorialInforme') + '" />');
+				this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.statusEntCartaRec" value="' + arr[app.EXP_EDT_CHK_CERT].model.get('statusEntCartaRec') + '" />');
+				this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.obsEntCartaRec" value="' + arr[app.EXP_EDT_CHK_CERT].model.get('obsEntCartaRec') + '" />');
+				this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.statusConstBolVal" value="' + arr[app.EXP_EDT_CHK_CERT].model.get('statusConstBolVal') + '" />');
+				this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.obsConstBolVal" value="' + arr[app.EXP_EDT_CHK_CERT].model.get('obsConstBolVal') + '" />');
+				//datos de puestos
+				var puestosJson = JSON.stringify(arr[app.EXP_EDT_CHK_PUES].collection.toJSON());
+				this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.puestos_json" value=\'' + puestosJson + '\' />');
 				$("#frmApp").submit();
 			},
 		});
@@ -337,7 +399,7 @@
 		checkSubmitView.setViewInstance(app.EXP_EDT_CHK_GRALES,generalesView);
 		checkSubmitView.setViewInstance(app.EXP_EDT_CHK_TELS,telefonosView);
 		checkSubmitView.setViewInstance(app.EXP_EDT_CHK_SEPOMEX,sepomexView);
-		//checkSubmitView.setViewInstance(app.EXP_EDT_CHK_CERT,telefonosView);
+		checkSubmitView.setViewInstance(app.EXP_EDT_CHK_CERT,certView);
 		checkSubmitView.setViewInstance(app.EXP_EDT_CHK_PUES,puestosView);
 		
 		$(window).bind("pageshow", function(){

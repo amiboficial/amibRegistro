@@ -2,7 +2,9 @@ package mx.amib.sistemas.registro.expediente.controller
 
 import grails.converters.JSON
 
+import java.text.SimpleDateFormat
 import java.util.Collection;
+import java.util.Date;
 import java.util.Map;
 
 import mx.amib.sistemas.external.catalogos.service.EstadoCivilTO;
@@ -14,8 +16,13 @@ import mx.amib.sistemas.external.catalogos.service.TipoTelefonoTO;
 import mx.amib.sistemas.external.catalogos.service.VarianteFiguraTO
 import mx.amib.sistemas.external.expediente.certificacion.catalog.service.*
 import mx.amib.sistemas.external.expediente.certificacion.service.CertificacionTO
+import mx.amib.sistemas.external.expediente.persona.service.DocumentoSustentanteTO
+import mx.amib.sistemas.external.expediente.persona.service.PuestoTO
 import mx.amib.sistemas.external.expediente.persona.service.SustentanteTO
+import mx.amib.sistemas.external.expediente.persona.service.TelefonoSustentanteTO
 import mx.amib.sistemas.registro.expediente.service.CertificacionDictamenPrevioService
+
+import org.codehaus.groovy.grails.web.json.JSONArray
 
 class CertificacionDictamenPrevioController {
 
@@ -140,7 +147,6 @@ class CertificacionDictamenPrevioController {
 		cvm.tipoTelefonoList = tipoTelefonoService.list()
 		
 		cvm.certificacionInstance = certificacionDictamenPrevioService.obtenerParaEmisionDictamen(id)
-		
 		if(cvm.certificacionInstance != null){
 			cvm.sustentanteInstance = cvm.certificacionInstance.sustentante
 			if(cvm.sustentanteInstance.idSepomex != null){
@@ -153,7 +159,85 @@ class CertificacionDictamenPrevioController {
 	}
 	
 	//Envía a autorización 
-	def save() { }
+	def save(SustentanteTO sustentante, CertificacionTO certificacion) {
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("dd-M-yyyy")
+		CertificacionTO originalCert
+		SustentanteTO originalSust
+		
+		//Obtiene los datos
+		originalCert = certificacionDictamenPrevioService.obtenerParaEmisionDictamen(certificacion.id)
+		if(originalCert != null){
+			originalSust = originalCert.sustentante
+		}
+		
+		sustentante.fechaNacimiento = sdf.parse(params.'sustentante.fechaNacimiento_day' + '-' + params.'sustentante.fechaNacimiento_month' + '-' + params.'sustentante.fechaNacimiento_year')
+		
+		def telefonosJsonElement = JSON.parse(params.'sustentante.telefonos_json')
+		sustentante.telefonos = new ArrayList<TelefonoSustentanteTO>()
+		if(telefonosJsonElement != null && telefonosJsonElement instanceof JSONArray){
+			def telefonosJsonArray = (JSONArray)telefonosJsonElement
+			telefonosJsonArray.each{
+				TelefonoSustentanteTO t = new TelefonoSustentanteTO()
+				t.lada = it.'lada'
+				t.telefono = it.'telefono'
+				t.extension = it.'extension'
+				t.idTipoTelefonoSustentante = (Long)it.'idTipoTelefono'
+				sustentante.telefonos.add(t)
+			}
+		}
+		
+		//sustentante.documentos = originalSust.documentos
+		
+		def puestosJsonElement = JSON.parse(params.'sustentante.puestos_json')
+		sustentante.puestos = new ArrayList<PuestoTO>()
+		if(puestosJsonElement != null && puestosJsonElement instanceof JSONArray){
+			def puestosJsonArray = (JSONArray)puestosJsonElement
+			puestosJsonArray.each{
+				PuestoTO p = new PuestoTO()
+				if(it.'id'.toString().compareToIgnoreCase("null") == 0)
+					p.id = -1
+				else
+					p.id = Long.parseLong(it.'id'.toString())	
+				p.idInstitucion = Long.parseLong(it.'idInstitucion'.toString())
+				p.fechaInicio = sdf.parse(it.'fechaInicio_day' + '-' + it.'fechaInicio_month' + '-' + it.'fechaInicio_year')
+				if(it.'fechaFin_day'.toString() != '-1' && it.'fechaFin_month'.toString() != '-1' && it.'fechaFin_year'.toString() != '-1'){
+					p.fechaFin = sdf.parse(it.'fechaFin_day' + '-' + it.'fechaFin_month' + '-' + it.'fechaFin_year')
+					p.esActual = false
+				}
+				else{
+					p.fechaFin = null
+					p.esActual = true
+				}
+				p.nombrePuesto = it.'nombrePuesto'
+				p.statusEntManifProtesta = Integer.parseInt(it.'statusEntManifProtesta'.toString())
+				p.obsEntManifProtesta = it.'obsEntManifProtesta'
+				p.statusEntCartaInter = Integer.parseInt(it.'statusEntCartaInter'.toString())
+				p.obsEntCartaInter = it.'obsEntCartaInter'
+				p.fechaModificacion = new Date()
+				p.sustentante = sustentante
+				sustentante.puestos.add(p)
+			}
+		}
+		//sustentante.certificaciones = originalSust.certificaciones
+		CertificacionTO certAEmitDict = originalSust.certificaciones.find{ it.id.value == certificacion.id.value }
+		certAEmitDict.fechaObtencion = sdf.parse(params.'certificacion.fechaObtencion_day' + '-' + params.'certificacion.fechaObtencion_month' + '-' + params.'certificacion.fechaObtencion_year')
+		certAEmitDict.statusEntHistorialInforme = certificacion.statusEntHistorialInforme
+		certAEmitDict.obsEntHistorialInforme = certificacion.obsEntHistorialInforme
+		certAEmitDict.statusEntCartaRec = certificacion.statusEntCartaRec
+		certAEmitDict.obsEntCartaRec = certificacion.obsEntCartaRec
+		certAEmitDict.statusConstBolVal = certificacion.statusConstBolVal
+		certAEmitDict.obsConstBolVal = certificacion.obsConstBolVal
+		
+		try {
+			certificacionDictamenPrevioService.enviarAAutorizacion(sustentante, certAEmitDict)
+			flash.successMessage = "La emisión de dictamen de sustentante de \"" + sustentante.nombre + " " + sustentante.primerApellido + "\" ha sido guardado satisfactoriamente"
+		}
+		catch (Exception e){
+			flash.errorMessage = "Ha ocurrido un error al guardar la información, los detalles son los siguientes: " + e.message.substring(0, Math.min(e.message.length(),256)  )
+		}
+		redirect (action: "index")		
+	}
 	
 	public static class IndexViewModel{
 		//No bindeables

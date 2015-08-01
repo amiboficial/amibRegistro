@@ -55,6 +55,7 @@ grails.scaffolding.templates.domainSuffix = 'Instance'
 
 // Set to false to use the new Grails 1.2 JSONBuilder in the render method
 grails.json.legacy.builder = false
+grails.converters.json.default.deep = true
 // enabled native2ascii conversion of i18n properties files
 grails.enable.native2ascii = true
 // packages to include in Spring bean scanning
@@ -167,6 +168,7 @@ mx.amib.sistemas.expediente.Sustentante.obtenerSustentantePorMatricula = 'susten
 mx.amib.sistemas.expediente.Sustentante.get = 'sustentanteRestful/show/'
 mx.amib.sistemas.expediente.Sustentante.save = 'sustentanteRestful/save'
 mx.amib.sistemas.expediente.Sustentante.updateDatosPersonales = 'sustentanteRestful/updateDatosPersonales'
+mx.amib.sistemas.expediente.Sustentante.updatePuestos = 'sustentanteRestful/updatePuestos'
 mx.amib.sistemas.expediente.certificacion.MetodoValidacion.list = 'metodoValidacionRestful/index?max=100'
 mx.amib.sistemas.expediente.certificacion.StatusAutorizacion.list = 'statusAutorizacionRestful/index?max=100'
 mx.amib.sistemas.expediente.certificacion.StatusCertificacion.list = 'statusCertificacionRestful/index?max=100'
@@ -175,6 +177,7 @@ mx.amib.sistemas.expediente.certificacion.Certificacion.getWithSustentante = 'ce
 mx.amib.sistemas.expediente.certificacion.Certificacion.findAllEnDictamenPrevio = 'certificacionRestful/findAllEnDictamenPrevio/'
 mx.amib.sistemas.expediente.certificacion.Certificacion.findAllEnDictamenPrevioByMatricula = 'certificacionRestful/findAllEnDictamenPrevioByMatricula/'
 mx.amib.sistemas.expediente.certificacion.Certificacion.findAllEnDictamenPrevioByFolio = 'certificacionRestful/findAllEnDictamenPrevioByFolio/'
+mx.amib.sistemas.expediente.certificacion.Certificacion.updateDatosParaAprobarDictamen = 'certificacionRestful/updateDatosParaAprobarDictamen'
 
 //especificaciones de rutas para servicios REST de amibDocumentos
 mx.amib.sistemas.documentos.Documento.save = 'documentoRestful/save'

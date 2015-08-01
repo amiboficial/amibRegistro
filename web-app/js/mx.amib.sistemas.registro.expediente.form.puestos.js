@@ -37,6 +37,16 @@ app.Institucion = function(id,nombre){
 }
 //arreglo "global" con listado de instituciones
 app.instituciones = new Array();
+app.getInstitucionById = function(idInstitucion){
+	var institucion = {};
+	for(var i=0; i<app.instituciones.length; i++){
+		if(app.instituciones[i].id == idInstitucion){
+			institucion = app.instituciones[i];
+			break;
+		}
+	}
+	return institucion;
+}
 
 app.MESES = [
 	{ id: 1, nombre: "enero" },

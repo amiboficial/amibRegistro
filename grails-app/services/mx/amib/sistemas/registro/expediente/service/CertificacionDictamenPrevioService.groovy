@@ -4,11 +4,17 @@ import grails.transaction.Transactional
 import mx.amib.sistemas.external.expediente.certificacion.service.CertificacionTO
 import mx.amib.sistemas.external.expediente.certificacion.catalog.service.StatusCertificacionTypes
 import mx.amib.sistemas.external.expediente.certificacion.catalog.service.StatusAutorizacionTypes
+import mx.amib.sistemas.external.expediente.persona.service.SustentanteTO
 
+// TODO: Implementar logging en este servicio dado que en estos métodos se hace
+// llamada a múltiples servicios, si alguno falla, se rastrea inmediatamente el
+// error. (cuestiones de integridad en "transacciones distribuidas")
 @Transactional
 class CertificacionDictamenPrevioService {
 
+	def sustentanteService
 	def certificacionService
+	def autorizacionService
 	
     def obtenerParaEmisionDictamen(Long id) {
 		CertificacionTO c = certificacionService.get(id)
@@ -24,5 +30,12 @@ class CertificacionDictamenPrevioService {
 		
 		return c
     }
+	
+	void enviarAAutorizacion(SustentanteTO sustentante, CertificacionTO certificacion){
+		sustentanteService.updateDatosPersonales(sustentante)
+		sustentanteService.updatePuestos(sustentante)
+		certificacionService.updateDatosParaAprobarDictamen(certificacion)
+		autorizacionService.aprobarDictamen( [certificacion.id] )
+	}
 	
 }

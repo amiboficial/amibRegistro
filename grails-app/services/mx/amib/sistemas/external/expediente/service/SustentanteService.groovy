@@ -47,6 +47,7 @@ class SustentanteService {
 	String getByNumeroMatriculaUrl
 	String saveUrl
 	String updateDatosPersonalesUrl
+	String updatePuestosUrl
 	
 	Collection<Integer> comprobarMatriculas(Collection<Integer> matriculasComprobar){
 		Collection<Integer> result = new ArrayList<Integer>()
@@ -96,8 +97,6 @@ class SustentanteService {
 		return sustentante
     }
 
-
-
 	/**
 	 * Guarda los datos de un nuevo sustentante
 	 * en el sistema de expediente. Los detalles de certificación,
@@ -106,7 +105,7 @@ class SustentanteService {
 	 * @param sustentante
 	 *
 	 */
-	void guardarNuevo(SustentanteTO sustentante){
+	SustentanteTO guardarNuevo(SustentanteTO sustentante){
 		sustentante.id = null
 
 		println "SaveUrl: " + saveUrl
@@ -117,8 +116,14 @@ class SustentanteService {
 			json (sustentante as JSON)
 		}
 
-		if(resp.statusCode.value() != HttpStatus.CREATED.value )
+		if(resp.statusCode.value() != HttpStatus.CREATED.value && resp.statusCode.value() != HttpStatus.OK.value)
 			throw new Exception("STATUS CODE: " + resp.statusCode)
+		else
+			if(resp.json != null && resp.json instanceof JSONObject) {
+				sustentante = this.obtenerSustentanteFromJSON(resp.json)
+			}
+		
+		return sustentante
 	}
 	
 	/**
@@ -129,16 +134,51 @@ class SustentanteService {
 	 * @param sustentante
 	 *
 	 */
-	void updateDatosPersonales(SustentanteTO sustentante){
-		println "updateDatosPersonalesUrl: " + updateDatosPersonalesUrl
+	SustentanteTO updateDatosPersonales(SustentanteTO sustentante){
+				
 		def rest = new RestBuilder()
 		def resp = rest.post(updateDatosPersonalesUrl){
 			contentType "application/json;charset=UTF-8"
 			json (sustentante as JSON)
 		}
 
-		if(resp.statusCode.value() != HttpStatus.CREATED.value )
+		if(resp.statusCode.value() != HttpStatus.CREATED.value && resp.statusCode.value() != HttpStatus.OK.value)
 			throw new Exception("STATUS CODE: " + resp.statusCode)
+		else
+			if(resp.json != null && resp.json instanceof JSONObject) {
+				sustentante = this.obtenerSustentanteFromJSON(resp.json)
+			}
+		
+		return sustentante
+	}
+	
+	/**
+	 * Guarda unicamente los datos laborales sustentante
+	 * en el sistema de expediente. Los detalles de certificación,
+	 * personales son omitidos.
+	 *
+	 * @param sustentante
+	 *
+	 */
+	SustentanteTO updatePuestos(SustentanteTO sustentante){
+		
+		println "updatePuestos: " + updatePuestosUrl
+		println "estupido JSON" + (sustentante as JSON)
+		
+		def rest = new RestBuilder()
+		def resp = rest.post(updatePuestosUrl){
+			contentType "application/json;charset=UTF-8"
+			json (sustentante as JSON)
+		}
+
+		if(resp.statusCode.value() != HttpStatus.CREATED.value && resp.statusCode.value() != HttpStatus.OK.value)
+			throw new Exception("STATUS CODE: " + resp.statusCode)
+		else
+			if(resp.json != null && resp.json instanceof JSONObject) {
+				sustentante = this.obtenerSustentanteFromJSON(resp.json)
+			}
+		
+		return sustentante
 	}
 	
 	SustentanteTO get(long id){
@@ -316,6 +356,7 @@ class SustentanteService {
 			ds.tipoDocumentoSustentate.vigente = it.'tipoDocumentoSustentate'.'vigente'
 			
 			ds.sustentante = sustentante
+			sustentante.documentos.add(ds)
 		}
 		sustentante.puestos = new ArrayList<PuestoTO>()
 		data.'puestos'.each {
@@ -329,23 +370,25 @@ class SustentanteService {
 			p.esActual = it.'esActual'
 			
 			p.statusEntManifProtesta = it.'statusEntManifProtesta'
-			p.obsEntManifProtesta = it.'obsEntManifProtesta'
+			if(!JSONObject.NULL.equals(it.'obsEntManifProtesta')) p.obsEntManifProtesta = it.'obsEntManifProtesta'
 			p.statusEntCartaInter = it.'statusEntCartaInter'
-			p.obsEntCartaInter = it.'obsEntCartaInter'
+			if(!JSONObject.NULL.equals(it.'obsEntCartaInter')) p.obsEntCartaInter = it.'obsEntCartaInter'
 			
 			if(!JSONObject.NULL.equals(it.'fechaCreacion')) p.fechaCreacion = df.parse(it.'fechaCreacion'.substring(0,10))
 			if(!JSONObject.NULL.equals(it.'fechaModificacion')) p.fechaModificacion = df.parse(it.'fechaModificacion'.substring(0,10))
 			
 			p.sustentante = sustentante
+			sustentante.puestos.add(p)
 		}
 		sustentante.certificaciones = new ArrayList<CertificacionTO>()
 		data.'certificaciones'.each {
+			/*
 			CertificacionTO c = new CertificacionTO()
 			c.id = it.'id'
 			
 			if(!JSONObject.NULL.equals(it.'fechaInicio')) c.fechaInicio = df.parse(it.'fechaInicio'.substring(0,10))
-			if(!JSONObject.NULL.equals(it.'fechaObtencion')) c.fechaFin = df.parse(it.'fechaFin'.substring(0,10))
-			if(!JSONObject.NULL.equals(it.'fechaCreacion')) c.fechaObtencion = df.parse(it.'fechaObtencion'.substring(0,10))
+			if(!JSONObject.NULL.equals(it.'fechaFin')) c.fechaFin = df.parse(it.'fechaFin'.substring(0,10))
+			if(!JSONObject.NULL.equals(it.'fechaObtencion')) c.fechaObtencion = df.parse(it.'fechaObtencion'.substring(0,10))
 			c.isAutorizado = it.'isAutorizado'
 			c.isApoderado = it.'isApoderado'
 			c.isUltima = it.'isUltima'
@@ -380,11 +423,11 @@ class SustentanteService {
 			c.idStatusCertificacion = it.'idStatusCertificacion'
 		
 			c.statusEntHistorialInforme = it.'statusEntHistorialInforme'
-			c.obsEntHistorialInforme = it.'obsEntHistorialInforme'
+			if(!JSONObject.NULL.equals(it.'obsEntHistorialInforme')) c.obsEntHistorialInforme = it.'obsEntHistorialInforme'
 			c.statusEntCartaRec = it.'statusEntCartaRec'
-			c.obsEntCartaRec = it.'obsEntCartaRec'
+			if(!JSONObject.NULL.equals(it.'obsEntCartaRec')) c.obsEntCartaRec = it.'obsEntCartaRec'
 			c.statusConstBolVal = it.'statusConstBolVal'
-			c.obsConstBolVal = it.'obsConstBolVal'
+			if(!JSONObject.NULL.equals(it.'obsConstBolVal')) c.obsConstBolVal = it.'obsConstBolVal'
 			
 			c.validaciones = new ArrayList<ValidacionTO>()
 			it.'validaciones'.each{ x ->
@@ -406,7 +449,9 @@ class SustentanteService {
 				v.certificacion = c
 				c.validaciones.add(v)
 			}
+			*/
 			
+			CertificacionTO c = CertificacionService.obtenerCertificacionFromJSON(it);
 			c.sustentante = sustentante
 			sustentante.certificaciones.add(c)
 		}

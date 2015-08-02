@@ -22,17 +22,17 @@
 		<div class="container-fluid">
 			<div class="body-content">
 				<div class="navbar-fixed-top">
-				
+
 					<header>
 		       	 		<div class="container-fluid colorcabecera">
 		          			<div class="row">
-		            			<div class="col-sm-2">
+		            			<div class="col-sm-3 col-md-2">
 		           					<a href="${createLink(uri: '/')}">
-		           						<asset:image class="center-block" src="logoamib.jpeg" alt="AMIB"/>
+		           						<asset:image class="center-block" src="logoamib.jpeg" alt="AMIB" />
 		                   			</a>
 		                		</div>
-		                		<div class="hidden-xs col-sm-10 col-sm-offset2">    
-		                			<span class="container letracabecera">Asociación Mexicana de Intermediarios Bursátiles</span>
+		                		<div class="hidden-xs col-sm-9" style="padding-top:2.25em">    
+		                			<span class="letracabecera">Asociación Mexicana de Intermediarios Bursátiles</span>
 		                		</div>
 		                	</div>
 		                </div>	
@@ -54,8 +54,7 @@
 								<div class="navbar-collapse collapse">
 									<div class="nav" role="navigation">
 										<ul class="nav navbar-nav pull-right" role="navigation">
-											<li><a href="#">(Detalles de sesión)</a></li>
-											<li><a href="#"></a></li>
+											<li><a href="#"><span class="glyphicon glyphicon-user"></span> USUARIO_REGISTRADO (Cerrar Sesión)</a></li>
 										</ul>
 									</div>
 								</div>		

@@ -8,6 +8,15 @@ app.EXP_CEA_SELECTED_TAB_BAV = 2;
 app.EXP_CEA_RSLTS_ST_READY = 0;
 app.EXP_CEA_RSLTS_ST_PROC = 0;
 
+app.EXP_CEA_RSLT_ST_NO_ENVIADO = 0;
+app.EXP_CEA_RSLT_ST_ENVIADO = 1;
+
+app.EXP_CEA_RSLT_NOSEL_COLOR = "#FFFFFF"; //blanco
+app.EXP_CEA_RSLT_SEL_COLOR = "#D9EDF7"; //azul claro
+app.EXP_CEA_RSLT_ENLOTE_COLOR = "#DEF7D9"; //verde claro
+app.EXP_CEA_RSLT_SELENLOTE_COLOR = "#F2D9F7"; //morado claro
+
+
 app.Figura = function(id,nombre){
 	this.id = id;
 	this.nombre = nombre;
@@ -54,6 +63,7 @@ app.BusqAvVM = Backbone.Model.extend({
 app.ResultVM = Backbone.Model.extend({
 	defaults: {
 		grailsId: -1,
+		numeroMatricula: -1,
 		nombre: "",
 		primerApellido: "",
 		segundoApellido: "",
@@ -65,6 +75,22 @@ app.ResultVM = Backbone.Model.extend({
 		yaEnLote: false,
 		
 		viewChecked: false
+	},
+	getViewSelectionColor: function(){
+		var colorHexStr = app.EXP_CEA_RSLT_NOSEL_COLOR;
+		if(this.get('yaEnLote') == true && this.get('viewChecked') == true){
+			colorHexStr = app.EXP_CEA_RSLT_SELENLOTE_COLOR;
+		}
+		else if(this.get('yaEnLote') == true && this.get('viewChecked') == false){
+			colorHexStr = app.EXP_CEA_RSLT_ENLOTE_COLOR;
+		}
+		else if(this.get('yaEnLote') == false && this.get('viewChecked') == true){
+			colorHexStr = app.EXP_CEA_RSLT_SEL_COLOR;
+		}
+		else if(this.get('yaEnLote') == false && this.get('viewChecked') == false){
+			colorHexStr = app.EXP_CEA_RSLT_NOSEL_COLOR;
+		}
+		return colorHexStr;
 	}
 });
 
@@ -101,7 +127,7 @@ app.ResultsVM = Backbone.Model.extend({
 
 app.CertPendAutMainView = Backbone.View.extend({
 	el: '#divCertPendAut',
-	template: _.template( $('#certPendAutMainView').html() ),
+	template: _.template( $('#certPendAutMainTemplate').html() ),
 	options: {},
 	
 	initialize: function(options){
@@ -115,31 +141,39 @@ app.CertPendAutMainView = Backbone.View.extend({
 	//MÉTODOS DE RENDEREO
 	render: function(){
 		this.$el.html( this.template() );
-		this.renderMatriculaTabView();
-		this.renderFolioTabView();
-		this.renderBusqAvView();
+		//this.renderMatriculaTabView();
+		//this.renderFolioTabView();
+		//this.renderBusqAvView();
 		this.renderResultView();
 		return this;
 	},
 	renderMatriculaTabView: function(){
-		this.$(".matricula-tab-pane").html("");
+		this.$(".tab-pane-matricula").html("");
 		var view = new app.MatriculaTabView(this.options);
 		return view.render();
 	},
 	renderFolioTabView: function(){
-		this.$(".folio-tab-pane").html("");
+		this.$(".tab-pane-folio").html("");
 		var view = new app.FolioTabView(this.options);
 		return view.render();
 	},
 	renderBusqAvView: function(){
-		this.$(".busqav-tab-pane").html("");
+		this.$(".tab-pane-busqav").html("");
 		var view = new app.BusqAvView(this.options);
 		return view.render();
 	},
 	renderResultView: function(){
+	
+		var parentView = this;
+		var model = this.options.resultsVM;
+		var collection = this.options.resultVMCollection;
+		
+		var view = new app.ResultsView({ model:model, collection:collection, parentView:parentView });
+
 		this.$(".div-resultados").html("");
-		var view = new app.ResultsView(this.options);
-		return view.render();
+		this.$(".div-resultados").append( view.render().el );
+		
+		return view;
 	}
 	
 });
@@ -151,6 +185,12 @@ app.MatriculaTabView = Backbone.View.extend({
 		'click .clean' : 'limpiar',
 		'click .find' : 'findByNumeroMatricula'
 	},
+	limpiar : function(e){
+		
+	},
+	findByNumeroMatricula : function(e){
+		
+	}
 });
 
 app.FolioTabView = Backbone.View.extend({
@@ -173,16 +213,111 @@ app.BusqAvView = Backbone.View.extend({
 
 app.ResultView = Backbone.View.extend({
 	parentView: {},
-	el: "",
-	events: {
-		//aqui va el evento de la "seleccion"
+	tagName: 'tr',
+	template: _.template( $('#resultTemplate').html() ),
+	
+	initialize: function(options){
+		this.model = options.model;
+		this.parentView = options.parentView;
+		
+		this.render();
+		
+		this.listenTo( this.model, 'change:viewChecked', this.render );
+		this.listenTo( this.model, 'change:yaEnLote', this.render );
 	},
+	
+	render: function(){
+		this.$el.html( this.template( this.model.toJSON() ) );
+		this.$el.css( "background-color" , this.model.getViewSelectionColor() );
+		return this;
+	},
+	
+	events: {
+		'click .sent' : 'enviarALote',
+		'click .check' : 'seleccionar'
+	},
+	
+	enviarALote: function(e){
+		e.preventDefault();
+		
+		if( this.model.get('yaEnLote') == false ){
+			this.model.set('yaEnLote',true);
+		}
+		else{
+			this.model.set('yaEnLote',false);
+		}
+	},
+	
+	seleccionar: function(e){
+		e.preventDefault();
+		
+		if( this.model.get('viewChecked') == false ){
+			this.model.set('viewChecked',true);
+		}
+		else{
+			this.model.set('viewChecked',false);
+		}
+	}
 });
 
 app.ResultsView = Backbone.View.extend({
 	parentView: {},
-	el: "",
-	events: {
-		//aqui van los eventos de los botones
+	tagname: 'div',
+	template: _.template( $('#resultsTemplate').html() ),
+	
+	model: new Backbone.Model(),
+	
+	initialize: function(options){
+		this.model = options.model;
+		this.collection = options.collection;
+		this.parentView = options.parentView;
+		
+		this.render();
+		
+		//this.listenTo( this.collection, 'add', this.renderList );
+		//this.listenTo( this.collection, 'sort', this.renderList );
 	},
+	
+	render: function(){
+		this.$el.html( this.template( this.model.toJSON() ) );
+		this.renderList();
+		return this;
+	},
+	renderList: function(){
+		this.$(".list-items").html("");
+		this.collection.each( function(item){
+			this.renderElement(item);
+		},this );
+	},
+	renderElement: function(item){
+		var view = this;
+		var elementView =  new app.ResultView({model:item,parentView:view});
+		elementView.viewModel = this.viewModel;
+		this.$(".list-items").append( elementView.render().el );
+		return this;
+	},
+	
+	events: {
+		'click .hideSent' : 'ocultarElementoEnviados',
+		'click .selectAll' : 'seleccionarTodos',
+		'click .selectNone' : 'quitarSeleccionTodos',
+		'click .sentSelected' : 'enviarSeleccionadosLote',
+		'click .viewLote' : 'verLote'
+	},
+	
+	ocultarElementoEnviados: function(e){
+		e.preventDefault();
+	},
+	seleccionarTodos: function(e){
+		e.preventDefault();
+	},
+	quitarSeleccionTodos: function(e){
+		e.preventDefault();
+	},
+	enviarSeleccionadosLote: function(e){
+		e.preventDefault();
+	},
+	verLote: function(e){
+		e.preventDefault();
+	}
 });

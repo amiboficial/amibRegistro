@@ -6,6 +6,10 @@ class CertificacionEnvioAutorizacionController {
 		
 	}
 		
+	def indexOld(){
+		
+	}
+	
 	def findAllByMatricula(){
 	
 	}

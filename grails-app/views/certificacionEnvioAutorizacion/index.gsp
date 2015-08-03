@@ -164,86 +164,87 @@
 			</div>
 		</fieldset>
 		
-		<fieldset>
-			<legend>Resultados de búsqueda</legend>
-			
-			<div class="alert alert-info"><asset:image src="spinner_alert_info.gif"/>&nbsp; Procesando datos, espere unos instantes...</div>
-			<div class="alert alert-danger"><span class="glyphicon glyphicon-info-sign"></span> Ha ocurrido un error un la petición, intente mas tarde.</div>
-			
-			<div class="form-group">
-				<div class="col-md-12 col-sm-12">
-					<button type="button" class="limpiar btn btn-default btn-primary" data-tab="M"><span class="glyphicon glyphicon-eye-close"></span>&nbsp;Ocultar elementos enviados</button>
-					&nbsp;&nbsp;&nbsp;
-					<div class="btn-group">
-						<button type="button" class="limpiar btn btn-default btn-primary" data-tab="M"><span class="glyphicon glyphicon-check"></span>&nbsp;Seleccionar todo</button>
-						<button type="button" class="limpiar btn btn-default btn-primary" data-tab="M"><span class="glyphicon glyphicon glyphicon-unchecked"></span>&nbsp;De-seleccionar todo</button>
-						<button type="button" class="limpiar btn btn-default btn-primary" data-tab="M"><span class="glyphicon glyphicon-share"></span>&nbsp;Enviar seleccionados a lote de envio</button>
-					</div>
-					&nbsp;&nbsp;&nbsp;
-					<button type="button" class="limpiar btn btn-default btn-primary" data-tab="M"><span class="glyphicon glyphicon-list-alt"></span>&nbsp;Ver lote de envio <span class="badge">X</span></button>
-				</div>
-			</div>
-			
-			<div id="list-certificacionEnvioAutorizacion" class="content scaffold-list" role="main">
-				<table class="table">
-					<thead>
-						<tr>
-							<th>&nbsp;</th>
-							<th>${message(code: 'expediente.folio.label', default: 'Folio')} <a href="#"><span class="glyphicon glyphicon-chevron-up"></span></a><a href="#"><span class="glyphicon glyphicon-chevron-down"></span></a></th>
-							<th>${message(code: 'expediente.matricula.label', default: 'Matrícula')} <a href="#"><span class="glyphicon glyphicon-chevron-up"></span></a><a href="#"><span class="glyphicon glyphicon-chevron-down"></span></a></th>
-							<th>${message(code: 'expediente.nombre.label', default: 'Nombre')} <a href="#"><span class="glyphicon glyphicon-chevron-up"></span></a><a href="#"><span class="glyphicon glyphicon-chevron-down"></span></a></th>
-							<th>${message(code: 'expediente.primerApellido.label', default: '1er Apellido')} <a href="#"><span class="glyphicon glyphicon-chevron-up"></span></a><a href="#"><span class="glyphicon glyphicon-chevron-down"></span></a></th>
-							<th>${message(code: 'expediente.segundoApellido.label', default: '2do Apellido')} <a href="#"><span class="glyphicon glyphicon-chevron-up"></span></a><a href="#"><span class="glyphicon glyphicon-chevron-down"></span></a></th>
-							<th>...</th>
-						</tr>
-					</thead>
-					
-					<tbody>
-						<tr style="background-color: #D9EDF7;">
-							<td style="width:1px;white-space:nowrap"><span class="glyphicon glyphicon-check" ></span></td>
-							<td style="white-space:nowrap">111</td>
-							<td style="white-space:nowrap">111</td>
-							<td>AAAAAAAAAAAAAA1</td>
-							<td>BBBBBBBBBBBBBBBBBBB2</td>
-							<td>CCCCCCCCCCCCCCCCCCCCCCCCCCCCCC3</td>
-							<td style="width:1px;white-space:nowrap"><button class="edictamen btn btn-default btn-xs" data-id="1">Enviar a lote de envio</button></td>
-						</tr>
-						<tr style="background-color: #F2D9F7;">
-							<td style="width:1px;white-space:nowrap"><span class="glyphicon glyphicon-check" ></span></td>
-							<td style="white-space:nowrap">111</td>
-							<td style="white-space:nowrap">111</td>
-							<td>AAAAAAAAAAAAAA1</td>
-							<td>BBBBBBBBBBBBBBBBBBB2</td>
-							<td>CCCCCCCCCCCCCCCCCCCCCCCCCCCCCC3</td>
-							<td style="width:1px;white-space:nowrap"><button class="edictamen btn btn-default btn-xs" data-id="2" disabled>Enviado</button></td>
-						</tr>
-						<tr style="background-color: #DEF7D9;">
-							<td style="width:1px;white-space:nowrap"><span class="glyphicon glyphicon-check" ></span></td>
-							<td style="white-space:nowrap">111</td>
-							<td style="white-space:nowrap">111</td>
-							<td>AAAAAAAAAAAAAA1</td>
-							<td>BBBBBBBBBBBBBBBBBBB2</td>
-							<td>CCCCCCCCCCCCCCCCCCCCCCCCCCCCCC3</td>
-							<td style="width:1px;white-space:nowrap"><button class="edictamen btn btn-default btn-xs" data-id="3" disabled>Enviado</button></td>
-						</tr>
-					</tbody>
+		<div class="div-resultados">
+			<fieldset>
+				<legend>Resultados de búsqueda</legend>
 				
-				</table>
-
-				<ul class="pagination pagination-sm">
-					<li><a href="#">&lt;</a></li>
-					<li class="active"><a href="#">1</a></li>
-					<li><a href="#">2</a></li>
-					<li><a href="#">3</a></li>
-					<li><a href="#">4</a></li>
-					<li><a href="#">5</a></li>
-					<li><a href="#">&gt;</a></li>
-				</ul>
-
-			</div>
-			
-		</fieldset>
-		
+				<div class="alert alert-info"><asset:image src="spinner_alert_info.gif"/>&nbsp; Procesando datos, espere unos instantes...</div>
+				<div class="alert alert-danger"><span class="glyphicon glyphicon-info-sign"></span> Ha ocurrido un error un la petición, intente mas tarde.</div>
+				
+				<div class="form-group">
+					<div class="col-md-12 col-sm-12">
+						<button type="button" class="limpiar btn btn-default btn-primary" data-tab="M"><span class="glyphicon glyphicon-eye-close"></span>&nbsp;Ocultar elementos enviados</button>
+						&nbsp;&nbsp;&nbsp;
+						<div class="btn-group">
+							<button type="button" class="limpiar btn btn-default btn-primary" data-tab="M"><span class="glyphicon glyphicon-check"></span>&nbsp;Seleccionar todo</button>
+							<button type="button" class="limpiar btn btn-default btn-primary" data-tab="M"><span class="glyphicon glyphicon glyphicon-unchecked"></span>&nbsp;De-seleccionar todo</button>
+							<button type="button" class="limpiar btn btn-default btn-primary" data-tab="M"><span class="glyphicon glyphicon-share"></span>&nbsp;Enviar seleccionados a lote de envio</button>
+						</div>
+						&nbsp;&nbsp;&nbsp;
+						<button type="button" class="limpiar btn btn-default btn-primary" data-tab="M"><span class="glyphicon glyphicon-list-alt"></span>&nbsp;Ver lote de envio <span class="badge">X</span></button>
+					</div>
+				</div>
+				
+				<div id="list-certificacionEnvioAutorizacion" class="content scaffold-list" role="main">
+					<table class="table">
+						<thead>
+							<tr>
+								<th>&nbsp;</th>
+								<th>${message(code: 'expediente.folio.label', default: 'Folio')} <a href="#"><span class="glyphicon glyphicon-chevron-up"></span></a><a href="#"><span class="glyphicon glyphicon-chevron-down"></span></a></th>
+								<th>${message(code: 'expediente.matricula.label', default: 'Matrícula')} <a href="#"><span class="glyphicon glyphicon-chevron-up"></span></a><a href="#"><span class="glyphicon glyphicon-chevron-down"></span></a></th>
+								<th>${message(code: 'expediente.nombre.label', default: 'Nombre')} <a href="#"><span class="glyphicon glyphicon-chevron-up"></span></a><a href="#"><span class="glyphicon glyphicon-chevron-down"></span></a></th>
+								<th>${message(code: 'expediente.primerApellido.label', default: '1er Apellido')} <a href="#"><span class="glyphicon glyphicon-chevron-up"></span></a><a href="#"><span class="glyphicon glyphicon-chevron-down"></span></a></th>
+								<th>${message(code: 'expediente.segundoApellido.label', default: '2do Apellido')} <a href="#"><span class="glyphicon glyphicon-chevron-up"></span></a><a href="#"><span class="glyphicon glyphicon-chevron-down"></span></a></th>
+								<th>...</th>
+							</tr>
+						</thead>
+						
+						<tbody>
+							<tr style="background-color: #D9EDF7;">
+								<td style="width:1px;white-space:nowrap"><span class="glyphicon glyphicon-check" ></span></td>
+								<td style="white-space:nowrap">111</td>
+								<td style="white-space:nowrap">111</td>
+								<td>AAAAAAAAAAAAAA1</td>
+								<td>BBBBBBBBBBBBBBBBBBB2</td>
+								<td>CCCCCCCCCCCCCCCCCCCCCCCCCCCCCC3</td>
+								<td style="width:1px;white-space:nowrap"><button class="edictamen btn btn-default btn-xs" data-id="1">Enviar a lote de envio</button></td>
+							</tr>
+							<tr style="background-color: #F2D9F7;">
+								<td style="width:1px;white-space:nowrap"><span class="glyphicon glyphicon-check" ></span></td>
+								<td style="white-space:nowrap">111</td>
+								<td style="white-space:nowrap">111</td>
+								<td>AAAAAAAAAAAAAA1</td>
+								<td>BBBBBBBBBBBBBBBBBBB2</td>
+								<td>CCCCCCCCCCCCCCCCCCCCCCCCCCCCCC3</td>
+								<td style="width:1px;white-space:nowrap"><button class="edictamen btn btn-default btn-xs" data-id="2" disabled>Enviado</button></td>
+							</tr>
+							<tr style="background-color: #DEF7D9;">
+								<td style="width:1px;white-space:nowrap"><span class="glyphicon glyphicon-check" ></span></td>
+								<td style="white-space:nowrap">111</td>
+								<td style="white-space:nowrap">111</td>
+								<td>AAAAAAAAAAAAAA1</td>
+								<td>BBBBBBBBBBBBBBBBBBB2</td>
+								<td>CCCCCCCCCCCCCCCCCCCCCCCCCCCCCC3</td>
+								<td style="width:1px;white-space:nowrap"><button class="edictamen btn btn-default btn-xs" data-id="3" disabled>Enviado</button></td>
+							</tr>
+						</tbody>
+					
+					</table>
+	
+					<ul class="pagination pagination-sm">
+						<li><a href="#">&lt;</a></li>
+						<li class="active"><a href="#">1</a></li>
+						<li><a href="#">2</a></li>
+						<li><a href="#">3</a></li>
+						<li><a href="#">4</a></li>
+						<li><a href="#">5</a></li>
+						<li><a href="#">&gt;</a></li>
+					</ul>
+	
+				</div>
+				
+			</fieldset>
+		</div>
 	</form>
 
 </body>

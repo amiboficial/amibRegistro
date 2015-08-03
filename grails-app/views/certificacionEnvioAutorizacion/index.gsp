@@ -42,9 +42,6 @@
 					<li role="presentation">
 						<a href="#bav" aria-controls="bav" role="tab" data-toggle="tab">Búsqueda avanzada</a>
 					</li>
-					<li role="presentation">
-						<a href="#bactions" aria-controls="bactions" role="tab" data-toggle="tab">Acciones</a>
-					</li>
 				</ul>
 				<br/>
 				
@@ -164,34 +161,85 @@
 					</div>
 					
 				</div>
-				<div role="tabpanel" id="bactions" class="tab-pane" >
-					<div class="form-group">
-						<div class="col-md-3 col-sm-3">
-							&nbsp;
-						</div>
-						<div class="col-md-6 col-sm-6" style="text-align: center">
-							<button type="button" class="limpiar btn btn-default btn-primary" data-tab="M">Limpiar campos</button>
-							<button type="button" class="buscar btn btn-default btn-primary" data-tab="M"><span class="glyphicon glyphicon-search"></span> Realizar búsqueda</button>
-						</div>
-						<div class="col-md-3 col-sm-3">
-							&nbsp;
-						</div>
-					</div>
-				</div>
 			</div>
 		</fieldset>
 		
 		<fieldset>
 			<legend>Resultados de búsqueda</legend>
 			
+			<div class="alert alert-info"><asset:image src="spinner_alert_info.gif"/>&nbsp; Procesando datos, espere unos instantes...</div>
+			<div class="alert alert-danger"><span class="glyphicon glyphicon-info-sign"></span> Ha ocurrido un error un la petición, intente mas tarde.</div>
+			
 			<div class="form-group">
 				<div class="col-md-12 col-sm-12">
-					<button type="button" class="limpiar btn btn-default btn-primary" data-tab="M">Seleccionar todo</button>
-					<button type="button" class="limpiar btn btn-default btn-primary" data-tab="M">De-seleccionar todo</button>
-					<button type="button" class="limpiar btn btn-default btn-primary" data-tab="M">Enviar seleccionados a lote de envio</button>
+					<button type="button" class="limpiar btn btn-default btn-primary" data-tab="M"><span class="glyphicon glyphicon-eye-close"></span>&nbsp;Ocultar elementos enviados</button>
 					&nbsp;&nbsp;&nbsp;
-					<button type="button" class="limpiar btn btn-default btn-primary" data-tab="M">Ver lote de envio (X)</button>
+					<div class="btn-group">
+						<button type="button" class="limpiar btn btn-default btn-primary" data-tab="M"><span class="glyphicon glyphicon-check"></span>&nbsp;Seleccionar todo</button>
+						<button type="button" class="limpiar btn btn-default btn-primary" data-tab="M"><span class="glyphicon glyphicon glyphicon-unchecked"></span>&nbsp;De-seleccionar todo</button>
+						<button type="button" class="limpiar btn btn-default btn-primary" data-tab="M"><span class="glyphicon glyphicon-share"></span>&nbsp;Enviar seleccionados a lote de envio</button>
+					</div>
+					&nbsp;&nbsp;&nbsp;
+					<button type="button" class="limpiar btn btn-default btn-primary" data-tab="M"><span class="glyphicon glyphicon-list-alt"></span>&nbsp;Ver lote de envio <span class="badge">X</span></button>
 				</div>
+			</div>
+			
+			<div id="list-certificacionEnvioAutorizacion" class="content scaffold-list" role="main">
+				<table class="table">
+					<thead>
+						<tr>
+							<th>&nbsp;</th>
+							<th>${message(code: 'expediente.folio.label', default: 'Folio')} <a href="#"><span class="glyphicon glyphicon-chevron-up"></span></a><a href="#"><span class="glyphicon glyphicon-chevron-down"></span></a></th>
+							<th>${message(code: 'expediente.matricula.label', default: 'Matrícula')} <a href="#"><span class="glyphicon glyphicon-chevron-up"></span></a><a href="#"><span class="glyphicon glyphicon-chevron-down"></span></a></th>
+							<th>${message(code: 'expediente.nombre.label', default: 'Nombre')} <a href="#"><span class="glyphicon glyphicon-chevron-up"></span></a><a href="#"><span class="glyphicon glyphicon-chevron-down"></span></a></th>
+							<th>${message(code: 'expediente.primerApellido.label', default: '1er Apellido')} <a href="#"><span class="glyphicon glyphicon-chevron-up"></span></a><a href="#"><span class="glyphicon glyphicon-chevron-down"></span></a></th>
+							<th>${message(code: 'expediente.segundoApellido.label', default: '2do Apellido')} <a href="#"><span class="glyphicon glyphicon-chevron-up"></span></a><a href="#"><span class="glyphicon glyphicon-chevron-down"></span></a></th>
+							<th>...</th>
+						</tr>
+					</thead>
+					
+					<tbody>
+						<tr style="background-color: #D9EDF7;">
+							<td style="width:1px;white-space:nowrap"><span class="glyphicon glyphicon-check" ></span></td>
+							<td style="white-space:nowrap">111</td>
+							<td style="white-space:nowrap">111</td>
+							<td>AAAAAAAAAAAAAA1</td>
+							<td>BBBBBBBBBBBBBBBBBBB2</td>
+							<td>CCCCCCCCCCCCCCCCCCCCCCCCCCCCCC3</td>
+							<td style="width:1px;white-space:nowrap"><button class="edictamen btn btn-default btn-xs" data-id="1">Enviar a lote de envio</button></td>
+						</tr>
+						<tr style="background-color: #F2D9F7;">
+							<td style="width:1px;white-space:nowrap"><span class="glyphicon glyphicon-check" ></span></td>
+							<td style="white-space:nowrap">111</td>
+							<td style="white-space:nowrap">111</td>
+							<td>AAAAAAAAAAAAAA1</td>
+							<td>BBBBBBBBBBBBBBBBBBB2</td>
+							<td>CCCCCCCCCCCCCCCCCCCCCCCCCCCCCC3</td>
+							<td style="width:1px;white-space:nowrap"><button class="edictamen btn btn-default btn-xs" data-id="2" disabled>Enviado</button></td>
+						</tr>
+						<tr style="background-color: #DEF7D9;">
+							<td style="width:1px;white-space:nowrap"><span class="glyphicon glyphicon-check" ></span></td>
+							<td style="white-space:nowrap">111</td>
+							<td style="white-space:nowrap">111</td>
+							<td>AAAAAAAAAAAAAA1</td>
+							<td>BBBBBBBBBBBBBBBBBBB2</td>
+							<td>CCCCCCCCCCCCCCCCCCCCCCCCCCCCCC3</td>
+							<td style="width:1px;white-space:nowrap"><button class="edictamen btn btn-default btn-xs" data-id="3" disabled>Enviado</button></td>
+						</tr>
+					</tbody>
+				
+				</table>
+
+				<ul class="pagination pagination-sm">
+					<li><a href="#">&lt;</a></li>
+					<li class="active"><a href="#">1</a></li>
+					<li><a href="#">2</a></li>
+					<li><a href="#">3</a></li>
+					<li><a href="#">4</a></li>
+					<li><a href="#">5</a></li>
+					<li><a href="#">&gt;</a></li>
+				</ul>
+
 			</div>
 			
 		</fieldset>

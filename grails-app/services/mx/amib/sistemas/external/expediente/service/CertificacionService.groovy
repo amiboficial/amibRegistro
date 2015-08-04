@@ -292,10 +292,10 @@ class CertificacionService {
 			resp.json.'list'.each{ x ->
 				ids.add(x.id)
 			}
-			
 			resp.json.'sustentantes'.each{ x ->
 				SustentanteTO s = null
 				s = SustentanteService.obtenerSustentanteFromJSON(x)
+				
 				sustentantes.add(s)
 				s.certificaciones.each { y ->
 					ids.each{ z ->
@@ -315,6 +315,8 @@ class CertificacionService {
 			rs.error = true
 			rs.errorDetails = "NO_JSON_RESP"
 		}
+		
+		
 		
 		return rs
 	}

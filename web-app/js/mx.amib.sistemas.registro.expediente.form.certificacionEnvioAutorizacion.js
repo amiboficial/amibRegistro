@@ -37,7 +37,8 @@ app.CertPendAutMainVM = Backbone.Model.extend({
 */
 app.MatriculaTabVM = Backbone.Model.extend({
 	defaults: {
-		numeroMatricula: -1
+		numeroMatricula: -1,
+		errorNumeroMatricula: false
 	}
 });
 
@@ -103,23 +104,86 @@ app.ResultVM = Backbone.Model.extend({
 app.ResultVMCollection = Backbone.Collection.extend({
 	model: app.ResultVM, 
 	
+	count: -1,
+	max: 10,
+	offset: 0,
+	sort: "id",
+	order: "asc",
+	
 	findAllByMatriculaUrl: "",
 	findAllByIdSustentanteUrl: "",
 	findAllUrl: "",
 	sendAllToLoteUrl: "",
 	
+	_processing: false,
+	_startProcessing: function(){
+		this._processing = true;
+		this.trigger('processingStarted');
+	},
+	_stopProcessing: function(){
+		this._processing = false;
+		this.trigger('processingStopped');
+	},
 	
 	findAllByMatricula: function(options){ //Async
+		var _this = this;
+		/*
+		this._startProcessing();
+		setTimeout(function(){ _this._stopProcessing(); },3000);
+		*/
+		$.ajax({
+			url: _this.findAllByMatriculaUrl + "/" + options.numeroMatricula, 
+			beforeSend: function(xhr){
+				_this._startProcessing();
+			}
+		}).done( function(data){
+			if(data.status == "OK"){
+			
+				var listE = data.status.object.list
+			
+				_this.reset( null );
+				
+				for(var i=0; i<listE.length; i++){
+					var elemento = new app.ResultVM();
+					elemento.set('grailsId',listE[i].id);
+					elemento.set('numeroMatricula',listE[i].numeroMatricula);
+					elemento.set('nombre',listE[i].nombre);
+					elemento.set('primerApellido',listE[i].primerApellido);
+					elemento.set('segundoApellido',listE[i].segundoApellido);
+					elemento.set('idFigura',listE[i].varianteFigura.idFigura);
+					elemento.set('dsFigura',listE[i].varianteFigura.nombreFigura);
+					elemento.set('idVarianteFigura',listE[i].varianteFigura.id);
+					elemento.set('dsVarianteFigura',listE[i].varianteFigura.nombre);
+					
+					elemento.set('yaEnLote',false); // <- checar con los que ya estan en lote
+					elemento.set('procesando',false);
+					
+					elemento.set('viewChecked',false);
+					elemento.set('sendToLoteUrl',""); // <- enviar URL
+				}
+				
+				_this.count = data.object.count;
+				_this.offset = options.offset;
+				_this.sort = options.sort;
+				_this.order = options.order;
+			}
+			else{
+				//error alguno
+				view.setErrorProc();
+				view.setReady();
+			}
+		} );
 		
+
 	},
 	findAllByIdSustentante: function(options){ //Async
-		
+		alert("find de coleccion 2 que se realizará async...");
 	},
 	findAll: function(options){ //Async
-		
+		alert("find de coleccion 3 que se realizará async...");
 	},
 	sendAllToLote: function(options){ //Async
-		
+		alert("find de coleccion 4 que se realizará async...");
 	}
 	
 });
@@ -173,16 +237,21 @@ app.CertPendAutMainView = Backbone.View.extend({
 	//MÉTODOS DE RENDEREO
 	render: function(){
 		this.$el.html( this.template() );
-		//this.renderMatriculaTabView();
+		this.renderMatriculaTabView();
 		//this.renderFolioTabView();
 		//this.renderBusqAvView();
 		this.renderResultView();
 		return this;
 	},
 	renderMatriculaTabView: function(){
+		var parentView = this;
+		var model = new app.MatriculaTabVM();
+		var collection = this.options.resultVMCollection;
+		
 		this.$(".tab-pane-matricula").html("");
-		var view = new app.MatriculaTabView(this.options);
-		return view.render();
+		var view = new app.MatriculaTabView({ model:model, collection:collection, parentView:parentView });
+		this.$(".tab-pane-matricula").append( view.render().el );
+		return view;
 	},
 	renderFolioTabView: function(){
 		this.$(".tab-pane-folio").html("");
@@ -195,7 +264,6 @@ app.CertPendAutMainView = Backbone.View.extend({
 		return view.render();
 	},
 	renderResultView: function(){
-	
 		var parentView = this;
 		var model = this.options.resultsVM;
 		var collection = this.options.resultVMCollection;
@@ -212,16 +280,84 @@ app.CertPendAutMainView = Backbone.View.extend({
 
 app.MatriculaTabView = Backbone.View.extend({
 	parentView: {},
-	el: "",
+	template: _.template( $('#matriculaTabTemplate').html() ),
+	model: new Backbone.Model(),
+	collection: new app.ResultVMCollection(),
+	
+	initialize: function(options){
+		this.model = options.model;
+		this.parentView = options.parentView;
+		this.collection = options.collection;
+		
+		//this.render();
+		this.listenTo( this.model, 'change:numeroMatricula', this.render );
+		this.listenTo( this.model, 'change:errorNumeroMatricula', this.renderError );
+		
+		this.listenTo( this.collection, 'processingStarted', this.disableInput );
+		this.listenTo( this.collection, 'processingStopped', this.enableInput );
+		
+		
+		//this.listenTo( this.model, 'change:procesando', this.render );
+	},
+	
+	render: function(){
+		this.$el.html( this.template( this.model.toJSON() ) );
+		this.renderError();
+		return this;
+	},
+	renderError: function(){
+		if( this.model.get('errorNumeroMatricula') == true ){
+			this.$('.div-numeroMatricula').addClass('has-error');
+		}
+		else{
+			this.$('.div-numeroMatricula').removeClass('has-error');
+		}
+	},
+	disableInput: function(){
+		this.$("input").prop('disabled',true);
+		this.$("button").prop('disabled',true);
+	},
+	enableInput: function(){
+		this.$("input").prop('disabled',false);
+		this.$("button").prop('disabled',false);
+	},
+	
 	events: {
 		'click .clean' : 'limpiar',
-		'click .find' : 'findByNumeroMatricula'
+		'click .find' : 'findByNumeroMatricula',
+		'change .field' : 'updateModel'
 	},
-	limpiar : function(e){
+	updateModel: function(ev){
+		ev.preventDefault();
 		
+		var fieldName = this.$(ev.currentTarget).data("field");
+		var fieldValue = this.$(ev.currentTarget).val().trim();
+		
+		this.model.set(fieldName,fieldValue,{silent:true});
+	},
+	
+	limpiar : function(e){
+		e.preventDefault();
+		this.model.set("numeroMatricula","");
 	},
 	findByNumeroMatricula : function(e){
+		e.preventDefault();
+		if(this.validate()){
+			this.collection.findAllByMatricula({ max:1, offset:0, sort:"id", order:"desc", numeroMatricula: this.model.get('numeroMatricula') });
+		}		
+	},
+	validate: function(){
+		var valid = true;
+		var numericRegEx = /^[0-9]{1,10}$/;
 		
+		this.model.set('errorNumeroMatricula', false);
+		
+		if( !numericRegEx.test( this.model.get('numeroMatricula') ) ){
+			valid = false;
+			this.model.set('errorNumeroMatricula', true);
+		}
+		
+		return valid;
 	}
 });
 
@@ -312,7 +448,7 @@ app.ResultsView = Backbone.View.extend({
 		this.collection = options.collection;
 		this.parentView = options.parentView;
 		
-		this.render();
+		//this.render();
 		
 		this.listenTo( this.model, 'change:state', this.renderStateChange );
 		//this.listenTo( this.collection, 'sort', this.renderList );

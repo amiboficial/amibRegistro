@@ -56,4 +56,15 @@ class CertificacionServiceIntegSpec extends Specification {
 		then:
 			rs.list.size() > 0
 	}
+	
+	void "test findAllEnAutorizacionByMatricula"(){
+		given:
+			Integer numeroMatricula = 10107
+			CertificacionService.ResultSet rs = null
+		when:
+			rs = certificacionService.findAllEnAutorizacionByMatricula(numeroMatricula)
+			println (rs as JSON)
+		then:
+			rs.list.size() > 0
+	}
 }

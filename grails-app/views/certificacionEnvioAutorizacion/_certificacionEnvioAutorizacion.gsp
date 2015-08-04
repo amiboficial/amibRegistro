@@ -20,35 +20,16 @@
 			<br/>
 			
 			<div role="tabpanel" id="bmat" class="tab-pane-matricula tab-pane active" >
-				<div class="form-group">
-					<label class="col-md-2 col-sm-3 control-label">
-						<g:message code="expediente.matricula.label" default="Matricula" />
-					</label>
-					<div class="col-md-9 col-sm-9">
-						<g:textField name="fltMat" id="txtFltMat" class="form-control" maxlength="10" value="${viewModelInstance?.fltMat}"/>
-					</div>
-				</div>
-				<br/>
-				<div class="form-group">
-					<div class="col-md-3 col-sm-3">
-						&nbsp;
-					</div>
-					<div class="col-md-6 col-sm-6" style="text-align: center">
-						<button type="button" class="limpiar btn btn-default btn-primary" data-tab="M">Limpiar campos</button>
-						<button type="button" class="buscar btn btn-default btn-primary" data-tab="M"><span class="glyphicon glyphicon-search"></span> Realizar búsqueda</button>
-					</div>
-					<div class="col-md-3 col-sm-3">
-						&nbsp;
-					</div>
-				</div>
+				
 			</div>
+			
 			<div role="tabpanel" id="bid" class="tab-pane-folio tab-pane">
 				<div class="form-group">
 					<label class="col-md-2 col-sm-3 control-label">
 						<g:message code="expediente.id.label" default="Folio" />
 					</label>
 					<div class="col-md-9 col-sm-9">
-						<g:textField name="fltFol" id="txtFltFol" class="form-control" maxlength="10" value="${viewModelInstance?.fltFol}"/>
+						<input type="text" name="fltFol" id="txtFltFol" class="form-control" maxlength="10"/>
 					</div>
 				</div>
 				<br/>
@@ -57,8 +38,8 @@
 						&nbsp;
 					</div>
 					<div class="col-md-6 col-sm-6" style="text-align: center">
-						<button type="button" class="limpiar btn btn-default btn-primary" data-tab="F" >Limpiar campos</button>
-						<button type="button" class="buscar btn btn-default btn-primary" data-tab="F" ><span class="glyphicon glyphicon-search"></span> Realizar búsqueda</button>
+						<button type="button" class="clean btn btn-default btn-primary" data-tab="F" >Limpiar campos</button>
+						<button type="button" class="find btn btn-default btn-primary" data-tab="F" ><span class="glyphicon glyphicon-search"></span> Realizar búsqueda</button>
 					</div>
 					<div class="col-md-3 col-sm-3">
 						&nbsp;
@@ -146,6 +127,28 @@
 
 <script type="text/template" id="matriculaTabTemplate">
 
+	<div class="div-numeroMatricula form-group">
+		<label class="col-md-2 col-sm-3 control-label">
+			<g:message code="expediente.matricula.label" default="Matricula" />
+		</label>
+		<div class="col-md-9 col-sm-9">
+			<input type="text" class="field form-control" maxlength="10" data-field="numeroMatricula"/>
+		</div>
+	</div>
+	<br/>
+	<div class="form-group">
+		<div class="col-md-3 col-sm-3">
+			&nbsp;
+		</div>
+		<div class="col-md-6 col-sm-6" style="text-align: center">
+			<button type="button" class="clean btn btn-default btn-primary">Limpiar campos</button>
+			<button type="button" class="find btn btn-default btn-primary"><span class="glyphicon glyphicon-search"></span> Realizar búsqueda</button>
+		</div>
+		<div class="col-md-3 col-sm-3">
+			&nbsp;
+		</div>
+	</div>
+
 </script>
 
 <script type="text/template" id="folioTabTemplate">
@@ -190,8 +193,6 @@
 		
 		<div class="form-group">
 			<div class="col-md-12 col-sm-12">
-				<button type="button" class="hideSent btn btn-default btn-primary" data-tab="M"><span class="glyphicon glyphicon-eye-close"></span>&nbsp;Ocultar elementos enviados</button>
-				&nbsp;&nbsp;&nbsp;
 				<div class="btn-group">
 					<button type="button" class="selectAll btn btn-default btn-primary" data-tab="M"><span class="glyphicon glyphicon-check"></span>&nbsp;Seleccionar todo</button>
 					<button type="button" class="selectNone btn btn-default btn-primary" data-tab="M"><span class="glyphicon glyphicon glyphicon-unchecked"></span>&nbsp;De-seleccionar todo</button>

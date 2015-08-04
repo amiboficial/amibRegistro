@@ -1,12 +1,12 @@
 var app = app || {};
 
-/*
+
 app.EXP_CEA_SELECTED_TAB_MAT = 0;
 app.EXP_CEA_SELECTED_TAB_FOL = 1;
 app.EXP_CEA_SELECTED_TAB_BAV = 2;
-*/
+
 app.EXP_CEA_RSLTS_ST_READY = 0;
-app.EXP_CEA_RSLTS_ST_PROC = 0;
+app.EXP_CEA_RSLTS_ST_PROC = 1;
 
 app.EXP_CEA_RSLT_ST_NO_ENVIADO = 0;
 app.EXP_CEA_RSLT_ST_ENVIADO = 1;
@@ -73,29 +73,55 @@ app.ResultVM = Backbone.Model.extend({
 		dsVarianteFigura: "",
 		
 		yaEnLote: false,
+		procesando: false,
 		
-		viewChecked: false
+		viewChecked: false,
+		
+		sendToLoteUrl: "",
 	},
-	getViewSelectionColor: function(){
+	getViewSelectionColor: function(){	
 		var colorHexStr = app.EXP_CEA_RSLT_NOSEL_COLOR;
-		if(this.get('yaEnLote') == true && this.get('viewChecked') == true){
+		if(this.get('yaEnLote') == true && this.get('viewChecked') == true && this.get('procesando') == false){
 			colorHexStr = app.EXP_CEA_RSLT_SELENLOTE_COLOR;
 		}
-		else if(this.get('yaEnLote') == true && this.get('viewChecked') == false){
+		else if(this.get('yaEnLote') == true && this.get('viewChecked') == false && this.get('procesando') == false){
 			colorHexStr = app.EXP_CEA_RSLT_ENLOTE_COLOR;
 		}
-		else if(this.get('yaEnLote') == false && this.get('viewChecked') == true){
+		else if(this.get('yaEnLote') == false && this.get('viewChecked') == true && this.get('procesando') == false){
 			colorHexStr = app.EXP_CEA_RSLT_SEL_COLOR;
 		}
-		else if(this.get('yaEnLote') == false && this.get('viewChecked') == false){
-			colorHexStr = app.EXP_CEA_RSLT_NOSEL_COLOR;
-		}
 		return colorHexStr;
+	},
+	
+	//Async
+	sendToLote: function(){
+		
 	}
+	
 });
 
 app.ResultVMCollection = Backbone.Collection.extend({
-	model: app.ResultVM
+	model: app.ResultVM, 
+	
+	findAllByMatriculaUrl: "",
+	findAllByIdSustentanteUrl: "",
+	findAllUrl: "",
+	sendAllToLoteUrl: "",
+	
+	
+	findAllByMatricula: function(options){ //Async
+		
+	},
+	findAllByIdSustentante: function(options){ //Async
+		
+	},
+	findAll: function(options){ //Async
+		
+	},
+	sendAllToLote: function(options){ //Async
+		
+	}
+	
 });
 
 app.ResultsVM = Backbone.Model.extend({
@@ -106,22 +132,28 @@ app.ResultsVM = Backbone.Model.extend({
 		state: app.EXP_CEA_RSLTS_ST_READY,
 		error: false,
 		
+		count: 95,
 		max: 10,
 		offset: 0,
 		sort: "id",
 		order: "asc",
+		tab: app.EXP_CEA_SELECTED_TAB_MAT
 	},
 	getCurrentPage: function(){
-		return -1;
+		return Math.ceil(offset/max);
 	},
 	getTotalPages: function(){
-		return -1;
+		return Math.ceil(count/max);
 	},
 	getNextPage: function(){
-		return -1;
+		var nextPage = 0;
+		nextPage = this.getCurrentPage() + 1;
+		return nextPage;
 	},
 	getBackPage: function(){
-		return -1;
+		var backPage = 0;
+		backPage = this.getCurrentPage() - 1;
+		return backPage;
 	}
 });
 
@@ -224,6 +256,7 @@ app.ResultView = Backbone.View.extend({
 		
 		this.listenTo( this.model, 'change:viewChecked', this.render );
 		this.listenTo( this.model, 'change:yaEnLote', this.render );
+		this.listenTo( this.model, 'change:procesando', this.render );
 	},
 	
 	render: function(){
@@ -233,19 +266,26 @@ app.ResultView = Backbone.View.extend({
 	},
 	
 	events: {
-		'click .sent' : 'enviarALote',
+		'click .send' : 'enviarALote',
 		'click .check' : 'seleccionar'
 	},
 	
 	enviarALote: function(e){
 		e.preventDefault();
 		
-		if( this.model.get('yaEnLote') == false ){
-			this.model.set('yaEnLote',true);
+		var view = this;
+		
+		//se debe ejecutar una llamada al servidor donde
+		//se envie el elemento al lote
+		//y en caso de que el eleemto se actualiza, cambie su estatus
+		if( view.model.get('yaEnLote') == false ){
+			view.model.set('procesando',true);
+			setTimeout(function(){
+				view.model.set({'procesando':false},{silent:true});
+				view.model.set('yaEnLote',true);
+			}, 1200);
 		}
-		else{
-			this.model.set('yaEnLote',false);
-		}
+		
 	},
 	
 	seleccionar: function(e){
@@ -274,13 +314,15 @@ app.ResultsView = Backbone.View.extend({
 		
 		this.render();
 		
-		//this.listenTo( this.collection, 'add', this.renderList );
+		this.listenTo( this.model, 'change:state', this.renderStateChange );
 		//this.listenTo( this.collection, 'sort', this.renderList );
 	},
 	
 	render: function(){
 		this.$el.html( this.template( this.model.toJSON() ) );
 		this.renderList();
+		this.renderStateChange();
+		
 		return this;
 	},
 	renderList: function(){
@@ -296,6 +338,20 @@ app.ResultsView = Backbone.View.extend({
 		this.$(".list-items").append( elementView.render().el );
 		return this;
 	},
+	renderStateChange: function(){
+		if(this.model.get('state') == app.EXP_CEA_RSLTS_ST_READY){
+			this.$('.procMessage').hide();
+		}
+		else{
+			this.$('.procMessage').show();
+		}
+		if(this.model.get('error') == false){
+			this.$('.errorMessage').hide();
+		}
+		else{
+			this.$('.errorMessage').show();
+		}
+	},
 	
 	events: {
 		'click .hideSent' : 'ocultarElementoEnviados',
@@ -310,12 +366,44 @@ app.ResultsView = Backbone.View.extend({
 	},
 	seleccionarTodos: function(e){
 		e.preventDefault();
+		
+		this.collection.each( function(item){
+			item.set('viewChecked',true);
+		},this );
+		
 	},
 	quitarSeleccionTodos: function(e){
 		e.preventDefault();
+		
+		this.collection.each( function(item){
+			item.set('viewChecked',false);
+		},this );
+		
 	},
 	enviarSeleccionadosLote: function(e){
 		e.preventDefault();
+		
+		var view = this;
+		
+		//envía una peticion AJAX "con todos los datos"
+		//rendera los que hayan sido satisfactorios
+		view.model.set('state',app.EXP_CEA_RSLTS_ST_PROC);
+		view.collection.each( function(item){
+			if( item.get('viewChecked') == true && item.get('yaEnLote') == false ){
+				item.set({'procesando':true});
+			}
+		},view );
+		
+		setTimeout(function(){
+			view.collection.each( function(item){
+				if( item.get('viewChecked') == true && item.get('yaEnLote') == false ){
+					item.set({'procesando':false},{silent:true});
+					item.set('yaEnLote',true);
+				}
+				view.model.set('state',app.EXP_CEA_RSLTS_ST_READY);
+			},view );
+		}, 3000);
+
 	},
 	verLote: function(e){
 		e.preventDefault();

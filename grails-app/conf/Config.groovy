@@ -177,6 +177,9 @@ mx.amib.sistemas.expediente.certificacion.Certificacion.getWithSustentante = 'ce
 mx.amib.sistemas.expediente.certificacion.Certificacion.findAllEnDictamenPrevio = 'certificacionRestful/findAllEnDictamenPrevio/'
 mx.amib.sistemas.expediente.certificacion.Certificacion.findAllEnDictamenPrevioByMatricula = 'certificacionRestful/findAllEnDictamenPrevioByMatricula/'
 mx.amib.sistemas.expediente.certificacion.Certificacion.findAllEnDictamenPrevioByFolio = 'certificacionRestful/findAllEnDictamenPrevioByFolio/'
+mx.amib.sistemas.expediente.certificacion.Certificacion.findAllEnAutorizacion = "certificacionRestful/findAllEnAutorizacion"
+mx.amib.sistemas.expediente.certificacion.Certificacion.findAllEnAutorizacionByMatricula = "certificacionRestful/findAllEnAutorizacionByMatricula/"
+mx.amib.sistemas.expediente.certificacion.Certificacion.findAllEnAutorizacionByFolio = "certificacionRestful/findAllEnAutorizacionByFolio/"
 mx.amib.sistemas.expediente.certificacion.Certificacion.updateDatosParaAprobarDictamen = 'certificacionRestful/updateDatosParaAprobarDictamen'
 
 //especificaciones de rutas para servicios REST de amibDocumentos

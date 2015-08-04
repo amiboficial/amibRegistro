@@ -157,20 +157,26 @@
 </script>
 
 <script type="text/template" id="resultTemplate">
-	<td style="width:1px;white-space:nowrap">
-		{{ if(viewChecked==true){ }}
-			<span class="handCursor glyphicon glyphicon-check" ></span>
-		{{ }else{ }}
-			<span class="handCursor glyphicon glyphicon-unchecked" ></span>
+	<td class="check handCursor" style="width:1px;white-space:nowrap">
+		{{ if(viewChecked==true && procesando==false){ }}
+			<span class="glyphicon glyphicon-check" ></span>
+		{{ }else if(viewChecked==false && procesando==false){ }}
+			<span class="glyphicon glyphicon-unchecked" ></span>
 		{{ } }}
 	</td>
-	<td style="white-space:nowrap">{{=grailsId}}</td>
-	<td style="white-space:nowrap">{{=numeroMatricula}}</td>
-	<td>{{=nombre}}</td>
-	<td>{{=primerApellido}}</td>
-	<td>{{=segundoApellido}}</td>
+	<td class="check handCursor" style="white-space:nowrap">{{=grailsId}}</td>
+	<td class="check handCursor" style="white-space:nowrap">{{=numeroMatricula}}</td>
+	<td class="check handCursor">{{=nombre}}</td>
+	<td class="check handCursor">{{=primerApellido}}</td>
+	<td class="check handCursor">{{=segundoApellido}}</td>
 	<td style="width:1px;white-space:nowrap">
-		<button class="edictamen btn btn-default btn-xs" data-id="1">Enviar a lote de envio</button>
+		{{ if(yaEnLote==false && procesando==false){ }}
+			<button class="send btn btn-default btn-xs" data-id="{{=grailsId}}">Enviar a lote de envio</button>
+		{{ }else if(yaEnLote==true && procesando==false) { }}
+			<button class="btn btn-default btn-xs" disabled>Enviado</button>
+		{{ }else{ }}
+			<button class="btn btn-default btn-xs" disabled>Procesando</button>
+		{{ } }}
 	</td>
 </script>
 
@@ -179,20 +185,20 @@
 	<fieldset>
 		<legend>Resultados de búsqueda</legend>
 		
-		<div class="alert alert-info"><asset:image src="spinner_alert_info.gif"/>&nbsp; Procesando datos, espere unos instantes...</div>
-		<div class="alert alert-danger"><span class="glyphicon glyphicon-info-sign"></span> Ha ocurrido un error un la petición, intente mas tarde.</div>
+		<div class="procMessage alert alert-info"><asset:image src="spinner_alert_info.gif"/>&nbsp; Procesando datos, espere unos instantes...</div>
+		<div class="errorMessage alert alert-danger"><span class="glyphicon glyphicon-info-sign"></span> Ha ocurrido un error un la petición, intente mas tarde.</div>
 		
 		<div class="form-group">
 			<div class="col-md-12 col-sm-12">
-				<button type="button" class="limpiar btn btn-default btn-primary" data-tab="M"><span class="glyphicon glyphicon-eye-close"></span>&nbsp;Ocultar elementos enviados</button>
+				<button type="button" class="hideSent btn btn-default btn-primary" data-tab="M"><span class="glyphicon glyphicon-eye-close"></span>&nbsp;Ocultar elementos enviados</button>
 				&nbsp;&nbsp;&nbsp;
 				<div class="btn-group">
-					<button type="button" class="limpiar btn btn-default btn-primary" data-tab="M"><span class="glyphicon glyphicon-check"></span>&nbsp;Seleccionar todo</button>
-					<button type="button" class="limpiar btn btn-default btn-primary" data-tab="M"><span class="glyphicon glyphicon glyphicon-unchecked"></span>&nbsp;De-seleccionar todo</button>
-					<button type="button" class="limpiar btn btn-default btn-primary" data-tab="M"><span class="glyphicon glyphicon-share"></span>&nbsp;Enviar seleccionados a lote de envio</button>
+					<button type="button" class="selectAll btn btn-default btn-primary" data-tab="M"><span class="glyphicon glyphicon-check"></span>&nbsp;Seleccionar todo</button>
+					<button type="button" class="selectNone btn btn-default btn-primary" data-tab="M"><span class="glyphicon glyphicon glyphicon-unchecked"></span>&nbsp;De-seleccionar todo</button>
+					<button type="button" class="sentSelected btn btn-default btn-primary" data-tab="M"><span class="glyphicon glyphicon-share"></span>&nbsp;Enviar seleccionados a lote de envio</button>
 				</div>
 				&nbsp;&nbsp;&nbsp;
-				<button type="button" class="limpiar btn btn-default btn-primary" data-tab="M"><span class="glyphicon glyphicon-list-alt"></span>&nbsp;Ver lote de envio <span class="badge">X</span></button>
+				<button type="button" class="viewLote btn btn-default btn-primary" data-tab="M"><span class="glyphicon glyphicon-list-alt"></span>&nbsp;Ver lote de envio <span class="badge">X</span></button>
 			</div>
 		</div>
 		

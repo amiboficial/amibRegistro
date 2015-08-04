@@ -42,4 +42,18 @@ class CertificacionServiceIntegSpec extends Specification {
 		then:
 			rs.list.size() > 0
 	}
+	
+	void "test findAllEnAutorizacion"(){
+		given:
+			Integer max = 10
+			Integer offset = 0
+			String sort = "id"
+			String order = "asc"
+			CertificacionService.ResultSet rs = null
+		when:
+			rs = certificacionService.findAllEnAutorizacion(max, offset, sort, order, "","","",-1,-1)
+			println (rs as JSON)
+		then:
+			rs.list.size() > 0
+	}
 }

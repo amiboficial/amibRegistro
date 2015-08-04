@@ -32,6 +32,9 @@ class CertificacionService {
 	String findAllEnDictamenPrevioUrl 
 	String findAllEnDictamenPrevioByMatriculaUrl
 	String findAllEnDictamenPrevioByFolioUrl
+	String findAllEnAutorizacionUrl
+	String findAllEnAutorizacionByMatriculaUrl
+	String findAllEnAutorizacionByFolioUrl
 	String updateDatosParaAprobarDictamenUrl
 	
 	CertificacionTO get(Long id){
@@ -97,11 +100,9 @@ class CertificacionService {
 		def resp = rest.get( getUrl )
 		
 		if(resp.json instanceof JSONObject && !JSONObject.NULL.equals(resp.json)){
-			
 			resp.json.'list'.each{ x ->
 				ids.add(x.id)
 			}
-			
 			resp.json.'sustentantes'.each{ x ->
 				SustentanteTO s = null
 				s = SustentanteService.obtenerSustentanteFromJSON(x)
@@ -128,7 +129,7 @@ class CertificacionService {
 		return rs
 	}
 	
-	CertificacionService.ResultSet findAllEnDictamenPrevioByMatricula(Integer numeroMatricula){
+	CertificacionService.ResultSet findAllEnDictamenPrevioByMatricula(int numeroMatricula){
 		
 		CertificacionService.ResultSet rs = new CertificacionService.ResultSet()
 		
@@ -176,7 +177,7 @@ class CertificacionService {
 		return rs
 	}
 	
-	CertificacionService.ResultSet findAllEnDictamenPrevioByFolio(Long idSustentante){
+	CertificacionService.ResultSet findAllEnDictamenPrevioByFolio(long idSustentante){
 		
 		CertificacionService.ResultSet rs = new CertificacionService.ResultSet()
 		
@@ -188,6 +189,147 @@ class CertificacionService {
 		def listSustentantesJson = null
 		
 		def getUrl = this.findAllEnDictamenPrevioByFolioUrl + idSustentante
+		
+		println "URL A SOLICITAR: " + getUrl
+		
+		def rest = new RestBuilder()
+		def resp = rest.get( getUrl )
+		
+		if(resp.json instanceof JSONObject && !JSONObject.NULL.equals(resp.json)){
+			
+			resp.json.'list'.each{ x ->
+				ids.add(x.id)
+			}
+			
+			resp.json.'sustentantes'.each{ x ->
+				SustentanteTO s = null
+				s = SustentanteService.obtenerSustentanteFromJSON(x)
+				sustentantes.add(s)
+				s.certificaciones.each { y ->
+					ids.each{ z ->
+						if(z.value == y.id.value){
+							certificaciones.add(y)
+						}
+					}
+				}
+			}
+			rs.list = certificaciones
+			rs.sustentantes = sustentantes
+			rs.count = resp.json.'count'
+			rs.error = false
+			rs.errorDetails = ""
+		}
+		else{
+			rs.error = true
+			rs.errorDetails = "NO_JSON_RESP"
+		}
+		
+		return rs
+	}
+	
+	CertificacionService.ResultSet findAllEnAutorizacion(Integer max, Integer offset, String sort, String order, String nom, String ap1, String ap2, Long idfig, Long idvarfig){
+		CertificacionService.ResultSet rs = new CertificacionService.ResultSet()
+											
+		List<SustentanteTO> sustentantes = new ArrayList<SustentanteTO>()
+		List<CertificacionTO> certificaciones = new ArrayList<CertificacionTO>()
+		List<Long> ids = new ArrayList<Long>()
+		
+		def listCertificacionesJson = null
+		def listSustentantesJson = null
+		
+		def getUrl = this.findAllEnAutorizacionUrl + "?max=${max}&offset=${offset}&sort=${sort}&order=${order}&nom=${nom}&ap1=${ap1}&ap2=${ap2}&idfig=${idfig}&idvarfig=${idvarfig}"
+		
+		def rest = new RestBuilder()
+		def resp = rest.get( getUrl )
+		
+		if(resp.json instanceof JSONObject && !JSONObject.NULL.equals(resp.json)){
+			resp.json.'list'.each{ x ->
+				ids.add(x.id)
+			}
+			resp.json.'sustentantes'.each{ x ->
+				SustentanteTO s = null
+				s = SustentanteService.obtenerSustentanteFromJSON(x)
+				sustentantes.add(s)
+				s.certificaciones.each { y ->
+					ids.each{ z ->
+						if(z.value == y.id.value){
+							certificaciones.add(y)
+						}
+					}
+				}
+			}
+			rs.list = certificaciones
+			rs.sustentantes = sustentantes
+			rs.count = resp.json.'count'
+			rs.error = false
+			rs.errorDetails = ""
+		}
+		else{
+			rs.error = true
+			rs.errorDetails = "NO_JSON_RESP"
+		}
+		
+		return rs
+	}
+	
+	CertificacionService.ResultSet findAllEnAutorizacionByMatricula(int numeroMatricula){
+		CertificacionService.ResultSet rs = new CertificacionService.ResultSet()
+		
+		List<SustentanteTO> sustentantes = new ArrayList<SustentanteTO>()
+		List<CertificacionTO> certificaciones = new ArrayList<CertificacionTO>()
+		List<Long> ids = new ArrayList<Long>()
+		
+		def listCertificacionesJson = null
+		def listSustentantesJson = null
+		
+		def getUrl = this.findAllEnAutorizacionByMatriculaUrl + numeroMatricula
+		
+		def rest = new RestBuilder()
+		def resp = rest.get( getUrl )
+		
+		if(resp.json instanceof JSONObject && !JSONObject.NULL.equals(resp.json)){
+			
+			resp.json.'list'.each{ x ->
+				ids.add(x.id)
+			}
+			
+			resp.json.'sustentantes'.each{ x ->
+				SustentanteTO s = null
+				s = SustentanteService.obtenerSustentanteFromJSON(x)
+				sustentantes.add(s)
+				s.certificaciones.each { y ->
+					ids.each{ z ->
+						if(z.value == y.id.value){
+							certificaciones.add(y)
+						}
+					}
+				}
+			}
+			rs.list = certificaciones
+			rs.sustentantes = sustentantes
+			rs.count = resp.json.'count'
+			rs.error = false
+			rs.errorDetails = ""
+		}
+		else{
+			rs.error = true
+			rs.errorDetails = "NO_JSON_RESP"
+		}
+		
+		return rs
+	}
+	
+	CertificacionService.ResultSet findAllEnAutorizacionByFolio(long idSustentante){
+		CertificacionService.ResultSet rs = new CertificacionService.ResultSet()
+		
+		List<SustentanteTO> sustentantes = new ArrayList<SustentanteTO>()
+		List<CertificacionTO> certificaciones = new ArrayList<CertificacionTO>()
+		List<Long> ids = new ArrayList<Long>()
+		
+		def listCertificacionesJson = null
+		def listSustentantesJson = null
+		
+		def getUrl = this.findAllEnAutorizacionByFolioUrl + idSustentante
 		
 		println "URL A SOLICITAR: " + getUrl
 		

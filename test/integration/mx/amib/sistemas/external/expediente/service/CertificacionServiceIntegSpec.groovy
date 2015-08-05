@@ -20,7 +20,7 @@ class CertificacionServiceIntegSpec extends Specification {
 
     def cleanup() {
     }
-
+/*
     void "probar servicio getWithSustentante"() {
 		when:
 			c = certificacionService.get(20019)
@@ -41,7 +41,7 @@ class CertificacionServiceIntegSpec extends Specification {
 			println rs
 		then:
 			rs.list.size() > 0
-	}
+	}*/
 	
 	void "test findAllEnAutorizacion"(){
 		given:
@@ -51,12 +51,12 @@ class CertificacionServiceIntegSpec extends Specification {
 			String order = "asc"
 			CertificacionService.ResultSet rs = null
 		when:
-			rs = certificacionService.findAllEnAutorizacion(max, offset, sort, order, "","","",-1,-1)
+			rs = certificacionService.findAllEnAutorizacion(max, offset, sort, order, "Fernando","","",-1,-1)
 			println (rs as JSON)
 		then:
 			rs.list.size() > 0
 	}
-	
+	/*
 	void "test findAllEnAutorizacionByMatricula"(){
 		given:
 			Integer numeroMatricula = 10107
@@ -66,5 +66,5 @@ class CertificacionServiceIntegSpec extends Specification {
 			println (rs as JSON)
 		then:
 			rs.list.size() > 0
-	}
+	}*/
 }

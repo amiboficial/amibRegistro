@@ -34,10 +34,19 @@
 	<g:javascript src="mx.amib.sistemas.registro.expediente.form.certificacionEnvioAutorizacion.js" />
 	<script type="text/javascript">
 		var app = app || {};
-		
+
+		var busqAvVM = new app.BusqAvVM();
 		var resultsVM = new app.ResultsVM();
 		var resultVMCollection = new app.ResultVMCollection();
-		
+
+		<g:each in="${viewModelInstance?.figuraList}" var="x">
+			busqAvVM.get('viewFiguras').push({ id:${x.id} , nombre:'${x.nombre}' , variantesFigura: [ 
+			<g:each in="${x?.variantes}" var="y">
+				{ id:${y.id}, nombre:'${y.nombre}' },
+			</g:each>
+			 ] });
+		</g:each>
+
 		resultVMCollection.findAllByMatriculaUrl = '<g:createLink action="findAllByMatricula" />';
 		resultVMCollection.findAllByIdSustentanteUrl = '<g:createLink action="findAllByIdSustentante" />';
 		resultVMCollection.findAllUrl = '<g:createLink action="findAll" />';
@@ -81,7 +90,7 @@
 		resultVMCollection.add(resultVMtest2);
 		resultVMCollection.add(resultVMtest3);
 
-		var mainViewOptions = { resultsVM:resultsVM , resultVMCollection:resultVMCollection };
+		var mainViewOptions = { resultsVM:resultsVM , resultVMCollection:resultVMCollection, busqAvVM:busqAvVM };
 		var mainView = new app.CertPendAutMainView(mainViewOptions);
 		
 	</script>

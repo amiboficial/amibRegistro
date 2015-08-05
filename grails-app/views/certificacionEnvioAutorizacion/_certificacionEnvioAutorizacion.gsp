@@ -26,74 +26,6 @@
 			</div>
 			
 			<div role="tabpanel" id="bav" class="tab-pane-busqav tab-pane">
-				
-				<div id="divFltNom" class="form-group">
-					<label class="col-md-2 col-sm-3 control-label">
-						<g:message code="expediente.nombre.label" default="Nombre" />
-					</label>
-					<div class="col-md-9 col-sm-9">
-						<g:textField id="txtFltNom" maxlength="80" class="form-control" name="fltNom" value="${viewModelInstance?.fltNom}" />
-					</div>
-				</div>
-				
-				<div id="divFltAp1" class="form-group">
-					<label class="col-md-2 col-sm-3 control-label">
-						<g:message code="expediente.apellido1.label" default="Primer apellido" />
-					</label>
-					<div class="col-md-9 col-sm-9">
-						<g:textField id="txtFltAp1" maxlength="100" class="form-control" name="fltAp1" value="${viewModelInstance?.fltAp1}" />
-					</div>
-				</div>
-				
-				<div id="divFltAp2" class="form-group">
-					<label class="col-md-2 col-sm-3 control-label">
-						<g:message code="expediente.apellido1.label" default="Segundo apellido" />
-					</label>
-					<div class="col-md-9 col-sm-9">
-						<g:textField id="txtFltAp2" maxlength="100" class="form-control" name="fltAp2" value="${viewModelInstance?.fltAp2}" />
-					</div>
-				</div>
-									
-				<div id="divFltFig" class="form-group">
-					<label class="col-md-2 col-sm-3 control-label">
-						<g:message code="expediente.figura.label" default="Figura" />
-					</label>
-					<div class="col-md-9 col-sm-9">
-						<g:select name='fltFig' class="form-control" id="selFltFig" 
-						value="${viewModelInstance?.fltFig}"
-						noSelection="${['-1':'-Seleccione-']}"
-						from='${viewModelInstance?.figuraList}'
-						optionKey="id" optionValue="nombre"></g:select>
-					</div>
-				</div>
-				
-				<div id="divFltVFig" class="form-group">
-					<label class="col-md-2 col-sm-3 control-label">
-						<g:message code="expediente.varianteFigura.label" default="Variante de Figura" />
-					</label>
-					<div class="col-md-9 col-sm-9">
-						<g:select name='fltVFig' class="form-control" id="selFltVFig" 
-						value="${viewModelInstance?.fltVFig}"
-						noSelection="${['-1':'-Seleccione-']}"
-						from='${viewModelInstance?.varianteFiguraList}'
-						optionKey="id" optionValue="nombre"></g:select>
-					</div>
-				</div>
-				
-				<br/>
-				<div class="form-group">
-					<div class="col-md-3 col-sm-3">
-						&nbsp;
-					</div>
-					<div class="col-md-6 col-sm-6" style="text-align: center">
-						<button type="button" class="limpiar btn btn-default btn-primary" data-tab="A">Limpiar campos</button>
-						<button type="button" class="buscar btn btn-default btn-primary" data-tab="A"><span class="glyphicon glyphicon-search"></span> Realizar búsqueda</button>
-					</div>
-					<div class="col-md-3 col-sm-3">
-						&nbsp;
-					</div>
-				</div>
-				
 			</div>
 			
 		</div>
@@ -157,6 +89,72 @@
 </script>
 
 <script type="text/template" id="busqAvTemplate">
+
+	<div class="form-group div-nombre">
+		<label class="col-md-2 col-sm-3 control-label">
+			<g:message code="expediente.nombre.label" default="Nombre" />
+		</label>
+		<div class="col-md-9 col-sm-9">
+			<input type="text" maxlength="80" class="nombre field form-control" data-field="nombre"/>
+		</div>
+	</div>
+
+	<div class="form-group div-primerApellido">
+		<label class="col-md-2 col-sm-3 control-label">
+			<g:message code="expediente.primerApellido.label" default="Primer apellido" />
+		</label>
+		<div class="col-md-9 col-sm-9">
+			<input type="text" maxlength="100" class="primerApellido field form-control" data-field="primerApellido"/>
+		</div>
+	</div>
+
+	<div class="form-group div-segundoApellido">
+		<label class="col-md-2 col-sm-3 control-label">
+			<g:message code="expediente.apellido1.label" default="Segundo apellido" />
+		</label>
+		<div class="col-md-9 col-sm-9">
+			<input type="text" maxlength="100" class="segundoApellido field form-control" data-field="segundoApellido" />
+		</div>
+	</div>
+						
+	<div class="form-group div-idFigura">
+		<label class="col-md-2 col-sm-3 control-label">
+			<g:message code="expediente.figura.label" default="Figura" />
+		</label>
+		<div class="col-md-9 col-sm-9">
+			<select class="idFigura field form-control" data-field="idFigura">
+				<option value="-1">-Seleccione-</option>
+				{{ _.each( viewFiguras, function(item){ }}
+					<option value="{{=item.id}}">{{=item.nombre}}</option>
+				{{ }, this ) }}
+			</select>
+		</div>
+	</div>
+
+	<div class="form-group div-idVarianteFigura">
+		<label class="col-md-2 col-sm-3 control-label">
+			<g:message code="expediente.varianteFigura.label" default="Variante de Figura" />
+		</label>
+		<div class="col-md-9 col-sm-9">
+			<select class="idVarianteFigura field form-control" data-field="idVarianteFigura">
+				<option value="-1">-Seleccione-</option>
+			</select>
+		</div>
+	</div>
+
+	<br/>
+	<div class="form-group">
+		<div class="col-md-3 col-sm-3">
+			&nbsp;
+		</div>
+		<div class="col-md-6 col-sm-6" style="text-align: center">
+			<button type="button" class="clean btn btn-default btn-primary">Limpiar campos</button>
+			<button type="button" class="find btn btn-default btn-primary"><span class="glyphicon glyphicon-search"></span> Realizar búsqueda</button>
+		</div>
+		<div class="col-md-3 col-sm-3">
+			&nbsp;
+		</div>
+	</div>
 
 </script>
 

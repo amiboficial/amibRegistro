@@ -51,6 +51,9 @@ app.FolioTabVM = Backbone.Model.extend({
 });
 
 app.BusqAvVM = Backbone.Model.extend({
+	initialize: function(){
+		this.listenTo( this, 'change:idFigura', this.changeFigura );
+	},
 	defaults: {
 		nombre: "",
 		primerApellido: "",
@@ -60,6 +63,25 @@ app.BusqAvVM = Backbone.Model.extend({
 		
 		viewFiguras: [],
 		viewVariantesFigura: []
+	},
+	changeFigura: function(){
+		var selIdFigura = this.get('idFigura');
+		var selFigura = {};
+		
+		if(selIdFigura != -1){
+			for(var i=0; i<this.get('viewFiguras').length; i++){
+				if( this.get('viewFiguras')[i].id == selIdFigura ){
+					selFigura = this.get('viewFiguras')[i];
+					break;
+				}
+			}
+			this.set('idVarianteFigura',-1);
+			this.set('viewVariantesFigura', _.sortBy(selFigura.variantesFigura, function(item){ return item.nombre }, this)  );
+		}
+		else{
+			this.set('idVarianteFigura',-1);
+			this.set('viewVariantesFigura', new Array() );
+		}
 	}
 });
 
@@ -196,8 +218,50 @@ app.ResultVMCollection = Backbone.Collection.extend({
 			}
 		} );
 	},
-	findAll: function(options){ //Async
-		alert("find de coleccion 3 que se realizará async...");
+	findAll: function(options){ //Async		
+		var _this = this;
+
+		$.ajax({
+			url: _this.findAllUrl, 
+			beforeSend: function(xhr){
+				_this._startProcessing();
+			},
+			data: {
+				max: options.max, 
+				offset: options.offset, 
+				sort: options.sort, 
+				order: options.order,
+				nom: options.nombre,
+				ap1: options.primerApellido,
+				ap2: options.segundoApellido,
+				idfig: options.idFigura,
+				idvarfig: options.idVarianteFigura
+			},
+			type: 'GET'
+		}).done( function(data){
+			if(data.status == "OK"){
+			
+				var listE = data.object.list
+			
+				_this.reset( null );
+				
+				for(var i=0; i<listE.length; i++){					
+					var elemento = _this._getResult(listE[i]);	
+					_this.add(elemento);
+				}
+				
+				_this.count = data.object.count;
+				_this.offset = options.offset;
+				_this.sort = options.sort;
+				_this.order = options.order;
+				
+				_this._stopProcessing();
+			}
+			else{				
+				_this._stopProcessing();
+			}
+		} );
+		
 	},
 	sendAllToLote: function(options){ //Async
 		alert("find de coleccion 4 que se realizará async...");
@@ -278,7 +342,7 @@ app.CertPendAutMainView = Backbone.View.extend({
 		this.$el.html( this.template() );
 		this.renderMatriculaTabView();
 		this.renderFolioTabView();
-		//this.renderBusqAvView();
+		this.renderBusqAvView();
 		this.renderResultView();
 		return this;
 	},
@@ -303,9 +367,14 @@ app.CertPendAutMainView = Backbone.View.extend({
 		return view;
 	},
 	renderBusqAvView: function(){
+		var parentView = this;
+		var model = this.options.busqAvVM;
+		var collection = this.options.resultVMCollection;
+		
 		this.$(".tab-pane-busqav").html("");
-		var view = new app.BusqAvView(this.options);
-		return view.render();
+		var view = new app.BusqAvView({ model:model, collection:collection, parentView:parentView });
+		this.$(".tab-pane-busqav").append( view.render().el );
+		return view;
 	},
 	renderResultView: function(){
 		var parentView = this;
@@ -490,10 +559,130 @@ app.BusqAvView = Backbone.View.extend({
 	model: new Backbone.Model(),
 	collection: new app.ResultVMCollection(),
 	
+	initialize: function(options){
+		this.model = options.model;
+		this.parentView = options.parentView;
+		this.collection = options.collection;
+		
+		//this.render();
+		
+		this.listenTo( this.model, 'change:nombre', this.changeNombreField );
+		this.listenTo( this.model, 'change:primerApellido', this.changePrimerApellidoField );
+		this.listenTo( this.model, 'change:segundoApellido', this.changeSegundoApellido );
+		this.listenTo( this.model, 'change:idFigura', this.changeIdFiguraField );
+		
+		this.listenTo( this.model, 'change:viewVariantesFigura', this.renderVariantesFigura );
+		
+		this.listenTo( this.collection, 'processingStarted', this.disableInput );
+		this.listenTo( this.collection, 'processingStopped', this.enableInput );
+	},
+	
+	render: function(){
+		this.$el.html( this.template( this.model.toJSON() ) );
+		this.renderError();
+		return this;
+	},
+	renderError: function(){
+		/*if( this.model.get('errorIdSustentante') == true ){
+			this.$('.div-idSustentante').addClass('has-error');
+		}
+		else{
+			this.$('.div-idSustentante').removeClass('has-error');
+		*/
+	},
+	renderVariantesFigura: function(){
+		var vfigsStr = "";
+		this.$('.idVarianteFigura').html("");
+		this.$('.idVarianteFigura').append('<option value="-1">-Seleccione-</option>');
+		var vfigs = this.model.get('viewVariantesFigura');
+		for(var i=0; i<vfigs.length; i++){
+			vfigsStr += '<option value="' + vfigs[i].id + '">' + vfigs[i].nombre + '</option>'
+		}
+		this.$('.idVarianteFigura').append(vfigsStr);
+	},
+	changeNombreField: function(){
+		this.$('.nombre').val( this.model.get("nombre") )
+	},
+	changePrimerApellidoField: function(){
+		this.$('.primerApellido').val( this.model.get("primerApellido")  )
+	},
+	changeSegundoApellido: function(){
+		this.$('.segundoApellido').val( this.model.get("segundoApellido")  )
+	},
+	changeIdFiguraField: function(){
+		this.$('.idFigura').val( this.model.get("idFigura")  )
+	},
+	disableInput: function(){
+		this.$("input").prop('disabled',true);
+		this.$("button").prop('disabled',true);
+		this.$("select").prop('disabled',true);
+	},
+	enableInput: function(){
+		this.$("input").prop('disabled',false);
+		this.$("button").prop('disabled',false);
+		this.$("select").prop('disabled',false);
+	},
+	
 	events: {
 		'click .clean' : 'limpiar',
-		'click .find' : 'findAll'
+		'click .find' : 'findAll',
+		'change .field' : 'updateModel'
 	},
+	
+	updateModel: function(ev){
+		ev.preventDefault();
+		
+		var fieldName = this.$(ev.currentTarget).data("field");
+		var fieldValue = this.$(ev.currentTarget).val().trim();
+		
+		if(fieldName != "idFigura")
+			this.model.set(fieldName,fieldValue,{silent:true});
+		else
+			this.model.set(fieldName,fieldValue);
+	},
+	
+	limpiar : function(e){
+		e.preventDefault();
+		this.model.set("nombre","");
+		this.model.set("primerApellido","");
+		this.model.set("segundoApellido","");
+		this.model.set("idFigura",-1);
+		//this.model.set("idVarianteFigura","-1",{silent:true});
+	},
+	
+	findAll: function(e){
+		e.preventDefault();
+		//if(this.validate()){
+			//aqui se deben agregar mas opciones
+			this.collection.findAll({ 
+				max:10, 
+				offset:0, 
+				sort:"id", 
+				order:"desc",
+				nombre: this.model.get("nombre"),
+				primerApellido: this.model.get("primerApellido"),
+				segundoApellido: this.model.get("segundoApellido"),
+				idFigura: this.model.get("idFigura"),
+				idVarianteFigura: this.model.get("idVarianteFigura")
+			});
+		//}
+	},
+	
+	validate: function(){
+		var valid = true;
+
+		if(
+			this.model.get("nombre") == "" &&
+			this.model.get("primerApellido") == "" &&
+			this.model.get("segundoApellido") == "" &&
+			this.model.get("idFigura") == "-1"
+		){
+			valid = false;
+		}
+		
+		return valid;
+	}
+	
 });
 
 app.ResultView = Backbone.View.extend({

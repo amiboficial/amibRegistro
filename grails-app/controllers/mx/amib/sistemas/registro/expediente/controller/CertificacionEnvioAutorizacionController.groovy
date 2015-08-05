@@ -1,16 +1,28 @@
 package mx.amib.sistemas.registro.expediente.controller
 
+import java.util.Collection;
+
 import grails.converters.JSON
+import mx.amib.sistemas.external.catalogos.service.FiguraService
+import mx.amib.sistemas.external.catalogos.service.FiguraTO;
 import mx.amib.sistemas.external.expediente.service.CertificacionService
 
 class CertificacionEnvioAutorizacionController {
 
+	FiguraService figuraService
 	CertificacionService certificacionService
 	
     def index() { 
-		
+		IndexViewModel ivm = this.getIndexViewModel()
+		render(view: "index", model: [ viewModelInstance : ivm ])
 	}
 		
+	private IndexViewModel getIndexViewModel(){
+		IndexViewModel ivm = new IndexViewModel()
+		ivm.figuraList = figuraService.list().sort{ it.nombre }
+		return ivm
+	}
+	
 	def indexOld(){
 		
 	}
@@ -66,4 +78,10 @@ class CertificacionEnvioAutorizacionController {
 		render (res as JSON)
 	}
 	
+	
+	public static class IndexViewModel{
+		Collection<FiguraTO> figuraList
+	}
 }
+
+

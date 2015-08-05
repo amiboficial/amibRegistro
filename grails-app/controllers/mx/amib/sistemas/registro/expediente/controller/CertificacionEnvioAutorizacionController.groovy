@@ -28,11 +28,11 @@ class CertificacionEnvioAutorizacionController {
 		render (res as JSON)
 	}
 	
-	def findAllByFolio(Long id){
+	def findAllByIdSustentante(Long id){
 		def res = null
 						
 		try{
-			res = [ 'status' : 'OK' , 'object' : certificacionService.findAllEnAutorizacionByFolio(id.value) ]
+			res = [ 'status' : 'OK' , 'object' : certificacionService.findAllByIdSustentante(id.value) ]
 		}
 		catch(Exception ex){
 			res = [ 'status': 'ERROR', 'object': ex.message ]

@@ -321,7 +321,7 @@ class CertificacionService {
 		return rs
 	}
 	
-	CertificacionService.ResultSet findAllEnAutorizacionByFolio(long idSustentante){
+	CertificacionService.ResultSet findAllByIdSustentante(long idSustentante){
 		CertificacionService.ResultSet rs = new CertificacionService.ResultSet()
 		
 		List<SustentanteTO> sustentantes = new ArrayList<SustentanteTO>()

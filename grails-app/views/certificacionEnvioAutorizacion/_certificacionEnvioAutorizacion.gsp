@@ -20,32 +20,11 @@
 			<br/>
 			
 			<div role="tabpanel" id="bmat" class="tab-pane-matricula tab-pane active" >
-				
 			</div>
 			
 			<div role="tabpanel" id="bid" class="tab-pane-folio tab-pane">
-				<div class="form-group">
-					<label class="col-md-2 col-sm-3 control-label">
-						<g:message code="expediente.id.label" default="Folio" />
-					</label>
-					<div class="col-md-9 col-sm-9">
-						<input type="text" name="fltFol" id="txtFltFol" class="form-control" maxlength="10"/>
-					</div>
-				</div>
-				<br/>
-				<div class="form-group">
-					<div class="col-md-3 col-sm-3">
-						&nbsp;
-					</div>
-					<div class="col-md-6 col-sm-6" style="text-align: center">
-						<button type="button" class="clean btn btn-default btn-primary" data-tab="F" >Limpiar campos</button>
-						<button type="button" class="find btn btn-default btn-primary" data-tab="F" ><span class="glyphicon glyphicon-search"></span> Realizar búsqueda</button>
-					</div>
-					<div class="col-md-3 col-sm-3">
-						&nbsp;
-					</div>
-				</div>
 			</div>
+			
 			<div role="tabpanel" id="bav" class="tab-pane-busqav tab-pane">
 				
 				<div id="divFltNom" class="form-group">
@@ -152,6 +131,28 @@
 </script>
 
 <script type="text/template" id="folioTabTemplate">
+
+	<div class="div-idSustentante form-group">
+		<label class="col-md-2 col-sm-3 control-label">
+			<g:message code="expediente.id.label" default="Folio" />
+		</label>
+		<div class="col-md-9 col-sm-9">
+			<input type="text" class="idSustentante field form-control" maxlength="10" data-field="idSustentante"/>
+		</div>
+	</div>
+	<br/>
+	<div class="form-group">
+		<div class="col-md-3 col-sm-3">
+			&nbsp;
+		</div>
+		<div class="col-md-6 col-sm-6" style="text-align: center">
+			<button type="button" class="clean btn btn-default btn-primary" data-tab="F" >Limpiar campos</button>
+			<button type="button" class="find btn btn-default btn-primary" data-tab="F" ><span class="glyphicon glyphicon-search"></span> Realizar búsqueda</button>
+		</div>
+		<div class="col-md-3 col-sm-3">
+			&nbsp;
+		</div>
+	</div>
 
 </script>
 

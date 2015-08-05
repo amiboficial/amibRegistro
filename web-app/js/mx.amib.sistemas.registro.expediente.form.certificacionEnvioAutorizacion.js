@@ -28,6 +28,7 @@ app.VarianteFigura = function(id,nombre){
 	this.nombre = nombre;
 	this.figura = {};
 }
+
 /*
 app.CertPendAutMainVM = Backbone.Model.extend({
 	defaults: {
@@ -44,7 +45,8 @@ app.MatriculaTabVM = Backbone.Model.extend({
 
 app.FolioTabVM = Backbone.Model.extend({
 	defaults: {
-		idSustentante: -1
+		idSustentante: -1,
+		errorIdSustentante: false
 	}
 });
 
@@ -114,6 +116,7 @@ app.ResultVMCollection = Backbone.Collection.extend({
 	findAllByIdSustentanteUrl: "",
 	findAllUrl: "",
 	sendAllToLoteUrl: "",
+	sendToLoteUrl: "",
 	
 	_processing: false,
 	_startProcessing: function(){
@@ -139,51 +142,87 @@ app.ResultVMCollection = Backbone.Collection.extend({
 		}).done( function(data){
 			if(data.status == "OK"){
 			
-				var listE = data.status.object.list
+				var listE = data.object.list
 			
 				_this.reset( null );
 				
-				for(var i=0; i<listE.length; i++){
-					var elemento = new app.ResultVM();
-					elemento.set('grailsId',listE[i].id);
-					elemento.set('numeroMatricula',listE[i].numeroMatricula);
-					elemento.set('nombre',listE[i].nombre);
-					elemento.set('primerApellido',listE[i].primerApellido);
-					elemento.set('segundoApellido',listE[i].segundoApellido);
-					elemento.set('idFigura',listE[i].varianteFigura.idFigura);
-					elemento.set('dsFigura',listE[i].varianteFigura.nombreFigura);
-					elemento.set('idVarianteFigura',listE[i].varianteFigura.id);
-					elemento.set('dsVarianteFigura',listE[i].varianteFigura.nombre);
-					
-					elemento.set('yaEnLote',false); // <- checar con los que ya estan en lote
-					elemento.set('procesando',false);
-					
-					elemento.set('viewChecked',false);
-					elemento.set('sendToLoteUrl',""); // <- enviar URL
+				for(var i=0; i<listE.length; i++){					
+					var elemento = _this._getResult(listE[i]);	
+					_this.add(elemento);
 				}
 				
 				_this.count = data.object.count;
 				_this.offset = options.offset;
 				_this.sort = options.sort;
 				_this.order = options.order;
+				
+				_this._stopProcessing();
 			}
-			else{
-				//error alguno
-				view.setErrorProc();
-				view.setReady();
+			else{				
+				_this._stopProcessing();
 			}
 		} );
-		
 
 	},
 	findAllByIdSustentante: function(options){ //Async
-		alert("find de coleccion 2 que se realizará async...");
+		var _this = this;
+
+		$.ajax({
+			url: _this.findAllByIdSustentanteUrl + "/" + options.idSustentante, 
+			beforeSend: function(xhr){
+				_this._startProcessing();
+			}
+		}).done( function(data){
+			if(data.status == "OK"){
+			
+				var listE = data.object.list
+			
+				_this.reset( null );
+				
+				for(var i=0; i<listE.length; i++){					
+					var elemento = _this._getResult(listE[i]);	
+					_this.add(elemento);
+				}
+				
+				_this.count = data.object.count;
+				_this.offset = options.offset;
+				_this.sort = options.sort;
+				_this.order = options.order;
+				
+				_this._stopProcessing();
+			}
+			else{				
+				_this._stopProcessing();
+			}
+		} );
 	},
 	findAll: function(options){ //Async
 		alert("find de coleccion 3 que se realizará async...");
 	},
 	sendAllToLote: function(options){ //Async
 		alert("find de coleccion 4 que se realizará async...");
+	},
+	
+	_getResult: function(certificacion){
+		var elemento = new app.ResultVM();
+	
+		elemento.set('grailsId',certificacion.sustentante.id);
+		elemento.set('numeroMatricula',certificacion.sustentante.numeroMatricula);
+		elemento.set('nombre',certificacion.sustentante.nombre);
+		elemento.set('primerApellido',certificacion.sustentante.primerApellido);
+		elemento.set('segundoApellido',certificacion.sustentante.segundoApellido);
+		elemento.set('idFigura',certificacion.varianteFigura.idFigura);
+		elemento.set('dsFigura',certificacion.varianteFigura.nombreFigura);
+		elemento.set('idVarianteFigura',certificacion.varianteFigura.id);
+		elemento.set('dsVarianteFigura',certificacion.varianteFigura.nombre);
+		
+		elemento.set('yaEnLote',false); // <- checar con los que ya estan en lote
+		elemento.set('procesando',false);
+		
+		elemento.set('viewChecked',false);
+		elemento.set('sendToLoteUrl',""); // <- enviar URL
+		
+		return elemento;
 	}
 	
 });
@@ -238,7 +277,7 @@ app.CertPendAutMainView = Backbone.View.extend({
 	render: function(){
 		this.$el.html( this.template() );
 		this.renderMatriculaTabView();
-		//this.renderFolioTabView();
+		this.renderFolioTabView();
 		//this.renderBusqAvView();
 		this.renderResultView();
 		return this;
@@ -254,9 +293,14 @@ app.CertPendAutMainView = Backbone.View.extend({
 		return view;
 	},
 	renderFolioTabView: function(){
+		var parentView = this;
+		var model = new app.MatriculaTabVM();
+		var collection = this.options.resultVMCollection;
+		
 		this.$(".tab-pane-folio").html("");
-		var view = new app.FolioTabView(this.options);
-		return view.render();
+		var view = new app.FolioTabView({ model:model, collection:collection, parentView:parentView });
+		this.$(".tab-pane-folio").append( view.render().el );
+		return view;
 	},
 	renderBusqAvView: function(){
 		this.$(".tab-pane-busqav").html("");
@@ -295,9 +339,6 @@ app.MatriculaTabView = Backbone.View.extend({
 		
 		this.listenTo( this.collection, 'processingStarted', this.disableInput );
 		this.listenTo( this.collection, 'processingStopped', this.enableInput );
-		
-		
-		//this.listenTo( this.model, 'change:procesando', this.render );
 	},
 	
 	render: function(){
@@ -363,16 +404,92 @@ app.MatriculaTabView = Backbone.View.extend({
 
 app.FolioTabView = Backbone.View.extend({
 	parentView: {},
-	el: "",
+	template: _.template( $('#folioTabTemplate').html() ),
+	model: new Backbone.Model(),
+	collection: new app.ResultVMCollection(),
+	
+	initialize: function(options){
+		this.model = options.model;
+		this.parentView = options.parentView;
+		this.collection = options.collection;
+		
+		//this.render();
+		this.listenTo( this.model, 'change:idSustentante', this.render );
+		this.listenTo( this.model, 'change:errorIdSustentante', this.renderError );
+		
+		this.listenTo( this.collection, 'processingStarted', this.disableInput );
+		this.listenTo( this.collection, 'processingStopped', this.enableInput );
+	},
+	
+	render: function(){
+		this.$el.html( this.template( this.model.toJSON() ) );
+		this.renderError();
+		return this;
+	},
+	renderError: function(){
+		if( this.model.get('errorIdSustentante') == true ){
+			this.$('.div-idSustentante').addClass('has-error');
+		}
+		else{
+			this.$('.div-idSustentante').removeClass('has-error');
+		}
+	},
+	disableInput: function(){
+		this.$("input").prop('disabled',true);
+		this.$("button").prop('disabled',true);
+	},
+	enableInput: function(){
+		this.$("input").prop('disabled',false);
+		this.$("button").prop('disabled',false);
+	},
+	
 	events: {
 		'click .clean' : 'limpiar',
-		'click .find' : 'findByIdSustentante'
+		'click .find' : 'findByIdSustentante',
+		'change .field' : 'updateModel'
 	},
+	
+	updateModel: function(ev){
+		ev.preventDefault();
+		
+		var fieldName = this.$(ev.currentTarget).data("field");
+		var fieldValue = this.$(ev.currentTarget).val().trim();
+		
+		this.model.set(fieldName,fieldValue,{silent:true});
+	},
+	
+	limpiar : function(e){
+		e.preventDefault();
+		this.model.set("idSustentante","");
+	},
+	findByIdSustentante : function(e){
+		e.preventDefault();
+		if(this.validate()){
+			this.collection.findAllByIdSustentante({ max:1, offset:0, sort:"id", order:"desc", idSustentante: this.model.get('idSustentante') });
+		}		
+	},
+	validate: function(){
+		var valid = true;
+		var numericRegEx = /^[0-9]{1,10}$/;
+		
+		this.model.set('errorIdSustentante', false);
+		
+		if( !numericRegEx.test( this.model.get('idSustentante') ) ){
+			valid = false;
+			this.model.set('errorIdSustentante', true);
+		}
+		
+		return valid;
+	}
+	
 });
 
 app.BusqAvView = Backbone.View.extend({
 	parentView: {},
-	el: "",
+	template: _.template( $('#busqAvTemplate').html() ),
+	model: new Backbone.Model(),
+	collection: new app.ResultVMCollection(),
+	
 	events: {
 		'click .clean' : 'limpiar',
 		'click .find' : 'findAll'
@@ -451,6 +568,8 @@ app.ResultsView = Backbone.View.extend({
 		//this.render();
 		
 		this.listenTo( this.model, 'change:state', this.renderStateChange );
+		this.listenTo( this.collection, 'add', this.renderElement );
+		this.listenTo( this.collection, 'reset', this.renderList );
 		//this.listenTo( this.collection, 'sort', this.renderList );
 	},
 	

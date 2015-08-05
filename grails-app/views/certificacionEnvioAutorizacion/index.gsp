@@ -38,6 +38,12 @@
 		var resultsVM = new app.ResultsVM();
 		var resultVMCollection = new app.ResultVMCollection();
 		
+		resultVMCollection.findAllByMatriculaUrl = '<g:createLink action="findAllByMatricula" />';
+		resultVMCollection.findAllByIdSustentanteUrl = '<g:createLink action="findAllByIdSustentante" />';
+		resultVMCollection.findAllUrl = '<g:createLink action="findAll" />';
+		resultVMCollection.sendAllToLoteUrl = '<g:createLink action="sendAllToLote" />';
+		resultVMCollection.sendToLoteUrl = '<g:createLink action="sendToLote" />';
+		
 		var resultVMtest1 = new app.ResultVM();
 		var resultVMtest2 = new app.ResultVM();
 		var resultVMtest3 = new app.ResultVM();

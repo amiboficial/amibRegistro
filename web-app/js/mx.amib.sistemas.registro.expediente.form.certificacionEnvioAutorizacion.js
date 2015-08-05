@@ -128,11 +128,12 @@ app.ResultVM = Backbone.Model.extend({
 app.ResultVMCollection = Backbone.Collection.extend({
 	model: app.ResultVM, 
 	
-	count: -1,
+	count: 0,
 	max: 10,
 	offset: 0,
 	sort: "id",
 	order: "asc",
+	lastQuery: app.EXP_CEA_SELECTED_TAB_MAT,
 	
 	findAllByMatriculaUrl: "",
 	findAllByIdSustentanteUrl: "",
@@ -152,10 +153,7 @@ app.ResultVMCollection = Backbone.Collection.extend({
 	
 	findAllByMatricula: function(options){ //Async
 		var _this = this;
-		/*
-		this._startProcessing();
-		setTimeout(function(){ _this._stopProcessing(); },3000);
-		*/
+
 		$.ajax({
 			url: _this.findAllByMatriculaUrl + "/" + options.numeroMatricula, 
 			beforeSend: function(xhr){
@@ -166,17 +164,16 @@ app.ResultVMCollection = Backbone.Collection.extend({
 			
 				var listE = data.object.list
 			
+				_this.count = data.object.count;
+				_this.offset = options.offset;
+				_this.sort = options.sort;
+				_this.order = options.order;
 				_this.reset( null );
 				
 				for(var i=0; i<listE.length; i++){					
 					var elemento = _this._getResult(listE[i]);	
 					_this.add(elemento);
 				}
-				
-				_this.count = data.object.count;
-				_this.offset = options.offset;
-				_this.sort = options.sort;
-				_this.order = options.order;
 				
 				_this._stopProcessing();
 			}
@@ -199,17 +196,16 @@ app.ResultVMCollection = Backbone.Collection.extend({
 			
 				var listE = data.object.list
 			
+				_this.count = data.object.count;
+				_this.offset = options.offset;
+				_this.sort = options.sort;
+				_this.order = options.order;
 				_this.reset( null );
 				
 				for(var i=0; i<listE.length; i++){					
 					var elemento = _this._getResult(listE[i]);	
 					_this.add(elemento);
 				}
-				
-				_this.count = data.object.count;
-				_this.offset = options.offset;
-				_this.sort = options.sort;
-				_this.order = options.order;
 				
 				_this._stopProcessing();
 			}
@@ -243,17 +239,16 @@ app.ResultVMCollection = Backbone.Collection.extend({
 			
 				var listE = data.object.list
 			
+				_this.count = data.object.count;
+				_this.offset = options.offset;
+				_this.sort = options.sort;
+				_this.order = options.order;
 				_this.reset( null );
 				
 				for(var i=0; i<listE.length; i++){					
 					var elemento = _this._getResult(listE[i]);	
 					_this.add(elemento);
 				}
-				
-				_this.count = data.object.count;
-				_this.offset = options.offset;
-				_this.sort = options.sort;
-				_this.order = options.order;
 				
 				_this._stopProcessing();
 			}
@@ -265,6 +260,24 @@ app.ResultVMCollection = Backbone.Collection.extend({
 	},
 	sendAllToLote: function(options){ //Async
 		alert("find de coleccion 4 que se realizará async...");
+	},
+	
+	getCurrentPage: function(){
+		return Math.floor(this.offset/this.max) + 1;
+	},
+	getTotalPages: function(){
+		console.log("COUNT: " + this.count + ";MAX: " + this.max);
+		return Math.ceil(this.count/this.max);
+	},
+	getNextPage: function(){
+		var nextPage = 0;
+		nextPage = this.getCurrentPage() + 1;
+		return nextPage;
+	},
+	getBackPage: function(){
+		var backPage = 0;
+		backPage = this.getCurrentPage() - 1;
+		return backPage;
 	},
 	
 	_getResult: function(certificacion){
@@ -293,34 +306,13 @@ app.ResultVMCollection = Backbone.Collection.extend({
 
 app.ResultsVM = Backbone.Model.extend({
 	defaults: {
+		results: new app.ResultVMCollection(),
+		
 		showYaEnLote: true,
 		totalEnLote: 0,
 		
 		state: app.EXP_CEA_RSLTS_ST_READY,
-		error: false,
-		
-		count: 95,
-		max: 10,
-		offset: 0,
-		sort: "id",
-		order: "asc",
-		tab: app.EXP_CEA_SELECTED_TAB_MAT
-	},
-	getCurrentPage: function(){
-		return Math.ceil(offset/max);
-	},
-	getTotalPages: function(){
-		return Math.ceil(count/max);
-	},
-	getNextPage: function(){
-		var nextPage = 0;
-		nextPage = this.getCurrentPage() + 1;
-		return nextPage;
-	},
-	getBackPage: function(){
-		var backPage = 0;
-		backPage = this.getCurrentPage() - 1;
-		return backPage;
+		error: false
 	}
 });
 
@@ -360,6 +352,8 @@ app.CertPendAutMainView = Backbone.View.extend({
 		var parentView = this;
 		var model = new app.MatriculaTabVM();
 		var collection = this.options.resultVMCollection;
+		
+		model.results = collection;
 		
 		this.$(".tab-pane-folio").html("");
 		var view = new app.FolioTabView({ model:model, collection:collection, parentView:parentView });
@@ -568,7 +562,7 @@ app.BusqAvView = Backbone.View.extend({
 		
 		this.listenTo( this.model, 'change:nombre', this.changeNombreField );
 		this.listenTo( this.model, 'change:primerApellido', this.changePrimerApellidoField );
-		this.listenTo( this.model, 'change:segundoApellido', this.changeSegundoApellido );
+		this.listenTo( this.model, 'change:segundoApellido', this.changeSegundoApellidoField );
 		this.listenTo( this.model, 'change:idFigura', this.changeIdFiguraField );
 		
 		this.listenTo( this.model, 'change:viewVariantesFigura', this.renderVariantesFigura );
@@ -606,7 +600,7 @@ app.BusqAvView = Backbone.View.extend({
 	changePrimerApellidoField: function(){
 		this.$('.primerApellido').val( this.model.get("primerApellido")  )
 	},
-	changeSegundoApellido: function(){
+	changeSegundoApellidoField: function(){
 		this.$('.segundoApellido').val( this.model.get("segundoApellido")  )
 	},
 	changeIdFiguraField: function(){
@@ -774,6 +768,7 @@ app.ResultsView = Backbone.View.extend({
 		this.collection.each( function(item){
 			this.renderElement(item);
 		},this );
+		this.renderPagination();
 	},
 	renderElement: function(item){
 		var view = this;
@@ -796,6 +791,38 @@ app.ResultsView = Backbone.View.extend({
 			this.$('.errorMessage').show();
 		}
 	},
+	renderPagination: function(){
+		var paginationStr = "";
+		var totalPages = this.collection.getTotalPages();
+		var currentPage = this.collection.getCurrentPage();
+		
+		if(currentPage == 1){
+			paginationStr += '<li class="disabled"><a href="javascript:void(0);">&lt;</a></li>'
+		}
+		else{
+			paginationStr += '<li class="page handCursor" data-page="' + (currentPage-1) + '"><a href="javascript:void(0);">&lt;</a></li>'
+		}
+		
+		for(var i=1; i<=totalPages; i++){
+			if(i == currentPage){
+				paginationStr += '<li class="active"><a href="javascript:void(0);">' + i + '</a></li>';
+			}
+			else{
+				paginationStr += '<li class="page handCursor" data-page="' + i + '"><a href="javascript:void(0);">' + i + '</a></li>';
+			}
+		}
+		
+		if(currentPage == totalPages){
+			paginationStr += '<li class="disabled"><a href="javascript:void(0);">&gt;</a></li>'
+		}
+		else{
+			paginationStr += '<li class="page handCursor" data-page="' + (currentPage+1) + '"><a href="javascript:void(0);">&gt;</a></li>'
+		}
+		
+		
+		this.$(".pagination").html("");
+		this.$(".pagination").html(paginationStr);
+	},
 	
 	events: {
 		'click .hideSent' : 'ocultarElementoEnviados',
@@ -804,6 +831,7 @@ app.ResultsView = Backbone.View.extend({
 		'click .sentSelected' : 'enviarSeleccionadosLote',
 		'click .viewLote' : 'verLote',
 		'click .sort': 'mandarOrdenar',
+		'click .page': 'mandarAPagina'
 	},
 	
 	ocultarElementoEnviados: function(e){
@@ -855,7 +883,16 @@ app.ResultsView = Backbone.View.extend({
 	},
 	
 	mandarOrdenar: function(e){
+		var order = this.$(e.currentTarget).data("order");
+		var sort = this.$(e.currentTarget).data("sort");
+		
 		e.preventDefault();
-		alert('NO IMPLEMENTADO AUN');
+		alert('NO IMPLEMENTADO AUN. ORDER: ' + order + '. SORT: ' + sort);
+	},
+	mandarAPagina: function(e){
+		var pagina = this.$(e.currentTarget).data("page");
+
+		e.preventDefault();
+		alert('NO IMPLEMENTADO AUN. LA PÁGINA ES: ' + pagina);
 	}
 });

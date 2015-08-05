@@ -210,27 +210,27 @@
 						<th>
 						${message(code: 'expediente.folio.label', default: 'Folio')} 
 							<span class="sort handCursor glyphicon glyphicon-chevron-up" data-sort="idSustentante" data-order="asc"></span>
-							<span class="sort handCursor glyphicon glyphicon-chevron-down" data-sort="idSustentante" data-order="asc"></span>
+							<span class="sort handCursor glyphicon glyphicon-chevron-down" data-sort="idSustentante" data-order="desc"></span>
 						</th>
 						<th>
 						${message(code: 'expediente.matricula.label', default: 'Matrícula')} 
-							<span class="sort handCursor glyphicon glyphicon-chevron-up" data-sort="idSustentante" data-order="asc"></span>
-							<span class="sort handCursor glyphicon glyphicon-chevron-down" data-sort="idSustentante" data-order="asc"></span>
+							<span class="sort handCursor glyphicon glyphicon-chevron-up" data-sort="numeroMatricula" data-order="asc"></span>
+							<span class="sort handCursor glyphicon glyphicon-chevron-down" data-sort="numeroMatricula" data-order="desc"></span>
 						</th>
 						<th>
 						${message(code: 'expediente.nombre.label', default: 'Nombre')} 
-							<span class="sort handCursor glyphicon glyphicon-chevron-up" data-sort="idSustentante" data-order="asc"></span>
-							<span class="sort handCursor glyphicon glyphicon-chevron-down" data-sort="idSustentante" data-order="asc"></span>
+							<span class="sort handCursor glyphicon glyphicon-chevron-up" data-sort="nombre" data-order="asc"></span>
+							<span class="sort handCursor glyphicon glyphicon-chevron-down" data-sort="nombre" data-order="desc"></span>
 						</th>
 						<th>
 						${message(code: 'expediente.primerApellido.label', default: '1er Apellido')} 
-							<span class="sort handCursor glyphicon glyphicon-chevron-up" data-sort="idSustentante" data-order="asc"></span>
-							<span class="sort handCursor glyphicon glyphicon-chevron-down" data-sort="idSustentante" data-order="asc"></span>
+							<span class="sort handCursor glyphicon glyphicon-chevron-up" data-sort="primerApellido" data-order="asc"></span>
+							<span class="sort handCursor glyphicon glyphicon-chevron-down" data-sort="primerApellido" data-order="desc"></span>
 						</th>
 						<th>
 						${message(code: 'expediente.segundoApellido.label', default: '2do Apellido')} 
-							<span class="sort handCursor glyphicon glyphicon-chevron-up" data-sort="idSustentante" data-order="asc"></span>
-							<span class="sort handCursor glyphicon glyphicon-chevron-down" data-sort="idSustentante" data-order="asc"></span>
+							<span class="sort handCursor glyphicon glyphicon-chevron-up" data-sort="segundoApellido" data-order="asc"></span>
+							<span class="sort handCursor glyphicon glyphicon-chevron-down" data-sort="segundoApellido" data-order="desc"></span>
 						</th>
 						<th>...</th>
 					</tr>
@@ -241,17 +241,11 @@
 				</tbody>
 			
 			</table>
-
+			
 			<ul class="pagination pagination-sm">
-				<li><a href="#">&lt;</a></li>
-				<li class="active"><a href="#">1</a></li>
-				<li><a href="#">2</a></li>
-				<li><a href="#">3</a></li>
-				<li><a href="#">4</a></li>
-				<li><a href="#">5</a></li>
-				<li><a href="#">&gt;</a></li>
-			</ul>
 
+			</ul>
+			
 		</div>
 		
 	</fieldset>

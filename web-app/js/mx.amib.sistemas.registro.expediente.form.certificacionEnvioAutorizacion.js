@@ -802,7 +802,8 @@ app.ResultsView = Backbone.View.extend({
 		'click .selectAll' : 'seleccionarTodos',
 		'click .selectNone' : 'quitarSeleccionTodos',
 		'click .sentSelected' : 'enviarSeleccionadosLote',
-		'click .viewLote' : 'verLote'
+		'click .viewLote' : 'verLote',
+		'click .sort': 'mandarOrdenar',
 	},
 	
 	ocultarElementoEnviados: function(e){
@@ -851,5 +852,10 @@ app.ResultsView = Backbone.View.extend({
 	},
 	verLote: function(e){
 		e.preventDefault();
+	},
+	
+	mandarOrdenar: function(e){
+		e.preventDefault();
+		alert('NO IMPLEMENTADO AUN');
 	}
 });

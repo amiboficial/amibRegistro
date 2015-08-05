@@ -207,11 +207,31 @@
 				<thead>
 					<tr>
 						<th>&nbsp;</th>
-						<th>${message(code: 'expediente.folio.label', default: 'Folio')} <a href="#"><span class="glyphicon glyphicon-chevron-up"></span></a><a href="#"><span class="glyphicon glyphicon-chevron-down"></span></a></th>
-						<th>${message(code: 'expediente.matricula.label', default: 'Matrícula')} <a href="#"><span class="glyphicon glyphicon-chevron-up"></span></a><a href="#"><span class="glyphicon glyphicon-chevron-down"></span></a></th>
-						<th>${message(code: 'expediente.nombre.label', default: 'Nombre')} <a href="#"><span class="glyphicon glyphicon-chevron-up"></span></a><a href="#"><span class="glyphicon glyphicon-chevron-down"></span></a></th>
-						<th>${message(code: 'expediente.primerApellido.label', default: '1er Apellido')} <a href="#"><span class="glyphicon glyphicon-chevron-up"></span></a><a href="#"><span class="glyphicon glyphicon-chevron-down"></span></a></th>
-						<th>${message(code: 'expediente.segundoApellido.label', default: '2do Apellido')} <a href="#"><span class="glyphicon glyphicon-chevron-up"></span></a><a href="#"><span class="glyphicon glyphicon-chevron-down"></span></a></th>
+						<th>
+						${message(code: 'expediente.folio.label', default: 'Folio')} 
+							<span class="sort handCursor glyphicon glyphicon-chevron-up" data-sort="idSustentante" data-order="asc"></span>
+							<span class="sort handCursor glyphicon glyphicon-chevron-down" data-sort="idSustentante" data-order="asc"></span>
+						</th>
+						<th>
+						${message(code: 'expediente.matricula.label', default: 'Matrícula')} 
+							<span class="sort handCursor glyphicon glyphicon-chevron-up" data-sort="idSustentante" data-order="asc"></span>
+							<span class="sort handCursor glyphicon glyphicon-chevron-down" data-sort="idSustentante" data-order="asc"></span>
+						</th>
+						<th>
+						${message(code: 'expediente.nombre.label', default: 'Nombre')} 
+							<span class="sort handCursor glyphicon glyphicon-chevron-up" data-sort="idSustentante" data-order="asc"></span>
+							<span class="sort handCursor glyphicon glyphicon-chevron-down" data-sort="idSustentante" data-order="asc"></span>
+						</th>
+						<th>
+						${message(code: 'expediente.primerApellido.label', default: '1er Apellido')} 
+							<span class="sort handCursor glyphicon glyphicon-chevron-up" data-sort="idSustentante" data-order="asc"></span>
+							<span class="sort handCursor glyphicon glyphicon-chevron-down" data-sort="idSustentante" data-order="asc"></span>
+						</th>
+						<th>
+						${message(code: 'expediente.segundoApellido.label', default: '2do Apellido')} 
+							<span class="sort handCursor glyphicon glyphicon-chevron-up" data-sort="idSustentante" data-order="asc"></span>
+							<span class="sort handCursor glyphicon glyphicon-chevron-down" data-sort="idSustentante" data-order="asc"></span>
+						</th>
 						<th>...</th>
 					</tr>
 				</thead>

@@ -318,6 +318,8 @@ app.ResultVMCollection = Backbone.Collection.extend({
 	sortAndOrderBy: function(order,sort){
 		var _this = this;
 		
+		this.sort = sort;
+		this.order = order;
 		//NO TIENE SENTIDO ALGUNO ORDENRAR COSAS CON PROBABLEMENTE SOLO 1 RESULTADO!!
 		/*
 		if(this.lastQuery == app.EXP_CEA_SELECTED_TAB_MAT){
@@ -343,8 +345,8 @@ app.ResultVMCollection = Backbone.Collection.extend({
 			this.findAll({ 
 				max: _this.max, 
 				offset: _this.offset, 
-				sort: sort, 
-				order: order,
+				sort: _this.sort, 
+				order: _this.order,
 				nombre: _this.lastNombre,
 				primerApellido: _this.lastPrimerApellido,
 				segundoApellido: _this.lastSegundoApellido,
@@ -353,6 +355,24 @@ app.ResultVMCollection = Backbone.Collection.extend({
 			});
 		}
 		
+	},
+	goToPage: function(pagenum){
+		var _this = this;
+		this.offset = ((pagenum-1) * _this.max);
+		
+		if(this.lastQuery == app.EXP_CEA_SELECTED_TAB_BAV){
+			this.findAll({ 
+				max: _this.max, 
+				offset: _this.offset, 
+				sort: _this.sort, 
+				order: _this.order,
+				nombre: _this.lastNombre,
+				primerApellido: _this.lastPrimerApellido,
+				segundoApellido: _this.lastSegundoApellido,
+				idFigura: _this.lastIdFigura,
+				idVarianteFigura: _this.lastIdVarianteFigura
+			});
+		}
 	},
 	
 	_getResult: function(certificacion){
@@ -871,6 +891,8 @@ app.ResultsView = Backbone.View.extend({
 		var totalPages = this.collection.getTotalPages();
 		var currentPage = this.collection.getCurrentPage();
 		
+		console.log("TOTAL PAGES = " + totalPages);
+		
 		if(currentPage == 1){
 			paginationStr += '<li class="disabled"><a href="javascript:void(0);">&lt;</a></li>'
 		}
@@ -887,7 +909,7 @@ app.ResultsView = Backbone.View.extend({
 			}
 		}
 		
-		if(currentPage == totalPages){
+		if(currentPage == totalPages || totalPages == 0){
 			paginationStr += '<li class="disabled"><a href="javascript:void(0);">&gt;</a></li>'
 		}
 		else{
@@ -968,6 +990,6 @@ app.ResultsView = Backbone.View.extend({
 		var pagina = this.$(e.currentTarget).data("page");
 
 		e.preventDefault();
-		alert('NO IMPLEMENTADO AUN. LA PÁGINA ES: ' + pagina);
+		this.collection.goToPage(pagina);
 	}
 });

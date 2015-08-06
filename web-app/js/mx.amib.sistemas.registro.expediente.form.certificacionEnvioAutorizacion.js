@@ -133,7 +133,15 @@ app.ResultVMCollection = Backbone.Collection.extend({
 	offset: 0,
 	sort: "id",
 	order: "asc",
-	lastQuery: app.EXP_CEA_SELECTED_TAB_MAT,
+	
+	lastQuery: -1, //EXP_CEA_SELECTED_TAB_MAT,EXP_CEA_SELECTED_TAB_FOL,EXP_CEA_SELECTED_TAB_BAV
+	lastMatricula: -1,
+	lastIdSustentante: -1,
+	lastNombre: "",
+	lastPrimerApellido: "",
+	lastSegundoApellido: "",
+	lastIdFigura: -1,
+	lastIdVarianteFigura: -1,
 	
 	findAllByMatriculaUrl: "",
 	findAllByIdSustentanteUrl: "",
@@ -154,6 +162,15 @@ app.ResultVMCollection = Backbone.Collection.extend({
 	findAllByMatricula: function(options){ //Async
 		var _this = this;
 
+		_this.lastQuery = app.EXP_CEA_SELECTED_TAB_MAT;
+		_this.lastMatricula = options.numeroMatricula;
+		_this.lastIdSustentante = -1;
+		_this.lastNombre = "";
+		_this.lastPrimerApellido = "";
+		_this.lastSegundoApellido = "";
+		_this.lastIdFigura = -1;
+		_this.lastIdVarianteFigura = -1;
+		
 		$.ajax({
 			url: _this.findAllByMatriculaUrl + "/" + options.numeroMatricula, 
 			beforeSend: function(xhr){
@@ -186,6 +203,15 @@ app.ResultVMCollection = Backbone.Collection.extend({
 	findAllByIdSustentante: function(options){ //Async
 		var _this = this;
 
+		_this.lastQuery = app.EXP_CEA_SELECTED_TAB_FOL;
+		_this.lastMatricula = -1;
+		_this.lastIdSustentante = options.idSustentante;
+		_this.lastNombre = "";
+		_this.lastPrimerApellido = "";
+		_this.lastSegundoApellido = "";
+		_this.lastIdFigura = -1;
+		_this.lastIdVarianteFigura = -1;
+		
 		$.ajax({
 			url: _this.findAllByIdSustentanteUrl + "/" + options.idSustentante, 
 			beforeSend: function(xhr){
@@ -217,6 +243,15 @@ app.ResultVMCollection = Backbone.Collection.extend({
 	findAll: function(options){ //Async		
 		var _this = this;
 
+		_this.lastQuery = app.EXP_CEA_SELECTED_TAB_BAV; //EXP_CEA_SELECTED_TAB_MAT,EXP_CEA_SELECTED_TAB_FOL,
+		_this.lastMatricula = -1;
+		_this.lastIdSustentante = -1;
+		_this.lastNombre = options.nombre;
+		_this.lastPrimerApellido = options.primerApellido;
+		_this.lastSegundoApellido = options.segundoApellido;
+		_this.lastIdFigura = options.idFigura;
+		_this.lastIdVarianteFigura = options.idVarianteFigura;
+		
 		$.ajax({
 			url: _this.findAllUrl, 
 			beforeSend: function(xhr){
@@ -278,6 +313,46 @@ app.ResultVMCollection = Backbone.Collection.extend({
 		var backPage = 0;
 		backPage = this.getCurrentPage() - 1;
 		return backPage;
+	},
+	
+	sortAndOrderBy: function(order,sort){
+		var _this = this;
+		
+		//NO TIENE SENTIDO ALGUNO ORDENRAR COSAS CON PROBABLEMENTE SOLO 1 RESULTADO!!
+		/*
+		if(this.lastQuery == app.EXP_CEA_SELECTED_TAB_MAT){
+			this.collection.findAllByMatricula({
+				max:1, 
+				offset:0, 
+				sort:sort, 
+				order:order, 
+				numeroMatricula: _this.lastMatricula
+			});
+		}
+		else if(this.lastQuery == app.EXP_CEA_SELECTED_TAB_FOL){
+			this.findAllByIdSustentante({
+				max:1, 
+				offset:0, 
+				sort:sort, 
+				order:order, 
+				idSustentante: _this.lastIdSustentante
+			});
+		}*/
+		
+		if(this.lastQuery == app.EXP_CEA_SELECTED_TAB_BAV){
+			this.findAll({ 
+				max: _this.max, 
+				offset: _this.offset, 
+				sort: sort, 
+				order: order,
+				nombre: _this.lastNombre,
+				primerApellido: _this.lastPrimerApellido,
+				segundoApellido: _this.lastSegundoApellido,
+				idFigura: _this.lastIdFigura,
+				idVarianteFigura: _this.lastIdVarianteFigura
+			});
+		}
+		
 	},
 	
 	_getResult: function(certificacion){
@@ -887,7 +962,7 @@ app.ResultsView = Backbone.View.extend({
 		var sort = this.$(e.currentTarget).data("sort");
 		
 		e.preventDefault();
-		alert('NO IMPLEMENTADO AUN. ORDER: ' + order + '. SORT: ' + sort);
+		this.collection.sortAndOrderBy(order,sort);
 	},
 	mandarAPagina: function(e){
 		var pagina = this.$(e.currentTarget).data("page");

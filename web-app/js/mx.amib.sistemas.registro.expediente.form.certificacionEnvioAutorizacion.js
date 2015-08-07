@@ -158,6 +158,9 @@ app.ResultVMCollection = Backbone.Collection.extend({
 		this._processing = false;
 		this.trigger('processingStopped');
 	},
+	isProcessing: function(){
+		return this._processing;
+	},
 	
 	findAllByMatricula: function(options){ //Async
 		var _this = this;
@@ -844,10 +847,12 @@ app.ResultsView = Backbone.View.extend({
 		this.parentView = options.parentView;
 		
 		//this.render();
-		
 		this.listenTo( this.model, 'change:state', this.renderStateChange );
 		this.listenTo( this.collection, 'add', this.renderElement );
 		this.listenTo( this.collection, 'reset', this.renderList );
+		
+		this.listenTo( this.collection, 'processingStarted', this.disableInput );
+		this.listenTo( this.collection, 'processingStopped', this.enableInput );
 		//this.listenTo( this.collection, 'sort', this.renderList );
 	},
 	
@@ -891,8 +896,6 @@ app.ResultsView = Backbone.View.extend({
 		var totalPages = this.collection.getTotalPages();
 		var currentPage = this.collection.getCurrentPage();
 		
-		console.log("TOTAL PAGES = " + totalPages);
-		
 		if(currentPage == 1){
 			paginationStr += '<li class="disabled"><a href="javascript:void(0);">&lt;</a></li>'
 		}
@@ -919,6 +922,16 @@ app.ResultsView = Backbone.View.extend({
 		
 		this.$(".pagination").html("");
 		this.$(".pagination").html(paginationStr);
+	},
+	disableInput: function(){
+		this.$("input").prop('disabled',true);
+		this.$("button").prop('disabled',true);
+		this.$("select").prop('disabled',true);
+	},
+	enableInput: function(){
+		this.$("input").prop('disabled',false);
+		this.$("button").prop('disabled',false);
+		this.$("select").prop('disabled',false);
 	},
 	
 	events: {
@@ -990,6 +1003,11 @@ app.ResultsView = Backbone.View.extend({
 		var pagina = this.$(e.currentTarget).data("page");
 
 		e.preventDefault();
-		this.collection.goToPage(pagina);
+		
+		//si no se esta procesando nada en la colección
+		if(!this.collection.isProcessing()){
+			this.collection.goToPage(pagina);
+		}
+		
 	}
 });

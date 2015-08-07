@@ -219,15 +219,25 @@ fieldset{
 	margin-left: auto;
 }
 
-/* Mod. 15/02/2014 - Fix para pagination */
+/* Mod. 15/02/2015 - Fix para pagination */
 
 .pagination {
 	margin-top: 5px;
 	margin-bottom: 5px;
 }
 
-/* Mod 16/07/2014 */
+/* Mod 16/07/2015 */
 
 .handCursor{
 	cursor: pointer;
 }
+
+/* Mod 06/08/2015 */
+
+.btn-xxs, .btn-group-xxs > .btn {
+    padding: 1px 2px;
+    font-size: 8px;
+    line-height: 1.5;
+    border-radius: 3px;
+}
+

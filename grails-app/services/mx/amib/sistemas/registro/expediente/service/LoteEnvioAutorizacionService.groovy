@@ -63,4 +63,8 @@ class LoteEnvioAutorizacionService {
 		return mySet
 	}
 	
+	int count(String sessionId){
+		Set<Long> mySet = this.getSessionSet(sessionId)
+		return mySet.size()
+	}
 }

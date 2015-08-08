@@ -13,9 +13,12 @@ app.EXP_CEA_RSLT_ST_ENVIADO = 1;
 
 app.EXP_CEA_RSLT_NOSEL_COLOR = "#FFFFFF"; //blanco
 app.EXP_CEA_RSLT_SEL_COLOR = "#D9EDF7"; //azul claro
-app.EXP_CEA_RSLT_ENLOTE_COLOR = "#DEF7D9"; //verde claro
-app.EXP_CEA_RSLT_SELENLOTE_COLOR = "#F2D9F7"; //morado claro
+app.EXP_CEA_RSLT_ENLOTE_COLOR = "#EFEDFA"; //morado claro
+app.EXP_CEA_RSLT_SELENLOTE_COLOR = "#DEF7D9"; //verde claro
+app.EXP_CEA_RSLT_PROC_COLOR = "#F8FAED"; //amarizho
 
+app.EXP_CEA_REFRESH_MILIS = 10000;
+app.EXP_CEA_REFRESH_STOP_MILIS = 180000;
 
 app.Figura = function(id,nombre){
 	this.id = id;
@@ -88,6 +91,7 @@ app.BusqAvVM = Backbone.Model.extend({
 app.ResultVM = Backbone.Model.extend({
 	defaults: {
 		grailsId: -1,
+		idSustentante: -1,
 		numeroMatricula: -1,
 		nombre: "",
 		primerApellido: "",
@@ -98,12 +102,31 @@ app.ResultVM = Backbone.Model.extend({
 		dsVarianteFigura: "",
 		
 		yaEnLote: false,
-		procesando: false,
 		
 		viewChecked: false,
 		
 		sendToLoteUrl: "",
+		
+		procesando: false,
 	},
+	
+	
+	_startProcessing: function(){
+		this.set('procesando',true);
+		this.trigger('processingStarted');
+	},
+	_stopProcessing: function(){
+		this.set('procesando',false);
+		this.trigger('processingStopped');
+	},
+	_stopProcessingWithError: function(){
+		this.set('procesando',false);
+		this.trigger('processingError');
+	},
+	isProcessing: function(){
+		return this.get('procesando');
+	},
+	
 	getViewSelectionColor: function(){	
 		var colorHexStr = app.EXP_CEA_RSLT_NOSEL_COLOR;
 		if(this.get('yaEnLote') == true && this.get('viewChecked') == true && this.get('procesando') == false){
@@ -115,12 +138,36 @@ app.ResultVM = Backbone.Model.extend({
 		else if(this.get('yaEnLote') == false && this.get('viewChecked') == true && this.get('procesando') == false){
 			colorHexStr = app.EXP_CEA_RSLT_SEL_COLOR;
 		}
+		else if(this.get('procesando') == true){
+			colorHexStr = app.EXP_CEA_RSLT_PROC_COLOR;
+		}
 		return colorHexStr;
 	},
 	
 	//Async
 	sendToLote: function(){
+		var _this = this;
 		
+		$.ajax({
+			url: _this.get('sendToLoteUrl'), 
+			beforeSend: function(xhr){
+				_this._startProcessing();
+			},
+			contentType: 'application/json; charset=utf-8',
+			type: 'GET'
+		}).done( function(data){
+			if(data.status == "OK"){
+				_this.set({'viewChecked':false},{silent:true});
+				_this.set({'yaEnLote':true},{silent:true});
+				
+				_this._stopProcessing();
+				_this.trigger('sentToLote');
+			}
+			else{
+				_this.set({'yaEnLote':false},{silent:true});
+				_this._stopProcessingWithError();
+			}
+		} );
 	}
 	
 });
@@ -157,6 +204,10 @@ app.ResultVMCollection = Backbone.Collection.extend({
 	_stopProcessing: function(){
 		this._processing = false;
 		this.trigger('processingStopped');
+	},
+	_stopProcessingWithError: function(){
+		this._processing = false;
+		this.trigger('processingError');
 	},
 	isProcessing: function(){
 		return this._processing;
@@ -297,7 +348,54 @@ app.ResultVMCollection = Backbone.Collection.extend({
 		
 	},
 	sendAllToLote: function(options){ //Async
-		alert("find de coleccion 4 que se realizará async...");
+		var _this = this;
+		var ids = new Array();
+		
+		//Rellena con ids seleccionados de los certificados
+		this.each(function(item){ 
+			if(item.get('viewChecked') == true && item.get('yaEnLote') == false){
+				ids.push(item.get('grailsId'));
+				item.set({'procesando':true});
+			}
+			else if(item.get('viewChecked') == true && item.get('yaEnLote') == true){
+				item.set({'viewChecked':false});
+			}
+		}, this);
+	
+		if(ids.length > 0){
+			
+			$.ajax({
+				url: _this.sendAllToLoteUrl, 
+				beforeSend: function(xhr){
+					_this._startProcessing();
+				},
+				data: JSON.stringify( { 'ids' : ids } ),
+				dataType: 'json',
+				contentType: 'application/json; charset=utf-8',
+				type: 'POST'
+			}).done( function(data){
+				if(data.status == "OK"){
+					_this.each(function(item){ 
+						if( item.get('viewChecked') == true && item.get('yaEnLote') == false ){
+							item.set({'viewChecked':false},{silent:true});
+							item.set({'yaEnLote':true},{silent:true});
+							item.set({'procesando':false});
+						}
+					}, _this);
+					_this._stopProcessing();
+					_this.trigger('sentToLote');
+				}
+				else{
+					_this.each(function(item){ 
+						if( item.get('viewChecked') == true && item.get('yaEnLote') == false ){
+							item.set({'procesando':false});
+						}
+					}, _this);
+					_this._stopProcessingWithError();
+				}
+			} );
+			
+		}
 	},
 	
 	getCurrentPage: function(){
@@ -378,24 +476,31 @@ app.ResultVMCollection = Backbone.Collection.extend({
 		}
 	},
 	
-	_getResult: function(certificacion){
+	_getResult: function(result){
 		var elemento = new app.ResultVM();
+		var _this = this;
 	
-		elemento.set('grailsId',certificacion.sustentante.id);
-		elemento.set('numeroMatricula',certificacion.sustentante.numeroMatricula);
-		elemento.set('nombre',certificacion.sustentante.nombre);
-		elemento.set('primerApellido',certificacion.sustentante.primerApellido);
-		elemento.set('segundoApellido',certificacion.sustentante.segundoApellido);
-		elemento.set('idFigura',certificacion.varianteFigura.idFigura);
-		elemento.set('dsFigura',certificacion.varianteFigura.nombreFigura);
-		elemento.set('idVarianteFigura',certificacion.varianteFigura.id);
-		elemento.set('dsVarianteFigura',certificacion.varianteFigura.nombre);
+		elemento.set('grailsId',result.id);
+		elemento.set('idSustentante',result.idSustentante);
+		elemento.set('numeroMatricula',result.numeroMatricula);
+		elemento.set('nombre',result.nombre);
+		elemento.set('primerApellido',result.primerApellido);
+		elemento.set('segundoApellido',result.segundoApellido);
+		elemento.set('idFigura',result.idFigura);
+		elemento.set('dsFigura',result.dsFigura);
+		elemento.set('idVarianteFigura',result.idVarianteFigura);
+		elemento.set('dsVarianteFigura',result.dsVarianteFigura);
 		
-		elemento.set('yaEnLote',false); // <- checar con los que ya estan en lote
+		elemento.set('yaEnLote',result.yaEnLote); // <- checar con los que ya estan en lote
 		elemento.set('procesando',false);
 		
 		elemento.set('viewChecked',false);
-		elemento.set('sendToLoteUrl',""); // <- enviar URL
+		elemento.set('sendToLoteUrl',this.sendToLoteUrl + '/' + result.id); // <- enviar URL
+		
+		this.listenTo( elemento, 'processingStarted', this._startProcessing );
+		this.listenTo( elemento, 'processingStopped', this._stopProcessing );
+		this.listenTo( elemento, 'processingError', this._stopProcessingWithError );
+		this.listenTo( elemento, 'sentToLote', function(){ _this.trigger('sentToLote'); } );
 		
 		return elemento;
 	}
@@ -406,11 +511,44 @@ app.ResultsVM = Backbone.Model.extend({
 	defaults: {
 		results: new app.ResultVMCollection(),
 		
-		showYaEnLote: true,
 		totalEnLote: 0,
+		totalEnLoteUrl: "",
+		_intervalTotalEnLote: 0,
+		_timeElapsedTotalEnLote: 0,
 		
 		state: app.EXP_CEA_RSLTS_ST_READY,
 		error: false
+	},
+	_refreshTotalEnLote: function(){
+		var _this = this;
+		
+		$.ajax({
+			url: _this.get('totalEnLoteUrl'), 
+			type: 'GET'
+		}).done( function(data){
+			if(data.status == "OK"){
+				_this.set('totalEnLote',data.object);
+			}
+		} );
+	},
+	startRefreshingTotalEnLote: function(){
+		var _this = this;
+		//no se si ya se debe iniciar aqui
+		_this._refreshTotalEnLote();
+		_this.set('_intervalTotalEnLote', window.setInterval( function(){ 
+			_this._refreshTotalEnLote();
+			_this.set('_timeElapsedTotalEnLote', _this.get('_timeElapsedTotalEnLote')+app.EXP_CEA_REFRESH_MILIS )
+		}, app.EXP_CEA_REFRESH_MILIS ) );
+	},
+	stopRefreshingTotalEnLote: function(){
+		var _this = this;
+		window.clearInterval(_this.get('_intervalTotalEnLote'));
+		_this.set('_timeElapsedTotalEnLote', 0);
+	},
+	forceRefreshTotalEnLote: function(){
+		console.log('paso por el force refresh');
+		this.stopRefreshingTotalEnLote();
+		this.startRefreshingTotalEnLote();
 	}
 });
 
@@ -744,20 +882,20 @@ app.BusqAvView = Backbone.View.extend({
 	
 	findAll: function(e){
 		e.preventDefault();
-		//if(this.validate()){
-			//aqui se deben agregar mas opciones
-			this.collection.findAll({ 
-				max:10, 
-				offset:0, 
-				sort:"id", 
-				order:"desc",
-				nombre: this.model.get("nombre"),
-				primerApellido: this.model.get("primerApellido"),
-				segundoApellido: this.model.get("segundoApellido"),
-				idFigura: this.model.get("idFigura"),
-				idVarianteFigura: this.model.get("idVarianteFigura")
-			});
-		//}
+
+		//aqui se deben agregar mas opciones
+		this.collection.findAll({ 
+			max:10, 
+			offset:0, 
+			sort:"id", 
+			order:"desc",
+			nombre: this.model.get("nombre"),
+			primerApellido: this.model.get("primerApellido"),
+			segundoApellido: this.model.get("segundoApellido"),
+			idFigura: this.model.get("idFigura"),
+			idVarianteFigura: this.model.get("idVarianteFigura")
+		});
+
 	},
 	
 	validate: function(){
@@ -789,7 +927,6 @@ app.ResultView = Backbone.View.extend({
 		this.render();
 		
 		this.listenTo( this.model, 'change:viewChecked', this.render );
-		this.listenTo( this.model, 'change:yaEnLote', this.render );
 		this.listenTo( this.model, 'change:procesando', this.render );
 	},
 	
@@ -809,16 +946,7 @@ app.ResultView = Backbone.View.extend({
 		
 		var view = this;
 		
-		//se debe ejecutar una llamada al servidor donde
-		//se envie el elemento al lote
-		//y en caso de que el eleemto se actualiza, cambie su estatus
-		if( view.model.get('yaEnLote') == false ){
-			view.model.set('procesando',true);
-			setTimeout(function(){
-				view.model.set({'procesando':false},{silent:true});
-				view.model.set('yaEnLote',true);
-			}, 1200);
-		}
+		this.model.sendToLote();
 		
 	},
 	
@@ -848,12 +976,16 @@ app.ResultsView = Backbone.View.extend({
 		
 		//this.render();
 		this.listenTo( this.model, 'change:state', this.renderStateChange );
+		this.listenTo( this.model, 'change:totalEnLote', this.renderTotalEnLoteChange );
+		
 		this.listenTo( this.collection, 'add', this.renderElement );
 		this.listenTo( this.collection, 'reset', this.renderList );
 		
-		this.listenTo( this.collection, 'processingStarted', this.disableInput );
-		this.listenTo( this.collection, 'processingStopped', this.enableInput );
-		//this.listenTo( this.collection, 'sort', this.renderList );
+		this.listenTo( this.collection, 'processingStarted', this.iniciaProcesamientoPeticion );
+		this.listenTo( this.collection, 'processingError', this.errorProcesamientoPeticion );
+		this.listenTo( this.collection, 'processingStopped', this.finProcesamientoPeticion );
+		this.listenTo( this.collection, 'sentToLote', this.forceRefreshTotalEnLote );
+
 	},
 	
 	render: function(){
@@ -880,9 +1012,11 @@ app.ResultsView = Backbone.View.extend({
 	renderStateChange: function(){
 		if(this.model.get('state') == app.EXP_CEA_RSLTS_ST_READY){
 			this.$('.procMessage').hide();
+			this.enableInput();
 		}
 		else{
 			this.$('.procMessage').show();
+			this.disableInput();
 		}
 		if(this.model.get('error') == false){
 			this.$('.errorMessage').hide();
@@ -890,6 +1024,9 @@ app.ResultsView = Backbone.View.extend({
 		else{
 			this.$('.errorMessage').show();
 		}
+	},
+	renderTotalEnLoteChange: function(){
+		this.$('.totalEnLote').html(this.model.get('totalEnLote'));
 	},
 	renderPagination: function(){
 		var paginationStr = "";
@@ -938,7 +1075,7 @@ app.ResultsView = Backbone.View.extend({
 		'click .hideSent' : 'ocultarElementoEnviados',
 		'click .selectAll' : 'seleccionarTodos',
 		'click .selectNone' : 'quitarSeleccionTodos',
-		'click .sentSelected' : 'enviarSeleccionadosLote',
+		'click .sendSelected' : 'enviarSeleccionadosLote',
 		'click .viewLote' : 'verLote',
 		'click .sort': 'mandarOrdenar',
 		'click .page': 'mandarAPagina'
@@ -965,12 +1102,13 @@ app.ResultsView = Backbone.View.extend({
 	},
 	enviarSeleccionadosLote: function(e){
 		e.preventDefault();
-		
+		this.collection.sendAllToLote();
+		/*
 		var view = this;
 		
 		//envía una peticion AJAX "con todos los datos"
 		//rendera los que hayan sido satisfactorios
-		view.model.set('state',app.EXP_CEA_RSLTS_ST_PROC);
+		view.iniciaProcesamientoPeticion();
 		view.collection.each( function(item){
 			if( item.get('viewChecked') == true && item.get('yaEnLote') == false ){
 				item.set({'procesando':true});
@@ -983,10 +1121,10 @@ app.ResultsView = Backbone.View.extend({
 					item.set({'procesando':false},{silent:true});
 					item.set('yaEnLote',true);
 				}
-				view.model.set('state',app.EXP_CEA_RSLTS_ST_READY);
+				view.finProcesamientoPeticion();
 			},view );
-		}, 3000);
-
+		}, 1333);
+		*/
 	},
 	verLote: function(e){
 		e.preventDefault();
@@ -1009,5 +1147,24 @@ app.ResultsView = Backbone.View.extend({
 			this.collection.goToPage(pagina);
 		}
 		
+	},
+	
+	iniciaProcesamientoPeticion: function(){
+		this.model.set('error',false);
+		this.model.set('state',app.EXP_CEA_RSLTS_ST_PROC);
+	},
+	
+	finProcesamientoPeticion: function(){
+		this.model.set('error',false);
+		this.model.set('state',app.EXP_CEA_RSLTS_ST_READY);
+	},
+	
+	errorProcesamientoPeticion: function(){
+		this.model.set('error',true);
+		this.model.set('state',app.EXP_CEA_RSLTS_ST_READY);
+	},
+	
+	forceRefreshTotalEnLote: function(){
+		this.model.forceRefreshTotalEnLote();
 	}
 });

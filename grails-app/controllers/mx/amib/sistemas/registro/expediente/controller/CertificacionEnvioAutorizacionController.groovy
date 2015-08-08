@@ -6,11 +6,13 @@ import grails.converters.JSON
 import mx.amib.sistemas.external.catalogos.service.FiguraService
 import mx.amib.sistemas.external.catalogos.service.FiguraTO;
 import mx.amib.sistemas.external.expediente.service.CertificacionService
+import mx.amib.sistemas.registro.expediente.service.LoteEnvioAutorizacionService
 
 class CertificacionEnvioAutorizacionController {
 
 	FiguraService figuraService
 	CertificacionService certificacionService
+	LoteEnvioAutorizacionService loteEnvioAutorizacionService
 	
     def index() { 
 		IndexViewModel ivm = this.getIndexViewModel()
@@ -28,10 +30,12 @@ class CertificacionEnvioAutorizacionController {
 	}
 	
 	def findAllByMatricula(Integer id){
-		def res = null
-				
+		Map<String,Object> res = null
+		
 		try{
-			res = [ 'status' : 'OK' , 'object' : certificacionService.findAllEnAutorizacionByMatricula(id.value) ]
+			def certServRes = certificacionService.findAllEnAutorizacionByMatricula(id.value)
+			def ctrlActResList = ResultElementViewModel.copyFromServicesResults(certServRes, loteEnvioAutorizacionService.getSet(session.id))
+			res = [ 'status' : 'OK' , 'object' : [ 'count': certServRes.count , 'list' : ctrlActResList ] ]
 		}
 		catch(Exception ex){
 			res = [ 'status': 'ERROR', 'object': ex.message ]
@@ -41,10 +45,12 @@ class CertificacionEnvioAutorizacionController {
 	}
 	
 	def findAllByIdSustentante(Long id){
-		def res = null
-						
+		Map<String,Object> res = null
+		
 		try{
-			res = [ 'status' : 'OK' , 'object' : certificacionService.findAllByIdSustentante(id.value) ]
+			def certServRes = certificacionService.findAllByIdSustentante(id.value)
+			def ctrlActResList = ResultElementViewModel.copyFromServicesResults(certServRes, loteEnvioAutorizacionService.getSet(session.id))
+			res = [ 'status' : 'OK' , 'object' : [ 'count': certServRes.count , 'list' : ctrlActResList ] ]
 		}
 		catch(Exception ex){
 			res = [ 'status': 'ERROR', 'object': ex.message ]
@@ -68,12 +74,14 @@ class CertificacionEnvioAutorizacionController {
 		long idvarfig = Long.parseLong(params.idvarfig?:"-1")
 		
 		
-		try{
-			res = [ 'status' : 'OK' , 'object' : certificacionService.findAllEnAutorizacion(max, offset, sort, order, nom, ap1, ap2, idfig, idvarfig) ] 
-		}
-		catch(Exception ex){
-			res = [ 'status': 'ERROR', 'object': ex.message ]
-		}
+		//try{
+			def certServRes = certificacionService.findAllEnAutorizacion(max, offset, sort, order, nom, ap1, ap2, idfig, idvarfig)
+			def ctrlActResList = ResultElementViewModel.copyFromServicesResults(certServRes, loteEnvioAutorizacionService.getSet(session.id))
+			res = [ 'status' : 'OK' , 'object' : [ 'count': certServRes.count , 'list' : ctrlActResList ] ]
+		//}
+		//catch(Exception ex){
+		//	res = [ 'status': 'ERROR', 'object': ex.message ]
+		//}
 		
 		render (res as JSON)
 	}
@@ -82,6 +90,42 @@ class CertificacionEnvioAutorizacionController {
 	public static class IndexViewModel{
 		Collection<FiguraTO> figuraList
 	}
+	
+	public static class ResultElementViewModel{
+		long id //id de la certificacion
+		long idSustentante
+		int numeroMatricula
+		String nombre
+		String primerApellido
+		String segundoApellido
+		long idFigura
+		String dsFigura
+		long idVarianteFigura
+		String dsVarianteFigura
+		boolean yaEnLote
+		
+		public static List<ResultElementViewModel> copyFromServicesResults(CertificacionService.ResultSet rs, Set<Long> idsCertEnLote){
+			List<ResultElementViewModel> newResults = new ArrayList<ResultElementViewModel>()
+			rs.list.each{ x ->
+				ResultElementViewModel revm = new ResultElementViewModel();
+				revm.id = x.id.value
+				revm.idSustentante = x.sustentante.id.value
+				revm.numeroMatricula = x.sustentante.numeroMatricula.value
+				revm.nombre = x.sustentante.nombre
+				revm.primerApellido = x.sustentante.primerApellido
+				revm.segundoApellido = x.sustentante.segundoApellido
+				revm.idFigura = x.varianteFigura.idFigura.value
+				revm.dsFigura = x.varianteFigura.nombreFigura
+				revm.idVarianteFigura = x.varianteFigura.id.value
+				revm.dsVarianteFigura = x.varianteFigura.nombre
+				revm.yaEnLote = idsCertEnLote.contains( new Long(revm.id) )
+				newResults.add(revm)
+			}
+			return newResults
+		}
+		
+	}
+	
 }
 
 

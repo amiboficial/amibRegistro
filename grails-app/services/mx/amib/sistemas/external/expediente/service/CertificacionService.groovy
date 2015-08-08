@@ -22,6 +22,7 @@ class CertificacionService {
 	public static class ResultSet{
 		List<CertificacionTO> list
 		List<SustentanteTO> sustentantes
+		Set<Long> idsCertLoteEnvioAutorizacion
 		long count
 		boolean error
 		String errorDetails

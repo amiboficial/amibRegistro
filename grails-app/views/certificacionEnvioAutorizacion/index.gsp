@@ -47,12 +47,13 @@
 			 ] });
 		</g:each>
 
+		resultsVM.set('totalEnLoteUrl','<g:createLink action="count" controller="loteEnvioAutorizacion"/>')
 		resultVMCollection.findAllByMatriculaUrl = '<g:createLink action="findAllByMatricula" />';
 		resultVMCollection.findAllByIdSustentanteUrl = '<g:createLink action="findAllByIdSustentante" />';
 		resultVMCollection.findAllUrl = '<g:createLink action="findAll" />';
-		resultVMCollection.sendAllToLoteUrl = '<g:createLink action="sendAllToLote" />';
-		resultVMCollection.sendToLoteUrl = '<g:createLink action="sendToLote" />';
-		
+		resultVMCollection.sendAllToLoteUrl = '<g:createLink action="addAll" controller="loteEnvioAutorizacion"/>';
+		resultVMCollection.sendToLoteUrl = '<g:createLink action="add" controller="loteEnvioAutorizacion"/>';
+		/*
 		var resultVMtest1 = new app.ResultVM();
 		var resultVMtest2 = new app.ResultVM();
 		var resultVMtest3 = new app.ResultVM();
@@ -89,10 +90,11 @@
 		resultVMCollection.add(resultVMtest1);
 		resultVMCollection.add(resultVMtest2);
 		resultVMCollection.add(resultVMtest3);
-
+		*/
 		var mainViewOptions = { resultsVM:resultsVM , resultVMCollection:resultVMCollection, busqAvVM:busqAvVM };
 		var mainView = new app.CertPendAutMainView(mainViewOptions);
-		
+
+		resultsVM.startRefreshingTotalEnLote();
 	</script>
 
 </body>

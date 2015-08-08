@@ -166,7 +166,7 @@
 			<span class="glyphicon glyphicon-unchecked" ></span>
 		{{ } }}
 	</td>
-	<td class="check handCursor" style="white-space:nowrap">{{=grailsId}}</td>
+	<td class="check handCursor" style="white-space:nowrap">{{=idSustentante}}</td>
 	<td class="check handCursor" style="white-space:nowrap">{{=numeroMatricula}}</td>
 	<td class="check handCursor">{{=nombre}}</td>
 	<td class="check handCursor">{{=primerApellido}}</td>
@@ -175,9 +175,9 @@
 		{{ if(yaEnLote==false && procesando==false){ }}
 			<button class="send btn btn-default btn-xs" data-id="{{=grailsId}}">Enviar a lote de envio</button>
 		{{ }else if(yaEnLote==true && procesando==false) { }}
-			<button class="btn btn-default btn-xs" disabled>Enviado</button>
+			<strong>Enviado</strong>
 		{{ }else{ }}
-			<button class="btn btn-default btn-xs" disabled>Procesando</button>
+			<strong>Procesando</strong>
 		{{ } }}
 	</td>
 </script>
@@ -195,10 +195,10 @@
 				<div class="btn-group">
 					<button type="button" class="selectAll btn btn-default btn-primary" data-tab="M"><span class="glyphicon glyphicon-check"></span>&nbsp;Seleccionar todo</button>
 					<button type="button" class="selectNone btn btn-default btn-primary" data-tab="M"><span class="glyphicon glyphicon glyphicon-unchecked"></span>&nbsp;De-seleccionar todo</button>
-					<button type="button" class="sentSelected btn btn-default btn-primary" data-tab="M"><span class="glyphicon glyphicon-share"></span>&nbsp;Enviar seleccionados a lote de envio</button>
+					<button type="button" class="sendSelected btn btn-default btn-primary" data-tab="M"><span class="glyphicon glyphicon-share"></span>&nbsp;Enviar seleccionados a lote de envio</button>
 				</div>
 				&nbsp;&nbsp;&nbsp;
-				<button type="button" class="viewLote btn btn-default btn-primary" data-tab="M"><span class="glyphicon glyphicon-list-alt"></span>&nbsp;Ver lote de envio <span class="badge">X</span></button>
+				<button type="button" class="viewLote btn btn-default btn-primary"><span class="glyphicon glyphicon-list-alt"></span>&nbsp;Ver lote de envio <span class="totalEnLote badge" >0</span></button>
 			</div>
 		</div>
 		

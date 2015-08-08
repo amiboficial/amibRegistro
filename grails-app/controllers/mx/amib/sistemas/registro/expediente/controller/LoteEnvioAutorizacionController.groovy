@@ -96,7 +96,7 @@ class LoteEnvioAutorizacionController {
 		render (result as JSON)
 	}
 	
-	def agregarUno(long id){
+	def add(long id){
 		Map<String,String> result = new HashMap<String,String>()
 		long idCert = id
 		
@@ -112,13 +112,13 @@ class LoteEnvioAutorizacionController {
 		render (result as JSON)
 	}
 	
-	def agregarVarios(){
+	def addAll(){
 		Map<String,String> result = new HashMap<String,String>()
 		List<Long> idsCertList = new ArrayList<Long>()
 		
 		try{
 			request.JSON.'ids'.each{ x -> 
-				idsCertList.add( x )
+				idsCertList.add( new Long(x) )
 			}
 			loteEnvioAutorizacionService.addAll(this.session.id, idsCertList)
 			result.put("status","OK")
@@ -131,7 +131,7 @@ class LoteEnvioAutorizacionController {
 		render (result as JSON)
 	}
 	
-	def quitarUno(long id){
+	def remove(long id){
 		Map<String,String> result = new HashMap<String,String>()
 		long idCert = id
 		
@@ -147,13 +147,13 @@ class LoteEnvioAutorizacionController {
 		render (result as JSON)
 	}
 	
-	def quitarVarios(){
+	def removeAll(){
 		Map<String,String> result = new HashMap<String,String>()
 		List<Long> idsCertList = new ArrayList<Long>()
 		
 		try{
 			request.JSON.'ids'.each{ x ->
-				idsCertList.add( x )
+				idsCertList.add( new Long(x) )
 			}
 			loteEnvioAutorizacionService.removeAll(this.session.id, idsCertList)
 			result.put("status","OK")
@@ -166,12 +166,27 @@ class LoteEnvioAutorizacionController {
 		render (result as JSON)
 	}
 	
-	def limpiar(){
+	def clear(){
 		Map<String,String> result = new HashMap<String,String>()
 		
 		try{
 			loteEnvioAutorizacionService.clear(this.session.id)
 			result.put("status","OK")
+		}
+		catch(Exception e){
+			result.put("status","ERROR")
+			result.put("errorDetail",e.message)
+		}
+		
+		render (result as JSON)
+	}
+	
+	def count(){
+		Map<String,String> result = new HashMap<String,String>()
+		try{
+			//qresult = loteEnvioAutorizacionService.getSet(this.session.id)
+			result.put("status","OK")
+			result.put("object",loteEnvioAutorizacionService.count(this.session.id))
 		}
 		catch(Exception e){
 			result.put("status","ERROR")

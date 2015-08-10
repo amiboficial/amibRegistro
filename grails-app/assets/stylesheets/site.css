@@ -2,9 +2,20 @@
 
 body {
     /*padding-top: 50px;*/
-    padding-top: 165px;
-    padding-bottom: 75px;
+    padding-top: 114px;
+    padding-bottom: 15px;
+    font-size: 12px;
+    line-height: 1.2000;
 }
+
+h1 { font-size: 18px; }
+h2 { font-size: 16px; }
+h3 { font-size: 14px; }
+h4 { font-size: 12px; }
+h5 { font-size: 10px; }
+h6 { font-size: 8px; }
+
+
 
 .cabeceratop{
 	padding-top: 0px;
@@ -76,9 +87,8 @@ input[type="checkbox"].input-validation-error {
 	
 .navbar-default .navbar-brand{
 	color:#634D15;
-	
-	
-	}
+	font-size: 16px;
+}
 .navbar-default .navbar-brand:hover,
 .navbar-default .navbar-brand:focus{
 	color: #634D15;
@@ -117,7 +127,7 @@ navbar-default .navbar-nav > li > a:focus{
 .letracabecera{
 	font-weight: bold;
 	font-family: "Trebuchet MS", Helvetica;
-	font-size: 21px;
+	font-size: 17px;
 	color: #ffffff;
 }
 
@@ -164,19 +174,19 @@ navbar-default .navbar-nav > li > a:focus{
 }
 
 label{
-	font-size: small;
+	font-size: 12px;
 }
 
 th{
-	font-size: small;
+	font-size: 12px;
 }
 
 td{
-	font-size: small;
+	font-size: 12px;
 }
 
 legend{
-	font-size: 18px;
+	font-size: 14px;
 	margin-bottom: 15px;
 }
 
@@ -233,6 +243,8 @@ fieldset{
 }
 
 /* Mod 06/08/2015 */
+
+.btn { font-size: 12px; }
 
 .btn-xxs, .btn-group-xxs > .btn {
     padding: 1px 2px;

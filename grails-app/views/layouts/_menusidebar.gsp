@@ -10,7 +10,7 @@
 			<div id="divLineBreaks">
 			</div>
             <div class="list-group" >
-            	<a class="list-group-item colortitle">Gestión de expediente</a>
+            	<a class="list-group-item colortitle"><strong>Gestión de expediente</strong></a>
             	<a href="<g:createLink controller="expedienteRegistrable" action="index" />" class="list-group-item"><span class="glyphicon glyphicon-share-alt"></span>&nbsp;Solicitud de registro</a>
             	<a href="<g:createLink controller="expedienteRegistrable" action="index" />" class="list-group-item"><span class="glyphicon glyphicon-refresh"></span>&nbsp;Actualización de la autorización</a>
             	<a href="<g:createLink controller="expedienteRegistrable" action="index" />" class="list-group-item"><span class="glyphicon glyphicon-retweet"></span>&nbsp;Reposición de la autorización</a>
@@ -18,11 +18,11 @@
             	<a href="<g:createLink controller="certificacionDictamenPrevio" action="index" />" class="list-group-item"><span class="glyphicon glyphicon-edit"></span>&nbsp;Dictamen previo</a>
             	<a href="<g:createLink controller="certificacionEnvioAutorizacion" action="index" />" class="list-group-item"><span class="glyphicon glyphicon-inbox"></span>&nbsp;Pendientes a autorizar</a>
             	<a href="<g:createLink controller="expediente" action="index" />" class="list-group-item"><span class="glyphicon glyphicon-book"></span>&nbsp;Búsqueda de expedientes</a></a>
-            	<a class="list-group-item colortitle">Gestión de oficios</a>
+            	<a class="list-group-item colortitle"><strong>Gestión de oficios</strong></a>
             	<a href="<g:createLink controller="poder" action="index" />" class="list-group-item"><span class="glyphicon glyphicon-open"></span>&nbsp;Poderes</a>
                 <a href="<g:createLink controller="revocacion" action="index" />" class="list-group-item"><span class="glyphicon glyphicon-share-alt"></span>&nbsp;Revocaciones</a>
                 <a href="<g:createLink controller="oficioCNBV" action="index" />" class="list-group-item"><span class="glyphicon glyphicon-file"></span>&nbsp;Oficios CNBV</a>
-            	<a class="list-group-item colortitle">Gestión de catálogos</a>
+            	<a class="list-group-item colortitle"><strong>Gestión de catálogos</strong></a>
             	<a href="<g:createLink controller="notario" action="index" />" class="list-group-item"><span class="glyphicon glyphicon-book"></span>&nbsp;Notarios</a>
                 
                 <!-- ESTO SE PUEDE USAR MAS ADELANTE PARA SOLICITUDES
@@ -39,7 +39,7 @@
                 <a href="#" class="list-group-item"><span class="glyphicon glyphicon-book"></span>&nbsp;Catálogo de notarios</a>
                  -->
                  
-                <a href="#" class="list-group-item colortitle">Acciones</a>
+                <a href="#" class="list-group-item colortitle"><strong>Acciones</strong></a>
                 <a href="#" class="list-group-item"><span class="glyphicon glyphicon-user"></span>&nbsp;Información de usuario</a>
                 <a href="#" class="list-group-item"><span class="glyphicon glyphicon-cog"></span>&nbsp;Cambio de contraseña</a>
                 <a href="#" class="list-group-item"><span class="glyphicon glyphicon-off"></span>&nbsp;Cerrar sesión</a>

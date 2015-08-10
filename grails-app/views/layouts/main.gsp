@@ -31,7 +31,7 @@
 		           						<asset:image class="center-block" src="logoamib.jpeg" alt="AMIB" />
 		                   			</a>
 		                		</div>
-		                		<div class="hidden-xs col-sm-9" style="padding-top:2.25em">    
+		                		<div class="hidden-xs col-sm-9" style="padding-top:1.18em">    
 		                			<span class="letracabecera">Asociación Mexicana de Intermediarios Bursátiles</span>
 		                		</div>
 		                	</div>

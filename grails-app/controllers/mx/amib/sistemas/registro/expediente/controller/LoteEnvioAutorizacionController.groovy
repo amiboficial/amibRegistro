@@ -14,7 +14,7 @@ class LoteEnvioAutorizacionController {
 		
 	}
 
-	def getAllCertificados(){
+	def getAllCompleteResult(){
 		Map<String,String> result = new HashMap<String,String>()
 		Set<Long> qresult = null
 		List<CertificacionTO> certs = null 
@@ -25,51 +25,9 @@ class LoteEnvioAutorizacionController {
 		try{
 			qresult = loteEnvioAutorizacionService.getSet(this.session.id)
 			certs = certificacionService.getAll(qresult.toList())
-						
-			//Sorting & ordering
-			if(sort == "id"){
-				if(order == "desc"){
-					certs = certs.sort{ it.sustentante.id }.reverse()
-				}
-				else{
-					certs = certs.sort{ it.sustentante.id }
-				}
-			}
-			if(sort == "numeroMatricula"){
-				if(order == "desc"){
-					certs = certs.sort{ it.sustentante.numeroMatricula }.reverse()
-				}
-				else{
-					certs = certs.sort{ it.sustentante.numeroMatricula }
-				}
-			}
-			else if(sort == "nombre"){
-				if(order == "desc"){
-					certs = certs.sort{ it.sustentante.nombre }.reverse()
-				}
-				else{
-					certs = certs.sort{ it.sustentante.nombre }
-				}
-			}
-			else if(sort == "primerApellido"){
-				if(order == "desc"){
-					certs = certs.sort{ it.sustentante.primerApellido }.reverse()
-				}
-				else{
-					certs = certs.sort{ it.sustentante.primerApellido }
-				}
-			}
-			else if(sort == "segundoApellido"){
-				if(order == "desc"){
-					certs = certs.sort{ it.sustentante.segundoApellido }.reverse()
-				}
-				else{
-					certs = certs.sort{ it.sustentante.segundoApellido }
-				}
-			}
 			
 			result.put("status","OK")
-			result.put("object", certs )
+			result.put("object", ResultElement.copyFromServicesResults(certs, sort, order) )
 		}
 		catch(Exception e){
 			result.put("status","ERROR")
@@ -195,5 +153,74 @@ class LoteEnvioAutorizacionController {
 		
 		render (result as JSON)
 	}
+	
+	public static class ResultElement{
+		long grailsId
+		long idSustentante
+		int numeroMatricula
+		String nombre
+		String primerApellido
+		String segundoApellido
 		
+		public static List<ResultElement> copyFromServicesResults(List<CertificacionTO> certs, String sort, String order){
+			List<ResultElement> rel = new ArrayList<ResultElement>()
+			ResultElement re = null
+			
+			certs.each{ x ->
+				re = new ResultElement()
+				re.grailsId = x.id
+				re.idSustentante = x.sustentante.id
+				re.numeroMatricula = x.sustentante.numeroMatricula
+				re.nombre = x.sustentante.nombre
+				re.primerApellido = x.sustentante.primerApellido
+				re.segundoApellido = x.sustentante.segundoApellido
+				rel.add(re)
+			}
+			
+			//Sorting & ordering
+			if(sort == "id"){
+				if(order == "desc"){
+					rel = rel.sort{ it.idSustentante }.reverse()
+				}
+				else{
+					rel = rel.sort{ it.idSustentante }
+				}
+			}
+			if(sort == "numeroMatricula"){
+				if(order == "desc"){
+					rel = rel.sort{ it.numeroMatricula }.reverse()
+				}
+				else{
+					rel = rel.sort{ it.numeroMatricula }
+				}
+			}
+			else if(sort == "nombre"){
+				if(order == "desc"){
+					rel = rel.sort{ it.nombre }.reverse()
+				}
+				else{
+					rel = rel.sort{ it.nombre }
+				}
+			}
+			else if(sort == "primerApellido"){
+				if(order == "desc"){
+					rel = rel.sort{ it.primerApellido }.reverse()
+				}
+				else{
+					rel = rel.sort{ it.primerApellido }
+				}
+			}
+			else if(sort == "segundoApellido"){
+				if(order == "desc"){
+					rel = rel.sort{ it.segundoApellido }.reverse()
+				}
+				else{
+					rel = rel.sort{ it.segundoApellido }
+				}
+			}
+			
+			return rel
+		}
+	}
+	
 }

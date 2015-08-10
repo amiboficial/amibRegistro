@@ -184,3 +184,8 @@ app.LoteElementCollectionVM = Backbone.Collection.extend({
 	
 });
 
+app.LoteElementView = Backbone.Model.view({
+});
+
+app.LoteElementCollectionView = Backbone.Model.view({
+});

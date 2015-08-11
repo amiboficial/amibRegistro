@@ -37,8 +37,12 @@
 
 	var app = app || {};
 
-	var leaview = new app.LoteEnvioAutorizacionMainView();
-	
+	var leaview = new app.LoteEnvioAutorizacionMainView({
+		getAllCompleteResultUrl: '<g:createLink controller="loteEnvioAutorizacion" action="getAllCompleteResult" />',
+		removeUrl: '<g:createLink controller="loteEnvioAutorizacion" action="remove" />',
+		removeAllUrl: '<g:createLink controller="loteEnvioAutorizacion" action="removeAll" />'
+	});
+
 	</script>
 </body>
 </html>

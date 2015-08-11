@@ -47,12 +47,17 @@
 			 ] });
 		</g:each>
 
-		resultsVM.set('totalEnLoteUrl','<g:createLink action="count" controller="loteEnvioAutorizacion"/>')
+		resultsVM.set('totalEnLoteUrl','<g:createLink action="count" controller="loteEnvioAutorizacion"/>');
+		resultsVM.set('verLoteUrl','<g:createLink action="index" controller="loteEnvioAutorizacion"/>');
+		resultsVM.set('eliminarUnoUrl','<g:createLink action="remove" controller="loteEnvioAutorizacion"/>');
+		resultsVM.set('eliminarVariosUrl','<g:createLink action="removeAll" controller="loteEnvioAutorizacion"/>');
+				
 		resultVMCollection.findAllByMatriculaUrl = '<g:createLink action="findAllByMatricula" />';
 		resultVMCollection.findAllByIdSustentanteUrl = '<g:createLink action="findAllByIdSustentante" />';
 		resultVMCollection.findAllUrl = '<g:createLink action="findAll" />';
 		resultVMCollection.sendAllToLoteUrl = '<g:createLink action="addAll" controller="loteEnvioAutorizacion"/>';
 		resultVMCollection.sendToLoteUrl = '<g:createLink action="add" controller="loteEnvioAutorizacion"/>';
+		
 		/*
 		var resultVMtest1 = new app.ResultVM();
 		var resultVMtest2 = new app.ResultVM();

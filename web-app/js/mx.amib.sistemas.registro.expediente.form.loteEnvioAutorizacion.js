@@ -34,14 +34,20 @@ app.LoteElementVM = Backbone.Model.extend({
 
 app.LoteElementCollectionVM = Backbone.Collection.extend({
 	model: app.LoteElementVM,
-	//count: 0,
 	max: 10,
 	offset: 0,
 	
 	state: app.EXP_LEA_RSLTS_ST_READY,
 	error: false,
 	
-	initialize: function(){
+	getAllCompleteResultUrl: '',
+	removeUrl: '',
+	removeAllUrl: '',
+		
+	initialize: function(options){
+		this.getAllCompleteResultUrl = options.getAllCompleteResultUrl;
+		this.removeUrl = options.removeUrl;
+		this.removeAllUrl = options.removeAllUrl;
         // if collection is empty, fetch from server
         if(this.size() == 0)
             this.fetchAll();
@@ -55,12 +61,6 @@ app.LoteElementCollectionVM = Backbone.Collection.extend({
 			 this.comparator = sortProperty;
 		}
     },
-	
-	/* METODOS PARA CAMBIO DE VALORES CON "EVENTO" */
-	setOffset: function(offset){
-		this.offset = offset;
-		this.refreshShowing();
-	},
 	
 	/* ESTADOS DE PROCESAMIENTO */
 	_processing: false,
@@ -102,58 +102,32 @@ app.LoteElementCollectionVM = Backbone.Collection.extend({
 	/* OBTENICION DE DATOS AJAX */
 	fetchAll: function(){
 		
-		//Este es un fetch AJAX
-		this.add( [{
-			grailsId: 1, 
-			idSustentante: 1, 
-			numeroMatricula: 1, 
-			nombre: "ZZZZ", 
-			primerApellido: "YYYYYY", 
-			segundoApellido: "ZZZZZZZ", 
+		var _this = this;
+		
+		$.ajax({
+			url: _this.getAllCompleteResultUrl, 
+			beforeSend: function(xhr){
+				_this._startProcessing();
+			},
+			type: 'GET'
+		}).done( function(data){
+			if(data.status == "OK"){
 			
-			checked: false, 
-			showing: true
-		},{
-			grailsId: 2, 
-			idSustentante: 2, 
-			numeroMatricula: 2, 
-			nombre: "ABELARDO", 
-			primerApellido: "YYYYYYAAAAA", 
-			segundoApellido: "ZZZZZZZAAAAAA", 
-			
-			checked: false, 
-			showing: true
-		},{
-			grailsId: 3, 
-			idSustentante: 3, 
-			numeroMatricula: 3, 
-			nombre: "JEAN CLAUDE", 
-			primerApellido: "YYYYYYBBBB", 
-			segundoApellido: "ZZZZZZZBBBB", 
-			
-			checked: false, 
-			showing: true
-		},{
-			grailsId: 4, 
-			idSustentante: 4, 
-			numeroMatricula: 4, 
-			nombre: "FRANCOIS", 
-			primerApellido: "YYYYYYCCCCC", 
-			segundoApellido: "ZZZZZZZCCCCCCCC", 
-			
-			checked: false, 
-			showing: true
-		},{
-			grailsId: 5, 
-			idSustentante: 5, 
-			numeroMatricula: 5, 
-			nombre: "ZZZZDDDDD", 
-			primerApellido: "YYYYYYDDDDD", 
-			segundoApellido: "ZZZZZZZDDDD", 
-			
-			checked: false, 
-			showing: true
-		}] );
+				var listE = data.object
+				_this.changeComparator('nombre');
+				_this.reset( null );
+				for(var i=0; i<listE.length; i++){					
+					var elemento = _this._getResult(listE[i]);	
+					_this.add(elemento);
+				}
+				_this.setOffset(0);
+				
+				_this._stopProcessing();
+			}
+			else{				
+				_this._stopProcessing();
+			}
+		} );
 		
 	},
 	
@@ -165,36 +139,44 @@ app.LoteElementCollectionVM = Backbone.Collection.extend({
 		if(order == 'desc'){
 			this.models.reverse();
 		}
-		this.trigger('reset', this, {});
+		this.refreshShowing();
 	},
 	
 	/* CAMBIO DE PAGINA */
+	setOffset: function(offset){
+		this.offset = offset;
+		this.refreshShowing();
+	},
 	goToPage: function(pagenum){
-		this.setOffset((pagenum-1) * _this.max);
+		this.setOffset((pagenum-1) * this.max);
 	},
 	
 	/* CUANDO EL VALOR DE OFFSET ES CAMBIADO, AUTOMATICAMENTE SE CAMBIA LOS VISIBLES */
 	refreshShowing: function(){
 		var i = 0;
-		var upperLimitEx = (_this.offset+_this.max);
-		var _this = this;
+		//var _this = this;
+		var upperLimitEx = (this.offset+this.max);
 		
 		i = 0;
 		this.forEach( function(item){
-			if(i >= _this.offset && i < upperLimitEx ){
+			if(i >= this.offset && i < upperLimitEx ){
 				item.set('showing',true);
+				item.set('checked',false);
 			}
 			else{
 				item.set('showing',false);
+				item.set('checked',false);
 			}
 			i++;
-		} , item );
+		} , this );
+		
+		this.trigger('reset', this, {});
 	},
 	
 	/* MÉTODOS "PRIVADOS" CON LOS QUE SE "COPIA" LA INFORMACIÓN DEL JSON RECIBIDO */
 	
-	_getResult: function(){
-		var elemento = new app.ResultVM();
+	_getResult: function(result){
+		var elemento = new app.LoteElementVM();
 		var _this = this;
 		elemento.set(result);
 		elemento.set( { checked: false, showing: true } );
@@ -204,12 +186,16 @@ app.LoteElementCollectionVM = Backbone.Collection.extend({
 	/* MÉTODOS DEL MODELO  */
 	selectAll: function(){
 		this.each( function(item){
-			item.set('checked',true);
+			if(item.get('showing') == true){
+				item.set('checked',true);
+			}
 		},this );
 	},
 	selectNone: function(){
 		this.each( function(item){
-			item.set('checked',false);
+			if(item.get('showing') == true){
+				item.set('checked',false);
+			}
 		},this );
 	},
 	removeSelected: function(){
@@ -217,7 +203,39 @@ app.LoteElementCollectionVM = Backbone.Collection.extend({
 			//en caso de que no sirva, triggerea error
 		//HACE UN "REFETCH" DE LOS DATOS
 			//en caso de que no sirva, triggerea error
-		console.log('removeSelected - Metodo no implementado');
+		
+		var _this = this;
+		var ids = new Array();
+		var modelsToDelete = new Array();
+		
+		//llena el arreglo con los ids de las certificaciones a eliminar
+		this.forEach( function(item){
+			if( item.get('checked') ){
+				ids.push( item.get('grailsId') );
+				modelsToDelete.push( item );
+			}
+		},this );
+		
+		$.ajax({
+			url: _this.removeAllUrl, 
+			beforeSend: function(xhr){
+				_this._startProcessing();
+			},
+			data: JSON.stringify( { 'ids' : ids } ),
+			dataType: 'json',
+			contentType: 'application/json; charset=utf-8',
+			type: 'POST'
+		}).done( function(data){
+			if(data.status == "OK"){
+				_this.remove(modelsToDelete, {silent:true} );
+				_this.setOffset(0);
+				
+				_this._stopProcessing();
+			}
+			else{				
+				_this._stopProcessing();
+			}
+		} );
 	}, 
 	empty: function(){
 		//MANDA LLAMAR A METODO AJAX PARA HACER EL VACIADO
@@ -299,8 +317,12 @@ app.LoteElementCollectionView = Backbone.View.extend({
 	renderElement: function(item){
 		var view = this;
 		var elementView =  new app.LoteElementView({model:item,parentView:view});
-		elementView.viewModel = this.viewModel;
-		this.$(".list-items").append( elementView.render().el );
+		//elementView.viewModel = this.viewModel;
+		
+		if(item.get('showing') == true){
+			this.$(".list-items").append( elementView.render().el );
+		}
+		
 		return this;
 	},
 	renderStateChange: function(){
@@ -424,7 +446,11 @@ app.LoteEnvioAutorizacionMainView = Backbone.View.extend({
 	},
 	renderLoteElementCollectionView: function(){
 		var parentView = this;
-		var collection = new app.LoteElementCollectionVM();
+		var collection = new app.LoteElementCollectionVM( { 
+			getAllCompleteResultUrl: this.options.getAllCompleteResultUrl,  
+			removeUrl: this.options.removeUrl, 
+			removeAllUrl: this.options.removeAllUrl, 
+		} );
 		
 		var view = new app.LoteElementCollectionView({ collection:collection, parentView:parentView });
 		

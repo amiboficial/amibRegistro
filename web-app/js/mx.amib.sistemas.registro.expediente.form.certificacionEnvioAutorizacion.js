@@ -513,8 +513,11 @@ app.ResultsVM = Backbone.Model.extend({
 		
 		totalEnLote: 0,
 		totalEnLoteUrl: "",
+		verLoteUrl: "",
+		
 		_intervalTotalEnLote: 0,
 		_timeElapsedTotalEnLote: 0,
+		
 		
 		state: app.EXP_CEA_RSLTS_ST_READY,
 		error: false
@@ -1103,31 +1106,11 @@ app.ResultsView = Backbone.View.extend({
 	enviarSeleccionadosLote: function(e){
 		e.preventDefault();
 		this.collection.sendAllToLote();
-		/*
-		var view = this;
-		
-		//envía una peticion AJAX "con todos los datos"
-		//rendera los que hayan sido satisfactorios
-		view.iniciaProcesamientoPeticion();
-		view.collection.each( function(item){
-			if( item.get('viewChecked') == true && item.get('yaEnLote') == false ){
-				item.set({'procesando':true});
-			}
-		},view );
-		
-		setTimeout(function(){
-			view.collection.each( function(item){
-				if( item.get('viewChecked') == true && item.get('yaEnLote') == false ){
-					item.set({'procesando':false},{silent:true});
-					item.set('yaEnLote',true);
-				}
-				view.finProcesamientoPeticion();
-			},view );
-		}, 1333);
-		*/
 	},
+	
 	verLote: function(e){
 		e.preventDefault();
+		window.location.assign(this.model.get('verLoteUrl'));
 	},
 	
 	mandarOrdenar: function(e){

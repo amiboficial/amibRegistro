@@ -1,11 +1,11 @@
-/* AMIB 2014 - ESTILO CSS APLICACIONES - Ult.Mod. 15/02/2015 - v1.4 */
+﻿/* AMIB 2014 - ESTILO CSS APLICACIONES - Ult.Mod. 15/02/2015 - v1.4 */
 
 body {
     /*padding-top: 50px;*/
-    padding-top: 114px;
-    padding-bottom: 15px;
-    font-size: 12px;
-    line-height: 1.2000;
+	padding-top: 94px;
+	padding-bottom: 15px;
+	font-size: 12px;
+	line-height: 1.2000;
 }
 
 h1 { font-size: 18px; }
@@ -69,6 +69,13 @@ input[type="checkbox"].input-validation-error {
     display: none;
 }
 
+.navbar-nav > li > a, .navbar-brand {
+    padding-top:6px !important; 
+    padding-bottom:0 !important;
+    height: 32px;
+}
+.navbar {min-height:32px !important;}
+
 .navbar-default {
 	background: -webkit-linear-gradient(gold, orange);
 	background: -moz-linear-gradient(gold, orange);
@@ -117,6 +124,14 @@ navbar-default .navbar-nav > li > a:focus{
 .navbar-default .navbar-nav > .open > a:focus {
 	background-color:1A242F;
 	color:#FFFFFF;
+}
+
+.navbar-toggle{
+	padding: 2px;
+}
+
+.navbar-toggle .icon-bar + .icon-bar{
+	margin-top: 2px;
 }
 	
 .colorcabecera {

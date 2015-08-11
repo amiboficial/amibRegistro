@@ -1141,12 +1141,10 @@ app.ResultsView = Backbone.View.extend({
 		var pagina = this.$(e.currentTarget).data("page");
 
 		e.preventDefault();
-		
 		//si no se esta procesando nada en la colección
 		if(!this.collection.isProcessing()){
 			this.collection.goToPage(pagina);
 		}
-		
 	},
 	
 	iniciaProcesamientoPeticion: function(){

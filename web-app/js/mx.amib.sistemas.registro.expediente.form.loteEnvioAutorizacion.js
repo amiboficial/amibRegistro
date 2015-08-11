@@ -1,5 +1,14 @@
 var app = app || {};
 
+app.EXP_LEA_RSLTS_ST_READY = 0;
+app.EXP_LEA_RSLTS_ST_PROC = 1;
+
+app.EXP_LEA_RSLT_NOSEL_COLOR = "#FFFFFF"; //blanco
+app.EXP_LEA_RSLT_SEL_COLOR = "#D9EDF7"; //azul claro
+app.EXP_LEA_RSLT_ENLOTE_COLOR = "#EFEDFA"; //morado claro
+app.EXP_LEA_RSLT_SELENLOTE_COLOR = "#DEF7D9"; //verde claro
+app.EXP_LEA_RSLT_PROC_COLOR = "#F8FAED"; //amarizho
+
 app.LoteElementVM = Backbone.Model.extend({
 	defaults: {
 		grailsId: -1,
@@ -182,10 +191,197 @@ app.LoteElementCollectionVM = Backbone.Collection.extend({
 		return elemento;
 	}
 	
+	/* MÉTODOS DEL MODELO  */
+	selectAll: function(){
+		this.each( function(item){
+			item.set('checked',true);
+		},this );
+	},
+	selectNone: function(){
+		this.collection.each( function(item){
+			item.set('checked',false);
+		},this );
+	},
+	removeSelected: function(){
+		//MANDA LLAMAR A METODO AJAX PARA HACER EL ELIMINADO
+			//en caso de que no sirva, triggerea error
+		//HACE UN "REFETCH" DE LOS DATOS
+			//en caso de que no sirva, triggerea error
+	}, 
+	empty: function(){
+		//MANDA LLAMAR A METODO AJAX PARA HACER EL VACIADO
+			//en caso de que no sirva, triggerea error
+		//DE HACERLO CORRECTAMIENTE, BORRA TODOS LOS DATOS EN LA COLECCION
+	}, 
+	exportxls: function(){
+		//MANDA LLAMAR A METODO 
+	}
+	
 });
 
 app.LoteElementView = Backbone.Model.view({
 });
 
 app.LoteElementCollectionView = Backbone.Model.view({
+	parentView: {},
+	template: _.template( $('#loteEnvAutTemplate').html() ),
+	
+	initialize: function(options){
+		this.collection = options.collection;
+		this.parentView = options.parentView;
+		
+		this.listenTo( this.collection, 'add', this.renderElement );
+		this.listenTo( this.collection, 'reset', this.renderList );
+	},
+	
+	render: function(){
+		this.$el.html( this.template( this.model.toJSON() ) );
+		this.renderList();
+		this.renderStateChange();
+		
+		return this;
+	},
+	renderList: function(){
+		this.$(".list-items").html("");
+		this.collection.each( function(item){
+			this.renderElement(item);
+		},this );
+		this.renderPagination();
+	},
+	renderElement: function(item){
+		var view = this;
+		var elementView =  new app.LoteElementView({model:item,parentView:view});
+		elementView.viewModel = this.viewModel;
+		this.$(".list-items").append( elementView.render().el );
+		return this;
+	},
+	renderStateChange: function(){
+		if(this.model.get('state') == app.EXP_LEA_RSLTS_ST_READY){
+			this.$('.procMessage').hide();
+			this.enableInput();
+		}
+		else{
+			this.$('.procMessage').show();
+			this.disableInput();
+		}
+		if(this.model.get('error') == false){
+			this.$('.errorMessage').hide();
+		}
+		else{
+			this.$('.errorMessage').show();
+		}
+	},
+	renderPagination: function(){
+		var paginationStr = "";
+		var totalPages = this.collection.getTotalPages();
+		var currentPage = this.collection.getCurrentPage();
+		
+		if(currentPage == 1){
+			paginationStr += '<li class="disabled"><a href="javascript:void(0);">&lt;</a></li>'
+		}
+		else{
+			paginationStr += '<li class="page handCursor" data-page="' + (currentPage-1) + '"><a href="javascript:void(0);">&lt;</a></li>'
+		}
+		
+		for(var i=1; i<=totalPages; i++){
+			if(i == currentPage){
+				paginationStr += '<li class="active"><a href="javascript:void(0);">' + i + '</a></li>';
+			}
+			else{
+				paginationStr += '<li class="page handCursor" data-page="' + i + '"><a href="javascript:void(0);">' + i + '</a></li>';
+			}
+		}
+		
+		if(currentPage == totalPages || totalPages == 0){
+			paginationStr += '<li class="disabled"><a href="javascript:void(0);">&gt;</a></li>'
+		}
+		else{
+			paginationStr += '<li class="page handCursor" data-page="' + (currentPage+1) + '"><a href="javascript:void(0);">&gt;</a></li>'
+		}
+		
+		
+		this.$(".pagination").html("");
+		this.$(".pagination").html(paginationStr);
+	},
+	disableInput: function(){
+		this.$("input").prop('disabled',true);
+		this.$("button").prop('disabled',true);
+		this.$("select").prop('disabled',true);
+	},
+	enableInput: function(){
+		this.$("input").prop('disabled',false);
+		this.$("button").prop('disabled',false);
+		this.$("select").prop('disabled',false);
+	},
+	
+	events: {
+		'click .selectAll' : 'seleccionarTodos',
+		'click .selectNone' : 'quitarSeleccionTodos',
+		'click .removeSelected' : 'eliminarSeleccionadosLote',
+		'click .empty' : 'vaciarLote',
+		'click .exportxls' : 'exportarExcel',
+		'click .sort': 'mandarOrdenar',
+		'click .page': 'mandarAPagina'
+	},
+	
+	seleccionarTodos: function(e){
+		e.preventDefault();
+		this.collection.selectAll();
+	},
+	quitarSeleccionTodos: function(e){
+		e.preventDefault();
+		this.collection.selectNone();
+	},
+	eliminarSeleccionadosLote: function(e){
+		e.preventDefault();
+		this.collection.removeSelected();
+	},
+	vaciarLote: function(e){
+		e.preventDefault();
+		this.collection.empty();
+	},
+	exportarExcel: function(e){
+		e.preventDefault();
+		this.collection.exportxls();
+	},
+	mandarOrdenar: function(e){
+		var order = this.$(e.currentTarget).data("order");
+		var sort = this.$(e.currentTarget).data("sort");
+		
+		e.preventDefault();
+		this.collection.sortAndOrderBy(order,sort);
+	},
+	mandarAPagina: function(e){
+		var pagina = this.$(e.currentTarget).data("page");
+
+		e.preventDefault();
+		this.collection.goToPage(pagina);
+	},
+});
+
+app.LoteEnvioAutorizacionMainView = Backbone.Model.view({ 
+	el: '#divLoteEnvAut',
+	options: {},
+	
+	//ACCIONES AL INICIALIZAR
+	initialize: function(options){
+		this.options = options;
+		this.render();
+	},
+	
+	//MÉTODOS DE RENDEREO
+	render: function(){
+		this.$el.html( this.template() );
+		this.renderLoteElementCollectionView();
+		return this;
+	},
+	renderLoteElementCollectionView: function(){
+		var parentView = this;
+		var collection = new app.LoteElementCollectionVM();
+		
+		var view = new app.LoteElementCollectionView({ collection:collection, parentView:parentView });
+		
+		return view;
+	}
+	
 });

@@ -178,7 +178,7 @@ app.ResultVMCollection = Backbone.Collection.extend({
 	count: 0,
 	max: 10,
 	offset: 0,
-	sort: "id",
+	sort: "id", //TODO: CAMBIAR ESTA VARIABLE SORT, ESTA SOBREESCRIBIENDO METODO SORT
 	order: "asc",
 	
 	lastQuery: -1, //EXP_CEA_SELECTED_TAB_MAT,EXP_CEA_SELECTED_TAB_FOL,EXP_CEA_SELECTED_TAB_BAV

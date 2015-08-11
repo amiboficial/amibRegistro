@@ -29,28 +29,28 @@
 						<th>&nbsp;</th>
 						<th>
 						Folio 
-							<button type="button" class="sort btn btn-default btn-xxs" data-sort="idSustentante" data-order="asc"><span class="sort handCursor glyphicon glyphicon-chevron-up"></span></button>
-							<button type="button" class="sort btn btn-default btn-xxs" data-sort="idSustentante" data-order="desc"><span class="sort handCursor glyphicon glyphicon-chevron-down"></span></button>
+							<button type="button" class="sort btn btn-default btn-xxs" data-sort="idSustentante" data-order="asc"><span class="glyphicon glyphicon-chevron-up"></span></button>
+							<button type="button" class="sort btn btn-default btn-xxs" data-sort="idSustentante" data-order="desc"><span class="glyphicon glyphicon-chevron-down"></span></button>
 						</th>
 						<th>
 						Matrícula 
-							<button type="button" class="sort btn btn-default btn-xxs" data-sort="numeroMatricula" data-order="asc"><span class="sort handCursor glyphicon glyphicon-chevron-up"></span></button>
-							<button type="button" class="sort btn btn-default btn-xxs" data-sort="numeroMatricula" data-order="desc"><span class="sort handCursor glyphicon glyphicon-chevron-down"></span></button>
+							<button type="button" class="sort btn btn-default btn-xxs" data-sort="numeroMatricula" data-order="asc"><span class="glyphicon glyphicon-chevron-up"></span></button>
+							<button type="button" class="sort btn btn-default btn-xxs" data-sort="numeroMatricula" data-order="desc"><span class="glyphicon glyphicon-chevron-down"></span></button>
 						</th>
 						<th>
 						Nombre 
-							<button type="button" class="sort btn btn-default btn-xxs" data-sort="nombre" data-order="asc"><span class="sort handCursor glyphicon glyphicon-chevron-up"></span></button>
-							<button type="button" class="sort btn btn-default btn-xxs" data-sort="nombre" data-order="desc"><span class="sort handCursor glyphicon glyphicon-chevron-down"></span></button>
+							<button type="button" class="sort btn btn-default btn-xxs" data-sort="nombre" data-order="asc"><span class="glyphicon glyphicon-chevron-up"></span></button>
+							<button type="button" class="sort btn btn-default btn-xxs" data-sort="nombre" data-order="desc"><span class="glyphicon glyphicon-chevron-down"></span></button>
 						</th>
 						<th>
 						1er Apellido 
-							<button type="button" class="sort btn btn-default btn-xxs" data-sort="primerApellido" data-order="asc"><span class="sort handCursor glyphicon glyphicon-chevron-up"></span></button>
-							<button type="button" class="sort btn btn-default btn-xxs" data-sort="primerApellido" data-order="desc"><span class="sort handCursor glyphicon glyphicon-chevron-down"></span></button>
+							<button type="button" class="sort btn btn-default btn-xxs" data-sort="primerApellido" data-order="asc"><span class="glyphicon glyphicon-chevron-up"></span></button>
+							<button type="button" class="sort btn btn-default btn-xxs" data-sort="primerApellido" data-order="desc"><span class="glyphicon glyphicon-chevron-down"></span></button>
 						</th>
 						<th>
 						2do Apellido 
-							<button type="button" class="sort btn btn-default btn-xxs" data-sort="segundoApellido" data-order="asc"><span class="sort handCursor glyphicon glyphicon-chevron-up"></span></button>
-							<button type="button" class="sort btn btn-default btn-xxs" data-sort="segundoApellido" data-order="desc"><span class="sort handCursor glyphicon glyphicon-chevron-down"></span></button>
+							<button type="button" class="sort btn btn-default btn-xxs" data-sort="segundoApellido" data-order="asc"><span class="glyphicon glyphicon-chevron-up"></span></button>
+							<button type="button" class="sort btn btn-default btn-xxs" data-sort="segundoApellido" data-order="desc"><span class="glyphicon glyphicon-chevron-down"></span></button>
 						</th>
 					</tr>
 				</thead>

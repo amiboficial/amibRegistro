@@ -20,22 +20,32 @@ app.LoteElementVM = Backbone.Model.extend({
 		
 		checked: false,
 		showing: true
+	},
+	getViewSelectionColor: function(){
+		if(this.get('checked')){
+			colorHexStr = app.EXP_LEA_RSLT_SEL_COLOR;
+		}
+		else{
+			colorHexStr = app.EXP_LEA_RSLT_NOSEL_COLOR;
+		}
+		return colorHexStr;
 	}
 });
 
 app.LoteElementCollectionVM = Backbone.Collection.extend({
-	model: app.LoteElementCollectionVM,
-	count: 0,
+	model: app.LoteElementVM,
+	//count: 0,
 	max: 10,
 	offset: 0,
-	sort: "id",
-	order: "asc",
+	
+	state: app.EXP_LEA_RSLTS_ST_READY,
+	error: false,
 	
 	initialize: function(){
         // if collection is empty, fetch from server
         if(this.size() == 0)
             this.fetchAll();
-    }
+    },
 
 	comparator : 'grailsId',
     changeComparator: function (sortProperty) {
@@ -76,7 +86,7 @@ app.LoteElementCollectionVM = Backbone.Collection.extend({
 	},
 	getTotalPages: function(){
 		console.log("COUNT: " + this.count + ";MAX: " + this.max);
-		return Math.ceil(this.count/this.max);
+		return Math.ceil(this.size()/this.max);
 	},
 	getNextPage: function(){
 		var nextPage = 0;
@@ -91,7 +101,9 @@ app.LoteElementCollectionVM = Backbone.Collection.extend({
 	
 	/* OBTENICION DE DATOS AJAX */
 	fetchAll: function(){
-		this.add( new app.LoteElementVM({
+		
+		//Este es un fetch AJAX
+		this.add( [{
 			grailsId: 1, 
 			idSustentante: 1, 
 			numeroMatricula: 1, 
@@ -101,41 +113,37 @@ app.LoteElementCollectionVM = Backbone.Collection.extend({
 			
 			checked: false, 
 			showing: true
-		}) );
-		this.add( new app.LoteElementVM({
+		},{
 			grailsId: 2, 
 			idSustentante: 2, 
 			numeroMatricula: 2, 
-			nombre: "ZZZZAAAAA", 
+			nombre: "ABELARDO", 
 			primerApellido: "YYYYYYAAAAA", 
 			segundoApellido: "ZZZZZZZAAAAAA", 
 			
 			checked: false, 
 			showing: true
-		}) );
-		this.add( new app.LoteElementVM({
+		},{
 			grailsId: 3, 
 			idSustentante: 3, 
 			numeroMatricula: 3, 
-			nombre: "ZZZZBBBB", 
+			nombre: "JEAN CLAUDE", 
 			primerApellido: "YYYYYYBBBB", 
 			segundoApellido: "ZZZZZZZBBBB", 
 			
 			checked: false, 
 			showing: true
-		}) );
-		this.add( new app.LoteElementVM({
+		},{
 			grailsId: 4, 
 			idSustentante: 4, 
 			numeroMatricula: 4, 
-			nombre: "ZZZZCCCCC", 
+			nombre: "FRANCOIS", 
 			primerApellido: "YYYYYYCCCCC", 
 			segundoApellido: "ZZZZZZZCCCCCCCC", 
 			
 			checked: false, 
 			showing: true
-		}) );
-		this.add( new app.LoteElementVM({
+		},{
 			grailsId: 5, 
 			idSustentante: 5, 
 			numeroMatricula: 5, 
@@ -145,14 +153,16 @@ app.LoteElementCollectionVM = Backbone.Collection.extend({
 			
 			checked: false, 
 			showing: true
-		}) );
+		}] );
+		
 	},
 	
 	/* ORDENAMIENTO DE DATOS */
 	sortAndOrderBy: function(order,sort){
-		this.changeComparator(order);
+		console.log("sortAndOrderBy: " + order + "," + sort);
+		this.changeComparator(sort);
 		this.sort({silent:true});
-		if(sort == 'desc'){
+		if(order == 'desc'){
 			this.models.reverse();
 		}
 		this.trigger('reset', this, {});
@@ -189,7 +199,7 @@ app.LoteElementCollectionVM = Backbone.Collection.extend({
 		elemento.set(result);
 		elemento.set( { checked: false, showing: true } );
 		return elemento;
-	}
+	},
 	
 	/* MÉTODOS DEL MODELO  */
 	selectAll: function(){
@@ -198,7 +208,7 @@ app.LoteElementCollectionVM = Backbone.Collection.extend({
 		},this );
 	},
 	selectNone: function(){
-		this.collection.each( function(item){
+		this.each( function(item){
 			item.set('checked',false);
 		},this );
 	},
@@ -207,22 +217,58 @@ app.LoteElementCollectionVM = Backbone.Collection.extend({
 			//en caso de que no sirva, triggerea error
 		//HACE UN "REFETCH" DE LOS DATOS
 			//en caso de que no sirva, triggerea error
+		console.log('removeSelected - Metodo no implementado');
 	}, 
 	empty: function(){
 		//MANDA LLAMAR A METODO AJAX PARA HACER EL VACIADO
 			//en caso de que no sirva, triggerea error
 		//DE HACERLO CORRECTAMIENTE, BORRA TODOS LOS DATOS EN LA COLECCION
+		console.log('empty - Metodo no implementado');
 	}, 
 	exportxls: function(){
 		//MANDA LLAMAR A METODO 
+		console.log('exportxls - Metodo no implementado');
 	}
 	
 });
 
-app.LoteElementView = Backbone.Model.view({
+app.LoteElementView = Backbone.View.extend({ 
+	parentView: {},
+	tagName: 'tr',
+	template: _.template( $('#elemLoteTemplate').html() ),
+	
+	initialize: function(options){
+		this.model = options.model;
+		this.parentView = options.parentView;
+		
+		this.render();
+		
+		this.listenTo( this.model, 'change:checked', this.render );
+	},
+	
+	render: function(){
+		this.$el.html( this.template( this.model.toJSON() ) );
+		this.$el.css( "background-color" , this.model.getViewSelectionColor() );
+		return this;
+	},
+	
+	events: {
+		'click .check' : 'seleccionar'
+	},
+	
+	seleccionar: function(e){
+		e.preventDefault();
+		
+		if( this.model.get('checked') == false ){
+			this.model.set('checked',true);
+		}
+		else{
+			this.model.set('checked',false);
+		}
+	}
 });
 
-app.LoteElementCollectionView = Backbone.Model.view({
+app.LoteElementCollectionView = Backbone.View.extend({
 	parentView: {},
 	template: _.template( $('#loteEnvAutTemplate').html() ),
 	
@@ -230,12 +276,14 @@ app.LoteElementCollectionView = Backbone.Model.view({
 		this.collection = options.collection;
 		this.parentView = options.parentView;
 		
+		this.render();
+		
 		this.listenTo( this.collection, 'add', this.renderElement );
 		this.listenTo( this.collection, 'reset', this.renderList );
 	},
 	
 	render: function(){
-		this.$el.html( this.template( this.model.toJSON() ) );
+		this.$el.html( this.template() );
 		this.renderList();
 		this.renderStateChange();
 		
@@ -256,7 +304,7 @@ app.LoteElementCollectionView = Backbone.Model.view({
 		return this;
 	},
 	renderStateChange: function(){
-		if(this.model.get('state') == app.EXP_LEA_RSLTS_ST_READY){
+		if(this.collection.state == app.EXP_LEA_RSLTS_ST_READY){
 			this.$('.procMessage').hide();
 			this.enableInput();
 		}
@@ -264,7 +312,7 @@ app.LoteElementCollectionView = Backbone.Model.view({
 			this.$('.procMessage').show();
 			this.disableInput();
 		}
-		if(this.model.get('error') == false){
+		if(this.collection.error == false){
 			this.$('.errorMessage').hide();
 		}
 		else{
@@ -359,7 +407,7 @@ app.LoteElementCollectionView = Backbone.Model.view({
 	},
 });
 
-app.LoteEnvioAutorizacionMainView = Backbone.Model.view({ 
+app.LoteEnvioAutorizacionMainView = Backbone.View.extend({ 
 	el: '#divLoteEnvAut',
 	options: {},
 	
@@ -371,7 +419,6 @@ app.LoteEnvioAutorizacionMainView = Backbone.Model.view({
 	
 	//MÉTODOS DE RENDEREO
 	render: function(){
-		this.$el.html( this.template() );
 		this.renderLoteElementCollectionView();
 		return this;
 	},
@@ -380,6 +427,9 @@ app.LoteEnvioAutorizacionMainView = Backbone.Model.view({
 		var collection = new app.LoteElementCollectionVM();
 		
 		var view = new app.LoteElementCollectionView({ collection:collection, parentView:parentView });
+		
+		this.$el.html("");
+		this.$el.append( view.render().el );
 		
 		return view;
 	}

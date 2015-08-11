@@ -268,3 +268,7 @@ fieldset{
     border-radius: 3px;
 }
 
+.list-group-item{
+	padding: 7px 10px;
+}
+}

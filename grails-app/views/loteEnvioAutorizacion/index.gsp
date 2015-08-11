@@ -36,6 +36,8 @@
 	<script type="text/javascript">
 
 	var app = app || {};
+
+	var leaview = new app.LoteEnvioAutorizacionMainView();
 	
 	</script>
 </body>

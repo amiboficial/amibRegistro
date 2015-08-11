@@ -43,11 +43,13 @@ app.LoteElementCollectionVM = Backbone.Collection.extend({
 	getAllCompleteResultUrl: '',
 	removeUrl: '',
 	removeAllUrl: '',
+	emptyUrl: '',
 		
 	initialize: function(options){
 		this.getAllCompleteResultUrl = options.getAllCompleteResultUrl;
 		this.removeUrl = options.removeUrl;
 		this.removeAllUrl = options.removeAllUrl;
+		this.emptyUrl = options.emptyUrl;
         // if collection is empty, fetch from server
         if(this.size() == 0)
             this.fetchAll();
@@ -241,7 +243,27 @@ app.LoteElementCollectionVM = Backbone.Collection.extend({
 		//MANDA LLAMAR A METODO AJAX PARA HACER EL VACIADO
 			//en caso de que no sirva, triggerea error
 		//DE HACERLO CORRECTAMIENTE, BORRA TODOS LOS DATOS EN LA COLECCION
-		console.log('empty - Metodo no implementado');
+		
+		var _this = this;
+		
+		$.ajax({
+			url: _this.emptyUrl, 
+			beforeSend: function(xhr){
+				_this._startProcessing();
+			},
+			type: 'GET'
+		}).done( function(data){
+			if(data.status == "OK"){
+				_this.reset(null, {silent:true} );
+				_this.setOffset(0);
+				
+				_this._stopProcessing();
+			}
+			else{				
+				_this._stopProcessing();
+			}
+		} );
+
 	}, 
 	exportxls: function(){
 		//MANDA LLAMAR A METODO 
@@ -449,7 +471,8 @@ app.LoteEnvioAutorizacionMainView = Backbone.View.extend({
 		var collection = new app.LoteElementCollectionVM( { 
 			getAllCompleteResultUrl: this.options.getAllCompleteResultUrl,  
 			removeUrl: this.options.removeUrl, 
-			removeAllUrl: this.options.removeAllUrl, 
+			removeAllUrl: this.options.removeAllUrl,
+			emptyUrl: this.options.emptyUrl			
 		} );
 		
 		var view = new app.LoteElementCollectionView({ collection:collection, parentView:parentView });

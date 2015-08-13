@@ -10,7 +10,10 @@ import java.util.HashMap
 import java.util.Iterator
 import java.util.List
 import java.util.Map
+import mx.amib.sistemas.external.catalogos.service.InstitucionTO
+import mx.amib.sistemas.external.catalogos.service.SepomexTO
 import mx.amib.sistemas.external.expediente.certificacion.service.CertificacionTO
+import mx.amib.sistemas.external.expediente.persona.service.PuestoTO
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import org.apache.poi.ss.usermodel.Cell
 import org.apache.poi.ss.usermodel.CellStyle
@@ -27,6 +30,9 @@ import org.apache.poi.ss.util.CellRangeAddress
 @Transactional
 class FormatoSolicitudAutorizacionService {
 
+	def entidadFinancieraService
+	def sepomexService
+	
 	static scope = "request"
 	
 	private static final String HEADER_SECUENCIA = "Secuencia"
@@ -59,48 +65,169 @@ class FormatoSolicitudAutorizacionService {
 	private static final String HEADER_ULTGRAD = "Último Grado de Estudios"
 	
 	private Map<String,Integer> mapHeadersIdx = [
-		HEADER_SECUENCIA : 0,
-		HEADER_FHENTORG : 1,
-		HEADER_TPINST : 2,
-		HEADER_CVINST : 3,
-		HEADER_INST : 4,
-		HEADER_FHINILAB : 5,
-		HEADER_TPAUT : 6,
-		HEADER_NUMMAT : 7,
-		HEADER_FOLIO : 8,
-		HEADER_AP1 : 9,
-		HEADER_AP2 : 10,
-		HEADER_NOM : 11,
-		HEADER_RFC : 12,
-		HEADER_CURP : 13,
-		HEADER_FHNAC : 14,
-		HEADER_CALLE : 15,
-		HEADER_NUM : 16,
-		HEADER_COL : 17,
-		HEADER_DEL : 18,
-		HEADER_CIUDAD : 19,
-		HEADER_CP : 20,
-		HEADER_EDO : 21,
-		HEADER_TELCAS : 22,
-		HEADER_TELOFI : 23,
-		HEADER_EMAIL : 24,
-		HEADER_NAL : 25,
-		HEADER_CALMIG : 26,
-		HEADER_ULTGRAD: 27
+		(HEADER_SECUENCIA) : 0,
+		(HEADER_FHENTORG) : 1,
+		(HEADER_TPINST) : 2,
+		(HEADER_CVINST) : 3,
+		(HEADER_INST) : 4,
+		(HEADER_FHINILAB) : 5,
+		(HEADER_TPAUT) : 6,
+		(HEADER_NUMMAT) : 7,
+		(HEADER_FOLIO) : 8,
+		(HEADER_AP1) : 9,
+		(HEADER_AP2) : 10,
+		(HEADER_NOM) : 11,
+		(HEADER_RFC) : 12,
+		(HEADER_CURP) : 13,
+		(HEADER_FHNAC) : 14,
+		(HEADER_CALLE) : 15,
+		(HEADER_NUM) : 16,
+		(HEADER_COL) : 17,
+		(HEADER_DEL) : 18,
+		(HEADER_CIUDAD) : 19,
+		(HEADER_CP) : 20,
+		(HEADER_EDO) : 21,
+		(HEADER_TELCAS) : 22,
+		(HEADER_TELOFI) : 23,
+		(HEADER_EMAIL) : 24,
+		(HEADER_NAL) : 25,
+		(HEADER_CALMIG) : 26,
+		(HEADER_ULTGRAD) : 27
 	]
 	
-	List<Map<String,String>> listaMapDato = new ArrayList<Map<String,String>>(); //datos almacenados en lista de mapas hash
+	List<Map<String,String>> listaMapDato; //datos almacenados en lista de mapas hash
 	
 	void fill(List<CertificacionTO> listCerts){
+		Map<String,String> refMap = null
+		int nuseq = System.currentTimeMillis()/1000000;
 		
+		this.listaMapDato = new ArrayList<Map<String,String>>();
+		listCerts.each { x ->
+			
+			//obtiene el puesto actual
+			PuestoTO puestoActual = x.sustentante.puestos.find{ it.fechaFin == null }
+			//obtiene la institucion del puesto actual
+			InstitucionTO institucionPuestoActual = entidadFinancieraService.obtenerInstitucion(puestoActual.idInstitucion)
+			//obtiene el elemento sepomex del sustentante
+			SepomexTO sepomexSust = sepomexService.obtenerCodigoPostalDeIdSepomex(x.sustentante.idSepomex) 
+			//obtiene un telefono de casa y oficina
+			String telCasa = x.sustentante.telefonos.find{ it.tipoTelefonoSustentante.descripcion == "Casa" }
+			String telOficina = x.sustentante.telefonos.find{ it.tipoTelefonoSustentante.descripcion == "Oficina" }
+			
+			refMap = new HashMap<String,String>()
+			refMap.put(this.HEADER_SECUENCIA, nuseq++)
+			refMap.put(this.HEADER_FHENTORG, "ddmmyyyy")
+			refMap.put(this.HEADER_TPINST, institucionPuestoActual.idTipoInstitucion)
+			refMap.put(this.HEADER_CVINST, institucionPuestoActual.id)
+			refMap.put(this.HEADER_INST, institucionPuestoActual.nombre)
+			refMap.put(this.HEADER_FHINILAB, puestoActual.fechaInicio.getAt(Calendar.DAY_OF_MONTH) + "" + (puestoActual.fechaInicio.getAt(Calendar.MONTH)+1) + "" + puestoActual.fechaInicio.getAt(Calendar.YEAR) )
+			refMap.put(this.HEADER_TPAUT, x.varianteFigura.tipoAutorizacionFigura)
+			refMap.put(this.HEADER_NUMMAT, x.sustentante.numeroMatricula)
+			refMap.put(this.HEADER_FOLIO, x.sustentante.id)
+			refMap.put(this.HEADER_AP1, x.sustentante.primerApellido)
+			refMap.put(this.HEADER_AP2, x.sustentante.segundoApellido)
+			refMap.put(this.HEADER_NOM, x.sustentante.nombre)
+			refMap.put(this.HEADER_RFC, x.sustentante.rfc)
+			refMap.put(this.HEADER_CURP, x.sustentante.curp)
+			refMap.put(this.HEADER_FHNAC, x.sustentante.fechaNacimiento.getAt(Calendar.DAY_OF_MONTH) + "" + (x.sustentante.fechaNacimiento.getAt(Calendar.MONTH)+1) + "" + x.sustentante.fechaNacimiento.getAt(Calendar.YEAR))
+			refMap.put(this.HEADER_CALLE, x.sustentante.nombre)
+			refMap.put(this.HEADER_NUM, x.sustentante.numeroInterior + x.sustentante.numeroExterior)
+			refMap.put(this.HEADER_COL, sepomexSust.asentamiento.nombre)
+			refMap.put(this.HEADER_DEL, sepomexSust.asentamiento.municipio.nombre)
+			refMap.put(this.HEADER_CIUDAD, sepomexSust.ciudad.nombre)
+			refMap.put(this.HEADER_CP, sepomexSust.codigoPostal)
+			refMap.put(this.HEADER_EDO, sepomexSust.asentamiento.municipio.entidadFederativa.nombre)
+			refMap.put(this.HEADER_TELCAS, telCasa)
+			refMap.put(this.HEADER_TELOFI, telOficina)
+			refMap.put(this.HEADER_EMAIL, x.sustentante.correoElectronico)
+			refMap.put(this.HEADER_NAL, x.sustentante.nacionalidad.descripcion)
+			refMap.put(this.HEADER_CALMIG, x.sustentante.calidadMigratoria)
+			refMap.put(this.HEADER_ULTGRAD, x.sustentante.nivelEstudios.descripcion)
+			
+			this.listaMapDato.add(refMap)
+		}
 	}
 	
 	void flush(){
-		
+		listaMapDato.clear()
 	}
 	
-	void renderAsXLSX(OutputStream os){
+	void renderAsXLSX(OutputStream os) throws IOException{
+		//aqui es donde va a renderear el excel
+		//Preparación de variables y referencias
+		ByteArrayOutputStream bout = new ByteArrayOutputStream();
+		Workbook wb = new XSSFWorkbook();  //create a new workbook
+		Sheet s = wb.createSheet();  // create a new sheet
+		Row row = null; //row reference
+		Cell cell = null; //cell reference
+		Font fuenteTitulo = null;
+		Font fuenteDato = null;
+		CellStyle csTitulo = null;
+		CellStyle csCabecera = null;
+		CellStyle csDato = null;
+		List<Map<String,String>> listaMapDato = new ArrayList<Map<String,String>>();
+		Map<String,Integer> mapHeadersIdx = new HashMap<String,Integer>();
+		Map<String,String> mapDato = null;
+		int totalAtributos = 0;
+		int i,j;
 		
+		//Prepeparar formato
+		// seteo de fuentes
+		fuenteTitulo = wb.createFont();
+		fuenteDato = wb.createFont();
+		fuenteTitulo.setBold(true);
+		fuenteTitulo.setFontHeightInPoints((short)12);
+		fuenteDato.setBold(false);
+		fuenteDato.setFontHeightInPoints((short)12);
+		// setedo de celdas unidas
+		s.addMergedRegion(new CellRangeAddress(0,0,0,9)); //el rango es de A1 a J1
+		// seteo de estilo de celda de cabecera
+		csTitulo = wb.createCellStyle();
+		csTitulo.setFont(fuenteTitulo);
+		csCabecera = wb.createCellStyle();
+		csCabecera.setFillPattern((short) CellStyle.SOLID_FOREGROUND);
+		csCabecera.setFillBackgroundColor( IndexedColors.GREY_25_PERCENT.getIndex() );
+		csCabecera.setFont(fuenteDato);
+		csDato = wb.createCellStyle();
+		csDato.setFont(fuenteDato);
+		
+		//crea el titulo
+		row = s.createRow(0); //instancia a la primera fila
+		cell = row.createCell(0); //instance a la primer celda (la que hicimos "merge"
+		cell.setCellValue("Formato de Solicitud de Autorización");
+		cell.setCellStyle(csTitulo);
+		//crea las cabeceras
+		row = s.createRow(2);
+		i = 0;
+		for(String nombreCabecera : mapHeadersIdx.keySet()){
+			cell = row.createCell( mapHeadersIdx.get(nombreCabecera) );
+			cell.setCellStyle(csCabecera);
+			cell.setCellValue(nombreCabecera);
+			i++;
+		}
+		
+		//llena los datos recibidos en el fill
+		i = 3; //inicia a partir de la fila 3 (indice desde 0)
+		totalAtributos = mapHeadersIdx.size();
+		for(Map<String,String> curMap : listaMapDato ){
+			row = s.createRow(i);
+			
+			Iterator<String> keySetIterator = curMap.keySet().iterator();
+			while(keySetIterator.hasNext()){
+				String curKey = keySetIterator.next();
+				j = mapHeadersIdx.get(curKey);
+				cell = row.createCell(j);
+				cell.setCellValue(curMap.get(curKey));
+			}
+			
+			i++;
+		}
+		//escribe en el byteOutputArray
+		wb.write(bout);
+		bout.close();
+		
+		//escribe en el OutputStream que se paso como parametro
+		os.write( bout.toByteArray() );
 	}
 	
 }

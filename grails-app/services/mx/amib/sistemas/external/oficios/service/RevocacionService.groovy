@@ -16,11 +16,11 @@ import grails.transaction.Transactional
 @Transactional
 class RevocacionService {
 
-	String listUrl = "http://localhost:8085/revocacion/index"
-	String findAllByUrl = "http://localhost:8085/revocacion/findAllBy"
-	String getUrl = "http://localhost:8085/revocacion/show/"
-	String saveUrl = "http://localhost:8085/revocacion/save"
-	String updateUrl = "http://localhost:8085/revocacion/update/"
+	String listUrl
+	String findAllByUrl
+	String getUrl
+	String saveUrl
+	String updateUrl
 	
     public SearchResult<RevocacionTO> list(Integer max, Integer offset, String sort, String order){
 		SearchResult<RevocacionTO> sr = new SearchResult<RevocacionTO>()

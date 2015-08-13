@@ -61,4 +61,28 @@ beans = {
 		findAllEnAutorizacionByFolioUrl = application.config.mx.amib.sistemas.expediente.resthttpURL + application.config.mx.amib.sistemas.expediente.certificacion.Certificacion.findAllEnAutorizacionByFolio
 		updateDatosParaAprobarDictamenUrl = application.config.mx.amib.sistemas.expediente.resthttpURL + application.config.mx.amib.sistemas.expediente.certificacion.Certificacion.updateDatosParaAprobarDictamen
 	}
+	poderService(mx.amib.sistemas.external.oficios.service.PoderService){
+		listUrl = application.config.mx.amib.sistemas.oficios.resthttpURL + application.config.mx.amib.sistemas.oficios.poder.list
+		findAllByUrl = application.config.mx.amib.sistemas.oficios.resthttpURL + application.config.mx.amib.sistemas.oficios.poder.findAllBy
+		getUrl = application.config.mx.amib.sistemas.oficios.resthttpURL + application.config.mx.amib.sistemas.oficios.poder.get
+		saveUrl = application.config.mx.amib.sistemas.oficios.resthttpURL + application.config.mx.amib.sistemas.oficios.poder.save
+		updateUrl = application.config.mx.amib.sistemas.oficios.resthttpURL + application.config.mx.amib.sistemas.oficios.poder.update
+		isNumeroEscrituraAvailableUrl = application.config.mx.amib.sistemas.oficios.resthttpURL + application.config.mx.amib.sistemas.oficios.poder.isNumeroEscrituraAvailable
+	}
+	revocacionService(mx.amib.sistemas.external.oficios.service.RevocacionService){
+		listUrl = application.config.mx.amib.sistemas.oficios.resthttpURL + application.config.mx.amib.sistemas.oficios.revocacion.list
+		findAllByUrl = application.config.mx.amib.sistemas.oficios.resthttpURL + application.config.mx.amib.sistemas.oficios.revocacion.findAllBy
+		getUrl = application.config.mx.amib.sistemas.oficios.resthttpURL + application.config.mx.amib.sistemas.oficios.revocacion.get
+		saveUrl = application.config.mx.amib.sistemas.oficios.resthttpURL + application.config.mx.amib.sistemas.oficios.revocacion.save
+		updateUrl = application.config.mx.amib.sistemas.oficios.resthttpURL + application.config.mx.amib.sistemas.oficios.revocacion.update
+	}
+	oficioCnbvService(mx.amib.sistemas.external.oficios.service.OficioCnbvService){
+		listUrl = application.config.mx.amib.sistemas.oficios.resthttpURL + application.config.mx.amib.sistemas.oficios.oficioCnbv.list
+		findAllByUrl = application.config.mx.amib.sistemas.oficios.resthttpURL + application.config.mx.amib.sistemas.oficios.oficioCnbv.findAllBy
+		findAllByIdCertificacionInAutorizadosUrl = application.config.mx.amib.sistemas.oficios.resthttpURL + application.config.mx.amib.sistemas.oficios.oficioCnbv.findAllByIdCertificacionInAutorizados
+		findAllByMultipleIdCertificacionInAutorizadosUrl = application.config.mx.amib.sistemas.oficios.resthttpURL + application.config.mx.amib.sistemas.oficios.oficioCnbv.findAllByMultipleIdCertificacionInAutorizados
+		getUrl = application.config.mx.amib.sistemas.oficios.resthttpURL + application.config.mx.amib.sistemas.oficios.oficioCnbv.get
+		saveUrl = application.config.mx.amib.sistemas.oficios.resthttpURL + application.config.mx.amib.sistemas.oficios.oficioCnbv.save
+		updateUrl = application.config.mx.amib.sistemas.oficios.resthttpURL + application.config.mx.amib.sistemas.oficios.oficioCnbv.update
+	}
 }

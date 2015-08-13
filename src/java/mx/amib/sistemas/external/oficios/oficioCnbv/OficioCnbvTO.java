@@ -10,7 +10,8 @@ public class OficioCnbvTO {
 	private Long version;
 	
 	private String claveDga;
-	private Date fechaInicioVigencia;
+	private Integer numeroOficio;
+	private Date fechaOficio;
 	private String uuidDocumentoRespaldo;
 	
 	private List<AutorizadoCnbvTO> autorizados;
@@ -38,11 +39,17 @@ public class OficioCnbvTO {
 	public void setClaveDga(String claveDga) {
 		this.claveDga = claveDga;
 	}
-	public Date getFechaInicioVigencia() {
-		return fechaInicioVigencia;
+	public Integer getNumeroOficio() {
+		return numeroOficio;
 	}
-	public void setFechaInicioVigencia(Date fechaInicioVigencia) {
-		this.fechaInicioVigencia = fechaInicioVigencia;
+	public void setNumeroOficio(Integer numeroOficio) {
+		this.numeroOficio = numeroOficio;
+	}
+	public Date getFechaOficio() {
+		return fechaOficio;
+	}
+	public void setFechaOficio(Date fechaOficio) {
+		this.fechaOficio = fechaOficio;
 	}
 	public String getUuidDocumentoRespaldo() {
 		return uuidDocumentoRespaldo;

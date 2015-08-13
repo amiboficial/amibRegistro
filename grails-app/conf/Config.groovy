@@ -86,6 +86,7 @@ environments {
 		mx.amib.sistemas.catalogos.resthttpURL = 'http://bimalatrop.no-ip.biz:8080/amibCatalogos-0.1/'
 		//mx.amib.sistemas.expediente.resthttpURL = 'http://localhost:8084/amibExpediente/'
 		mx.amib.sistemas.expediente.resthttpURL = 'http://bimalatrop.no-ip.biz:8080/amibExpediente-0.1/'
+		mx.amib.sistemas.oficios.resthttpURL = 'http://bimalatrop.no-ip.biz:8080/amibOficios-0.0.1-SNAPSHOT/'
 		mx.amib.sistemas.documentos.resthttpURL = 'http://bimalatrop.no-ip.biz:8080/amibDocumentos-0.1/'
     }
 	test {
@@ -94,6 +95,7 @@ environments {
 		mx.amib.sistemas.catalogos.resthttpURL = 'http://bimalatrop.no-ip.biz:8080/amibCatalogos-0.1/'
 		//mx.amib.sistemas.expediente.resthttpURL = 'http://localhost:8084/amibExpediente/'
 		mx.amib.sistemas.expediente.resthttpURL = 'http://bimalatrop.no-ip.biz:8080/amibExpediente-0.1/'
+		mx.amib.sistemas.oficios.resthttpURL = 'http://bimalatrop.no-ip.biz:8080/amibOficios-0.0.1-SNAPSHOT/'
 		mx.amib.sistemas.documentos.resthttpURL = 'http://bimalatrop.no-ip.biz:8080/amibDocumentos-0.1/'
 	}
     production {
@@ -101,6 +103,7 @@ environments {
         // TODO: grails.serverURL = "http://www.changeme.com"
 		mx.amib.sistemas.catalogos.resthttpURL = 'http://bimalatrop.no-ip.biz:8080/amibCatalogos-0.1/'
 		mx.amib.sistemas.expediente.resthttpURL = 'http://bimalatrop.no-ip.biz:8080/amibExpediente-0.1/'
+		mx.amib.sistemas.oficios.resthttpURL = 'http://bimalatrop.no-ip.biz:8080/amibOficios-0.0.1-SNAPSHOT/'
 		mx.amib.sistemas.documentos.resthttpURL = 'http://bimalatrop.no-ip.biz:8080/amibDocumentos-0.1/'
     }
 }
@@ -184,6 +187,26 @@ mx.amib.sistemas.expediente.certificacion.Certificacion.findAllEnAutorizacion = 
 mx.amib.sistemas.expediente.certificacion.Certificacion.findAllEnAutorizacionByMatricula = "certificacionRestful/findAllEnAutorizacionByMatricula/"
 mx.amib.sistemas.expediente.certificacion.Certificacion.findAllEnAutorizacionByFolio = "certificacionRestful/findAllEnAutorizacionByFolio/"
 mx.amib.sistemas.expediente.certificacion.Certificacion.updateDatosParaAprobarDictamen = 'certificacionRestful/updateDatosParaAprobarDictamen'
+
+//especificaciones de rutas para servicios REST de amibOficios
+mx.amib.sistemas.oficios.poder.list = 'poder/index'
+mx.amib.sistemas.oficios.poder.findAllBy = 'poder/findAllBy'
+mx.amib.sistemas.oficios.poder.get = 'poder/show/'
+mx.amib.sistemas.oficios.poder.save = 'poder/save'
+mx.amib.sistemas.oficios.poder.update = 'poder/update/'
+mx.amib.sistemas.oficios.poder.isNumeroEscrituraAvailable = 'poder/isNumeroEscrituraAvailable/'
+mx.amib.sistemas.oficios.revocacion.list = 'revocacion/index'
+mx.amib.sistemas.oficios.revocacion.findAllBy = 'revocacion/findAllBy'
+mx.amib.sistemas.oficios.revocacion.get = 'revocacion/show/'
+mx.amib.sistemas.oficios.revocacion.save = 'revocacion/save'
+mx.amib.sistemas.oficios.revocacion.update = 'revocacion/update/'
+mx.amib.sistemas.oficios.oficioCnbv.list = 'oficioCnbv/index'
+mx.amib.sistemas.oficios.oficioCnbv.findAllBy = 'oficioCnbv/findAllBy'
+mx.amib.sistemas.oficios.oficioCnbv.findAllByIdCertificacionInAutorizados = 'oficioCnbv/findAllByIdCertificacionInAutorizados'
+mx.amib.sistemas.oficios.oficioCnbv.findAllByMultipleIdCertificacionInAutorizados = 'oficioCnbv/findAllByMultipleIdCertificacionInAutorizados'
+mx.amib.sistemas.oficios.oficioCnbv.get = 'oficioCnbv/show/'
+mx.amib.sistemas.oficios.oficioCnbv.save = 'oficioCnbv/save'
+mx.amib.sistemas.oficios.oficioCnbv.update = 'oficioCnbv/update/'
 
 //especificaciones de rutas para servicios REST de amibDocumentos
 mx.amib.sistemas.documentos.Documento.save = 'documentoRestful/save'

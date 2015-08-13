@@ -16,13 +16,13 @@ import grails.transaction.Transactional
 @Transactional
 class OficioCnbvService {
 
-	String listUrl = "http://localhost:8085/oficioCnbv/index"
-	String findAllByUrl = "http://localhost:8085/oficioCnbv/findAllBy"
-	String findAllByIdCertificacionInAutorizadosUrl = "http://localhost:8085/oficioCnbv/findAllByIdCertificacionInAutorizados"
-	String findAllByMultipleIdCertificacionInAutorizadosUrl = "http://localhost:8085/oficioCnbv/findAllByMultipleIdCertificacionInAutorizados"
-	String getUrl = "http://localhost:8085/oficioCnbv/show/"
-	String saveUrl = "http://localhost:8085/oficioCnbv/save"
-	String updateUrl = "http://localhost:8085/oficioCnbv/update/"
+	String listUrl
+	String findAllByUrl
+	String findAllByIdCertificacionInAutorizadosUrl
+	String findAllByMultipleIdCertificacionInAutorizadosUrl
+	String getUrl
+	String saveUrl
+	String updateUrl
 	
     public SearchResult<OficioCnbvTO> list(Integer max, Integer offset, String sort, String order){
 		SearchResult<OficioCnbvTO> sr = new SearchResult<OficioCnbvTO>()
@@ -122,7 +122,7 @@ class OficioCnbvService {
 	
 	private JSON customServiceJson(OficioCnbvTO o){
 		def pMap = o.properties
-		pMap.'fechaInicioVigencia' = o.fechaInicioVigencia.getTime()
+		pMap.'fechaOficio' = o.fechaOficio.getTime()
 		pMap.'fechaCreacion' = null
 		pMap.'fechaModificacion' = null
 		pMap.'autorizados'.each{
@@ -133,7 +133,7 @@ class OficioCnbvService {
 	}
 	private JSONObject fixOficioCnbvJsonObject(JSONObject je){
 		je.remove('class')
-		je.'fechaInicioVigencia' = new Date(je.'fechaInicioVigencia')
+		je.'fechaOficio' = new Date(je.'fechaOficio')
 		je.'fechaCreacion' = new Date(je.'fechaCreacion')
 		je.'fechaModificacion' = new Date(je.'fechaModificacion')
 		je.'autorizados'.each{

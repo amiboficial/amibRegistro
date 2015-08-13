@@ -41,7 +41,8 @@
 		getAllCompleteResultUrl: '<g:createLink controller="loteEnvioAutorizacion" action="getAllCompleteResult" />',
 		removeUrl: '<g:createLink controller="loteEnvioAutorizacion" action="remove" />',
 		removeAllUrl: '<g:createLink controller="loteEnvioAutorizacion" action="removeAll" />',
-		emptyUrl: '<g:createLink controller="loteEnvioAutorizacion" action="clear" />'
+		emptyUrl: '<g:createLink controller="loteEnvioAutorizacion" action="clear" />',
+		exportxlsUrl: '<g:createLink controller="loteEnvioAutorizacion" action="downloadAsExcel" />'
 	});
 
 	</script>

@@ -1,19 +1,44 @@
 package mx.amib.sistemas.registro.expediente.controller
 
 import grails.converters.JSON
+import javax.servlet.ServletOutputStream
 import mx.amib.sistemas.external.expediente.certificacion.service.CertificacionTO
 import mx.amib.sistemas.external.expediente.service.CertificacionService
+import mx.amib.sistemas.registro.expediente.service.FormatoSolicitudAutorizacionService
 import mx.amib.sistemas.registro.expediente.service.LoteEnvioAutorizacionService
 
 class LoteEnvioAutorizacionController {
 
 	LoteEnvioAutorizacionService loteEnvioAutorizacionService
 	CertificacionService certificacionService
+	FormatoSolicitudAutorizacionService formatoSolicitudAutorizacionService
 	
     def index() { 
 		
 	}
 
+	def downloadAsExcel(){
+		Set<Long> qresult = null
+		List<CertificacionTO> certs = null
+		ServletOutputStream sos = response.outputStream
+		
+		qresult = loteEnvioAutorizacionService.getSet(this.session.id)
+		certs = certificacionService.getAll(qresult.toList())
+		
+		formatoSolicitudAutorizacionService.fill(certs)
+		if(certs.size() > 0){
+			response.setContentType('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+			response.setHeader('Content-disposition', 'attachment;filename=\"envioAutorizacion' + (int)(System.currentTimeMillis()/1000) + '.xlsx\"')
+			formatoSolicitudAutorizacionService.renderAsXLSX(sos)
+			sos.close()
+			return
+		}
+		else {
+			response.sendError(404)
+			return
+		}
+	}
+	
 	def getAllCompleteResult(){
 		Map<String,String> result = new HashMap<String,String>()
 		Set<Long> qresult = null

@@ -156,7 +156,7 @@ class FormatoSolicitudAutorizacionService {
 	public void renderAsXLSX(OutputStream os) throws IOException{
 		
 		//imprimir 
-		println "llamando a render as xlsx"
+		//println "llamando a render as xlsx"
 		//println (listaMapDato as JSON)
 		//aqui es donde va a renderear el excel
 		//Preparación de variables y referencias
@@ -216,11 +216,11 @@ class FormatoSolicitudAutorizacionService {
 		println "aqui llego 1, con el listaMapDato cuyo tamanio es: " + listaMapDato.size()
 		for(Map<String,String> curMap : listaMapDato ){
 			row = s.createRow(i);
-			println "leyendo una tupla"
+			//println "leyendo una tupla"
 			Iterator<String> keySetIterator = curMap.keySet().iterator();
 			while(keySetIterator.hasNext()){
 				String curKey = keySetIterator.next();
-				println "leyendo map por tupla cuyo key es " + curKey
+				//println "leyendo map por tupla cuyo key es " + curKey
 				j = mapHeadersIdx.get(curKey);
 				cell = row.createCell(j);
 				cell.setCellValue(curMap.get(curKey));
@@ -228,11 +228,11 @@ class FormatoSolicitudAutorizacionService {
 			
 			i++;
 		}
-		println "aqui llego 2"
+		//println "aqui llego 2"
 		//escribe en el byteOutputArray
 		wb.write(bout);
 		//bout.close();
-		println "aqui llego 3"
+		//println "aqui llego 3"
 		//escribe en el OutputStream que se paso como parametro
 		os.write( bout.toByteArray() );
 	}

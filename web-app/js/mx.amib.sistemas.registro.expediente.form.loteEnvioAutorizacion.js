@@ -44,12 +44,14 @@ app.LoteElementCollectionVM = Backbone.Collection.extend({
 	removeUrl: '',
 	removeAllUrl: '',
 	emptyUrl: '',
+	exportxlsUrl: '',
 		
 	initialize: function(options){
 		this.getAllCompleteResultUrl = options.getAllCompleteResultUrl;
 		this.removeUrl = options.removeUrl;
 		this.removeAllUrl = options.removeAllUrl;
 		this.emptyUrl = options.emptyUrl;
+		this.exportxlsUrl = options.exportxlsUrl;
         // if collection is empty, fetch from server
         if(this.size() == 0)
             this.fetchAll();
@@ -266,8 +268,9 @@ app.LoteElementCollectionVM = Backbone.Collection.extend({
 
 	}, 
 	exportxls: function(){
-		//MANDA LLAMAR A METODO 
-		console.log('exportxls - Metodo no implementado');
+		if(this.size() > 0){
+			window.open(this.exportxlsUrl,'_blank');
+		}
 	}
 	
 });
@@ -472,7 +475,8 @@ app.LoteEnvioAutorizacionMainView = Backbone.View.extend({
 			getAllCompleteResultUrl: this.options.getAllCompleteResultUrl,  
 			removeUrl: this.options.removeUrl, 
 			removeAllUrl: this.options.removeAllUrl,
-			emptyUrl: this.options.emptyUrl			
+			emptyUrl: this.options.emptyUrl,
+			exportxlsUrl: this.options.exportxlsUrl
 		} );
 		
 		var view = new app.LoteElementCollectionView({ collection:collection, parentView:parentView });

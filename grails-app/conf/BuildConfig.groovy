@@ -50,8 +50,12 @@ grails.project.dependency.resolution = {
         // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes e.g.
         // runtime 'mysql:mysql-connector-java:5.1.29'
         // runtime 'org.postgresql:postgresql:9.3-1101-jdbc41'
+		compile 'dom4j:dom4j:1.6.1'
+		compile "org.apache.xmlbeans:xmlbeans:2.6.0"
 		compile "org.apache.poi:poi:3.12"
 		compile "org.apache.poi:poi-ooxml:3.12"
+		compile 'org.apache.poi:poi-ooxml-schemas:3.12'
+		compile 'org.apache.poi:ooxml-schemas:1.1'
         test "org.grails:grails-datastore-test-support:1.0-grails-2.4"
     }
 

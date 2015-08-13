@@ -1,5 +1,6 @@
 package mx.amib.sistemas.registro.expediente.service
 
+import grails.converters.JSON
 import grails.transaction.Transactional
 import java.io.ByteArrayOutputStream
 import java.io.FileNotFoundException
@@ -33,7 +34,7 @@ class FormatoSolicitudAutorizacionService {
 	def entidadFinancieraService
 	def sepomexService
 	
-	static scope = "request"
+	static scope = "prototype"
 	
 	private static final String HEADER_SECUENCIA = "Secuencia"
 	private static final String HEADER_FHENTORG = "Fecha Entrega Organismo"
@@ -97,10 +98,11 @@ class FormatoSolicitudAutorizacionService {
 	
 	List<Map<String,String>> listaMapDato; //datos almacenados en lista de mapas hash
 	
-	void fill(List<CertificacionTO> listCerts){
+	public void fill(List<CertificacionTO> listCerts){
 		Map<String,String> refMap = null
 		int nuseq = System.currentTimeMillis()/1000000;
 		
+		println 'SE LLAMA A FILL'
 		this.listaMapDato = new ArrayList<Map<String,String>>();
 		listCerts.each { x ->
 			
@@ -109,7 +111,7 @@ class FormatoSolicitudAutorizacionService {
 			//obtiene la institucion del puesto actual
 			InstitucionTO institucionPuestoActual = entidadFinancieraService.obtenerInstitucion(puestoActual.idInstitucion)
 			//obtiene el elemento sepomex del sustentante
-			SepomexTO sepomexSust = sepomexService.obtenerCodigoPostalDeIdSepomex(x.sustentante.idSepomex) 
+			SepomexTO sepomexSust = sepomexService.get(x.sustentante.idSepomex) 
 			//obtiene un telefono de casa y oficina
 			String telCasa = x.sustentante.telefonos.find{ it.tipoTelefonoSustentante.descripcion == "Casa" }
 			String telOficina = x.sustentante.telefonos.find{ it.tipoTelefonoSustentante.descripcion == "Oficina" }
@@ -143,16 +145,19 @@ class FormatoSolicitudAutorizacionService {
 			refMap.put(this.HEADER_NAL, x.sustentante.nacionalidad.descripcion)
 			refMap.put(this.HEADER_CALMIG, x.sustentante.calidadMigratoria)
 			refMap.put(this.HEADER_ULTGRAD, x.sustentante.nivelEstudios.descripcion)
-			
 			this.listaMapDato.add(refMap)
 		}
 	}
 	
-	void flush(){
+	public void flush(){
 		listaMapDato.clear()
 	}
 	
-	void renderAsXLSX(OutputStream os) throws IOException{
+	public void renderAsXLSX(OutputStream os) throws IOException{
+		
+		//imprimir 
+		println "llamando a render as xlsx"
+		//println (listaMapDato as JSON)
 		//aqui es donde va a renderear el excel
 		//Preparación de variables y referencias
 		ByteArrayOutputStream bout = new ByteArrayOutputStream();
@@ -165,8 +170,6 @@ class FormatoSolicitudAutorizacionService {
 		CellStyle csTitulo = null;
 		CellStyle csCabecera = null;
 		CellStyle csDato = null;
-		List<Map<String,String>> listaMapDato = new ArrayList<Map<String,String>>();
-		Map<String,Integer> mapHeadersIdx = new HashMap<String,Integer>();
 		Map<String,String> mapDato = null;
 		int totalAtributos = 0;
 		int i,j;
@@ -185,8 +188,8 @@ class FormatoSolicitudAutorizacionService {
 		csTitulo = wb.createCellStyle();
 		csTitulo.setFont(fuenteTitulo);
 		csCabecera = wb.createCellStyle();
+		csCabecera.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
 		csCabecera.setFillPattern((short) CellStyle.SOLID_FOREGROUND);
-		csCabecera.setFillBackgroundColor( IndexedColors.GREY_25_PERCENT.getIndex() );
 		csCabecera.setFont(fuenteDato);
 		csDato = wb.createCellStyle();
 		csDato.setFont(fuenteDato);
@@ -209,12 +212,15 @@ class FormatoSolicitudAutorizacionService {
 		//llena los datos recibidos en el fill
 		i = 3; //inicia a partir de la fila 3 (indice desde 0)
 		totalAtributos = mapHeadersIdx.size();
+		
+		println "aqui llego 1, con el listaMapDato cuyo tamanio es: " + listaMapDato.size()
 		for(Map<String,String> curMap : listaMapDato ){
 			row = s.createRow(i);
-			
+			println "leyendo una tupla"
 			Iterator<String> keySetIterator = curMap.keySet().iterator();
 			while(keySetIterator.hasNext()){
 				String curKey = keySetIterator.next();
+				println "leyendo map por tupla cuyo key es " + curKey
 				j = mapHeadersIdx.get(curKey);
 				cell = row.createCell(j);
 				cell.setCellValue(curMap.get(curKey));
@@ -222,10 +228,11 @@ class FormatoSolicitudAutorizacionService {
 			
 			i++;
 		}
+		println "aqui llego 2"
 		//escribe en el byteOutputArray
 		wb.write(bout);
-		bout.close();
-		
+		//bout.close();
+		println "aqui llego 3"
 		//escribe en el OutputStream que se paso como parametro
 		os.write( bout.toByteArray() );
 	}

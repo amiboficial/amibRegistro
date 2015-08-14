@@ -20,10 +20,18 @@
 		<div class="alert alert-danger" role="alert"><span class="glyphicon glyphicon-info-sign"></span> ${flash.errorMessage}</div>
 	</g:if>
 	
-	<fieldset>
-		<legend>Acciones</legend>
-		<button id="btnAltaOficio" type="button" class="btn btn-default btn-primary"><span class="glyphicon glyphicon-file"></span> Alta de oficio</button>
-	</fieldset>
+	<form id="frmApp" class="form-horizontal" role="form">
+		<div id="divOficioCnbvIndexView"></div>
+	</form>
+	
+	<g:render template="oficioCnbvIndex"/>
+	<g:javascript src="mx.amib.sistemas.registro.autorizacionCnbv.oficioCnbv.form.index.js" />
+	<script type="text/javascript">
+	
+		var app = app || {};
+		var mainView = new app.OficioCnbvIndexView({ resultVMCollection: new app.ResultVMCollection() });
+		
+	</script>
 	
 </body>
 </html>

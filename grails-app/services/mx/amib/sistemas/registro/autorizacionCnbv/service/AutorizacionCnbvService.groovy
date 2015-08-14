@@ -18,7 +18,8 @@ class AutorizacionCnbvService {
 		OficioCnbvTO modobj = oficioCnbvService.get(oficioCnbv.id)
 		
 		modobj.claveDga = oficioCnbv.claveDga
-		modobj.fechaInicioVigencia = oficioCnbv.fechaInicioVigencia
+		modobj.numeroOficio = oficioCnbv.numeroOficio
+		modobj.fechaOficio = oficioCnbv.fechaOficio
 		modobj.uuidDocumentoRespaldo = oficioCnbv.uuidDocumentoRespaldo
 		
 		return oficioCnbvService.update(modobj)

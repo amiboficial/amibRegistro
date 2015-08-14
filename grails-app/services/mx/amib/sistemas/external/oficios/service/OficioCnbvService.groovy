@@ -59,17 +59,21 @@ class OficioCnbvService {
 		return sr
 	}
 	
-	public SearchResult<OficioCnbvTO> findAllByMultipleIdCertificacionInAutorizados(Integer max, Integer offset, String sort, String order, List<Long> multipleIds){
+	public SearchResult<OficioCnbvTO> findAllByMultipleIdCertificacionInAutorizados(Integer max, Integer offset, String sort, String order, Collection<Long> multipleIds){
 		
 		SearchResult<OficioCnbvTO> sr = new SearchResult<OficioCnbvTO>()
 		def qs = "?max=${max}&offset=${offset}&sort=${sort}&order=${order}"
 		def rest = new RestBuilder()
+		
+		println "la lista es: " + (multipleIds as JSON)
+		println findAllByMultipleIdCertificacionInAutorizadosUrl + qs.toString()
+		
 		def resp = rest.post(findAllByMultipleIdCertificacionInAutorizadosUrl + qs.toString()){
 			contentType "application/json;charset=UTF-8"
 			json (multipleIds as JSON)
 		}
 		if(resp.json instanceof JSONObject && !JSONObject.NULL.equals(resp.json)){
-			sr = new SearchResult<OficioCnbvTO>(resp.json)
+			sr = new SearchResult<OficioCnbvTO>( this.fixSearchResultJsonObject(resp.json) )
 		}
 		return sr
 	}

@@ -86,7 +86,7 @@ environments {
 		mx.amib.sistemas.catalogos.resthttpURL = 'http://bimalatrop.no-ip.biz:8080/amibCatalogos-0.1/'
 		//mx.amib.sistemas.expediente.resthttpURL = 'http://localhost:8084/amibExpediente/'
 		mx.amib.sistemas.expediente.resthttpURL = 'http://bimalatrop.no-ip.biz:8080/amibExpediente-0.1/'
-		mx.amib.sistemas.oficios.resthttpURL = 'http://bimalatrop.no-ip.biz:8080/amibOficios-0.0.1-SNAPSHOT/'
+		mx.amib.sistemas.oficios.resthttpURL = 'http://bimalatrop.no-ip.biz:8080/amibOficios/'
 		mx.amib.sistemas.documentos.resthttpURL = 'http://bimalatrop.no-ip.biz:8080/amibDocumentos-0.1/'
     }
 	test {
@@ -95,7 +95,7 @@ environments {
 		mx.amib.sistemas.catalogos.resthttpURL = 'http://bimalatrop.no-ip.biz:8080/amibCatalogos-0.1/'
 		//mx.amib.sistemas.expediente.resthttpURL = 'http://localhost:8084/amibExpediente/'
 		mx.amib.sistemas.expediente.resthttpURL = 'http://bimalatrop.no-ip.biz:8080/amibExpediente-0.1/'
-		mx.amib.sistemas.oficios.resthttpURL = 'http://bimalatrop.no-ip.biz:8080/amibOficios-0.0.1-SNAPSHOT/'
+		mx.amib.sistemas.oficios.resthttpURL = 'http://bimalatrop.no-ip.biz:8080/amibOficios/'
 		mx.amib.sistemas.documentos.resthttpURL = 'http://bimalatrop.no-ip.biz:8080/amibDocumentos-0.1/'
 	}
     production {
@@ -103,7 +103,7 @@ environments {
         // TODO: grails.serverURL = "http://www.changeme.com"
 		mx.amib.sistemas.catalogos.resthttpURL = 'http://bimalatrop.no-ip.biz:8080/amibCatalogos-0.1/'
 		mx.amib.sistemas.expediente.resthttpURL = 'http://bimalatrop.no-ip.biz:8080/amibExpediente-0.1/'
-		mx.amib.sistemas.oficios.resthttpURL = 'http://bimalatrop.no-ip.biz:8080/amibOficios-0.0.1-SNAPSHOT/'
+		mx.amib.sistemas.oficios.resthttpURL = 'http://bimalatrop.no-ip.biz:8080/amibOficios/'
 		mx.amib.sistemas.documentos.resthttpURL = 'http://bimalatrop.no-ip.biz:8080/amibDocumentos-0.1/'
     }
 }

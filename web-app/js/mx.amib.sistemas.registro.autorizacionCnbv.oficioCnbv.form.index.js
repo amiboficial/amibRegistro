@@ -22,7 +22,7 @@ app.MESES = [
 app.DatosOficioTabVM = Backbone.Model.extend({
 	defaults: {
 		claveDga: "",
-		numeroOficio: -1,
+		numeroOficio: "",
 		fechaOficioAl_day: -1,
 		fechaOficioAl_month: -1,
 		fechaOficioAl_year: -1,
@@ -84,25 +84,25 @@ app.ResultVMCollection = Backbone.Collection.extend({
 	
 	/* CONSULTAS AJAX */
 	findAllByDatosOficio: function(options){
-		
+		alert('NOT YET IMPLEMENTED - findAllByDatosOficio');
 	},
 	findAllByNumeroMatricula: function(options){
-		
+		alert('NOT YET IMPLEMENTED - findAllByNumeroMatricula');
 	},
 	findAllByIdSustentante: function(options){
-		
+		alert('NOT YET IMPLEMENTED - findAllByIdSustentante');
 	},
 	findAllByNombreApellidos: function(options){
-		
+		alert('NOT YET IMPLEMENTED - findAllByNombreApellidos');
 	},
 	findAll: function(options){
-	
+		alert('NOT YET IMPLEMENTED - findAll');
 	},
 	sortAndOrderBy: function(order, sort){
-	
+		alert('NOT YET IMPLEMENTED - sortAndOrderBy');
 	},
 	goToPage: function(pagenum){
-	
+		alert('NOT YET IMPLEMENTED - goToPage');
 	},
 	_getResult: function(result){
 		return elemento;
@@ -226,6 +226,17 @@ app.DatosOficioTabView = Backbone.View.extend({
 	
 	limpiar: function(e){
 		e.preventDefault();
+		this._clearModel();
+	},
+	findByDatosOficio: function(e){
+		e.preventDefault();
+		
+		if(this._validate()){
+			this.collection.findAllByDatosOficio();
+		}
+	},
+	
+	_clearModel: function(){
 		this.model.set('claveDga','');
 		this.model.set('numeroOficio','');
 		this.model.set('fechaOficioAl_day',-1);
@@ -235,9 +246,43 @@ app.DatosOficioTabView = Backbone.View.extend({
 		this.model.set('fechaOficioDel_month',-1);
 		this.model.set('fechaOficioDel_year',-1);
 	},
-	findByDatosOficio: function(e){
-		e.preventDefault();
-		alert('NOT YET IMPLEMENTED');
+	_clearError: function(){
+		this.model.set('errorNumeroMatricula',false);
+		this.model.set('errorIdSustentante',false);
+		this.model.set('errorNombres',false);
+	},
+	_validate: function(){
+		var numericRegEx = /^[0-9]{1,10}$/;
+		var valid = true;
+		
+		this._clearError();
+		
+		var claveDgaVacio = (this.model.get('claveDga') == '')
+		var numeroOficioVacio = (this.model.get('numeroOficio') == '')
+		var fechaDelVacia = (this.model.get('fechaOficioDel_day') == -1 && this.model.get('fechaOficioDel_month') == -1 && this.model.get('fechaOficioDel_year') == -1);
+		var fechaAlVacia = (this.model.get('fechaOficioAl_day') == -1 && this.model.get('fechaOficioAl_month') == -1 && this.model.get('fechaOficioAl_year') == -1);
+		var fechaDelOk = (this.model.get('fechaOficioDel_day') != -1 && this.model.get('fechaOficioDel_month') != -1 && this.model.get('fechaOficioDel_year') != -1);
+		var fechaAlOk = (this.model.get('fechaOficioAl_day') != -1 && this.model.get('fechaOficioAl_month') != -1 && this.model.get('fechaOficioAl_year') != -1);
+		var todoVacio = (claveDgaVacio && numeroOficioVacio && fechaDelVacia && fechaAlVacia)
+		
+		if(!todoVacio){
+			if(!numeroOficioVacio){
+				if( numericRegEx.test( this.model.get('numeroOficio') ) != true ){
+					this.model.set('errorNumeroOficio',true);
+					valid = false;
+				}
+			}
+			if(!fechaDelVacia && !fechaDelOk){
+				this.model.set('errorFechaOficioDel',true);
+				valid = false;
+			}
+			if(!fechaAlOk && !fechaAlOk){
+				this.model.set('errorFechaOficioAl',true);
+				valid = false;
+			}
+		}
+		
+		return valid;
 	}
 	
 });
@@ -257,6 +302,10 @@ app.DatosSustTabView = Backbone.View.extend({
 		
 		//binding del modelo a la vista
 		this.listenTo( this.model, 'change', this.onChangeModel );
+		
+		this.listenTo( this.model, 'change:errorNumeroMatricula', this.renderError );
+		this.listenTo( this.model, 'change:errorIdSustentante', this.renderError );
+		this.listenTo( this.model, 'change:errorNombres', this.renderError );
 	},
 	render: function(){
 		this.$el.html( this.template( this.model.toJSON() ) );
@@ -293,6 +342,7 @@ app.DatosSustTabView = Backbone.View.extend({
 	renderOpcionSeleccionada: function(){
 		console.log('paso por renderOpcionSeleccionada');
 		var valOpcion = this.model.get("opcionSeleccionada");
+				
 		this.$('.opcionSeleccionada[value="' + valOpcion + '"]').prop('checked',true);
 		if(valOpcion == app.EXP_OFA_DST_MATRICULA){
 			this.$('.numeroMatricula').prop('disabled',false);
@@ -362,32 +412,83 @@ app.DatosSustTabView = Backbone.View.extend({
 		
 		if(fieldName == 'opcionSeleccionada'){
 			this.model.set(fieldName,fieldValue);
+			this._clearModel();
+			this._clearError();
 		}
 		else{
 			this.model.set(fieldName,fieldValue,{silent:true});
 		}
-		
-		
-		console.log("Se actualizo modelo en el atributo: " + fieldName + ":" + fieldValue);
 	},
 	limpiar: function(e){
 		e.preventDefault();
 		
-		//this.model.set('opcionSeleccionada',app.EXP_OFA_DST_MATRICULA);
+		this._clearModel();
+		this._clearError();
+	},
+	findByDatosSust: function(e){
+		e.preventDefault();
+		
+		if(this._validate()){
+			var valOpcion = this.model.get("opcionSeleccionada");
+			if(valOpcion == app.EXP_OFA_DST_MATRICULA){
+				this.collection.findAllByNumeroMatricula();
+			}
+			else if(valOpcion == app.EXP_OFA_DST_IDSUSTENTANTE){
+				this.collection.findAllByIdSustentante();
+			}
+			else if(valOpcion == app.EXP_OFA_DST_NOMBRES){
+				this.collection.findAllByNombreApellidos();
+			}
+		}
+		
+	},
+	
+	_clearModel: function(){
 		this.model.set('numeroMatricula',"");
 		this.model.set('idSustentante',"");
 		this.model.set('nombre',"");
 		this.model.set('primerApellido',"");
 		this.model.set('segundoApellido',"");
-		
+	},
+	
+	_clearError: function(){
 		this.model.set('errorNumeroMatricula',false);
 		this.model.set('errorIdSustentante',false);
 		this.model.set('errorNombres',false);
-		
 	},
-	findByDatosSust: function(e){
-		e.preventDefault();
-		alert('NOT YET IMPLEMENTED');
+	
+	_validate: function(){
+		var numericRegEx = /^[0-9]{1,10}$/;
+		
+		var valOpcion = this.model.get("opcionSeleccionada");
+		var valid = true;
+		
+		this._clearError();
+		
+		if(valOpcion == app.EXP_OFA_DST_MATRICULA){
+			if( numericRegEx.test( this.model.get('numeroMatricula') ) != true ){
+				this.model.set('errorNumeroMatricula',true);
+				valid = false;
+			}
+		}
+		else if(valOpcion == app.EXP_OFA_DST_IDSUSTENTANTE){
+			if( numericRegEx.test( this.model.get('idSustentante') ) != true ){
+				this.model.set('errorIdSustentante',true);
+				valid = false;
+			}
+		}
+		else if(valOpcion == app.EXP_OFA_DST_NOMBRES){
+			//valida que al menos uno de los 3 este completado
+			if( this.model.get('nombre') == '' && 
+				this.model.get('primerApellido') == '' && 
+				this.model.get('segundoApellido') == ''){
+				
+				this.model.set('errorNombres',true);
+				valid = false;
+			}
+		}
+		
+		return valid;
 	}
 	
 });

@@ -44,7 +44,7 @@
 			<g:message code="oficioCnbv.numeroOficio.label" default="Número de oficio" />
 		</label>
 		<div class="col-md-9 col-sm-9">
-			<input type="text" class="field form-control" maxlength="10" data-field="numeroOficio"/>
+			<input type="text" class="numeroOficio field form-control" maxlength="10" data-field="numeroOficio"/>
 		</div>
 	</div>
 	
@@ -53,7 +53,7 @@
 			<g:message code="oficioCnbv.claveDga.label" default="Clave DGA" />
 		</label>
 		<div class="col-md-9 col-sm-9">
-			<input type="text" class="field form-control" maxlength="16" data-field="claveDga"/>
+			<input type="text" class="claveDga field form-control" maxlength="16" data-field="claveDga"/>
 		</div>
 	</div>
 	
@@ -161,4 +161,74 @@
 
 <script type="text/template" id="oficioCnbvIndexDatosSustTemplate">
 
+	<div class="div-opcionSeleccionada form-group">
+		<label class="col-md-2 col-sm-3 control-label">
+			<g:message code="oficioCnbv.opcionSeleccionada.label" default="Criterio de búsqueda" />
+		</label>
+		<div class="col-md-9 col-sm-9">
+			<input type="radio" class="opcionSeleccionada field" name="opcionSeleccionada" data-field="opcionSeleccionada" value="0" checked>&nbsp;Matrícula&nbsp;&nbsp;
+			<input type="radio" class="opcionSeleccionada field" name="opcionSeleccionada" data-field="opcionSeleccionada" value="1" >&nbsp;Folio&nbsp;&nbsp;
+			<input type="radio" class="opcionSeleccionada field" name="opcionSeleccionada" data-field="opcionSeleccionada" value="2" >&nbsp;Nombre y/o apellido(s)
+		</div>
+	</div>
+
+	<div class="div-numeroMatricula form-group">
+		<label class="col-md-2 col-sm-3 control-label">
+			<g:message code="oficioCnbv.numeroMatricula.label" default="Matrícula" />
+		</label>
+		<div class="col-md-9 col-sm-9">
+			<input type="text" class="numeroMatricula field form-control" maxlength="10" data-field="numeroMatricula"/>
+		</div>
+	</div>
+	
+	<div class="div-idSustentante form-group">
+		<label class="col-md-2 col-sm-3 control-label">
+			<g:message code="oficioCnbv.idSustentante.label" default="Folio" />
+		</label>
+		<div class="col-md-9 col-sm-9">
+			<input type="text" class="idSustentante field form-control" maxlength="10" data-field="idSustentante"/>
+		</div>
+	</div>
+	
+	<div class="div-nombre form-group">
+		<label class="col-md-2 col-sm-3 control-label">
+			<g:message code="oficioCnbv.nombre.label" default="Nombre(s)" />
+		</label>
+		<div class="col-md-9 col-sm-9">
+			<input type="text" class="nombre field form-control" maxlength="100" data-field="nombre"/>
+		</div>
+	</div>
+	
+	<div class="div-primerApellido form-group">
+		<label class="col-md-2 col-sm-3 control-label">
+			<g:message code="oficioCnbv.primerApellido.label" default="Primer apellido" />
+		</label>
+		<div class="col-md-9 col-sm-9">
+			<input type="text" class="primerApellido field form-control" maxlength="100" data-field="primerApellido"/>
+		</div>
+	</div>
+	
+	<div class="div-segundoApellido form-group">
+		<label class="col-md-2 col-sm-3 control-label">
+			<g:message code="oficioCnbv.segundoApellido.label" default="Segundo apellido" />
+		</label>
+		<div class="col-md-9 col-sm-9">
+			<input type="text" class="segundoApellido field form-control" maxlength="100" data-field="segundoApellido"/>
+		</div>
+	</div>
+	
+	<br/>
+	<div class="form-group">
+		<div class="col-md-3 col-sm-3">
+			&nbsp;
+		</div>
+		<div class="col-md-6 col-sm-6" style="text-align: center">
+			<button type="button" class="clean btn btn-default btn-primary">Limpiar campos</button>
+			<button type="button" class="find btn btn-default btn-primary"><span class="glyphicon glyphicon-search"></span> Realizar búsqueda</button>
+		</div>
+		<div class="col-md-3 col-sm-3">
+			&nbsp;
+		</div>
+	</div>
+	
 </script>

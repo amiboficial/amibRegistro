@@ -81,6 +81,15 @@ app.ResultVMCollection = Backbone.Collection.extend({
 	_lastAttributes: {},
 	
 	_fetching: false,
+	_error: false,
+	
+	/* OBTIENE EL STATUS SI ES QUE ESTA "TRAYENDO DATOS" */
+	isFetching: function(){
+		return this._fetching;
+	},
+	hasError: function(){
+		return this._error;
+	},
 	
 	/* CONSULTAS AJAX */
 	findAllByDatosOficio: function(options){
@@ -143,6 +152,9 @@ app.DatosOficioTabView = Backbone.View.extend({
 		
 		//binding del modelo a la vista
 		this.listenTo( this.model, 'change', this.change );
+		this.listenTo( this.model, 'change:errorNumeroOficio', this.renderError );
+		this.listenTo( this.model, 'change:errorFechaOficioAl', this.renderError );
+		this.listenTo( this.model, 'change:errorFechaOficioDel', this.renderError );
 	},
 	
 	render: function(){
@@ -227,6 +239,7 @@ app.DatosOficioTabView = Backbone.View.extend({
 	limpiar: function(e){
 		e.preventDefault();
 		this._clearModel();
+		this._clearError();
 	},
 	findByDatosOficio: function(e){
 		e.preventDefault();
@@ -247,9 +260,9 @@ app.DatosOficioTabView = Backbone.View.extend({
 		this.model.set('fechaOficioDel_year',-1);
 	},
 	_clearError: function(){
-		this.model.set('errorNumeroMatricula',false);
-		this.model.set('errorIdSustentante',false);
-		this.model.set('errorNombres',false);
+		this.model.set('errorNumeroOficio',false);
+		this.model.set('errorFechaOficioAl',false);
+		this.model.set('errorFechaOficioDel',false);
 	},
 	_validate: function(){
 		var numericRegEx = /^[0-9]{1,10}$/;
@@ -266,20 +279,24 @@ app.DatosOficioTabView = Backbone.View.extend({
 		var todoVacio = (claveDgaVacio && numeroOficioVacio && fechaDelVacia && fechaAlVacia)
 		
 		if(!todoVacio){
+			
 			if(!numeroOficioVacio){
 				if( numericRegEx.test( this.model.get('numeroOficio') ) != true ){
 					this.model.set('errorNumeroOficio',true);
 					valid = false;
 				}
 			}
+			
+			if(!fechaAlVacia && !fechaAlOk){
+				this.model.set('errorFechaOficioAl',true);
+				valid = false;
+			}
+			
 			if(!fechaDelVacia && !fechaDelOk){
 				this.model.set('errorFechaOficioDel',true);
 				valid = false;
 			}
-			if(!fechaAlOk && !fechaAlOk){
-				this.model.set('errorFechaOficioAl',true);
-				valid = false;
-			}
+			
 		}
 		
 		return valid;
@@ -493,6 +510,127 @@ app.DatosSustTabView = Backbone.View.extend({
 	
 });
 
+app.OficioCnbvResultsView = Backbone.View.extend({
+	parentView: {},
+	tagname: 'div',
+	template: _.template( $('#oficioCnbvResultsTemplate').html() ),
+	
+	initialize: function(options){
+		this.collection = options.collection;
+		this.parentView = options.parentView;
+		
+		this.listenTo( this.collection, 'reset', this.renderList );
+		
+		this.listenTo( this.collection, 'processingStarted', this.renderStateChange );
+		this.listenTo( this.collection, 'processingError', this.renderStateChange );
+		this.listenTo( this.collection, 'processingStopped', this.renderStateChange );
+	},
+	render: function(){
+		this.$el.html( this.template() );
+		//this.renderList();
+		this.renderStateChange();
+		return this;
+	},
+	renderList: function(){
+		this.$(".list-items").html("");
+		this.collection.each( function(item){
+			this.renderElement(item);
+		},this );
+		this.renderPagination();
+	},
+	renderElement: function(item){
+		var view = this;
+		var elementView =  new app.ResultView({model:item,parentView:view});
+		elementView.viewModel = this.viewModel;
+		this.$(".list-items").append( elementView.render().el );
+		return this;
+	},
+	renderStateChange: function(){
+		if(this.collection.isFetching() == false){
+			this.$('.procMessage').hide();
+			this.enableInput();
+		}
+		else{
+			this.$('.procMessage').show();
+			this.disableInput();
+		}
+		if(this.collection.hasError() == false){
+			this.$('.errorMessage').hide();
+		}
+		else{
+			this.$('.errorMessage').show();
+		}
+	},
+	renderPagination: function(){
+		var paginationStr = "";
+		var totalPages = this.collection.getTotalPages();
+		var currentPage = this.collection.getCurrentPage();
+		
+		if(currentPage == 1){
+			paginationStr += '<li class="disabled"><a href="javascript:void(0);">&lt;</a></li>'
+		}
+		else{
+			paginationStr += '<li class="page handCursor" data-page="' + (currentPage-1) + '"><a href="javascript:void(0);">&lt;</a></li>'
+		}
+		
+		for(var i=1; i<=totalPages; i++){
+			if(i == currentPage){
+				paginationStr += '<li class="active"><a href="javascript:void(0);">' + i + '</a></li>';
+			}
+			else{
+				paginationStr += '<li class="page handCursor" data-page="' + i + '"><a href="javascript:void(0);">' + i + '</a></li>';
+			}
+		}
+		
+		if(currentPage == totalPages || totalPages == 0){
+			paginationStr += '<li class="disabled"><a href="javascript:void(0);">&gt;</a></li>'
+		}
+		else{
+			paginationStr += '<li class="page handCursor" data-page="' + (currentPage+1) + '"><a href="javascript:void(0);">&gt;</a></li>'
+		}
+		
+		
+		this.$(".pagination").html("");
+		this.$(".pagination").html(paginationStr);
+	},
+	enableInput: function(){
+		this.$("input").prop('disabled',false);
+		this.$("button").prop('disabled',false);
+		this.$("select").prop('disabled',false);
+	},
+	disableInput: function(){
+		this.$("input").prop('disabled',true);
+		this.$("button").prop('disabled',true);
+		this.$("select").prop('disabled',true);
+	},
+	
+	events: {
+		'click .sort': 'mandarOrdenar',
+		'click .page': 'mandarAPagina'
+	},
+	
+	mandarOrdenar: function(e){
+		var order = this.$(e.currentTarget).data("order");
+		var sort = this.$(e.currentTarget).data("sort");
+		
+		e.preventDefault();
+		//si no se esta procesando nada en la colección
+		if(!this.collection.isFetching()){
+			this.collection.sortAndOrderBy(order,sort);
+		}
+	},
+	mandarAPagina: function(e){
+		var pagina = this.$(e.currentTarget).data("page");
+
+		e.preventDefault();
+		//si no se esta procesando nada en la colección
+		if(!this.collection.isFetching()){
+			this.collection.goToPage(pagina);
+		}
+	}
+	
+});
+
 app.OficioCnbvIndexView = Backbone.View.extend({
 	el: '#divOficioCnbvIndexView',
 	template: _.template( $('#oficioCnbvIndexTemplate').html() ),
@@ -508,6 +646,7 @@ app.OficioCnbvIndexView = Backbone.View.extend({
 		this.$el.html( this.template() );
 		this.renderDatosOficioTabView();
 		this.renderDatosSustTabView();
+		this.renderResultView();
 		return this;
 	},
 	renderDatosOficioTabView: function(){
@@ -531,5 +670,17 @@ app.OficioCnbvIndexView = Backbone.View.extend({
 		this.$(".tab-pane-sustentante").append( view.render().el );
 		
 		return view;
+	},
+	renderResultView: function(){
+		var parentView = this;
+		var collection = this.options.resultVMCollection;
+		
+		var view = new app.OficioCnbvResultsView({ collection:collection, parentView:parentView });
+
+		this.$(".div-resultados").html("");
+		this.$(".div-resultados").append( view.render().el );
+		
+		return view;
 	}
 });
+

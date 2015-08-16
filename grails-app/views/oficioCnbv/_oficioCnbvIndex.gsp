@@ -204,7 +204,7 @@
 			<g:message code="oficioCnbv.primerApellido.label" default="Primer apellido" />
 		</label>
 		<div class="col-md-9 col-sm-9">
-			<input type="text" class="primerApellido field form-control" maxlength="100" data-field="primerApellido"/>
+			<input type="text" class="primerApellido field form-control" maxlength="80" data-field="primerApellido"/>
 		</div>
 	</div>
 	
@@ -213,7 +213,7 @@
 			<g:message code="oficioCnbv.segundoApellido.label" default="Segundo apellido" />
 		</label>
 		<div class="col-md-9 col-sm-9">
-			<input type="text" class="segundoApellido field form-control" maxlength="100" data-field="segundoApellido"/>
+			<input type="text" class="segundoApellido field form-control" maxlength="80" data-field="segundoApellido"/>
 		</div>
 	</div>
 	
@@ -231,4 +231,48 @@
 		</div>
 	</div>
 	
+</script>
+
+<script type="text/template" id="oficioCnbvResultsTemplate">
+	<fieldset>
+		<legend>Resultados de búsqueda</legend>
+		
+		<div class="procMessage alert alert-info"><asset:image src="spinner_alert_info.gif"/>&nbsp; Procesando datos, espere unos instantes...</div>
+		<div class="errorMessage alert alert-danger"><span class="glyphicon glyphicon-info-sign"></span> Ha ocurrido un error un la petición, intente mas tarde.</div>
+		
+		<div class="content scaffold-list" role="main">
+			<table class="table">
+				<thead>
+					<tr>
+						<th>
+						Clave DGA
+							<button type="button" class="sort btn btn-default btn-xxs" data-sort="claveDga" data-order="asc"><span class="glyphicon glyphicon-chevron-up"></span></button>
+							<button type="button" class="sort btn btn-default btn-xxs" data-sort="claveDga" data-order="desc"><span class="glyphicon glyphicon-chevron-down"></span></button>
+						</th>
+						<th>
+						N. Oficio
+							<button type="button" class="sort btn btn-default btn-xxs" data-sort="numeroOficio" data-order="asc"><span class="glyphicon glyphicon-chevron-up"></span></button>
+							<button type="button" class="sort btn btn-default btn-xxs" data-sort="numeroOficio" data-order="desc"><span class="glyphicon glyphicon-chevron-down"></span></button>
+						</th>
+						<th>
+						Fecha Oficio
+							<button type="button" class="sort btn btn-default btn-xxs" data-sort="fechaOficio" data-order="asc"><span class="glyphicon glyphicon-chevron-up"></span></button>
+							<button type="button" class="sort btn btn-default btn-xxs" data-sort="fechaOficio" data-order="desc"><span class="glyphicon glyphicon-chevron-down"></span></button>
+						</th>
+						<th>
+						Autorizados
+						</th>
+						<th>...</th>
+					</tr>
+				</thead>
+				
+				<tbody class="list-items"></tbody>
+			
+			</table>
+			
+			<ul class="pagination pagination-sm"></ul>
+			
+		</div>
+		
+	</fieldset>
 </script>

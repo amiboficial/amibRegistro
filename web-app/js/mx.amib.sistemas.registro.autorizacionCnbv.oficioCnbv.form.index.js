@@ -4,6 +4,10 @@ app.EXP_OFA_DST_MATRICULA = 0;
 app.EXP_OFA_DST_IDSUSTENTANTE = 1;
 app.EXP_OFA_DST_NOMBRES = 2;
 
+app.EXP_OFA_DST_NUMOFICIO = 0;
+app.EXP_OFA_DST_CLAVEDGA = 1;
+app.EXP_OFA_DST_FCOFICIO = 2;
+
 app.MESES = [
 	{ id: 1, nombre: "enero" },
 	{ id: 2, nombre: "febrero" },
@@ -21,6 +25,9 @@ app.MESES = [
 
 app.DatosOficioTabVM = Backbone.Model.extend({
 	defaults: {
+	
+		opcionSeleccionada: app.EXP_OFA_DST_NUMOFICIO,
+	
 		claveDga: "",
 		numeroOficio: "",
 		fechaOficioAl_day: -1,
@@ -31,6 +38,7 @@ app.DatosOficioTabVM = Backbone.Model.extend({
 		fechaOficioDel_year: -1,
 		
 		errorNumeroOficio: false,
+		errorClaveDga: false,
 		errorFechaOficioAl: false,
 		errorFechaOficioDel: false,
 		
@@ -59,7 +67,7 @@ app.DatosSustTabVM = Backbone.Model.extend({
 	}
 });
 
-app.ResultVM = Backbone.Model.extend({
+app.OficioCnbvResultVM = Backbone.Model.extend({
 	defaults: { 
 		grailsId: -1,
 		numeroOficio: -1,
@@ -68,8 +76,8 @@ app.ResultVM = Backbone.Model.extend({
 	}
 });
 
-app.ResultVMCollection = Backbone.Collection.extend({ 
-	model: app.ResultVM,
+app.OficioCnbvResultVMCollection = Backbone.Collection.extend({ 
+	model: app.OficioCnbvResultVM,
 	
 	_count: 0,
 	_max: 10,
@@ -92,8 +100,18 @@ app.ResultVMCollection = Backbone.Collection.extend({
 	},
 	
 	/* CONSULTAS AJAX */
-	findAllByDatosOficio: function(options){
+	/*findAllByDatosOficio: function(options){
 		alert('NOT YET IMPLEMENTED - findAllByDatosOficio');
+	},*/
+	
+	findAllByNumeroOficio: function(){
+		alert('NOT YET IMPLEMENTED - findAllByNumeroOficio');
+	},
+	findAllByClaveDga: function(){
+		alert('NOT YET IMPLEMENTED - findAllByClaveDga');
+	},
+	findAllByFechaOficio: function(){
+		alert('NOT YET IMPLEMENTED - findAllByFechaOficio');
 	},
 	findAllByNumeroMatricula: function(options){
 		alert('NOT YET IMPLEMENTED - findAllByNumeroMatricula');
@@ -151,14 +169,16 @@ app.DatosOficioTabView = Backbone.View.extend({
 		this.render();
 		
 		//binding del modelo a la vista
-		this.listenTo( this.model, 'change', this.change );
+		this.listenTo( this.model, 'change', this.onChangeModel );
 		this.listenTo( this.model, 'change:errorNumeroOficio', this.renderError );
+		this.listenTo( this.model, 'change:errorClaveDga', this.renderError );
 		this.listenTo( this.model, 'change:errorFechaOficioAl', this.renderError );
 		this.listenTo( this.model, 'change:errorFechaOficioDel', this.renderError );
 	},
 	
 	render: function(){
 		this.$el.html( this.template( this.model.toJSON() ) );
+		this.renderOpcionSeleccionada();
 		this.renderError();
 		return this;
 	},
@@ -169,6 +189,12 @@ app.DatosOficioTabView = Backbone.View.extend({
 		}
 		else{
 			this.$('.div-numeroOficio').removeClass('has-error');
+		}
+		if( this.model.get('errorClaveDga') == true ){
+			this.$('.div-claveDga').addClass('has-error');
+		}
+		else{
+			this.$('.div-claveDga').removeClass('has-error');
 		}
 		//renderea error en caso que la fecha de inicio (al) este mal
 		if( this.model.get('errorFechaOficioAl') == true ){
@@ -185,6 +211,49 @@ app.DatosOficioTabView = Backbone.View.extend({
 			this.$('.div-fechaOficioDel').removeClass('has-error');
 		}
 	},
+	renderOpcionSeleccionada: function(){
+		console.log('paso por renderOpcionSeleccionada');
+		var valOpcion = this.model.get("opcionSeleccionada");
+				
+		this.$('.opcionSeleccionada[value="' + valOpcion + '"]').prop('checked',true);
+		if(valOpcion == app.EXP_OFA_DST_NUMOFICIO){
+			this.$('.numeroOficio').prop('disabled',false);
+			
+			this.$('.claveDga').prop('disabled',true);
+			
+			this.$('.fechaOficioAl_day').prop('disabled',true);
+			this.$('.fechaOficioAl_month').prop('disabled',true);
+			this.$('.fechaOficioAl_year').prop('disabled',true);
+			this.$('.fechaOficioDel_day').prop('disabled',true);
+			this.$('.fechaOficioDel_month').prop('disabled',true);
+			this.$('.fechaOficioDel_year').prop('disabled',true);
+			
+		}
+		else if(valOpcion == app.EXP_OFA_DST_CLAVEDGA){
+			this.$('.numeroOficio').prop('disabled',true);
+			
+			this.$('.claveDga').prop('disabled',false);
+			
+			this.$('.fechaOficioAl_day').prop('disabled',true);
+			this.$('.fechaOficioAl_month').prop('disabled',true);
+			this.$('.fechaOficioAl_year').prop('disabled',true);
+			this.$('.fechaOficioDel_day').prop('disabled',true);
+			this.$('.fechaOficioDel_month').prop('disabled',true);
+			this.$('.fechaOficioDel_year').prop('disabled',true);
+		}
+		else if(valOpcion == app.EXP_OFA_DST_FCOFICIO){
+			this.$('.numeroOficio').prop('disabled',true);
+			
+			this.$('.claveDga').prop('disabled',true);
+			
+			this.$('.fechaOficioAl_day').prop('disabled',false);
+			this.$('.fechaOficioAl_month').prop('disabled',false);
+			this.$('.fechaOficioAl_year').prop('disabled',false);
+			this.$('.fechaOficioDel_day').prop('disabled',false);
+			this.$('.fechaOficioDel_month').prop('disabled',false);
+			this.$('.fechaOficioDel_year').prop('disabled',false);
+		}
+	},
 	enableInput: function(){
 		this.$("input").prop('disabled',false);
 		this.$("button").prop('disabled',false);
@@ -193,7 +262,10 @@ app.DatosOficioTabView = Backbone.View.extend({
 		this.$("input").prop('disabled',true);
 		this.$("button").prop('disabled',true);
 	},
-	change: function(item){
+	onChangeModel: function(item){
+		if(item.changed.hasOwnProperty('opcionSeleccionada')){
+			this.renderOpcionSeleccionada();
+		}
 		if(item.changed.hasOwnProperty('claveDga')){
 			this.$('.claveDga').val( this.model.get("claveDga") );
 		}
@@ -231,7 +303,14 @@ app.DatosOficioTabView = Backbone.View.extend({
 		var fieldName = this.$(ev.currentTarget).data("field");
 		var fieldValue = this.$(ev.currentTarget).val().trim();
 		
-		this.model.set(fieldName,fieldValue,{silent:true});
+		if(fieldName == 'opcionSeleccionada'){
+			this.model.set(fieldName,fieldValue);
+			this._clearModel();
+			this._clearError();
+		}
+		else{
+			this.model.set(fieldName,fieldValue,{silent:true});
+		}
 		
 		console.log("Se actualizo modelo en el atributo: " + fieldName + ":" + fieldValue);
 	},
@@ -245,7 +324,19 @@ app.DatosOficioTabView = Backbone.View.extend({
 		e.preventDefault();
 		
 		if(this._validate()){
-			this.collection.findAllByDatosOficio();
+		
+			var valOpcion = this.model.get("opcionSeleccionada");
+		
+			if(valOpcion == app.EXP_OFA_DST_NUMOFICIO){
+				this.collection.findAllByNumeroOficio();
+			}
+			else if(valOpcion == app.EXP_OFA_DST_CLAVEDGA){
+				this.collection.findAllByClaveDga();
+			}
+			else if(valOpcion == app.EXP_OFA_DST_FCOFICIO){
+				this.collection.findAllByFechaOficio();
+			}
+		
 		}
 	},
 	
@@ -261,11 +352,13 @@ app.DatosOficioTabView = Backbone.View.extend({
 	},
 	_clearError: function(){
 		this.model.set('errorNumeroOficio',false);
+		this.model.set('errorClaveDga',false);
 		this.model.set('errorFechaOficioAl',false);
 		this.model.set('errorFechaOficioDel',false);
 	},
 	_validate: function(){
 		var numericRegEx = /^[0-9]{1,10}$/;
+		var valOpcion = this.model.get("opcionSeleccionada");
 		var valid = true;
 		
 		this._clearError();
@@ -278,25 +371,29 @@ app.DatosOficioTabView = Backbone.View.extend({
 		var fechaAlOk = (this.model.get('fechaOficioAl_day') != -1 && this.model.get('fechaOficioAl_month') != -1 && this.model.get('fechaOficioAl_year') != -1);
 		var todoVacio = (claveDgaVacio && numeroOficioVacio && fechaDelVacia && fechaAlVacia)
 		
-		if(!todoVacio){
-			
-			if(!numeroOficioVacio){
-				if( numericRegEx.test( this.model.get('numeroOficio') ) != true ){
-					this.model.set('errorNumeroOficio',true);
-					valid = false;
-				}
+		if(valOpcion == app.EXP_OFA_DST_NUMOFICIO){
+			if( numericRegEx.test( this.model.get('numeroOficio') ) != true ){
+				this.model.set('errorNumeroOficio',true);
+				valid = false;
 			}
-			
-			if(!fechaAlVacia && !fechaAlOk){
+		}
+		else if(valOpcion == app.EXP_OFA_DST_CLAVEDGA){
+			if( claveDgaVacio ){
+				this.model.set('errorClaveDga',true);
+				valid = false;
+			}
+		}
+		else if(valOpcion == app.EXP_OFA_DST_FCOFICIO){
+			//valida que al menos uno de los 3 este completado
+			if(fechaAlVacia || !fechaAlOk){
 				this.model.set('errorFechaOficioAl',true);
 				valid = false;
 			}
 			
-			if(!fechaDelVacia && !fechaDelOk){
+			if(fechaDelVacia || !fechaDelOk){
 				this.model.set('errorFechaOficioDel',true);
 				valid = false;
 			}
-			
 		}
 		
 		return valid;
@@ -527,7 +624,7 @@ app.OficioCnbvResultsView = Backbone.View.extend({
 	},
 	render: function(){
 		this.$el.html( this.template() );
-		//this.renderList();
+		this.renderList();
 		this.renderStateChange();
 		return this;
 	},

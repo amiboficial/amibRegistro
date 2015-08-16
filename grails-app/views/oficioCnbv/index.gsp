@@ -29,7 +29,7 @@
 	<script type="text/javascript">
 	
 		var app = app || {};
-		var mainView = new app.OficioCnbvIndexView({ resultVMCollection: new app.ResultVMCollection() });
+		var mainView = new app.OficioCnbvIndexView({ resultVMCollection: new app.OficioCnbvResultVMCollection() });
 		
 	</script>
 	

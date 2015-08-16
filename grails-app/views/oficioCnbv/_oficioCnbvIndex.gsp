@@ -39,6 +39,17 @@
 
 <script type="text/template" id="oficioCnbvIndexDatosOficioTemplate">
 
+	<div class="div-opcionSeleccionada form-group">
+		<label class="col-md-2 col-sm-3 control-label">
+			<g:message code="oficioCnbv.opcionSeleccionada.label" default="Criterio de búsqueda" />
+		</label>
+		<div class="col-md-9 col-sm-9">
+			<input type="radio" class="opcionSeleccionada field" name="opcionSeleccionadaDO" data-field="opcionSeleccionada" value="0" checked>&nbsp;Número de oficio&nbsp;&nbsp;
+			<input type="radio" class="opcionSeleccionada field" name="opcionSeleccionadaDO" data-field="opcionSeleccionada" value="1" >&nbsp;Clave DGA&nbsp;&nbsp;
+			<input type="radio" class="opcionSeleccionada field" name="opcionSeleccionadaDO" data-field="opcionSeleccionada" value="2" >&nbsp;Fecha de oficio
+		</div>
+	</div>
+
 	<div class="div-numeroOficio form-group">
 		<label class="col-md-2 col-sm-3 control-label">
 			<g:message code="oficioCnbv.numeroOficio.label" default="Número de oficio" />

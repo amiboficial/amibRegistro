@@ -8,6 +8,11 @@ app.EXP_OFA_DST_NUMOFICIO = 0;
 app.EXP_OFA_DST_CLAVEDGA = 1;
 app.EXP_OFA_DST_FCOFICIO = 2;
 
+app.EXP_OFA_DEFAULT_MAX = 10;
+app.EXP_OFA_DEFAULT_OFFSET = 0;
+app.EXP_OFA_DEFAULT_SORT = 'id';
+app.EXP_OFA_DEFAULT_ORDER = 'asc';
+
 app.EXP_OFA_ERR_MSG = "Ha ocurrido un error un la petición, intente mas tarde.";
 app.EXP_OFA_ERR_MAX_SUSTENTANTE_RESULTS_MSG = "No es posible realizar la búsqueda. Sea más específico al introducir el nombre y/o apellidos del sustentante.";
 
@@ -143,10 +148,10 @@ app.OficioCnbvResultVMCollection = Backbone.Collection.extend({
 		var _this = this;
 	
 		this._count = 0;
-		this._max = 10;
+		this._max = 1;
 		this._offset = 0;
-		this._sort = "id";
-		this._order = "";
+		this._sort = 'id';
+		this._order = 'asc';
 	
 		this._query = 'findAllByNumeroOficio';
 		this._lastAttributes = { numeroOficio: options.numeroOficio }
@@ -161,9 +166,9 @@ app.OficioCnbvResultVMCollection = Backbone.Collection.extend({
 			},
 			type: 'GET'
 		}).done( function(data){
+			_this.reset( null );
 			if(data.status == "OK"){
 				var listE = data.object.list
-				_this.reset( null );
 				for(var i=0; i<listE.length; i++){					
 					var elemento = _this._getResult(listE[i]);	
 					_this.add(elemento);
@@ -180,10 +185,10 @@ app.OficioCnbvResultVMCollection = Backbone.Collection.extend({
 		var _this = this;
 	
 		this._count = 0;
-		this._max = 10;
+		this._max = 1;
 		this._offset = 0;
-		this._sort = "id";
-		this._order = "";
+		this._sort = 'id';
+		this._order = 'asc';
 	
 		this._query = 'findAllByClaveDga';
 		this._lastAttributes = { claveDga:options.claveDga }
@@ -198,9 +203,9 @@ app.OficioCnbvResultVMCollection = Backbone.Collection.extend({
 			},
 			type: 'GET'
 		}).done( function(data){
+			_this.reset( null );
 			if(data.status == "OK"){
 				var listE = data.object.list
-				_this.reset( null );
 				for(var i=0; i<listE.length; i++){					
 					var elemento = _this._getResult(listE[i]);	
 					_this.add(elemento);
@@ -217,10 +222,10 @@ app.OficioCnbvResultVMCollection = Backbone.Collection.extend({
 		var _this = this;
 	
 		this._count = 0;
-		this._max = 10;
-		this._offset = 0;
-		this._sort = "id";
-		this._order = "";
+		this._max = options.max;
+		this._offset = options.offset;
+		this._sort = options.sort;
+		this._order = options.order;
 	
 		this._query = 'findAllByFechaOficio';
 		this._lastAttributes = {
@@ -237,12 +242,12 @@ app.OficioCnbvResultVMCollection = Backbone.Collection.extend({
 			beforeSend: function(xhr){
 				_this._startProcessing();
 			},
-			data: _this._lastAttributes,
+			data: options,
 			type: 'GET'
 		}).done( function(data){
 			if(data.status == "OK"){
-				var listE = data.object.list
 				_this.reset( null );
+				var listE = data.object.list
 				for(var i=0; i<listE.length; i++){					
 					var elemento = _this._getResult(listE[i]);	
 					_this.add(elemento);
@@ -259,17 +264,13 @@ app.OficioCnbvResultVMCollection = Backbone.Collection.extend({
 		var _this = this;
 	
 		this._count = 0;
-		this._max = 10;
-		this._offset = 0;
-		this._sort = "id";
-		this._order = "asc";
+		this._max = options.max;
+		this._offset = options.offset;
+		this._sort = options.sort;
+		this._order = options.order;
 	
 		this._query = 'findAllByNumeroMatricula';
 		this._lastAttributes = {
-			max: _this._max,
-			offset: _this._offset,
-			sort: _this._sort,
-			order: _this._order,
 			numeroMatricula : options.numeroMatricula
 		}
 	
@@ -278,12 +279,12 @@ app.OficioCnbvResultVMCollection = Backbone.Collection.extend({
 			beforeSend: function(xhr){
 				_this._startProcessing();
 			},
-			data: _this._lastAttributes,
+			data: options,
 			type: 'GET'
 		}).done( function(data){
+			_this.reset( null );
 			if(data.status == "OK"){
 				var listE = data.object.list
-				_this.reset( null );
 				for(var i=0; i<listE.length; i++){					
 					var elemento = _this._getResult(listE[i]);	
 					_this.add(elemento);
@@ -300,17 +301,13 @@ app.OficioCnbvResultVMCollection = Backbone.Collection.extend({
 		var _this = this;
 	
 		this._count = 0;
-		this._max = 10;
-		this._offset = 0;
-		this._sort = "id";
-		this._order = "asc";
+		this._max = options.max;
+		this._offset = options.offset;
+		this._sort = options.sort;
+		this._order = options.order;
 	
 		this._query = 'findAllByIdSustentante';
 		this._lastAttributes = {
-			max: _this._max,
-			offset: _this._offset,
-			sort: _this._sort,
-			order: _this._order,
 			idSustentante : options.idSustentante
 		}
 	
@@ -319,12 +316,12 @@ app.OficioCnbvResultVMCollection = Backbone.Collection.extend({
 			beforeSend: function(xhr){
 				_this._startProcessing();
 			},
-			data: _this._lastAttributes,
+			data: options,
 			type: 'GET'
 		}).done( function(data){
+			_this.reset( null );
 			if(data.status == "OK"){
 				var listE = data.object.list
-				_this.reset( null );
 				for(var i=0; i<listE.length; i++){					
 					var elemento = _this._getResult(listE[i]);	
 					_this.add(elemento);
@@ -341,17 +338,13 @@ app.OficioCnbvResultVMCollection = Backbone.Collection.extend({
 		var _this = this;
 	
 		this._count = 0;
-		this._max = 10;
-		this._offset = 0;
-		this._sort = "id";
-		this._order = "asc";
+		this._max = options.max;
+		this._offset = options.offset;
+		this._sort = options.sort;
+		this._order = options.order;
 	
 		this._query = 'findAllByNombreApellidos';
 		this._lastAttributes = {
-			max: _this._max,
-			offset: _this._offset,
-			sort: _this._sort,
-			order: _this._order,
 			nombre : options.nombre,
 			primerApellido : options.primerApellido,
 			segundoApellido : options.segundoApellido
@@ -362,12 +355,12 @@ app.OficioCnbvResultVMCollection = Backbone.Collection.extend({
 			beforeSend: function(xhr){
 				_this._startProcessing();
 			},
-			data: _this._lastAttributes,
+			data: options,
 			type: 'GET'
 		}).done( function(data){
+			_this.reset( null );
 			if(data.status == "OK"){
 				var listE = data.object.list
-				_this.reset( null );
 				for(var i=0; i<listE.length; i++){					
 					var elemento = _this._getResult(listE[i]);	
 					_this.add(elemento);
@@ -392,10 +385,105 @@ app.OficioCnbvResultVMCollection = Backbone.Collection.extend({
 		alert('NOT YET IMPLEMENTED - findAll');
 	},
 	sortAndOrderBy: function(order, sort){
-		alert('NOT YET IMPLEMENTED - sortAndOrderBy');
+		var _this = this;
+		var opts = {};
+		
+		this._order = order;
+		this._sort = sort;
+		
+		if(this._query == "findAllByFechaOficio"){
+			opts = {
+				max: _this._max, 
+				offset: 0, 
+				sort: _this._sort, 
+				order: _this._order,
+				fechaOficioDel_day : _this._lastAttributes.fechaOficioDel_day,
+				fechaOficioDel_month : _this._lastAttributes.fechaOficioDel_month,
+				fechaOficioDel_year : _this._lastAttributes.fechaOficioDel_year,
+				fechaOficioAl_day : _this._lastAttributes.fechaOficioAl_day,
+				fechaOficioAl_month : _this._lastAttributes.fechaOficioAl_month,
+				fechaOficioAl_year : _this._lastAttributes.fechaOficioAl_year
+			};
+			this.findAllByFechaOficio(opts);
+		}
+		else if(this._query == "findAllByNumeroMatricula"){
+			this.findAllByNumeroMatricula({ 
+				max: _this._max,
+				offset: 0,
+				sort: _this._sort,
+				order: _this._order,
+				numeroMatricula: _this._lastAttributes.numeroMatricula
+			});
+		}
+		else if(this._query == "findAllByIdSustentante"){
+			this.collection.findAllByIdSustentante({ 
+				max: _this._max,
+				offset: 0,
+				sort: _this._sort,
+				order: _this._order,
+				idSustentante: _this._lastAttributes.idSustentante
+			});
+		}
+		else if(this._query == "findAllByNombreApellidos"){
+			this.collection.findAllByNombreApellidos({
+				max: _this._max,
+				offset: 0,
+				sort: _this._sort,
+				order: _this._order,
+				nombre: _this._lastAttributes.nombre,
+				primerApellido: _this._lastAttributes.primerApellido,
+				segundoApellido: _this._lastAttributes.segundoApellido,
+			});
+		}
 	},
 	goToPage: function(pagenum){
-		alert('NOT YET IMPLEMENTED - goToPage');
+		var _this = this;
+		this._offset = ((pagenum-1) * _this._max);
+		
+		if(this._query == "findAllByFechaOficio"){
+			opts = {
+				max: _this._max, 
+				offset: _this._offset, 
+				sort: _this._sort, 
+				order: _this._order,
+				fechaOficioDel_day : _this._lastAttributes.fechaOficioDel_day,
+				fechaOficioDel_month : _this._lastAttributes.fechaOficioDel_month,
+				fechaOficioDel_year : _this._lastAttributes.fechaOficioDel_year,
+				fechaOficioAl_day : _this._lastAttributes.fechaOficioAl_day,
+				fechaOficioAl_month : _this._lastAttributes.fechaOficioAl_month,
+				fechaOficioAl_year : _this._lastAttributes.fechaOficioAl_year
+			};
+			this.findAllByFechaOficio(opts);
+		}
+		else if(this._query == "findAllByNumeroMatricula"){
+			this.findAllByNumeroMatricula({ 
+				max: _this._max,
+				offset: _this._offset, 
+				sort: _this._sort,
+				order: _this._order,
+				numeroMatricula: _this._lastAttributes.numeroMatricula
+			});
+		}
+		else if(this._query == "findAllByIdSustentante"){
+			this.collection.findAllByIdSustentante({ 
+				max: _this._max,
+				offset: _this._offset, 
+				sort: _this._sort,
+				order: _this._order,
+				idSustentante: _this._lastAttributes.idSustentante
+			});
+		}
+		else if(this._query == "findAllByNombreApellidos"){
+			this.collection.findAllByNombreApellidos({
+				max: _this._max,
+				offset: _this._offset, 
+				sort: _this._sort,
+				order: _this._order,
+				nombre: _this._lastAttributes.nombre,
+				primerApellido: _this._lastAttributes.primerApellido,
+				segundoApellido: _this._lastAttributes.segundoApellido,
+			});
+		}
 	},
 	_getResult: function(result){
 	
@@ -610,12 +698,16 @@ app.DatosOficioTabView = Backbone.View.extend({
 			}
 			else if(valOpcion == app.EXP_OFA_DST_FCOFICIO){
 				var opts = {
+					max: app.EXP_OFA_DEFAULT_MAX,
+					offset: app.EXP_OFA_DEFAULT_OFFSET,
+					sort: app.EXP_OFA_DEFAULT_SORT,
+					order: app.EXP_OFA_DEFAULT_ORDER,
 					fechaOficioDel_day : this.model.get("fechaOficioDel_day"),
 					fechaOficioDel_month : this.model.get("fechaOficioDel_month"),
 					fechaOficioDel_year : this.model.get("fechaOficioDel_year"),
 					fechaOficioAl_day : this.model.get("fechaOficioAl_day"),
 					fechaOficioAl_month : this.model.get("fechaOficioAl_month"),
-					fechaOficioAl_year : this.model.get("fechaOficioAl_year"),
+					fechaOficioAl_year : this.model.get("fechaOficioAl_year")
 				}
 				this.collection.findAllByFechaOficio(opts);
 			}
@@ -840,13 +932,29 @@ app.DatosSustTabView = Backbone.View.extend({
 		if(this._validate()){
 			var valOpcion = this.model.get("opcionSeleccionada");
 			if(valOpcion == app.EXP_OFA_DST_MATRICULA){
-				this.collection.findAllByNumeroMatricula({ numeroMatricula: _this.model.get("numeroMatricula") });
+				this.collection.findAllByNumeroMatricula({ 
+					max: app.EXP_OFA_DEFAULT_MAX,
+					offset: app.EXP_OFA_DEFAULT_OFFSET,
+					sort: app.EXP_OFA_DEFAULT_SORT,
+					order: app.EXP_OFA_DEFAULT_ORDER,
+					numeroMatricula: _this.model.get("numeroMatricula") 
+				});
 			}
 			else if(valOpcion == app.EXP_OFA_DST_IDSUSTENTANTE){
-				this.collection.findAllByIdSustentante({ idSustentante: _this.model.get("idSustentante") });
+				this.collection.findAllByIdSustentante({ 
+					max: app.EXP_OFA_DEFAULT_MAX,
+					offset: app.EXP_OFA_DEFAULT_OFFSET,
+					sort: app.EXP_OFA_DEFAULT_SORT,
+					order: app.EXP_OFA_DEFAULT_ORDER,
+					idSustentante: _this.model.get("idSustentante")
+				});
 			}
 			else if(valOpcion == app.EXP_OFA_DST_NOMBRES){
 				this.collection.findAllByNombreApellidos({
+					max: app.EXP_OFA_DEFAULT_MAX,
+					offset: app.EXP_OFA_DEFAULT_OFFSET,
+					sort: app.EXP_OFA_DEFAULT_SORT,
+					order: app.EXP_OFA_DEFAULT_ORDER,
 					nombre: _this.model.get("nombre"),
 					primerApellido: _this.model.get("primerApellido"),
 					segundoApellido: _this.model.get("segundoApellido"),

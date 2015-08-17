@@ -1,12 +1,15 @@
 package mx.amib.sistemas.external.expediente.service
 
 import org.springframework.http.HttpStatus
+import org.springframework.http.converter.StringHttpMessageConverter
 
 import java.util.Date
 import java.util.List;
 import java.text.DateFormat
 import java.text.SimpleDateFormat
-
+import java.nio.charset.Charset
+import java.text.Normalizer
+import java.text.Normalizer.Form
 import org.codehaus.groovy.grails.web.json.JSONObject
 
 import grails.converters.JSON
@@ -21,6 +24,7 @@ import mx.amib.sistemas.external.expediente.certificacion.service.EventoPuntosTO
 import mx.amib.sistemas.external.expediente.certificacion.service.ValidacionTO;
 import mx.amib.sistemas.external.expediente.persona.catalog.service.*
 import mx.amib.sistemas.external.expediente.persona.service.*
+import mx.amib.sistemas.utils.StringUtils
 
 //NOTA: Este servicio esta presente en:
 //amibRegistro, amibCursosEventos
@@ -162,9 +166,6 @@ class SustentanteService {
 	 */
 	SustentanteTO updatePuestos(SustentanteTO sustentante){
 		
-		println "updatePuestos: " + updatePuestosUrl
-		println "estupido JSON" + (sustentante as JSON)
-		
 		def rest = new RestBuilder()
 		def resp = rest.post(updatePuestosUrl){
 			contentType "application/json;charset=UTF-8"
@@ -206,6 +207,7 @@ class SustentanteService {
 		println "La url es: " + url
 		
 		def rest = new RestBuilder() 
+		rest.restTemplate.setMessageConverters([new StringHttpMessageConverter(Charset.forName("UTF-8"))])
 		def resp = rest.get(url)
 		
 		if(resp.json != null && resp.json instanceof JSONObject) {
@@ -230,13 +232,22 @@ class SustentanteService {
 		Integer max, Integer offset, String sort, String order){
 		
 		SearchResult sr = new SearchResult()
-		String url = findAllAdvancedSearchUrl + "?max=" + max + "&offset=" + offset + "&sort=" + sort + "&order=" + order +
-		"&nom=" + nom + "&ap1=" + ap1 + "&ap2=" + ap2
+		String url = findAllAdvancedSearchUrl
+		Map<String,String> qsparams = new HashMap<String,String>()
+		RestBuilder rest = new RestBuilder() 
+		def resp = null
+		
+		qsparams.put('max', max)
+		qsparams.put('offset', offset)
+		qsparams.put('sort', sort)
+		qsparams.put('order', order)
+		qsparams.put('nom', nom)
+		qsparams.put('ap1', ap1)
+		qsparams.put('ap2', ap2)
+		url += '?max={max}&offset={offset}&sort={sort}&order={order}&nom={nom}&ap1={ap1}&ap2={ap2}'
 		println "La url es: " + url
-		
-		def rest = new RestBuilder()
-		def resp = rest.get(url)
-		
+
+		resp = rest.get(url,qsparams)
 		if(resp.json != null && resp.json instanceof JSONObject) {
 			def lista = new ArrayList<SustentanteTO>()
 			resp.json.'list'.each{
@@ -259,15 +270,27 @@ class SustentanteService {
 		Long idfig, Long idvarfig, Long stcert, Long staut, 
 		Integer max, Integer offset, String sort, String order){
 		
-		SearchResult sr = new SearchResult()
-		String url = findAllAdvancedSearchWithCertificacionUrl + "?max=" + max + "&offset=" + offset + "&sort=" + sort + "&order=" + order + 
-						"&nom=" + nom + "&ap1=" + ap1 + "&ap2=" + ap2 + "&idfig=" + idfig + "&idvarfig=" + idvarfig + 
-						"&stcert=" + stcert + "&staut=" + staut
+		SearchResult sr = new SearchResult()		
+		String url = findAllAdvancedSearchWithCertificacionUrl
+		Map<String,String> qsparams = new HashMap<String,String>()
+		RestBuilder rest = new RestBuilder()
+		def resp = null
+		
+		qsparams.put('max', max)
+		qsparams.put('offset', offset)
+		qsparams.put('sort', sort)
+		qsparams.put('order', order)
+		qsparams.put('nom', nom)
+		qsparams.put('ap1', ap1)
+		qsparams.put('ap2', ap2)
+		qsparams.put('idfig', idfig)
+		qsparams.put('idvarfig', idvarfig)
+		qsparams.put('stcert', stcert)
+		qsparams.put('staut', staut)
+		url +=	"?max={max}&offset={offset}&sort={sort}&order={order}&nom={nom}&ap1={ap1}&ap2={ap2}&idfig={idfig}&idvarfig={idvarfig}&stcert={stcert}&staut={staut}"
 		println "La url es: " + url
 		
-		def rest = new RestBuilder()
-		def resp = rest.get(url)
-		
+		resp = rest.get(url)
 		if(resp.json != null && resp.json instanceof JSONObject) {
 			def lista = new ArrayList<SustentanteTO>()
 			resp.json.'list'.each{
@@ -382,75 +405,6 @@ class SustentanteService {
 		}
 		sustentante.certificaciones = new ArrayList<CertificacionTO>()
 		data.'certificaciones'.each {
-			/*
-			CertificacionTO c = new CertificacionTO()
-			c.id = it.'id'
-			
-			if(!JSONObject.NULL.equals(it.'fechaInicio')) c.fechaInicio = df.parse(it.'fechaInicio'.substring(0,10))
-			if(!JSONObject.NULL.equals(it.'fechaFin')) c.fechaFin = df.parse(it.'fechaFin'.substring(0,10))
-			if(!JSONObject.NULL.equals(it.'fechaObtencion')) c.fechaObtencion = df.parse(it.'fechaObtencion'.substring(0,10))
-			c.isAutorizado = it.'isAutorizado'
-			c.isApoderado = it.'isApoderado'
-			c.isUltima = it.'isUltima'
-			
-			if(!JSONObject.NULL.equals(it.'fechaCreacion')) c.fechaCreacion = df.parse(it.'fechaCreacion'.substring(0,10))
-			if(!JSONObject.NULL.equals(it.'fechaModificacion')) c.fechaModificacion = df.parse(it.'fechaModificacion'.substring(0,10))
-			
-			c.varianteFigura = new VarianteFiguraTO()
-			c.varianteFigura.id = it.'varianteFigura'.'id'
-			c.varianteFigura.nombre = it.'varianteFigura'.'nombre'
-			c.varianteFigura.vigente = it.'varianteFigura'.'vigente'
-			c.varianteFigura.numeroVersion = it.'varianteFigura'.'numeroVersion'
-			c.varianteFigura.idFigura = it.'varianteFigura'.'idFigura'
-			c.varianteFigura.nombreFigura = it.'varianteFigura'.'nombreFigura'
-			c.varianteFigura.nombreAcuseFigura = it.'varianteFigura'.'nombreAcuseFigura'
-			c.varianteFigura.esAutorizableFigura = it.'varianteFigura'.'esAutorizableFigura'
-			c.varianteFigura.tipoAutorizacionFigura = it.'varianteFigura'.'tipoAutorizacionFigura'
-			c.varianteFigura.inicialesFigura = it.'varianteFigura'.'inicialesFigura'
-
-			c.statusAutorizacion = new StatusAutorizacionTO()
-			c.statusAutorizacion.id = it.'statusAutorizacion'.'id'
-			c.statusAutorizacion.descripcion = it.'statusAutorizacion'.'descripcion'
-			c.statusAutorizacion.vigente = it.'statusAutorizacion'.'vigente'
-			
-			c.statusCertificacion = new StatusCertificacionTO()
-			c.statusCertificacion.id = it.'statusCertificacion'.'id'
-			c.statusCertificacion.descripcion = it.'statusCertificacion'.'descripcion'
-			c.statusCertificacion.vigente = it.'statusCertificacion'.'vigente'
-			
-			c.idVarianteFigura = it.'idVarianteFigura'
-			c.idStatusAutorizacion = it.'idStatusAutorizacion'
-			c.idStatusCertificacion = it.'idStatusCertificacion'
-		
-			c.statusEntHistorialInforme = it.'statusEntHistorialInforme'
-			if(!JSONObject.NULL.equals(it.'obsEntHistorialInforme')) c.obsEntHistorialInforme = it.'obsEntHistorialInforme'
-			c.statusEntCartaRec = it.'statusEntCartaRec'
-			if(!JSONObject.NULL.equals(it.'obsEntCartaRec')) c.obsEntCartaRec = it.'obsEntCartaRec'
-			c.statusConstBolVal = it.'statusConstBolVal'
-			if(!JSONObject.NULL.equals(it.'obsConstBolVal')) c.obsConstBolVal = it.'obsConstBolVal'
-			
-			c.validaciones = new ArrayList<ValidacionTO>()
-			it.'validaciones'.each{ x ->
-				ValidacionTO v = new ValidacionTO()
-				if(!JSONObject.NULL.equals(it.'fechaAplicacion')) v.fechaAplicacion = df.parse(x.'fechaAplicacion'.substring(0,10))
-				if(!JSONObject.NULL.equals(it.'fechaInicio')) v.fechaInicio = df.parse(x.'fechaInicio'.substring(0,10))
-				if(!JSONObject.NULL.equals(it.'fechaFin')) v.fechaFin = df.parse(x.'fechaFin'.substring(0,10))
-				v.autorizadoPorUsuario = x.'autorizadoPorUsuario'
-				
-				v.eventosPuntos = new ArrayList<EventoPuntosTO>()
-				//aqui van el registro de los eventos que generaron puntos
-				
-				v.metodoValidacion = new MetodoValidacionTO()
-				v.idMetodoValidacion = x.'idMetodoValidacion'
-			
-				if(!JSONObject.NULL.equals(it.'fechaCreacion'))  v.fechaCreacion = df.parse(x.'fechaCreacion'.substring(0,10))
-				if(!JSONObject.NULL.equals(it.'fechaModificacion'))  v.fechaModificacion = df.parse(x.'fechaModificacion'.substring(0,10))
-				
-				v.certificacion = c
-				c.validaciones.add(v)
-			}
-			*/
-			
 			CertificacionTO c = CertificacionService.obtenerCertificacionFromJSON(it);
 			c.sustentante = sustentante
 			sustentante.certificaciones.add(c)

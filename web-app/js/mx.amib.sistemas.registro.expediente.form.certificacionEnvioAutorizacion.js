@@ -421,26 +421,6 @@ app.ResultVMCollection = Backbone.Collection.extend({
 		
 		this.sort = sort;
 		this.order = order;
-		//NO TIENE SENTIDO ALGUNO ORDENRAR COSAS CON PROBABLEMENTE SOLO 1 RESULTADO!!
-		/*
-		if(this.lastQuery == app.EXP_CEA_SELECTED_TAB_MAT){
-			this.collection.findAllByMatricula({
-				max:1, 
-				offset:0, 
-				sort:sort, 
-				order:order, 
-				numeroMatricula: _this.lastMatricula
-			});
-		}
-		else if(this.lastQuery == app.EXP_CEA_SELECTED_TAB_FOL){
-			this.findAllByIdSustentante({
-				max:1, 
-				offset:0, 
-				sort:sort, 
-				order:order, 
-				idSustentante: _this.lastIdSustentante
-			});
-		}*/
 		
 		if(this.lastQuery == app.EXP_CEA_SELECTED_TAB_BAV){
 			this.findAll({ 

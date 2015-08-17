@@ -3,6 +3,7 @@ package mx.amib.sistemas.registro.autorizacionCnbv.controller
 import grails.converters.JSON
 import mx.amib.sistemas.external.expediente.persona.service.SustentanteTO
 import mx.amib.sistemas.external.oficios.oficioCnbv.OficioCnbvTO
+import mx.amib.sistemas.registro.expediente.controller.CertificacionDictamenPrevioController;
 import mx.amib.sistemas.utils.SearchResult
 
 class OficioCnbvController {
@@ -39,19 +40,95 @@ class OficioCnbvController {
 	
 	def findAllByNumeroOficio(){
 		Map<String,Object> res = new HashMap<String,Object>()
+		SearchResult<OficioCnbvTO> servRes = null
 		
+		int numeroOficio = Integer.parseInt(params.'numeroOficio'?:'-1')
 		
+		if(numeroOficio > -1){
+			try{				
+				servRes = oficioCnbvService.findAllByNumeroOficio(numeroOficio)
+				res.put("status", "OK")
+				res.put("object", [
+					'count': servRes.count,
+					'list' : ResultVM.copyFromServicesResults(servRes.list)
+				] )
+			}
+			catch(Exception ex){
+				res = [ 'status': 'ERROR', 'object': ex.message ]
+			}
+		}
+		else{
+			res = [ 'status': 'ERROR', 'object': 'DATA_NOT_GIVEN' ]
+		}	
 		
 		render (res as JSON)
 	}
 	
 	def findAllByClaveDga(){
 		Map<String,Object> res = new HashMap<String,Object>()
+		SearchResult<OficioCnbvTO> servRes = null
+		
+		String claveDga = params.'claveDga'?:''
+		
+		if(claveDga.compareTo("") != 0){
+			try{				
+				servRes = oficioCnbvService.findAllByClaveDga(claveDga)
+				res.put("status", "OK")
+				res.put("object", [
+					'count': servRes.count,
+					'list' : ResultVM.copyFromServicesResults(servRes.list)
+				] )
+			}
+			catch(Exception ex){
+				res = [ 'status': 'ERROR', 'object': ex.message ]
+			}
+		}
+		else{
+			res = [ 'status': 'ERROR', 'object': 'DATA_NOT_GIVEN' ]
+		}	
+		
 		render (res as JSON)
 	}
 	
 	def findAllByFechaOficio(){
 		Map<String,Object> res = new HashMap<String,Object>()
+		SearchResult<OficioCnbvTO> servRes = null
+		
+		int max = Integer.parseInt(params.max?:"10")
+		int offset = Integer.parseInt(params.offset?:"0")
+		String sort = params.sort?:"id"
+		String order = params.order?:"asc"
+		
+		int fechaOficioDel_day = Integer.parseInt(params.'fechaOficioDel_day'?:'1')
+		int fechaOficioDel_month = Integer.parseInt(params.'fechaOficioDel_month'?:'1') - 1
+		int fechaOficioDel_year = Integer.parseInt(params.'fechaOficioDel_year'?:'1900')
+		int fechaOficioAl_day = Integer.parseInt(params.'fechaOficioAl_day'?:'31')
+		int fechaOficioAl_month = Integer.parseInt(params.'fechaOficioAl_month'?:'12') - 1
+		int fechaOficioAl_year = Integer.parseInt(params.'fechaOficioAl_year'?:'2999')
+		
+		Calendar cfodel = Calendar.getInstance()
+		Calendar cfoal = Calendar.getInstance()
+		
+		cfodel.set(Calendar.DAY_OF_MONTH,fechaOficioDel_day);
+		cfodel.set(Calendar.MONTH,fechaOficioDel_month);
+		cfodel.set(Calendar.YEAR,fechaOficioDel_year);
+		cfoal.set(Calendar.DAY_OF_MONTH,fechaOficioAl_day);
+		cfoal.set(Calendar.MONTH,fechaOficioAl_month);
+		cfoal.set(Calendar.YEAR,fechaOficioAl_year);
+		
+
+		try{				
+			servRes = oficioCnbvService.findAllByFechaOficio(max, offset, sort, order, cfodel.getTime(), cfoal.getTime())
+			res.put("status", "OK")
+			res.put("object", [
+				'count': servRes.count,
+				'list' : ResultVM.copyFromServicesResults(servRes.list)
+			] )
+		}
+		catch(Exception ex){
+			res = [ 'status': 'ERROR', 'object': ex.message ]
+		}
+
 		render (res as JSON)
 	}
 	

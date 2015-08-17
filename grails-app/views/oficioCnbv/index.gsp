@@ -29,8 +29,16 @@
 	<script type="text/javascript">
 	
 		var app = app || {};
-		var mainView = new app.OficioCnbvIndexView({ resultVMCollection: new app.OficioCnbvResultVMCollection() });
 		
+		var resultVMCollection = new app.OficioCnbvResultVMCollection();
+		resultVMCollection.findAllByNumeroOficioUrl= '<g:createLink action="findAllByNumeroOficio" />';
+		resultVMCollection.findAllByClaveDgaUrl= '<g:createLink action="findAllByClaveDga" />';
+		resultVMCollection.findAllByFechaOficioUrl= '<g:createLink action="findAllByFechaOficio" />';
+		resultVMCollection.findAllByNumeroMatriculaUrl= '<g:createLink action="findAllByNumeroMatricula" />';
+		resultVMCollection.findAllByIdSustentanteUrl= '<g:createLink action="findAllByIdSustentante" />';
+		resultVMCollection.findAllByNombreApellidosUrl= '<g:createLink action="findAllByNombreApellidos" />';
+		
+		var mainView = new app.OficioCnbvIndexView({ resultVMCollection: resultVMCollection });
 	</script>
 	
 </body>

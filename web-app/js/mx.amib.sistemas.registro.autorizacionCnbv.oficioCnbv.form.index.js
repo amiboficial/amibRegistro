@@ -91,7 +91,26 @@ app.OficioCnbvResultVMCollection = Backbone.Collection.extend({
 	_fetching: false,
 	_error: false,
 	
+	findAllByNumeroOficioUrl: '',
+	findAllByClaveDgaUrl: '',
+	findAllByFechaOficioUrl: '',
+	findAllByNumeroMatriculaUrl: '',
+	findAllByIdSustentanteUrl: '',
+	findAllByNombreApellidosUrl: '',
+	
 	/* OBTIENE EL STATUS SI ES QUE ESTA "TRAYENDO DATOS" */
+	_startProcessing: function(){
+		this._fetching = true;
+		this.trigger('processingStarted');
+	},
+	_stopProcessing: function(){
+		this._fetching = false;
+		this.trigger('processingStopped');
+	},
+	_stopProcessingWithError: function(){
+		this._fetching = false;
+		this.trigger('processingError');
+	},
 	isFetching: function(){
 		return this._fetching;
 	},
@@ -104,11 +123,79 @@ app.OficioCnbvResultVMCollection = Backbone.Collection.extend({
 		alert('NOT YET IMPLEMENTED - findAllByDatosOficio');
 	},*/
 	
-	findAllByNumeroOficio: function(){
-		alert('NOT YET IMPLEMENTED - findAllByNumeroOficio');
+	findAllByNumeroOficio: function(options){
+		var _this = this;
+	
+		this._count = 0;
+		this._max = 10;
+		this._offset = 0;
+		this._sort = "id";
+		this._order = "";
+	
+		this._query = 'findAllByNumeroOficio';
+		this._lastAttributes = { numeroOficio: options.numeroOficio }
+	
+		$.ajax({
+			url: _this.findAllByNumeroOficioUrl, 
+			beforeSend: function(xhr){
+				_this._startProcessing();
+			},
+			data: {
+				numeroOficio: options.numeroOficio
+			},
+			type: 'GET'
+		}).done( function(data){
+			if(data.status == "OK"){
+				var listE = data.object.list
+				_this.reset( null );
+				for(var i=0; i<listE.length; i++){					
+					var elemento = _this._getResult(listE[i]);	
+					_this.add(elemento);
+				}
+				_this.trigger('reset', this, {});
+				_this._stopProcessing();
+			}
+			else{				
+				_this._stopProcessing();
+			}
+		} );
 	},
-	findAllByClaveDga: function(){
-		alert('NOT YET IMPLEMENTED - findAllByClaveDga');
+	findAllByClaveDga: function(options){
+		var _this = this;
+	
+		this._count = 0;
+		this._max = 10;
+		this._offset = 0;
+		this._sort = "id";
+		this._order = "";
+	
+		this._query = 'findAllByClaveDga';
+		this._lastAttributes = { claveDga:options.claveDga }
+	
+		$.ajax({
+			url: _this.findAllByClaveDgaUrl, 
+			beforeSend: function(xhr){
+				_this._startProcessing();
+			},
+			data: {
+				claveDga: options.claveDga
+			},
+			type: 'GET'
+		}).done( function(data){
+			if(data.status == "OK"){
+				var listE = data.object.list
+				_this.reset( null );
+				for(var i=0; i<listE.length; i++){					
+					var elemento = _this._getResult(listE[i]);	
+					_this.add(elemento);
+				}
+				_this.trigger('reset', this, {});
+				_this._stopProcessing();
+			}
+			else{				
+				_this._stopProcessing();
+			}
+		} );
 	},
 	findAllByFechaOficio: function(){
 		alert('NOT YET IMPLEMENTED - findAllByFechaOficio');
@@ -132,6 +219,15 @@ app.OficioCnbvResultVMCollection = Backbone.Collection.extend({
 		alert('NOT YET IMPLEMENTED - goToPage');
 	},
 	_getResult: function(result){
+	
+		var elemento = new app.OficioCnbvResultVM();
+		var _this = this;
+	
+		elemento.set('grailsId',result.id);
+		elemento.set('numeroOficio',result.numeroOficio);
+		elemento.set('claveDga',result.claveDga);
+		elemento.set('fechaOficio',result.fechaOficio);
+		
 		return elemento;
 	},
 	
@@ -328,10 +424,10 @@ app.DatosOficioTabView = Backbone.View.extend({
 			var valOpcion = this.model.get("opcionSeleccionada");
 		
 			if(valOpcion == app.EXP_OFA_DST_NUMOFICIO){
-				this.collection.findAllByNumeroOficio();
+				this.collection.findAllByNumeroOficio( { numeroOficio : this.model.get("numeroOficio") } );
 			}
 			else if(valOpcion == app.EXP_OFA_DST_CLAVEDGA){
-				this.collection.findAllByClaveDga();
+				this.collection.findAllByClaveDga( { claveDga : this.model.get("claveDga") } );
 			}
 			else if(valOpcion == app.EXP_OFA_DST_FCOFICIO){
 				this.collection.findAllByFechaOficio();
@@ -607,6 +703,29 @@ app.DatosSustTabView = Backbone.View.extend({
 	
 });
 
+app.OficioCnbvResultView = Backbone.View.extend({
+	parentView: {},
+	tagName: 'tr',
+	template: _.template( $('#oficioCnbvResultTemplate').html() ),
+	
+	initialize: function(options){
+		this.model = options.model;
+		this.parentView = options.parentView;
+		this.render();
+	},
+	render: function(){
+		this.$el.html( this.template( this.model.toJSON() ) );
+		return this;
+	},
+	events: {
+		'click .show' : 'show'
+	},
+	show: function(e){
+		e.preventDefault();
+		alert("not implemented yet - show");
+	}
+});
+
 app.OficioCnbvResultsView = Backbone.View.extend({
 	parentView: {},
 	tagname: 'div',
@@ -629,6 +748,7 @@ app.OficioCnbvResultsView = Backbone.View.extend({
 		return this;
 	},
 	renderList: function(){
+		console.log("paso el renderList");
 		this.$(".list-items").html("");
 		this.collection.each( function(item){
 			this.renderElement(item);
@@ -637,7 +757,7 @@ app.OficioCnbvResultsView = Backbone.View.extend({
 	},
 	renderElement: function(item){
 		var view = this;
-		var elementView =  new app.ResultView({model:item,parentView:view});
+		var elementView =  new app.OficioCnbvResultView({model:item,parentView:view});
 		elementView.viewModel = this.viewModel;
 		this.$(".list-items").append( elementView.render().el );
 		return this;

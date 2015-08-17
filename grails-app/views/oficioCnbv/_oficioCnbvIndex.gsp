@@ -244,6 +244,18 @@
 	
 </script>
 
+<script type="text/template" id="oficioCnbvResultTemplate">
+
+	<td style="white-space:nowrap">{{=claveDga}}</td>
+	<td style="white-space:nowrap">{{=numeroOficio}}</td>
+	<td>{{=fechaOficio}}</td>
+	<td>AAAA BBBB CCCC</td>
+	<td>
+		<button type="button" class="show btn btn-default btn-xs" data-grailsId="{{=grailsId}}" ><span class="glyphicon glyphicon-eye-open"></span>&nbsp;Ver detalle</button>
+	</td>
+
+</script>
+
 <script type="text/template" id="oficioCnbvResultsTemplate">
 	<fieldset>
 		<legend>Resultados de búsqueda</legend>

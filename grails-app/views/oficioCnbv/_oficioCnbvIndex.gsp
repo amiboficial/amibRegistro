@@ -261,7 +261,7 @@
 		<legend>Resultados de búsqueda</legend>
 		
 		<div class="procMessage alert alert-info"><asset:image src="spinner_alert_info.gif"/>&nbsp; Procesando datos, espere unos instantes...</div>
-		<div class="errorMessage alert alert-danger"><span class="glyphicon glyphicon-info-sign"></span> Ha ocurrido un error un la petición, intente mas tarde.</div>
+		<div class="errorMessage alert alert-danger"><span class="glyphicon glyphicon-info-sign"></span> <span class="errorMessageText">Ha ocurrido un error un la petición, intente mas tarde.</span></div>
 		
 		<div class="content scaffold-list" role="main">
 			<table class="table">

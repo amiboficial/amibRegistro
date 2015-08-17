@@ -220,9 +220,9 @@ class OficioCnbvController {
 		String sort = params.sort?:'id'
 		String order = params.order?:'asc'
 		
-		String nom = params.nom?:''
-		String ap1 = params.ap1?:''
-		String ap2 = params.ap2?:''
+		String nom = params.nombre?:''
+		String ap1 = params.primerApellido?:''
+		String ap2 = params.segundoApellido?:''
 		
 		if(nom != '' || ap1 != '' || ap2 != ''){
 			try{

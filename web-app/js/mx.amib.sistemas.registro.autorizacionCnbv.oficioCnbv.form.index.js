@@ -8,6 +8,9 @@ app.EXP_OFA_DST_NUMOFICIO = 0;
 app.EXP_OFA_DST_CLAVEDGA = 1;
 app.EXP_OFA_DST_FCOFICIO = 2;
 
+app.EXP_OFA_ERR_MSG = "Ha ocurrido un error un la petición, intente mas tarde.";
+app.EXP_OFA_ERR_MAX_SUSTENTANTE_RESULTS_MSG = "No es posible realizar la búsqueda. Sea más específico al introducir el nombre y/o apellidos del sustentante.";
+
 app.MESES = [
 	{ id: 1, nombre: "enero" },
 	{ id: 2, nombre: "febrero" },
@@ -90,6 +93,7 @@ app.OficioCnbvResultVMCollection = Backbone.Collection.extend({
 	
 	_fetching: false,
 	_error: false,
+	_errorMessage: app.EXP_OFA_ERR_MSG,
 	
 	findAllByNumeroOficioUrl: '',
 	findAllByClaveDgaUrl: '',
@@ -101,14 +105,23 @@ app.OficioCnbvResultVMCollection = Backbone.Collection.extend({
 	/* OBTIENE EL STATUS SI ES QUE ESTA "TRAYENDO DATOS" */
 	_startProcessing: function(){
 		this._fetching = true;
+		this._error = false;
 		this.trigger('processingStarted');
 	},
 	_stopProcessing: function(){
 		this._fetching = false;
+		this._error = false;
 		this.trigger('processingStopped');
 	},
-	_stopProcessingWithError: function(){
+	_stopProcessingWithError: function(message){
 		this._fetching = false;
+		this._error = true;
+		if(message == null){
+			this._errorMessage = app.EXP_OFA_ERR_MSG;
+		}
+		else{
+			this._errorMessage = message;
+		}
 		this.trigger('processingError');
 	},
 	isFetching: function(){
@@ -116,6 +129,9 @@ app.OficioCnbvResultVMCollection = Backbone.Collection.extend({
 	},
 	hasError: function(){
 		return this._error;
+	},
+	getLastErrorMessage: function(){
+		return this._errorMessage;
 	},
 	
 	/* CONSULTAS AJAX */
@@ -197,17 +213,180 @@ app.OficioCnbvResultVMCollection = Backbone.Collection.extend({
 			}
 		} );
 	},
-	findAllByFechaOficio: function(){
-		alert('NOT YET IMPLEMENTED - findAllByFechaOficio');
+	findAllByFechaOficio: function(options){
+		var _this = this;
+	
+		this._count = 0;
+		this._max = 10;
+		this._offset = 0;
+		this._sort = "id";
+		this._order = "";
+	
+		this._query = 'findAllByFechaOficio';
+		this._lastAttributes = {
+			fechaOficioDel_day:options.fechaOficioDel_day,
+			fechaOficioDel_month:options.fechaOficioDel_month,
+			fechaOficioDel_year:options.fechaOficioDel_year,
+			fechaOficioAl_day:options.fechaOficioAl_day,
+			fechaOficioAl_month:options.fechaOficioAl_month,
+			fechaOficioAl_year:options.fechaOficioAl_year,
+		}
+	
+		$.ajax({
+			url: _this.findAllByFechaOficioUrl, 
+			beforeSend: function(xhr){
+				_this._startProcessing();
+			},
+			data: _this._lastAttributes,
+			type: 'GET'
+		}).done( function(data){
+			if(data.status == "OK"){
+				var listE = data.object.list
+				_this.reset( null );
+				for(var i=0; i<listE.length; i++){					
+					var elemento = _this._getResult(listE[i]);	
+					_this.add(elemento);
+				}
+				_this.trigger('reset', this, {});
+				_this._stopProcessing();
+			}
+			else{				
+				_this._stopProcessing();
+			}
+		} );
 	},
 	findAllByNumeroMatricula: function(options){
-		alert('NOT YET IMPLEMENTED - findAllByNumeroMatricula');
+		var _this = this;
+	
+		this._count = 0;
+		this._max = 10;
+		this._offset = 0;
+		this._sort = "id";
+		this._order = "asc";
+	
+		this._query = 'findAllByNumeroMatricula';
+		this._lastAttributes = {
+			max: _this._max,
+			offset: _this._offset,
+			sort: _this._sort,
+			order: _this._order,
+			numeroMatricula : options.numeroMatricula
+		}
+	
+		$.ajax({
+			url: _this.findAllByNumeroMatriculaUrl, 
+			beforeSend: function(xhr){
+				_this._startProcessing();
+			},
+			data: _this._lastAttributes,
+			type: 'GET'
+		}).done( function(data){
+			if(data.status == "OK"){
+				var listE = data.object.list
+				_this.reset( null );
+				for(var i=0; i<listE.length; i++){					
+					var elemento = _this._getResult(listE[i]);	
+					_this.add(elemento);
+				}
+				_this.trigger('reset', this, {});
+				_this._stopProcessing();
+			}
+			else{				
+				_this._stopProcessing();
+			}
+		} );
 	},
 	findAllByIdSustentante: function(options){
-		alert('NOT YET IMPLEMENTED - findAllByIdSustentante');
+		var _this = this;
+	
+		this._count = 0;
+		this._max = 10;
+		this._offset = 0;
+		this._sort = "id";
+		this._order = "asc";
+	
+		this._query = 'findAllByIdSustentante';
+		this._lastAttributes = {
+			max: _this._max,
+			offset: _this._offset,
+			sort: _this._sort,
+			order: _this._order,
+			idSustentante : options.idSustentante
+		}
+	
+		$.ajax({
+			url: _this.findAllByIdSustentanteUrl, 
+			beforeSend: function(xhr){
+				_this._startProcessing();
+			},
+			data: _this._lastAttributes,
+			type: 'GET'
+		}).done( function(data){
+			if(data.status == "OK"){
+				var listE = data.object.list
+				_this.reset( null );
+				for(var i=0; i<listE.length; i++){					
+					var elemento = _this._getResult(listE[i]);	
+					_this.add(elemento);
+				}
+				_this.trigger('reset', this, {});
+				_this._stopProcessing();
+			}
+			else{				
+				_this._stopProcessing();
+			}
+		} );
 	},
 	findAllByNombreApellidos: function(options){
-		alert('NOT YET IMPLEMENTED - findAllByNombreApellidos');
+		var _this = this;
+	
+		this._count = 0;
+		this._max = 10;
+		this._offset = 0;
+		this._sort = "id";
+		this._order = "asc";
+	
+		this._query = 'findAllByNombreApellidos';
+		this._lastAttributes = {
+			max: _this._max,
+			offset: _this._offset,
+			sort: _this._sort,
+			order: _this._order,
+			nombre : options.nombre,
+			primerApellido : options.primerApellido,
+			segundoApellido : options.segundoApellido
+		}
+	
+		$.ajax({
+			url: _this.findAllByNombreApellidosUrl, 
+			beforeSend: function(xhr){
+				_this._startProcessing();
+			},
+			data: _this._lastAttributes,
+			type: 'GET'
+		}).done( function(data){
+			if(data.status == "OK"){
+				var listE = data.object.list
+				_this.reset( null );
+				for(var i=0; i<listE.length; i++){					
+					var elemento = _this._getResult(listE[i]);	
+					_this.add(elemento);
+				}
+				_this.trigger('reset', this, {});
+				_this._stopProcessing();
+			}
+			else if(data.status == "ERROR"){
+				if(data.object == "MAX_SUSTENTANTE_RESULTS"){
+					_this._stopProcessingWithError(app.EXP_OFA_ERR_MAX_SUSTENTANTE_RESULTS_MSG);
+				}
+				else{
+					_this._stopProcessing();
+				}
+			}
+			else{				
+				_this._stopProcessing();
+			}
+		} );
 	},
 	findAll: function(options){
 		alert('NOT YET IMPLEMENTED - findAll');
@@ -430,7 +609,15 @@ app.DatosOficioTabView = Backbone.View.extend({
 				this.collection.findAllByClaveDga( { claveDga : this.model.get("claveDga") } );
 			}
 			else if(valOpcion == app.EXP_OFA_DST_FCOFICIO){
-				this.collection.findAllByFechaOficio();
+				var opts = {
+					fechaOficioDel_day : this.model.get("fechaOficioDel_day"),
+					fechaOficioDel_month : this.model.get("fechaOficioDel_month"),
+					fechaOficioDel_year : this.model.get("fechaOficioDel_year"),
+					fechaOficioAl_day : this.model.get("fechaOficioAl_day"),
+					fechaOficioAl_month : this.model.get("fechaOficioAl_month"),
+					fechaOficioAl_year : this.model.get("fechaOficioAl_year"),
+				}
+				this.collection.findAllByFechaOficio(opts);
 			}
 		
 		}
@@ -489,6 +676,16 @@ app.DatosOficioTabView = Backbone.View.extend({
 			if(fechaDelVacia || !fechaDelOk){
 				this.model.set('errorFechaOficioDel',true);
 				valid = false;
+			}
+			
+			if(!fechaDelVacia && !fechaAlVacia){
+				var fechaDelMilis = new Date(this.model.get('fechaOficioDel_year'), this.model.get('fechaOficioDel_month') - 1, this.model.get('fechaOficioDel_day'), 0, 0, 0, 0);
+				var fechaAlMilis = new Date(this.model.get('fechaOficioAl_year'), this.model.get('fechaOficioAl_month') - 1, this.model.get('fechaOficioAl_day'), 0, 0, 0, 0);
+				if(fechaAlMilis < fechaDelMilis){
+					this.model.set('errorFechaOficioAl',true);
+					this.model.set('errorFechaOficioDel',true);
+					valid = false;
+				}
 			}
 		}
 		
@@ -636,18 +833,24 @@ app.DatosSustTabView = Backbone.View.extend({
 		this._clearError();
 	},
 	findByDatosSust: function(e){
+		var _this = this;
+		
 		e.preventDefault();
 		
 		if(this._validate()){
 			var valOpcion = this.model.get("opcionSeleccionada");
 			if(valOpcion == app.EXP_OFA_DST_MATRICULA){
-				this.collection.findAllByNumeroMatricula();
+				this.collection.findAllByNumeroMatricula({ numeroMatricula: _this.model.get("numeroMatricula") });
 			}
 			else if(valOpcion == app.EXP_OFA_DST_IDSUSTENTANTE){
-				this.collection.findAllByIdSustentante();
+				this.collection.findAllByIdSustentante({ idSustentante: _this.model.get("idSustentante") });
 			}
 			else if(valOpcion == app.EXP_OFA_DST_NOMBRES){
-				this.collection.findAllByNombreApellidos();
+				this.collection.findAllByNombreApellidos({
+					nombre: _this.model.get("nombre"),
+					primerApellido: _this.model.get("primerApellido"),
+					segundoApellido: _this.model.get("segundoApellido"),
+				});
 			}
 		}
 		
@@ -773,8 +976,10 @@ app.OficioCnbvResultsView = Backbone.View.extend({
 		}
 		if(this.collection.hasError() == false){
 			this.$('.errorMessage').hide();
+			this.$('.errorMessageText').html("");
 		}
 		else{
+			this.$('.errorMessageText').html(this.collection.getLastErrorMessage());
 			this.$('.errorMessage').show();
 		}
 	},

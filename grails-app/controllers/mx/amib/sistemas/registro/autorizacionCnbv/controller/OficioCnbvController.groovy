@@ -36,6 +36,25 @@ class OficioCnbvController {
 		
 		render (res as JSON)
 	}
+	
+	def findAllByNumeroOficio(){
+		Map<String,Object> res = new HashMap<String,Object>()
+		
+		
+		
+		render (res as JSON)
+	}
+	
+	def findAllByClaveDga(){
+		Map<String,Object> res = new HashMap<String,Object>()
+		render (res as JSON)
+	}
+	
+	def findAllByFechaOficio(){
+		Map<String,Object> res = new HashMap<String,Object>()
+		render (res as JSON)
+	}
+	
 	def findAllByNumeroMatricula(){ 
 		Map<String,Object> res = new HashMap<String,Object>()
 		SustentanteTO sustRes = null

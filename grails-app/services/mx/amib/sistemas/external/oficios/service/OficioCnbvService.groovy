@@ -20,6 +20,9 @@ class OficioCnbvService {
 	String findAllByUrl
 	String findAllByIdCertificacionInAutorizadosUrl
 	String findAllByMultipleIdCertificacionInAutorizadosUrl
+	String findAllByNumeroOficioUrl //TODO: Especificar injection
+	String findAllByClaveDgaUrl //TODO: Especificar injection
+	String findAllByFechaOficioUrl //TODO: Especificar injection
 	String getUrl
 	String saveUrl
 	String updateUrl
@@ -75,6 +78,57 @@ class OficioCnbvService {
 		if(resp.json instanceof JSONObject && !JSONObject.NULL.equals(resp.json)){
 			sr = new SearchResult<OficioCnbvTO>( this.fixSearchResultJsonObject(resp.json) )
 		}
+		return sr
+	}
+	
+	public SearchResult<OficioCnbvTO> findAllByNumeroOficio(Integer numeroOficio){
+		SearchResult<OficioCnbvTO> sr = new SearchResult<OficioCnbvTO>()
+		def qs = "?numeroOficio=${numeroOficio}"
+		def rest = new RestBuilder()
+		
+		println findAllByNumeroOficioUrl + qs.toString()
+		
+		def resp = rest.get(findAllByNumeroOficioUrl + qs.toString())
+		
+		if(resp.json instanceof JSONObject && !JSONObject.NULL.equals(resp.json)){
+			sr = new SearchResult<OficioCnbvTO>( this.fixSearchResultJsonObject(resp.json) )
+		}
+		
+		return sr
+	}
+	
+	public SearchResult<OficioCnbvTO> findAllByClaveDga(String claveDga){
+		SearchResult<OficioCnbvTO> sr = new SearchResult<OficioCnbvTO>()
+		def qs = "?claveDga=${claveDga}"
+		def rest = new RestBuilder()
+		
+		println findAllByClaveDgaUrl + qs.toString()
+		
+		def resp = rest.get(findAllByClaveDgaUrl + qs.toString())
+		
+		if(resp.json instanceof JSONObject && !JSONObject.NULL.equals(resp.json)){
+			sr = new SearchResult<OficioCnbvTO>( this.fixSearchResultJsonObject(resp.json) )
+		}
+		
+		return sr
+	}
+	
+	public SearchResult<OficioCnbvTO> findAllByFechaOficio(Integer max, Integer offset, String sort, String order, Date fechaOficioDel, Date fechaOficioAl){
+		long fechaOficioDelMilis = fechaOficioDel.getTime()
+		long fechaOficioAlMilis = fechaOficioAl.getTime()
+		
+		SearchResult<OficioCnbvTO> sr = new SearchResult<OficioCnbvTO>()
+		def qs = "?max=${max}&offset=${offset}&sort=${sort}&order=${order}&fechaOficioDel=${fechaOficioDelMilis}&fechaOficioAl=${fechaOficioAlMilis}"
+		def rest = new RestBuilder()
+		
+		println findAllByFechaOficioUrl + qs.toString()
+		
+		def resp = rest.get(findAllByFechaOficioUrl + qs.toString())
+		
+		if(resp.json instanceof JSONObject && !JSONObject.NULL.equals(resp.json)){
+			sr = new SearchResult<OficioCnbvTO>( this.fixSearchResultJsonObject(resp.json) )
+		}
+		
 		return sr
 	}
 	

@@ -15,6 +15,12 @@ class OficioCnbvController {
 	
     def index() { }
 	
+	def show() { }
+	
+	def create() { }
+	
+	def save(){ }
+	
 	def findAllByDatosOficio(){ 
 		Map<String,Object> res = new HashMap<String,Object>()
 		
@@ -36,8 +42,7 @@ class OficioCnbvController {
 		}
 		
 		render (res as JSON)
-	}
-	
+	}	
 	def findAllByNumeroOficio(){
 		Map<String,Object> res = new HashMap<String,Object>()
 		SearchResult<OficioCnbvTO> servRes = null
@@ -63,7 +68,6 @@ class OficioCnbvController {
 		
 		render (res as JSON)
 	}
-	
 	def findAllByClaveDga(){
 		Map<String,Object> res = new HashMap<String,Object>()
 		SearchResult<OficioCnbvTO> servRes = null
@@ -89,7 +93,6 @@ class OficioCnbvController {
 		
 		render (res as JSON)
 	}
-	
 	def findAllByFechaOficio(){
 		Map<String,Object> res = new HashMap<String,Object>()
 		SearchResult<OficioCnbvTO> servRes = null
@@ -131,7 +134,6 @@ class OficioCnbvController {
 
 		render (res as JSON)
 	}
-	
 	def findAllByNumeroMatricula(){ 
 		Map<String,Object> res = new HashMap<String,Object>()
 		SustentanteTO sustRes = null
@@ -277,6 +279,37 @@ class OficioCnbvController {
 				'count': servRes.count, 
 				'list' : ResultVM.copyFromServicesResults(servRes.list)
 			] )
+		}
+		catch(Exception ex){
+			res = [ 'status': 'ERROR', 'object': ex.message ]
+		}
+		
+		render (res as JSON)
+	}
+	
+	def checkUniqueClaveDga(String id){
+		Map<String,Object> res = new HashMap<String,Object>()
+		String claveDga = id
+		
+		try{
+			//def servRes = oficioCnbvService.list(max, offset, sort, order)
+			res.put("status", "OK")
+			res.put("object", true )
+		}
+		catch(Exception ex){
+			res = [ 'status': 'ERROR', 'object': ex.message ]
+		}
+		
+		render (res as JSON)
+	}
+	def checkUniqueNumeroOficio(Integer id){
+		Map<String,Object> res = new HashMap<String,Object>()
+		int numeroOficio = id
+		
+		try{
+			//def servRes = oficioCnbvService.list(max, offset, sort, order)
+			res.put("status", "OK")
+			res.put("object", true )
 		}
 		catch(Exception ex){
 			res = [ 'status': 'ERROR', 'object': ex.message ]

@@ -43,12 +43,12 @@
 			</div>
 			<div role="tabpanel" class="tab-pane" id="tabAutorizados">
 			
-				<div id="divAutorizados">B</div>
+				<div id="divAutorizados"></div>
 				
 			</div>
 			<div role="tabpanel" class="tab-pane" id="tabDoc">
 				
-				<div id="divDocumentos">C</div>
+				<div id="divDocumentos"></div>
 				
 			</div>
 			
@@ -99,6 +99,13 @@
 	<g:render template="./formAutorizados"/>
 	<g:javascript src="mx.amib.sistemas.registro.autorizacionCnbv.oficioCnbv.form.datosAutorizados.js" />
 	<script type="text/javascript">
+		var app = app || {};
+		var autorizadosData;
+		var datosOficioView;
+
+		
+		
+		datosOficioView = new app.DatosAutorizadosTabView({ model: new app.DatosAutorizadosTabVM(), collection: new app.AutorizadoVMCollection() });
 	</script>
 	
 	<g:render template="../common/docMultiples.v2"/>

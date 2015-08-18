@@ -1059,7 +1059,6 @@ app.OficioCnbvResultsView = Backbone.View.extend({
 		return this;
 	},
 	renderList: function(){
-		console.log("paso el renderList");
 		this.$(".list-items").html("");
 		this.collection.each( function(item){
 			this.renderElement(item);
@@ -1071,7 +1070,7 @@ app.OficioCnbvResultsView = Backbone.View.extend({
 		var elementView =  new app.OficioCnbvResultView({model:item,parentView:view});
 		elementView.viewModel = this.viewModel;
 		this.$(".list-items").append( elementView.render().el );
-		return this;
+		return elementView;
 	},
 	renderStateChange: function(){
 		if(this.collection.isFetching() == false){

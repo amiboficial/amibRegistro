@@ -111,7 +111,7 @@ app.DatosOficioTabVM = Backbone.Model.extend({
 });
 
 app.DatosOficioTabView =  Backbone.View.extend({
-	checkId: -1,
+	
 	el: '#divOficioCnbv',
 	template: _.template( $('#oficioCnbvFormDatosOficioTemplate').html() ),
 	templateNumeroOficioUniqueValidated: _.template( $('#_NumeroOficioUniqueValidated').html() ),
@@ -143,6 +143,17 @@ app.DatosOficioTabView =  Backbone.View.extend({
 		this.listenTo( this.model, 'change:validated', this.notifyValidated );
 		
 		this.listenTo( this.model, 'change:processing', this.renderProcessing );
+	},
+	
+	//CHECKLIST ID ATTRIBUTES
+	//métodos y atributo para implementar complemento 
+	//en un checklist
+	checkId: -1,
+	setCheckId: function(checkId){
+		this.checkId = checkId;
+	},
+	getCheckId: function(checkId){
+		return checkId;
 	},
 	
 	//MÉTODOS DE RENDEREO
@@ -322,11 +333,13 @@ app.DatosOficioTabView =  Backbone.View.extend({
 		e.preventDefault();
 		if(this._validate()){
 			this.model.set('validated',true);
+			this.trigger("stateChange","VALIDATED",this.checkId);
 		}
 	},
 	edit: function(e){
 		e.preventDefault();
 		this.model.set('validated',false);
+		this.trigger("stateChange","READY",this.checkId);
 	},
 	
 	_validate: function(){

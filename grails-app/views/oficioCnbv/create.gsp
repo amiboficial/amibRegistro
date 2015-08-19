@@ -102,7 +102,7 @@
 		var app = app || {};
 		
 		var autorizadosData;
-		var datosOficioView;
+		var datosAutorizadoView;
 		var findAutorizableByNumeroMatriculaUrl;
 
 		findAutorizableByNumeroMatriculaUrl = '<g:createLink action="findAutorizableByNumeroMatricula" />';
@@ -158,7 +158,7 @@
 			}
 		];*/
 		
-		datosOficioView = new app.DatosAutorizadosTabView({ model: new app.DatosAutorizadosTabVM( {findAutorizableByNumeroMatriculaUrl:findAutorizableByNumeroMatriculaUrl} ), collection: new app.AutorizadoVMCollection() });
+		datosAutorizadoView = new app.DatosAutorizadosTabView({ model: new app.DatosAutorizadosTabVM( {findAutorizableByNumeroMatriculaUrl:findAutorizableByNumeroMatriculaUrl} ), collection: new app.AutorizadoVMCollection() });
 	</script>
 	
 	<g:render template="../common/docMultiples.v2"/>
@@ -211,6 +211,30 @@
 		documentosView.setDownloadNewUrl('<g:createLink controller="documento" action="downloadNew" />');
 		documentosView.setDownloadUrl('<g:createLink controller="documento" action="download" />');
 		documentosView.setDeleteNewUrl('<g:createLink controller="documento" action="delete" />');
+	</script>
+
+	<g:javascript src="mx.amib.sistemas.registro.autorizacionCnbv.oficioCnbv.create.checklist.js" />
+	<script type="text/javascript">
+		
+		var checkSubmitView = new app.CheckSubmitView();
+		checkSubmitView.setViewInstance(app.OFA_CREATE_CHKIDX_DATOFICIO,datosOficioView);
+		checkSubmitView.setViewInstance(app.OFA_CREATE_CHKIDX_AUTORIZADOS,datosAutorizadoView);
+		checkSubmitView.setViewInstance(app.OFA_CREATE_CHKIDX_DOCS,documentosView);
+		
+		/*
+
+		Ejemplo de instanciamineto en el GSP,JSP,etc..-
+
+		var checkSubmitView = new app.CheckSubmitView();
+		checkSubmitView.setViewInstance(app.EXP_REG_CHK_GRALES,generalesView);
+		checkSubmitView.setViewInstance(app.EXP_REG_CHK_TELS,telefonosView);
+		checkSubmitView.setViewInstance(app.EXP_REG_CHK_SEPOMEX,sepomexView);
+		checkSubmitView.setViewInstance(app.EXP_REG_CHK_REGISTRO,registroView);
+
+		$(window).bind("pageshow", function(){
+			$('#spnHdnPostData').html("");
+		});
+		*/
 	</script>
 
 </body>

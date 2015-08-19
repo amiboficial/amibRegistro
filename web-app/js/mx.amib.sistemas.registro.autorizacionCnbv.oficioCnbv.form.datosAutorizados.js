@@ -544,11 +544,13 @@ app.DatosAutorizadosTabView = Backbone.View.extend({
 		e.preventDefault();
 		if(this._validate()){
 			this.model.set('validated',true);
+			this.trigger("stateChange","VALIDATED",this.checkId);
 		}
 	},
 	edit: function(e){
 		e.preventDefault();
 		this.model.set('validated',false);
+		this.trigger("stateChange","READY",this.checkId);
 	},
 	
 	_validate: function(){

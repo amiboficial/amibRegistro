@@ -18,6 +18,7 @@ app.DatosAutorizadosTabVM = Backbone.Model.extend({
 		errorNumeroMatriculaNotFound: false,
 		errorNumeroMatriculaInvalidDataType: false,
 		errorNumeroMatriculaInList: false,
+		errorNumeroMatriculaAtLeastOne: false,
 		
 		processing: false,
 
@@ -34,6 +35,7 @@ app.DatosAutorizadosTabVM = Backbone.Model.extend({
 				_this.set('errorNumeroMatriculaNotFound',false);
 				_this.set('errorNumeroMatriculaInvalidDataType',false);
 				_this.set('errorNumeroMatriculaInList',false);
+				_this.set('errorNumeroMatriculaAtLeastOne',false);
 				_this.set('numeroMatriculaFoundValidated',false);
 			},
 			type: 'GET'
@@ -78,22 +80,137 @@ app.AutorizadoVMCollection = Backbone.Collection.extend({
 	_sort: "idCertificacion",
 	_order: "asc",
 	
-	comparator : 'idCertificacion',
+	/*comparator : 'nombreCompleto',
     changeComparator: function (sortProperty) {
 		if( sortProperty == 'idCertificacion' || sortProperty == 'idSustentante' || sortProperty == 'nombreCompleto' ||
 			sortProperty == 'nombre' || sortProperty == 'primerApellido' || sortProperty == 'segundoApellido' ||
 			sortProperty == 'dsTipoAutorizacion' ){
 			 this.comparator = sortProperty;
 		}
-    },
+    },*/
+	
+	comparator: function(itemA, itemB){
+		if(this._sort == "idCertificacion"){
+			if(this._order == "desc"){
+				if(itemA.get('idCertificacion') == itemB.get('idCertificacion'))
+					return 0;
+				else if(itemA.get('idCertificacion') > itemB.get('idCertificacion'))
+					return -1;
+				else
+					return 1;
+			}
+			else{
+				if(itemA.get('idCertificacion') <= itemB.get('idCertificacion'))
+					return -1;
+				else
+					return 1
+			}
+		}
+		else if(this._sort == "idSustentante"){
+			if(this._order == "desc"){
+				if(itemA.get('idSustentante') > itemB.get('idSustentante'))
+					return -1;
+				else
+					return 1
+			}
+			else{
+				if(itemA.get('idSustentante') <= itemB.get('idSustentante'))
+					return -1;
+				else
+					return 1
+			}
+		}
+		else if(this._sort == "numeroMatricula"){
+			if(this._order == "desc"){
+				if(itemA.get('numeroMatricula') > itemB.get('numeroMatricula'))
+					return -1;
+				else
+					return 1
+			}
+			else{
+				if(itemA.get('numeroMatricula') <= itemB.get('numeroMatricula'))
+					return -1;
+				else
+					return 1
+			}
+		}
+		else if(this._sort == "nombreCompleto"){
+			if(this._order == "desc"){
+				if(itemA.get('nombreCompleto').toUpperCase() > itemB.get('nombreCompleto').toUpperCase())
+					return -1;
+				else
+					return 1
+			}
+			else{
+				if(itemA.get('nombreCompleto').toUpperCase() <= itemB.get('nombreCompleto').toUpperCase())
+					return -1;
+				else
+					return 1
+			}
+		}
+		else if(this._sort == "nombre"){
+			if(this._order == "desc"){
+				if(itemA.get('nombre').toUpperCase() > itemB.get('nombre').toUpperCase())
+					return -1;
+				else
+					return 1
+			}
+			else{
+				if(itemA.get('nombre').toUpperCase() <= itemB.get('nombre').toUpperCase())
+					return -1;
+				else
+					return 1
+			}
+		}
+		else if(this._sort == "primerApellido"){
+			if(this._order == "desc"){
+				if(itemA.get('primerApellido').toUpperCase() > itemB.get('primerApellido').toUpperCase())
+					return -1;
+				else
+					return 1
+			}
+			else{
+				if(itemA.get('primerApellido').toUpperCase() <= itemB.get('primerApellido').toUpperCase())
+					return -1;
+				else
+					return 1
+			}
+		}
+		else if(this._sort == "segundoApellido"){
+			if(this._order == "desc"){
+				if(itemA.get('segundoApellido').toUpperCase() > itemB.get('segundoApellido').toUpperCase())
+					return -1;
+				else
+					return 1
+			}
+			else{
+				if(itemA.get('segundoApellido').toUpperCase() <= itemB.get('segundoApellido').toUpperCase())
+					return -1;
+				else
+					return 1
+			}
+		}
+		else if(this._sort == "dsTipoAutorizacion"){
+			if(this._order == "desc"){
+				if(itemA.get('dsTipoAutorizacion').toUpperCase() > itemB.get('dsTipoAutorizacion').toUpperCase())
+					return -1;
+				else
+					return 1
+			}
+			else{
+				if(itemA.get('dsTipoAutorizacion').toUpperCase() <= itemB.get('dsTipoAutorizacion').toUpperCase())
+					return -1;
+				else
+					return 1
+			}
+		}
+	},
 	
 	sortAndOrderBy: function(order, sort){
-		this.changeComparator(sort);
-		this.sort({silent:true});
-		if(order == 'desc'){
-			this.models.reverse();
-		}
-		this.trigger('reset', this, {});
+		this._order = order;
+		this._sort = sort;
+		
+		this.sort();
 	}
 });
 
@@ -136,6 +253,7 @@ app.AutorizadoResultsView = Backbone.View.extend({
 		this.parentView = options.parentView;
 		
 		this.listenTo( this.collection, 'reset', this.renderList );
+		this.listenTo( this.collection, 'sort', this.renderList );
 		this.listenTo( this.collection, 'add', this.renderList );
 	},
 	
@@ -190,8 +308,9 @@ app.DatosAutorizadosTabView = Backbone.View.extend({
 		this.listenTo( this.model, 'change:errorNumeroMatriculaNotFound', this.renderError );
 		this.listenTo( this.model, 'change:errorNumeroMatriculaInvalidDataType', this.renderError );
 		this.listenTo( this.model, 'change:errorNumeroMatriculaInList', this.renderError );
+		this.listenTo( this.model, 'change:errorNumeroMatriculaAtLeastOne', this.renderError );
 		
-		
+		this.listenTo( this.model, 'change:validated', this.renderValidated );
 		this.listenTo( this.model, 'change:processing', this.renderProcessing );
 	},
 	
@@ -221,6 +340,7 @@ app.DatosAutorizadosTabView = Backbone.View.extend({
 		var errorNumeroMatriculaNotFound = this.model.get('errorNumeroMatriculaNotFound');
 		var errorNumeroMatriculaInvalidDataType = this.model.get('errorNumeroMatriculaInvalidDataType');
 		var errorNumeroMatriculaInList =  this.model.get('errorNumeroMatriculaInList');
+		var errorNumeroMatriculaAtLeastOne = this.model.get('errorNumeroMatriculaAtLeastOne');
 		
 		if(errorNumeroMatricula){
 			this.$('.alert-errorNumeroMatricula').show();
@@ -257,6 +377,15 @@ app.DatosAutorizadosTabView = Backbone.View.extend({
 			this.$('.alert-errorNumeroMatriculaInList').hide();
 			this.$('.div-numeroMatricula').removeClass('has-error');
 		}
+		
+		if(errorNumeroMatriculaAtLeastOne){
+			this.$('.alert-errorNumeroMatriculaAtLeastOne').show();
+			this.$('.div-numeroMatricula').addClass('has-error');
+		}
+		else{
+			this.$('.alert-errorNumeroMatriculaAtLeastOne').hide();
+			this.$('.div-numeroMatricula').removeClass('has-error');
+		}
 	},
 	renderProcessing: function(){
 		if(this.model.get('processing')){
@@ -282,6 +411,9 @@ app.DatosAutorizadosTabView = Backbone.View.extend({
 		this.$(".numeroMatricula").prop('disabled',true);
 		this.$(".verifyNumeroMatricula").prop('disabled',true);
 		this.$(".add").prop('disabled',true);
+		
+		this.$(".sort").prop('disabled',true);
+		this.$(".remove ").prop('disabled',true); 
 	},
 	enableInput: function(){
 		this.$(".numeroMatricula").prop('disabled',false);
@@ -292,6 +424,8 @@ app.DatosAutorizadosTabView = Backbone.View.extend({
 		else{
 			this.$(".add").prop('disabled',true);
 		}
+		this.$(".sort").prop('disabled',false);
+		this.$(".remove ").prop('disabled',false); 
 	},
 	enableSubmitDisableEdit: function(){
 		this.$(".edit").prop('disabled',true);
@@ -325,13 +459,17 @@ app.DatosAutorizadosTabView = Backbone.View.extend({
 			numeroMatriculaFoundValidated: false,
 			errorNumeroMatricula: false,
 			errorNumeroMatriculaNotFound: false,
-			errorNumeroMatriculaInvalidDataType: false
+			errorNumeroMatriculaInvalidDataType: false,
+			errorNumeroMatriculaInList: false,
+			errorNumeroMatriculaAtLeastOne: false
 		});
 	},
 	
 	events: {
 		'click .verifyNumeroMatricula':'verifyNumeroMatricula',
 		'click .add': 'addApoderadable',
+		'click .submit':'submit',
+		'click .edit':'edit',
 		'change .field': 'updateModel'
 	},
 	
@@ -343,10 +481,13 @@ app.DatosAutorizadosTabView = Backbone.View.extend({
 	
 	addApoderadable: function(e){
 		e.preventDefault();
-		var _this = this;
 		
-		this.collection.add({
-			idCertificacion: _this.model.get('idCertificacions'),
+		var _this = this;
+		var apoderable;
+		var obj;
+		
+		obj = {
+			idCertificacion: _this.model.get('idCertificacion'),
 			idSustentante: _this.model.get('idSustentante'),
 			numeroMatricula: _this.model.get('numeroMatricula'),
 			nombreCompleto: _this.model.get('nombreCompleto'),
@@ -356,7 +497,10 @@ app.DatosAutorizadosTabView = Backbone.View.extend({
 			dsFigura: _this.model.get('dsFigura'),
 			dsVarianteFigura: _this.model.get('dsVarianteFigura'),
 			dsTipoAutorizacion: _this.model.get('dsTipoAutorizacion')
-		});
+		}
+		apoderable = new app.AutorizadoVM(obj);
+		
+		this.collection.add(apoderable);
 		
 		this.model.set('numeroMatricula','');
 	},
@@ -391,6 +535,30 @@ app.DatosAutorizadosTabView = Backbone.View.extend({
 				this.model.set('errorNumeroMatriculaInList',true);
 				valid = false;
 			}
+		}
+		
+		return valid;
+	},
+	
+	submit: function(e){
+		e.preventDefault();
+		if(this._validate()){
+			this.model.set('validated',true);
+		}
+	},
+	edit: function(e){
+		e.preventDefault();
+		this.model.set('validated',false);
+	},
+	
+	_validate: function(){
+		var valid = true;
+		//valida que haya al menos un autorizable
+		this.model.set('errorNumeroMatriculaAtLeastOne',false);
+		
+		if(this.collection.size() == 0){
+			this.model.set('errorNumeroMatriculaAtLeastOne',true);
+			valid = false;
 		}
 		
 		return valid;

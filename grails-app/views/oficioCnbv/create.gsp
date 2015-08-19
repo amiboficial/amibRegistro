@@ -107,7 +107,7 @@
 
 		findAutorizableByNumeroMatriculaUrl = '<g:createLink action="findAutorizableByNumeroMatricula" />';
 		
-		autorizadosData = [
+		/*autorizadosData = [
 			{
 				idCertificacion: 1,
 				idSustentante: 1,
@@ -156,9 +156,9 @@
 				dsVarianteFigura: 'Asesor de estrategias de inversión (Serie 300)',
 				dsTipoAutorizacion: 'YYYY Autorizado para realzar accion dentro del estatuto general que implica los reglamentos impartidos'
 			}
-		];
+		];*/
 		
-		datosOficioView = new app.DatosAutorizadosTabView({ model: new app.DatosAutorizadosTabVM( {findAutorizableByNumeroMatriculaUrl:findAutorizableByNumeroMatriculaUrl} ), collection: new app.AutorizadoVMCollection(autorizadosData) });
+		datosOficioView = new app.DatosAutorizadosTabView({ model: new app.DatosAutorizadosTabVM( {findAutorizableByNumeroMatriculaUrl:findAutorizableByNumeroMatriculaUrl} ), collection: new app.AutorizadoVMCollection() });
 	</script>
 	
 	<g:render template="../common/docMultiples.v2"/>

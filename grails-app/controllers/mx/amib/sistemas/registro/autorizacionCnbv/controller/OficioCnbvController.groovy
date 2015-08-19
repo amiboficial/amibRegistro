@@ -13,6 +13,7 @@ class OficioCnbvController {
 	
 	def oficioCnbvService
 	def sustentanteService
+	def certificacionService
 	
     def index() { }
 	
@@ -296,6 +297,7 @@ class OficioCnbvController {
 			//def servRes = oficioCnbvService.list(max, offset, sort, order)
 			res.put("status", "OK")
 			res.put("object", true )
+			
 		}
 		catch(Exception ex){
 			res = [ 'status': 'ERROR', 'object': ex.message ]
@@ -321,9 +323,23 @@ class OficioCnbvController {
 	def findAutorizableByNumeroMatricula(Integer id){
 		Map<String,Object> res = new HashMap<String,Object>()
 		int numeroMatricula = id
+		def servRes
 		
-		res.put("status", "OK")
-		res.put("object", AutorizableResultVM.copyFromServicesResults(null) )
+		try{
+			servRes = certificacionService.findAllEnAutorizacionByMatricula(numeroMatricula)
+			if( servRes.count > 0 ){
+				res.put("status", "OK")
+				res.put("object", AutorizableResultVM.copyFromServicesResults( servRes.list.first() ) )
+			}
+			else{
+				res.put("status", "ERROR")
+				res.put("object", "NOT_FOUND")
+			}
+		}
+		catch(Exception e){
+			res.put("status", "ERROR")
+			res.put("object", e.message)
+		}
 		
 		render (res as JSON)
 	}
@@ -367,15 +383,15 @@ class OficioCnbvController {
 		public static AutorizableResultVM copyFromServicesResults(CertificacionTO resCert){
 			AutorizableResultVM res = new AutorizableResultVM()
 			
-			res.idCertificacion = 1
-			res.idSustentante = 2
-			res.nombreCompleto = 'dsadsa dsadsa dsadsa'
-			res.nombre = 'asdsadas'
-			res.primerApellido = 'gfdgfd'
-			res.segundoApellido = 'rewrew'
-			res.dsFigura = 'sdfasdfdsfdsafdsa'
-			res.dsVarianteFigura = 'fdsafsfdsafsdafsadfdfdsaf fthaf'
-			res.dsTipoAutorizacion = 'feaf51ga35fg1rg1ra0v604 g0a6g0aw g650sg65ar10 gr1a0 6gar01 65g1re'
+			res.idCertificacion = resCert.id
+			res.idSustentante = resCert.sustentante.id
+			res.nombre = resCert.sustentante.nombre
+			res.primerApellido = resCert.sustentante.primerApellido
+			res.segundoApellido = resCert.sustentante.segundoApellido
+			res.nombreCompleto = res.nombre + ' ' + res.primerApellido + ' ' + res.segundoApellido
+			res.dsFigura = resCert.varianteFigura.nombreFigura
+			res.dsVarianteFigura = resCert.varianteFigura.nombre
+			res.dsTipoAutorizacion = resCert.varianteFigura.tipoAutorizacionFigura
 			
 			return res
 		}

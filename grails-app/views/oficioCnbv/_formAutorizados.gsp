@@ -6,6 +6,7 @@
 	<div class="alert-errorNumeroMatriculaNotFound alert alert-danger" role="alert"><span class="glyphicon glyphicon-info-sign"></span> No se puedo encontrar un registro <strong>En Autorización</strong> con el <strong>Numero de matrícula</strong> introducida.</div>
 	<div class="alert-errorNumeroMatriculaInvalidDataType alert alert-danger" role="alert"><span class="glyphicon glyphicon-info-sign"></span> Introduzca un <strong>Numero de matrícula</strong> válido.</div>
 	<div class="alert-errorNumeroMatriculaInList alert alert-danger" role="alert"><span class="glyphicon glyphicon-info-sign"></span> Introduzca un <strong>Numero de matrícula</strong> que no haya sido ya incluido en la lista.</div>
+	<div class="alert-errorNumeroMatriculaAtLeastOne alert alert-danger" role="alert"><span class="glyphicon glyphicon-info-sign"></span> Debe introducir al menos un registro.</div>
 	<div class="alert-processing alert alert-info"><asset:image src="spinner_alert_info.gif"/>&nbsp; Procesando datos, espere unos instantes...</div>
 	
 	<div class="div-numeroMatricula form-group">
@@ -25,7 +26,22 @@
 
 	<div class="div-autorizados">
 	</div>
-	
+
+	<div class="form-group">
+		<div class="col-md-3 col-sm-3">
+			&nbsp;
+		</div>
+		<div class="col-md-3 col-sm-3">
+			<button type="button" class="btn btn-primary btn-block submit">Validar y confirmar</button>
+		</div>
+		<div class="col-md-3 col-sm-3">
+			<button disabled="" type="button" class="btn btn-primary btn-block edit">Editar</button>
+		</div>
+		<div class="col-md-3 col-sm-3">
+			&nbsp;
+		</div>
+	</div>	
+
 </script>
 
 <script type="text/template" id="oficioCnbvFormAutorizadosResultTemplate">

@@ -63,30 +63,40 @@
 		<table class="table">
 			<thead>
 				<tr>
-					<th>
-					Folio 
-						<button type="button" class="sort btn btn-default btn-xxs" data-sort="idSustentante" data-order="asc"><span class="sort handCursor glyphicon glyphicon-chevron-up"></span></button>
-						<button type="button" class="sort btn btn-default btn-xxs" data-sort="idSustentante" data-order="desc"><span class="sort handCursor glyphicon glyphicon-chevron-down"></span></button>
+					<th class="hidden-xs">
+					Folio<br/>
+						<button type="button" class="sort btn btn-default btn-xxs" data-sort="idSustentante" data-order="asc"><span class="glyphicon glyphicon-chevron-up"></span></button>
+						<button type="button" class="sort btn btn-default btn-xxs" data-sort="idSustentante" data-order="desc"><span class="glyphicon glyphicon-chevron-down"></span></button>
 					</th>
 					<th>
-					Matrícula 
-						<button type="button" class="sort btn btn-default btn-xxs" data-sort="numeroMatricula" data-order="asc"><span class="sort handCursor glyphicon glyphicon-chevron-up"></span></button>
-						<button type="button" class="sort btn btn-default btn-xxs" data-sort="numeroMatricula" data-order="desc"><span class="sort handCursor glyphicon glyphicon-chevron-down"></span></button>
+					Matrícula<br/>
+						<button type="button" class="sort btn btn-default btn-xxs" data-sort="numeroMatricula" data-order="asc"><span class="glyphicon glyphicon-chevron-up"></span></button>
+						<button type="button" class="sort btn btn-default btn-xxs" data-sort="numeroMatricula" data-order="desc"><span class="glyphicon glyphicon-chevron-down"></span></button>
 					</th>
-					<th>
-					Nombre 
-						<button type="button" class="sort btn btn-default btn-xxs" data-sort="nombre" data-order="asc"><span class="sort handCursor glyphicon glyphicon-chevron-up"></span></button>
-						<button type="button" class="sort btn btn-default btn-xxs" data-sort="nombre" data-order="desc"><span class="sort handCursor glyphicon glyphicon-chevron-down"></span></button>
+					<th class="hidden-sm hidden-md hidden-lg">
+					Nombre completo<br/>
+						<button type="button" class="sort btn btn-default btn-xxs" data-sort="nombreCompleto" data-order="asc"><span class="glyphicon glyphicon-chevron-up"></span></button>
+						<button type="button" class="sort btn btn-default btn-xxs" data-sort="nombreCompleto" data-order="desc"><span class="glyphicon glyphicon-chevron-down"></span></button>
 					</th>
-					<th>
-					1er Apellido 
-						<button type="button" class="sort btn btn-default btn-xxs" data-sort="primerApellido" data-order="asc"><span class="sort handCursor glyphicon glyphicon-chevron-up"></span></button>
-						<button type="button" class="sort btn btn-default btn-xxs" data-sort="primerApellido" data-order="desc"><span class="sort handCursor glyphicon glyphicon-chevron-down"></span></button>
+					<th class="hidden-xs">
+					Nombre<br/>
+						<button type="button" class="sort btn btn-default btn-xxs" data-sort="nombre" data-order="asc"><span class="glyphicon glyphicon-chevron-up"></span></button>
+						<button type="button" class="sort btn btn-default btn-xxs" data-sort="nombre" data-order="desc"><span class="glyphicon glyphicon-chevron-down"></span></button>
 					</th>
-					<th>
-					2do Apellido 
-						<button type="button" class="sort btn btn-default btn-xxs" data-sort="segundoApellido" data-order="asc"><span class="sort handCursor glyphicon glyphicon-chevron-up"></span></button>
-						<button type="button" class="sort btn btn-default btn-xxs" data-sort="segundoApellido" data-order="desc"><span class="sort handCursor glyphicon glyphicon-chevron-down"></span></button>
+					<th class="hidden-xs">
+					1er Apellido<br/>
+						<button type="button" class="sort btn btn-default btn-xxs" data-sort="primerApellido" data-order="asc"><span class="glyphicon glyphicon-chevron-up"></span></button>
+						<button type="button" class="sort btn btn-default btn-xxs" data-sort="primerApellido" data-order="desc"><span class="glyphicon glyphicon-chevron-down"></span></button>
+					</th>
+					<th class="hidden-xs">
+					2do Apellido<br/>
+						<button type="button" class="sort btn btn-default btn-xxs" data-sort="segundoApellido" data-order="asc"><span class="glyphicon glyphicon-chevron-up"></span></button>
+						<button type="button" class="sort btn btn-default btn-xxs" data-sort="segundoApellido" data-order="desc"><span class="glyphicon glyphicon-chevron-down"></span></button>
+					</th>
+					<th class="hidden-xs hidden-sm">
+					Tipo de Autorización<br/>
+						<button type="button" class="sort btn btn-default btn-xxs" data-sort="segundoApellido" data-order="asc"><span class="glyphicon glyphicon-chevron-up"></span></button>
+						<button type="button" class="sort btn btn-default btn-xxs" data-sort="segundoApellido" data-order="desc"><span class="glyphicon glyphicon-chevron-down"></span></button>
 					</th>
 					<th>...</th>
 				</tr>
@@ -95,4 +105,17 @@
 		</table>
 	</fieldset>
 
+</script>
+
+<script type="text/template" id="oficioCnbvFormAutorizadosElementTemplate">
+	<td class="hidden-xs">{{=idSustentante}}</td>
+	<td>{{=numeroMatricula}}</td>
+	<td class="hidden-sm hidden-md hidden-lg">{{=nombre}} {{=primerApellido}} {{=segundoApellido}}</td>
+	<td class="hidden-xs">{{=nombre}}</td>
+	<td class="hidden-xs">{{=primerApellido}}</td>
+	<td class="hidden-xs">{{=segundoApellido}}</td>
+	<td class="hidden-xs hidden-sm" style="width: 330px">{{=dsTipoAutorizacion}}</td>
+	<td>
+		<button type="button" class="remove btn btn-default btn-xs" data-idCertificacion="{{=idCertificacion}}"><span class="glyphicon glyphicon glyphicon-trash"></span> Eliminar</button>
+	</td>
 </script>

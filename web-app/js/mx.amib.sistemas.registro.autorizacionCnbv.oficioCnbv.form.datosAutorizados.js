@@ -58,6 +58,29 @@ app.AutorizadoVMCollection = Backbone.Collection.extend({
 
 app.AutorizadoResultView = Backbone.View.extend({
 	parentView: {},
+	tagName: 'tr',
+	template: _.template( $('#oficioCnbvFormAutorizadosElementTemplate').html() ),
+	model: new Backbone.Model(),
+	
+	initialize: function(options){
+		this.model = options.model;
+		this.parentView = options.parentView;
+	},
+	
+	render: function(){
+		this.$el.html( this.template( this.model.toJSON() ) );
+		return this;
+	},
+	
+	events: {
+		'click .remove': 'remove',
+		'click .expand': 'expand',
+	},
+	
+	remove: function(e){
+		e.preventDefault();
+		alert('remove - NOT YET IMPLEMENTED');
+	}
 });
 
 app.AutorizadoResultsView = Backbone.View.extend({
@@ -88,6 +111,18 @@ app.AutorizadoResultsView = Backbone.View.extend({
 		var elementView =  new app.AutorizadoResultView({model:item,parentView:view});
 		this.$(".list-items").append( elementView.render().el );
 		return elementView;
+	},
+	
+	events: {
+		'click .sort': 'mandarOrdenar'
+	},
+	
+	mandarOrdenar: function(e){
+		var order = this.$(e.currentTarget).data("order");
+		var sort = this.$(e.currentTarget).data("sort");
+		
+		e.preventDefault();
+			this.collection.sortAndOrderBy(order,sort);
 	}
 });
 

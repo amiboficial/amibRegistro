@@ -103,9 +103,42 @@
 		var autorizadosData;
 		var datosOficioView;
 
-		
-		
-		datosOficioView = new app.DatosAutorizadosTabView({ model: new app.DatosAutorizadosTabVM(), collection: new app.AutorizadoVMCollection() });
+		autorizadosData = [
+			{
+				idCertificacion: 1,
+				idSustentante: 1,
+				numeroMatricula: '1',
+				nombre: 'Perla',
+				primerApellido: 'Poon',
+				segundoApellido: 'Gregg',
+				dsFigura: 'Asesor de estrategias de inversión',
+				dsVarianteFigura: 'Asesor de estrategias de inversión (Serie 100)',
+				dsTipoAutorizacion: 'Autorizado para realzar accion dentro del estatuto general que implica los reglamentos impartidos'
+			},
+			{
+				idCertificacion: 2,
+				idSustentante: 2,
+				numeroMatricula: '2',
+				nombre: 'Meredith',
+				primerApellido: 'Coogan',
+				segundoApellido: 'Schon',
+				dsFigura: 'Asesor de estrategias de inversión X',
+				dsVarianteFigura: 'Asesor de estrategias de inversión (Serie 200)',
+				dsTipoAutorizacion: 'XXXX Autorizado para realzar accion dentro del estatuto general que implica los reglamentos impartidos'
+			},
+			{
+				idCertificacion: 3,
+				idSustentante: 3,
+				numeroMatricula: '3',
+				nombre: 'Josephine',
+				primerApellido: 'Green',
+				segundoApellido: 'Jenning',
+				dsFigura: 'Asesor de estrategias de inversión Y',
+				dsVarianteFigura: 'Asesor de estrategias de inversión (Serie 300)',
+				dsTipoAutorizacion: 'YYYY Autorizado para realzar accion dentro del estatuto general que implica los reglamentos impartidos'
+			},
+		];
+		datosOficioView = new app.DatosAutorizadosTabView({ model: new app.DatosAutorizadosTabVM(), collection: new app.AutorizadoVMCollection(autorizadosData) });
 	</script>
 	
 	<g:render template="../common/docMultiples.v2"/>

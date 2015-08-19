@@ -149,9 +149,9 @@ app.DatosOficioTabView =  Backbone.View.extend({
 	render: function(){
 		this.$el.html( this.template( this.model.toJSON() ) );
 		this.renderUniqueValidated();
-		this.renderValidated();
 		this.renderError();
 		this.renderProcessing();
+		this.renderValidated();
 		return this;
 	},
 	renderUniqueValidated: function(){
@@ -232,16 +232,25 @@ app.DatosOficioTabView =  Backbone.View.extend({
 			this.$('.alert-processing').hide();
 			this.enableInput();
 		}
+		//this.renderValidated();
 	},
 	disableInput: function(){
-		this.$("input").prop('disabled',true);
-		this.$("button").prop('disabled',true);
-		this.$("select").prop('disabled',true);
+		this.$(".numeroOficio").prop('disabled',true);
+		this.$(".claveDga").prop('disabled',true);
+		this.$(".fechaOficio_day").prop('disabled',true);
+		this.$(".fechaOficio_month").prop('disabled',true);
+		this.$(".fechaOficio_year").prop('disabled',true);
+		this.$(".verifyClaveDga").prop('disabled',true);
+		this.$(".verifyNumeroOficio").prop('disabled',true);
 	},
 	enableInput: function(){
-		this.$("input").prop('disabled',false);
-		this.$("button").prop('disabled',false);
-		this.$("select").prop('disabled',false);
+		this.$(".numeroOficio").prop('disabled',false);
+		this.$(".claveDga").prop('disabled',false);
+		this.$(".fechaOficio_day").prop('disabled',false);
+		this.$(".fechaOficio_month").prop('disabled',false);
+		this.$(".fechaOficio_year").prop('disabled',false);
+		this.$(".verifyClaveDga").prop('disabled',false);
+		this.$(".verifyNumeroOficio").prop('disabled',false);
 	},
 	enableSubmitDisableEdit: function(){
 		this.$(".edit").prop('disabled',true);
@@ -304,7 +313,7 @@ app.DatosOficioTabView =  Backbone.View.extend({
 			this.model.set('errorNumeroOficio',true);
 		}
 		else{
-			this.model.set('numeroOficioUniqueValidated',true);
+			this.model.checkUniqueNumeroOficio();
 		}
 		
 	},

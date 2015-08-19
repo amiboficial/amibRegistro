@@ -1,6 +1,7 @@
 package mx.amib.sistemas.registro.autorizacionCnbv.controller
 
 import grails.converters.JSON
+import mx.amib.sistemas.external.expediente.certificacion.service.CertificacionTO
 import mx.amib.sistemas.external.expediente.persona.service.SustentanteTO
 import mx.amib.sistemas.external.oficios.oficioCnbv.OficioCnbvTO
 import mx.amib.sistemas.registro.expediente.controller.CertificacionDictamenPrevioController;
@@ -317,6 +318,15 @@ class OficioCnbvController {
 		
 		render (res as JSON)
 	}
+	def findAutorizableByNumeroMatricula(Integer id){
+		Map<String,Object> res = new HashMap<String,Object>()
+		int numeroMatricula = id
+		
+		res.put("status", "OK")
+		res.put("object", AutorizableResultVM.copyFromServicesResults(null) )
+		
+		render (res as JSON)
+	}
 	
 	public static class ResultVM{
 		long id
@@ -341,5 +351,34 @@ class OficioCnbvController {
 			
 			return res
 		}
+	}
+	
+	public static class AutorizableResultVM{
+		long idCertificacion
+		long idSustentante
+		String nombreCompleto
+		String nombre
+		String primerApellido
+		String segundoApellido
+		String dsFigura
+		String dsVarianteFigura
+		String dsTipoAutorizacion
+		
+		public static AutorizableResultVM copyFromServicesResults(CertificacionTO resCert){
+			AutorizableResultVM res = new AutorizableResultVM()
+			
+			res.idCertificacion = 1
+			res.idSustentante = 2
+			res.nombreCompleto = 'dsadsa dsadsa dsadsa'
+			res.nombre = 'asdsadas'
+			res.primerApellido = 'gfdgfd'
+			res.segundoApellido = 'rewrew'
+			res.dsFigura = 'sdfasdfdsfdsafdsa'
+			res.dsVarianteFigura = 'fdsafsfdsafsdafsadfdfdsaf fthaf'
+			res.dsTipoAutorizacion = 'feaf51ga35fg1rg1ra0v604 g0a6g0aw g650sg65ar10 gr1a0 6gar01 65g1re'
+			
+			return res
+		}
+		
 	}
 }

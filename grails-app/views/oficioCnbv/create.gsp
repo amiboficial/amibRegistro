@@ -100,17 +100,22 @@
 	<g:javascript src="mx.amib.sistemas.registro.autorizacionCnbv.oficioCnbv.form.datosAutorizados.js" />
 	<script type="text/javascript">
 		var app = app || {};
+		
 		var autorizadosData;
 		var datosOficioView;
+		var findAutorizableByNumeroMatriculaUrl;
 
+		findAutorizableByNumeroMatriculaUrl = '<g:createLink action="findAutorizableByNumeroMatricula" />';
+		
 		autorizadosData = [
 			{
 				idCertificacion: 1,
 				idSustentante: 1,
 				numeroMatricula: '1',
+				nombreCompleto: 'Perla Poon López',
 				nombre: 'Perla',
 				primerApellido: 'Poon',
-				segundoApellido: 'Gregg',
+				segundoApellido: 'López',
 				dsFigura: 'Asesor de estrategias de inversión',
 				dsVarianteFigura: 'Asesor de estrategias de inversión (Serie 100)',
 				dsTipoAutorizacion: 'Autorizado para realzar accion dentro del estatuto general que implica los reglamentos impartidos'
@@ -119,9 +124,10 @@
 				idCertificacion: 2,
 				idSustentante: 2,
 				numeroMatricula: '2',
+				nombreCompleto: 'Meredith Coogan Pérez',
 				nombre: 'Meredith',
 				primerApellido: 'Coogan',
-				segundoApellido: 'Schon',
+				segundoApellido: 'Pérez',
 				dsFigura: 'Asesor de estrategias de inversión X',
 				dsVarianteFigura: 'Asesor de estrategias de inversión (Serie 200)',
 				dsTipoAutorizacion: 'XXXX Autorizado para realzar accion dentro del estatuto general que implica los reglamentos impartidos'
@@ -130,15 +136,29 @@
 				idCertificacion: 3,
 				idSustentante: 3,
 				numeroMatricula: '3',
+				nombreCompleto: 'Josephine Green Martinez',
 				nombre: 'Josephine',
 				primerApellido: 'Green',
-				segundoApellido: 'Jenning',
+				segundoApellido: 'Martinez',
+				dsFigura: 'Asesor de estrategias de inversión Z',
+				dsVarianteFigura: 'Asesor de estrategias de inversión (Serie 300)',
+				dsTipoAutorizacion: 'ZZZZ Autorizado para realzar accion dentro del estatuto general que implica los reglamentos impartidos'
+			},
+			{
+				idCertificacion: 4,
+				idSustentante: 4,
+				numeroMatricula: '4',
+				nombreCompleto: 'Jennifer Aniston Rodriguez',
+				nombre: 'Jennifer',
+				primerApellido: 'Aniston',
+				segundoApellido: 'Rodriguez',
 				dsFigura: 'Asesor de estrategias de inversión Y',
 				dsVarianteFigura: 'Asesor de estrategias de inversión (Serie 300)',
 				dsTipoAutorizacion: 'YYYY Autorizado para realzar accion dentro del estatuto general que implica los reglamentos impartidos'
-			},
+			}
 		];
-		datosOficioView = new app.DatosAutorizadosTabView({ model: new app.DatosAutorizadosTabVM(), collection: new app.AutorizadoVMCollection(autorizadosData) });
+		
+		datosOficioView = new app.DatosAutorizadosTabView({ model: new app.DatosAutorizadosTabVM( {findAutorizableByNumeroMatriculaUrl:findAutorizableByNumeroMatriculaUrl} ), collection: new app.AutorizadoVMCollection(autorizadosData) });
 	</script>
 	
 	<g:render template="../common/docMultiples.v2"/>

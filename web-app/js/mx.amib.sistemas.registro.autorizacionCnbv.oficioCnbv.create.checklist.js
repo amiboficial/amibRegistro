@@ -94,9 +94,6 @@ app.CheckSubmitView = Backbone.View.extend({
 		//Limpia los datos del "span" donde se introducirán los hiddens
 		$('#spnHdnPostData').html("");
 		
-		//Datos del poder
-		//this.$("#spnHdnPostData").append('<input type="hidden" name="poder.idGrupoFinanciero" value="' + arr[app.PODER_CREATE_CHKIDX_PODER].model.get('idGrupoFinanciero') + '" />');
-		
 		this.$("#spnHdnPostData").append('<input type="hidden" name="oficioCnbv.claveDga" value="' + arr[app.OFA_CREATE_CHKIDX_DATOFICIO].model.get('claveDga') + '" />');
 		this.$("#spnHdnPostData").append('<input type="hidden" name="oficioCnbv.numeroOficio" value="' + arr[app.OFA_CREATE_CHKIDX_DATOFICIO].model.get('numeroOficio') + '" />');
 		this.$("#spnHdnPostData").append('<input type="hidden" name="oficioCnbv.fechaOficio_day" value="' + arr[app.OFA_CREATE_CHKIDX_DATOFICIO].model.get('fechaOficio_day') + '" />');
@@ -106,7 +103,7 @@ app.CheckSubmitView = Backbone.View.extend({
 		
 		i = 0;
 		arr[app.OFA_CREATE_CHKIDX_AUTORIZADOS].collection.each( function(item){
-			this.$("#spnHdnPostData").append('<input type="hidden" name="autorizadoCnbvTO[' + i + '].idCertificacion" value="' + item.get("idCertificacion") + '" />');
+			this.$("#spnHdnPostData").append('<input type="hidden" name="autorizadosCnbv.idCertificacion" value="' + item.get("idCertificacion") + '" />');
 			i++;
 		}, this );
 		

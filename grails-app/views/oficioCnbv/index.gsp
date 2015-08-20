@@ -38,7 +38,10 @@
 		resultVMCollection.findAllByIdSustentanteUrl= '<g:createLink action="findAllByIdSustentante" />';
 		resultVMCollection.findAllByNombreApellidosUrl= '<g:createLink action="findAllByNombreApellidos" />';
 		
-		var mainView = new app.OficioCnbvIndexView({ resultVMCollection: resultVMCollection });
+		var mainView = new app.OficioCnbvIndexView({
+			resultVMCollection: resultVMCollection,
+			createUrl : '<g:createLink action="create" />'
+		});
 	</script>
 	
 </body>

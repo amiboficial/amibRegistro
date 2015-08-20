@@ -1164,9 +1164,11 @@ app.OficioCnbvIndexView = Backbone.View.extend({
 	el: '#divOficioCnbvIndexView',
 	template: _.template( $('#oficioCnbvIndexTemplate').html() ),
 	options: {},
+	createUrl: '',
 	
 	initialize: function(options){
 		this.options = options;
+		this.createUrl = options.createUrl;
 		this.render();
 	},
 	
@@ -1210,6 +1212,14 @@ app.OficioCnbvIndexView = Backbone.View.extend({
 		this.$(".div-resultados").append( view.render().el );
 		
 		return view;
+	},
+	
+	events:{
+		'click .create': 'irAltaOficio'
+	},
+	
+	irAltaOficio: function(){
+		window.location.assign(this.createUrl)
 	}
 });
 

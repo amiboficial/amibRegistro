@@ -74,7 +74,7 @@
 			</div>
 			
 		</div>
-	
+		<span id="spnHdnPostData"></span>
 	</form>
 
 	<g:render template="./formOficioCnbv"/>

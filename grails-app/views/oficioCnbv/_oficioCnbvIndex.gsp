@@ -4,7 +4,7 @@
 
 	<fieldset>
 		<legend>Acciones</legend>
-		<button id="btnAltaOficio" type="button" class="btn btn-default btn-primary"><span class="glyphicon glyphicon-file"></span> Alta de oficio</button>
+		<button type="button" class="create btn btn-default btn-primary"><span class="glyphicon glyphicon-file"></span> Alta de oficio</button>
 	</fieldset>
 
 	<fieldset>

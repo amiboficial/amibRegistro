@@ -3,6 +3,7 @@ package mx.amib.sistemas.registro.autorizacionCnbv.controller
 import grails.converters.JSON
 import mx.amib.sistemas.external.expediente.certificacion.service.CertificacionTO
 import mx.amib.sistemas.external.expediente.persona.service.SustentanteTO
+import mx.amib.sistemas.external.oficios.oficioCnbv.AutorizadoCnbvTO
 import mx.amib.sistemas.external.oficios.oficioCnbv.OficioCnbvTO
 import mx.amib.sistemas.registro.expediente.controller.CertificacionDictamenPrevioController;
 import mx.amib.sistemas.utils.SearchResult
@@ -12,6 +13,7 @@ class OficioCnbvController {
 	private static final MAX_SUSTENTANTE_RESULTS = 100
 	
 	def oficioCnbvService
+	def autorizacionCnbvService
 	def sustentanteService
 	def certificacionService
 	
@@ -21,7 +23,50 @@ class OficioCnbvController {
 	
 	def create() { }
 	
-	def save(){ }
+	def save(OficioCnbvTO oficioCnbv){
+		def idsCertificacion
+		def certsFromIds
+		int fechaOficio_day
+		int fechaOficio_month
+		int fechaOficio_year
+		Calendar calFechaOficio
+		
+		//BINDINGS MANUALES
+		idsCertificacion = params.list('autorizadosCnbv.idCertificacion').collect{ Long.parseLong(it) }
+		fechaOficio_day = params.int('oficioCnbv.fechaOficio_day')
+		fechaOficio_month = params.int('oficioCnbv.fechaOficio_month')
+		fechaOficio_year = params.int('oficioCnbv.fechaOficio_year')
+		
+		calFechaOficio = Calendar.getInstance()
+		calFechaOficio.set(Calendar.DAY_OF_MONTH, fechaOficio_day )
+		calFechaOficio.set(Calendar.MONTH, fechaOficio_month - 1 )
+		calFechaOficio.set(Calendar.YEAR, fechaOficio_year )
+		calFechaOficio.set(Calendar.MINUTE, 0 )
+		calFechaOficio.set(Calendar.SECOND, 0 )
+		calFechaOficio.set(Calendar.MILLISECOND, 0 )
+		oficioCnbv.fechaOficio = calFechaOficio.getTime()
+		
+		certsFromIds = certificacionService.getAll(idsCertificacion)
+		oficioCnbv.autorizados = new ArrayList<AutorizadoCnbvTO>()
+		certsFromIds.each { x -> 
+			def aut = new AutorizadoCnbvTO()
+			aut.id = null
+			aut.idCertificacion = x.id
+			aut.idOficioCnbv = null
+			oficioCnbv.autorizados.add(aut)
+		}
+		
+		try{	
+			//Ya teniendo todo bindeado a oficioCnbv
+			oficioCnbv = autorizacionCnbvService.altaOficioCnbv(oficioCnbv)
+			flash.successMessage = "El oficio con la Clave DGA: " + oficioCnbv.claveDga + " ha sido dado de alta [ID:" + oficioCnbv.id + "]"
+		}
+		catch(Exception e){
+			flash.errorMessage = "Ha ocurrido un error al dar de alta el oficio de autorización"
+		}
+		
+		redirect (action: "index")
+	}
 	
 	def findAllByDatosOficio(){ 
 		Map<String,Object> res = new HashMap<String,Object>()

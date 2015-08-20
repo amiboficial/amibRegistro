@@ -84,6 +84,10 @@ beans = {
 		findAllByNumeroOficioUrl = application.config.mx.amib.sistemas.oficios.resthttpURL + application.config.mx.amib.sistemas.oficios.oficioCnbv.findAllByNumeroOficio
 		findAllByClaveDgaUrl = application.config.mx.amib.sistemas.oficios.resthttpURL + application.config.mx.amib.sistemas.oficios.oficioCnbv.findAllByClaveDga
 		findAllByFechaOficioUrl = application.config.mx.amib.sistemas.oficios.resthttpURL + application.config.mx.amib.sistemas.oficios.oficioCnbv.findAllByFechaOficio
+		
+		checkUniqueClaveDgaUrl = application.config.mx.amib.sistemas.oficios.resthttpURL + application.config.mx.amib.sistemas.oficios.oficioCnbv.checkUniqueClaveDga
+		checkUniqueNumeroOficioUrl = application.config.mx.amib.sistemas.oficios.resthttpURL + application.config.mx.amib.sistemas.oficios.oficioCnbv.checkUniqueNumeroOficio
+		
 		getUrl = application.config.mx.amib.sistemas.oficios.resthttpURL + application.config.mx.amib.sistemas.oficios.oficioCnbv.get
 		saveUrl = application.config.mx.amib.sistemas.oficios.resthttpURL + application.config.mx.amib.sistemas.oficios.oficioCnbv.save
 		updateUrl = application.config.mx.amib.sistemas.oficios.resthttpURL + application.config.mx.amib.sistemas.oficios.oficioCnbv.update

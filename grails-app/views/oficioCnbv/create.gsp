@@ -37,19 +37,13 @@
 		<div class="tab-content">
 			<br/>
 			<div role="tabpanel" class="tab-pane active" id="tabOficio">
-				
 				<div id="divOficioCnbv"></div>
-				
 			</div>
 			<div role="tabpanel" class="tab-pane" id="tabAutorizados">
-			
 				<div id="divAutorizados"></div>
-				
 			</div>
 			<div role="tabpanel" class="tab-pane" id="tabDoc">
-				
 				<div id="divDocumentos"></div>
-				
 			</div>
 			
 			<div role="tabpanel" class="tab-pane" id="tabCheckSubmit">
@@ -131,30 +125,6 @@
 				dsFigura: 'Asesor de estrategias de inversión X',
 				dsVarianteFigura: 'Asesor de estrategias de inversión (Serie 200)',
 				dsTipoAutorizacion: 'XXXX Autorizado para realzar accion dentro del estatuto general que implica los reglamentos impartidos'
-			},
-			{
-				idCertificacion: 3,
-				idSustentante: 3,
-				numeroMatricula: '3',
-				nombreCompleto: 'Josephine Green Martinez',
-				nombre: 'Josephine',
-				primerApellido: 'Green',
-				segundoApellido: 'Martinez',
-				dsFigura: 'Asesor de estrategias de inversión Z',
-				dsVarianteFigura: 'Asesor de estrategias de inversión (Serie 300)',
-				dsTipoAutorizacion: 'ZZZZ Autorizado para realzar accion dentro del estatuto general que implica los reglamentos impartidos'
-			},
-			{
-				idCertificacion: 4,
-				idSustentante: 4,
-				numeroMatricula: '4',
-				nombreCompleto: 'Jennifer Aniston Rodriguez',
-				nombre: 'Jennifer',
-				primerApellido: 'Aniston',
-				segundoApellido: 'Rodriguez',
-				dsFigura: 'Asesor de estrategias de inversión Y',
-				dsVarianteFigura: 'Asesor de estrategias de inversión (Serie 300)',
-				dsTipoAutorizacion: 'YYYY Autorizado para realzar accion dentro del estatuto general que implica los reglamentos impartidos'
 			}
 		];*/
 		
@@ -215,26 +185,10 @@
 
 	<g:javascript src="mx.amib.sistemas.registro.autorizacionCnbv.oficioCnbv.create.checklist.js" />
 	<script type="text/javascript">
-		
 		var checkSubmitView = new app.CheckSubmitView();
 		checkSubmitView.setViewInstance(app.OFA_CREATE_CHKIDX_DATOFICIO,datosOficioView);
 		checkSubmitView.setViewInstance(app.OFA_CREATE_CHKIDX_AUTORIZADOS,datosAutorizadoView);
 		checkSubmitView.setViewInstance(app.OFA_CREATE_CHKIDX_DOCS,documentosView);
-		
-		/*
-
-		Ejemplo de instanciamineto en el GSP,JSP,etc..-
-
-		var checkSubmitView = new app.CheckSubmitView();
-		checkSubmitView.setViewInstance(app.EXP_REG_CHK_GRALES,generalesView);
-		checkSubmitView.setViewInstance(app.EXP_REG_CHK_TELS,telefonosView);
-		checkSubmitView.setViewInstance(app.EXP_REG_CHK_SEPOMEX,sepomexView);
-		checkSubmitView.setViewInstance(app.EXP_REG_CHK_REGISTRO,registroView);
-
-		$(window).bind("pageshow", function(){
-			$('#spnHdnPostData').html("");
-		});
-		*/
 	</script>
 
 </body>

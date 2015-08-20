@@ -2,8 +2,8 @@
 
 <script type="text/template" id="oficioCnbvFormDatosOficioTemplate">
 
-	<div class="alert-errorClaveDgaUnique alert alert-danger" role="alert"><span class="glyphicon glyphicon-info-sign"></span> Ya existe un registro con el <strong>Numero de Oficio</strong> introducido.</div>
-	<div class="alert-errorNumeroOficioUnique alert alert-danger" role="alert"><span class="glyphicon glyphicon-info-sign"></span> Ya existe un registro con la <strong>Clave DGA</strong> introducida.</div>
+	<div class="alert-errorNumeroOficioUnique alert alert-danger" role="alert"><span class="glyphicon glyphicon-info-sign"></span> Ya existe un registro con el <strong>Numero de Oficio</strong> introducido.</div>
+	<div class="alert-errorClaveDgaUnique alert alert-danger" role="alert"><span class="glyphicon glyphicon-info-sign"></span> Ya existe un registro con la <strong>Clave DGA</strong> introducida.</div>
 	<div class="alert-errorNumeroOficioUniqueNonValidated alert alert-danger" role="alert"><span class="glyphicon glyphicon-info-sign"></span> No se ha validado la disponiblidad del <strong>Numero de Oficio</strong> introducido.</div>
 	<div class="alert-errorClaveDgaUniqueNonValidated alert alert-danger" role="alert"><span class="glyphicon glyphicon-info-sign"></span>  No se ha validado la disponiblidad de la <strong>Clave DGA</strong> introducida.</div>
 	<div class="alert-processing alert alert-info"><asset:image src="spinner_alert_info.gif"/>&nbsp; Procesando datos, espere unos instantes...</div>

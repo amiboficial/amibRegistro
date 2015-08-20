@@ -444,6 +444,10 @@ app.DatosAutorizadosTabView = Backbone.View.extend({
 		return checkId;
 	},
 	
+	clearNumeroMatricula: function(){
+		this.model.set('numeroMatricula','');
+		this.$('.numeroMatricula').val('');
+	},
 	invalidateResult: function(){
 		this.model.set({
 			idCertificacion: '',
@@ -502,7 +506,8 @@ app.DatosAutorizadosTabView = Backbone.View.extend({
 		
 		this.collection.add(apoderable);
 		
-		this.model.set('numeroMatricula','');
+		//this.model.set('numeroMatricula','');
+		this.clearNumeroMatricula();
 	},
 	
 	verifyNumeroMatricula: function(e){
@@ -544,6 +549,8 @@ app.DatosAutorizadosTabView = Backbone.View.extend({
 		e.preventDefault();
 		if(this._validate()){
 			this.model.set('validated',true);
+			this.invalidateResult();
+			this.clearNumeroMatricula();
 			this.trigger("stateChange","VALIDATED",this.checkId);
 		}
 	},

@@ -20,9 +20,11 @@ class OficioCnbvService {
 	String findAllByUrl
 	String findAllByIdCertificacionInAutorizadosUrl
 	String findAllByMultipleIdCertificacionInAutorizadosUrl
-	String findAllByNumeroOficioUrl //TODO: Especificar injection
-	String findAllByClaveDgaUrl //TODO: Especificar injection
-	String findAllByFechaOficioUrl //TODO: Especificar injection
+	String findAllByNumeroOficioUrl
+	String findAllByClaveDgaUrl
+	String findAllByFechaOficioUrl
+	String checkUniqueClaveDgaUrl
+	String checkUniqueNumeroOficioUrl
 	String getUrl
 	String saveUrl
 	String updateUrl
@@ -130,6 +132,46 @@ class OficioCnbvService {
 		}
 		
 		return sr
+	}
+	
+	public boolean checkUniqueClaveDga(String claveDga){
+		def rest = new RestBuilder()
+		def resp
+		def qs = "?claveDga=${claveDga}"
+		String url
+		boolean res = false
+		
+		url = checkUniqueClaveDgaUrl + qs
+		resp = rest.get(url)
+		
+		println 'SE LLAMA A checkUniqueClaveDgaUrl: ' + url
+		println 'Respuesta: ' + resp.text
+		
+		if(resp.text == "true"){
+			res = true
+		}
+		
+		return res
+	}
+	
+	public boolean checkUniqueNumeroOficio(int numeroOficio){
+		def rest = new RestBuilder()
+		def resp
+		def qs = "?numeroOficio=${numeroOficio}"
+		String url
+		boolean res = false
+		
+		url = checkUniqueNumeroOficioUrl + qs
+		resp = rest.get(url)
+		
+		println 'SE LLAMA A checkUniqueNumeroOficio: ' + url
+		println 'Respuesta: ' + resp.text
+		
+		if(resp.text == "true"){
+			res = true
+		}
+		
+		return res
 	}
 	
 	public OficioCnbvTO get(Long id){

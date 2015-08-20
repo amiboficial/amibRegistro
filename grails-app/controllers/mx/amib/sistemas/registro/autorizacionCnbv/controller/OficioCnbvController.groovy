@@ -292,11 +292,12 @@ class OficioCnbvController {
 	def checkUniqueClaveDga(String id){
 		Map<String,Object> res = new HashMap<String,Object>()
 		String claveDga = id
+		def servRes
 		
 		try{
-			//def servRes = oficioCnbvService.list(max, offset, sort, order)
+			servRes = oficioCnbvService.checkUniqueClaveDga(claveDga)
 			res.put("status", "OK")
-			res.put("object", true )
+			res.put("object", servRes )
 			
 		}
 		catch(Exception ex){
@@ -308,11 +309,12 @@ class OficioCnbvController {
 	def checkUniqueNumeroOficio(Integer id){
 		Map<String,Object> res = new HashMap<String,Object>()
 		int numeroOficio = id
+		def servRes
 		
 		try{
-			//def servRes = oficioCnbvService.list(max, offset, sort, order)
+			servRes = oficioCnbvService.checkUniqueNumeroOficio(numeroOficio)
 			res.put("status", "OK")
-			res.put("object", true )
+			res.put("object", servRes )
 		}
 		catch(Exception ex){
 			res = [ 'status': 'ERROR', 'object': ex.message ]

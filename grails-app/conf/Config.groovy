@@ -207,6 +207,8 @@ mx.amib.sistemas.oficios.oficioCnbv.findAllByMultipleIdCertificacionInAutorizado
 mx.amib.sistemas.oficios.oficioCnbv.findAllByNumeroOficio = 'oficioCnbv/findAllByNumeroOficio'
 mx.amib.sistemas.oficios.oficioCnbv.findAllByClaveDga = 'oficioCnbv/findAllByClaveDga'
 mx.amib.sistemas.oficios.oficioCnbv.findAllByFechaOficio = 'oficioCnbv/findAllByFechaOficio'
+mx.amib.sistemas.oficios.oficioCnbv.checkUniqueClaveDga = 'oficioCnbv/checkUniqueClaveDga'
+mx.amib.sistemas.oficios.oficioCnbv.checkUniqueNumeroOficio = 'oficioCnbv/checkUniqueNumeroOficio'
 mx.amib.sistemas.oficios.oficioCnbv.get = 'oficioCnbv/show/'
 mx.amib.sistemas.oficios.oficioCnbv.save = 'oficioCnbv/save'
 mx.amib.sistemas.oficios.oficioCnbv.update = 'oficioCnbv/update/'

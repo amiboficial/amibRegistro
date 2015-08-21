@@ -91,6 +91,7 @@
 	</script>
 
 	<g:render template="./formAutorizados"/>
+	<g:javascript src="mx.amib.sistemas.registro.autorizacionCnbv.oficioCnbv.form.datosAutorizados.viewModels.js" />
 	<g:javascript src="mx.amib.sistemas.registro.autorizacionCnbv.oficioCnbv.form.datosAutorizados.js" />
 	<script type="text/javascript">
 		var app = app || {};

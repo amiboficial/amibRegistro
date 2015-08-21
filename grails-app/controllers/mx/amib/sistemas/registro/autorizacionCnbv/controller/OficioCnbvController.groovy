@@ -1,6 +1,7 @@
 package mx.amib.sistemas.registro.autorizacionCnbv.controller
 
 import grails.converters.JSON
+import mx.amib.sistemas.external.documentos.service.DocumentoRepositorioTO
 import mx.amib.sistemas.external.expediente.certificacion.service.CertificacionTO
 import mx.amib.sistemas.external.expediente.persona.service.SustentanteTO
 import mx.amib.sistemas.external.oficios.oficioCnbv.AutorizadoCnbvTO
@@ -16,10 +17,23 @@ class OficioCnbvController {
 	def autorizacionCnbvService
 	def sustentanteService
 	def certificacionService
+	def documentoRepositorioService
 	
     def index() { }
 	
-	def show() { }
+	def show(long id) {
+		OficioCnbvTO ofiServRes
+		List<CertificacionTO> certServRes
+		DocumentoRepositorioTO docServRes
+		ShowVM vm
+		
+		ofiServRes = oficioCnbvService.get(id)
+		certServRes = certificacionService.getAll( ofiServRes.autorizados.collect{ it.idCertificacion } )
+		docServRes = documentoRepositorioService.obtenerMetadatosDocumento(ofiServRes.uuidDocumentoRespaldo)
+		vm = ShowVM.copyFromServicesResults(ofiServRes, certServRes)
+		
+		render(view:'show', model: [viewModelInstance:vm])
+	}
 	
 	def create() { }
 	
@@ -165,7 +179,6 @@ class OficioCnbvController {
 		cfoal.set(Calendar.DAY_OF_MONTH,fechaOficioAl_day);
 		cfoal.set(Calendar.MONTH,fechaOficioAl_month);
 		cfoal.set(Calendar.YEAR,fechaOficioAl_year);
-		
 
 		try{				
 			servRes = oficioCnbvService.findAllByFechaOficio(max, offset, sort, order, cfodel.getTime(), cfoal.getTime())
@@ -443,5 +456,19 @@ class OficioCnbvController {
 			return res
 		}
 		
+	}
+	
+	public static class ShowVM{
+		OficioCnbvTO oficioCnbv
+		List<CertificacionTO> certAutList
+		DocumentoRepositorioTO documentoRespaldo
+		
+		public static ShowVM copyFromServicesResults(OficioCnbvTO oficioCnbv, List<CertificacionTO> certAutList){
+			ShowVM vm = new ShowVM()
+			vm.setOficioCnbv(oficioCnbv)
+			vm.setCertAutList(certAutList)
+			
+			return vm
+		}
 	}
 }

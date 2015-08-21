@@ -312,7 +312,15 @@ app.DatosOficioTabView =  Backbone.View.extend({
 	
 	verifyClaveDga: function(e){
 		e.preventDefault();
-		this.model.checkUniqueClaveDga();
+		
+		this.model.set('errorClaveDga',false);
+		if( this.model.get('claveDga').trim() == '' ){
+			this.model.set('errorClaveDga',true);
+		}
+		else{
+			this.model.checkUniqueClaveDga();
+		}
+		
 	},
 	verifyNumeroOficio: function(e){
 		var num10CarExp = /^[0-9]{1,10}$/;

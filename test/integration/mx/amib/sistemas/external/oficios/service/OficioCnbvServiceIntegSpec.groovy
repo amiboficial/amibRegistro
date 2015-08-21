@@ -53,7 +53,7 @@ class OficioCnbvServiceIntegSpec extends Specification {
 		then:
 			sr.list.size() > 0
 	}*/
-	
+	/*
 	void "probando llamada a findAllByNumeroOficio"(){
 		given:
 			SearchResult<OficioCnbvTO> sr = null
@@ -104,5 +104,31 @@ class OficioCnbvServiceIntegSpec extends Specification {
 			
 		then:
 			sr.list.size() > 0
+	}*/
+	
+	void "probando llamada a checkUniqueClaveDga"(){
+		given:
+			String claveDga1 = 'DGA-906090'
+			String claveDga2 = 'DGA-334455'
+			boolean result1
+			boolean result2
+		when:
+			result1 = oficioCnbvService.checkUniqueClaveDga(claveDga1)
+			result2 = oficioCnbvService.checkUniqueClaveDga(claveDga2)
+		then:
+			(result1 == true && result2 == false) 
+	}
+	
+	void "probando llamada a checkUniqueNumeroOficio"(){
+		given:
+			int numeroOficio1 = 666
+			int numeroOficio2 = 1
+			boolean result1
+			boolean result2
+		when:
+			result1 = oficioCnbvService.checkUniqueNumeroOficio(numeroOficio1)
+			result2 = oficioCnbvService.checkUniqueNumeroOficio(numeroOficio2)
+		then:
+			(result1 == true && result2 == false) 
 	}
 }

@@ -25,6 +25,7 @@ class AutorizacionCnbvService {
 		documentoRepositorioService.enviarDocumentosArchivoTemporal( documentoCol )
 		
 		autorizacionService.autorizar(oficioCnbv.autorizados.collect{ it.idCertificacion })
+		
 		return oficioCnbvService.save(oficioCnbv)
 	}
 	OficioCnbvTO editarDatosOficioCnbv(OficioCnbvTO oficioCnbv){

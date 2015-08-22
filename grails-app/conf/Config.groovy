@@ -236,5 +236,8 @@ mx.amib.sistemas.documentos.DocumentoPoder.save = 'documentoPoderRestful/save'
 mx.amib.sistemas.documentos.DocumentoPoder.update = 'documentoPoderRestful/updateByUuid'
 mx.amib.sistemas.documentos.DocumentoRevocacion.save = 'documentoRevocacionRestful/save'
 mx.amib.sistemas.documentos.DocumentoRevocacion.update = 'documentoRevocacionRestful/updateByUuid'
+mx.amib.sistemas.documentos.CnbvDgaOficio.save = 'cnbvDgaOficioRestful/save'
+mx.amib.sistemas.documentos.CnbvDgaOficio.update = 'cnbvDgaOficioRestful/updateByUuid'
+
 mx.amib.sistemas.documentos.archivo.subirArchivoDocumentoUuid = 'archivoDocumento/subirArchivoDocumentoUuid?uuid='
 mx.amib.sistemas.documentos.archivo.descargarArchivoDocumentoUuid = 'archivoDocumento/descargarArchivoDocumentoUuid?uuid='

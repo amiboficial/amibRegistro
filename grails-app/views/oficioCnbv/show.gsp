@@ -88,7 +88,7 @@
 							&nbsp;
 						</div>
 						<div class="col-sm-2">
-							<button type="button" class="download btn btn-sm btn-block btn-default btn-primary" data-url="">
+							<button type="button" class="download btn btn-sm btn-block btn-default btn-primary" data-uuid='${viewModelInstance?.documentoRespaldo?.uuid}' data-url='<g:createLink action="download" controller="documento" />'>
 								<span class="glyphicon glyphicon-save" aria-hidden="true"></span> Descargar
 							</button>
 						</div>
@@ -126,6 +126,19 @@
 		]);
 		var showExpedienteUrl = '<g:createLink action="show" controller="expediente" />';
 		new app.AutorizadoResultsView({ collection:autCol , showExpedienteUrl:showExpedienteUrl});
+	</script>
+	<script>
+
+	$(document).ready(function(){
+		$('.download').click(function(e){
+			e.preventDefault();
+			var url = $(e.currentTarget).data("url");
+			var uuid = $(e.currentTarget).data("uuid");
+
+			window.open(url + '/' + uuid);
+		});
+	});
+	
 	</script>
 </body>
 </html>

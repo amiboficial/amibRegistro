@@ -30,7 +30,9 @@ class OficioCnbvController {
 		ofiServRes = oficioCnbvService.get(id)
 		certServRes = certificacionService.getAll( ofiServRes.autorizados.collect{ it.idCertificacion } )
 		docServRes = documentoRepositorioService.obtenerMetadatosDocumento(ofiServRes.uuidDocumentoRespaldo)
-		vm = ShowVM.copyFromServicesResults(ofiServRes, certServRes)
+		vm = ShowVM.copyFromServicesResults(ofiServRes, certServRes, docServRes)
+		
+		println (vm as JSON)
 		
 		render(view:'show', model: [viewModelInstance:vm])
 	}
@@ -70,14 +72,14 @@ class OficioCnbvController {
 			oficioCnbv.autorizados.add(aut)
 		}
 		
-		try{	
+		//try{	
 			//Ya teniendo todo bindeado a oficioCnbv
 			oficioCnbv = autorizacionCnbvService.altaOficioCnbv(oficioCnbv)
 			flash.successMessage = "El oficio con la Clave DGA: " + oficioCnbv.claveDga + " ha sido dado de alta [ID:" + oficioCnbv.id + "]"
-		}
-		catch(Exception e){
-			flash.errorMessage = "Ha ocurrido un error al dar de alta el oficio de autorización"
-		}
+		//}
+		//catch(Exception e){
+		//	flash.errorMessage = "Ha ocurrido un error al dar de alta el oficio de autorización"
+		//}
 		
 		redirect (action: "index")
 	}
@@ -463,10 +465,11 @@ class OficioCnbvController {
 		List<CertificacionTO> certAutList
 		DocumentoRepositorioTO documentoRespaldo
 		
-		public static ShowVM copyFromServicesResults(OficioCnbvTO oficioCnbv, List<CertificacionTO> certAutList){
+		public static ShowVM copyFromServicesResults(OficioCnbvTO oficioCnbv, List<CertificacionTO> certAutList, DocumentoRepositorioTO documentoRespaldo){
 			ShowVM vm = new ShowVM()
 			vm.setOficioCnbv(oficioCnbv)
 			vm.setCertAutList(certAutList)
+			vm.setDocumentoRespaldo(documentoRespaldo)
 			
 			return vm
 		}

@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.ArrayList
 
+import mx.amib.sistemas.external.documentos.service.DocumentoOficioCnbvRespositorioTO
 import mx.amib.sistemas.utils.service.ArchivoTO
 import mx.amib.sistemas.utils.service.ArchivoTemporalService
 import mx.amib.sistemas.utils.AmibFechaUtils
@@ -42,8 +43,8 @@ class DocumentoRepositorioService {
 	
 	String saveUrl
 	String updateUrl //TODO: asignar URL
-	String documentoOficioCnbvSaveUrl //TODO: asignar URL
-	String documentoOficioUpdateUrl //TODO: asignar URL
+	String documentoOficioCnbvSaveUrl
+	String documentoOficioCnbvUpdateUrl
 	String documentoPoderSaveUrl
 	String documentoPoderUpdateUrl
 	String documentoFotoSustentanteSaveUrl //TODO: asignar URL
@@ -295,14 +296,14 @@ class DocumentoRepositorioService {
 			String _uuid = it.uuid
 			String _json = (it as JSON)
 						
-			if( DocumentoOficioCnbvRespositorioTO.class.isInstance(it) ){
-				restUrl = ""
-			}
-			else if ( DocumentoPoderRepositorioTO.class.isInstance(it) ){
+			if ( DocumentoPoderRepositorioTO.class.isInstance(it) ){
 				restUrl = this.documentoPoderSaveUrl
 			}
 			else if ( DocumentoRevocacionRepositorioTO.class.isInstance(it) ){
 				restUrl = this.documentoRevocacionSaveUrl
+			}
+			else if ( DocumentoOficioCnbvRespositorioTO.class.isInstance(it) ){
+				restUrl = this.documentoOficioCnbvSaveUrl
 			}
 			else if ( DocumentoFotoSustentanteRepositorioTO.class.isInstance(it) ){
 				restUrl = ""
@@ -353,14 +354,14 @@ class DocumentoRepositorioService {
 		String _uuid = doc.uuid
 		String _json = (doc as JSON)
 		
-		if( DocumentoOficioCnbvRespositorioTO.class.isInstance(doc) ){
-			restUrl = ""
-		}
-		else if ( DocumentoPoderRepositorioTO.class.isInstance(doc) ){
+		if ( DocumentoPoderRepositorioTO.class.isInstance(doc) ){
 			restUrl = this.documentoPoderUpdateUrl
 		}
 		else if ( DocumentoRevocacionRepositorioTO.class.isInstance(doc) ){
 			restUrl = this.documentoRevocacionUpdateUrl
+		}
+		else if ( DocumentoOficioCnbvRespositorioTO.class.isInstance(doc) ){
+			restUrl = this.documentoOficioCnbvUpdateUrl
 		}
 		else if ( DocumentoFotoSustentanteRepositorioTO.class.isInstance(doc) ){
 			restUrl = ""

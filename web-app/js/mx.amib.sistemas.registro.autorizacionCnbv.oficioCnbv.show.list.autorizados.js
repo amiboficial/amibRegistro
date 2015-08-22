@@ -73,6 +73,14 @@ app.AutorizadoResultsView = Backbone.View.extend({
 		var sort = this.$(e.currentTarget).data("sort");
 		
 		e.preventDefault();
-			this.collection.sortAndOrderBy(order,sort);
+		this.collection.sortAndOrderBy(order,sort);
 	}
+	/*
+	descargarDocumento: function(e){
+		e.preventDefault();
+		var url = this.$(e.currentTarget).data("url");
+		var uuid = this.$(e.currentTarget).data("uuid");
+		
+		window.open(url + uuid);
+	}*/
 });

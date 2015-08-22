@@ -27,7 +27,6 @@
 	<g:render template="oficioCnbvIndex"/>
 	<g:javascript src="mx.amib.sistemas.registro.autorizacionCnbv.oficioCnbv.form.index.js" />
 	<script type="text/javascript">
-	
 		var app = app || {};
 		
 		var resultVMCollection = new app.OficioCnbvResultVMCollection();
@@ -40,7 +39,8 @@
 		
 		var mainView = new app.OficioCnbvIndexView({
 			resultVMCollection: resultVMCollection,
-			createUrl : '<g:createLink action="create" />'
+			createUrl : '<g:createLink action="create" />',
+			showUrl : '<g:createLink action="show" />'
 		});
 	</script>
 	

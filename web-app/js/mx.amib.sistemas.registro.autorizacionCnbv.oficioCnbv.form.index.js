@@ -1019,9 +1019,12 @@ app.OficioCnbvResultView = Backbone.View.extend({
 	tagName: 'tr',
 	template: _.template( $('#oficioCnbvResultTemplate').html() ),
 	
+	showUrl: '',
+	
 	initialize: function(options){
 		this.model = options.model;
 		this.parentView = options.parentView;
+		this.showUrl = options.showUrl;
 		this.render();
 	},
 	render: function(){
@@ -1033,7 +1036,7 @@ app.OficioCnbvResultView = Backbone.View.extend({
 	},
 	show: function(e){
 		e.preventDefault();
-		alert("not implemented yet - show");
+		window.location.assign(this.showUrl + '/' + this.model.get('grailsId'));
 	}
 });
 
@@ -1042,9 +1045,12 @@ app.OficioCnbvResultsView = Backbone.View.extend({
 	tagname: 'div',
 	template: _.template( $('#oficioCnbvResultsTemplate').html() ),
 	
+	showUrl: '',
+	
 	initialize: function(options){
 		this.collection = options.collection;
 		this.parentView = options.parentView;
+		this.showUrl = options.showUrl;
 		
 		this.listenTo( this.collection, 'reset', this.renderList );
 		
@@ -1067,7 +1073,7 @@ app.OficioCnbvResultsView = Backbone.View.extend({
 	},
 	renderElement: function(item){
 		var view = this;
-		var elementView =  new app.OficioCnbvResultView({model:item,parentView:view});
+		var elementView =  new app.OficioCnbvResultView({model:item,parentView:view,showUrl:view.showUrl});
 		elementView.viewModel = this.viewModel;
 		this.$(".list-items").append( elementView.render().el );
 		return elementView;
@@ -1165,10 +1171,12 @@ app.OficioCnbvIndexView = Backbone.View.extend({
 	template: _.template( $('#oficioCnbvIndexTemplate').html() ),
 	options: {},
 	createUrl: '',
+	showUrl: '',
 	
 	initialize: function(options){
 		this.options = options;
 		this.createUrl = options.createUrl;
+		this.showUrl = options.showUrl;
 		this.render();
 	},
 	
@@ -1203,10 +1211,12 @@ app.OficioCnbvIndexView = Backbone.View.extend({
 		return view;
 	},
 	renderResultView: function(){
+		var _this = this;
+	
 		var parentView = this;
 		var collection = this.options.resultVMCollection;
 		
-		var view = new app.OficioCnbvResultsView({ collection:collection, parentView:parentView });
+		var view = new app.OficioCnbvResultsView({ collection:collection, parentView:parentView, showUrl:_this.showUrl });
 
 		this.$(".div-resultados").html("");
 		this.$(".div-resultados").append( view.render().el );

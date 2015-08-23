@@ -83,7 +83,14 @@
 	<g:render template="./formNotario"/>
 	<g:javascript src="mx.amib.sistemas.registro.autorizacionCnbv.revocacion.form.notario.js" />
 	<script type="text/javascript">
+		var notarioView;
+		var notarioModel;
+		var entidadesFederativas;
+
+		notarioModel = new app.Notario();
+
 		
+		notarioView = new app.NotarioView();
 	</script>
 
 </body>

@@ -77,6 +77,7 @@ app.Notario = Backbone.Model.extend ({
 app.NotarioView =  Backbone.View.extend({
 	el: '#divNotario',
 	template: _.template( $('#notarioTemplate').html() ),
+	model: new app.Notario(),
 	
 	initialize: function(options){
 		this.render();
@@ -149,41 +150,41 @@ app.NotarioView =  Backbone.View.extend({
 	renderError: function(){
 		if(this.model.get('errorNumeroNotariaInvalidType')){
 			this.$('.div-numeroNotaria').addClass('has-error');
-			this.$('alert-errorNumeroNotariaInvalidType').show();
+			this.$('.alert-errorNumeroNotariaInvalidType').show();
 		}
 		else{
+			this.$('.alert-errorNumeroNotariaInvalidType').hide();
 			this.$('.div-numeroNotaria').removeClass('has-error');
-			this.$('alert-errorNumeroNotariaInvalidType').hide();
 		}
 		if(this.model.get('errorNumeroNotariaBlank')){
 			this.$('.div-numeroNotaria').addClass('has-error');
-			this.$('alert-errorNumeroNotariaBlank').show();
+			this.$('.alert-errorNumeroNotariaBlank').show();
 		}
 		else{
 			this.$('.div-numeroNotaria').removeClass('has-error');
-			this.$('alert-errorNumeroNotariaBlank').hide();
+			this.$('.alert-errorNumeroNotariaBlank').hide();
 		}
 		if(this.model.get('errorEntidadFederativaNonSelected')){
 			this.$('.div-idEntidadFederativa').removeClass('has-error');
-			this.$('alert-errorEntidadFederativaNonSelected').show();
+			this.$('.alert-errorEntidadFederativaNonSelected').show();
 		}
 		else{
 			this.$('.div-idEntidadFederativa').removeClass('has-error');
-			this.$('alert-errorEntidadFederativaNonSelected').hide();
+			this.$('.alert-errorEntidadFederativaNonSelected').hide();
 		}
 		if(this.model.get('errorNotarioNotFound')){
-			this.$('alert-errorNotarioNotFound').show();
+			this.$('.alert-errorNotarioNotFound').show();
 		}
 		else{
-			this.$('alert-errorNotarioNotFound').hide();
+			this.$('.alert-errorNotarioNotFound').hide();
 		}
 		if(this.model.get('errorNotarioNotSelected')){
 			this.$('.div-idNotarioSeleccionado').removeClass('has-error');
-			this.$('alert-errorNotarioNotSelected').show();
+			this.$('.alert-errorNotarioNotSelected').show();
 		}
 		else{
 			this.$('.div-idNotarioSeleccionado').removeClass('has-error');
-			this.$('alert-errorNotarioNotSelected').hide();
+			this.$('.alert-errorNotarioNotSelected').hide();
 		}
 	},
 	disableInput: function(){
@@ -196,7 +197,7 @@ app.NotarioView =  Backbone.View.extend({
 		this.$(".idEntidadFederativa").prop('disabled',false);
 		this.$(".notariosEncontrados").prop('disabled',false);
 	},
-	enableSubmit function(){
+	enableSubmit: function(){
 		this.$(".edit").prop('disabled',true);
 		this.$(".submit").prop('disabled',false);
 	},

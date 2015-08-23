@@ -1,15 +1,25 @@
 package mx.amib.sistemas.registro.apoderamiento.controller
 
 import grails.converters.JSON
+import mx.amib.sistemas.external.catalogos.service.EntidadFederativaTO
 import mx.amib.sistemas.external.catalogos.service.NotarioTO
+import mx.amib.sistemas.external.catalogos.service.SepomexService
+import mx.amib.sistemas.external.oficios.revocacion.RevocacionTO
 
 class RevocacionController {
 
 	def notarioService
+	def sepomexService
 	
-    def index() { }
+    def index() {
+		
+		
+	}
 	
-	def create() { }
+	def create() {
+		def vm = RevocacionFormViewModel.getForCreate(sepomexService)
+		render( view:'create', model: [viewModelInstance:vm] )
+	}
 	
 	def show() { }
 	
@@ -27,6 +37,21 @@ class RevocacionController {
 		res.put('object', resObj )
 		
 		render(res as JSON)
+	}
+	
+	public static class RevocacionFormViewModel{
+		RevocacionTO revocacion
+		Collection<EntidadFederativaTO> entidadesFed
+		
+		public static getForCreate(SepomexService sepomexService){
+			RevocacionFormViewModel vm = new RevocacionFormViewModel()
+			vm.fillEntidades(sepomexService)
+			return vm
+		}
+		
+		private void fillEntidades(SepomexService sepomexService){
+			entidadesFed = sepomexService.obtenerEntidadesFederativas()
+		}
 	}
 	
 	static class NotarioResult{

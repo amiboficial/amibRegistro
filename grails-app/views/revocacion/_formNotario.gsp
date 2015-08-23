@@ -36,9 +36,9 @@
 		<div class="col-md-3 col-sm-3">
 			
 			{{ if(!hayNotarioEncontrados){ }}
-				<button type="button" class="btn btn-block btn-default buscarNotario">
+				<button type="button" class="btn btn-block btn-info buscarNotario">
 			{{ } else{ }}
-				<button disabled=""type="button" class="btn btn-block btn-default buscarNotario">	
+				<button disabled=""type="button" class="btn btn-block btn-info buscarNotario">	
 			{{ } }}
 					<span class="glyphicon glyphicon-search" aria-hidden="true"></span> Buscar
 				</button>

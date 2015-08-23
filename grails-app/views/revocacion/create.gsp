@@ -87,12 +87,14 @@
 		var notarioModel;
 		var entidadesFederativas;
 
-		entidadesFederativas = [
+		entidadesFederativas = new Array();
+		entidadesFederativas.push({ id:-1,text:"-Seleccione-" });
+		<g:each in="${viewModelInstance?.entidadesFed}">
+			entidadesFederativas.push({ id:${it.id},text:"${it.nombre}" });
+		</g:each>
 
-		                  		];
-		
-		notarioModel = new app.Notario();
-		notarioView = new app.NotarioView();
+		notarioModel = new app.Notario( { entidadesFederativas:entidadesFederativas } );
+		notarioView = new app.NotarioView({model:notarioModel});
 	</script>
 
 </body>

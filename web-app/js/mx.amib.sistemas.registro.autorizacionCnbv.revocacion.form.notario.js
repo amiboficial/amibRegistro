@@ -80,6 +80,8 @@ app.NotarioView =  Backbone.View.extend({
 	model: new app.Notario(),
 	
 	initialize: function(options){
+		this.model = options.model;
+		
 		this.render();
 		
 		this.listenTo(this.model, 'change:notariosEncontrados', this.renderNotariosEncontrados );

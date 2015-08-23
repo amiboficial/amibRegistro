@@ -23,7 +23,7 @@
 			Entidad federativa
 		</label>
 		<div class="col-md-6 col-sm-6">
-			<select class="field idEntidadFederativa form-control" data-field="idEntidadFederativa">
+			<select class="field idEntidadFederativa form-control" data-field="idEntidadFederativa" >
 			{{ _.each(entidadesFederativas,function(item){ }}
 				{{ if(item.id == idEntidadFederativa){ }}
 					<option value="{{=item.id}}" selected>{{=item.text}}</option>
@@ -35,7 +35,7 @@
 		</div>
 		<div class="col-md-3 col-sm-3">
 			
-			{{ if(!hayNotarioEncontrados){ }}
+			{{ if(!hayNotariosEncontrados){ }}
 				<button type="button" class="btn btn-block btn-info buscarNotario">
 			{{ } else{ }}
 				<button disabled=""type="button" class="btn btn-block btn-info buscarNotario">	

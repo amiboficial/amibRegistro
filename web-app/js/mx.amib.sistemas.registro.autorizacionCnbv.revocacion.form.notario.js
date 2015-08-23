@@ -11,7 +11,7 @@ app.Notario = Backbone.Model.extend ({
 		
 		//flags de estado
 		processing: false,
-		hayNotarioEncontrados: false,
+		hayNotariosEncontrados: false,
 		
 		//errores de "valdidación" al momento de buscar el notario
 		errorNumeroNotariaInvalidType: false,
@@ -37,11 +37,14 @@ app.Notario = Backbone.Model.extend ({
 		this.set('notariosEncontrados',[ { id:'-1',text:'-Seleccione-' } ]);
 	},
 	findNotarioByNumeroNotariaAndIdEntidadFederativa: function(numeroNotaria,idEntidadFederativa){
+		var _this = this;
+		
 		//llamada ajax para actualizar a los notarios
 		$.ajax({
 			url: _this.get('findNotarioByNumeroNotariaAndIdEntidadFederativaUrl'),
 			beforeSend: function( xhr ){
 				_this.set('processing',true);
+				_this.set('hayNotariosEncontrados',false);
 				_this.set('errorNumeroNotariaInvalidType',false);
 				_this.set('errorNumeroNotariaBlank',false);
 				_this.set('errorEntidadFederativaNonSelected',false);
@@ -52,8 +55,11 @@ app.Notario = Backbone.Model.extend ({
 			data: { numeroNotaria:numeroNotaria, idEntidadFederativa:idEntidadFederativa },
 		}).done( function( data ) {
 			_this.set('processing',false);
-			if(data.status == "OK"){
-				_this.set('notariosEncontrados',data.object);
+			if(data.status == "OK" && data.object.length > 1){
+				console.log('antes hayNotariosEncontrados... ' + _this.get('hayNotariosEncontrados'));
+				_this.set('hayNotariosEncontrados',true);
+				console.log('despues hayNotariosEncontrados... ' + _this.get('hayNotariosEncontrados'));
+				//_this.set('notariosEncontrados',data.object);
 			}
 			else{
 				_this.set('errorNotarioNotFound',true);
@@ -85,6 +91,7 @@ app.NotarioView =  Backbone.View.extend({
 		this.render();
 		
 		this.listenTo(this.model, 'change:notariosEncontrados', this.renderNotariosEncontrados );
+		this.listenTo(this.model, 'change:hayNotariosEncontrados', this.renderHayNotariosEncontrados );
 		
 		this.listenTo(this.model, 'change:processing', this.renderProcessing );
 		
@@ -108,10 +115,24 @@ app.NotarioView =  Backbone.View.extend({
 	
 	render: function(){
 		this.$el.html( this.template( this.model.toJSON() ) );
-		this.renderNotariosEncontrados();
+		//this.renderNotariosEncontrados();
+		this.renderHayNotariosEncontrados();
 		this.renderProcessing();
 		this.renderError();
 		this.renderValidated();
+	},
+	renderHayNotariosEncontrados: function(){
+		console.log('paso por renderHayNotariosEncontrados...');
+		if(this.model.get('hayNotariosEncontrados') == true){
+			console.log('hayNotariosEncontrados -> true');
+			this.$('.idNotarioSeleccionado').prop('disabled',false);
+			this.$('.buscarNotario').prop('disabled',true);
+		}
+		else{
+			console.log('hayNotariosEncontrados -> false');
+			this.$('.idNotarioSeleccionado').prop('disabled',true);
+			this.$('.buscarNotario').prop('disabled',false);
+		}
 	},
 	renderNotariosEncontrados: function(){
 		var optionsStr = '';

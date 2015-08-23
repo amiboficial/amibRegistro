@@ -86,14 +86,19 @@
 		var notarioView;
 		var notarioModel;
 		var entidadesFederativas;
-
+		var fnturl; //findNotarioByNumeroNotariaAndIdEntidadFederativaUrl
+		
 		entidadesFederativas = new Array();
 		entidadesFederativas.push({ id:-1,text:"-Seleccione-" });
 		<g:each in="${viewModelInstance?.entidadesFed}">
 			entidadesFederativas.push({ id:${it.id},text:"${it.nombre}" });
 		</g:each>
-
-		notarioModel = new app.Notario( { entidadesFederativas:entidadesFederativas } );
+		fnturl = '<g:createLink action="findNotarioByNumeroNotariaAndIdEntidadFederativa" />';
+		
+		notarioModel = new app.Notario({
+			entidadesFederativas:entidadesFederativas,
+			findNotarioByNumeroNotariaAndIdEntidadFederativaUrl:fnturl
+		});
 		notarioView = new app.NotarioView({model:notarioModel});
 	</script>
 

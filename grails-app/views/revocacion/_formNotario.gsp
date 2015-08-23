@@ -22,9 +22,38 @@
 		<label class="col-md-2 col-sm-3 control-label">
 			Entidad federativa
 		</label>
-		<div class="col-md-9 col-sm-9">
+		<div class="col-md-6 col-sm-6">
 			<select class="field idEntidadFederativa form-control" data-field="idEntidadFederativa">
 			{{ _.each(entidadesFederativas,function(item){ }}
+				{{ if(item.id == idEntidadFederativa){ }}
+					<option value="{{=item.id}}" selected>{{=item.text}}</option>
+				{{ } else{ }}
+					<option value="{{=item.id}}">{{=item.text}}</option>
+				{{ } }}
+			{{ },this ); }}
+			</select>
+		</div>
+		<div class="col-md-3 col-sm-3">
+			
+			{{ if(!hayNotarioEncontrados){ }}
+				<button type="button" class="btn btn-block btn-default buscarNotario">
+			{{ } else{ }}
+				<button disabled=""type="button" class="btn btn-block btn-default buscarNotario">	
+			{{ } }}
+					<span class="glyphicon glyphicon-search" aria-hidden="true"></span> Buscar
+				</button>
+			
+		</div>
+	</div>
+
+	
+	<div class="div-idNotarioSeleccionado form-group">
+		<label class="col-md-2 col-sm-3 control-label">
+			Notario:
+		</label>
+		<div class="col-md-9 col-sm-9">
+			<select class="field idNotarioSeleccionado form-control" data-field="idNotarioSeleccionado">
+			{{ _.each(notariosEncontrados,function(item){ }}
 				{{ if(item.id == idNotarioSeleccionado){ }}
 					<option value="{{=item.id}}" selected>{{=item.text}}</option>
 				{{ } else{ }}
@@ -35,20 +64,16 @@
 		</div>
 	</div>
 	
+	<br/>
 	<div class="form-group">
 		<div class="col-md-3 col-sm-3">
 			&nbsp;
 		</div>
-		<div class="col-md-6 col-sm-6">
-		
-			{{ if(!hayNotarioEncontrados){ }}
-				<button type="button" class="btn btn-block btn-default buscarNotario">
-			{{ } else{ }}
-				<button disabled=""type="button" class="btn btn-block btn-default buscarNotario">	
-			{{ } }}
-					<span class="glyphicon glyphicon-plus" aria-hidden="true"></span><span class="glyphicon glyphicon-search" aria-hidden="true"></span> Buscar
-				</button>
-		
+		<div class="col-md-3 col-sm-3">
+			<button type="button" class="btn btn-primary btn-block submit">Validar y confirmar</button>
+		</div>
+		<div class="col-md-3 col-sm-3">
+			<button type="button" class="btn btn-primary btn-block edit">Editar</button>
 		</div>
 		<div class="col-md-3 col-sm-3">
 			&nbsp;

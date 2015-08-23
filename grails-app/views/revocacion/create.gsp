@@ -30,7 +30,7 @@
 		<ul class="nav nav-tabs" role="tablist">
 			<li role="presentation" class="active"><a href="#tabRevocacion" aria-controls="tabRevocacion" role="tab" data-toggle="tab">Datos del oficio</a></li>
 			<li role="presentation"><a href="#tabNotario" aria-controls="tabNotario" role="tab" data-toggle="tab">Datos del notario</a></li>
-			<li role="presentation"><a href="#tabRevocados" aria-controls="tabRevocados" role="tab" data-toggle="tab">Datos de los autorizados</a></li>
+			<li role="presentation"><a href="#tabRevocados" aria-controls="tabRevocados" role="tab" data-toggle="tab">Datos de los revocados</a></li>
 			<li role="presentation"><a href="#tabDoc" aria-controls="tabDoc" role="tab" data-toggle="tab">Documento(s) de respaldo</a></li>
 			<li role="presentation"><a href="#tabCheckSubmit" aria-controls="tabCheckSubmit" role="tab" data-toggle="tab">Alta de información</a></li>
 		</ul>
@@ -58,7 +58,7 @@
 						<ul style="list-style-type:none">
 							<li><span id="spnCheckOficioCnbv" class="glyphicon glyphicon-unchecked"></span> Datos del oficio</li>
 							<li><span id="spnCheckNotario" class="glyphicon glyphicon-unchecked"></span> Datos del notario</li>
-							<li><span id="spnCheckAutorizados" class="glyphicon glyphicon-unchecked"></span> Datos de los autorizados</li>
+							<li><span id="spnCheckRevocados" class="glyphicon glyphicon-unchecked"></span> Datos de los revocados</li>
 							<li><span id="spnCheckDocs" class="glyphicon glyphicon-unchecked"></span> Documento(s) de respaldo</li>
 						</ul>
 					</div>
@@ -87,9 +87,11 @@
 		var notarioModel;
 		var entidadesFederativas;
 
-		notarioModel = new app.Notario();
+		entidadesFederativas = [
 
+		                  		];
 		
+		notarioModel = new app.Notario();
 		notarioView = new app.NotarioView();
 	</script>
 

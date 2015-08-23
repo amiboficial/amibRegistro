@@ -15,13 +15,13 @@ class RevocacionController {
 	
 	
 	def findNotarioByNumeroNotariaAndIdEntidadFederativa(){
-		int numeroNotario = params.int('numeroNotario')
+		int numeroNotaria = params.int('numeroNotaria')
 		long idEntidadFederativa = params.long('idEntidadFederativa')
 		
 		List<NotarioResult> resObj = null
 		Map<String,Object> res = new HashMap<String,Object>()
 		
-		resObj = NotarioResult.copyFromServicesResults( notarioService.findAllBy(100, 0, "id", "asc", idEntidadFederativa, numeroNotario, "").list )
+		resObj = NotarioResult.copyFromServicesResults( notarioService.findAllBy(100, 0, "id", "asc", idEntidadFederativa, numeroNotaria, "").list )
 		
 		res.put('status', 'OK')
 		res.put('object', resObj )

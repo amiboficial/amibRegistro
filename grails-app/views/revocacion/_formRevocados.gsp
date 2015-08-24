@@ -49,6 +49,10 @@
 	<div class="alert-errorNumeroMatriculaNonNumeric alert alert-danger" role="alert"><span class="glyphicon glyphicon-info-sign"></span> Introduzca un <strong>Numero de matrícula</strong> válido.</div>
 	<div class="alert-errorNumeroMatriculaInList alert alert-danger" role="alert"><span class="glyphicon glyphicon-info-sign"></span> Introduzca un <strong>Numero de matrícula</strong> que no haya sido ya incluido en la lista.</div>
 
+	<div class="alert-errorIdApoderadoNotSelected alert alert-danger" role="alert"><span class="glyphicon glyphicon-info-sign"></span> No ha seleccionado el <strong>poder</strong> a revocar.</div>
+	<div class="alert-errorDsMotivoBlank alert alert-danger" role="alert"><span class="glyphicon glyphicon-info-sign"></span> Debe incresar un <strong>Motivo</strong> para la revocación.</div>
+	<div class="alert-errorFechaBajaNotValid alert alert-danger" role="alert"><span class="glyphicon glyphicon-info-sign"></span> Ha habido un error con la <strong>Fecha de baja</strong> introducida.</div>
+	
 	<div class="div-numeroMatricula form-group">
 		<label class="col-md-2 col-sm-3 control-label">
 			Número de matrícula
@@ -119,7 +123,7 @@
 			Motivo
 		</label>
 		<div class="col-md-9 col-sm-9">
-			<input class="dsMotivo form-control" type="text" value="{{=dsMotivo}}" disabled>
+			<input class="dsMotivo field form-control" data-field="dsMotivo" type="text" value="{{=dsMotivo}}" disabled>
 		</div>
 	</div>
 	
@@ -207,7 +211,91 @@
 				</tr>
 			</thead>
 			<tbody class="list-items">
-			
+				<tr>
+					<td>
+					[-]
+					</td>
+					<td>
+					Lorem
+					</td>
+					<td>
+					Ipsum
+					</td>
+					<td>
+					Dolor
+					</td>
+					<td>
+					Lorem
+					</td>
+					<td>
+					Ipsum
+					</td>
+					<td>
+					[Eliminar]
+					</td>
+				</tr>
+				<tr>
+					<td colspan="7">
+						Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum
+					</td>
+				</tr>
+				
+				<tr>
+					<td>
+					[+]
+					</td>
+					<td>
+					Lorem
+					</td>
+					<td>
+					Ipsum
+					</td>
+					<td>
+					Dolor
+					</td>
+					<td>
+					Lorem
+					</td>
+					<td>
+					Ipsum
+					</td>
+					<td>
+					[Eliminar]
+					</td>
+				</tr>
+				<tr>
+					<td colspan="7">
+					</td>
+				</tr>
+				
+				<tr>
+					<td>
+					[-]
+					</td>
+					<td>
+					Lorem
+					</td>
+					<td>
+					Ipsum
+					</td>
+					<td>
+					Dolor
+					</td>
+					<td>
+					Lorem
+					</td>
+					<td>
+					Ipsum
+					</td>
+					<td>
+					[Eliminar]
+					</td>
+				</tr>
+				<tr>
+					<td colspan="7">
+						Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum
+					</td>
+				</tr>
 			</tbody>
 		</table>
 	</fieldset>

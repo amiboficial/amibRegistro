@@ -35,7 +35,7 @@ app.RevocableVM = Backbone.Model.extend ({
 		fechaBaja_year: -1,
 		dsMotivo: '',
 		
-		seEncontroMatricula: false,
+		seEncontroMatricula: true,
 		
 		errorNumeroMatriculaBlank: false,
 		errorNumeroMatriculaNonNumeric: false,
@@ -137,7 +137,9 @@ app.RevocadoVM = Backbone.Model.extend ({
 		fechaBaja_day: -1,
 		fechaBaja_month: -1,
 		fechaBaja_year: -1,
-		dsMotivo: ''
+		dsMotivo: '',
+		
+		vistaExpandida: false
 	}
 });
 
@@ -270,8 +272,12 @@ app.RevocadoVMCollectionView = Backbone.View.extend ({
 	},
 	
 	//aqui se realizará lo correspondiente al rendereo de la lista
-	enableInput: function(){},
-	disableInput: function(){}
+	enableInput: function(){
+		this.$('button').prop('disabled',false);
+	},
+	disableInput: function(){
+		this.$('button').prop('disabled',true);
+	}
 });
 
 app.RevocableView = Backbone.View.extend ({
@@ -284,11 +290,87 @@ app.RevocableView = Backbone.View.extend ({
 	
 	render: function(){
 		this.$el.html( this.template( this.model.toJSON() ) );
+		this.renderMatriculaEncontrada();
 		return this;
 	},
+	renderError: function(){
+		if(this.model.get('errorNumeroMatriculaBlank')){
+			this.$('.alert-errorNumeroMatriculaBlank').show();
+		}
+		else{
+			this.$('.alert-errorNumeroMatriculaBlank').hide();
+		}
+		
+		if(this.model.get('errorNumeroMatriculaNonNumeric')){
+			this.$('.alert-errorNumeroMatriculaNonNumeric').show();
+		}
+		else{
+			this.$('.alert-errorNumeroMatriculaNonNumeric').hide();
+		}
+		
+		if(this.model.get('errorNumeroMatriculaNotFound')){
+			this.$('.alert-errorNumeroMatriculaNotFound').show();
+		}
+		else{
+			this.$('.alert-errorNumeroMatriculaNotFound').hide();
+		}
+		
+		if(this.model.get('errorNumeroMatriculaInList')){
+			this.$('.alert-errorNumeroMatriculaInList').show();
+		}
+		else{
+			this.$('.alert-errorNumeroMatriculaInList').hide();
+		}
+		
+		if(this.model.get('errorIdApoderadoNotSelected')){
+			this.$('.alert-errorIdApoderadoNotSelected').show();
+		}
+		else{
+			this.$('.alert-errorIdApoderadoNotSelected').hide();
+		}
+		
+		if(this.model.get('errorDsMotivoBlank')){
+			this.$('.alert-errorDsMotivoBlank').show();
+		}
+		else{
+			this.$('.alert-errorDsMotivoBlank').hide();
+		}
+		
+		if(this.model.get('errorFechaBajaNotValid')){
+			this.$('.alert-errorFechaBajaNotValid').show();
+		}
+		else{
+			this.$('.alert-errorFechaBajaNotValid').hide();
+		}
+	},
+	renderMatriculaEncontrada: function(){
+		if(this.model.get('seEncontroMatricula') == true){
+			this.$('.idApoderado').prop('disabled',false);
+			this.$('.dsMotivo').prop('disabled',false);
+			this.$('.fechaBaja_day').prop('disabled',false);
+			this.$('.fechaBaja_month').prop('disabled',false);
+			this.$('.fechaBaja_year').prop('disabled',false);
+			//this.$('.add').prop('disabled',false);
+		}
+		else{
+			this.$('.idApoderado').prop('disabled',true);
+			this.$('.dsMotivo').prop('disabled',true);
+			this.$('.fechaBaja_day').prop('disabled',true);
+			this.$('.fechaBaja_month').prop('disabled',true);
+			this.$('.fechaBaja_year').prop('disabled',true);
+			//this.$('.add').prop('disabled',true);
+		}
+	},
 	
-	enableInput: function(){},
-	disableInput: function(){},
+	enableInput: function(){
+		this.$('.field').prop('disabled',false);
+		this.$('button').prop('disabled',false);
+		this.renderMatriculaEncontrada();
+	},
+	disableInput: function(){
+		this.$('.field').prop('disabled',true);
+		this.$('button').prop('disabled',true);
+	},
 });
 
 app.RevocadosTabView = Backbone.View.extend ({
@@ -319,6 +401,7 @@ app.RevocadosTabView = Backbone.View.extend ({
 		
 		this.renderError();
 		this.renderValidated();
+		this.renderMatriculaEncontrada();
 		
 		//oculta mensaje de processmiento dado que no se esta procesando nada
 		this.$('.alert-processing').hide();
@@ -332,6 +415,14 @@ app.RevocadosTabView = Backbone.View.extend ({
 	renderRevocadoVMCollectionView: function(){
 		this.revocadoVMCollectionView = new app.RevocadoVMCollectionView( {collection:this.revocadoVMCollection} );
 		this.$('.div-list-revocados').html( this.revocadoVMCollectionView.render().el );
+	},
+	renderMatriculaEncontrada: function(){
+		if(this.revocableVM.get('seEncontroMatricula') == true){
+			this.$('.add').prop('disabled',false);
+		}
+		else{
+			this.$('.add').prop('disabled',true);
+		}
 	},
 	renderError: function(){
 		if(this.model.get('errorRevocadosListBlank')){
@@ -368,18 +459,25 @@ app.RevocadosTabView = Backbone.View.extend ({
 		}
 	},
 	disableInput: function(){
+		this.$(".add").prop('disabled',true);
+		
 		this.revocableView.disableInput();
 		this.revocadoVMCollectionView.disableInput();
 	},
 	enableInput: function(){
 		this.revocableView.enableInput();
 		this.revocadoVMCollectionView.enableInput();
+		this.renderMatriculaEncontrada();
 	},
 	enableSubmit: function(){
+		
+		this.enableInput();
 		this.$(".edit").prop('disabled',true);
 		this.$(".submit").prop('disabled',false);
 	},
 	disableSubmit: function(){
+		
+		this.disableInput();
 		this.$(".submit").prop('disabled',true);
 		this.$(".edit").prop('disabled',false);
 	},

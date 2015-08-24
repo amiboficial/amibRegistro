@@ -2,11 +2,11 @@
 
 <script type="text/template" id="notarioTemplate">
 
-	<div class="alert-errorNumeroNotariaInvalidType alert alert-danger" role="alert"><span class="glyphicon glyphicon-info-sign"></span> errorNumeroNotariaInvalidType</div>
-	<div class="alert-errorNumeroNotariaBlank alert alert-danger" role="alert"><span class="glyphicon glyphicon-info-sign"></span> errorNumeroNotariaBlank</div>
-	<div class="alert-errorEntidadFederativaNonSelected alert alert-danger" role="alert"><span class="glyphicon glyphicon-info-sign"></span> errorEntidadFederativaNonSelected</div>
-	<div class="alert-errorNotarioNotFound alert alert-danger" role="alert"><span class="glyphicon glyphicon-info-sign"></span> errorNotarioNotFound</div>
-	<div class="alert-errorNotarioNotSelected alert alert-danger" role="alert"><span class="glyphicon glyphicon-info-sign"></span> errorNotarioNotSelected</div>
+	<div class="alert-errorNumeroNotariaInvalidType alert alert-danger" role="alert"><span class="glyphicon glyphicon-info-sign"></span> Asegurese que el dato intrducido en número de notaria se un dato numerico</div>
+	<div class="alert-errorNumeroNotariaBlank alert alert-danger" role="alert"><span class="glyphicon glyphicon-info-sign"></span> Debe ingresar un número de notaria</div>
+	<div class="alert-errorEntidadFederativaNonSelected alert alert-danger" role="alert"><span class="glyphicon glyphicon-info-sign"></span> No ha seleccionado la entidad federativa</div>
+	<div class="alert-errorNotarioNotFound alert alert-danger" role="alert"><span class="glyphicon glyphicon-info-sign"></span> No se encontró ningún notario</div>
+	<div class="alert-errorNotarioNotSelected alert alert-danger" role="alert"><span class="glyphicon glyphicon-info-sign"></span> Debe seleccionar un notario</div>
 	<div class="alert-processing alert alert-info"><asset:image src="spinner_alert_info.gif"/>&nbsp; Procesando datos, espere unos instantes...</div>
 	
 	<div class="div-numeroNotaria form-group">
@@ -49,7 +49,7 @@
 	
 	<div class="div-idNotarioSeleccionado form-group">
 		<label class="col-md-2 col-sm-3 control-label">
-			Notario:
+			Notario*
 		</label>
 		<div class="col-md-9 col-sm-9">
 			<select class="field idNotarioSeleccionado form-control" data-field="idNotarioSeleccionado">

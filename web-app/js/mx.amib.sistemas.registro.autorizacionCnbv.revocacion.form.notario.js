@@ -55,11 +55,11 @@ app.Notario = Backbone.Model.extend ({
 			data: { numeroNotaria:numeroNotaria, idEntidadFederativa:idEntidadFederativa },
 		}).done( function( data ) {
 			_this.set('processing',false);
-			if(data.status == "OK" && data.object.length > 1){
-				console.log('antes hayNotariosEncontrados... ' + _this.get('hayNotariosEncontrados'));
+			if(data.status == "OK" && data.object.length > 1){ //es mayor a 1 porque ya incluy el dato del "nulo"
 				_this.set('hayNotariosEncontrados',true);
-				console.log('despues hayNotariosEncontrados... ' + _this.get('hayNotariosEncontrados'));
-				//_this.set('notariosEncontrados',data.object);
+				console.log("notariosEncontrados ->");
+				console.dir(data.object);
+				_this.set('notariosEncontrados',data.object);
 			}
 			else{
 				_this.set('errorNotarioNotFound',true);
@@ -67,9 +67,10 @@ app.Notario = Backbone.Model.extend ({
 		});
 	},
 	invalidarResultadosBusqueda: function(){
+		console.log('invalidarResultadosBusqueda');
 		this.set({
-			hayNotarioEncontrados: false,
-			
+			hayNotariosEncontrados: false,
+			idNotarioSeleccionado: -1,
 			errorNumeroNotariaInvalidType: false,
 			errorNumeroNotariaBlank: false,
 			errorEntidadFederativaNonSelected: false,
@@ -93,13 +94,16 @@ app.NotarioView =  Backbone.View.extend({
 		this.listenTo(this.model, 'change:notariosEncontrados', this.renderNotariosEncontrados );
 		this.listenTo(this.model, 'change:hayNotariosEncontrados', this.renderHayNotariosEncontrados );
 		
-		this.listenTo(this.model, 'change:processing', this.renderProcessing );
-		
 		this.listenTo(this.model, 'change:errorNumeroNotariaInvalidType', this.renderError );
 		this.listenTo(this.model, 'change:errorNumeroNotariaBlank', this.renderError );
 		this.listenTo(this.model, 'change:errorEntidadFederativaNonSelected', this.renderError );
 		this.listenTo(this.model, 'change:errorNotarioNotFound', this.renderError );
 		this.listenTo(this.model, 'change:errorNotarioNotSelected', this.renderError );
+		
+		this.listenTo( this.model, 'change:validated', this.renderValidated );
+		this.listenTo( this.model, 'change:validated', this.notifyValidated );
+		
+		this.listenTo(this.model, 'change:processing', this.renderProcessing );
 	},
 	
 	//CHECKLIST ID ATTRIBUTES
@@ -112,29 +116,39 @@ app.NotarioView =  Backbone.View.extend({
 	getCheckId: function(checkId){
 		return checkId;
 	},
+	notifyValidated: function(){
+		if(this.model.get('validated') == true){
+			this.trigger("stateChange","VALIDATED",this.checkId);
+		}
+		else{
+			this.trigger("stateChange","READY",this.checkId);
+		}
+	},
 	
 	render: function(){
 		this.$el.html( this.template( this.model.toJSON() ) );
-		//this.renderNotariosEncontrados();
+		this.renderNotariosEncontrados();
 		this.renderHayNotariosEncontrados();
 		this.renderProcessing();
 		this.renderError();
 		this.renderValidated();
 	},
 	renderHayNotariosEncontrados: function(){
-		console.log('paso por renderHayNotariosEncontrados...');
+		//console.log('paso por renderHayNotariosEncontrados...');
 		if(this.model.get('hayNotariosEncontrados') == true){
-			console.log('hayNotariosEncontrados -> true');
+			//console.log('hayNotariosEncontrados -> true');
 			this.$('.idNotarioSeleccionado').prop('disabled',false);
 			this.$('.buscarNotario').prop('disabled',true);
 		}
 		else{
-			console.log('hayNotariosEncontrados -> false');
+			//console.log('hayNotariosEncontrados -> false');
 			this.$('.idNotarioSeleccionado').prop('disabled',true);
 			this.$('.buscarNotario').prop('disabled',false);
 		}
 	},
 	renderNotariosEncontrados: function(){
+		//console.log('paso por -> renderNotariosEncontrados');
+		//console.dir(this.model.get('notariosEncontrados'));
 		var optionsStr = '';
 		var notariosArr;
 		var idNotarioSel;
@@ -149,6 +163,8 @@ app.NotarioView =  Backbone.View.extend({
 				optionsStr += '<option value="'+item.id+'">' + item.text + '</option>';
 			}
 		},this);
+		
+		this.$('.idNotarioSeleccionado').html(optionsStr);
 	},
 	renderProcessing: function(){
 		if(this.model.get('processing')){
@@ -168,6 +184,7 @@ app.NotarioView =  Backbone.View.extend({
 		else{
 			this.enableInput();
 			this.enableSubmit();
+			this.renderHayNotariosEncontrados();
 		}
 	},
 	renderError: function(){
@@ -214,11 +231,15 @@ app.NotarioView =  Backbone.View.extend({
 		this.$(".numeroNotaria").prop('disabled',true);
 		this.$(".idEntidadFederativa").prop('disabled',true);
 		this.$(".notariosEncontrados").prop('disabled',true);
+		this.$(".idNotarioSeleccionado").prop('disabled',true);
+		this.$(".buscarNotario").prop('disabled',true);
 	},
 	enableInput: function(){
 		this.$(".numeroNotaria").prop('disabled',false);
 		this.$(".idEntidadFederativa").prop('disabled',false);
 		this.$(".notariosEncontrados").prop('disabled',false);
+		this.$(".idNotarioSeleccionado").prop('disabled',false);
+		this.$(".buscarNotario").prop('disabled',false);
 	},
 	enableSubmit: function(){
 		this.$(".edit").prop('disabled',true);
@@ -243,6 +264,7 @@ app.NotarioView =  Backbone.View.extend({
 		var fieldValue = this.$(e.currentTarget).val().trim();
 		
 		if(fieldName == 'numeroNotaria' ||fieldName == 'idEntidadFederativa'){
+			
 			this.model.set(fieldName,fieldValue);
 		}
 		else{
@@ -256,7 +278,40 @@ app.NotarioView =  Backbone.View.extend({
 		
 		var numeroNotaria = this.model.get('numeroNotaria');
 		var idEntidadFederativa = this.model.get('idEntidadFederativa');
-		this.model.findNotarioByNumeroNotariaAndIdEntidadFederativa(numeroNotaria,idEntidadFederativa);
+		
+		if(this._validateBuscarNotario()){
+			this.model.findNotarioByNumeroNotariaAndIdEntidadFederativa(numeroNotaria,idEntidadFederativa);
+		}
+	},
+	_validateBuscarNotario: function(){
+		var valid = true;
+		var num10CarExp = /^[0-9]{1,10}$/;
+		
+		var numeroNotariaBlank = (this.model.get('numeroNotaria').trim() == '');
+		var numeroNotariaInvalidType = num10CarExp.test(!this.model.get('numeroNotaria').trim())
+		var entidadFederativaNonSelected = (this.model.get('idEntidadFederativa') == -1)
+		
+		this.model.set({
+			errorNumeroNotariaInvalidType: false,
+			errorNumeroNotariaBlank: false,
+			errorEntidadFederativaNonSelected: false
+		});
+		
+		if(numeroNotariaBlank){
+			this.model.set('errorNumeroNotariaInvalidType',true);
+			valid = false;
+		}
+		else if(numeroNotariaInvalidType){
+			this.model.set('errorNumeroNotariaBlank',true);
+			valid = false;
+		}
+		
+		if(entidadFederativaNonSelected){
+			this.model.set('errorEntidadFederativaNonSelected',true);
+			valid = false;
+		}
+		
+		return valid;
 	},
 	
 	submit: function(e){
@@ -272,6 +327,17 @@ app.NotarioView =  Backbone.View.extend({
 		this.trigger("stateChange","READY",this.checkId);
 	},
 	_validate: function(){
-		return true; //TODO: validancion que hay seleccionado un notario valido
+		var valid = true;
+		var notarioSeleted = (this.model.get('idNotarioSeleccionado') != -1);
+		
+		//limpia errores
+		this.model.set('errorNotarioNotSelected',false);
+		
+		if(!notarioSeleted){
+			this.model.set('errorNotarioNotSelected',true);
+			valid = false;
+		}
+		
+		return valid; //TODO: validancion que hay seleccionado un notario valido
 	}
 });

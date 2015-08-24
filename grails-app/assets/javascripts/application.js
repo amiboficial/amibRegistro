@@ -8,7 +8,7 @@
 //= require jquery
 //= require underscore-1.6.0-min.js
 //= require backbone-1.1.2-min.js
-//= require moment-2.8.3-min.js
+//= require moment-2.10.6-min.js
 //= require encoder.js
 //= require_tree .
 //= require_self
@@ -29,3 +29,5 @@ _.templateSettings = {
 	interpolate: /\{\{=(.+?)\}\}/g,
 	escape: /\{\{-(.+?)\}\}/g
 }
+
+moment().format();

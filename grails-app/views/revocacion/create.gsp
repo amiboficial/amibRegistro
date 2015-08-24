@@ -80,11 +80,13 @@
 	
 	</form>
 	
+	
+	
 	<g:render template="./formNotario"/>
 	<g:javascript src="mx.amib.sistemas.registro.autorizacionCnbv.revocacion.form.notario.js" />
 	<script type="text/javascript">
 		var notarioView;
-		var notarioModel;
+		var notarioViewModel;
 		var entidadesFederativas;
 		var fnturl; //findNotarioByNumeroNotariaAndIdEntidadFederativaUrl
 		
@@ -95,11 +97,20 @@
 		</g:each>
 		fnturl = '<g:createLink action="findNotarioByNumeroNotariaAndIdEntidadFederativa" />';
 		
-		notarioModel = new app.Notario({
+		notarioViewModel = new app.NotarioVM({
 			entidadesFederativas:entidadesFederativas,
 			findNotarioByNumeroNotariaAndIdEntidadFederativaUrl:fnturl
 		});
-		notarioView = new app.NotarioView({model:notarioModel});
+		notarioView = new app.NotarioView({model:notarioViewModel});
+	</script>
+
+	<g:render template="./formRevocados"/>
+	<g:javascript src="mx.amib.sistemas.registro.autorizacionCnbv.revocacion.form.revocados.js" />
+	<script type="text/javascript">
+		var revocadosTabView;
+		var findRevocableUrl;
+
+		revocadosTabView = new app.RevocadosTabView({collection:new app.RevocadoVMCollection()});
 	</script>
 
 </body>

@@ -1,6 +1,6 @@
 var app = app || {};
 
-app.Notario = Backbone.Model.extend ({
+app.NotarioVM = Backbone.Model.extend ({
 	defaults: {
 		numeroNotaria: '',
 		idEntidadFederativa: -1,
@@ -57,8 +57,8 @@ app.Notario = Backbone.Model.extend ({
 			_this.set('processing',false);
 			if(data.status == "OK" && data.object.length > 1){ //es mayor a 1 porque ya incluy el dato del "nulo"
 				_this.set('hayNotariosEncontrados',true);
-				console.log("notariosEncontrados ->");
-				console.dir(data.object);
+				//console.log("notariosEncontrados ->");
+				//console.dir(data.object);
 				_this.set('notariosEncontrados',data.object);
 			}
 			else{
@@ -84,7 +84,7 @@ app.Notario = Backbone.Model.extend ({
 app.NotarioView =  Backbone.View.extend({
 	el: '#divNotario',
 	template: _.template( $('#notarioTemplate').html() ),
-	model: new app.Notario(),
+	model: new app.NotarioVM(),
 	
 	initialize: function(options){
 		this.model = options.model;

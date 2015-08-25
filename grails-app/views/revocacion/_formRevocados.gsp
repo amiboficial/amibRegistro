@@ -43,7 +43,6 @@
 
 <script type="text/template" id="formRevocableTemplate">
 
-	<div class="alert-errorNumeroMatricula alert alert-danger" role="alert"><span class="glyphicon glyphicon-info-sign"></span> Ha habido un error con el <strong>Numero de matrícula</strong> introducido.</div>
 	<div class="alert-errorNumeroMatriculaNotFound alert alert-danger" role="alert"><span class="glyphicon glyphicon-info-sign"></span> No se puedo encontrar un registro <strong>Autorizado con poderes</strong> con el <strong>Numero de matrícula</strong> introducida.</div>
 	<div class="alert-errorNumeroMatriculaBlank alert alert-danger" role="alert"><span class="glyphicon glyphicon-info-sign"></span> Introduzca un <strong>Numero de matrícula</strong> válido.</div>
 	<div class="alert-errorNumeroMatriculaNonNumeric alert alert-danger" role="alert"><span class="glyphicon glyphicon-info-sign"></span> Introduzca un <strong>Numero de matrícula</strong> válido.</div>
@@ -58,10 +57,10 @@
 			Número de matrícula
 		</label>
 		<div class="col-md-4 col-sm-4">
-			<input class="numeroMatricula field form-control" maxlength="10" data-field="numeroMatricula" type="text">
+			<input type="text" class="numeroMatricula field form-control" maxlength="10" data-field="numeroMatricula" value={{=numeroMatricula}}>
 		</div>
 		<div class="col-md-3 col-sm-3">
-			<button type="button" class="btn btn-primary btn-block btn-xs verifyNumeroMatricula">Buscar</button>
+			<button type="button" class="btn btn-info btn-block btn-xs verifyNumeroMatricula"><span class="glyphicon glyphicon-search" aria-hidden="true"></span>&nbsp;Buscar</button>
 		</div>
 	</div>
 
@@ -70,7 +69,7 @@
 			Nombre completo
 		</label>
 		<div class="col-md-9 col-sm-9">
-			<input class="nombre form-control" type="text" value="{{=nombreCompleto}}" disabled>
+			<input class="nombreCompleto form-control" type="text" value="{{=nombreCompleto}}" disabled>
 		</div>
 	</div>
 
@@ -79,7 +78,7 @@
 			Figura
 		</label>
 		<div class="col-md-9 col-sm-9">
-			<input class="nombre form-control" type="text" value="{{=dsFigura}}" disabled>
+			<input class="dsFigura form-control" type="text" value="{{=dsFigura}}" disabled>
 		</div>
 	</div>
 

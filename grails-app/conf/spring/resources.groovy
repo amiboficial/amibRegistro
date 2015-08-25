@@ -71,6 +71,9 @@ beans = {
 		updateUrl = application.config.mx.amib.sistemas.oficios.resthttpURL + application.config.mx.amib.sistemas.oficios.poder.update
 		isNumeroEscrituraAvailableUrl = application.config.mx.amib.sistemas.oficios.resthttpURL + application.config.mx.amib.sistemas.oficios.poder.isNumeroEscrituraAvailable
 	}
+	apoderadoService(mx.amib.sistemas.external.oficios.service.ApoderadoService){
+		findAllByIdCertificacionInUrl = application.config.mx.amib.sistemas.oficios.resthttpURL + application.config.mx.amib.sistemas.oficios.poder.apoderado.findAllByIdCertificacionIn
+	}
 	revocacionService(mx.amib.sistemas.external.oficios.service.RevocacionService){
 		listUrl = application.config.mx.amib.sistemas.oficios.resthttpURL + application.config.mx.amib.sistemas.oficios.revocacion.list
 		findAllByUrl = application.config.mx.amib.sistemas.oficios.resthttpURL + application.config.mx.amib.sistemas.oficios.revocacion.findAllBy

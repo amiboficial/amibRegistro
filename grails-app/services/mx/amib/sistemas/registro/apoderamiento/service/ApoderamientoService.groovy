@@ -117,6 +117,27 @@ class ApoderamientoService {
 		autorizacionService.revocar(listIdCerts)
 		return r
 	}
+	List<ApoderadoTO> obtenerApoderamientosRevocables(int numeroMatricula){
+		SustentanteTO s
+		List<CertificacionTO> certs
+		List<ApoderadoTO> apoderaminetosDeCerts
+		List<RevocadoTO> revocaminetosDeCerts
+		List<ApoderadoTO> apoderaminetosSinRevocacion
+		
+		s = sustentanteService.findByMatricula(numeroMatricula)
+		if(s != null){
+			certs = s.certificaciones
+			
+		}
+		//SustentanteTO s = sustentanteService.findByMatricula(numeroMatricula)
+		//obtiene al sustentante
+		//obtiene sus certificaciones
+		//obtiene los apoderamientos correspondientes a las certificaciones
+		//obtiene las posibles revocaciones de esos apoderamientos
+		//los apoderamientos ya revocados se descartan
+		//se retorna la lista de apoderamientos
+		return null
+	}
 	RevocacionTO editarDatosRevocacion(RevocacionTO revocacion){
 		def modobj = revocacionService.get(revocacion.id)
 		

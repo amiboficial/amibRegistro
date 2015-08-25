@@ -10,7 +10,7 @@ class RevocacionController {
 
 	def notarioService
 	def sepomexService
-	
+
     def index() {
 		
 		
@@ -37,6 +37,15 @@ class RevocacionController {
 		res.put('object', resObj )
 		
 		render(res as JSON)
+	}
+	
+	def findByNumeroMatricula(){
+		int numeroMatricula = -1
+		List<NotarioResult> resObj = null
+		Map<String,Object> res = new HashMap<String,Object>()
+		
+		numeroMatricula = params.int('numeroMatricula')
+		
 	}
 	
 	public static class RevocacionFormViewModel{

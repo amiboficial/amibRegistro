@@ -81,6 +81,10 @@ beans = {
 		saveUrl = application.config.mx.amib.sistemas.oficios.resthttpURL + application.config.mx.amib.sistemas.oficios.revocacion.save
 		updateUrl = application.config.mx.amib.sistemas.oficios.resthttpURL + application.config.mx.amib.sistemas.oficios.revocacion.update
 	}
+	revocadoService(mx.amib.sistemas.external.oficios.service.RevocadoService){
+		getIdsCertificacionUrl = application.config.mx.amib.sistemas.oficios.resthttpURL + application.config.mx.amib.sistemas.oficios.revocacion.revocado.getIdsCertificacion
+		containsRevocadosUrl = application.config.mx.amib.sistemas.oficios.resthttpURL + application.config.mx.amib.sistemas.oficios.revocacion.revocado.containsRevocados
+	}
 	oficioCnbvService(mx.amib.sistemas.external.oficios.service.OficioCnbvService){
 		listUrl = application.config.mx.amib.sistemas.oficios.resthttpURL + application.config.mx.amib.sistemas.oficios.oficioCnbv.list
 		findAllByUrl = application.config.mx.amib.sistemas.oficios.resthttpURL + application.config.mx.amib.sistemas.oficios.oficioCnbv.findAllBy

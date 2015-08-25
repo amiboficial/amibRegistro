@@ -8,7 +8,8 @@ import org.codehaus.groovy.grails.web.json.JSONObject
 @Transactional
 class RevocadoService {
 
-	String getIdsCertificacionUrl = "http://localhost:8085/revocado/getIdsCertificacionFromIdsRevocados"
+	String getIdsCertificacionUrl
+	String containsRevocadosUrl
 	
     List<Long> getIdsCertificacion(List<Long> ids) {
 		List<Long> idsCertificacion = new ArrayList<Long>()
@@ -24,5 +25,31 @@ class RevocadoService {
 	
 		return idsCertificacion	
     }
+	
+	Map<Long,Boolean> containsRevocados(Set<Long> idsApoderado){
+		Map<Long,Boolean> res = new HashMap<Long,Boolean>()
+		def rest = new RestBuilder()
+		def resp
+		
+		println 'SE VA A ENVIAR A LA URL -> ' + containsRevocadosUrl
+		println 'LO SIGUIENTE -> ' + (idsApoderado as JSON)
+		
+		resp = rest.post(containsRevocadosUrl){
+			contentType "application/json;charset=UTF-8"
+			json (idsApoderado)
+		}
+		
+		if(resp.json instanceof JSONObject && !JSONObject.NULL.equals(resp.json)){
+			
+			println 'la respuesta json -> ' + (resp.json as JSON)
+			
+			for(Long idApoderado : idsApoderado){
+				String strIdApoderado = idApoderado.toString()
+				res.put(idApoderado, ((JSONObject)resp.json).getBoolean(strIdApoderado))
+			}
+		}
+		
+		return res
+	}
 	
 }

@@ -8,6 +8,7 @@ import mx.amib.sistemas.external.expediente.certificacion.catalog.service.Status
 import mx.amib.sistemas.external.expediente.certificacion.service.CertificacionTO
 import mx.amib.sistemas.external.expediente.persona.service.SustentanteTO
 import mx.amib.sistemas.external.oficios.oficioCnbv.OficioCnbvTO
+import mx.amib.sistemas.external.oficios.poder.ApoderadoResultTO
 import mx.amib.sistemas.external.oficios.poder.PoderTO
 import mx.amib.sistemas.external.oficios.revocacion.RevocacionTO
 import mx.amib.sistemas.registro.apoderado.service.ApoderadoTO
@@ -24,6 +25,7 @@ class ApoderamientoService {
 	
 	def autorizacionService
 	def poderService
+	def apoderadoService
 	def revocacionService
 	def revocadoService
 	
@@ -119,24 +121,29 @@ class ApoderamientoService {
 	}
 	List<ApoderadoTO> obtenerApoderamientosRevocables(int numeroMatricula){
 		SustentanteTO s
+		ApoderadoResultTO ares
+		Map<Long, Boolean> apoderadosRevocados
 		List<CertificacionTO> certs
-		List<ApoderadoTO> apoderaminetosDeCerts
-		List<RevocadoTO> revocaminetosDeCerts
-		List<ApoderadoTO> apoderaminetosSinRevocacion
+		List<ApoderadoTO> apoderadosSinRevocacion = new ArrayList<ApoderadoTO>()
 		
-		s = sustentanteService.findByMatricula(numeroMatricula)
-		if(s != null){
-			certs = s.certificaciones
-			
-		}
-		//SustentanteTO s = sustentanteService.findByMatricula(numeroMatricula)
 		//obtiene al sustentante
 		//obtiene sus certificaciones
 		//obtiene los apoderamientos correspondientes a las certificaciones
 		//obtiene las posibles revocaciones de esos apoderamientos
 		//los apoderamientos ya revocados se descartan
 		//se retorna la lista de apoderamientos
-		return null
+		s = sustentanteService.findByMatricula(numeroMatricula)
+		if(s != null){
+			certs = s.certificaciones //obtiene las ceritificaciones del sustentante
+			ares = apoderadoService.findAllByIdCertificacionIn(new HashSet<Long>( s.certificaciones.collect{ it.id } )) //obtiene los "apoderados" por cada certificacion
+			apoderadosRevocados = revocadoService.containsRevocados(new HashSet<Long>( ares.apoderados.collect{ it.id } )) //revisa que "apoderados" ya fueron revocados
+			apoderadosRevocados.each{ x ->
+				if(x.value.booleanValue() == false){
+					apoderadosSinRevocacion.add(ares.apoderados.find{ it.id.longValue() == ((Long)x.key).longValue() });
+				}			
+			}
+		}
+		return apoderadosSinRevocacion
 	}
 	RevocacionTO editarDatosRevocacion(RevocacionTO revocacion){
 		def modobj = revocacionService.get(revocacion.id)

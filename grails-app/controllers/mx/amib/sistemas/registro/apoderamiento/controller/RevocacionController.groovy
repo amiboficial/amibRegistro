@@ -1,16 +1,26 @@
 package mx.amib.sistemas.registro.apoderamiento.controller
 
+import java.util.List;
+
 import grails.converters.JSON
 import mx.amib.sistemas.external.catalogos.service.EntidadFederativaTO
 import mx.amib.sistemas.external.catalogos.service.NotarioTO
 import mx.amib.sistemas.external.catalogos.service.SepomexService
+import mx.amib.sistemas.external.expediente.persona.service.SustentanteTO
+import mx.amib.sistemas.external.oficios.poder.PoderTO
+import mx.amib.sistemas.external.oficios.poder.ApoderadoTO
 import mx.amib.sistemas.external.oficios.revocacion.RevocacionTO
+import mx.amib.sistemas.external.oficios.service.PoderService
+
 
 class RevocacionController {
 
 	def notarioService
 	def sepomexService
-
+	def poderService
+	def apoderamientoService
+	def sustentanteService
+	
     def index() {
 		
 		
@@ -41,11 +51,51 @@ class RevocacionController {
 	
 	def findByNumeroMatricula(){
 		int numeroMatricula = -1
-		List<NotarioResult> resObj = null
-		Map<String,Object> res = new HashMap<String,Object>()
+		Map<String,Object> resultado = new HashMap<String,Object>()
+		Map<String,Object> respuesta = new HashMap<String,Object>()
+		
+		List<Map<String,String>> listadoApoderamientos = new ArrayList<Map<String,String>>()
+		Map<String,String> apoEncontrado = new HashMap<String,String>()
+		
+		PoderTO poderCurInstance
+		List<ApoderadoTO> apoderados
+		SustentanteTO sustentante
 		
 		numeroMatricula = params.int('numeroMatricula')
 		
+		sustentante = sustentanteService.findByMatricula(numeroMatricula)
+		
+		if(sustentante != null){
+			apoderados = apoderamientoService.obtenerApoderamientosRevocables(numeroMatricula)
+			
+			apoEncontrado.put('id', '-1')
+			apoEncontrado.put('text', '-Seleccione-')
+			listadoApoderamientos.add(apoEncontrado)
+			apoderados.each{ x ->
+				poderCurInstance = poderService.get(x.idPoder)
+				apoEncontrado = new HashMap<String,String>()
+				apoEncontrado.put('id', x.id.toString())
+				apoEncontrado.put('text', 'Numero de escritura: ' + poderCurInstance.numeroEscritura)
+				listadoApoderamientos.add(apoEncontrado)
+			}
+			
+			resultado = [
+				idSustentante: sustentante.id,
+				numeroMatricula: sustentante.numeroMatricula,
+				nombreCompleto: sustentante.nombre + ' ' + sustentante.primerApellido + ' ' + sustentante.segundoApellido,
+				nombre: sustentante.nombre,
+				primerApellido: sustentante.primerApellido,
+				segundoApellido: sustentante.segundoApellido,
+				apoderamientosEncontrados: listadoApoderamientos
+			]
+			
+			respuesta = [ 'status' : 'OK' , 'object' : resultado ]
+		}
+		else{
+			respuesta = [ 'status' : 'ERROR' , 'object' : 'SUSTENTANTE_NOT_FOUND' ]
+		}
+		
+		render(respuesta as JSON)
 	}
 	
 	public static class RevocacionFormViewModel{

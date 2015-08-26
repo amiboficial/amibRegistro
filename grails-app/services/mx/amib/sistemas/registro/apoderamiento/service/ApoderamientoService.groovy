@@ -145,6 +145,7 @@ class ApoderamientoService {
 		}
 		return apoderadosSinRevocacion
 	}
+	
 	RevocacionTO editarDatosRevocacion(RevocacionTO revocacion){
 		def modobj = revocacionService.get(revocacion.id)
 		

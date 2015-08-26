@@ -41,6 +41,7 @@ app.RevocableVM = Backbone.Model.extend ({
 		errorNumeroMatriculaNonNumeric: false,
 		errorNumeroMatriculaNotFound: false,
 		errorNumeroMatriculaInList: false,
+		errorNumeroMatriculaNotRevocable: false,
 		
 		errorIdApoderadoNotSelected: false,
 		errorDsMotivoBlank: false,
@@ -55,8 +56,6 @@ app.RevocableVM = Backbone.Model.extend ({
 		var _this = this;
 		var numeroMatricula = this.get('numeroMatricula');
 		
-		alert('findByNumeroMatricula -> not implemented yet');
-		/*
 		$.ajax({
 			url:  _this.get('findByNumeroMatriculaUrl'),
 			beforeSend: function(xhr){
@@ -68,14 +67,20 @@ app.RevocableVM = Backbone.Model.extend ({
 			data: { numeroMatricula:numeroMatricula }
 		}).done( function(data){
 			_this.set('processing',false);
-			if(data.status == "OK"){ //es mayor a 1 porque ya incluy el dato del "nulo"
-				_this.set('seEncontroMatricula',true);
-				_this.set(data.object);
+			if(data.status == "OK"){ //es mayor a 1 porque ya incluyo el dato del "nulo"
+				if(data.object.apoderamientosEncontrados.length > 1){
+					_this.set(data.object);
+					_this.set('seEncontroMatricula',true);
+				}
+				else{
+					_this.set('errorNumeroMatriculaNotRevocable',true);
+				}
 			}
 			else{
-				_this.set('errorNotarioNotFound',true);
+				_this.set('errorNumeroMatriculaNotFound',true);
 			}
-		});*/
+		});
+		
 	},
 	invalidateResultadoBusqueda: function(){
 		console.log("paso por -> RevocableVM.invalidateResultadoBusqueda");
@@ -103,6 +108,8 @@ app.RevocableVM = Backbone.Model.extend ({
 			errorNumeroMatriculaNonNumeric: false,
 			errorNumeroMatriculaNotFound: false,
 			errorNumeroMatriculaInList: false,
+			errorNumeroMatriculaNotRevocable: false,
+			
 			errorIdApoderadoNotSelected: false,
 			errorDsMotivoBlank: false,
 			errorFechaBajaNotValid: false
@@ -115,6 +122,7 @@ app.RevocableVM = Backbone.Model.extend ({
 			errorNumeroMatriculaNonNumeric: false,
 			errorNumeroMatriculaNotFound: false,
 			errorNumeroMatriculaInList: false,
+			errorNumeroMatriculaNotRevocable: false,
 			errorIdApoderadoNotSelected: false,
 			errorDsMotivoBlank: false,
 			errorFechaBajaNotValid: false
@@ -124,6 +132,37 @@ app.RevocableVM = Backbone.Model.extend ({
 	clearResults: function(){
 		this.invalidateResultadoBusqueda();
 		this.trigger("resultsCleared", {});
+	},
+	validateToAdd: function(){
+		var valid = true;
+		
+		var hayApoderamientoARevocar;
+		var motivoEnBlanco;
+		var fechaBajaValida;
+		
+		hayApoderamientoARevocar = (this.get('idApoderado') != -1);
+		motivoEnBlanco = ($.trim(this.get('dsMotivo')) == '');
+		fechaBajaValida = this.get('fechaBaja_day') != -1 && this.get('fechaBaja_month') != -1 && this.get('fechaBaja_year') != -1 
+	
+		this.set('errorIdApoderadoNotSelected',false,{silent:true});
+		this.set('errorDsMotivoBlank',false,{silent:true});
+		this.set('errorFechaBajaNotValid',false,{silent:true});
+		if(!hayApoderamientoARevocar){
+			this.set('errorIdApoderadoNotSelected',true,{silent:true});
+			valid = false;
+		}
+		if(motivoEnBlanco){
+			this.set('errorDsMotivoBlank',true,{silent:true});
+			valid = false;
+		}
+		if(!fechaBajaValida){
+			this.set('errorFechaBajaNotValid',true,{silent:true});
+			valid = false;
+		}
+		
+		this.trigger('errorSet');
+		
+		return valid;
 	}
 });
 
@@ -295,35 +334,45 @@ app.RevocableView = Backbone.View.extend ({
 		
 		this.listenTo(this.model,'change:seEncontroMatricula',this.renderMatriculaEncontrada);
 		this.listenTo(this.model,'resultsInvalidated',this.renderMatriculaEncontrada);
+		
+		this.listenTo(this.model,'change:errorNumeroMatriculaBlank',this.renderError);
+		this.listenTo(this.model,'change:errorNumeroMatriculaNonNumeric',this.renderError);
+		this.listenTo(this.model,'change:errorNumeroMatriculaNotRevocable',this.renderError);
+		this.listenTo(this.model,'errorSet',this.renderError);
+		this.listenTo(this.model,'errorFlagsCleared',this.renderError);
 	},
 	
 	render: function(){
-		console.log("render ->RevocableView");
+		
 		this.$el.html( this.template( this.model.toJSON() ) );
 		this.renderMatriculaEncontrada();
 		this.renderError();
 		return this;
 	},
 	renderError: function(){
+		
+		this.$('.alert-errorNumeroMatriculaBlank').hide();
+		this.$('.alert-errorNumeroMatriculaNonNumeric').hide();
+		this.$('.alert-errorNumeroMatriculaNotRevocable').hide();
+		this.$('.alert-errorNumeroMatriculaNotFound').hide();
+		this.$('.div-numeroMatricula').removeClass('has-error');
+		
 		if(this.model.get('errorNumeroMatriculaBlank')){
 			this.$('.alert-errorNumeroMatriculaBlank').show();
+			this.$('.div-numeroMatricula').addClass('has-error');
 		}
-		else{
-			this.$('.alert-errorNumeroMatriculaBlank').hide();
-		}
-		
 		if(this.model.get('errorNumeroMatriculaNonNumeric')){
 			this.$('.alert-errorNumeroMatriculaNonNumeric').show();
+			this.$('.div-numeroMatricula').addClass('has-error');
 		}
-		else{
-			this.$('.alert-errorNumeroMatriculaNonNumeric').hide();
+		if(this.model.get('errorNumeroMatriculaNotRevocable')){
+			this.$('.alert-errorNumeroMatriculaNotRevocable').show();
+			this.$('.div-numeroMatricula').addClass('has-error');
 		}
 		
 		if(this.model.get('errorNumeroMatriculaNotFound')){
 			this.$('.alert-errorNumeroMatriculaNotFound').show();
-		}
-		else{
-			this.$('.alert-errorNumeroMatriculaNotFound').hide();
+			this.$('.div-numeroMatricula').addClass('has-error');
 		}
 		
 		if(this.model.get('errorNumeroMatriculaInList')){
@@ -355,6 +404,7 @@ app.RevocableView = Backbone.View.extend ({
 		}
 	},
 	renderMatriculaEncontrada: function(){
+		//this.renderError();
 		if(this.model.get('seEncontroMatricula') == true){
 			this.renderValues();
 			this.$('.verifyNumeroMatricula').prop('disabled',true);
@@ -363,7 +413,6 @@ app.RevocableView = Backbone.View.extend ({
 			this.$('.fechaBaja_day').prop('disabled',false);
 			this.$('.fechaBaja_month').prop('disabled',false);
 			this.$('.fechaBaja_year').prop('disabled',false);
-			//this.$('.add').prop('disabled',false);
 		}
 		else{
 			this.renderValues();
@@ -373,18 +422,24 @@ app.RevocableView = Backbone.View.extend ({
 			this.$('.fechaBaja_day').prop('disabled',true);
 			this.$('.fechaBaja_month').prop('disabled',true);
 			this.$('.fechaBaja_year').prop('disabled',true);
-			//this.$('.add').prop('disabled',true);
 		}
 	},
 	renderValues: function(){
+		var apoderamientosHtml = '';
+		var apoderaminetos;
+		
 		this.$('.nombreCompleto').val( this.model.get('nombreCompleto') );
-		this.$('.dsFigura').val( this.model.get('dsFigura') );
-		this.$('.dsVarianteFigura').val( this.model.get('dsVarianteFigura') );
-		this.$('.dsTipoAutorizacion').val( this.model.get('dsTipoAutorizacion') );
 		this.$('.fechaBaja_day').val( this.model.get('fechaBaja_day') );
 		this.$('.fechaBaja_month').val( this.model.get('fechaBaja_month') );
 		this.$('.fechaBaja_year').val( this.model.get('fechaBaja_year') );
 		this.$('.dsMotivo').val( this.model.get('dsMotivo') );
+		
+		apoderaminetos = this.model.get('apoderamientosEncontrados');
+		_.each(apoderaminetos,function(item){
+			apoderamientosHtml += '<option value="'+item.id+'">'+item.text+'</option>'
+		},this);
+		this.$('.idApoderado').html(apoderamientosHtml);
+		this.$('.idApoderado').val( this.model.get('idApoderado') );
 	},
 	
 	enableInput: function(){
@@ -404,7 +459,7 @@ app.RevocableView = Backbone.View.extend ({
 	
 	updateModel: function(e){
 		var fieldName = this.$(e.currentTarget).data("field");
-		var fieldValue = this.$(e.currentTarget).val().trim();
+		var fieldValue = $.trim(this.$(e.currentTarget).val());
 		
 		console.log('updateModel:'+fieldName+':'+fieldValue);
 		if(fieldName == 'numeroMatricula'){
@@ -418,8 +473,43 @@ app.RevocableView = Backbone.View.extend ({
 	
 	verifyNumeroMatricula: function(e){
 		e.preventDefault();
-		this.model.findByNumeroMatricula();
+		if(this._validateNumeroMatricula()){
+			this.model.findByNumeroMatricula();
+		}		
+	},
+	
+	_validateNumeroMatricula: function(){
+		//expresion regular
+		var num10CarExp = /^[0-9]{1,10}$/;
+		//variable de validacion incial
+		var valid = true;
+		//obtencion de valores a validar
+		var numeroMatricula = this.model.get('numeroMatricula');
+		//booleanos de validacion
+		var isBlank;
+		var isNumeric;
+		
+		//limpia errores si es que hubo
+		this.model.set('errorNumeroMatriculaBlank',false,{silent:true});
+		this.model.set('errorNumeroMatriculaNonNumeric',false,{silent:true});
+		this.model.trigger('change:errorNumeroMatriculaBlank');
+		this.model.trigger('change:errorNumeroMatriculaNonNumeric');
+		
+		isBlank = ($.trim(numeroMatricula) == '');
+		isNumeric = num10CarExp.test($.trim(numeroMatricula));
+		
+		if(isBlank){
+			valid = false;
+			this.model.set('errorNumeroMatriculaBlank',true);
+		}
+		else if(!isNumeric){
+			valid = false;
+			this.model.set('errorNumeroMatriculaNonNumeric',true);
+		}
+		
+		return valid;
 	}
+	
 });
 
 app.RevocadosTabView = Backbone.View.extend ({
@@ -434,12 +524,22 @@ app.RevocadosTabView = Backbone.View.extend ({
 	revocableView: {},
 	revocadoVMCollectionView: {},
 	
+	findByNumeroMatriculaUrl: '',
+	
 	initialize: function(options){
 		this.revocadoVMCollection = options.collection;
+		this.revocableVM.set('findByNumeroMatriculaUrl', options.findByNumeroMatriculaUrl);
+		
 		this.render();
 		
 		this.listenTo( this.model, 'change:validated', this.renderValidated );
 		this.listenTo( this.model, 'change:processing', this.renderProcessing );
+		
+		this.listenTo( this.revocableVM, 'change:processing', function(item){ 
+			this.model.set('processing',item.attributes.processing); 
+		} );
+		this.listenTo( this.revocableVM, 'change:seEncontroMatricula', this.renderMatriculaEncontrada );
+		this.listenTo( this.revocableVM, 'resultsInvalidated', this.renderMatriculaEncontrada );
 	},
 	
 	render: function(){
@@ -540,8 +640,19 @@ app.RevocadosTabView = Backbone.View.extend ({
 	},
 	
 	events: {
+		'click .add': 'add',
 		'click .submit':'submit',
 		'click .edit':'edit'
+	},
+	
+	add: function(e){
+		e.preventDefault();
+		if(this._validateAdd()){
+			alert('ES VALIDO!!!!');
+		}
+	},
+	_validateAdd: function(){
+		return this.revocableVM.validateToAdd();
 	},
 	
 	submit: function(e){

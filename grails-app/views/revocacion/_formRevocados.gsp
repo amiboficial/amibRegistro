@@ -44,8 +44,9 @@
 <script type="text/template" id="formRevocableTemplate">
 
 	<div class="alert-errorNumeroMatriculaNotFound alert alert-danger" role="alert"><span class="glyphicon glyphicon-info-sign"></span> No se puedo encontrar un registro <strong>Autorizado con poderes</strong> con el <strong>Numero de matrícula</strong> introducida.</div>
+	<div class="alert-errorNumeroMatriculaNotRevocable alert alert-danger" role="alert"><span class="glyphicon glyphicon-info-sign"></span> No es posible aplicar revocación alguna a la matricula mencioanda.</div>
 	<div class="alert-errorNumeroMatriculaBlank alert alert-danger" role="alert"><span class="glyphicon glyphicon-info-sign"></span> Introduzca un <strong>Numero de matrícula</strong> válido.</div>
-	<div class="alert-errorNumeroMatriculaNonNumeric alert alert-danger" role="alert"><span class="glyphicon glyphicon-info-sign"></span> Introduzca un <strong>Numero de matrícula</strong> válido.</div>
+	<div class="alert-errorNumeroMatriculaNonNumeric alert alert-danger" role="alert"><span class="glyphicon glyphicon-info-sign"></span> Introduzca un <strong>Numero de matrícula</strong> válido. El valor debe ser numérico.</div>
 	<div class="alert-errorNumeroMatriculaInList alert alert-danger" role="alert"><span class="glyphicon glyphicon-info-sign"></span> Introduzca un <strong>Numero de matrícula</strong> que no haya sido ya incluido en la lista.</div>
 
 	<div class="alert-errorIdApoderadoNotSelected alert alert-danger" role="alert"><span class="glyphicon glyphicon-info-sign"></span> No ha seleccionado el <strong>poder</strong> a revocar.</div>
@@ -70,33 +71,6 @@
 		</label>
 		<div class="col-md-9 col-sm-9">
 			<input class="nombreCompleto form-control" type="text" value="{{=nombreCompleto}}" disabled>
-		</div>
-	</div>
-
-	<div class="div-dsFigura form-group">
-		<label class="col-md-2 col-sm-3 control-label">
-			Figura
-		</label>
-		<div class="col-md-9 col-sm-9">
-			<input class="dsFigura form-control" type="text" value="{{=dsFigura}}" disabled>
-		</div>
-	</div>
-
-	<div class="div-dsVarianteFigura form-group">
-		<label class="col-md-2 col-sm-3 control-label">
-			Variante de Figura
-		</label>
-		<div class="col-md-9 col-sm-9">
-			<input class="dsVarianteFigura form-control" type="text" value="{{=dsVarianteFigura}}" disabled>
-		</div>
-	</div>
-
-	<div class="div-dsTipoAutorizacion form-group">
-		<label class="col-md-2 col-sm-3 control-label">
-			Tipo de autorización
-		</label>
-		<div class="col-md-9 col-sm-9">
-			<input class="dsTipoAutorizacion form-control" type="text" value="{{=dsTipoAutorizacion}}" disabled>
 		</div>
 	</div>
 

@@ -81,11 +81,11 @@ class RevocacionController {
 			
 			resultado = [
 				idSustentante: sustentante.id,
-				numeroMatricula: sustentante.numeroMatricula,
 				nombreCompleto: sustentante.nombre + ' ' + sustentante.primerApellido + ' ' + sustentante.segundoApellido,
 				nombre: sustentante.nombre,
 				primerApellido: sustentante.primerApellido,
 				segundoApellido: sustentante.segundoApellido,
+				idApoderado: -1,
 				apoderamientosEncontrados: listadoApoderamientos
 			]
 			

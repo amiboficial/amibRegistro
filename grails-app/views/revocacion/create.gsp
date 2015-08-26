@@ -108,9 +108,14 @@
 	<g:javascript src="mx.amib.sistemas.registro.autorizacionCnbv.revocacion.form.revocados.js" />
 	<script type="text/javascript">
 		var revocadosTabView;
-		var findRevocableUrl;
+		var findByNumeroMatriculaUrl;
 
-		revocadosTabView = new app.RevocadosTabView({collection:new app.RevocadoVMCollection()});
+		findByNumeroMatriculaUrl = '<g:createLink action="findByNumeroMatricula" />'
+		
+		revocadosTabView = new app.RevocadosTabView({
+			collection : new app.RevocadoVMCollection(), 
+			findByNumeroMatriculaUrl : findByNumeroMatriculaUrl
+		});
 	</script>
 
 </body>

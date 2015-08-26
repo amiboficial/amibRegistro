@@ -198,15 +198,17 @@ app.RevocadoVMCollection = Backbone.Collection.extend ({
 	comparator: function(itemA, itemB){
 		if(this._sort == "idSustentante"){
 			if(this._order == "desc"){
-				if(itemA.get('idSustentante') == itemB.get('idSustentante'))
+				if(parseInt(itemA.get('idSustentante')) == parseInt(itemB.get('idSustentante')))
 					return 0;
-				else if(itemA.get('idSustentante') > itemB.get('idSustentante'))
+				else if(parseInt(itemA.get('idSustentante')) > parseInt(itemB.get('idSustentante')))
 					return -1;
 				else
 					return 1;
 			}
 			else{
-				if(itemA.get('idSustentante') <= itemB.get('idSustentante'))
+				if(parseInt(itemA.get('idSustentante')) == parseInt(itemB.get('idSustentante')))
+					return 0;
+				else if(parseInt(itemA.get('idSustentante')) <= parseInt(itemB.get('idSustentante')))
 					return -1;
 				else
 					return 1
@@ -214,15 +216,17 @@ app.RevocadoVMCollection = Backbone.Collection.extend ({
 		}	
 		else if(this._sort == "numeroMatricula"){
 			if(this._order == "desc"){
-				if(itemA.get('numeroMatricula') == itemB.get('numeroMatricula'))
+				if(parseInt(itemA.get('numeroMatricula')) == parseInt(itemB.get('numeroMatricula')))
 					return 0;
-				else if(itemA.get('numeroMatricula') > itemB.get('numeroMatricula'))
+				else if(parseInt(itemA.get('numeroMatricula')) > parseInt(itemB.get('numeroMatricula')))
 					return -1;
 				else
 					return 1;
 			}
 			else{
-				if(itemA.get('numeroMatricula') <= itemB.get('numeroMatricula'))
+				if(parseInt(itemA.get('numeroMatricula')) == parseInt(itemB.get('numeroMatricula')))
+					return 0;
+				else if(parseInt(itemA.get('numeroMatricula')) <= parseInt(itemB.get('numeroMatricula')))
 					return -1;
 				else
 					return 1
@@ -304,6 +308,7 @@ app.RevocadoVMCollection = Backbone.Collection.extend ({
 		this.trigger('reset',{});
 		//this.sort();
 	},
+	
 	removeByIdApoderado: function(idApoderado){
 		var itemABorrar;
 		
@@ -314,6 +319,16 @@ app.RevocadoVMCollection = Backbone.Collection.extend ({
 		});
 		
 		this.remove([ item ]);
+	},
+	
+	containsApoderadoByNumeroMatricula: function(numeroMatricula){
+		var contains = false;
+		this.each(function(item){
+			if(item.get('numeroMatricula') == numeroMatricula){
+				contains = true;
+			}
+		});
+		return contains;
 	}
 });
 
@@ -364,9 +379,18 @@ app.RevocadoVMCollectionView = Backbone.View.extend ({
 	},
 	
 	events: {
+		'click .sort': 'sortRows',
 		'click .expandRow' : 'expandRow',
 		'click .collapseRow' : 'collapseRow',
 		'click .removeItem' : 'removeItem',
+	},
+	sortRows: function(e){
+		e.preventDefault();
+		
+		var _sort = this.$(e.currentTarget).data("sort");
+		var _order = this.$(e.currentTarget).data("order");
+		
+		this.collection.sortAndOrderBy(_order,_sort);
 	},
 	expandRow: function(e){
 		e.preventDefault();
@@ -393,23 +417,25 @@ app.RevocadoVMCollectionView = Backbone.View.extend ({
 
 app.RevocableView = Backbone.View.extend ({
 	model: new app.RevocableVM(),
+	collection: new app.RevocadoVMCollection(),
 	template: _.template( $('#formRevocableTemplate').html() ),
 	
 	initialize: function(options){
 		this.model = options.model;
+		this.collection = options.collection;
 		
 		this.listenTo(this.model,'change:seEncontroMatricula',this.renderMatriculaEncontrada);
 		this.listenTo(this.model,'resultsInvalidated',this.renderMatriculaEncontrada);
-		
+		this.listenTo(this.model,'resultsCleared',this.renderLimpiarCampoMatricula);
 		this.listenTo(this.model,'change:errorNumeroMatriculaBlank',this.renderError);
 		this.listenTo(this.model,'change:errorNumeroMatriculaNonNumeric',this.renderError);
 		this.listenTo(this.model,'change:errorNumeroMatriculaNotRevocable',this.renderError);
+		this.listenTo(this.model,'change:errorNumeroMatriculaInList',this.renderError);
 		this.listenTo(this.model,'errorSet',this.renderError);
 		this.listenTo(this.model,'errorFlagsCleared',this.renderError);
 	},
 	
 	render: function(){
-		
 		this.$el.html( this.template( this.model.toJSON() ) );
 		this.renderMatriculaEncontrada();
 		this.renderError();
@@ -507,6 +533,9 @@ app.RevocableView = Backbone.View.extend ({
 		this.$('.idApoderado').html(apoderamientosHtml);
 		this.$('.idApoderado').val( this.model.get('idApoderado') );
 	},
+	renderLimpiarCampoMatricula: function(){
+		this.$('.numeroMatricula').val('');
+	},
 	
 	enableInput: function(){
 		this.$('.field').prop('disabled',false);
@@ -554,15 +583,19 @@ app.RevocableView = Backbone.View.extend ({
 		//booleanos de validacion
 		var isBlank;
 		var isNumeric;
+		var isAlreadyInList;
 		
 		//limpia errores si es que hubo
 		this.model.set('errorNumeroMatriculaBlank',false,{silent:true});
 		this.model.set('errorNumeroMatriculaNonNumeric',false,{silent:true});
+		this.model.set('errorNumeroMatriculaInList',false,{silent:true});
 		this.model.trigger('change:errorNumeroMatriculaBlank');
 		this.model.trigger('change:errorNumeroMatriculaNonNumeric');
+		this.model.trigger('change:errorNumeroMatriculaInList');
 		
 		isBlank = ($.trim(numeroMatricula) == '');
 		isNumeric = num10CarExp.test($.trim(numeroMatricula));
+		isAlreadyInList = this.collection.containsApoderadoByNumeroMatricula(numeroMatricula);
 		
 		if(isBlank){
 			valid = false;
@@ -571,6 +604,10 @@ app.RevocableView = Backbone.View.extend ({
 		else if(!isNumeric){
 			valid = false;
 			this.model.set('errorNumeroMatriculaNonNumeric',true);
+		}
+		else if(isAlreadyInList){
+			valid = false;
+			this.model.set('errorNumeroMatriculaInList',true);
 		}
 		
 		return valid;
@@ -606,6 +643,8 @@ app.RevocadosTabView = Backbone.View.extend ({
 		} );
 		this.listenTo( this.revocableVM, 'change:seEncontroMatricula', this.renderMatriculaEncontrada );
 		this.listenTo( this.revocableVM, 'resultsInvalidated', this.renderMatriculaEncontrada );
+		
+		this.listenTo( this.revocableVM, 'change:errorRevocadosListBlank', this.renderError );
 	},
 	
 	render: function(){
@@ -624,7 +663,7 @@ app.RevocadosTabView = Backbone.View.extend ({
 		return this;
 	},
 	renderRevocableView: function(){
-		this.revocableView = new app.RevocableView( {model:this.revocableVM} );
+		this.revocableView = new app.RevocableView( {model:this.revocableVM,collection:this.revocadoVMCollection} );
 		this.$('.div-revocable').html( this.revocableView.render().el );
 	},
 	renderRevocadoVMCollectionView: function(){
@@ -742,7 +781,7 @@ app.RevocadosTabView = Backbone.View.extend ({
 				vistaExpandida: true
 			});
 			this.revocadoVMCollection.add(revToAdd);
-			this.revocableVM.invalidateResultadoBusqueda();
+			this.revocableVM.clearResults();
 		}
 	},
 	_validateAdd: function(){
@@ -751,12 +790,12 @@ app.RevocadosTabView = Backbone.View.extend ({
 	
 	submit: function(e){
 		e.preventDefault();
-		//if(this._validate()){
+		if(this._validate()){
 			this.model.set('validated',true);
 			//this.invalidateResult();
 			//this.clearNumeroMatricula();
 			this.trigger("stateChange","VALIDATED",this.checkId);
-		//}
+		}
 	},
 	edit: function(e){
 		e.preventDefault();

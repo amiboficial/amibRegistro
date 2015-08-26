@@ -240,7 +240,10 @@ class RegistroExamenService {
         re.segundoApellido = grr.get("USU_APE_MATERNO")
         re.genero = ( grr.get("USU_SEXO") == true )?'M':'F'
         re.rfc = grr.get("USU_RFC")
-        re.curp = grr.get("USU_CURP")
+        re.curp = ((String)grr.get("USU_CURP"))
+		if(re.curp != null && re.curp.length() > 18){
+			re.curp = re.curp.substring(0, 18)
+		}
         re.domicilio = grr.get("USU_DOMICILIO1") + " " + grr.get("USU_DOMICILIO2")
         re.codigoPostal = StringUtils.padLeft('0' as char,grr.get("USU_COD_POSTAL").toString(),5)
         re.ciudad = grr.get("USU_CIUDAD")

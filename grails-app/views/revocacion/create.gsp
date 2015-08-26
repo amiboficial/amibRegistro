@@ -118,5 +118,57 @@
 		});
 	</script>
 
+	<g:render template="../common/docMultiples.v2"/>
+	<g:javascript src="mx.amib.sistemas.registro.form.docMultiples.v2.js" />
+	<script type="text/javascript">
+		var app = app || {};
+		
+		/*
+		EJEMPLO DE INSTANCIAMIENTO
+		var documentosView = new app.DocumentosView({
+			tiposDocumento: [
+				{
+					grailsId: 1,
+					descripcion: "Documento de respaldo de poder 1",
+					vigente: true,
+					cantidadRequerida: 1,
+					cantidadMaxima: 1,
+					manejaVigencia: false
+				},
+				{
+					grailsId: 2,
+					descripcion: "Documento de respaldo de poder 2",
+					vigente: true,
+					cantidadRequerida: 1,
+					cantidadMaxima: 3,
+					manejaVigencia: true
+				},
+			],
+			manejaVigencia: true,
+			initialDocumentos: new app.Documentos()
+		});
+		*/
+		
+		var documentosView = new app.DocumentosView({
+			tiposDocumento: [
+				{
+					grailsId: 1,
+					descripcion: "Oficio de revocación",
+					vigente: true,
+					cantidadRequerida: 1,
+					cantidadMaxima: 1,
+					manejaVigencia: false
+				},
+			],
+			manejaVigencia: true,
+			initialDocumentos: new app.Documentos()
+		});
+		
+		documentosView.setUploadUrl('<g:createLink controller="documento" action="upload" />');
+		documentosView.setDownloadNewUrl('<g:createLink controller="documento" action="downloadNew" />');
+		documentosView.setDownloadUrl('<g:createLink controller="documento" action="download" />');
+		documentosView.setDeleteNewUrl('<g:createLink controller="documento" action="delete" />');
+	</script>
+
 </body>
 </html>

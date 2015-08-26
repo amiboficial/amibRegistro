@@ -184,93 +184,52 @@
 				</tr>
 			</thead>
 			<tbody class="list-items">
-				<tr>
-					<td>
-					[-]
-					</td>
-					<td>
-					Lorem
-					</td>
-					<td>
-					Ipsum
-					</td>
-					<td>
-					Dolor
-					</td>
-					<td>
-					Lorem
-					</td>
-					<td>
-					Ipsum
-					</td>
-					<td>
-					[Eliminar]
-					</td>
-				</tr>
-				<tr>
-					<td colspan="7">
-						Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum
-					</td>
-				</tr>
-				
-				<tr>
-					<td>
-					[+]
-					</td>
-					<td>
-					Lorem
-					</td>
-					<td>
-					Ipsum
-					</td>
-					<td>
-					Dolor
-					</td>
-					<td>
-					Lorem
-					</td>
-					<td>
-					Ipsum
-					</td>
-					<td>
-					[Eliminar]
-					</td>
-				</tr>
-				<tr>
-					<td colspan="7">
-					</td>
-				</tr>
-				
-				<tr>
-					<td>
-					[-]
-					</td>
-					<td>
-					Lorem
-					</td>
-					<td>
-					Ipsum
-					</td>
-					<td>
-					Dolor
-					</td>
-					<td>
-					Lorem
-					</td>
-					<td>
-					Ipsum
-					</td>
-					<td>
-					[Eliminar]
-					</td>
-				</tr>
-				<tr>
-					<td colspan="7">
-						Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum
-					</td>
-				</tr>
 			</tbody>
 		</table>
 	</fieldset>
 
+</script>
+
+<script type="text/template" id="formRevocadosRowTemplate">
+
+	<tr>
+		<td>
+			{{ if(vistaExpandida){ }}
+				<button class="collapseRow btn btn-default btn-xxs" data-id="{{=idApoderado}}"><span class="glyphicon glyphicon-minus"></span></button>
+			{{ } else { }}
+				<button class="expandRow btn btn-default btn-xxs" data-id="{{=idApoderado}}"><span class="glyphicon glyphicon-plus"></span></button>
+			{{ } }}
+		</td>
+		<td>
+		{{=idSustentante}}
+		</td>
+		<td>
+		{{=numeroMatricula}}
+		</td>
+		<td>
+		{{=nombre}}
+		</td>
+		<td>
+		{{=primerApellido}}
+		</td>
+		<td>
+		{{=segundoApellido}}
+		</td>
+		<td>
+		[Eliminar]
+		</td>
+	</tr>
+	{{ if(vistaExpandida){ }}
+		<tr>
+			<td colspan="7">
+				<div class="div-revocado-details-{{=idApoderado}}">
+					<ul>
+						<li><strong>Motivo:</strong>&nbsp;{{=dsMotivo}}</li>
+						<li><strong>Fecha de baja:</strong>&nbsp;{{=fechaBaja_day}}/{{=fechaBaja_month}}/{{=fechaBaja_year}}</li>
+						<li><strong>Poder a revocar:</strong>&nbsp;{{=dsPoderRevocar}}</li>
+					</ul>
+				</div>
+			</td>
+		</tr>
+	{{ } }}
 </script>

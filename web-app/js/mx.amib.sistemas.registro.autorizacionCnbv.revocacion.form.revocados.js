@@ -183,6 +183,7 @@ app.RevocadoVM = Backbone.Model.extend ({
 		fechaBaja_month: -1,
 		fechaBaja_year: -1,
 		dsMotivo: '',
+		dsPoderRevocar: '',
 		
 		vistaExpandida: false
 	}
@@ -291,6 +292,28 @@ app.RevocadoVMCollection = Backbone.Collection.extend ({
 		this._sort = sort;
 		
 		this.sort();
+	},
+	
+	setVistaExpandida: function(idApoderado, isVistaExpandida){
+		console.log( 'PASO AQUI setVistaExpandida CON PARAMETROS: ' + idApoderado + ',' + isVistaExpandida);
+		this.each(function(item){
+			if(item.get('idApoderado') == idApoderado){
+				item.set('vistaExpandida',isVistaExpandida);
+			}
+		});
+		this.trigger('reset',{});
+		//this.sort();
+	},
+	removeByIdApoderado: function(idApoderado){
+		var itemABorrar;
+		
+		this.each(function(item){
+			if(item.get('idApoderado') == idApoderado){
+				itemABorrar = item;
+			}
+		});
+		
+		this.remove([ item ]);
 	}
 });
 
@@ -306,14 +329,30 @@ app.RevocadosTabVM = Backbone.Model.extend ({
 app.RevocadoVMCollectionView = Backbone.View.extend ({
 	model: {},
 	template: _.template( $('#formRevocadosCollectionTemplate').html() ),
+	rowTemplate: _.template( $('#formRevocadosRowTemplate').html() ),
 	
 	initialize: function(options){
 		this.model = new Backbone.Model( { collection:options.collection } );
+		this.collection = options.collection;
+		
+		this.listenTo( this.collection , 'add', this.render );
+		this.listenTo( this.collection , 'remove', this.render );
+		this.listenTo( this.collection , 'sort', this.render );
+		this.listenTo( this.collection , 'reset', this.render );
+		
 	},
 	
 	render: function(){
 		this.$el.html( this.template( this.model.toJSON() ) );
+		this.renderItems();
 		return this;
+	},
+	renderItems: function(){
+		var itemsHtml = '';
+		this.collection.each(function(item){
+			itemsHtml += this.rowTemplate( item.toJSON() );
+		},this);
+		this.$('.list-items').html(itemsHtml);
 	},
 	
 	//aqui se realizará lo correspondiente al rendereo de la lista
@@ -322,6 +361,33 @@ app.RevocadoVMCollectionView = Backbone.View.extend ({
 	},
 	disableInput: function(){
 		this.$('button').prop('disabled',true);
+	},
+	
+	events: {
+		'click .expandRow' : 'expandRow',
+		'click .collapseRow' : 'collapseRow',
+		'click .removeItem' : 'removeItem',
+	},
+	expandRow: function(e){
+		e.preventDefault();
+		
+		var idApoderado = this.$(e.currentTarget).data("id");
+		
+		this.collection.setVistaExpandida(idApoderado,true);
+	},
+	collapseRow: function(e){
+		e.preventDefault();
+		
+		var idApoderado = this.$(e.currentTarget).data("id");
+		
+		this.collection.setVistaExpandida(idApoderado,false);
+	},
+	removeItem: function(e){
+		e.preventDefault();
+		
+		var idApoderado = this.$(e.currentTarget).data("id");
+		
+		this.collection.removeByIdApoderado(idApoderado);
 	}
 });
 
@@ -648,7 +714,35 @@ app.RevocadosTabView = Backbone.View.extend ({
 	add: function(e){
 		e.preventDefault();
 		if(this._validateAdd()){
-			alert('ES VALIDO!!!!');
+			
+			var dsPoderRevocar;
+			var apoderamientosEncontrados = this.revocableVM.get('apoderamientosEncontrados');
+			var idApoderado = this.revocableVM.get('idApoderado');
+			_.each(apoderamientosEncontrados,function(item){
+				if(item.id == idApoderado){
+					dsPoderRevocar = item.text;
+				}
+			},this);
+			
+			var revToAdd = new app.RevocadoVM();
+			revToAdd.set({
+				idApoderado: this.revocableVM.get('idApoderado'),
+				idCertificacion: this.revocableVM.get('idCertificacion'),
+				idSustentante: this.revocableVM.get('idSustentante'),
+				numeroMatricula: this.revocableVM.get('numeroMatricula'),
+				nombreCompleto: this.revocableVM.get('nombreCompleto'),
+				nombre: this.revocableVM.get('nombre'),
+				primerApellido: this.revocableVM.get('primerApellido'),
+				segundoApellido: this.revocableVM.get('segundoApellido'),
+				fechaBaja_day: this.revocableVM.get('fechaBaja_day'),
+				fechaBaja_month: this.revocableVM.get('fechaBaja_month'),
+				fechaBaja_year: this.revocableVM.get('fechaBaja_year'),
+				dsMotivo: this.revocableVM.get('dsMotivo'),
+				dsPoderRevocar: dsPoderRevocar,
+				vistaExpandida: true
+			});
+			this.revocadoVMCollection.add(revToAdd);
+			this.revocableVM.invalidateResultadoBusqueda();
 		}
 	},
 	_validateAdd: function(){

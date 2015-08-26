@@ -318,7 +318,7 @@ app.RevocadoVMCollection = Backbone.Collection.extend ({
 			}
 		});
 		
-		this.remove([ item ]);
+		this.remove([ itemABorrar ]);
 	},
 	
 	containsApoderadoByNumeroMatricula: function(numeroMatricula){
@@ -644,7 +644,7 @@ app.RevocadosTabView = Backbone.View.extend ({
 		this.listenTo( this.revocableVM, 'change:seEncontroMatricula', this.renderMatriculaEncontrada );
 		this.listenTo( this.revocableVM, 'resultsInvalidated', this.renderMatriculaEncontrada );
 		
-		this.listenTo( this.revocableVM, 'change:errorRevocadosListBlank', this.renderError );
+		this.listenTo( this.model, 'change:errorRevocadosListBlank', this.renderError );
 	},
 	
 	render: function(){
@@ -785,6 +785,7 @@ app.RevocadosTabView = Backbone.View.extend ({
 		}
 	},
 	_validateAdd: function(){
+		this.model.set('errorRevocadosListBlank',false);
 		return this.revocableVM.validateToAdd();
 	},
 	

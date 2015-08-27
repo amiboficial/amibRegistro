@@ -80,7 +80,18 @@
 	
 	</form>
 	
-	
+	<g:render template="./formRevocacion"/>
+	<g:javascript src="mx.amib.sistemas.registro.autorizacionCnbv.revocacion.form.datosOficio.js" />
+	<script type="text/javascript">
+		var datosOficioView;
+		var checkNumeroEscrituraUniqueUrl = '<g:createLink action="checkNumeroEscrituraUnique" />';
+		
+		datosOficioView = new app.RevocacionDatosOficioTabView({
+			model: new app.RevocacionDatosOficioTabVM({
+				checkNumeroEscrituraUniqueUrl : checkNumeroEscrituraUniqueUrl
+			})
+		});
+	</script>
 	
 	<g:render template="./formNotario"/>
 	<g:javascript src="mx.amib.sistemas.registro.autorizacionCnbv.revocacion.form.notario.js" />

@@ -216,7 +216,7 @@
 		{{=segundoApellido}}
 		</td>
 		<td>
-			<button class="removeItem btn btn-danger btn-xxs" data-id="{{=idApoderado}}"><span class="glyphicon glyphicon-trash"></span>Eliminar</button>
+			<button class="removeItem btn btn-danger btn-xs" data-id="{{=idApoderado}}"><span class="glyphicon glyphicon-trash"></span>Eliminar</button>
 		</td>
 	</tr>
 	{{ if(vistaExpandida){ }}

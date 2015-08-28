@@ -164,18 +164,43 @@ app.RevocacionDatosOficioTabVM = Backbone.Model.extend({
 	checkNumeroEscrituraUnique: function(){
 		console.log('checkNumeroEscrituraUniqueUrl -> ' + checkNumeroEscrituraUniqueUrl)
 		var _this = this;
+		var randomNumber = Math.random() >= 0.5;
 		
 		this.invalidateCheckNumeroEscrituraUnique();
-		this.set('processing',true);
+		if(this.validateNumeroEscritura()){
+			this.set('processing',true);
+			setTimeout(function(){
+				_this.set('processing',false);
+				
+				_this.set('numeroEscrituraUniqueChecked',true);
+				_this.set('isNumeroEscrituraUnique',randomNumber);
+				
+				_this.trigger('numeroEscrituraUniqueChecked',{});
+			}, 1000);
+		}
+	},
+	validateNumeroEscritura: function(){
+		var valid = true;
+		var num10CarExp = /^[0-9]{1,10}$/;
 		
-		setTimeout(function(){
-			_this.set('processing',false);
-			
-			_this.set('numeroEscrituraUniqueChecked',true);
-			_this.set('isNumeroEscrituraUnique',false);
-			
-			_this.trigger('numeroEscrituraUniqueChecked',{});
-		}, 1000);
+		var noNumeroEscritura = (this.get('numeroEscritura') == '');
+		var numeroEscrituraNoNumerico = (!num10CarExp.test(this.get('numeroEscritura')));
+		
+		this.set('errorNoNumeroEscritura',false);
+		this.set('errorNumeroEscrituraNoNumerico',false);
+		
+		if(noNumeroEscritura){
+			valid = false;
+			//this.set('errorNoNumeroEscritura',true); simplemente se muestra como borrado
+		}
+		else if(numeroEscrituraNoNumerico){
+			valid = false;
+			this.set('errorNumeroEscrituraNoNumerico',true);
+		}
+		
+		this.trigger('numeroEscrituraValidated',{});
+		
+		return valid;
 	},
 	invalidateCheckNumeroEscrituraUnique: function(){
 		this.set({
@@ -202,7 +227,9 @@ app.RevocacionDatosOficioTabView = Backbone.View.extend({
 		this.listenTo( this.model, 'change:processing', this.renderProcessing );
 		this.listenTo( this.model, 'institucionesCargadas', this.renderInstitucionesCargadas );
 		this.listenTo( this.model, 'numeroEscrituraUniqueChecked', this.renderNumeroEscrituraUniqueChecked );
-		this.listenTo( this.model, 'numeroEscrituraUniqueCheckInvalidated', this.renderInvalidateCheckNumeroEscrituraUnique);
+		this.listenTo( this.model, 'numeroEscrituraUniqueCheckInvalidated', this.renderInvalidateCheckNumeroEscrituraUnique );
+		this.listenTo( this.model, 'numeroEscrituraValidated', this.renderError );
+		
 		Backbone.View.prototype.initialize.call(this);
 	},
 	
@@ -259,6 +286,11 @@ app.RevocacionDatosOficioTabView = Backbone.View.extend({
 			this.$('.div-representanteLegalApellido1').addClass( 'has-error' );
 		}
 		
+		if( this.model.get('errorNoNumeroEscritura') == true ){
+			this.$('.alert-errorNoNumeroEscritura').show();
+			this.$('.div-numeroEscritura').addClass( 'has-error' );
+		}
+		
 		if( this.model.get('errorNumeroEscrituraNoNumerico') == true ){
 			this.$('.alert-errorNumeroEscrituraNoNumerico').show();
 			this.$('.div-numeroEscritura').addClass( 'has-error' );
@@ -304,20 +336,20 @@ app.RevocacionDatosOficioTabView = Backbone.View.extend({
 	renderNumeroEscrituraUniqueChecked: function(){
 		this.$('.alert-errorNumeroEscrituraNonUnique').hide();
 		this.$('.div-numeroEscritura').removeClass( 'has-success' );
-		this.$('.div-numeroEscritura').removeClass( 'has-warning' );
+		this.$('.div-numeroEscritura').removeClass( 'has-error' );
 		
 		if(this.model.get('isNumeroEscrituraUnique')){
 			this.$('.div-numeroEscritura').addClass( 'has-success' );
 		}
 		else{
 			this.$('.alert-errorNumeroEscrituraNonUnique').show();
-			this.$('.div-numeroEscritura').addClass( 'has-warning' );
+			this.$('.div-numeroEscritura').addClass( 'has-error' );
 		}
 	},
 	renderInvalidateCheckNumeroEscrituraUnique: function(){
 		this.$('.alert-errorNumeroEscrituraNonUnique').hide();
 		this.$('.div-numeroEscritura').removeClass( 'has-success' );
-		this.$('.div-numeroEscritura').removeClass( 'has-warning' );
+		this.$('.div-numeroEscritura').removeClass( 'has-error' );
 	},
 	enableInput: function(){
 		this.$('input').prop('disabled',false);

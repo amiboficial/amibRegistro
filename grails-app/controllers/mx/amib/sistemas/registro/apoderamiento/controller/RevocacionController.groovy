@@ -17,6 +17,7 @@ import mx.amib.sistemas.external.oficios.service.PoderService
 
 class RevocacionController {
 
+	def revocacionService
 	def notarioService
 	def sepomexService
 	def poderService
@@ -36,6 +37,26 @@ class RevocacionController {
 	
 	def show() { }
 	
+	def isNumeroEscrituraAvailable(){
+		int numeroEscritura = -1
+		boolean resultado
+		def responseObj = null
+		
+		try{
+			numeroEscritura = Integer.parseInt(params.'numeroEscritura'?:"-1")
+			resultado = revocacionService.isNumeroEscrituraAvailable(numeroEscritura)
+			if(resultado == true){
+				responseObj = [ 'status': 'OK', 'object': [ 'isNumeroEscrituraAvailable': true ] ]
+			}
+			else{
+				responseObj = [ 'status': 'OK', 'object': [ 'isNumeroEscrituraAvailable': false ] ]
+			}
+		}
+		catch(Exception ex) {
+			responseObj = [ 'status': 'ERROR', 'object': ex.message ]
+		}
+		render responseObj as JSON
+	}
 	
 	def findNotarioByNumeroNotariaAndIdEntidadFederativa(){
 		int numeroNotaria = params.int('numeroNotaria')

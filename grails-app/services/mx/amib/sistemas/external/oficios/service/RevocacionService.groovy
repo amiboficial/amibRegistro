@@ -21,6 +21,7 @@ class RevocacionService {
 	String getUrl
 	String saveUrl
 	String updateUrl
+	String isNumeroEscrituraAvailableUrl
 	
     public SearchResult<RevocacionTO> list(Integer max, Integer offset, String sort, String order){
 		SearchResult<RevocacionTO> sr = new SearchResult<RevocacionTO>()
@@ -88,6 +89,21 @@ class RevocacionService {
 			r = new RevocacionTO( this.fixRevocacionJsonObject(resp.json) )
 		}
 		return r
+	}
+	
+	public boolean isNumeroEscrituraAvailable(int numeroEscritura){
+		def rest = new RestBuilder()
+
+		println isNumeroEscrituraAvailableUrl + numeroEscritura
+		def resp = rest.get(isNumeroEscrituraAvailableUrl + numeroEscritura)
+		println resp.text
+		
+		if(resp.text == "true"){
+			return true
+		}
+		else{	
+			return false
+		}
 	}
 	
 	private JSON customServiceJson(RevocacionTO r){

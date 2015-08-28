@@ -80,6 +80,7 @@ beans = {
 		getUrl = application.config.mx.amib.sistemas.oficios.resthttpURL + application.config.mx.amib.sistemas.oficios.revocacion.get
 		saveUrl = application.config.mx.amib.sistemas.oficios.resthttpURL + application.config.mx.amib.sistemas.oficios.revocacion.save
 		updateUrl = application.config.mx.amib.sistemas.oficios.resthttpURL + application.config.mx.amib.sistemas.oficios.revocacion.update
+		isNumeroEscrituraAvailableUrl = application.config.mx.amib.sistemas.oficios.resthttpURL + application.config.mx.amib.sistemas.oficios.revocacion.isNumeroEscrituraAvailable
 	}
 	revocadoService(mx.amib.sistemas.external.oficios.service.RevocadoService){
 		getIdsCertificacionUrl = application.config.mx.amib.sistemas.oficios.resthttpURL + application.config.mx.amib.sistemas.oficios.revocacion.revocado.getIdsCertificacion

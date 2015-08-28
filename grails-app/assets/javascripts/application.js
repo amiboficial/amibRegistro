@@ -6,8 +6,8 @@
 // to create separate JavaScript files as needed.
 //
 //= require jquery
-//= require underscore-1.6.0-min.js
-//= require backbone-1.1.2-min.js
+//= require underscore-1.8.3.js
+//= require backbone-1.2.2.js
 //= require encoder.js
 //= require_tree .
 //= require_self

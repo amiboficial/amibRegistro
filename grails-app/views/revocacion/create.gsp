@@ -58,7 +58,7 @@
 					<div class="panel-heading">Checklist de validación de información</div>
 					<div class="panel-body">
 						<ul style="list-style-type:none">
-							<li><span id="spnCheckOficioCnbv" class="glyphicon glyphicon-unchecked"></span> Datos del oficio</li>
+							<li><span id="spnCheckOficioRevocacion" class="glyphicon glyphicon-unchecked"></span> Datos del oficio de revocación</li>
 							<li><span id="spnCheckNotario" class="glyphicon glyphicon-unchecked"></span> Datos del notario</li>
 							<li><span id="spnCheckRevocados" class="glyphicon glyphicon-unchecked"></span> Datos de los revocados</li>
 							<li><span id="spnCheckDocs" class="glyphicon glyphicon-unchecked"></span> Documento(s) de respaldo</li>
@@ -201,6 +201,15 @@
 		documentosView.setDownloadNewUrl('<g:createLink controller="documento" action="downloadNew" />');
 		documentosView.setDownloadUrl('<g:createLink controller="documento" action="download" />');
 		documentosView.setDeleteNewUrl('<g:createLink controller="documento" action="delete" />');
+	</script>
+
+	<g:javascript src="mx.amib.sistemas.registro.apoderamiento.revocacion.create.checklist.js" />
+	<script type="text/javascript">
+		var checkSubmitView = new app.CheckSubmitView();
+		checkSubmitView.setViewInstance(app.REV_CREATE_CHKIDX_DATOFICIO,datosOficioView);
+		checkSubmitView.setViewInstance(app.REV_CREATE_CHKIDX_NOTARIO,notarioView);
+		checkSubmitView.setViewInstance(app.REV_CREATE_CHKIDX_REVOCADOS,revocadosTabView);
+		checkSubmitView.setViewInstance(app.REV_CREATE_CHKIDX_DOCS,documentosView);
 	</script>
 
 </body>

@@ -82,6 +82,7 @@ app.NotarioVM = Backbone.Model.extend ({
 });
 
 app.NotarioView =  Backbone.View.extend({
+	checkId: -1,
 	el: '#divNotario',
 	template: _.template( $('#notarioTemplate').html() ),
 	model: new app.NotarioVM(),
@@ -312,6 +313,14 @@ app.NotarioView =  Backbone.View.extend({
 		}
 		
 		return valid;
+	},
+	
+	//metodos para el checklist
+	setCheckId: function(checkId){
+		this.checkId = checkId;
+	},
+	getCheckId: function(checkId){
+		return checkId;
 	},
 	
 	submit: function(e){

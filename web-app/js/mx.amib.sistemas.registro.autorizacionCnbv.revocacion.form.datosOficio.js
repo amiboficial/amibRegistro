@@ -355,6 +355,14 @@ app.RevocacionDatosOficioTabView = Backbone.View.extend({
 		this.$('select').prop('disabled',true);
 	},
 	
+	//metodos para el checklist
+	setCheckId: function(checkId){
+		this.checkId = checkId;
+	},
+	getCheckId: function(checkId){
+		return checkId;
+	},
+	
 	events: {
 		'change .field':'updateModel',
 		'click .submit':'submit',
@@ -375,11 +383,12 @@ app.RevocacionDatosOficioTabView = Backbone.View.extend({
 	},
 	
 	submit: function(){
-		console.log('paso por el sumbit');
-		this.model.validate(true);
-	},
-	
+		if(this.model.validate(true)){
+			this.trigger("stateChange","VALIDATED",this.checkId);
+		}
+	},	
 	edit: function(){
+		this.trigger("stateChange","READY",this.checkId);
 		this.model.invalidate();
 	}
 	

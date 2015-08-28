@@ -4,6 +4,8 @@ import java.util.List;
 
 import grails.converters.JSON
 import mx.amib.sistemas.external.catalogos.service.EntidadFederativaTO
+import mx.amib.sistemas.external.catalogos.service.EntidadFinancieraService
+import mx.amib.sistemas.external.catalogos.service.GrupoFinancieroTO
 import mx.amib.sistemas.external.catalogos.service.NotarioTO
 import mx.amib.sistemas.external.catalogos.service.SepomexService
 import mx.amib.sistemas.external.expediente.persona.service.SustentanteTO
@@ -20,6 +22,7 @@ class RevocacionController {
 	def poderService
 	def apoderamientoService
 	def sustentanteService
+	def entidadFinancieraService
 	
     def index() {
 		
@@ -27,7 +30,7 @@ class RevocacionController {
 	}
 	
 	def create() {
-		def vm = RevocacionFormViewModel.getForCreate(sepomexService)
+		def vm = RevocacionFormViewModel.getForCreate(sepomexService, entidadFinancieraService)
 		render( view:'create', model: [viewModelInstance:vm] )
 	}
 	
@@ -101,19 +104,25 @@ class RevocacionController {
 	public static class RevocacionFormViewModel{
 		RevocacionTO revocacion
 		Collection<EntidadFederativaTO> entidadesFed
+		Collection<GrupoFinancieroTO> gfins
 		
-		public static getForCreate(SepomexService sepomexService){
+		public static getForCreate(SepomexService sepomexService, EntidadFinancieraService entidadFinancieraService){
 			RevocacionFormViewModel vm = new RevocacionFormViewModel()
 			vm.fillEntidades(sepomexService)
+			vm.fillEntidadesFinancieras(entidadFinancieraService)
 			return vm
 		}
 		
 		private void fillEntidades(SepomexService sepomexService){
 			entidadesFed = sepomexService.obtenerEntidadesFederativas()
 		}
+		
+		private void fillEntidadesFinancieras(EntidadFinancieraService entidadFinancieraService){
+			gfins = entidadFinancieraService.obtenerGruposFinancierosVigentes().sort{ it.nombre }
+		}
 	}
 	
-	static class NotarioResult{
+	public static class NotarioResult{
 		long id
 		String text
 		

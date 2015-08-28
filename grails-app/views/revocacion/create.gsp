@@ -1,4 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
+<%@ page import="grails.converters.JSON" %>
+
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -84,13 +86,33 @@
 	<g:javascript src="mx.amib.sistemas.registro.autorizacionCnbv.revocacion.form.datosOficio.js" />
 	<script type="text/javascript">
 		var datosOficioView;
+		
 		var checkNumeroEscrituraUniqueUrl = '<g:createLink action="checkNumeroEscrituraUnique" />';
+		var gruposFinancieros = new Array();
+		
+		gruposFinancieros.push({ id:-1,text:"-Seleccione-" });
+		<g:each var="x" in="${viewModelInstance?.gfins}">
+			gruposFinancieros.push({ id:'${x.id}',text:'${x.nombre}', instituciones:[
+				{ id:'-1',text:'-Seleccione-' },
+				<g:each status="i" var="y" in="${x?.instituciones.sort{ it.nombre } }">
+					<g:if test="${ i < x?.instituciones.size() }">
+						{ id:'${y.id}',text:'${y.nombre}' },
+					</g:if>
+					<g:else>
+						{ id:'${y.id}',text:'${y.nombre}' }
+					</g:else>
+				</g:each>
+					
+			] });
+		</g:each>
 		
 		datosOficioView = new app.RevocacionDatosOficioTabView({
 			model: new app.RevocacionDatosOficioTabVM({
-				checkNumeroEscrituraUniqueUrl : checkNumeroEscrituraUniqueUrl
+				checkNumeroEscrituraUniqueUrl : checkNumeroEscrituraUniqueUrl,
+				gruposFinancieros : gruposFinancieros
 			})
 		});
+		
 	</script>
 	
 	<g:render template="./formNotario"/>

@@ -51,6 +51,7 @@ app.RevocacionDatosOficioTabVM = Backbone.Model.extend({
 		this.listenTo( this, 'change:numeroEscritura', this.checkNumeroEscrituraUnique );
 		this.listenTo( this, 'change:idGrupoFinanciero', this.cargarInstitucionesDeGrupoFinanciero );
 		
+		
 		Backbone.Model.prototype.initialize.call(this);
 	},
 	
@@ -82,8 +83,8 @@ app.RevocacionDatosOficioTabVM = Backbone.Model.extend({
 		//manda una notificacion de que se acualizaron las instituciones
 		this.trigger('institucionesCargadas',{});
 	},
-	validate: function(propagateError){
-		var valid = false;
+	validate: function(){
+		var valid = true;
 		var num10CarExp = /^[0-9]{1,10}$/;
 		
 		var grupoFinancieroSeleccionado = (this.get('idGrupoFinanciero') != -1);
@@ -94,72 +95,60 @@ app.RevocacionDatosOficioTabVM = Backbone.Model.extend({
 		var numeroEscrituraUniqueChecked = this.get('numeroEscrituraUniqueChecked');
 		var numeroEscrituraUnique = this.get('isNumeroEscrituraUnique');
 		var noFechaRevocacion = ( this.get('fechaRevocacion_day') == -1 || this.get('fechaRevocacion_month') == -1 || this.get('fechaRevocacion_year') == -1)
-		
-		if(propagateError){
-			this.set({
-				errorNoGrupoFinanciero: false,
-				errorNoRepresentanteLegalNombre: false,
-				errorNoRepresentanteLegalApellido1: false,
-				errorNoNumeroEscritura: false,
-				errorNumeroEscrituraNoNumerico: false,
-				errorNumeroEscrituraNonCheckedYet: false,
-				errorNumeroEscrituraNonUnique: false,
-				errorNoFechaRevocacion: false
-			},false);
-		}
+	
+		this.set({
+			errorNoGrupoFinanciero: false,
+			errorNoRepresentanteLegalNombre: false,
+			errorNoRepresentanteLegalApellido1: false,
+			errorNoNumeroEscritura: false,
+			errorNumeroEscrituraNoNumerico: false,
+			errorNumeroEscrituraNonCheckedYet: false,
+			errorNumeroEscrituraNonUnique: false,
+			errorNoFechaRevocacion: false,
+			validated: false
+		},false);
 		
 		if(!grupoFinancieroSeleccionado){
 			valid = false;
-			if(propagateError){
-				this.set('errorNoGrupoFinanciero',true);
-			}
+			this.set('errorNoGrupoFinanciero',true);
 		}
 		if(noRepLegalNombre){
 			valid = false;
-			if(propagateError){
-				this.set('errorNoRepresentanteLegalNombre',true);
-			}
+			this.set('errorNoRepresentanteLegalNombre',true);
 		}
 		if(noRepLegalAp1){
 			valid = false;
-			if(propagateError){
-				this.set('errorNoRepresentanteLegalApellido1',true);
-			}
+			this.set('errorNoRepresentanteLegalApellido1',true);
 		}
 		if(noNumeroEscritura){
 			valid = false;
-			if(propagateError){
-				this.set('errorNoNumeroEscritura',true);
-			}
+			this.set('errorNoNumeroEscritura',true);
 		}
 		if(numeroEscrituraNoNumerico){
 			valid = false;
-			if(propagateError){
-				this.set('errorNumeroEscrituraNoNumerico',true);
-			}
+			this.set('errorNumeroEscrituraNoNumerico',true);
 		}
 		if(!numeroEscrituraUniqueChecked){
 			valid = false;
-			if(propagateError){
-				this.set('errorNumeroEscrituraNonCheckedYet',true);
-			}
+			this.set('errorNumeroEscrituraNonCheckedYet',true);
 		}
 		else if(!numeroEscrituraUnique){
 			valid = false;
-			if(propagateError){
-				this.set('errorNumeroEscrituraNonUnique',true);
-			}
+			this.set('errorNumeroEscrituraNonUnique',true);
 		}
 		
 		if(noFechaRevocacion){
 			valid = false;
-			if(propagateError){
-				this.set('errorNoFechaRevocacion',true);
-			}
+			this.set('errorNoFechaRevocacion',true);
 		}
 		
+		this.set('validated',valid);
 		this.trigger('validated',valid);
 		return valid;
+	},
+	invalidate: function(){
+		this.set('validated',false);
+		this.trigger('validated',false);
 	},
 	checkNumeroEscrituraUnique: function(){
 		console.log('checkNumeroEscrituraUniqueUrl -> ' + checkNumeroEscrituraUniqueUrl)
@@ -229,6 +218,8 @@ app.RevocacionDatosOficioTabView = Backbone.View.extend({
 		this.listenTo( this.model, 'numeroEscrituraUniqueChecked', this.renderNumeroEscrituraUniqueChecked );
 		this.listenTo( this.model, 'numeroEscrituraUniqueCheckInvalidated', this.renderInvalidateCheckNumeroEscrituraUnique );
 		this.listenTo( this.model, 'numeroEscrituraValidated', this.renderError );
+		this.listenTo( this.model, 'validated', this.renderError );
+		this.listenTo( this.model, 'validated', this.renderValidated );
 		
 		Backbone.View.prototype.initialize.call(this);
 	},
@@ -322,6 +313,8 @@ app.RevocacionDatosOficioTabView = Backbone.View.extend({
 		}
 	},
 	renderValidated: function(){
+		console.log('paso por el renderValidated');
+		
 		if(this.model.get('validated')){
 			this.disableInput();
 			this.$('.submit').prop('disabled',true);
@@ -382,11 +375,12 @@ app.RevocacionDatosOficioTabView = Backbone.View.extend({
 	},
 	
 	submit: function(){
-		alert('not yet implemented');
+		console.log('paso por el sumbit');
+		this.model.validate(true);
 	},
 	
 	edit: function(){
-		alert('not yet implemented');
+		this.model.invalidate();
 	}
 	
 });

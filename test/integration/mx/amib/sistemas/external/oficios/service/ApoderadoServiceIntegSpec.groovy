@@ -31,8 +31,23 @@ class ApoderadoServiceIntegSpec extends Specification {
 			idsCertificacion.add(44L)
 		when:
 			apres = apoderadoService.findAllByIdCertificacionIn(idsCertificacion)
-			println 'el resutlado es -> ' + (apres as JSON)
+			println 'el resultado es -> ' + (apres as JSON)
 		then:
 			apres != null
     }
+	
+	void "test apoderadoService.getAll"(){
+		given:
+			Set<Long> ids = new HashSet<Long>();
+			ApoderadoResultTO apres = new ApoderadoResultTO();
+			ids.add(20048L)
+			ids.add(20049L)
+			ids.add(20050L)
+			ids.add(20051L)
+		when:
+			apres = apoderadoService.findAllByIdCertificacionIn(ids)
+			println 'el resultado es -> ' + (apres as JSON)
+		then:
+			apres != null
+	}
 }

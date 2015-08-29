@@ -12,6 +12,7 @@ import mx.amib.sistemas.external.expediente.persona.service.SustentanteTO
 import mx.amib.sistemas.external.oficios.poder.PoderTO
 import mx.amib.sistemas.external.oficios.poder.ApoderadoTO
 import mx.amib.sistemas.external.oficios.revocacion.RevocacionTO
+import mx.amib.sistemas.external.oficios.revocacion.RevocadoTO
 import mx.amib.sistemas.external.oficios.service.PoderService
 
 
@@ -33,6 +34,29 @@ class RevocacionController {
 	def create() {
 		def vm = RevocacionFormViewModel.getForCreate(sepomexService, entidadFinancieraService)
 		render( view:'create', model: [viewModelInstance:vm] )
+	}
+	
+	def save(RevocacionTO revocacion) {
+		List<RevocadoTO> revocados = new ArrayList<RevocadoTO>()
+		
+		Calendar cFechaRevocacion = Calendar.getInstance()
+		List<Long> idsApoderadoARevocar = new ArrayList<Long>()
+		List<Long> idsCertificacionARevocar = new ArrayList<Long>()
+		
+		def pIdsApoderadosARevocar = params.list('revocados.idApoderado')
+		def pFechaRevocacionDay = params.int('revocacion.fechaRevocacion_day')
+		def pFechaRevocacionMonth = params.int('revocacion.fechaRevocacion_month')
+		def pFechaRevocacionYear = params.int('revocacion.fechaRevocacion_year')
+		
+		//checa calendars
+		cFechaRevocacion.set(pFechaRevocacionYear, pFechaRevocacionMonth - 1, pFechaRevocacionDay,0,0,0)
+		
+		revocacion.fechaRevocacion = cFechaRevocacion.getTime()
+		
+		println "ids recibidos"
+		println (pIdsApoderadosARevocar as JSON)
+		
+		render (revocacion as JSON)
 	}
 	
 	def show() { }

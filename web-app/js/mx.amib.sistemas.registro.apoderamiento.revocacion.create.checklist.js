@@ -100,26 +100,33 @@ app.CheckSubmitView = Backbone.View.extend({
 
 	submitDatos: function(e){
 		e.preventDefault();
+		
 		var arr = this.model.get('viewsarray');
 		var i;
+		
 		//Limpia los datos del "span" donde se introducirán los hiddens
 		$('#spnHdnPostData').html("");
-		/*
-		this.$("#spnHdnPostData").append('<input type="hidden" name="oficioCnbv.claveDga" value="' + arr[app.REV_CREATE_CHKIDX_DATOFICIO].model.get('claveDga') + '" />');
-		this.$("#spnHdnPostData").append('<input type="hidden" name="oficioCnbv.numeroOficio" value="' + arr[app.REV_CREATE_CHKIDX_DATOFICIO].model.get('numeroOficio') + '" />');
-		this.$("#spnHdnPostData").append('<input type="hidden" name="oficioCnbv.fechaOficio_day" value="' + arr[app.REV_CREATE_CHKIDX_DATOFICIO].model.get('fechaOficio_day') + '" />');
-		this.$("#spnHdnPostData").append('<input type="hidden" name="oficioCnbv.fechaOficio_month" value="' + arr[app.REV_CREATE_CHKIDX_DATOFICIO].model.get('fechaOficio_month') + '" />');
-		this.$("#spnHdnPostData").append('<input type="hidden" name="oficioCnbv.fechaOficio_year" value="' + arr[app.REV_CREATE_CHKIDX_DATOFICIO].model.get('fechaOficio_year') + '" />');
-		this.$("#spnHdnPostData").append('<input type="hidden" name="oficioCnbv.uuidDocumentoRespaldo" value="' + arr[app.REV_CREATE_CHKIDX_DOCS].collection.at(0).get("uuid") + '" />');
 		
-		i = 0;s
-		arr[app.REV_CREATE_CHKIDX_REVOCADOS].collection.each( function(item){
-			this.$("#spnHdnPostData").append('<input type="hidden" name="autorizadosCnbv.idCertificacion" value="' + item.get("idCertificacion") + '" />');
-			i++;
-		}, this );
+		this.$("#spnHdnPostData").append('<input type="hidden" name="revocacion.idGrupoFinanciero" value="' + arr[app.REV_CREATE_CHKIDX_DATOFICIO].model.get('idGrupoFinanciero') + '" />');
+		this.$("#spnHdnPostData").append('<input type="hidden" name="revocacion.idInstitucion" value="' + arr[app.REV_CREATE_CHKIDX_DATOFICIO].model.get('idInstitucion') + '" />');
+		this.$("#spnHdnPostData").append('<input type="hidden" name="revocacion.numeroEscritura" value="' + arr[app.REV_CREATE_CHKIDX_DATOFICIO].model.get('numeroEscritura') + '" />');
+		this.$("#spnHdnPostData").append('<input type="hidden" name="revocacion.representanteLegalNombre" value="' + arr[app.REV_CREATE_CHKIDX_DATOFICIO].model.get('representanteLegalNombre') + '" />');
+		this.$("#spnHdnPostData").append('<input type="hidden" name="revocacion.representanteLegalApellido1" value="' + arr[app.REV_CREATE_CHKIDX_DATOFICIO].model.get('representanteLegalApellido1') + '" />');
+		this.$("#spnHdnPostData").append('<input type="hidden" name="revocacion.representanteLegalApellido2" value="' + arr[app.REV_CREATE_CHKIDX_DATOFICIO].model.get('representanteLegalApellido2') + '" />');
+		this.$("#spnHdnPostData").append('<input type="hidden" name="revocacion.fechaRevocacion_day" value="' + arr[app.REV_CREATE_CHKIDX_DATOFICIO].model.get('fechaRevocacion_day') + '" />');
+		this.$("#spnHdnPostData").append('<input type="hidden" name="revocacion.fechaRevocacion_month" value="' + arr[app.REV_CREATE_CHKIDX_DATOFICIO].model.get('fechaRevocacion_month') + '" />');
+		this.$("#spnHdnPostData").append('<input type="hidden" name="revocacion.fechaRevocacion_year" value="' + arr[app.REV_CREATE_CHKIDX_DATOFICIO].model.get('fechaRevocacion_year') + '" />');
+		
+		this.$("#spnHdnPostData").append('<input type="hidden" name="revocacion.idNotarioSeleccionado" value="' + arr[app.REV_CREATE_CHKIDX_NOTARIO].model.get('idNotarioSeleccionado') + '" />');
+		
+		arr[app.REV_CREATE_CHKIDX_REVOCADOS].revocadoVMCollection.each(function(item){
+			this.$("#spnHdnPostData").append('<input type="hidden" name="revocados.idApoderado" value="' + item.get('idApoderado') + '" />');
+		},this);
+		
+		this.$("#spnHdnPostData").append('<input type="hidden" name="revocacion.uuidDocumentoRespaldo" value="' + arr[app.REV_CREATE_CHKIDX_DOCS].collection.at(0).get("uuid") + '" />');
 		
 		if(confirm(app.REV_CREATE_CHKIDX_MSG))
 			$("#frmApp").submit();
-		*/
+
 	},
 });

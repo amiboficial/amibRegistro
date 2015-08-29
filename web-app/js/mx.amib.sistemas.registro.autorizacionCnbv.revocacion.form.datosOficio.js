@@ -151,22 +151,32 @@ app.RevocacionDatosOficioTabVM = Backbone.Model.extend({
 		this.trigger('validated',false);
 	},
 	checkNumeroEscrituraUnique: function(){
-		console.log('checkNumeroEscrituraUniqueUrl -> ' + checkNumeroEscrituraUniqueUrl)
 		var _this = this;
-		var randomNumber = Math.random() >= 0.5;
+		
+		console.log('checkNumeroEscrituraUniqueUrl -> ' + _this.get('checkNumeroEscrituraUniqueUrl'))
 		
 		this.invalidateCheckNumeroEscrituraUnique();
 		if(this.validateNumeroEscritura()){
-			this.set('processing',true);
-			setTimeout(function(){
-				_this.set('processing',false);
-				
-				_this.set('numeroEscrituraUniqueChecked',true);
-				_this.set('isNumeroEscrituraUnique',randomNumber);
-				
-				_this.trigger('numeroEscrituraUniqueChecked',{});
-			}, 1000);
+			
+			_this.set('processing',true);
+			$.ajax({
+				url: _this.get('checkNumeroEscrituraUniqueUrl') + "?numeroEscritura=" + _this.get("numeroEscritura") ,
+				async: true,
+				success: function(result){
+					_this.set('processing',false);
+					_this.set('numeroEscrituraUniqueChecked',true);
+					if(result.status == "OK" && result.object.isNumeroEscrituraAvailable == true){
+						_this.set('isNumeroEscrituraUnique',true);
+					}
+					else{
+						_this.set('isNumeroEscrituraUnique',false);
+					}
+					_this.trigger('numeroEscrituraUniqueChecked',{});
+				}
+			});
+			
 		}
+		
 	},
 	validateNumeroEscritura: function(){
 		var valid = true;

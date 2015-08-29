@@ -87,7 +87,7 @@
 	<script type="text/javascript">
 		var datosOficioView;
 		
-		var checkNumeroEscrituraUniqueUrl = '<g:createLink action="checkNumeroEscrituraUnique" />';
+		var checkNumeroEscrituraUniqueUrl = '<g:createLink action="isNumeroEscrituraAvailable" />';
 		var gruposFinancieros = new Array();
 		
 		gruposFinancieros.push({ id:-1,text:"-Seleccione-" });

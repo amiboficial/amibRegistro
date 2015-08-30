@@ -117,7 +117,7 @@ app.CheckSubmitView = Backbone.View.extend({
 		this.$("#spnHdnPostData").append('<input type="hidden" name="revocacion.fechaRevocacion_month" value="' + arr[app.REV_CREATE_CHKIDX_DATOFICIO].model.get('fechaRevocacion_month') + '" />');
 		this.$("#spnHdnPostData").append('<input type="hidden" name="revocacion.fechaRevocacion_year" value="' + arr[app.REV_CREATE_CHKIDX_DATOFICIO].model.get('fechaRevocacion_year') + '" />');
 		
-		this.$("#spnHdnPostData").append('<input type="hidden" name="revocacion.idNotarioSeleccionado" value="' + arr[app.REV_CREATE_CHKIDX_NOTARIO].model.get('idNotarioSeleccionado') + '" />');
+		this.$("#spnHdnPostData").append('<input type="hidden" name="revocacion.idNotario" value="' + arr[app.REV_CREATE_CHKIDX_NOTARIO].model.get('idNotarioSeleccionado') + '" />');
 		
 		arr[app.REV_CREATE_CHKIDX_REVOCADOS].revocadoVMCollection.each(function(item){
 			this.$("#spnHdnPostData").append('<input type="hidden" name="revocados.apoderado" value="' + JSON.stringify(item.toJSON()).replace(/["]/g, "'") + '" />');

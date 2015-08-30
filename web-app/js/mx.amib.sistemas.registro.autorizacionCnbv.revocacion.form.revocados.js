@@ -33,7 +33,7 @@ app.RevocableVM = Backbone.Model.extend ({
 		fechaBaja_day: -1,
 		fechaBaja_month: -1,
 		fechaBaja_year: -1,
-		dsMotivo: '',
+		motivo: '',
 		
 		seEncontroMatricula: false,
 		
@@ -100,7 +100,7 @@ app.RevocableVM = Backbone.Model.extend ({
 			fechaBaja_day: -1,
 			fechaBaja_month: -1,
 			fechaBaja_year: -1,
-			dsMotivo: '',
+			motivo: '',
 			
 			seEncontroMatricula: false,
 			
@@ -141,7 +141,7 @@ app.RevocableVM = Backbone.Model.extend ({
 		var fechaBajaValida;
 		
 		hayApoderamientoARevocar = (this.get('idApoderado') != -1);
-		motivoEnBlanco = ($.trim(this.get('dsMotivo')) == '');
+		motivoEnBlanco = ($.trim(this.get('motivo')) == '');
 		fechaBajaValida = this.get('fechaBaja_day') != -1 && this.get('fechaBaja_month') != -1 && this.get('fechaBaja_year') != -1 
 	
 		this.set('errorIdApoderadoNotSelected',false,{silent:true});
@@ -182,7 +182,7 @@ app.RevocadoVM = Backbone.Model.extend ({
 		fechaBaja_day: -1,
 		fechaBaja_month: -1,
 		fechaBaja_year: -1,
-		dsMotivo: '',
+		motivo: '',
 		dsPoderRevocar: '',
 		
 		vistaExpandida: false
@@ -501,7 +501,7 @@ app.RevocableView = Backbone.View.extend ({
 			this.renderValues();
 			this.$('.verifyNumeroMatricula').prop('disabled',true);
 			this.$('.idApoderado').prop('disabled',false);
-			this.$('.dsMotivo').prop('disabled',false);
+			this.$('.motivo').prop('disabled',false);
 			this.$('.fechaBaja_day').prop('disabled',false);
 			this.$('.fechaBaja_month').prop('disabled',false);
 			this.$('.fechaBaja_year').prop('disabled',false);
@@ -510,7 +510,7 @@ app.RevocableView = Backbone.View.extend ({
 			this.renderValues();
 			this.$('.verifyNumeroMatricula').prop('disabled',false);
 			this.$('.idApoderado').prop('disabled',true);
-			this.$('.dsMotivo').prop('disabled',true);
+			this.$('.motivo').prop('disabled',true);
 			this.$('.fechaBaja_day').prop('disabled',true);
 			this.$('.fechaBaja_month').prop('disabled',true);
 			this.$('.fechaBaja_year').prop('disabled',true);
@@ -524,7 +524,7 @@ app.RevocableView = Backbone.View.extend ({
 		this.$('.fechaBaja_day').val( this.model.get('fechaBaja_day') );
 		this.$('.fechaBaja_month').val( this.model.get('fechaBaja_month') );
 		this.$('.fechaBaja_year').val( this.model.get('fechaBaja_year') );
-		this.$('.dsMotivo').val( this.model.get('dsMotivo') );
+		this.$('.motivo').val( this.model.get('motivo') );
 		
 		apoderaminetos = this.model.get('apoderamientosEncontrados');
 		_.each(apoderaminetos,function(item){
@@ -776,7 +776,7 @@ app.RevocadosTabView = Backbone.View.extend ({
 				fechaBaja_day: this.revocableVM.get('fechaBaja_day'),
 				fechaBaja_month: this.revocableVM.get('fechaBaja_month'),
 				fechaBaja_year: this.revocableVM.get('fechaBaja_year'),
-				dsMotivo: this.revocableVM.get('dsMotivo'),
+				motivo: this.revocableVM.get('motivo'),
 				dsPoderRevocar: dsPoderRevocar,
 				vistaExpandida: true
 			});

@@ -91,12 +91,12 @@
 		</div>
 	</div>
 	
-	<div class="div-dsMotivo form-group">
+	<div class="div-motivo form-group">
 		<label class="col-md-2 col-sm-3 control-label">
 			Motivo
 		</label>
 		<div class="col-md-9 col-sm-9">
-			<input class="dsMotivo field form-control" data-field="dsMotivo" type="text" value="{{=dsMotivo}}" disabled>
+			<input class="motivo field form-control" data-field="motivo" type="text" value="{{=motivo}}" disabled>
 		</div>
 	</div>
 	
@@ -224,7 +224,7 @@
 			<td colspan="7">
 				<div class="div-revocado-details-{{=idApoderado}}">
 					<ul>
-						<li><strong>Motivo:</strong>&nbsp;{{=dsMotivo}}</li>
+						<li><strong>Motivo:</strong>&nbsp;{{=motivo}}</li>
 						<li><strong>Fecha de baja:</strong>&nbsp;{{=fechaBaja_day}}/{{=fechaBaja_month}}/{{=fechaBaja_year}}</li>
 						<li><strong>Poder a revocar:</strong>&nbsp;{{=dsPoderRevocar}}</li>
 					</ul>

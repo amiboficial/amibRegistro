@@ -4,6 +4,7 @@ import grails.converters.JSON
 import grails.transaction.Transactional
 import mx.amib.sistemas.external.documentos.service.DocumentoPoderRepositorioTO
 import mx.amib.sistemas.external.documentos.service.DocumentoRepositorioTO
+import mx.amib.sistemas.external.documentos.service.DocumentoRevocacionRepositorioTO
 import mx.amib.sistemas.external.expediente.certificacion.catalog.service.StatusAutorizacionTypes
 import mx.amib.sistemas.external.expediente.certificacion.service.CertificacionTO
 import mx.amib.sistemas.external.expediente.persona.service.SustentanteTO
@@ -110,13 +111,25 @@ class ApoderamientoService {
 		return poderService.update(modobj)
 	}
 	
-	
 	RevocacionTO altaRevocacion(RevocacionTO revocacion){
+		RevocacionTO r
+		List<Long> idsCert
+		
 		//guarda el oficio
-		RevocacionTO r = revocacionService.save(revocacion)
-		//aplica el status
-		def listIdCerts = revocadoService.getIdsCertificacion(r.revocados.collect{it.id})
-		autorizacionService.revocar(listIdCerts)
+		r = revocacionService.save(revocacion)
+		//obtiene información de certificacion de los aporamientos a revocar
+		idsCert = apoderadoService.getAll(r.revocados.collect{ it.idApoderado }.toSet()).apoderados.collect{ it.idCertificacion }
+		//aplica el status de "Autorizado sin poderes" si es que se encontraba
+		//"Autorizado con poderes"
+		autorizacionService.revocar(idsCert)
+		//Llama al servicio de repositorio de documentos (amibDocumentos) para
+		//enviar el documento de respaldo que ha sido cargado previamiente
+		//en el espacio temporal otorgado por el servicio de Archivos Temporales
+		def documentoCol = new ArrayList<DocumentoRepositorioTO>()
+		documentoCol.add( this.obtenerDocumentoConMetadatos(revocacion) )
+		documentoRepositorioService.enviarDocumentosArchivoTemporal( documentoCol )
+		
+		//Regresa una instancia con la revocacion ya guardada
 		return r
 	}
 	List<ApoderadoTO> obtenerApoderamientosRevocables(int numeroMatricula){
@@ -145,7 +158,6 @@ class ApoderamientoService {
 		}
 		return apoderadosSinRevocacion
 	}
-	
 	RevocacionTO editarDatosRevocacion(RevocacionTO revocacion){
 		def modobj = revocacionService.get(revocacion.id)
 		
@@ -211,6 +223,28 @@ class ApoderamientoService {
 		d.notario = "Número: " + "X" + "; " + "Nombre: " + "X" + "Y" + "Z"
 		d.grupoFinanciero = poder.idGrupoFinanciero
 		d.institucion = poder.idInstitucion
+		
+		return d
+	}
+	
+	private DocumentoRevocacionRepositorioTO obtenerDocumentoConMetadatos(RevocacionTO revocacion){
+		DocumentoRevocacionRepositorioTO d = new DocumentoRevocacionRepositorioTO()
+		
+		d.id = null
+		d.uuid = revocacion.uuidDocumentoRespaldo
+		d.tipoDocumentoRespaldo = "Escrito de revocación"
+		d.representanteLegalNombreCompleto = revocacion?.representanteLegalNombre + " " + revocacion?.representanteLegalApellido1 + " " + revocacion?.representanteLegalApellido2
+		d.numeroEscritura = revocacion.numeroEscritura
+		d.fechaRevocacion = revocacion.fechaRevocacion
+		d.matriculasRevocados = ""
+		d.nombresRevocados = ""
+		revocacion.revocados.each{ x ->
+			d.matriculasRevocados += "X" + ";"
+			d.nombresRevocados += "Y" + ";"
+		}
+		d.notario = "Número: " + "X" + "; " + "Nombre: " + "X" + "Y" + "Z"
+		d.grupoFinanciero = revocacion.idGrupoFinanciero
+		d.institucion = revocacion.idInstitucion
 		
 		return d
 	}

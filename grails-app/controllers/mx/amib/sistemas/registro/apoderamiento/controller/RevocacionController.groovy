@@ -40,20 +40,18 @@ class RevocacionController {
 	}
 	
 	def save(RevocacionTO revocacion) {
+		//variable de calendar a usar
 		Calendar cFechaRevocacion = Calendar.getInstance()
-		
 		//obtiene parametros
-		def pApoderadosARevocar = params.list('revocados.apoderado')
+		def pApoderadosARevocar = params.list('revocados.apoderado') //recibe una lista de Strings con formato JSON por objeto
 		def pFechaRevocacionDay = params.int('revocacion.fechaRevocacion_day')
 		def pFechaRevocacionMonth = params.int('revocacion.fechaRevocacion_month')
 		def pFechaRevocacionYear = params.int('revocacion.fechaRevocacion_year')		
-		//checa calendars
-		cFechaRevocacion.set(pFechaRevocacionYear, pFechaRevocacionMonth - 1, pFechaRevocacionDay,0,0,0)
-		
 		//idsApoderadoARevocar = pIdsApoderadosARevocar.collect{ Long.parseLong(it) }
 		//idsCertificacionARevocar = apoderadoService.getAll( new HashSet<Long>(idsApoderadoARevocar) ).apoderados.collect{ it.idCertificacion } //igual y eso se mueve al service
 		
 		//bindea "restantes"
+		cFechaRevocacion.set(pFechaRevocacionYear, pFechaRevocacionMonth - 1, pFechaRevocacionDay,0,0,0)
 		revocacion.fechaRevocacion = cFechaRevocacion.getTime()
 		revocacion.revocados = new ArrayList<RevocadoTO>()
 		pApoderadosARevocar.each { x ->
@@ -65,11 +63,13 @@ class RevocacionController {
 			rev.idRevocacion = null
 			rev.idApoderado = Long.parseLong(jx.'idApoderado')
 			rev.motivo = jx.'motivo'
-			cFechaBaja.set(Integer.parseInt(jx.'fechaBaja_day'), Integer.parseInt(jx.'fechaBaja_month') - 1, Integer.parseInt(jx.'fechaBaja_year'),0,0,0)
+			cFechaBaja.set(Integer.parseInt(jx.'fechaBaja_year'), Integer.parseInt(jx.'fechaBaja_month') - 1, Integer.parseInt(jx.'fechaBaja_day'),0,0,0)
 			rev.fechaBaja = cFechaBaja.getTime()
 			
 			revocacion.revocados.add(rev)
 		}
+		
+		revocacion = apoderamientoService.altaRevocacion(revocacion)
 		
 		render (revocacion as JSON)
 	}

@@ -120,7 +120,7 @@ app.CheckSubmitView = Backbone.View.extend({
 		this.$("#spnHdnPostData").append('<input type="hidden" name="revocacion.idNotarioSeleccionado" value="' + arr[app.REV_CREATE_CHKIDX_NOTARIO].model.get('idNotarioSeleccionado') + '" />');
 		
 		arr[app.REV_CREATE_CHKIDX_REVOCADOS].revocadoVMCollection.each(function(item){
-			this.$("#spnHdnPostData").append('<input type="hidden" name="revocados.idApoderado" value="' + item.get('idApoderado') + '" />');
+			this.$("#spnHdnPostData").append('<input type="hidden" name="revocados.apoderado" value="' + JSON.stringify(item.toJSON()).replace(/["]/g, "'") + '" />');
 		},this);
 		
 		this.$("#spnHdnPostData").append('<input type="hidden" name="revocacion.uuidDocumentoRespaldo" value="' + arr[app.REV_CREATE_CHKIDX_DOCS].collection.at(0).get("uuid") + '" />');

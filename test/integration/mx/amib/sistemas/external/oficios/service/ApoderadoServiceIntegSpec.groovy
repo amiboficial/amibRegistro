@@ -45,7 +45,7 @@ class ApoderadoServiceIntegSpec extends Specification {
 			ids.add(20050L)
 			ids.add(20051L)
 		when:
-			apres = apoderadoService.findAllByIdCertificacionIn(ids)
+			apres = apoderadoService.getAll(ids)
 			println 'el resultado es -> ' + (apres as JSON)
 		then:
 			apres != null

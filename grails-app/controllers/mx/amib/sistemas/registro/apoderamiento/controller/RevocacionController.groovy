@@ -1,5 +1,6 @@
 package mx.amib.sistemas.registro.apoderamiento.controller
 
+import java.util.Date;
 import java.util.List;
 
 import grails.converters.JSON
@@ -14,11 +15,13 @@ import mx.amib.sistemas.external.oficios.poder.ApoderadoTO
 import mx.amib.sistemas.external.oficios.revocacion.RevocacionTO
 import mx.amib.sistemas.external.oficios.revocacion.RevocadoTO
 import mx.amib.sistemas.external.oficios.service.PoderService
+import org.codehaus.groovy.grails.web.json.JSONElement
 
 
 class RevocacionController {
 
 	def revocacionService
+	def apoderadoService
 	def notarioService
 	def sepomexService
 	def poderService
@@ -37,24 +40,36 @@ class RevocacionController {
 	}
 	
 	def save(RevocacionTO revocacion) {
-		List<RevocadoTO> revocados = new ArrayList<RevocadoTO>()
-		
 		Calendar cFechaRevocacion = Calendar.getInstance()
-		List<Long> idsApoderadoARevocar = new ArrayList<Long>()
-		List<Long> idsCertificacionARevocar = new ArrayList<Long>()
 		
-		def pIdsApoderadosARevocar = params.list('revocados.idApoderado')
+		//obtiene parametros
+		def pApoderadosARevocar = params.list('revocados.apoderado')
 		def pFechaRevocacionDay = params.int('revocacion.fechaRevocacion_day')
 		def pFechaRevocacionMonth = params.int('revocacion.fechaRevocacion_month')
-		def pFechaRevocacionYear = params.int('revocacion.fechaRevocacion_year')
-		
+		def pFechaRevocacionYear = params.int('revocacion.fechaRevocacion_year')		
 		//checa calendars
 		cFechaRevocacion.set(pFechaRevocacionYear, pFechaRevocacionMonth - 1, pFechaRevocacionDay,0,0,0)
 		
-		revocacion.fechaRevocacion = cFechaRevocacion.getTime()
+		//idsApoderadoARevocar = pIdsApoderadosARevocar.collect{ Long.parseLong(it) }
+		//idsCertificacionARevocar = apoderadoService.getAll( new HashSet<Long>(idsApoderadoARevocar) ).apoderados.collect{ it.idCertificacion } //igual y eso se mueve al service
 		
-		println "ids recibidos"
-		println (pIdsApoderadosARevocar as JSON)
+		//bindea "restantes"
+		revocacion.fechaRevocacion = cFechaRevocacion.getTime()
+		revocacion.revocados = new ArrayList<RevocadoTO>()
+		pApoderadosARevocar.each { x ->
+			JSONElement jx = JSON.parse(x)
+			RevocadoTO rev = new RevocadoTO()
+			Calendar cFechaBaja = Calendar.getInstance()
+			
+			rev.id = null
+			rev.idRevocacion = null
+			rev.idApoderado = Long.parseLong(jx.'idApoderado')
+			rev.motivo = jx.'motivo'
+			cFechaBaja.set(Integer.parseInt(jx.'fechaBaja_day'), Integer.parseInt(jx.'fechaBaja_month') - 1, Integer.parseInt(jx.'fechaBaja_year'),0,0,0)
+			rev.fechaBaja = cFechaBaja.getTime()
+			
+			revocacion.revocados.add(rev)
+		}
 		
 		render (revocacion as JSON)
 	}

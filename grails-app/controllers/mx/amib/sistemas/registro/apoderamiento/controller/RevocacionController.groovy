@@ -30,12 +30,12 @@ class RevocacionController {
 	def entidadFinancieraService
 	
     def index() {
-		
-		
+		def vm = RevocacionIndexViewModel.getInstance(entidadFinancieraService)
+		render( view:'index', model: [viewModelInstance:vm] )
 	}
 	
 	def create() {
-		def vm = RevocacionFormViewModel.getForCreate(sepomexService, entidadFinancieraService)
+		def vm = RevocacionFormViewModel.getInstanceForCreate(sepomexService, entidadFinancieraService)
 		render( view:'create', model: [viewModelInstance:vm] )
 	}
 	
@@ -161,12 +161,26 @@ class RevocacionController {
 		render(respuesta as JSON)
 	}
 	
+	public static class RevocacionIndexViewModel{
+		Collection<GrupoFinancieroTO> gfins
+		
+		public static getInstance(EntidadFinancieraService entidadFinancieraService){
+			RevocacionFormViewModel vm = new RevocacionFormViewModel()
+			vm.fillEntidadesFinancieras(entidadFinancieraService)
+			return vm
+		}
+		
+		private void fillEntidadesFinancieras(EntidadFinancieraService entidadFinancieraService){
+			gfins = entidadFinancieraService.obtenerGruposFinancierosVigentes().sort{ it.nombre }
+		}
+	}
+	
 	public static class RevocacionFormViewModel{
 		RevocacionTO revocacion
 		Collection<EntidadFederativaTO> entidadesFed
 		Collection<GrupoFinancieroTO> gfins
 		
-		public static getForCreate(SepomexService sepomexService, EntidadFinancieraService entidadFinancieraService){
+		public static getInstanceForCreate(SepomexService sepomexService, EntidadFinancieraService entidadFinancieraService){
 			RevocacionFormViewModel vm = new RevocacionFormViewModel()
 			vm.fillEntidades(sepomexService)
 			vm.fillEntidadesFinancieras(entidadFinancieraService)

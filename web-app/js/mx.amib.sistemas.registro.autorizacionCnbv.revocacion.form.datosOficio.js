@@ -77,9 +77,6 @@ app.RevocacionDatosOficioTabVM = Backbone.Model.extend({
 			this.set('instituciones',grupoFinancieroSeleccionado.instituciones);
 		}
 		
-		console.log('gp seleccionado -> ');
-		console.dir(grupoFinancieroSeleccionado);
-		
 		//manda una notificacion de que se acualizaron las instituciones
 		this.trigger('institucionesCargadas',{});
 	},

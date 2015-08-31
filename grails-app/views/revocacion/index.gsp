@@ -39,11 +39,28 @@
 	<script type="text/javascript">
 		var app = app || {};
 		var revocacionIndexView;
+		var revocacionSearchVM;
+		var gruposFinancieros;
+		var institucionesGruposFinancieros;
+
+		gruposFinancieros = new Array();
+		gruposFinancieros.push({id:'-1',text:'-Seleccione-', instituciones: [ {id:'-1',text:'-Seleccione-'} ] });
+		<g:each var="x" in="${viewModelInstance.gfins}" >
+			institucionesGruposFinancieros = new Array();
+			institucionesGruposFinancieros.push({id:'-1',text:'-Seleccione-'});
+			<g:each var="y" in="${x.instituciones.sort{ it.nombre } }">
+				institucionesGruposFinancieros.push({id:'${y.id}',text:'${y.nombre}'});
+			</g:each>
+			gruposFinancieros.push({id:'${x.id}',text:'${x.nombre}', instituciones:institucionesGruposFinancieros});
+		</g:each>
+		revocacionSearchVM = new app.RevocacionSearchVM();
+		revocacionSearchVM.set({ gruposFinancieros:gruposFinancieros });
 
 		revocacionIndexView = new app.RevocacionIndexView( { 
-			searchVM : new app.RevocacionSearchVM(), 
+			searchVM : revocacionSearchVM,
 			searchResultVMCollection : new app.RevocacionSearchResultVMCollection()
 		} );
+
 	</script>
 	
 </body>

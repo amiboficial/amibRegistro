@@ -15,9 +15,26 @@
 						Criterio de búsqueda
 					</label>
 					<div class="col-md-9 col-sm-9">
-						<input class="opcionSeleccionada field" name="opcionSeleccionadaDO" data-field="opcionSeleccionada" value="0" checked="" type="radio">&nbsp;Numero de escritura&nbsp;&nbsp;
-						<input class="opcionSeleccionada field" name="opcionSeleccionadaDO" data-field="opcionSeleccionada" value="1" type="radio">&nbsp;Fecha de revocación&nbsp;&nbsp;
-						<input class="opcionSeleccionada field" name="opcionSeleccionadaDO" data-field="opcionSeleccionada" value="2" type="radio">&nbsp;Entidad Financiera
+						<input class="criterioBusqueda field" name="criterioBusquedaDO" data-field="criterioBusqueda" 
+						value="{{=app.REV_IDX_OPTION_NUMESCRITURA}}" 
+						{{ if(criterioBusqueda == app.REV_IDX_OPTION_NUMESCRITURA){ }}
+							checked="" 
+						{{ } }}
+						type="radio">&nbsp;Numero de escritura&nbsp;&nbsp;
+						
+						<input class="criterioBusqueda field" name="criterioBusquedaDO" data-field="criterioBusqueda" 
+						value="{{=app.REV_IDX_OPTION_FECREV}}" 
+						{{ if(criterioBusqueda == app.REV_IDX_OPTION_FECREV){ }}
+							checked="" 
+						{{ } }}
+						type="radio">&nbsp;Fecha de revocación&nbsp;&nbsp;
+						
+						<input class="criterioBusqueda field" name="criterioBusquedaDO" data-field="criterioBusqueda" 
+						value="{{=app.REV_IDX_OPTION_ENTFINANCIERA}}" 
+						{{ if(criterioBusqueda == app.REV_IDX_OPTION_ENTFINANCIERA){ }}
+							checked="" 
+						{{ } }}
+						type="radio">&nbsp;Entidad Financiera
 					</div>
 				</div>
 				
@@ -123,7 +140,7 @@
 				
 				<div class="div-idInstitucion form-group">
 					<label class="col-md-2 col-sm-3 control-label">
-						Institución<span class="required-indicator">*</span>
+						Institución
 					</label>
 					<div class="col-md-9 col-sm-9">
 						<select class="field idInstitucion form-control" data-field="idInstitucion">
@@ -146,6 +163,16 @@
 				
 			</div>
 		</fieldset>
+</script>
+
+<script type="text/template" id="revocacionSearchViewInstitucionesTemplate">
+	{{ _.each(instituciones,function(item){ }}
+		{{ if(item.id == idInstitucion){ }}
+			<option value="{{=item.id}}" selected>{{=item.text}}</option>
+		{{ } else{ }}
+			<option value="{{=item.id}}">{{=item.text}}</option>
+		{{ } }}
+	{{ },this); }}
 </script>
 
 <script type="text/template" id="revocacionResultViewTemplate">

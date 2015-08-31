@@ -28,7 +28,7 @@
 		
 		<div class="div-idInstitucion form-group">
 			<label class="col-md-2 col-sm-3 control-label">
-				Institución<span class="required-indicator">*</span>
+				Institución
 			</label>
 			<div class="col-md-9 col-sm-9">
 				<select class="field idInstitucion form-control" data-field="idInstitucion">

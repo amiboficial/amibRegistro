@@ -31,7 +31,7 @@ public class RevocacionJsonTranportConverter {
 	public static List<RevocacionTO> fromJsonArrayToTranportList(JSONArray ja){
 		List<RevocacionTO> objlist = new ArrayList<RevocacionTO>()
 		ja.each { x ->
-			RevocacionTO obj = RevocadoJsonTransportConverter.fromJsonToTranport(x)
+			RevocacionTO obj = RevocacionJsonTranportConverter.fromJsonToTranport(x)
 			objlist.add(obj)
 		}
 		return objlist

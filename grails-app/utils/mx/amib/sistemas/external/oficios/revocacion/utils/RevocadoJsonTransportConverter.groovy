@@ -11,14 +11,40 @@ import org.codehaus.groovy.grails.web.json.JSONObject
 
 class RevocadoJsonTransportConverter {
 	public static RevocadoTO fromJsonToTranport(JSONElement je){
+		Calendar calFecBaja = Calendar.getInstance()
+		Calendar calFecCreacion = Calendar.getInstance()
+		Calendar calFecModificacion = Calendar.getInstance()
+		
 		RevocadoTO revocado = new RevocadoTO()
 		revocado.id = je.'id'
 		revocado.idRevocacion = je.'idRevocacion'
 		revocado.idApoderado = je.'idApoderado'
 		revocado.motivo = je.'motivo'
-		revocado.fechaBaja = new Date(je.'fechaBaja')
-		revocado.fechaCreacion = new Date(je.'fechaCreacion')
-		revocado.fechaCreacion = new Date(je.'fechaModificacion')
+		
+		if(JSONObject.NULL.equals(je.'fechaBaja')){
+			revocado.fechaBaja = null
+		}
+		else{
+			calFecBaja.setTimeInMillis(je.'fechaBaja')
+			revocado.fechaBaja = calFecBaja.getTime()
+		}
+			
+		if(JSONObject.NULL.equals(je.'fechaCreacion')){
+			revocado.fechaCreacion = null
+		}
+		else{
+			calFecBaja.setTimeInMillis(je.'fechaCreacion')
+			revocado.fechaCreacion = calFecCreacion.getTime()
+		}
+		
+		if(JSONObject.NULL.equals(je.'fechaModificacion')){
+			revocado.fechaModificacion = null
+		}
+		else{
+			calFecBaja.setTimeInMillis(je.'fechaModificacion')
+			revocado.fechaModificacion = calFecModificacion.getTime()
+		}
+		
 		return revocado
 	}
 	public static List<RevocadoTO> fromJsonArrayToTranportList(JSONArray ja){

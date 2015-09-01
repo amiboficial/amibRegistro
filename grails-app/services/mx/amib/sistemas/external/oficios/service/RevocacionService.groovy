@@ -11,6 +11,7 @@ import org.codehaus.groovy.grails.web.json.JSONObject
 
 import grails.converters.JSON
 import grails.plugins.rest.client.RestBuilder
+import grails.plugins.rest.client.RestResponse
 import grails.transaction.Transactional
 
 @Transactional
@@ -22,6 +23,10 @@ class RevocacionService {
 	String saveUrl
 	String updateUrl
 	String isNumeroEscrituraAvailableUrl
+	String findAllByNumeroEscrituraUrl
+	String findAllByFechaRevocacionUrl
+	String findAllByGrupoFinancieroUrl
+	String findAllByInstitucionUrl
 	
     public SearchResult<RevocacionTO> list(Integer max, Integer offset, String sort, String order){
 		SearchResult<RevocacionTO> sr = new SearchResult<RevocacionTO>()
@@ -37,6 +42,7 @@ class RevocacionService {
 			Integer numeroEscritura, Integer fechaDelDia, Integer fechaDelMes, Integer fechaDelAnio,
 			Integer fechaAlDia, Integer fechaAlMes, Integer fechaAlAnio,
 			Long idGrupoFinanciero, Long idInstitucion){
+			
 		SearchResult<RevocacionTO> sr = new SearchResult<RevocacionTO>()
 		def qs = "?max=${max}&offset=${offset}&sort=${sort}&order=${order}&numeroEscritura=${numeroEscritura}&fechaDelDia=${fechaDelDia}&fechaDelMes=${fechaDelMes}&fechaDelAnio=${fechaDelAnio}&fechaAlDia=${fechaAlDia}&fechaAlMes=${fechaAlMes}&fechaAlAnio=${fechaAlAnio}&idGrupoFinanciero=${idGrupoFinanciero}&idInstitucion=${idInstitucion}"
 		def rest = new RestBuilder()
@@ -46,6 +52,67 @@ class RevocacionService {
 		}
 		return sr
 	}
+	
+	public SearchResult<RevocacionTO> findAllByNumeroEscritura(int numeroEscritura){
+		SearchResult<RevocacionTO> sr = new SearchResult<RevocacionTO>()
+		RestBuilder rest = new RestBuilder()
+		RestResponse resp
+		String queryString
+		
+		queryString = "?numeroEscritura=${numeroEscritura}"
+		resp = rest.get(findAllByNumeroEscrituraUrl + queryString)
+		if(resp.json instanceof JSONObject && !JSONObject.NULL.equals(resp.json)){
+			sr = new SearchResult<RevocacionTO>( this.fixSearchResultJsonObject(resp.json) )
+		}
+		
+		return sr
+	}
+	public SearchResult<RevocacionTO> findAllByFechaRevocacion(int max, int offset, String sort, String order,
+																int fechaDelDia, int fechaDelMes, int fechaDelAnio,
+																int fechaAlDia, int fechaAlMes, int fechaAlAnio){
+		
+		SearchResult<RevocacionTO> sr = new SearchResult<RevocacionTO>()
+		RestBuilder rest = new RestBuilder()
+		RestResponse resp
+		String queryString
+		
+		queryString = "?max=${max}&offset=${offset}&sort=${sort}&order=${order}&fechaDelDia=${fechaDelDia}&fechaDelMes=${fechaDelMes}&fechaDelAnio=${fechaDelAnio}&fechaAlDia=${fechaAlDia}&fechaAlMes=${fechaAlMes}&fechaAlAnio=${fechaAlAnio}"
+		resp = rest.get(findAllByFechaRevocacionUrl + queryString)
+		if(resp.json instanceof JSONObject && !JSONObject.NULL.equals(resp.json)){
+			sr = new SearchResult<RevocacionTO>( this.fixSearchResultJsonObject(resp.json) )
+		}
+		
+		return sr
+	}
+	public SearchResult<RevocacionTO> findAllByGrupoFinanciero(int max, int offset, String sort, String order, int idGrupoFinanciero){
+		SearchResult<RevocacionTO> sr = new SearchResult<RevocacionTO>()
+		RestBuilder rest = new RestBuilder()
+		RestResponse resp
+		String queryString
+		
+		queryString = "?max=${max}&offset=${offset}&sort=${sort}&order=${order}&idGrupoFinanciero=${idGrupoFinanciero}"
+		resp = rest.get(findAllByGrupoFinancieroUrl + queryString)
+		if(resp.json instanceof JSONObject && !JSONObject.NULL.equals(resp.json)){
+			sr = new SearchResult<RevocacionTO>( this.fixSearchResultJsonObject(resp.json) )
+		}
+		
+		return sr
+	}
+	public SearchResult<RevocacionTO> findAllByInstitucion(int max, int offset, String sort, String order, int idInstitucion){
+		SearchResult<RevocacionTO> sr = new SearchResult<RevocacionTO>()
+		RestBuilder rest = new RestBuilder()
+		RestResponse resp
+		String queryString
+		
+		queryString = "?max=${max}&offset=${offset}&sort=${sort}&order=${order}&idInstitucion=${idInstitucion}"
+		resp = rest.get(findAllByInstitucionUrl + queryString)
+		if(resp.json instanceof JSONObject && !JSONObject.NULL.equals(resp.json)){
+			sr = new SearchResult<RevocacionTO>( this.fixSearchResultJsonObject(resp.json) )
+		}
+		
+		return sr
+	}
+	
 	public RevocacionTO get(Long id){
 		RevocacionTO r = new RevocacionTO()
 		r.id = -1

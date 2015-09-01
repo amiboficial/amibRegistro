@@ -79,6 +79,12 @@ beans = {
 		listUrl = application.config.mx.amib.sistemas.oficios.resthttpURL + application.config.mx.amib.sistemas.oficios.revocacion.list
 		findAllByUrl = application.config.mx.amib.sistemas.oficios.resthttpURL + application.config.mx.amib.sistemas.oficios.revocacion.findAllBy
 		getUrl = application.config.mx.amib.sistemas.oficios.resthttpURL + application.config.mx.amib.sistemas.oficios.revocacion.get
+		
+		findAllByNumeroEscrituraUrl = application.config.mx.amib.sistemas.oficios.resthttpURL + application.config.mx.amib.sistemas.oficios.revocacion.findAllByNumeroEscritura
+		findAllByFechaRevocacionUrl = application.config.mx.amib.sistemas.oficios.resthttpURL + application.config.mx.amib.sistemas.oficios.revocacion.findAllByFechaRevocacion
+		findAllByGrupoFinancieroUrl = application.config.mx.amib.sistemas.oficios.resthttpURL + application.config.mx.amib.sistemas.oficios.revocacion.findAllByGrupoFinanciero
+		findAllByInstitucionUrl = application.config.mx.amib.sistemas.oficios.resthttpURL + application.config.mx.amib.sistemas.oficios.revocacion.findAllByInstitucion
+		
 		saveUrl = application.config.mx.amib.sistemas.oficios.resthttpURL + application.config.mx.amib.sistemas.oficios.revocacion.save
 		updateUrl = application.config.mx.amib.sistemas.oficios.resthttpURL + application.config.mx.amib.sistemas.oficios.revocacion.update
 		isNumeroEscrituraAvailableUrl = application.config.mx.amib.sistemas.oficios.resthttpURL + application.config.mx.amib.sistemas.oficios.revocacion.isNumeroEscrituraAvailable

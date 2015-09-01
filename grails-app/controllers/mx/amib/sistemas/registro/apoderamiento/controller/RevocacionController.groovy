@@ -16,9 +16,10 @@ import mx.amib.sistemas.external.oficios.poder.PoderTO
 import mx.amib.sistemas.external.oficios.poder.ApoderadoTO
 import mx.amib.sistemas.external.oficios.revocacion.RevocacionTO
 import mx.amib.sistemas.external.oficios.revocacion.RevocadoTO
+import mx.amib.sistemas.external.oficios.service.ApoderadoService
 import mx.amib.sistemas.external.oficios.service.PoderService
 import mx.amib.sistemas.external.oficios.service.RevocacionService
-import mx.amib.sistemas.utils.SearchResult;
+import mx.amib.sistemas.utils.SearchResult
 
 import org.codehaus.groovy.grails.web.json.JSONElement
 
@@ -26,8 +27,8 @@ import org.codehaus.groovy.grails.web.json.JSONElement
 class RevocacionController {
 
 	RevocacionService revocacionService
-	def apoderadoService
-	def notarioService
+	ApoderadoService apoderadoService
+	NotarioService notarioService
 	def sepomexService
 	def poderService
 	def apoderamientoService
@@ -45,10 +46,10 @@ class RevocacionController {
 		
 		int numeroEscritura = Integer.parseInt(params.'numeroEscritura'?:'-1')
 		
-		revServResult = revocacionService.findAllByGrupoFinanciero(numeroEscritura)
+		revServResult = revocacionService.findAllByNumeroEscritura(numeroEscritura)
 		
 		responseMap.put('status','OK')
-		responseMap.put('list', RevocacionSearchResultViewModel.getListInstance(revServResult, notarioService) )
+		responseMap.put('list', RevocacionSearchResultViewModel.getListInstance(revServResult.list, this.notarioService) )
 		responseMap.put('count', revServResult.count)
 		
 		render(responseMap as JSON)
@@ -74,7 +75,7 @@ class RevocacionController {
 														fechaRevocacionAlDay, fechaRevocacionAlMonth, fechaRevocacionAlYear)
 		
 		responseMap.put('status','OK')
-		responseMap.put('list', RevocacionSearchResultViewModel.getListInstance(revServResult, notarioService) )
+		responseMap.put('list', RevocacionSearchResultViewModel.getListInstance(revServResult.list, notarioService) )
 		responseMap.put('count', revServResult.count)
 		
 		render(responseMap as JSON)
@@ -93,7 +94,7 @@ class RevocacionController {
 		revServResult = revocacionService.findAllByGrupoFinanciero(max, offset, sort, order, idGrupoFinanciero)
 		
 		responseMap.put('status','OK')
-		responseMap.put('list', RevocacionSearchResultViewModel.getListInstance(revServResult, notarioService) )
+		responseMap.put('list', RevocacionSearchResultViewModel.getListInstance(revServResult.list, notarioService) )
 		responseMap.put('count', revServResult.count)
 		
 		render(responseMap as JSON)
@@ -109,10 +110,10 @@ class RevocacionController {
 		
 		int idInstitucion = Integer.parseInt(params.'idInstitucion'?:'-1')
 		
-		revServResult = revocacionService.findAllByGrupoFinanciero(max, offset, sort, order, idInstitucion)
+		revServResult = revocacionService.findAllByInstitucion(max, offset, sort, order, idInstitucion)
 		
 		responseMap.put('status','OK')
-		responseMap.put('list', RevocacionSearchResultViewModel.getListInstance(revServResult, notarioService) )
+		responseMap.put('list', RevocacionSearchResultViewModel.getListInstance(revServResult.list, notarioService) )
 		responseMap.put('count', revServResult.count)
 		
 		render(responseMap as JSON)

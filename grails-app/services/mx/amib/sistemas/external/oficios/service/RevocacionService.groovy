@@ -1,12 +1,16 @@
 package mx.amib.sistemas.external.oficios.service
 
+import java.util.Date;
 import java.util.List
 
 import org.springframework.http.HttpStatus
 
 import mx.amib.sistemas.utils.SearchResult
 import mx.amib.sistemas.external.oficios.revocacion.RevocacionTO
+import mx.amib.sistemas.external.oficios.revocacion.RevocadoTO
+import mx.amib.sistemas.external.oficios.revocacion.utils.*
 
+import org.codehaus.groovy.grails.web.json.JSONElement
 import org.codehaus.groovy.grails.web.json.JSONObject
 
 import grails.converters.JSON
@@ -34,7 +38,7 @@ class RevocacionService {
 		def rest = new RestBuilder()
 		def resp = rest.get(listUrl + qs.toString())
 		if(resp.json instanceof JSONObject && !JSONObject.NULL.equals(resp.json)){
-			sr = new SearchResult<RevocacionTO>( this.fixSearchResultJsonObject(resp.json) )
+			sr = SearchResultJsonTranportConverter.fromJsonToTranport(resp.json)
 		}
 		return sr
     }
@@ -48,7 +52,7 @@ class RevocacionService {
 		def rest = new RestBuilder()
 		def resp = rest.get(findAllByUrl + qs.toString())
 		if(resp.json instanceof JSONObject && !JSONObject.NULL.equals(resp.json)){
-			sr = new SearchResult<RevocacionTO>( this.fixSearchResultJsonObject(resp.json) )
+			sr = SearchResultJsonTranportConverter.fromJsonToTranport(resp.json)
 		}
 		return sr
 	}
@@ -62,7 +66,7 @@ class RevocacionService {
 		queryString = "?numeroEscritura=${numeroEscritura}"
 		resp = rest.get(findAllByNumeroEscrituraUrl + queryString)
 		if(resp.json instanceof JSONObject && !JSONObject.NULL.equals(resp.json)){
-			sr = new SearchResult<RevocacionTO>( this.fixSearchResultJsonObject(resp.json) )
+			sr = SearchResultJsonTranportConverter.fromJsonToTranport(resp.json)
 		}
 		
 		return sr
@@ -79,7 +83,7 @@ class RevocacionService {
 		queryString = "?max=${max}&offset=${offset}&sort=${sort}&order=${order}&fechaDelDia=${fechaDelDia}&fechaDelMes=${fechaDelMes}&fechaDelAnio=${fechaDelAnio}&fechaAlDia=${fechaAlDia}&fechaAlMes=${fechaAlMes}&fechaAlAnio=${fechaAlAnio}"
 		resp = rest.get(findAllByFechaRevocacionUrl + queryString)
 		if(resp.json instanceof JSONObject && !JSONObject.NULL.equals(resp.json)){
-			sr = new SearchResult<RevocacionTO>( this.fixSearchResultJsonObject(resp.json) )
+			sr = SearchResultJsonTranportConverter.fromJsonToTranport(resp.json)
 		}
 		
 		return sr
@@ -93,7 +97,7 @@ class RevocacionService {
 		queryString = "?max=${max}&offset=${offset}&sort=${sort}&order=${order}&idGrupoFinanciero=${idGrupoFinanciero}"
 		resp = rest.get(findAllByGrupoFinancieroUrl + queryString)
 		if(resp.json instanceof JSONObject && !JSONObject.NULL.equals(resp.json)){
-			sr = new SearchResult<RevocacionTO>( this.fixSearchResultJsonObject(resp.json) )
+			sr = SearchResultJsonTranportConverter.fromJsonToTranport(resp.json)
 		}
 		
 		return sr
@@ -107,7 +111,7 @@ class RevocacionService {
 		queryString = "?max=${max}&offset=${offset}&sort=${sort}&order=${order}&idInstitucion=${idInstitucion}"
 		resp = rest.get(findAllByInstitucionUrl + queryString)
 		if(resp.json instanceof JSONObject && !JSONObject.NULL.equals(resp.json)){
-			sr = new SearchResult<RevocacionTO>( this.fixSearchResultJsonObject(resp.json) )
+			sr = SearchResultJsonTranportConverter.fromJsonToTranport(resp.json)
 		}
 		
 		return sr
@@ -121,7 +125,7 @@ class RevocacionService {
 		def resp = rest.get(getUrl + id)
 		
 		if(resp.json instanceof JSONObject && !JSONObject.NULL.equals(resp.json)){
-			r = new RevocacionTO( this.fixRevocacionJsonObject(resp.json) )
+			r = RevocacionJsonTranportConverter.fromJsonToTranport(resp.json)
 		}
 		return r
 	}
@@ -138,7 +142,7 @@ class RevocacionService {
 			throw new Exception("STATUS CODE: " + resp.statusCode)
 			
 		if(resp.json instanceof JSONObject && !JSONObject.NULL.equals(resp.json)){
-			r = new RevocacionTO( this.fixRevocacionJsonObject(resp.json) )
+			r = RevocacionJsonTranportConverter.fromJsonToTranport(resp.json)
 		}
 		return r
 	}
@@ -153,7 +157,7 @@ class RevocacionService {
 			throw new Exception("STATUS CODE: " + resp.statusCode)
 			
 		if(resp.json instanceof JSONObject && !JSONObject.NULL.equals(resp.json)){
-			r = new RevocacionTO( this.fixRevocacionJsonObject(resp.json) )
+			r = RevocacionJsonTranportConverter.fromJsonToTranport(resp.json)
 		}
 		return r
 	}
@@ -173,36 +177,4 @@ class RevocacionService {
 		}
 	}
 	
-	private JSON customServiceJson(RevocacionTO r){
-		def pMap = r.properties
-		pMap.'fechaRevocacion' = r.fechaRevocacion.getTime()
-		pMap.'fechaCreacion' = null
-		pMap.'fechaModificacion' = null
-		pMap.'revocados'.each{
-			it.'fechaCreacion' = null
-			it.'fechaModificacion' = null
-		}
-		return new JSON(pMap)
-	}
-	private JSONObject fixRevocacionJsonObject(JSONObject je){
-		je.remove('class')
-		
-		je.'fechaRevocacion' = new Date(je.'fechaRevocacion')
-		je.'fechaCreacion' = new Date(je.'fechaCreacion')
-		je.'fechaModificacion' = new Date(je.'fechaModificacion')
-		je.'revocados'.each{
-			it.'fechaCreacion' = new Date(it.'fechaCreacion')
-			it.'fechaModificacion' = new Date(it.'fechaModificacion')
-		}
-		
-		return je
-	}
-	private JSONObject fixSearchResultJsonObject(JSONObject je){
-		je.remove('class')
-		
-		je.'list'.each{
-			it = this.fixRevocacionJsonObject(it)
-		}
-		return je
-	}
 }

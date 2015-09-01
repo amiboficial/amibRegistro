@@ -2,11 +2,11 @@ package mx.amib.sistemas.external.oficios.poder.utils
 
 import java.util.List;
 
-import mx.amib.sistemas.external.oficios.poder.ApoderadoResultTO;
+import mx.amib.sistemas.external.oficios.poder.ApoderadoResultTO
 import mx.amib.sistemas.external.oficios.poder.ApoderadoTO
 
-import org.codehaus.groovy.grails.web.json.JSONArray;
-import org.codehaus.groovy.grails.web.json.JSONObject;
+import org.codehaus.groovy.grails.web.json.JSONArray
+import org.codehaus.groovy.grails.web.json.JSONObject
 
 public class ApoderadoJsonTranportConverter {
 	public static ApoderadoTO fromJsonToTranport(JSONObject jsonObject){

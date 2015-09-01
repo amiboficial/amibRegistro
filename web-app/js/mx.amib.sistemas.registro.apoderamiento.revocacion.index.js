@@ -48,6 +48,7 @@ app.RevocacionSearchResultVMCollection = Backbone.Collection.extend({
 	/* NOTIFICACION DE ESTATUS DE PROCESAMIENTO */
 	_processing: false,
 	_errorOnRequest: false,
+	_warningNotFound: false,
 	isProcessing: function(){
 		return this._processing;
 	},
@@ -55,23 +56,76 @@ app.RevocacionSearchResultVMCollection = Backbone.Collection.extend({
 		this._processing = processingSt;
 		this.trigger('processing',processingSt);
 	},
-	setErrorOnRequestStatus: function(errorSt){
-		this._error = false;
+	setErrorOnRequest: function(errorSt){
+		this._errorOnRequest = errorSt;
 		this.trigger('errorOnRequest',errorSt);
+	},
+	getErrorOnRequest: function(){
+		return this._errorOnRequest;
+	},
+	setWarningNotFound: function(warnSt){
+		this._warningNotFound = warnSt;
+		this.trigger('warningNotFound',warnSt);
+	},
+	getWarningNotFound: function(){
+		return this._warningNotFound;
 	},
 	
 	/* CONSULTAS AJAX */
 	findAllByNumeroEscritura: function(options){
-		alert('NOT YET IMPLEMENTED');
+		var _this = this;
+		
+		this._count = 0;
+		this._max = 1;
+		this._offset = 0;
+		this._sort = 'id';
+		this._order = 'asc';
+		
+		this._query = 'findAllByNumeroEscritura';
+		this._lastAttributes = { numeroEscritura: options.numeroEscritura }
+		
+		$.ajax({
+			url: _this.findAllByNumeroEscrituraUrl, 
+			beforeSend: function(xhr){
+				_this.setProcessingStatus(true);
+				_this.setWarningNotFound(false);
+				_this.setErrorOnRequest(false);
+			},
+			data: {
+				numeroEscritura: options.numeroEscritura
+			},
+			type: 'GET'
+		}).done( function(data){
+			_this.reset( null );
+			if(data.status == "OK"){
+				var listE = data.list
+				var countE = data.count
+				if(countE > 0){
+					for(var i=0; i<listE.length; i++){
+						_this.add(new app.RevocacionSearchResultVM(listE[i]));
+					}
+				}
+				else{
+					_this.setWarningNotFound(true);
+				}
+				_this.trigger('reset', this, {});
+				_this.setProcessingStatus(false);
+			}
+			else{
+				_this.setErrorOnRequest(true);
+				_this.setProcessingStatus(false);
+			}
+		} );
+		
 	},
 	findAllByFechaRevocacion: function(options){
-		alert('NOT YET IMPLEMENTED');
+		alert('NOT YET IMPLEMENTED-> FR');
 	},
 	findAllByGrupoFinanciero: function(options){
-		alert('NOT YET IMPLEMENTED');
+		alert('NOT YET IMPLEMENTED _> GF');
 	},
 	findAllByInstitucion: function(options){
-		alert('NOT YET IMPLEMENTED');
+		alert('NOT YET IMPLEMENTED -> INS');
 	},
 	sortAndOrderBy: function(order, sort){
 		alert('NOT YET IMPLEMENTED');
@@ -264,6 +318,11 @@ app.RevocacionResultsView = Backbone.View.extend({
 		this.render();
 		
 		this.listenTo( this.collection, 'processing', this.renderProcessing );
+		this.listenTo( this.collection, 'errorOnRequest', this.renderError );
+		this.listenTo( this.collection, 'warningNotFound', this.renderWarning );
+		
+		this.listenTo( this.collection, 'reset', this.renderList );
+		
 		Backbone.View.prototype.initialize.call(this);
 	},
 	
@@ -271,6 +330,8 @@ app.RevocacionResultsView = Backbone.View.extend({
 		this.$el.html( this.template() );
 		this.renderList();
 		this.renderProcessing();
+		this.renderError();
+		this.renderWarning();
 		return this;
 	},
 	
@@ -288,6 +349,24 @@ app.RevocacionResultsView = Backbone.View.extend({
 		else{
 			this.$('.alert-processing').hide();
 			this.enableInput();
+		}
+	},
+	renderError: function(){
+		var errorOnRequest = this.collection.getErrorOnRequest();
+		
+		this.$('.alert-errorOnRequest').hide();
+		
+		if(errorOnRequest){
+			this.$('.alert-errorOnRequest').show();
+		}
+	},
+	renderWarning: function(){
+		var warningNotFound = this.collection.getWarningNotFound();
+		
+		this.$('.alert-warningNotFound').hide();
+		
+		if(warningNotFound){
+			this.$('.alert-warningNotFound').show();
 		}
 	},
 	renderPagination: function(){
@@ -507,7 +586,49 @@ app.RevocacionSearchView = Backbone.View.extend({
 		ev.preventDefault();
 		
 		if( this.model.validate() ){
-			alert('VALIDATED');
+			if( this.model.get('criterioBusqueda') == app.REV_IDX_OPTION_NUMESCRITURA ){
+				this.searchResultVMCollection.findAllByNumeroEscritura({
+					numeroEscritura : this.model.get('numeroEscritura'),
+					max: 10,
+					offset: 0,
+					sort: "asc",
+					order: "id",
+				});
+			}
+			else if( this.model.get('criterioBusqueda') == app.REV_IDX_OPTION_FECREV ){
+				this.searchResultVMCollection.findAllByFechaRevocacion({
+					fechaRevocacionDel_day: this.model.get('fechaRevocacionDel_day'),
+					fechaRevocacionDel_month: this.model.get('fechaRevocacionDel_month'),
+					fechaRevocacionDel_year: this.model.get('fechaRevocacionDel_year'),
+					fechaRevocacionAl_day: this.model.get('fechaRevocacionAl_day'),
+					fechaRevocacionAl_month: this.model.get('fechaRevocacionAl_month'),
+					fechaRevocacionAl_year: this.model.get('fechaRevocacionAl_year'),
+					max: 10,
+					offset: 0,
+					sort: "asc",
+					order: "id"
+				});
+			}
+			else if( this.model.get('criterioBusqueda') == app.REV_IDX_OPTION_ENTFINANCIERA ){
+				if( this.model.get('idInstitucion') == -1 ){
+					this.searchResultVMCollection.findAllByGrupoFinanciero({
+						idGrupoFinanciero: this.model.get('idGrupoFinanciero'),
+						max: 10,
+						offset: 0,
+						sort: "asc",
+						order: "id"
+					});
+				}
+				else{
+					this.searchResultVMCollection.findAllByInstitucion({
+						idInstitucion: this.model.get('idInstitucion'),
+						max: 10,
+						offset: 0,
+						sort: "asc",
+						order: "id"
+					});
+				}	
+			}
 		}
 		
 	},

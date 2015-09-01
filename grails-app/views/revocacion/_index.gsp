@@ -53,6 +53,7 @@
 						<input type="text" maxlength="10" class="numeroEscritura field form-control" data-field="numeroEscritura" />
 					</div>
 				</div>
+				
 				<div class="div-fechaRevocacionDel form-group">
 					<label class="col-md-2 col-sm-3 control-label">
 						Fecha de revocación (del)
@@ -183,7 +184,15 @@
 </script>
 
 <script type="text/template" id="revocacionResultViewTemplate">
-	
+	<tr>
+		<td>{{=grailsId}}</td>
+		<td>{{=numeroEscritura}}</td>
+		<td>{{=fechaRevocacionDDMMYYYY}}</td>
+		<td>{{=nombreCompletoNotario}}</td>
+		<td>
+			[Ver detalle]
+		</td>
+	</tr>
 </script>
 
 <script type="text/template" id="revocacionResultsViewTemplate">
@@ -193,6 +202,7 @@
 				
 				<div class="alert-processing alert alert-info"><img src="/amibRegistro/assets/spinner_alert_info.gif">&nbsp; Procesando datos, espere unos instantes...</div>
 				<div class="alert-errorOnRequest alert alert-danger"><span class="glyphicon glyphicon-info-sign"></span>&nbsp; Error en petición</div>
+				<div class="alert-warningNotFound alert alert-warning"><span class="glyphicon glyphicon-info-sign"></span>&nbsp; No se encontró ningún resultado</div>
 				
 				<div class="content scaffold-list" role="main">
 					<table class="table">

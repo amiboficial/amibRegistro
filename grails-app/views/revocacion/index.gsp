@@ -38,11 +38,15 @@
 	<g:javascript src="mx.amib.sistemas.registro.apoderamiento.revocacion.index.js" />
 	<script type="text/javascript">
 		var app = app || {};
+		
 		var revocacionIndexView;
-		var revocacionSearchVM;
+		var revocacionSearchVM = new app.RevocacionSearchVM();
+		var revocacionSearchResultVMCollection = new app.RevocacionSearchResultVMCollection();
+		
 		var gruposFinancieros;
 		var institucionesGruposFinancieros;
 
+		//RELLENA DATOS
 		gruposFinancieros = new Array();
 		gruposFinancieros.push({id:'-1',text:'-Seleccione-', instituciones: [ {id:'-1',text:'-Seleccione-'} ] });
 		<g:each var="x" in="${viewModelInstance.gfins}" >
@@ -53,12 +57,15 @@
 			</g:each>
 			gruposFinancieros.push({id:'${x.id}',text:'${x.nombre}', instituciones:institucionesGruposFinancieros});
 		</g:each>
-		revocacionSearchVM = new app.RevocacionSearchVM();
 		revocacionSearchVM.set({ gruposFinancieros:gruposFinancieros });
-
+		//RELLENA URL
+		revocacionSearchResultVMCollection.findAllByNumeroEscrituraUrl = '<g:createLink action="findAllByNumeroEscritura" />'
+		revocacionSearchResultVMCollection.findAllByFechaRevocacionUrl = '<g:createLink action="findAllByFechaRevocacion" />'
+		revocacionSearchResultVMCollection.findAllByGrupoFinancieroUrl = '<g:createLink action="findAllByGrupoFinanciero" />'
+		revocacionSearchResultVMCollection.findAllByInstitucionUrl = '<g:createLink action="findAllByInstitucion" />'
 		revocacionIndexView = new app.RevocacionIndexView( { 
 			searchVM : revocacionSearchVM,
-			searchResultVMCollection : new app.RevocacionSearchResultVMCollection()
+			searchResultVMCollection : revocacionSearchResultVMCollection
 		} );
 
 	</script>

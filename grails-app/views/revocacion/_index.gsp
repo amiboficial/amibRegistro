@@ -10,6 +10,13 @@
 			<legend>Búsqueda de revocaciones</legend>
 			<div id="divBusquedaRevocaciones">
 				
+				<div class="alert-errorNumeroEscrituraBlank alert alert-danger" role="alert"><span class="glyphicon glyphicon-info-sign"></span> errorNumeroEscrituraBlank</div>
+				<div class="alert-errorNumeroEscrituraNonNumeric alert alert-danger" role="alert"><span class="glyphicon glyphicon-info-sign"></span> errorNumeroEscrituraNonNumeric</div>
+				<div class="alert-errorFechaRevocacionDelBlank alert alert-danger" role="alert"><span class="glyphicon glyphicon-info-sign"></span> errorFechaRevocacionDelBlank</div>
+				<div class="alert-errorFechaRevocacionAlBlank alert alert-danger" role="alert"><span class="glyphicon glyphicon-info-sign"></span> errorFechaRevocacionAlBlank</div>
+				<div class="alert-errorFechaRevocacionWrongRange alert alert-danger" role="alert"><span class="glyphicon glyphicon-info-sign"></span> errorFechaRevocacionWrongRange</div>
+				<div class="alert-errorGrupoFinancieroNonSelected alert alert-danger" role="alert"><span class="glyphicon glyphicon-info-sign"></span> errorGrupoFinancieroNonSelected</div>
+				
 				<div class="div-opcionSeleccionada form-group">
 					<label class="col-md-2 col-sm-3 control-label">
 						Criterio de búsqueda

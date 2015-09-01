@@ -210,51 +210,41 @@ app.RevocacionSearchVM = Backbone.Model.extend({
 		var criterioBusqueda = this.get('criterioBusqueda');
 		var numericRegEx = /^[0-9]{1,10}$/;
 		
+		this.clearAllErrors();
+		
 		if( criterioBusqueda == app.REV_IDX_OPTION_NUMESCRITURA ){
-			this.set({
-				errorNumeroEscrituraBlank: false,
-				errorNumeroEscrituraNonNumeric: false
-			});
 			if( this.get('numeroEscritura') == '' ){
-				this.set(errorNumeroEscrituraBlank,true);
+				this.set('errorNumeroEscrituraBlank',true);
 				valid = false;
 			}
 			else if( !numericRegEx.test( this.get('numeroEscritura') ) ){
-				this.set(errorNumeroEscrituraNonNumeric,true);
+				this.set('errorNumeroEscrituraNonNumeric',true);
 				valid = false;
 			}
 		}
 		else if( criterioBusqueda == app.REV_IDX_OPTION_FECREV ){
-			this.set({
-				errorFechaRevocacionDelBlank: false,
-				errorFechaRevocacionAlBlank: false,
-				errorFechaRevocacionWrongRange: false
-			});
 			if( this.get('fechaRevocacionDel_day') == -1 || this.get('fechaRevocacionDel_month') == -1 ||  this.get('fechaRevocacionDel_year') == -1 ){
-				this.set(errorFechaRevocacionDelBlank,true);
+				this.set('errorFechaRevocacionDelBlank',true);
 				valid = false;
 			}
 			if( this.get('fechaRevocacionAl_day') == -1 || this.get('fechaRevocacionAl_month') == -1 ||  this.get('fechaRevocacionAl_year') == -1 ){
-				this.set(errorFechaRevocacionAlBlank,true);
+				this.set('errorFechaRevocacionAlBlank',true);
 				valid = false;
 			}
 			if(valid == true){
 				var dateDel = new Date(parseInt(this.get('fechaRevocacionDel_year')), parseInt(this.get('fechaRevocacionDel_month')) - 1, parseInt(this.get('fechaRevocacionDel_day')), 0, 0, 0, 0);
 				var dateAl = new Date(parseInt(this.get('fechaRevocacionAl_year')), parseInt(this.get('fechaRevocacionAl_month')) - 1, parseInt(this.get('fechaRevocacionAl_day')), 0, 0, 0, 0);
 				
-				if(dateAl > dateDel){
-					this.set(errorFechaRevocacionWrongRange,true);
+				if(dateAl < dateDel){
+					this.set('errorFechaRevocacionWrongRange',true);
 					valid = false;
 				}
 			}
 		}
 		else if( criterioBusqueda == app.REV_IDX_OPTION_ENTFINANCIERA ){
-			this.set({
-				errorGrupoFinancieroNonSelected: false
-			});
-			
 			if( this.get('idGrupoFinanciero') == -1 ){
-				this.set(errorGrupoFinancieroNonSelected,true);
+				this.set('errorGrupoFinancieroNonSelected',true);
+				valid = false;
 			}
 		}
 		
@@ -363,6 +353,8 @@ app.RevocacionSearchView = Backbone.View.extend({
 		//al cambiar criterio, se limpian campos y se llama a everythingClear, por lo que no es necesario bindear
 		this.listenTo( this.model, 'institucionesCargadas', this.renderInstituciones );
 		this.listenTo( this.model, 'everythingCleared', this.render );
+		this.listenTo( this.model, 'allErrorsCleared', this.renderError );
+		this.listenTo( this.model, 'validated', this.renderError );
 		
 		Backbone.View.prototype.initialize.call(this);
 	},
@@ -371,6 +363,7 @@ app.RevocacionSearchView = Backbone.View.extend({
 		this.$el.html( this.template( this.model.toJSON() ) );
 		this.renderProcessing();
 		this.renderInstituciones();
+		this.renderError();
 		return this;
 	},
 	
@@ -384,6 +377,48 @@ app.RevocacionSearchView = Backbone.View.extend({
 			this.enableInput();
 			this.renderCriterioBusqueda();
 		}
+	},
+	renderError: function(){
+		
+		this.$('.alert-errorNumeroEscrituraBlank').hide();
+		this.$('.alert-errorNumeroEscrituraNonNumeric').hide();
+		this.$('.alert-errorFechaRevocacionDelBlank').hide();
+		this.$('.alert-errorFechaRevocacionAlBlank').hide();
+		this.$('.alert-errorFechaRevocacionWrongRange').hide();
+		this.$('.alert-errorGrupoFinancieroNonSelected').hide();
+		
+		this.$('.div-numeroEscritura').removeClass('has-error');
+		this.$('.div-fechaRevocacionDel').removeClass('has-error');
+		this.$('.div-fechaRevocacionAl').removeClass('has-error');
+		this.$('.div-idGrupoFinanciero').removeClass('has-error');
+		this.$('.div-idInstitucion').removeClass('has-error');
+		
+		if(this.model.get('errorNumeroEscrituraBlank') == true){
+			this.$('.alert-errorNumeroEscrituraBlank').show();
+			this.$('.div-numeroEscritura').addClass('has-error');
+		}
+		if(this.model.get('errorNumeroEscrituraNonNumeric') == true){
+			this.$('.alert-errorNumeroEscrituraNonNumeric').show();
+			this.$('.div-numeroEscritura').addClass('has-error');
+		}
+		if(this.model.get('errorFechaRevocacionDelBlank') == true){
+			this.$('.alert-errorFechaRevocacionDelBlank').show();
+			this.$('.div-fechaRevocacionDel').addClass('has-error');
+		}
+		if(this.model.get('errorFechaRevocacionAlBlank') == true){
+			this.$('.alert-errorFechaRevocacionAlBlank').show();
+			this.$('.div-fechaRevocacionAl').addClass('has-error');
+		}
+		if(this.model.get('errorFechaRevocacionWrongRange') == true){
+			this.$('.alert-errorFechaRevocacionWrongRange').show();
+			this.$('.div-fechaRevocacionDel').addClass('has-error');
+			this.$('.div-fechaRevocacionAl').addClass('has-error');
+		}
+		if(this.model.get('errorGrupoFinancieroNonSelected') == true){
+			this.$('.alert-errorGrupoFinancieroNonSelected').show();
+			this.$('.div-idGrupoFinanciero').addClass('has-error');
+		}
+		
 	},
 	renderCriterioBusqueda: function(){
 		if( this.model.get('criterioBusqueda') == app.REV_IDX_OPTION_NUMESCRITURA ){

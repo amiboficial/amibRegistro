@@ -1,5 +1,6 @@
 package mx.amib.sistemas.registro.apoderamiento.controller
 
+import java.text.SimpleDateFormat
 import java.util.Date;
 import java.util.List;
 
@@ -7,6 +8,7 @@ import grails.converters.JSON
 import mx.amib.sistemas.external.catalogos.service.EntidadFederativaTO
 import mx.amib.sistemas.external.catalogos.service.EntidadFinancieraService
 import mx.amib.sistemas.external.catalogos.service.GrupoFinancieroTO
+import mx.amib.sistemas.external.catalogos.service.NotarioService
 import mx.amib.sistemas.external.catalogos.service.NotarioTO
 import mx.amib.sistemas.external.catalogos.service.SepomexService
 import mx.amib.sistemas.external.expediente.persona.service.SustentanteTO
@@ -15,12 +17,15 @@ import mx.amib.sistemas.external.oficios.poder.ApoderadoTO
 import mx.amib.sistemas.external.oficios.revocacion.RevocacionTO
 import mx.amib.sistemas.external.oficios.revocacion.RevocadoTO
 import mx.amib.sistemas.external.oficios.service.PoderService
+import mx.amib.sistemas.external.oficios.service.RevocacionService
+import mx.amib.sistemas.utils.SearchResult;
+
 import org.codehaus.groovy.grails.web.json.JSONElement
 
 
 class RevocacionController {
 
-	def revocacionService
+	RevocacionService revocacionService
 	def apoderadoService
 	def notarioService
 	def sepomexService
@@ -32,6 +37,85 @@ class RevocacionController {
     def index() {
 		def vm = RevocacionIndexViewModel.getInstance(entidadFinancieraService)
 		render( view:'index', model: [viewModelInstance:vm] )
+	}
+	
+	def findAllByNumeroEscritura(){
+		Map<String,Object> responseMap = new HashMap<String,Object>()
+		SearchResult<RevocadoTO> revServResult
+		
+		int numeroEscritura = Integer.parseInt(params.'numeroEscritura'?:'-1')
+		
+		revServResult = revocacionService.findAllByGrupoFinanciero(numeroEscritura)
+		
+		responseMap.put('status','OK')
+		responseMap.put('list', RevocacionSearchResultViewModel.getListInstance(revServResult, notarioService) )
+		responseMap.put('count', revServResult.count)
+		
+		render(responseMap as JSON)
+	}
+	def findAllByFechaRevocacion(){
+		Map<String,Object> responseMap = new HashMap<String,Object>()
+		SearchResult<RevocadoTO> revServResult
+		
+		int max = Integer.parseInt(params.'max'?:'10')
+		int offset = Integer.parseInt(params.'offset'?:'0')
+		String sort = params.'sort'?:''
+		String order = params.'order'?:''
+		
+		int fechaRevocacionDelDay = Integer.parseInt(params.'max'?:'1')
+		int fechaRevocacionDelMonth = Integer.parseInt(params.'max'?:'1')
+		int fechaRevocacionDelYear = Integer.parseInt(params.'max'?:'1900')
+		int fechaRevocacionAlDay = Integer.parseInt(params.'max'?:'31')
+		int fechaRevocacionAlMonth = Integer.parseInt(params.'max'?:'12')
+		int fechaRevocacionAlYear = Integer.parseInt(params.'max'?:'2099')
+		
+		revServResult = revocacionService.findAllByFechaRevocacion(max, offset, sort, order, 
+														fechaRevocacionDelDay, fechaRevocacionDelMonth, fechaRevocacionDelYear, 
+														fechaRevocacionAlDay, fechaRevocacionAlMonth, fechaRevocacionAlYear)
+		
+		responseMap.put('status','OK')
+		responseMap.put('list', RevocacionSearchResultViewModel.getListInstance(revServResult, notarioService) )
+		responseMap.put('count', revServResult.count)
+		
+		render(responseMap as JSON)
+	}
+	def findAllByGrupoFinanciero(){
+		Map<String,Object> responseMap = new HashMap<String,Object>()
+		SearchResult<RevocadoTO> revServResult
+		
+		int max = Integer.parseInt(params.'max'?:'10')
+		int offset = Integer.parseInt(params.'offset'?:'0')
+		String sort = params.'sort'?:''
+		String order = params.'order'?:''
+		
+		int idGrupoFinanciero = Integer.parseInt(params.'idGrupoFinanciero'?:'-1')
+		
+		revServResult = revocacionService.findAllByGrupoFinanciero(max, offset, sort, order, idGrupoFinanciero)
+		
+		responseMap.put('status','OK')
+		responseMap.put('list', RevocacionSearchResultViewModel.getListInstance(revServResult, notarioService) )
+		responseMap.put('count', revServResult.count)
+		
+		render(responseMap as JSON)
+	}
+	def findAllByInstitucion(){
+		Map<String,Object> responseMap = new HashMap<String,Object>()
+		SearchResult<RevocadoTO> revServResult
+		
+		int max = Integer.parseInt(params.'max'?:'10')
+		int offset = Integer.parseInt(params.'offset'?:'0')
+		String sort = params.'sort'?:''
+		String order = params.'order'?:''
+		
+		int idInstitucion = Integer.parseInt(params.'idInstitucion'?:'-1')
+		
+		revServResult = revocacionService.findAllByGrupoFinanciero(max, offset, sort, order, idInstitucion)
+		
+		responseMap.put('status','OK')
+		responseMap.put('list', RevocacionSearchResultViewModel.getListInstance(revServResult, notarioService) )
+		responseMap.put('count', revServResult.count)
+		
+		render(responseMap as JSON)
 	}
 	
 	def create() {
@@ -173,6 +257,40 @@ class RevocacionController {
 		private void fillEntidadesFinancieras(EntidadFinancieraService entidadFinancieraService){
 			gfins = entidadFinancieraService.obtenerGruposFinancierosVigentes().sort{ it.nombre }
 		}
+	}
+	
+	public static class RevocacionSearchResultViewModel{
+		long grailsId
+		int numeroEscritura
+		long fechaRevocacionUnixEpoch
+		String fechaRevocacionDDMMYYYY
+		String nombreCompletoNotario
+		
+		public static RevocacionSearchResultViewModel getInstance(RevocacionTO revocacion, NotarioService notarioService){
+			RevocacionSearchResultViewModel vm = new RevocacionSearchResultViewModel()
+			
+			NotarioTO notario
+			SimpleDateFormat df = new SimpleDateFormat("dd MM yyyy")
+			
+			notario = notarioService.get(revocacion.idNotario)
+			
+			vm.grailsId = revocacion.id
+			vm.numeroEscritura = revocacion.numeroEscritura
+			vm.fechaRevocacionUnixEpoch = revocacion.fechaRevocacion.getTime()/1000
+			vm.fechaRevocacionDDMMYYYY = df.format(revocacion.fechaRevocacion)
+			vm.nombreCompletoNotario = notario.nombreCompleto
+			
+			return vm
+		}
+		
+		public static List<RevocacionSearchResultViewModel> getListInstance(Collection<RevocacionTO> revocaciones, NotarioService notarioService){
+			List<RevocacionSearchResultViewModel> list = new ArrayList<RevocacionSearchResultViewModel>()
+			revocaciones.each{ x ->
+				list.add( RevocacionSearchResultViewModel.getInstance(x, notarioService) )
+			}
+			return list
+		}
+		
 	}
 	
 	public static class RevocacionFormViewModel{

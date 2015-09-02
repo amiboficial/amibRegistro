@@ -119,7 +119,54 @@ app.RevocacionSearchResultVMCollection = Backbone.Collection.extend({
 		
 	},
 	findAllByFechaRevocacion: function(options){
-		alert('NOT YET IMPLEMENTED-> FR');
+		var _this = this;
+		
+		this._count = 0;
+		this._max = options.max;
+		this._offset = options.offset;
+		this._sort = options.sort;
+		this._order = options.order;
+		
+		this._query = 'findAllByFechaRevocacion';
+		this._lastAttributes = {
+			fechaRevocacionDel_day: options.fechaRevocacionDel_day,
+			fechaRevocacionDel_month: options.fechaRevocacionDel_month,
+			fechaRevocacionDel_year: options.fechaRevocacionDel_year,
+			fechaRevocacionAl_day: options.fechaRevocacionAl_day,
+			fechaRevocacionAl_month: options.fechaRevocacionAl_month,
+			fechaRevocacionAl_year: options.fechaRevocacionAl_year
+		}
+		
+		$.ajax({
+			url: _this.findAllByFechaRevocacionUrl, 
+			beforeSend: function(xhr){
+				_this.setProcessingStatus(true);
+				_this.setWarningNotFound(false);
+				_this.setErrorOnRequest(false);
+			},
+			data: options,
+			type: 'GET'
+		}).done( function(data){
+			_this.reset( null );
+			if(data.status == "OK"){
+				var listE = data.list
+				var countE = data.count
+				if(countE > 0){
+					for(var i=0; i<listE.length; i++){
+						_this.add(new app.RevocacionSearchResultVM(listE[i]));
+					}
+				}
+				else{
+					_this.setWarningNotFound(true);
+				}
+				_this.trigger('reset', this, {});
+				_this.setProcessingStatus(false);
+			}
+			else{
+				_this.setErrorOnRequest(true);
+				_this.setProcessingStatus(false);
+			}
+		} );
 	},
 	findAllByGrupoFinanciero: function(options){
 		alert('NOT YET IMPLEMENTED _> GF');
@@ -128,7 +175,24 @@ app.RevocacionSearchResultVMCollection = Backbone.Collection.extend({
 		alert('NOT YET IMPLEMENTED -> INS');
 	},
 	sortAndOrderBy: function(order, sort){
-		alert('NOT YET IMPLEMENTED');
+		var _this = this;
+		var opts = {};
+		
+		this._order = order;
+		this._sort = sort;
+		
+		if(this._query == "findAllByFechaRevocacion"){
+			alert('NOT YET IMPLEMENTED');
+		}
+		else if(this._query == "findAllByGrupoFinanciero"){
+			alert('NOT YET IMPLEMENTED');
+		}
+		else if(this._query == "findAllByInstitucion"){
+			alert('NOT YET IMPLEMENTED');
+		}
+		else{
+			alert("NO ACTION REQUIRED");
+		}
 	},
 	goToPage: function(pagenum){
 		alert('NOT YET IMPLEMENTED');
@@ -410,6 +474,17 @@ app.RevocacionResultsView = Backbone.View.extend({
 		this.$('input').prop('disabled',false);
 		this.$('select').prop('disabled',false);
 		this.$('button').prop('disabled',false);
+	},
+	
+	events: {
+		'click .sort': 'mandarOrdenar',
+	},
+	
+	mandarOrdenar: function(ev){
+		var sort = this.$(ev.currentTarget).data("sort");
+		var order = this.$(ev.currentTarget).data("order");
+		
+		alert('implementando sort para: ' + sort + ',' + order);
 	},
 	
 });

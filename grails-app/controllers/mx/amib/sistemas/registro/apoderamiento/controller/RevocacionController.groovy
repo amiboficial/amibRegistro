@@ -63,12 +63,12 @@ class RevocacionController {
 		String sort = params.'sort'?:''
 		String order = params.'order'?:''
 		
-		int fechaRevocacionDelDay = Integer.parseInt(params.'max'?:'1')
-		int fechaRevocacionDelMonth = Integer.parseInt(params.'max'?:'1')
-		int fechaRevocacionDelYear = Integer.parseInt(params.'max'?:'1900')
-		int fechaRevocacionAlDay = Integer.parseInt(params.'max'?:'31')
-		int fechaRevocacionAlMonth = Integer.parseInt(params.'max'?:'12')
-		int fechaRevocacionAlYear = Integer.parseInt(params.'max'?:'2099')
+		int fechaRevocacionDelDay = Integer.parseInt(params.'fechaRevocacionDel_day'?:'1')
+		int fechaRevocacionDelMonth = Integer.parseInt(params.'fechaRevocacionDel_month'?:'1')
+		int fechaRevocacionDelYear = Integer.parseInt(params.'fechaRevocacionDel_year'?:'1900')
+		int fechaRevocacionAlDay = Integer.parseInt(params.'fechaRevocacionAl_day'?:'31')
+		int fechaRevocacionAlMonth = Integer.parseInt(params.'fechaRevocacionAl_month'?:'12')
+		int fechaRevocacionAlYear = Integer.parseInt(params.'fechaRevocacionAl_year'?:'2099')
 		
 		revServResult = revocacionService.findAllByFechaRevocacion(max, offset, sort, order, 
 														fechaRevocacionDelDay, fechaRevocacionDelMonth, fechaRevocacionDelYear, 

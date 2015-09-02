@@ -73,6 +73,7 @@ app.RevocacionSearchResultVMCollection = Backbone.Collection.extend({
 	
 	/* CONSULTAS AJAX */
 	_sendQuery: function(optionsToSend,urlToSend){
+		var _this = this;
 		$.ajax({
 			url: urlToSend, 
 			beforeSend: function(xhr){
@@ -103,7 +104,7 @@ app.RevocacionSearchResultVMCollection = Backbone.Collection.extend({
 				_this.setProcessingStatus(false);
 			}
 		} );
-	}
+	},
 	findAllByNumeroEscritura: function(options){
 		var _this = this;
 		
@@ -116,39 +117,7 @@ app.RevocacionSearchResultVMCollection = Backbone.Collection.extend({
 		this._query = 'findAllByNumeroEscritura';
 		this._lastAttributes = { numeroEscritura: options.numeroEscritura }
 		
-		$.ajax({
-			url: _this.findAllByNumeroEscrituraUrl, 
-			beforeSend: function(xhr){
-				_this.setProcessingStatus(true);
-				_this.setWarningNotFound(false);
-				_this.setErrorOnRequest(false);
-			},
-			data: {
-				numeroEscritura: options.numeroEscritura
-			},
-			type: 'GET'
-		}).done( function(data){
-			_this.reset( null );
-			if(data.status == "OK"){
-				var listE = data.list
-				var countE = data.count
-				if(countE > 0){
-					for(var i=0; i<listE.length; i++){
-						_this.add(new app.RevocacionSearchResultVM(listE[i]));
-					}
-				}
-				else{
-					_this.setWarningNotFound(true);
-				}
-				_this.trigger('reset', this, {});
-				_this.setProcessingStatus(false);
-			}
-			else{
-				_this.setErrorOnRequest(true);
-				_this.setProcessingStatus(false);
-			}
-		} );
-		
+		this._sendQuery( {numeroEscritura:numeroEscritura} ,this.findAllByNumeroEscrituraUrl);
 	},
 	findAllByFechaRevocacion: function(options){
 		var _this = this;
@@ -169,36 +138,7 @@ app.RevocacionSearchResultVMCollection = Backbone.Collection.extend({
 			fechaRevocacionAl_year: options.fechaRevocacionAl_year
 		}
 		
-		$.ajax({
-			url: _this.findAllByFechaRevocacionUrl, 
-			beforeSend: function(xhr){
-				_this.setProcessingStatus(true);
-				_this.setWarningNotFound(false);
-				_this.setErrorOnRequest(false);
-			},
-			data: options,
-			type: 'GET'
-		}).done( function(data){
-			_this.reset( null );
-			if(data.status == "OK"){
-				var listE = data.list
-				var countE = data.count
-				if(countE > 0){
-					for(var i=0; i<listE.length; i++){
-						_this.add(new app.RevocacionSearchResultVM(listE[i]));
-					}
-				}
-				else{
-					_this.setWarningNotFound(true);
-				}
-				_this.trigger('reset', this, {});
-				_this.setProcessingStatus(false);
-			}
-			else{
-				_this.setErrorOnRequest(true);
-				_this.setProcessingStatus(false);
-			}
-		} );
+		this._sendQuery( options ,this.findAllByFechaRevocacionUrl);
 	},
 	findAllByGrupoFinanciero: function(options){
 		var _this = this;
@@ -214,36 +154,7 @@ app.RevocacionSearchResultVMCollection = Backbone.Collection.extend({
 			idGrupoFinanciero: options.idGrupoFinanciero
 		}
 		
-		$.ajax({
-			url: _this.findAllByGrupoFinancieroUrl, 
-			beforeSend: function(xhr){
-				_this.setProcessingStatus(true);
-				_this.setWarningNotFound(false);
-				_this.setErrorOnRequest(false);
-			},
-			data: options,
-			type: 'GET'
-		}).done( function(data){
-			_this.reset( null );
-			if(data.status == "OK"){
-				var listE = data.list
-				var countE = data.count
-				if(countE > 0){
-					for(var i=0; i<listE.length; i++){
-						_this.add(new app.RevocacionSearchResultVM(listE[i]));
-					}
-				}
-				else{
-					_this.setWarningNotFound(true);
-				}
-				_this.trigger('reset', this, {});
-				_this.setProcessingStatus(false);
-			}
-			else{
-				_this.setErrorOnRequest(true);
-				_this.setProcessingStatus(false);
-			}
-		} );
+		this._sendQuery( options , this.findAllByGrupoFinancieroUrl );
 	},
 	findAllByInstitucion: function(options){
 		var _this = this;
@@ -259,36 +170,7 @@ app.RevocacionSearchResultVMCollection = Backbone.Collection.extend({
 			idInstitucion: options.idInstitucion
 		}
 		
-		$.ajax({
-			url: _this.findAllByInstitucionUrl, 
-			beforeSend: function(xhr){
-				_this.setProcessingStatus(true);
-				_this.setWarningNotFound(false);
-				_this.setErrorOnRequest(false);
-			},
-			data: options,
-			type: 'GET'
-		}).done( function(data){
-			_this.reset( null );
-			if(data.status == "OK"){
-				var listE = data.list
-				var countE = data.count
-				if(countE > 0){
-					for(var i=0; i<listE.length; i++){
-						_this.add(new app.RevocacionSearchResultVM(listE[i]));
-					}
-				}
-				else{
-					_this.setWarningNotFound(true);
-				}
-				_this.trigger('reset', this, {});
-				_this.setProcessingStatus(false);
-			}
-			else{
-				_this.setErrorOnRequest(true);
-				_this.setProcessingStatus(false);
-			}
-		} );
+		this._sendQuery( options , this.findAllByInstitucionUrl );
 	},
 	sortAndOrderBy: function(order, sort){
 		var _this = this;
@@ -597,10 +479,10 @@ app.RevocacionResultsView = Backbone.View.extend({
 	},
 	
 	mandarOrdenar: function(ev){
-		var sort = this.$(ev.currentTarget).data("sort");
 		var order = this.$(ev.currentTarget).data("order");
+		var sort = this.$(ev.currentTarget).data("sort");
 		
-		alert('implementando sort para: ' + sort + ',' + order);
+		this.collection.sortAndOrderBy(order,sort);
 	},
 	
 });

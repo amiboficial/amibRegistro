@@ -31,7 +31,7 @@ app.AutorizadoResultView = Backbone.View.extend({
 app.AutorizadoResultsView = Backbone.View.extend({
 	template: _.template( $('#oficioCnbvShowAutorizadosListTemplate').html() ),
 	collection: new Backbone.Collection(),
-	el: '#485b227985f34dfcadf8369d1525f925',
+	el: '#autorizados485b227985f34dfcadf8369d1525f925',
 	
 	showExpedienteUrl: '',
 	

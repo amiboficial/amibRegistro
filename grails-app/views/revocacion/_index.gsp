@@ -47,7 +47,14 @@
 						{{ if(criterioBusqueda == app.REV_IDX_OPTION_ENTFINANCIERA){ }}
 							checked="" 
 						{{ } }}
-						type="radio">&nbsp;Entidad Financiera
+						type="radio">&nbsp;Entidad Financiera&nbsp;&nbsp;
+						
+						<input class="criterioBusqueda field" name="criterioBusquedaDO" data-field="criterioBusqueda" 
+						value="{{=app.REV_IDX_OPTION_TODOS}}" 
+						{{ if(criterioBusqueda == app.REV_IDX_OPTION_TODOS){ }}
+							checked="" 
+						{{ } }}
+						type="radio">&nbsp;Mostrar todos
 					</div>
 				</div>
 				

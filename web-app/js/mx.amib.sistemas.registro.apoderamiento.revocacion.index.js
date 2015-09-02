@@ -18,6 +18,7 @@ app.MESES = [
 app.REV_IDX_OPTION_NUMESCRITURA = 0;
 app.REV_IDX_OPTION_FECREV = 1;
 app.REV_IDX_OPTION_ENTFINANCIERA = 2;
+app.REV_IDX_OPTION_TODOS = 3;
 
 app.RevocacionSearchResultVM = Backbone.Model.extend({
 	defaults:{
@@ -421,6 +422,7 @@ app.RevocacionSearchVM = Backbone.Model.extend({
 				valid = false;
 			}
 		}
+		// el criterio de busqueda "todos" no requiere de validación
 		
 		this.trigger('validated',{});
 		return valid;
@@ -678,6 +680,19 @@ app.RevocacionSearchView = Backbone.View.extend({
 			this.$('.idGrupoFinanciero').prop('disabled',false);
 			this.$('.idInstitucion').prop('disabled',false);
 		}
+		else if( this.model.get('criterioBusqueda') == app.REV_IDX_OPTION_TODOS ){
+			this.$('.numeroEscritura').prop('disabled',true);
+			
+			this.$('.fechaRevocacionDel_day').prop('disabled',true);
+			this.$('.fechaRevocacionDel_month').prop('disabled',true);
+			this.$('.fechaRevocacionDel_year').prop('disabled',true);
+			this.$('.fechaRevocacionAl_day').prop('disabled',true);
+			this.$('.fechaRevocacionAl_month').prop('disabled',true);
+			this.$('.fechaRevocacionAl_year').prop('disabled',true);
+			
+			this.$('.idGrupoFinanciero').prop('disabled',true);
+			this.$('.idInstitucion').prop('disabled',true);
+		}
 	},
 	renderInstituciones: function(){
 		console.log('PASO AQUI!!!!');
@@ -767,6 +782,21 @@ app.RevocacionSearchView = Backbone.View.extend({
 						order: "id"
 					});
 				}	
+			}
+			else if( this.model.get('criterioBusqueda') == app.REV_IDX_OPTION_TODOS ){
+				//usa el criterio de busqueda de fechas con fechas MUY AMPLIAS
+				this.searchResultVMCollection.findAllByFechaRevocacion({
+					fechaRevocacionDel_day: '1',
+					fechaRevocacionDel_month: '1',
+					fechaRevocacionDel_year: '1900',
+					fechaRevocacionAl_day: '31',
+					fechaRevocacionAl_month: '12',
+					fechaRevocacionAl_year: '2199',
+					max: 10,
+					offset: 0,
+					sort: "asc",
+					order: "id"
+				});
 			}
 		}
 		

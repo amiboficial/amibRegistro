@@ -179,7 +179,7 @@
 		<div class="col-md-9 col-sm-9">
 			<input type="radio" class="opcionSeleccionada field" name="opcionSeleccionada" data-field="opcionSeleccionada" value="0" checked>&nbsp;Matrícula&nbsp;&nbsp;
 			<input type="radio" class="opcionSeleccionada field" name="opcionSeleccionada" data-field="opcionSeleccionada" value="1" >&nbsp;Folio&nbsp;&nbsp;
-			<input type="radio" class="opcionSeleccionada field" name="opcionSeleccionada" data-field="opcionSeleccionada" value="2" >&nbsp;Nombre y/o apellido(s)
+			<input type="radio" class="opcionSeleccionada field" name="opcionSeleccionada" data-field="opcionSeleccionada" value="2" >&nbsp;Nombre y/o apellido(s)&nbsp;&nbsp;
 		</div>
 	</div>
 

@@ -159,7 +159,9 @@ class RevocacionController {
 		render (revocacion as JSON)
 	}
 	
-	def show() { }
+	def show(Long id) {
+		render( view:'show', model: new Object() )
+	}
 	
 	def isNumeroEscrituraAvailable(){
 		int numeroEscritura = -1

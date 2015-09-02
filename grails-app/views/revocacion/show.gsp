@@ -61,7 +61,7 @@
 		</fieldset>
 		<fieldset>
 			<legend><span class="toggle-1 toggle glyphicon glyphicon-plus-sign handCursor" data-toggle-idx="1"></span>&nbsp;<i>Revocados</i></legend>
-			<div id="revocados72cbc179568d466bb1bf401f09ac8168" class="section-1">
+			<div id="revocados72cbc179" class="section-1">
 			</div>
 		</fieldset>
 		
@@ -103,8 +103,23 @@
 	<script>
 		new app.TogglableShowView();
 	</script>
-	<script>
 
+	<g:render template="show"/>
+	<g:javascript src="mx.amib.sistemas.registro.apoderamiento.revocacion.show.revocados.js" />
+	<script>
+		var showUrl = '<g:createLink action="show" />';
+		new app.ResRevShwColView({
+			showUrl: showUrl,
+			collection: new app.ResRevShwCol([
+				{ idSustentante: 1, numeroMatricula:1, nombre:'XXXX1', primerApellido:'YYYY1',segundoApellido:'ZZZ9' },
+				{ idSustentante: 2, numeroMatricula:2, nombre:'XXXX2', primerApellido:'YYYY2',segundoApellido:'ZZZ2' },
+				{ idSustentante: 3, numeroMatricula:3, nombre:'XXXX3', primerApellido:'YYYY3',segundoApellido:'ZZZ6' },
+				{ idSustentante: 4, numeroMatricula:4, nombre:'XXXX4', primerApellido:'YYYY4',segundoApellido:'ZZZ1' }
+			])
+		});
+	</script>
+
+	<script>
 	$(document).ready(function(){
 		$('.download').click(function(e){
 			e.preventDefault();
@@ -114,7 +129,7 @@
 			window.open(url + '/' + uuid);
 		});
 	});
-	
 	</script>
+	
 </body>
 </html>

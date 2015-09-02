@@ -31,4 +31,9 @@ class RegistroExamenTO {
 
     Long idInstitucion
     String puesto
+	
+	//campos "calculados"
+	int fechaNacimientoDay = -1
+	int fechaNacimientoMonth = -1
+	int fechaNacimientoYear = -1
 }

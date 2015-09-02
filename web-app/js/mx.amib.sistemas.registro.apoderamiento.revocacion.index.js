@@ -32,6 +32,7 @@ app.RevocacionSearchResultVM = Backbone.Model.extend({
 app.RevocacionSearchResultVMCollection = Backbone.Collection.extend({
 	model: app.RevocacionSearchResultVM,
 	
+	_count: 0,
 	_max: 10,
 	_offset: 0,
 	_sort: "asc",
@@ -180,20 +181,75 @@ app.RevocacionSearchResultVMCollection = Backbone.Collection.extend({
 		this._sort = sort;
 		
 		if(this._query == "findAllByFechaRevocacion"){
-			alert('NOT YET IMPLEMENTED sort:'+sort+',order:'+order);
+			this.findAllByFechaRevocacion({
+				max: _this._max,
+				offset: 0,
+				sort: _this._sort,
+				order: _this._order,
+				fechaRevocacionDel_day: _this._lastAttributes.fechaRevocacionDel_day,
+				fechaRevocacionDel_month: _this._lastAttributes.fechaRevocacionDel_month,
+				fechaRevocacionDel_year: _this._lastAttributes.fechaRevocacionDel_year,
+				fechaRevocacionAl_day: _this._lastAttributes.fechaRevocacionAl_day,
+				fechaRevocacionAl_month: _this._lastAttributes.fechaRevocacionAl_month,
+				fechaRevocacionAl_year: _this._lastAttributes.fechaRevocacionAl_year
+			});
 		}
 		else if(this._query == "findAllByGrupoFinanciero"){
-			alert('NOT YET IMPLEMENTED sort:'+sort+',order:'+order);
+			this.findAllByGrupoFinanciero({
+				max: _this._max,
+				offset: 0,
+				sort: _this._sort,
+				order: _this._order,
+				idGrupoFinanciero : _this._lastAttributes.idGrupoFinanciero
+			});
 		}
 		else if(this._query == "findAllByInstitucion"){
-			alert('NOT YET IMPLEMENTED sort:'+sort+',order:'+order);
+			this.findAllByGrupoFinanciero({
+				max: _this._max,
+				offset: 0,
+				sort: _this._sort,
+				order: _this._order,
+				idInstitucion : _this._lastAttributes.idInstitucion
+			});
 		}
-		else{
-			alert("NO ACTION REQUIRED");
-		}
+		
 	},
 	goToPage: function(pagenum){
-		alert('NOT YET IMPLEMENTED, pagenum:' + pagenum);
+		var _this = this;
+		this._offset = ((pagenum-1) * _this._max);
+		
+		if(this._query == "findAllByFechaRevocacion"){
+			this.findAllByFechaRevocacion({
+				max: _this._max,
+				offset: _this._offset,
+				sort: _this._sort,
+				order: _this._order,
+				fechaOficioDel_day: _this._lastAttributes.fechaOficioDel_day,
+				fechaOficioDel_month: _this._lastAttributes.fechaOficioDel_month,
+				fechaOficioDel_year: _this._lastAttributes.fechaOficioDel_year,
+				fechaOficioAl_day: _this._lastAttributes.fechaOficioAl_day,
+				fechaOficioAl_month: _this._lastAttributes.fechaOficioAl_month,
+				fechaOficioAl_year: _this._lastAttributes.fechaOficioAl_year
+			});
+		}
+		else if(this._query == "findAllByGrupoFinanciero"){
+			this.findAllByGrupoFinanciero({
+				max: _this._max,
+				offset: _this._offset,
+				sort: _this._sort,
+				order: _this._order,
+				idGrupoFinanciero : _this._lastAttributes.idGrupoFinanciero
+			});
+		}
+		else if(this._query == "findAllByInstitucion"){
+			this.findAllByGrupoFinanciero({
+				max: _this._max,
+				offset: _this._offset,
+				sort: _this._sort,
+				order: _this._order,
+				idInstitucion : _this._lastAttributes.idInstitucion
+			});
+		}
 	},
 	
 	/* METODOS CON DETALLES DE PAGINACION */
@@ -402,6 +458,7 @@ app.RevocacionResultsView = Backbone.View.extend({
 		this.collection.each( function(item){
 			this.$('.list-items').append( this.templateElement( item.toJSON() ) );
 		},this );
+		this.renderPagination();
 	},
 	renderProcessing: function(){
 		if( this.collection.isProcessing() ){

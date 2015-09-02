@@ -229,6 +229,8 @@ class RegistroExamenService {
 
     private RegistroExamenTO groovyRowResultToRegistroExamenTO(GroovyRowResult grr){
         RegistroExamenTO re = new RegistroExamenTO()
+		int rfcYear = 0
+		
         re.numeroMatricula = (Integer)grr.get("IDE_USUARIO")
         re.idFigura = (Long)grr.get("IDE_FIGURA")
         re.descripcionFigura = grr.get("FIG_DESCRIPCION")
@@ -240,6 +242,24 @@ class RegistroExamenService {
         re.segundoApellido = grr.get("USU_APE_MATERNO")
         re.genero = ( grr.get("USU_SEXO") == true )?'M':'F'
         re.rfc = grr.get("USU_RFC")
+		if(re.rfc != null && re.rfc.trim().length() == 13){
+			try{
+				re.fechaNacimientoDay = Integer.parseInt(re.rfc.substring(8,10))
+				re.fechaNacimientoMonth = Integer.parseInt(re.rfc.substring(6,8))
+				rfcYear = Integer.parseInt(re.rfc.substring(4,6))
+				if(rfcYear >= 30){
+					re.fechaNacimientoYear = rfcYear + 1900
+				}
+				else{
+					re.fechaNacimientoYear = rfcYear + 2000
+				}
+			}
+			catch(NumberFormatException nfe){
+				re.fechaNacimientoDay = -1
+				re.fechaNacimientoMonth = -1
+				re.fechaNacimientoYear = -1
+			}
+		}
         re.curp = ((String)grr.get("USU_CURP"))
 		if(re.curp != null && re.curp.length() > 18){
 			re.curp = re.curp.substring(0, 18)

@@ -105,9 +105,9 @@
 	generalesModel.set("primerApellido","${raw(viewModelInstance?.registroExamenInstance?.primerApellido)}");
 	generalesModel.set("segundoApellido","${raw(viewModelInstance?.registroExamenInstance?.segundoApellido)}");
 
-	generalesModel.set("fechaNacimientoDay",-1);
-	generalesModel.set("fechaNacimientoMonth",-1);
-	generalesModel.set("fechaNacimientoYear",-1);
+	generalesModel.set("fechaNacimientoDay",${viewModelInstance?.registroExamenInstance?.fechaNacimientoDay});
+	generalesModel.set("fechaNacimientoMonth",${viewModelInstance?.registroExamenInstance?.fechaNacimientoMonth});
+	generalesModel.set("fechaNacimientoYear",${viewModelInstance?.registroExamenInstance?.fechaNacimientoYear});
 
 	generalesModel.set("genero","${viewModelInstance?.registroExamenInstance?.genero}");
 	generalesModel.set("rfc","${viewModelInstance?.registroExamenInstance?.rfc}");

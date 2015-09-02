@@ -72,6 +72,38 @@ app.RevocacionSearchResultVMCollection = Backbone.Collection.extend({
 	},
 	
 	/* CONSULTAS AJAX */
+	_sendQuery: function(optionsToSend,urlToSend){
+		$.ajax({
+			url: urlToSend, 
+			beforeSend: function(xhr){
+				_this.setProcessingStatus(true);
+				_this.setWarningNotFound(false);
+				_this.setErrorOnRequest(false);
+			},
+			data: optionsToSend,
+			type: 'GET'
+		}).done( function(data){
+			_this.reset( null );
+			if(data.status == "OK"){
+				var listE = data.list
+				var countE = data.count
+				if(countE > 0){
+					for(var i=0; i<listE.length; i++){
+						_this.add(new app.RevocacionSearchResultVM(listE[i]));
+					}
+				}
+				else{
+					_this.setWarningNotFound(true);
+				}
+				_this.trigger('reset', this, {});
+				_this.setProcessingStatus(false);
+			}
+			else{
+				_this.setErrorOnRequest(true);
+				_this.setProcessingStatus(false);
+			}
+		} );
+	}
 	findAllByNumeroEscritura: function(options){
 		var _this = this;
 		
@@ -169,10 +201,94 @@ app.RevocacionSearchResultVMCollection = Backbone.Collection.extend({
 		} );
 	},
 	findAllByGrupoFinanciero: function(options){
-		alert('NOT YET IMPLEMENTED _> GF');
+		var _this = this;
+		
+		this._count = 0;
+		this._max = options.max;
+		this._offset = options.offset;
+		this._sort = options.sort;
+		this._order = options.order;
+		
+		this._query = 'findAllByGrupoFinanciero';
+		this._lastAttributes = {
+			idGrupoFinanciero: options.idGrupoFinanciero
+		}
+		
+		$.ajax({
+			url: _this.findAllByGrupoFinancieroUrl, 
+			beforeSend: function(xhr){
+				_this.setProcessingStatus(true);
+				_this.setWarningNotFound(false);
+				_this.setErrorOnRequest(false);
+			},
+			data: options,
+			type: 'GET'
+		}).done( function(data){
+			_this.reset( null );
+			if(data.status == "OK"){
+				var listE = data.list
+				var countE = data.count
+				if(countE > 0){
+					for(var i=0; i<listE.length; i++){
+						_this.add(new app.RevocacionSearchResultVM(listE[i]));
+					}
+				}
+				else{
+					_this.setWarningNotFound(true);
+				}
+				_this.trigger('reset', this, {});
+				_this.setProcessingStatus(false);
+			}
+			else{
+				_this.setErrorOnRequest(true);
+				_this.setProcessingStatus(false);
+			}
+		} );
 	},
 	findAllByInstitucion: function(options){
-		alert('NOT YET IMPLEMENTED -> INS');
+		var _this = this;
+		
+		this._count = 0;
+		this._max = options.max;
+		this._offset = options.offset;
+		this._sort = options.sort;
+		this._order = options.order;
+		
+		this._query = 'findAllByInstitucion';
+		this._lastAttributes = {
+			idInstitucion: options.idInstitucion
+		}
+		
+		$.ajax({
+			url: _this.findAllByInstitucionUrl, 
+			beforeSend: function(xhr){
+				_this.setProcessingStatus(true);
+				_this.setWarningNotFound(false);
+				_this.setErrorOnRequest(false);
+			},
+			data: options,
+			type: 'GET'
+		}).done( function(data){
+			_this.reset( null );
+			if(data.status == "OK"){
+				var listE = data.list
+				var countE = data.count
+				if(countE > 0){
+					for(var i=0; i<listE.length; i++){
+						_this.add(new app.RevocacionSearchResultVM(listE[i]));
+					}
+				}
+				else{
+					_this.setWarningNotFound(true);
+				}
+				_this.trigger('reset', this, {});
+				_this.setProcessingStatus(false);
+			}
+			else{
+				_this.setErrorOnRequest(true);
+				_this.setProcessingStatus(false);
+			}
+		} );
 	},
 	sortAndOrderBy: function(order, sort){
 		var _this = this;
@@ -182,20 +298,20 @@ app.RevocacionSearchResultVMCollection = Backbone.Collection.extend({
 		this._sort = sort;
 		
 		if(this._query == "findAllByFechaRevocacion"){
-			alert('NOT YET IMPLEMENTED');
+			alert('NOT YET IMPLEMENTED sort:'+sort+',order:'+order);
 		}
 		else if(this._query == "findAllByGrupoFinanciero"){
-			alert('NOT YET IMPLEMENTED');
+			alert('NOT YET IMPLEMENTED sort:'+sort+',order:'+order);
 		}
 		else if(this._query == "findAllByInstitucion"){
-			alert('NOT YET IMPLEMENTED');
+			alert('NOT YET IMPLEMENTED sort:'+sort+',order:'+order);
 		}
 		else{
 			alert("NO ACTION REQUIRED");
 		}
 	},
 	goToPage: function(pagenum){
-		alert('NOT YET IMPLEMENTED');
+		alert('NOT YET IMPLEMENTED, pagenum:' + pagenum);
 	},
 	
 	/* METODOS CON DETALLES DE PAGINACION */

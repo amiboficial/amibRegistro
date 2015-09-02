@@ -6,16 +6,22 @@
 </script>
 
 <script type="text/template" id="revocacionSearchViewTemplate">
+
+		<fieldset>
+			<legend>Acciones</legend>
+			<button type="button" class="create btn btn-primary"><span class="glyphicon glyphicon-file"></span> Alta de revocación</button>
+		</fieldset>
+
 		<fieldset>
 			<legend>Búsqueda de revocaciones</legend>
 			<div id="divBusquedaRevocaciones">
 				
-				<div class="alert-errorNumeroEscrituraBlank alert alert-danger" role="alert"><span class="glyphicon glyphicon-info-sign"></span> errorNumeroEscrituraBlank</div>
-				<div class="alert-errorNumeroEscrituraNonNumeric alert alert-danger" role="alert"><span class="glyphicon glyphicon-info-sign"></span> errorNumeroEscrituraNonNumeric</div>
-				<div class="alert-errorFechaRevocacionDelBlank alert alert-danger" role="alert"><span class="glyphicon glyphicon-info-sign"></span> errorFechaRevocacionDelBlank</div>
-				<div class="alert-errorFechaRevocacionAlBlank alert alert-danger" role="alert"><span class="glyphicon glyphicon-info-sign"></span> errorFechaRevocacionAlBlank</div>
-				<div class="alert-errorFechaRevocacionWrongRange alert alert-danger" role="alert"><span class="glyphicon glyphicon-info-sign"></span> errorFechaRevocacionWrongRange</div>
-				<div class="alert-errorGrupoFinancieroNonSelected alert alert-danger" role="alert"><span class="glyphicon glyphicon-info-sign"></span> errorGrupoFinancieroNonSelected</div>
+				<div class="alert-errorNumeroEscrituraBlank alert alert-danger" role="alert"><span class="glyphicon glyphicon-info-sign"></span> Debe introducir un <strong>Número de escritura</strong></div>
+				<div class="alert-errorNumeroEscrituraNonNumeric alert alert-danger" role="alert"><span class="glyphicon glyphicon-info-sign"></span> Debe introducir un valor numérico en <strong>Número de escritura</strong></div>
+				<div class="alert-errorFechaRevocacionDelBlank alert alert-danger" role="alert"><span class="glyphicon glyphicon-info-sign"></span> Debe introducir una fecha inicial a buscar por <strong>Fecha de Revocación</strong></div>
+				<div class="alert-errorFechaRevocacionAlBlank alert alert-danger" role="alert"><span class="glyphicon glyphicon-info-sign"></span> Debe introducir una fecha final a buscar por <strong>Fecha de Revocación</strong></div>
+				<div class="alert-errorFechaRevocacionWrongRange alert alert-danger" role="alert"><span class="glyphicon glyphicon-info-sign"></span> Debe introducir un rango de fechas válido</div>
+				<div class="alert-errorGrupoFinancieroNonSelected alert alert-danger" role="alert"><span class="glyphicon glyphicon-info-sign"></span> Debe seleccionar como "mínimo" un grupo financiero</div>
 				
 				<div class="div-opcionSeleccionada form-group">
 					<label class="col-md-2 col-sm-3 control-label">
@@ -190,7 +196,7 @@
 		<td>{{=fechaRevocacionDDMMYYYY}}</td>
 		<td>{{=nombreCompletoNotario}}</td>
 		<td>
-			[Ver detalle]
+			<button type="button" class="show btn btn-default btn-xs" data-grailsid="{{=grailsId}}" ><span class="glyphicon glyphicon-eye-open"></span>&nbsp;Ver detalle</button>
 		</td>
 	</tr>
 </script>

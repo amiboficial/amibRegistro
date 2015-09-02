@@ -46,6 +46,8 @@ app.RevocacionSearchResultVMCollection = Backbone.Collection.extend({
 	findAllByGrupoFinancieroUrl: '',
 	findAllByInstitucionUrl: '',
 	
+	showUrl: '',
+	
 	/* NOTIFICACION DE ESTATUS DE PROCESAMIENTO */
 	_processing: false,
 	_errorOnRequest: false,
@@ -533,6 +535,7 @@ app.RevocacionResultsView = Backbone.View.extend({
 	
 	events: {
 		'click .sort': 'mandarOrdenar',
+		'click .show': 'irAShow',
 	},
 	
 	mandarOrdenar: function(ev){
@@ -541,6 +544,12 @@ app.RevocacionResultsView = Backbone.View.extend({
 		
 		this.collection.sortAndOrderBy(order,sort);
 	},
+	
+	irAShow: function(ev){
+		var grailsId = this.$(ev.currentTarget).data("grailsid");
+		
+		window.location.assign(this.collection.showUrl + '/' + grailsId)
+	}
 	
 });
 
@@ -770,9 +779,13 @@ app.RevocacionIndexView = Backbone.View.extend({
 	searchVM: new Backbone.Model(),
 	searchResultVMCollection: new Backbone.Collection(),
 	
+	createUrl: '',
+	
 	initialize: function(options){
 		this.searchVM = options.searchVM;
 		this.searchResultVMCollection = options.searchResultVMCollection;
+		
+		this.createUrl = options.createUrl;
 		
 		this.render();
 		
@@ -816,6 +829,13 @@ app.RevocacionIndexView = Backbone.View.extend({
 		this.$('.div-revocacionResults').html( view.render().el );
 		
 		return view;
-	}
+	},
 	
+	events:{
+		'click .create':'irACreate'
+	},
+	
+	irACreate: function(){
+		window.location.assign(this.createUrl)
+	}
 });

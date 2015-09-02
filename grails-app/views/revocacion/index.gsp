@@ -24,10 +24,6 @@
 	<g:if test="${flash.errorMessage}">
 		<div class="alert alert-danger" role="alert"><span class="glyphicon glyphicon-info-sign"></span> ${flash.errorMessage}</div>
 	</g:if>
-	<fieldset>
-		<legend>Acciones</legend>
-		<button id="btnNuevoPoder" type="button" class="btn btn-default btn-primary"><span class="glyphicon glyphicon-file"></span> Alta de revocación</button>
-	</fieldset>
 	
 	<form id="frmApp" class="form-horizontal" role="form" action="<g:createLink controller="revocacion" action="index" />" method="get">
 		<div id="divRevocacionIndex">
@@ -42,6 +38,7 @@
 		var revocacionIndexView;
 		var revocacionSearchVM = new app.RevocacionSearchVM();
 		var revocacionSearchResultVMCollection = new app.RevocacionSearchResultVMCollection();
+		var createUrl;
 		
 		var gruposFinancieros;
 		var institucionesGruposFinancieros;
@@ -59,13 +56,16 @@
 		</g:each>
 		revocacionSearchVM.set({ gruposFinancieros:gruposFinancieros });
 		//RELLENA URL
+		createUrl = '<g:createLink action="create" />'
+		revocacionSearchResultVMCollection.showUrl= '<g:createLink action="show" />'
 		revocacionSearchResultVMCollection.findAllByNumeroEscrituraUrl = '<g:createLink action="findAllByNumeroEscritura" />'
 		revocacionSearchResultVMCollection.findAllByFechaRevocacionUrl = '<g:createLink action="findAllByFechaRevocacion" />'
 		revocacionSearchResultVMCollection.findAllByGrupoFinancieroUrl = '<g:createLink action="findAllByGrupoFinanciero" />'
 		revocacionSearchResultVMCollection.findAllByInstitucionUrl = '<g:createLink action="findAllByInstitucion" />'
 		revocacionIndexView = new app.RevocacionIndexView( { 
 			searchVM : revocacionSearchVM,
-			searchResultVMCollection : revocacionSearchResultVMCollection
+			searchResultVMCollection : revocacionSearchResultVMCollection,
+			createUrl: createUrl
 		} );
 
 	</script>

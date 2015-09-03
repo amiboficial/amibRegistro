@@ -111,7 +111,7 @@
 						<g:message code="revocacion.notario.entidadFederativa.label" default="Entidad Federativa" />
 					</label>
 					<div class="col-md-8 col-sm-8">						
-						<p class="form-control-static">${vm?.notario?.idEntidadFederativa}</p>
+						<p class="form-control-static">${vm?.nombreEntidadFederativaNotario}</p>
 					</div>
 				</div>
 				<div class="form-group">
@@ -143,7 +143,7 @@
 						<g:message code="revocacion.fechaRevocacion.label" default="Fecha de revocación" />
 					</label>
 					<div class="col-md-8 col-sm-8">
-						<p class="form-control-static">${vm?.revocacion?.fechaRevocacion}</p>
+						<p class="form-control-static"><g:formatDate format="dd/MM/yyyy" date="${vm?.revocacion?.fechaRevocacion}"/></p>
 					</div>
 				</div>
 			</div>
@@ -196,15 +196,22 @@
 	<g:render template="show"/>
 	<g:javascript src="mx.amib.sistemas.registro.apoderamiento.revocacion.show.revocados.js" />
 	<script>
-		var showUrl = '<g:createLink action="show" />';
+		var showExpedienteUrl = '<g:createLink controller="expediente" action="show" />';
+		var resRevShwCol = new app.ResRevShwCol();
+
+		<g:each var="x" in="${vm?.sustentantes}">
+			resRevShwCol.push({
+				idSustentante: ${x?.id}, 
+				numeroMatricula: ${x?.numeroMatricula}, 
+				nombre:'${x?.nombre}', 
+				primerApellido:'${x?.primerApellido}',
+				segundoApellido:'${x?.segundoApellido}'
+			});
+		</g:each>
+
 		new app.ResRevShwColView({
-			showUrl: showUrl,
-			collection: new app.ResRevShwCol([
-				{ idSustentante: 1, numeroMatricula:1, nombre:'Azucena', primerApellido:'García',segundoApellido:'Galicia' },
-				{ idSustentante: 2, numeroMatricula:2, nombre:'Yuridia', primerApellido:'Pérez',segundoApellido:'Fuentes' },
-				{ idSustentante: 3, numeroMatricula:3, nombre:'Gloria', primerApellido:'Rocha',segundoApellido:'Verduzco' },
-				{ idSustentante: 4, numeroMatricula:4, nombre:'María del Sol', primerApellido:'Reyes',segundoApellido:'Sanroman' }
-			])
+			showExpedienteUrl: showExpedienteUrl,
+			collection: resRevShwCol
 		});
 	</script>
 

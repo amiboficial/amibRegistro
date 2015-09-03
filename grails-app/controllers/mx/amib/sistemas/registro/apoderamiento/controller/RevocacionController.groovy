@@ -170,7 +170,7 @@ class RevocacionController {
 	def show(Long id) {
 		RevocacionShowViewModel rsvm = RevocacionShowViewModel.getInstance(id,
 			revocacionService, apoderadoService, certificacionService, documentoRepositorioService,
-			notarioService, entidadFinancieraService)
+			notarioService, sepomexService, entidadFinancieraService)
 		
 		println ('EL MODEL A SACAR ES -> ')
 		println (rsvm as JSON)
@@ -316,6 +316,7 @@ class RevocacionController {
 		List<SustentanteTO> sustentantes
 		DocumentoRepositorioTO docRespaldo
 		NotarioTO notario
+		String nombreEntidadFederativaNotario
 		String nombreGrupoFinanciero
 		String nombreInstitucion
 		
@@ -323,7 +324,8 @@ class RevocacionController {
 			RevocacionService revocacionService, ApoderadoService apoderadoService,
 			CertificacionService certificacionService,
 			DocumentoRepositorioService documentoRepositorioService,
-			NotarioService notarioService, EntidadFinancieraService entidadFinancieraService){
+			NotarioService notarioService, SepomexService sepomexService,
+			EntidadFinancieraService entidadFinancieraService){
 			
 			//Declaración de variables
 			RevocacionShowViewModel rsvm = new RevocacionShowViewModel()
@@ -340,7 +342,10 @@ class RevocacionController {
 			}
 			
 			rsvm.docRespaldo = documentoRepositorioService.obtenerMetadatosDocumento(rsvm.revocacion.uuidDocumentoRespaldo)
+			
 			rsvm.notario = notarioService.get(rsvm.revocacion.idNotario)
+			rsvm.nombreEntidadFederativaNotario = sepomexService.obtenerEntidadFederativa((int)rsvm.notario.idEntidadFederativa.value).nombre
+			
 			rsvm.nombreGrupoFinanciero = entidadFinancieraService.obtenerGrupoFinanciero(rsvm.revocacion.idGrupoFinanciero).nombre
 			if(rsvm.revocacion.idInstitucion != null || rsvm.revocacion.idInstitucion != -1 ){
 				rsvm.nombreInstitucion = entidadFinancieraService.obtenerInstitucion(rsvm.revocacion.idInstitucion).nombre

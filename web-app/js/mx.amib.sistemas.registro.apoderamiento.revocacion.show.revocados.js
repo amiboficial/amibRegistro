@@ -112,11 +112,11 @@ app.ResRevShwColView = Backbone.View.extend ({
 	template: _.template( $('#resRevShwColTemplate').html() ),
 	templateElement: _.template( $('#resRevShwTemplate').html() ),
 	
-	showUrl: '',
+	showExpedienteUrl: '',
 	
 	initialize: function(options){
 		this.collection = options.collection;
-		this.showUrl = options.showUrl;
+		this.showExpedienteUrl = options.showExpedienteUrl;
 		
 		this.render();
 		
@@ -146,7 +146,7 @@ app.ResRevShwColView = Backbone.View.extend ({
 	irAExpediente: function(ev){
 		var idSustentante = this.$(ev.currentTarget).data("idsustentante");
 		
-		window.location.assign(showUrl + '/' + idSustentante);
+		window.location.assign(this.showExpedienteUrl + '/' + idSustentante);
 	},
 	
 	ordernarLista: function(ev){

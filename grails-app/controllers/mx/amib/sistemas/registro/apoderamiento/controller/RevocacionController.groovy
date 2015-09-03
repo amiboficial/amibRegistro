@@ -11,7 +11,12 @@ import mx.amib.sistemas.external.catalogos.service.GrupoFinancieroTO
 import mx.amib.sistemas.external.catalogos.service.NotarioService
 import mx.amib.sistemas.external.catalogos.service.NotarioTO
 import mx.amib.sistemas.external.catalogos.service.SepomexService
+import mx.amib.sistemas.external.documentos.service.DocumentoRepositorioService
+import mx.amib.sistemas.external.documentos.service.DocumentoRepositorioTO
+import mx.amib.sistemas.external.expediente.certificacion.service.CertificacionTO
 import mx.amib.sistemas.external.expediente.persona.service.SustentanteTO
+import mx.amib.sistemas.external.expediente.service.CertificacionService
+import mx.amib.sistemas.external.expediente.service.SustentanteService
 import mx.amib.sistemas.external.oficios.poder.PoderTO
 import mx.amib.sistemas.external.oficios.poder.ApoderadoTO
 import mx.amib.sistemas.external.oficios.revocacion.RevocacionTO
@@ -19,6 +24,7 @@ import mx.amib.sistemas.external.oficios.revocacion.RevocadoTO
 import mx.amib.sistemas.external.oficios.service.ApoderadoService
 import mx.amib.sistemas.external.oficios.service.PoderService
 import mx.amib.sistemas.external.oficios.service.RevocacionService
+import mx.amib.sistemas.registro.apoderamiento.service.ApoderamientoService
 import mx.amib.sistemas.utils.SearchResult
 
 import org.codehaus.groovy.grails.web.json.JSONElement
@@ -29,13 +35,15 @@ class RevocacionController {
 	RevocacionService revocacionService
 	ApoderadoService apoderadoService
 	NotarioService notarioService
-	def sepomexService
-	def poderService
-	def apoderamientoService
-	def sustentanteService
-	def entidadFinancieraService
+	CertificacionService certificacionService
+	DocumentoRepositorioService documentoRepositorioService
+	SepomexService sepomexService
+	PoderService poderService
+	ApoderamientoService apoderamientoService
+	SustentanteService sustentanteService
+	EntidadFinancieraService entidadFinancieraService
 	
-    def index() {
+	def index() {
 		def vm = RevocacionIndexViewModel.getInstance(entidadFinancieraService)
 		render( view:'index', model: [viewModelInstance:vm] )
 	}
@@ -70,8 +78,8 @@ class RevocacionController {
 		int fechaRevocacionAlMonth = Integer.parseInt(params.'fechaRevocacionAl_month'?:'12')
 		int fechaRevocacionAlYear = Integer.parseInt(params.'fechaRevocacionAl_year'?:'2099')
 		
-		revServResult = revocacionService.findAllByFechaRevocacion(max, offset, sort, order, 
-														fechaRevocacionDelDay, fechaRevocacionDelMonth, fechaRevocacionDelYear, 
+		revServResult = revocacionService.findAllByFechaRevocacion(max, offset, sort, order,
+														fechaRevocacionDelDay, fechaRevocacionDelMonth, fechaRevocacionDelYear,
 														fechaRevocacionAlDay, fechaRevocacionAlMonth, fechaRevocacionAlYear)
 		
 		responseMap.put('status','OK')
@@ -131,7 +139,7 @@ class RevocacionController {
 		def pApoderadosARevocar = params.list('revocados.apoderado') //recibe una lista de Strings con formato JSON por objeto
 		def pFechaRevocacionDay = params.int('revocacion.fechaRevocacion_day')
 		def pFechaRevocacionMonth = params.int('revocacion.fechaRevocacion_month')
-		def pFechaRevocacionYear = params.int('revocacion.fechaRevocacion_year')		
+		def pFechaRevocacionYear = params.int('revocacion.fechaRevocacion_year')
 		//idsApoderadoARevocar = pIdsApoderadosARevocar.collect{ Long.parseLong(it) }
 		//idsCertificacionARevocar = apoderadoService.getAll( new HashSet<Long>(idsApoderadoARevocar) ).apoderados.collect{ it.idCertificacion } //igual y eso se mueve al service
 		
@@ -160,7 +168,14 @@ class RevocacionController {
 	}
 	
 	def show(Long id) {
-		render( view:'show', model: new Object() )
+		RevocacionShowViewModel rsvm = RevocacionShowViewModel.getInstance(id,
+			revocacionService, apoderadoService, certificacionService, documentoRepositorioService,
+			notarioService, entidadFinancieraService)
+		
+		println ('EL MODEL A SACAR ES -> ')
+		println (rsvm as JSON)
+		
+		render( view:'show', model: [vm:rsvm] )
 	}
 	
 	def isNumeroEscrituraAvailable(){
@@ -296,12 +311,51 @@ class RevocacionController {
 		
 	}
 	
+	public static class RevocacionShowViewModel{
+		RevocacionTO revocacion
+		List<SustentanteTO> sustentantes
+		DocumentoRepositorioTO docRespaldo
+		NotarioTO notario
+		String nombreGrupoFinanciero
+		String nombreInstitucion
+		
+		public static RevocacionShowViewModel getInstance(Long idRevocacion,
+			RevocacionService revocacionService, ApoderadoService apoderadoService,
+			CertificacionService certificacionService,
+			DocumentoRepositorioService documentoRepositorioService,
+			NotarioService notarioService, EntidadFinancieraService entidadFinancieraService){
+			
+			//Declaración de variables
+			RevocacionShowViewModel rsvm = new RevocacionShowViewModel()
+			List<ApoderadoTO> apoderados
+			List<CertificacionTO> certs
+			
+			rsvm.revocacion = revocacionService.get(idRevocacion)
+			
+			rsvm.sustentantes = new ArrayList<SustentanteTO>()
+			apoderados = apoderadoService.getAll( new HashSet<Long>(rsvm.revocacion.revocados.collect{ it.idApoderado }) ).apoderados
+			certs = certificacionService.getAll( apoderados.collect{ it.idCertificacion } )
+			certs.each { x ->
+				rsvm.sustentantes.add(x.sustentante)
+			}
+			
+			rsvm.docRespaldo = documentoRepositorioService.obtenerMetadatosDocumento(rsvm.revocacion.uuidDocumentoRespaldo)
+			rsvm.notario = notarioService.get(rsvm.revocacion.idNotario)
+			rsvm.nombreGrupoFinanciero = entidadFinancieraService.obtenerGrupoFinanciero(rsvm.revocacion.idGrupoFinanciero).nombre
+			if(rsvm.revocacion.idInstitucion != null || rsvm.revocacion.idInstitucion != -1 ){
+				rsvm.nombreInstitucion = entidadFinancieraService.obtenerInstitucion(rsvm.revocacion.idInstitucion).nombre
+			}
+			
+			return rsvm
+		}
+	}
+	
 	public static class RevocacionFormViewModel{
 		RevocacionTO revocacion
 		Collection<EntidadFederativaTO> entidadesFed
 		Collection<GrupoFinancieroTO> gfins
 		
-		public static getInstanceForCreate(SepomexService sepomexService, EntidadFinancieraService entidadFinancieraService){
+		public static RevocacionFormViewModel getInstanceForCreate(SepomexService sepomexService, EntidadFinancieraService entidadFinancieraService){
 			RevocacionFormViewModel vm = new RevocacionFormViewModel()
 			vm.fillEntidades(sepomexService)
 			vm.fillEntidadesFinancieras(entidadFinancieraService)

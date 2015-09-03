@@ -37,50 +37,139 @@
 		<legend>Oficio de revocación</legend>
 	
 		<fieldset>
-			<legend><span class="toggle-0 toggle glyphicon glyphicon-plus-sign handCursor" data-toggle-idx="0"></span>&nbsp;<i>Datos de oficio</i></legend>
+			<legend><span class="toggle-0 toggle glyphicon glyphicon-plus-sign handCursor" data-toggle-idx="0"></span>&nbsp;<i>Datos de entidad financiera</i></legend>
 			<div class="section-0">
 				<div class="form-group">
-					<label class="col-md-2 col-sm-3 control-label">
-						<g:message code="oficioCnbv.numeroOficio.label" default="Numero de Oficio" />
+					<label class="col-md-3 col-sm-4 control-label">
+						<g:message code="revocacion.grupoFinanciero.label" default="Grupo financiero" />
 					</label>
 					
-					<div class="col-md-9 col-sm-9">						
-						<p class="form-control-static"></p>
+					<div class="col-md-8 col-sm-8">						
+						<p class="form-control-static">${vm?.nombreGrupoFinanciero}</p>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-md-3 col-sm-4 control-label">
+						<g:message code="revocacion.institucion.label" default="Institucion" />
+					</label>
+					
+					<div class="col-md-8 col-sm-8">						
+						<p class="form-control-static">${vm?.nombreInstitucion}</p>
+					</div>
+				</div>
+			</div>
+		</fieldset>
+		
+		<fieldset>
+			<legend><span class="toggle-1 toggle glyphicon glyphicon-plus-sign handCursor" data-toggle-idx="1"></span>&nbsp;<i>Datos del representante legal</i></legend>
+			<div class="section-1">
+				<div class="form-group">
+					<label class="col-md-3 col-sm-4 control-label">
+						<g:message code="revocacion.representanteLegalNombre.label" default="Nombre" />
+					</label>
+					
+					<div class="col-md-8 col-sm-8">						
+						<p class="form-control-static">${vm?.revocacion?.representanteLegalNombre}</p>
 					</div>
 				</div>
 				
 				<div class="form-group">
-					<label class="col-md-2 col-sm-3 control-label">
-						<g:message code="oficioCnbv.claveDga.label" default="Clave DGA" />
+					<label class="col-md-3 col-sm-4 control-label">
+						<g:message code="revocacion.representanteLegalApellido1.label" default="Primer apellido" />
 					</label>
-					<div class="col-md-9 col-sm-9">
-						<p class="form-control-static"></p>
+					
+					<div class="col-md-8 col-sm-8">						
+						<p class="form-control-static">${vm?.revocacion?.representanteLegalApellido1}</p>
+					</div>
+				</div>
+				
+				<div class="form-group">
+					<label class="col-md-3 col-sm-4 control-label">
+						<g:message code="revocacion.representanteLegalApellido2.label" default="Segundo Apellido" />
+					</label>
+					
+					<div class="col-md-8 col-sm-8">						
+						<p class="form-control-static">${vm?.revocacion?.representanteLegalApellido2}</p>
+					</div>
+				</div>
+			</div>
+		</fieldset>
+		
+		<fieldset>
+			<legend><span class="toggle-2 toggle glyphicon glyphicon-plus-sign handCursor" data-toggle-idx="2"></span>&nbsp;<i>Notario</i></legend>
+			<div class="section-2">
+				<div class="form-group">
+					<label class="col-md-3 col-sm-4 control-label">
+						<g:message code="revocacion.notario.numero.label" default="Número de notaria" />
+					</label>
+					<div class="col-md-8 col-sm-8">						
+						<p class="form-control-static">${vm?.notario?.numeroNotaria}</p>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-md-3 col-sm-4 control-label">
+						<g:message code="revocacion.notario.entidadFederativa.label" default="Entidad Federativa" />
+					</label>
+					<div class="col-md-8 col-sm-8">						
+						<p class="form-control-static">${vm?.notario?.idEntidadFederativa}</p>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-md-3 col-sm-4 control-label">
+						<g:message code="revocacion.notario.nombre.label" default="Nombre completo" />
+					</label>
+					<div class="col-md-8 col-sm-8">						
+						<p class="form-control-static">${vm?.notario?.nombreCompleto}</p>
+					</div>
+				</div>
+			</div>
+		</fieldset>
+		
+		<fieldset>
+			<legend><span class="toggle-3 toggle glyphicon glyphicon-plus-sign handCursor" data-toggle-idx="3"></span>&nbsp;<i>Datos de oficio</i></legend>
+			<div class="section-3">
+				<div class="form-group">
+					<label class="col-md-3 col-sm-4 control-label">
+						<g:message code="revocacion.numeroEscritura.label" default="Numero de Escritura" />
+					</label>
+					
+					<div class="col-md-8 col-sm-8">						
+						<p class="form-control-static">${vm?.revocacion?.numeroEscritura}</p>
+					</div>
+				</div>
+				
+				<div class="form-group">
+					<label class="col-md-3 col-sm-4 control-label">
+						<g:message code="revocacion.fechaRevocacion.label" default="Fecha de revocación" />
+					</label>
+					<div class="col-md-8 col-sm-8">
+						<p class="form-control-static">${vm?.revocacion?.fechaRevocacion}</p>
 					</div>
 				</div>
 			</div>
 		</fieldset>
 		<fieldset>
-			<legend><span class="toggle-1 toggle glyphicon glyphicon-plus-sign handCursor" data-toggle-idx="1"></span>&nbsp;<i>Revocados</i></legend>
-			<div id="revocados72cbc179" class="section-1">
+			<legend><span class="toggle-4 toggle glyphicon glyphicon-plus-sign handCursor" data-toggle-idx="4"></span>&nbsp;<i>Revocados</i></legend>
+			<div id="revocados72cbc179" class="section-4">
 			</div>
 		</fieldset>
 		
 		<fieldset>
-			<legend><span class="toggle-2 toggle glyphicon glyphicon-plus-sign handCursor" data-toggle-idx="2"></span>&nbsp;<i>Documentos de respaldo</i></legend>
+			<legend><span class="toggle-5 toggle glyphicon glyphicon-plus-sign handCursor" data-toggle-idx="5"></span>&nbsp;<i>Documentos de respaldo</i></legend>
 		
-			<div class="section-2">
+			<div class="section-5">
 				<div class="list-group-item">
 					<div class="div-nombreArchivo row">
 						<label class="col-sm-2 control-label">Nombre</label>
-						<div class="col-sm-9"><p></p></div>
+						<div class="col-sm-9"><p>${vm?.docRespaldo?.nombre}</p></div>
 					</div>
 					<div class="div-tipoDocumento row">
 						<label class="col-sm-2 control-label">UUID</label>
-						<div class="col-sm-9"><p></p></div>
+						<div class="col-sm-9"><p>${vm?.docRespaldo?.uuid}</p></div>
 					</div>
 					<div class="div-fecha row">
 						<label class="col-sm-2 control-label">Fecha</label>
-						<div class="col-sm-9"><p></p></div>
+						<div class="col-sm-9"><p>${vm?.docRespaldo?.fechaCreacion}</p></div>
 					</div>
 					
 					<div class="row">
@@ -88,7 +177,7 @@
 							&nbsp;
 						</div>
 						<div class="col-sm-2">
-							<button type="button" class="download btn btn-sm btn-block btn-default btn-primary" data-uuid='' data-url='<g:createLink action="download" controller="documento" />'>
+							<button type="button" class="download btn btn-sm btn-block btn-default btn-primary" data-uuid='${vm?.docRespaldo?.uuid}' data-url='<g:createLink action="download" controller="documento" />'>
 								<span class="glyphicon glyphicon-save" aria-hidden="true"></span> Descargar
 							</button>
 						</div>
@@ -111,10 +200,10 @@
 		new app.ResRevShwColView({
 			showUrl: showUrl,
 			collection: new app.ResRevShwCol([
-				{ idSustentante: 1, numeroMatricula:1, nombre:'XXXX1', primerApellido:'YYYY1',segundoApellido:'ZZZ9' },
-				{ idSustentante: 2, numeroMatricula:2, nombre:'XXXX2', primerApellido:'YYYY2',segundoApellido:'ZZZ2' },
-				{ idSustentante: 3, numeroMatricula:3, nombre:'XXXX3', primerApellido:'YYYY3',segundoApellido:'ZZZ6' },
-				{ idSustentante: 4, numeroMatricula:4, nombre:'XXXX4', primerApellido:'YYYY4',segundoApellido:'ZZZ1' }
+				{ idSustentante: 1, numeroMatricula:1, nombre:'Azucena', primerApellido:'García',segundoApellido:'Galicia' },
+				{ idSustentante: 2, numeroMatricula:2, nombre:'Yuridia', primerApellido:'Pérez',segundoApellido:'Fuentes' },
+				{ idSustentante: 3, numeroMatricula:3, nombre:'Gloria', primerApellido:'Rocha',segundoApellido:'Verduzco' },
+				{ idSustentante: 4, numeroMatricula:4, nombre:'María del Sol', primerApellido:'Reyes',segundoApellido:'Sanroman' }
 			])
 		});
 	</script>

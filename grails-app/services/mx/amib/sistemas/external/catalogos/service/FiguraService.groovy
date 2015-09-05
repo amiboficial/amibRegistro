@@ -3,6 +3,7 @@ package mx.amib.sistemas.external.catalogos.service
 import java.util.Collection
 import java.util.TreeMap
 import grails.plugins.rest.client.RestBuilder
+import org.codehaus.groovy.grails.web.json.JSONElement
 import org.codehaus.groovy.grails.web.json.JSONObject
 import grails.transaction.Transactional
 
@@ -32,9 +33,12 @@ class FiguraService {
 		
 		def rest = new RestBuilder()
 		def resp = rest.get(restUrl)
-		resp.json instanceof JSONObject
 		
 		if(resp.json != null){
+			
+			FiguraCatalog.getInstance().clearAll()
+			VarianteFiguraCatalog.getInstance().clearAll()
+			
 			resp.json.each{ objjson ->
 				def newobj = new FiguraTO()
 				newobj.id = objjson.'id'
@@ -61,7 +65,7 @@ class FiguraService {
 }
 
 /**
- * Clase singleton que gestiona catálogo de estados civiles
+ * Clase singleton que gestiona catálogo de figuras
  * en memoria
  *
  * @author Gabriel
@@ -93,8 +97,12 @@ class FiguraCatalog{
 		return _map.get(id)
 	}
 	
-	public Collection<FiguraTO> getAllElements(){
+	public List<FiguraTO> getAllElements(){
 		return _map.values().toList()
+	}
+	
+	public void clearAll(){
+		_map.clear()
 	}
 }
 
@@ -123,8 +131,12 @@ class VarianteFiguraCatalog{
 		return _map.get(id)
 	}
 	
-	public Collection<VarianteFiguraTO> getAllElements(){
-		return _map.values()
+	public List<VarianteFiguraTO> getAllElements(){
+		return _map.values().toList()
+	}
+	
+	public void clearAll(){
+		_map.clear()
 	}
 }
 

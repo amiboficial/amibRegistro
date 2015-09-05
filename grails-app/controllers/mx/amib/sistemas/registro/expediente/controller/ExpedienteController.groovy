@@ -229,13 +229,13 @@ class ExpedienteController {
 	}
 }
 
-class ShowViewModel{
+public class ShowViewModel{
 	SustentanteTO sustentanteInstance
 	SepomexTO sepomexData
 	String nombreCompleto
 }
 
-class FormViewModel{
+public class FormViewModel{
 	//Bindeables
 	SustentanteTO sustentanteInstance
 	
@@ -253,7 +253,7 @@ class FormViewModel{
 	String codigoPostal
 }
 
-class IndexViewModel{
+public class IndexViewModel{
 	
 	//No bindeables
 	Collection<VarianteFiguraTO> varianteFiguraList

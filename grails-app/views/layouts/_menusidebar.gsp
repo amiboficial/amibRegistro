@@ -22,10 +22,11 @@
             	<a href="<g:createLink controller="poder" action="index" />" class="list-group-item"><span class="glyphicon glyphicon-open"></span>&nbsp;Poderes</a>
                 <a href="<g:createLink controller="revocacion" action="index" />" class="list-group-item"><span class="glyphicon glyphicon-share-alt"></span>&nbsp;Revocaciones</a>
                 <a href="<g:createLink controller="oficioCnbv" action="index" />" class="list-group-item"><span class="glyphicon glyphicon-file"></span>&nbsp;Oficios CNBV</a>
-            	<a class="list-group-item colortitle"><strong>Gestión de catálogos</strong></a>
-            	<a href="<g:createLink controller="notario" action="index" />" class="list-group-item"><span class="glyphicon glyphicon-book"></span>&nbsp;Notarios</a>
+            	
                 
                 <!-- ESTO SE PUEDE USAR MAS ADELANTE PARA SOLICITUDES
+                <a class="list-group-item colortitle"><strong>Gestión de catálogos</strong></a>
+            	<a href="<g:createLink controller="notario" action="index" />" class="list-group-item"><span class="glyphicon glyphicon-book"></span>&nbsp;Notarios</a>
                 <a class="list-group-item colortitle">Servicios</a>
                 <a href="<g:createLink controller="poder" action="createAltaGpoFin" />" class="list-group-item"><span class="glyphicon glyphicon-open"></span>&nbsp;Alta de poder</a>
                 <a href="<g:createLink controller="revocacion" action="createSolGpoFin" />" class="list-group-item"><span class="glyphicon glyphicon-share-alt"></span>&nbsp;Solicitud de Revocación</a>

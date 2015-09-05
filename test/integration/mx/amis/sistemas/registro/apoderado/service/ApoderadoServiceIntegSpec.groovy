@@ -4,7 +4,7 @@ import grails.converters.JSON
 import mx.amib.sistemas.external.catalogos.service.NotarioTO
 import mx.amib.sistemas.external.oficios.poder.PoderTO
 import mx.amib.sistemas.external.oficios.revocacion.RevocacionTO
-import mx.amib.sistemas.registro.apoderado.service.ApoderadoV1Service
+
 import spock.lang.*
 
 /**

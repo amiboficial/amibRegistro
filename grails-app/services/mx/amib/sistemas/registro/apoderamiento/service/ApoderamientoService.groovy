@@ -12,8 +12,8 @@ import mx.amib.sistemas.external.oficios.oficioCnbv.OficioCnbvTO
 import mx.amib.sistemas.external.oficios.poder.ApoderadoResultTO
 import mx.amib.sistemas.external.oficios.poder.PoderTO
 import mx.amib.sistemas.external.oficios.revocacion.RevocacionTO
-import mx.amib.sistemas.registro.apoderado.service.ApoderadoTO
-import mx.amib.sistemas.registro.apoderado.service.RevocadoTO
+import mx.amib.sistemas.external.oficios.poder.ApoderadoTO
+import mx.amib.sistemas.external.oficios.revocacion.RevocadoTO
 
 // TODO: Implementar logging en este servicio dado que en estos métodos se hace 
 // llamada a múltiples servicios, si alguno falla, se rastrea inmediatamente el 

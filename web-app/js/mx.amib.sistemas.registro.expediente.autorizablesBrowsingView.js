@@ -41,7 +41,7 @@ app.AutBrwParamsVM = Backbone.Model.extend({
 		errorIdSustentanteBlank: false,
 		errorIdSustentanteNonNumeric: false,
 		
-		errorBusqAvNoHayAlMenosUnParamtetro: false,
+		errorBusqAvNoHayAlMenosUnParametro: false,
 		
 		processing: false
 	},
@@ -82,7 +82,7 @@ app.AutBrwParamsVM = Backbone.Model.extend({
 				valid = false;
 				this.set('errorNumeroMatriculaBlank',true);
 			}
-			else if( regExpIsNumeric.test(this.get('numeroMatricula')) ){
+			else if( !regExpIsNumeric.test(this.get('numeroMatricula')) ){
 				valid = false;
 				this.set('errorNumeroMatriculaNonNumeric',true);
 			}
@@ -92,7 +92,7 @@ app.AutBrwParamsVM = Backbone.Model.extend({
 				valid = false;
 				this.set('errorIdSustentanteBlank',true);
 			}
-			else if( regExpIsNumeric.test(this.get('idSustentante')) ){
+			else if( !regExpIsNumeric.test(this.get('idSustentante')) ){
 				valid = false;
 				this.set('errorIdSustentanteNonNumeric',true);
 			}
@@ -105,14 +105,17 @@ app.AutBrwParamsVM = Backbone.Model.extend({
 			
 			if(nombreBlank && primerApellidoBlank && segundoApellidoBlank && idFiguraNonSelected){
 				valid = false;
-				this.set('errorBusqAvNoHayAlMenosUnParamtetro',true);
+				this.set('errorBusqAvNoHayAlMenosUnParametro',true);
 			}
 		}
 		
 		if(!valid){
 			this.trigger('errorOnValidate');
 		}
-		this.trigger('validated',{});
+		else{
+			this.trigger('okValidate',{});
+		}
+		
 		
 		return valid;
 	},
@@ -155,7 +158,7 @@ app.AutBrwParamsVM = Backbone.Model.extend({
 			errorIdSustentanteBlank: false,
 			errorIdSustentanteNonNumeric: false,
 			
-			errorBusqAvNoHayAlMenosUnParamtetro: false
+			errorBusqAvNoHayAlMenosUnParametro: false
 		});
 		this.trigger('validationErrorsCleaned',{});
 	},
@@ -168,7 +171,9 @@ app.AutBrwParamsVM = Backbone.Model.extend({
 	},
 	
 	performSearch: function(){
-		alert('Le notificara a la "coleccion" que haga el respectivo trabajo de búsqueda');
+		if(this.validate()){
+			this.set('processing',true);
+		}
 	}
 });
 
@@ -190,6 +195,9 @@ app.AutBrwParamsView = Backbone.View.extend({
 		
 		this.listenTo( this.model , 'everythingCleared' , this.render );
 		this.listenTo( this.model , 'varianteFiguraChanged' , this.render );
+		this.listenTo( this.model , 'change:processing' , this.renderProcessing );
+		this.listenTo( this.model , 'errorOnValidate' , this.renderError );
+		this.listenTo( this.model , 'okValidate' , this.render );
 		
 		Backbone.View.prototype.initialize.call(this);
 	},
@@ -201,6 +209,57 @@ app.AutBrwParamsView = Backbone.View.extend({
 			this.$('.' + this._savedFocus).focus();
 			this._savedFocus = null;
 		}
+	},
+	
+	renderProcessing: function(){
+		//disables all inputs and shows processing message when proc. event is raised
+		var _this = this;
+		
+		if(this.model.get('processing',true)){
+			this.$('.alert-processing').show();
+			this.disableInput();
+			setTimeout(function(){ _this.model.set('processing',false); }, 1000);
+		}
+		else{
+			this.render();
+		}
+		
+	},
+	
+	renderError: function(){
+		//clean all errors first
+		this.render();
+
+		
+		if( this.model.get('errorNumeroMatriculaBlank') == true ){
+			this.$('.alert-errorNumeroMatriculaBlank').show();
+			this.$('.div-numeroMatricula').addClass('has-error');
+		}
+		if( this.model.get('errorNumeroMatriculaNonNumeric') == true ){
+			this.$('.alert-errorNumeroMatriculaNonNumeric').show();
+			this.$('.div-numeroMatricula').addClass('has-error');
+		}
+		
+		if( this.model.get('errorIdSustentanteBlank') == true ){
+			this.$('.alert-errorIdSustentanteBlank').show();
+			this.$('.div-idSustentante').addClass('has-error');
+		}
+		if( this.model.get('errorIdSustentanteNonNumeric') == true ){
+			this.$('.alert-errorIdSustentanteNonNumeric').show();
+			this.$('.div-idSustentante').addClass('has-error');
+		}
+		
+		if( this.model.get('errorBusqAvNoHayAlMenosUnParametro') == true ){
+			this.$('.alert-errorBusqAvNoHayAlMenosUnParametro').show();
+			this.$('.div-busqavparam').addClass('has-error');
+		}
+		
+	},
+	
+	disableInput: function(){
+		this.$('input').prop('disabled',true);
+		this.$('select').prop('disabled',true);
+		this.$('button').prop('disabled',true);
 	},
 	
 	events: {

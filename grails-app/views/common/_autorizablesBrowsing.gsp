@@ -4,6 +4,16 @@
 	<fieldset>
 		<legend>Parámetros de búsqueda</legend>
 		
+		<div class="alert-processing alert alert-info" style="display: none;"><img src="/amibRegistro/assets/spinner_alert_info.gif">&nbsp; Procesando datos, espere unos instantes...</div>
+		
+		<div class="alert-errorNumeroMatriculaBlank alert alert-danger" style="display: none;"><span class="glyphicon glyphicon-info-sign" ></span>&nbsp; Ingrese un <strong>Número de Matrícula</strong></div>
+		<div class="alert-errorNumeroMatriculaNonNumeric alert alert-danger"  style="display: none;"><span class="glyphicon glyphicon-info-sign"></span>&nbsp; Ingrese un valor numérico para <strong>Número de Matrícula</strong></div>
+		
+		<div class="alert-errorIdSustentanteBlank alert alert-danger" style="display: none;"><span class="glyphicon glyphicon-info-sign" ></span>&nbsp; Ingrese un <strong>Folio</strong></div>
+		<div class="alert-errorIdSustentanteNonNumeric alert alert-danger" style="display: none;"><span class="glyphicon glyphicon-info-sign" ></span>&nbsp; Ingrese un valor numérico para <strong>Folio</strong></div>
+		
+		<div class="alert-errorBusqAvNoHayAlMenosUnParametro alert alert-danger" style="display: none;"><span class="glyphicon glyphicon-info-sign" ></span>&nbsp; Debé ingresar al menos parametro para la búsqueda avanzada. (Nombre, Primer Apellido, Segundo Apellido, y/o detalles de la Figura)</div>
+		
 		<div class="form-group">
 			<label class="col-md-2 col-sm-3 control-label">
 				Criterio de búsqueda
@@ -40,7 +50,7 @@
 			</div>
 		</div>
 		
-		<div class="form-group">
+		<div class="div-numeroMatricula form-group">
 			<label class="col-md-2 col-sm-3 control-label">
 				Matrícula
 			</label>
@@ -53,7 +63,7 @@
 			</div>
 		</div>
 		
-		<div class="form-group">
+		<div class="div-idSustentante form-group">
 			<label class="col-md-2 col-sm-3 control-label">
 				Folio
 			</label>
@@ -66,7 +76,7 @@
 			</div>
 		</div>
 		
-		<div class="form-group">
+		<div class="div-busqavparam form-group">
 			<label class="col-md-2 col-sm-3 control-label">
 				Nombre
 			</label>
@@ -79,7 +89,7 @@
 			</div>
 		</div>
 		
-		<div class="form-group">
+		<div class="div-busqavparam form-group">
 			<label class="col-md-2 col-sm-3 control-label">
 				Primer apellido
 			</label>
@@ -92,7 +102,7 @@
 			</div>
 		</div>
 		
-		<div class="form-group">
+		<div class="div-busqavparam form-group">
 			<label class="col-md-2 col-sm-3 control-label">
 				Segundo apellido
 			</label>
@@ -105,7 +115,7 @@
 			</div>
 		</div>
 		
-		<div class="form-group">
+		<div class="div-busqavparam form-group">
 			<label class="col-md-2 col-sm-3 control-label">
 				Figura
 			</label>
@@ -128,7 +138,7 @@
 			</div>
 		</div>
 		
-		<div class="form-group">
+		<div class="div-busqavparam form-group">
 			<label class="col-md-2 col-sm-3 control-label">
 				Variante de figura
 			</label>
@@ -151,7 +161,7 @@
 			</div>
 		</div>
 		
-		<div class="form-group">
+		<div class="div- form-group">
 			<div class="col-md-3 col-sm-3">
 				&nbsp;
 			</div>

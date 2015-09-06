@@ -81,6 +81,17 @@ app.AutBrwResVMCol = Backbone.Collection.extend({
 		return this._warningNotFound;
 	},
 	
+	/* OBTENCION DE ELEMENTOS EN LA COLECCION ACTUAL */
+	getItemBy: function(fieldName, fieldExpectedValue){
+		var seleccionado = null;
+		this.each(function(item){
+			if( item.get(fieldName) == fieldExpectedValue ){
+				seleccionado = item;
+			}
+		},this);
+		return seleccionado;
+	},
+	
 	/* CONSULTAS AJAX */
 	_sendQuery: function(optionsToSend,urlToSend){
 		var _this = this;
@@ -180,7 +191,20 @@ app.AutBrwResVMCol = Backbone.Collection.extend({
 		var backPage = 0;
 		backPage = this.getCurrentPage() - 1;
 		return backPage;
+	},
+
+	/* MÉTODOS ADICIONALES */
+	expandResult: function(grailsId){
+		var item = this.getItemBy('grailsId',grailsId);
+		item.set('expanded',true);
+		this.trigger('itemChanged',item);
+	},
+	collapseResult: function(grailsId){
+		var item = this.getItemBy('grailsId',grailsId);
+		item.set('expanded',false);
+		this.trigger('itemChanged',item);
 	}
+	
 });
 
 app.AutBrwResColView = Backbone.View.extend({
@@ -201,6 +225,8 @@ app.AutBrwResColView = Backbone.View.extend({
 		
 		this.listenTo( this.collection, 'reset', this.renderList );
 		
+		this.listenTo( this.collection, 'itemChanged', this.renderList );
+		
 		Backbone.View.prototype.initialize.call(this);
 	},
 	
@@ -216,7 +242,8 @@ app.AutBrwResColView = Backbone.View.extend({
 	renderList: function(){
 		this.$('.list-items').html('');
 		this.collection.each( function(item){
-			this.$('.list-items').append( this.templateElement( item.toJSON() ) );
+			this.$('.list-items').append( this.templateItem( item.toJSON() ) );
+			//this.$('.list-items').append( this.templateItem()  );
 		},this );
 		this.renderPagination();
 	},
@@ -294,28 +321,37 @@ app.AutBrwResColView = Backbone.View.extend({
 	events: {
 		'click .sort': 'mandarOrdenar',
 		'click .performAccion': 'realizarAccion',
+		'click .showinfo': 'mostrarInfoAdicional',
+		'click .hideinfo': 'ocultarInfoAdicional'
 	},
 	
 	mandarOrdenar: function(ev){
 		var order = this.$(ev.currentTarget).data("order");
 		var sort = this.$(ev.currentTarget).data("sort");
 		
-		this.collection.sortAndOrderBy(order,sort);
+		alert('NOT YET IMPLEMENTED');
+		//this.collection.sortAndOrderBy(order,sort);
 	},
 	
 	realizarAccion: function(ev){
-		var grailsId = this.$(ev.currentTarget).data("grailsid");
-		var seleccionado = null;
-		
-		this.collection.each(function(item){
-			if( item.get('grailsid') == grailsId ){
-				seleccionado = item;
-			}
-		},this);
+		var grailsId = this.$(ev.currentTarget).data("grailsid"); //el atributo data-* solo permite minusculas
+		var seleccionado = this.collection.getItemBy('grailsId', grailsId);
 		
 		if(seleccionado != null){
 			window.location.assign(this.seleccionado.accionUrl)
 		}
-	}
+	},
+	
+	mostrarInfoAdicional: function(ev){
+		var grailsId = this.$(ev.currentTarget).data("grailsid"); //el atributo data-* solo permite minusculas
+		
+		this.collection.expandResult(grailsId);
+	},
+	
+	ocultarInfoAdicional: function(ev){
+		var grailsId = this.$(ev.currentTarget).data("grailsid"); //el atributo data-* solo permite minusculas
+		
+		this.collection.collapseResult(grailsId);
+	},
 	
 });

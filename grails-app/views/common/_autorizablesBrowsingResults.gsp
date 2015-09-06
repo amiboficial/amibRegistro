@@ -14,12 +14,12 @@
 					<tr>
 						<th>
 						</th>
-						<th>
+						<th style="width:81px">
 						Folio
 							<button type="button" class="sort btn btn-default btn-xxs" data-sort="idSustentante" data-order="asc"><span class="glyphicon glyphicon-chevron-up"></span></button>
 							<button type="button" class="sort btn btn-default btn-xxs" data-sort="idSustentante" data-order="desc"><span class="glyphicon glyphicon-chevron-down"></span></button>
 						</th>
-						<th>
+						<th style="width:107px">
 						Matricula
 							<button type="button" class="sort btn btn-default btn-xxs" data-sort="numeroMatricula" data-order="asc"><span class="glyphicon glyphicon-chevron-up"></span></button>
 							<button type="button" class="sort btn btn-default btn-xxs" data-sort="numeroMatricula" data-order="desc"><span class="glyphicon glyphicon-chevron-down"></span></button>
@@ -57,13 +57,17 @@
 <script type="text/template" id="templateAutBrwResultItemView">
 	<tr>
 		<td>
-			[+]
+			{{ if(!expanded){ }}
+				<button type="button" class="showinfo btn btn-default btn-xxs" data-grailsid="{{=grailsId}}"><span class="glyphicon glyphicon-plus"></span></button>
+			{{ } else{ }}
+				<button type="button" class="hideinfo btn btn-default btn-xxs" data-grailsid="{{=grailsId}}"><span class="glyphicon glyphicon-minus"></span></button>
+			{{ } }}
 		</td>
 		<td>
-			[Folio]
+			0123456789
 		</td>
 		<td>
-			[Matricula]
+			0123456789
 		</td>
 		<td>
 			[nombre]
@@ -78,6 +82,7 @@
 			[accion]
 		</td>
 	</tr>
+	{{ if(expanded){ }}
 	<tr>
 		<td colspan="8" >
 			<div>
@@ -85,4 +90,5 @@
 			</div>
 		</td>
 	</tr>
+	{{ } }}
 </script>

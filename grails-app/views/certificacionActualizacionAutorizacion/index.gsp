@@ -32,8 +32,8 @@
 		<div id="divAutBrwRes"></div>
 	</form>
 
-	<g:render template="../common/autorizablesBrowsing"/>
-	<g:javascript src="mx.amib.sistemas.registro.expediente.autorizablesBrowsingView.js" />
+	<g:render template="../common/autorizablesBrowsingParams"/>
+	<g:javascript src="mx.amib.sistemas.registro.expediente.autorizablesBrowsingParamsView.js" />
 	<script type="text/javascript">
 		var autBrwParamsVM = new app.AutBrwParamsVM();
 		var figuras = null;
@@ -55,5 +55,10 @@
 		new app.AutBrwParamsView({model:autBrwParamsVM});
 	</script>
 
+	<g:render template="../common/autorizablesBrowsingResults"/>
+	<g:javascript src="mx.amib.sistemas.registro.expediente.autorizablesBrowsingResultsView.js" />
+	<script type="text/javascript">
+		new app.AutBrwResColView({collection:new app.AutBrwResVMCol()});
+	</script>
 </body>
 </html>

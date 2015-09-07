@@ -10,6 +10,11 @@ app.CRIT_FOLIO = 1;
 app.CRIT_BUSQAV = 2;
 app.CRIT_TODOS = 3;
 
+app.MAX = 10;
+app.OFFSET = 0;
+app.SORT = 'id';
+app.ORDER = 'desc';
+
 app.AutBrwParamsVM = Backbone.Model.extend({
 	//triggers disparados:
 	//varianteFiguraChanged
@@ -20,6 +25,8 @@ app.AutBrwParamsVM = Backbone.Model.extend({
 	//everythingCleared
 	//change:processing
 	defaults:{
+		collection: new Backbone.Collection(), //debe ser del tipo app.AutBrwResVMCol()
+		
 		modo: app.MODO_DICTAMEN_PREV,
 		criterio: app.CRIT_MATRICULA,
 		
@@ -51,6 +58,13 @@ app.AutBrwParamsVM = Backbone.Model.extend({
 		this.listenTo( this, 'change:criterio', this.clearAll );
 		
 		Backbone.Model.prototype.initialize.call(this);
+	},
+	setCollection: function(collection){
+		this.collection = collection;
+		this.listenTo( this.collection, 'processing', this.setProcessingFromCollection );
+	},
+	setProcessingFromCollection: function(){
+		this.set('processing',  this.collection.isProcessing() );
 	},
 	
 	cargarVariantesFigura: function(){
@@ -172,7 +186,39 @@ app.AutBrwParamsVM = Backbone.Model.extend({
 	
 	performSearch: function(){
 		if(this.validate()){
-			this.set('processing',true);
+			//this.set('processing',true);
+			var criterio = this.get('criterio');
+			if(criterio == app.CRIT_MATRICULA){
+				this.collection.findAllByNumeroMatricula({ 
+					max: app.MAX,
+					offset: app.OFFSET,
+					sort: app.SORT,
+					order: app.ORDER,
+					numeroMatricula: this.get('numeroMatricula') 
+				});
+			}
+			else if(criterio == app.CRIT_FOLIO){
+				this.collection.findAllByIdSustentante({
+					max: app.MAX,
+					offset: app.OFFSET,
+					sort: app.SORT,
+					order: app.ORDER,
+					idSustentante: this.get('idSustentante')
+				});
+			}
+			else if(criterio == app.CRIT_BUSQAV){
+				this.collection.findAllByNombresAndCertificacion({
+					max: app.MAX,
+					offset: app.OFFSET,
+					sort: app.SORT,
+					order: app.ORDER,
+					nombre: this.get('nombre') ,
+					primerApellido: this.get('primerApellido') ,
+					segundoApellido: this.get('segundoApellido') ,
+					idFigura: this.get('idFigura') ,
+					idVarianteFigura: this.get('idVarianteFigura') 
+				});
+			}
 		}
 	}
 });
@@ -218,7 +264,6 @@ app.AutBrwParamsView = Backbone.View.extend({
 		if(this.model.get('processing',true)){
 			this.$('.alert-processing').show();
 			this.disableInput();
-			setTimeout(function(){ _this.model.set('processing',false); }, 1000);
 		}
 		else{
 			this.render();

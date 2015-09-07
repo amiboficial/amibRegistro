@@ -13,17 +13,14 @@ class CertificacionActualizacionAutorizacionController {
 	}
 	
 	static class IndexViewModel{
+		int modoBusqueda = ModoBusqueda.ACTUALIZACION_AUTORIZACION
 		List<FiguraTO> figuras;
 		
 		private IndexViewModel(){}
 		
 		public static IndexViewModel getInstance(FiguraService figuraService){
 			IndexViewModel vm = new IndexViewModel()
-			
 			vm.figuras = figuraService.list()
-			
-			println (vm.figuras as JSON)
-			
 			return vm
 		}
 	}

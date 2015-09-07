@@ -5,11 +5,13 @@ import java.util.List;
 
 import mx.amib.sistemas.external.expediente.certificacion.service.CertificacionTO
 import mx.amib.sistemas.external.expediente.service.CertificacionService
-import mx.amib.sistemas.registro.autorizacionCnbv.controller.OficioCnbvController.ShowVM;
+import mx.amib.sistemas.registro.autorizacionCnbv.controller.OficioCnbvController.ShowVM
+import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 
 class CertificacionAutorizableController {
 
 	CertificacionService certificacionService
+	LinkGenerator grailsLinkGenerator
 	
 	//El id es el modo de búsqueda
 	def findAllByMatricula(int id){
@@ -45,7 +47,7 @@ class CertificacionAutorizableController {
 			
 			if(certServRes != null){
 				responseModel.put('status','OK')
-				responseModel.put('list', ResultVM.copyFromServicesResults(certServRes.getList()) )
+				responseModel.put('list', ResultVM.copyFromServicesResults(grailsLinkGenerator,certServRes.getList(),id) )
 				responseModel.put('count', certServRes.count)
 			}
 			else{
@@ -95,7 +97,7 @@ class CertificacionAutorizableController {
 			
 			if(certServRes != null){
 				responseModel.put('status','OK')
-				responseModel.put('list', ResultVM.copyFromServicesResults(certServRes.getList()) )
+				responseModel.put('list', ResultVM.copyFromServicesResults(grailsLinkGenerator,certServRes.getList(),id) )
 				responseModel.put('count', certServRes.count)
 			}
 			else{
@@ -162,7 +164,7 @@ class CertificacionAutorizableController {
 			
 			if(certServRes != null){
 				responseModel.put('status','OK')
-				responseModel.put('list', ResultVM.copyFromServicesResults(certServRes.getList()) )
+				responseModel.put('list', ResultVM.copyFromServicesResults(grailsLinkGenerator,certServRes.getList(),id) )
 				responseModel.put('count', certServRes.count)
 			}
 			else{
@@ -290,26 +292,50 @@ class CertificacionAutorizableController {
 		
 		boolean expanded = false
 		
-		public static List<ResultVM> copyFromServicesResults(List<CertificacionTO> certList){
+		public static List<ResultVM> copyFromServicesResults(LinkGenerator glg, List<CertificacionTO> certList, int modoBusqueda){
 			List<ResultVM> listRes = new ArrayList<ResultVM>()
 			certList.each { x ->
-				ResultVM vm = new ResultVM()
-				vm.grailsId = x.id
-				vm.idSustentante = x.sustentante.id
-				vm.numeroMatricula = x.sustentante.numeroMatricula
-				vm.nombre = x.sustentante.nombre
-				vm.primerApellido = x.sustentante.primerApellido
-				vm.segundoApellido = x.sustentante.segundoApellido
-				vm.nombreFigura = x.varianteFigura.nombreFigura
-				vm.nombreVarianteFigura = x.varianteFigura.nombre
-				vm.dsStatusCertificacion = x.statusCertificacion.descripcion
-				vm.dsStatusAutorizacion = x.statusAutorizacion.descripcion
-				vm.dsFechaRangoVigencia = x.fechaInicio.toString() + ' - ' + x.fechaFin.toString()
-				listRes.add(vm)
+				listRes.add(ResultVM.copyFromCertificacionTO(glg, x, modoBusqueda))
 			}
 			return listRes
 		}
 		
+		private static ResultVM copyFromCertificacionTO(LinkGenerator glg, CertificacionTO cert, int modoBusqueda){
+			ResultVM vm = new ResultVM()
+			vm.grailsId = cert.id
+			vm.idSustentante = cert.sustentante.id
+			vm.numeroMatricula = cert.sustentante.numeroMatricula
+			vm.nombre = cert.sustentante.nombre
+			vm.primerApellido = cert.sustentante.primerApellido
+			vm.segundoApellido = cert.sustentante.segundoApellido
+			vm.nombreFigura = cert.varianteFigura.nombreFigura
+			vm.nombreVarianteFigura = cert.varianteFigura.nombre
+			vm.dsStatusCertificacion = cert.statusCertificacion.descripcion
+			vm.dsStatusAutorizacion = cert.statusAutorizacion.descripcion
+			vm.dsFechaRangoVigencia = cert.fechaInicio.toString() + ' - ' + cert.fechaFin.toString()
+			
+			if(modoBusqueda == ModoBusqueda.DICTAMEN_PREVIO){
+				vm.iconoBotonAccion = 'asterisk'
+				vm.mensajeBotonAccion = 'Emitir dictamen'
+				vm.accionUrl = glg.link(controller: 'certificacionDictamenPrevio', action: 'create', id: cert.id)
+			}
+			else if(modoBusqueda == ModoBusqueda.ACTUALIZACION_AUTORIZACION){
+				vm.iconoBotonAccion = 'asterisk'
+				vm.mensajeBotonAccion = 'Actualizar'
+				vm.accionUrl = glg.link(controller: 'certificacionDictamenPrevio', action: 'create', id: cert.id)
+			}
+			else if(modoBusqueda == ModoBusqueda.REPOSICION_AUTORIZACION){
+				vm.iconoBotonAccion = 'asterisk'
+				vm.mensajeBotonAccion = 'Reponer'
+				vm.accionUrl = glg.link(controller: 'certificacionDictamenPrevio', action: 'create', id: cert.id)
+			}
+			else if(modoBusqueda == ModoBusqueda.CAMBIO_FIGURA){
+				vm.iconoBotonAccion = 'asterisk'
+				vm.mensajeBotonAccion = 'Cambiar figura'
+				vm.accionUrl = glg.link(controller: 'certificacionDictamenPrevio', action: 'create', id: cert.id)
+			}
+			return vm
+		}
 	}
 }
 

@@ -140,7 +140,7 @@ app.AutBrwResVMCol = Backbone.Collection.extend({
 		
 		this._sendQuery( options ,this.findAllByNumeroMatriculaUrl );
 	},
-	findAllByIdSustentante: function(){
+	findAllByIdSustentante: function(options){
 		var _this = this;
 		
 		this._count = 0;
@@ -154,7 +154,7 @@ app.AutBrwResVMCol = Backbone.Collection.extend({
 		
 		this._sendQuery( options ,this.findAllByIdSustentanteUrl );
 	},
-	findAllByNombresAndCertificacion: function(){
+	findAllByNombresAndCertificacion: function(options){
 		var _this = this;
 		
 		this._count = 0;

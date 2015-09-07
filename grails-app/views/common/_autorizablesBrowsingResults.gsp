@@ -64,29 +64,36 @@
 			{{ } }}
 		</td>
 		<td>
-			0123456789
+			{{=idSustentante}}
 		</td>
 		<td>
-			0123456789
+			{{=numeroMatricula}}
 		</td>
 		<td>
-			[nombre]
+			{{=nombre}}
 		</td>
 		<td>
-			[primerapellido]
+			{{=primerApellido}}
 		</td>
 		<td>
-			[segundapellido]
+			{{=segundoApellido}}
 		</td>
 		<td>
-			[accion]
+			<button type="button" class="performAction btn btn-default btn-xs" data-grailsid="{{=grailsId}}"><span class="glyphicon glyphicon-{{=iconoBotonAccion}}"></span> {{=mensajeBotonAccion}}</button>
 		</td>
 	</tr>
 	{{ if(expanded){ }}
 	<tr>
-		<td colspan="8" >
+		<td colspan="8">
 			<div>
-				[Atributos adicionales relacionados con la figura]
+				 <ul class="list-group">
+					<li class="list-group-item"><strong>Figura</strong></li>
+					<li class="list-group-item"><strong>Variante de Figura</strong></li>
+					<li class="list-group-item"><strong>Status de certificación</strong></li>
+					<li class="list-group-item"><strong>Status de autorización</strong></li>
+					<li class="list-group-item"><strong>Fecha de inicio desde primera autorziación</strong></li>
+					<li class="list-group-item"><strong>Fecha de vencimineto</strong></li>
+				</ul>
 			</div>
 		</td>
 	</tr>

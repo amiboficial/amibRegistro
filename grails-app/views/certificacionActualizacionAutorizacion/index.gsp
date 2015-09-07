@@ -59,8 +59,18 @@
 	<g:javascript src="mx.amib.sistemas.registro.expediente.autorizablesBrowsingResultsView.js" />
 	<script type="text/javascript">
 		var autBrwResVMCol = new app.AutBrwResVMCol([
-			{grailsId: 1, expanded: false},{grailsId: 2, expanded: true},{grailsId: 3, expanded: false},{grailsId: 4, expanded: true},{grailsId: 5, expanded: false}
-		]);
+			{grailsId: 1, expanded: false},{grailsId: 2, expanded: true}, {grailsId: 3, expanded: false}, {grailsId: 4, expanded: true}
+        ]);
+		/*
+		
+			new app.AutBrwResVM({grailsId: 1, expanded: false}),
+			new app.AutBrwResVM({grailsId: 2, expanded: true}),
+			new app.AutBrwResVM({grailsId: 3, expanded: false}),
+			new app.AutBrwResVM({grailsId: 4, expanded: true}),
+			new app.AutBrwResVM({grailsId: 5, expanded: false})
+		
+		*/
+		autBrwResVMCol.add( new app.AutBrwResVM() );
 		new app.AutBrwResColView({collection:autBrwResVMCol});
 	</script>
 </body>

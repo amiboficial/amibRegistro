@@ -1,7 +1,7 @@
 var app = app || {};
 
 app.AutBrwResVM = Backbone.Model.extend({
-	default: {
+	defaults: {
 		grailsId: -1,
 		idSustentante: -1,
 		numeroMatricula: -1,
@@ -15,8 +15,8 @@ app.AutBrwResVM = Backbone.Model.extend({
 		dsStatusAutorizacion: '',
 		dsFechaRangoVigencia: '',
 		
-		iconoBotonAccion: '',
-		mensajeBotonAccion: '',
+		iconoBotonAccion: 'asterisk',
+		mensajeBotonAccion: 'Ir a proceso',
 		accionUrl: '', //url a la que se dirigirá 
 		
 		expanded: false
@@ -320,7 +320,7 @@ app.AutBrwResColView = Backbone.View.extend({
 	
 	events: {
 		'click .sort': 'mandarOrdenar',
-		'click .performAccion': 'realizarAccion',
+		'click .performAction': 'realizarAccion',
 		'click .showinfo': 'mostrarInfoAdicional',
 		'click .hideinfo': 'ocultarInfoAdicional'
 	},
@@ -329,7 +329,7 @@ app.AutBrwResColView = Backbone.View.extend({
 		var order = this.$(ev.currentTarget).data("order");
 		var sort = this.$(ev.currentTarget).data("sort");
 		
-		alert('NOT YET IMPLEMENTED');
+		alert('NOT YET IMPLEMENTED - mandarOrdenar');
 		//this.collection.sortAndOrderBy(order,sort);
 	},
 	
@@ -338,7 +338,8 @@ app.AutBrwResColView = Backbone.View.extend({
 		var seleccionado = this.collection.getItemBy('grailsId', grailsId);
 		
 		if(seleccionado != null){
-			window.location.assign(this.seleccionado.accionUrl)
+			//window.location.assign(this.seleccionado.accionUrl)
+			alert('NOT YET IMPLEMENTED - realizarAccion');
 		}
 	},
 	

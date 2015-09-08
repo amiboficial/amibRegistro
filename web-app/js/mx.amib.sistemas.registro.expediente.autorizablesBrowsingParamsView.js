@@ -219,6 +219,14 @@ app.AutBrwParamsVM = Backbone.Model.extend({
 					idVarianteFigura: this.get('idVarianteFigura') 
 				});
 			}
+			else{
+				this.collection.getAll({
+					max: app.MAX,
+					offset: app.OFFSET,
+					sort: app.SORT,
+					order: app.ORDER
+				});
+			}
 		}
 	}
 });

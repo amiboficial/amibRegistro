@@ -54,6 +54,7 @@ app.AutBrwResVMCol = Backbone.Collection.extend({
 	findAllByNumeroMatriculaUrl: '',
 	findAllByIdSustentanteUrl: '',
 	findAllByNombresAndCertificacionUrl: '',
+	getAllUrl: '',
 	
 	/* NOTIFICACION DE ESTATUS DE PROCESAMIENTO Y ERROR */
 	_processing: false,
@@ -166,14 +167,34 @@ app.AutBrwResVMCol = Backbone.Collection.extend({
 		
 		this._query = 'findAllByNombresAndCertificacion';
 		this._lastAttributes = { 
+			nombre: options.nombre,
+			primerApellido: options.primerApellido,
+			segundoApellido: options.segundoApellido,
+			idFigura: options.idFigura,
+			idVarianteFigura: options.idVarianteFigura
+		}
+		
+		this._sendQuery( options ,this.findAllByNombresAndCertificacionUrl );
+	},
+	getAll: function(options){
+		var _this = this;
+		
+		this._count = 0;
+		this._max = options.max;
+		this._offset = options.offset;
+		this._sort = options.sort;
+		this._order = options.order;
+		
+		this._query = 'getAll';
+		this._lastAttributes = { 
 			nombre: '',
 			primerApellido: '',
 			segundoApellido: '',
 			idFigura: -1,
 			idVarianteFigura: -1
 		}
-		
-		this._sendQuery( options ,this.findAllByNombresAndCertificacionUrl );
+				
+		this._sendQuery( options ,this.getAllUrl );
 	},
 	
 	/* METODOS CON DETALLES DE PAGINACION */
@@ -321,6 +342,7 @@ app.AutBrwResColView = Backbone.View.extend({
 	
 	events: {
 		'click .sort': 'mandarOrdenar',
+		'click .page':'irPagina',
 		'click .performAction': 'realizarAccion',
 		'click .showinfo': 'mostrarInfoAdicional',
 		'click .hideinfo': 'ocultarInfoAdicional'
@@ -332,6 +354,12 @@ app.AutBrwResColView = Backbone.View.extend({
 		
 		alert('NOT YET IMPLEMENTED - mandarOrdenar');
 		//this.collection.sortAndOrderBy(order,sort);
+	},
+	
+	irPagina: function(ev){
+		var pagenum =  this.$(ev.currentTarget).data("page");
+		
+		alert('NOT YET IMPLEMENTED - ir a página - ' + pagenum);
 	},
 	
 	realizarAccion: function(ev){

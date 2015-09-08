@@ -62,6 +62,7 @@
         autBrwResVMCol.findAllByNumeroMatriculaUrl = '<g:createLink controller="certificacionAutorizable" action="findAllByMatricula" id="${vm?.modoBusqueda}"/>'
        	autBrwResVMCol.findAllByIdSustentanteUrl = '<g:createLink controller="certificacionAutorizable" action="findAllByIdSustentante" id="${vm?.modoBusqueda}"/>'
       	autBrwResVMCol.findAllByNombresAndCertificacionUrl = '<g:createLink controller="certificacionAutorizable" action="findAllByNombresAndCertificacion" id="${vm?.modoBusqueda}"/>'
+     	autBrwResVMCol.getAllUrl = '<g:createLink controller="certificacionAutorizable" action="getAll" id="${vm?.modoBusqueda}"/>'
 		new app.AutBrwResColView({collection:autBrwResVMCol});
 
       	autBrwParamsVM.setCollection(autBrwResVMCol);

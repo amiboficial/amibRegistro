@@ -14,6 +14,61 @@ class CertificacionAutorizableController {
 	LinkGenerator grailsLinkGenerator
 	
 	//El id es el modo de búsqueda
+	def getAll(int id){
+		//Parámetros de ordenamiento y paginación
+		int max, offset
+		String sort, order
+		//Referencias de objetos a utilizar
+		Map<String,Object> responseModel
+		def certServRes
+		
+		max = this.getMaxParam(params)
+		offset = this.getOffsetParam(params)
+		sort = this.getSortParam(params)
+		order = this.getOrderParam(params)
+		
+		responseModel = new HashMap<String,Object>()
+		try{
+			if(id == ModoBusqueda.DICTAMEN_PREVIO){
+				certServRes = certificacionService.findAllEnDictamenPrevio(max, offset, sort, order, '', '', '', -1, -1)
+			}
+			else if(id == ModoBusqueda.ACTUALIZACION_AUTORIZACION){
+				//aplican todos aquellos que estan autorizados con poderes, pasados 18 meses de su fecha de inicio
+				//esta condición se aplica en la búsqueda de expediente
+				certServRes = certificacionService.findAllEnDictamenPrevio(max, offset, sort, order, '', '', '', -1, -1)
+			}
+			else if(id == ModoBusqueda.REPOSICION_AUTORIZACION){
+				//aplican para todos aquellos cuya autorización en la última certificación se encuentra vencia
+				certServRes = certificacionService.findAllEnDictamenPrevio(max, offset, sort, order, '', '', '', -1, -1)
+			}
+			else if(id == ModoBusqueda.CAMBIO_FIGURA){
+				//aplican todos aquellos que estan autorizados con poderes, pasados 18 meses de su fecha de inicio
+				//esta condición se aplica en la búsqueda de expediente
+				certServRes = certificacionService.findAllEnDictamenPrevio(max, offset, sort, order, '', '', '', -1, -1)
+			}
+			else{
+				certServRes = null
+			}
+			
+			if(certServRes != null){
+				responseModel.put('status','OK')
+				responseModel.put('list', ResultVM.copyFromServicesResults(grailsLinkGenerator,certServRes.getList(),id) )
+				responseModel.put('count', certServRes.count)
+			}
+			else{
+				responseModel.put('status','ERROR')
+				responseModel.put('errorMessage','ID_MODO_BUSQUEDA_NOT_SPECIFIED')
+			}
+		}
+		catch(Exception e){
+			responseModel.put('status','ERROR')
+			responseModel.put('errorMessage',e.message)
+		}
+		
+		render (responseModel as JSON)
+	}
+	
+	//El id es el modo de búsqueda
 	def findAllByMatricula(int id){
 		int numeroMatricula
 		//Referencias de objetos a utilizar
@@ -25,21 +80,21 @@ class CertificacionAutorizableController {
 		responseModel = new HashMap<String,Object>()
 		try{
 			if(id == ModoBusqueda.DICTAMEN_PREVIO){
-				certServRes = certificacionService.findAllEnDictamenPrevioByMatricula(numeroMatricula)
+				certServRes = certificacionService.findAllEnDictamenPrevio(max, offset, sort, order, nombre, primerApellido, segundoApellido, idFigura, idVarianteFigura)
 			}
 			else if(id == ModoBusqueda.ACTUALIZACION_AUTORIZACION){
 				//aplican todos aquellos que estan autorizados con poderes, pasados 18 meses de su fecha de inicio
 				//esta condición se aplica en la búsqueda de expediente
-				certServRes = certificacionService.findAllEnDictamenPrevioByMatricula(numeroMatricula)
+				certServRes = certificacionService.findAllEnDictamenPrevio(max, offset, sort, order, nombre, primerApellido, segundoApellido, idFigura, idVarianteFigura)
 			}
 			else if(id == ModoBusqueda.REPOSICION_AUTORIZACION){
 				//aplican para todos aquellos cuya autorización en la última certificación se encuentra vencia
-				certServRes = certificacionService.findAllEnDictamenPrevioByMatricula(numeroMatricula)
+				certServRes = certificacionService.findAllEnDictamenPrevio(max, offset, sort, order, nombre, primerApellido, segundoApellido, idFigura, idVarianteFigura)
 			}
 			else if(id == ModoBusqueda.CAMBIO_FIGURA){
 				//aplican todos aquellos que estan autorizados con poderes, pasados 18 meses de su fecha de inicio
 				//esta condición se aplica en la búsqueda de expediente
-				certServRes = certificacionService.findAllEnDictamenPrevioByMatricula(numeroMatricula)
+				certServRes = certificacionService.findAllEnDictamenPrevio(max, offset, sort, order, nombre, primerApellido, segundoApellido, idFigura, idVarianteFigura)
 			}
 			else{
 				certServRes = null

@@ -85,15 +85,45 @@
 	{{ if(expanded){ }}
 	<tr>
 		<td colspan="8">
-			<div>
-				 <ul class="list-group">
-					<li class="list-group-item"><strong>Figura</strong></li>
-					<li class="list-group-item"><strong>Variante de Figura</strong></li>
-					<li class="list-group-item"><strong>Status de certificación</strong></li>
-					<li class="list-group-item"><strong>Status de autorización</strong></li>
-					<li class="list-group-item"><strong>Fecha de inicio desde primera autorziación</strong></li>
-					<li class="list-group-item"><strong>Fecha de vencimineto</strong></li>
-				</ul>
+			<div class="form-group">
+				<label class="col-md-3 col-sm-3 control-label">
+					Figura
+				</label>
+				<div class="col-md-9 col-sm-9">
+					<p class="form-control-static">{{=nombreFigura}}</p>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-md-3 col-sm-3 control-label">
+					Variante de Figura
+				</label>
+				<div class="col-md-9 col-sm-9">
+					<p class="form-control-static">{{=nombreVarianteFigura}}</p>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-md-3 col-sm-3 control-label">
+					Status de certificación
+				</label>
+				<div class="col-md-9 col-sm-9">
+					<p class="form-control-static">{{=dsStatusCertificacion}}</p>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-md-3 col-sm-3 control-label">
+					Status de autorización
+				</label>
+				<div class="col-md-9 col-sm-9">
+					<p class="form-control-static">{{=dsStatusAutorizacion}}</p>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-md-3 col-sm-3 control-label">
+					Vigencia
+				</label>
+				<div class="col-md-9 col-sm-9">
+					<p class="form-control-static">{{=dsFechaRangoVigencia}}</p>
+				</div>
 			</div>
 		</td>
 	</tr>

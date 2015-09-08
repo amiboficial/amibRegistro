@@ -113,6 +113,7 @@ app.AutBrwResVMCol = Backbone.Collection.extend({
 					for(var i=0; i<listE.length; i++){
 						_this.add(new app.AutBrwResVM(listE[i])); //de esta forma el JSON se convierte al "model" de backbone
 					}
+					_this._count = countE;
 				}
 				else{
 					_this.setWarningNotFound(true);

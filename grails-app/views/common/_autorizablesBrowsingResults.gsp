@@ -12,7 +12,9 @@
 			<table class="table">
 				<thead>
 					<tr>
-						<th>
+						<th style="width:48px">
+							<button type="button" class="showallinfo btn btn-default btn-xxs"><span class="glyphicon glyphicon-plus"></span></button>
+							<button type="button" class="hideallinfo btn btn-default btn-xxs"><span class="glyphicon glyphicon-minus"></span></button>
 						</th>
 						<th style="width:81px">
 						Folio
@@ -36,8 +38,8 @@
 						</th>
 						<th>
 						2do Apellido
-							<button type="button" class="sort btn btn-default btn-xxs" data-sort="primerApellido" data-order="asc"><span class="glyphicon glyphicon-chevron-up"></span></button>
-							<button type="button" class="sort btn btn-default btn-xxs" data-sort="primerApellido" data-order="desc"><span class="glyphicon glyphicon-chevron-down"></span></button>
+							<button type="button" class="sort btn btn-default btn-xxs" data-sort="segundoApellido" data-order="asc"><span class="glyphicon glyphicon-chevron-up"></span></button>
+							<button type="button" class="sort btn btn-default btn-xxs" data-sort="segundoApellido" data-order="desc"><span class="glyphicon glyphicon-chevron-down"></span></button>
 						</th>
 						<th>...</th>
 					</tr>

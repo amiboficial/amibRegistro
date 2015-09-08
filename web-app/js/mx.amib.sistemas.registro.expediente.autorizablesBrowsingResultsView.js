@@ -196,6 +196,102 @@ app.AutBrwResVMCol = Backbone.Collection.extend({
 				
 		this._sendQuery( options ,this.getAllUrl );
 	},
+	sortAndOrderBy: function(order, sort){
+		var _this = this;
+		
+		this._order = order;
+		this._sort = sort;
+		
+		if(this._query == "findAllByNumeroMatricula"){
+			this.findAllByNumeroMatricula({
+				max: _this._max,
+				offset: 0,
+				sort: _this._sort,
+				order: _this._order,
+				
+				numeroMatricula: _this._lastAttributes.numeroMatricula
+			});
+		}
+		else if(this._query == "findAllByIdSustentante"){
+			this.findAllByNumeroMatricula({ 
+				max: _this._max,
+				offset: 0,
+				sort: _this._sort,
+				order: _this._order,
+				
+				idSustentante: _this._lastAttributes.idSustentante
+			});
+		}
+		else if(this._query == "findAllByNombresAndCertificacion"){
+			this.findAllByNombresAndCertificacion({ 
+				max: _this._max,
+				offset: 0,
+				sort: _this._sort,
+				order: _this._order,
+				
+				nombre: _this._lastAttributes.nombre,
+				primerApellido: _this._lastAttributes.primerApellido,
+				segundoApellido: _this._lastAttributes.segundoApellido,
+				idFigura: _this._lastAttributes.idFigura,
+				idVarianteFigura: _this._lastAttributes.idVarianteFigura
+			});
+		}
+		else if(this._query == "getAll"){
+			this.getAll({
+				max: _this._max,
+				offset: 0,
+				sort: _this._sort,
+				order: _this._order
+			});
+		}
+	},
+	goToPage: function(pagenum){
+		var _this = this;
+		this._offset = ((pagenum-1) * _this._max);
+		
+		if(this._query == "findAllByNumeroMatricula"){
+			this.findAllByNumeroMatricula({
+				max: _this._max,
+				offset: _this._offset,
+				sort: _this._sort,
+				order: _this._order,
+				
+				numeroMatricula: _this._lastAttributes.numeroMatricula
+			});
+		}
+		else if(this._query == "findAllByIdSustentante"){
+			this.findAllByNumeroMatricula({ 
+				max: _this._max,
+				offset: _this._offset,
+				sort: _this._sort,
+				order: _this._order,
+				
+				idSustentante: _this._lastAttributes.idSustentante
+			});
+		}
+		else if(this._query == "findAllByNombresAndCertificacion"){
+			this.findAllByNombresAndCertificacion({ 
+				max: _this._max,
+				offset: _this._offset,
+				sort: _this._sort,
+				order: _this._order,
+				
+				nombre: _this._lastAttributes.nombre,
+				primerApellido: _this._lastAttributes.primerApellido,
+				segundoApellido: _this._lastAttributes.segundoApellido,
+				idFigura: _this._lastAttributes.idFigura,
+				idVarianteFigura: _this._lastAttributes.idVarianteFigura
+			});
+		}
+		else if(this._query == "getAll"){
+			this.getAll({
+				max: _this._max,
+				offset: _this._offset,
+				sort: _this._sort,
+				order: _this._order
+			});
+		}
+	},
 	
 	/* METODOS CON DETALLES DE PAGINACION */
 	getCurrentPage: function(){
@@ -225,6 +321,18 @@ app.AutBrwResVMCol = Backbone.Collection.extend({
 		var item = this.getItemBy('grailsId',grailsId);
 		item.set('expanded',false);
 		this.trigger('itemChanged',item);
+	},
+	expandAllResults: function(){
+		this.each( function(item){
+			item.set('expanded',true)
+		},this );
+		this.trigger('itemChanged',{});
+	},
+	collapseAllResults: function(){
+		this.each( function(item){
+			item.set('expanded',false)
+		},this );
+		this.trigger('itemChanged',{});
 	}
 	
 });
@@ -345,21 +453,22 @@ app.AutBrwResColView = Backbone.View.extend({
 		'click .page':'irPagina',
 		'click .performAction': 'realizarAccion',
 		'click .showinfo': 'mostrarInfoAdicional',
-		'click .hideinfo': 'ocultarInfoAdicional'
+		'click .hideinfo': 'ocultarInfoAdicional',
+		'click .showallinfo': 'mostrarInfoAdicionalTodos',
+		'click .hideallinfo': 'ocultarInfoAdicionalTodos',
 	},
 	
 	mandarOrdenar: function(ev){
 		var order = this.$(ev.currentTarget).data("order");
 		var sort = this.$(ev.currentTarget).data("sort");
 		
-		alert('NOT YET IMPLEMENTED - mandarOrdenar');
-		//this.collection.sortAndOrderBy(order,sort);
+		this.collection.sortAndOrderBy(order,sort);
 	},
 	
 	irPagina: function(ev){
 		var pagenum =  this.$(ev.currentTarget).data("page");
 		
-		alert('NOT YET IMPLEMENTED - ir a página - ' + pagenum);
+		this.collection.goToPage(pagenum);
 	},
 	
 	realizarAccion: function(ev){
@@ -384,4 +493,11 @@ app.AutBrwResColView = Backbone.View.extend({
 		this.collection.collapseResult(grailsId);
 	},
 	
+	mostrarInfoAdicionalTodos: function(){
+		this.collection.expandAllResults();
+	},
+	
+	ocultarInfoAdicionalTodos: function(){
+		this.collection.collapseAllResults();
+	}
 });

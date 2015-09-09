@@ -48,7 +48,7 @@ class CertificacionEnvioAutorizacionController {
 		Map<String,Object> res = null
 		
 		try{
-			def certServRes = certificacionService.findAllByIdSustentante(id.value)
+			def certServRes = certificacionService.findAllEnAutorizacionByFolio(id.value)
 			def ctrlActResList = ResultElementViewModel.copyFromServicesResults(certServRes, loteEnvioAutorizacionService.getSet(session.id))
 			res = [ 'status' : 'OK' , 'object' : [ 'count': certServRes.count , 'list' : ctrlActResList ] ]
 		}

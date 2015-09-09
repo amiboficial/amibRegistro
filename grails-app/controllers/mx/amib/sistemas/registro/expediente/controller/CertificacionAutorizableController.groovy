@@ -1,6 +1,8 @@
 package mx.amib.sistemas.registro.expediente.controller
 
 import grails.converters.JSON
+import java.text.DateFormat
+import java.text.SimpleDateFormat
 import java.util.List;
 
 import mx.amib.sistemas.external.expediente.certificacion.service.CertificacionTO
@@ -35,16 +37,16 @@ class CertificacionAutorizableController {
 			else if(id == ModoBusqueda.ACTUALIZACION_AUTORIZACION){
 				//aplican todos aquellos que estan autorizados con poderes, pasados 18 meses de su fecha de inicio
 				//esta condición se aplica en la búsqueda de expediente
-				certServRes = certificacionService.findAllEnDictamenPrevio(max, offset, sort, order, '', '', '', -1, -1)
+				certServRes = certificacionService.findAllCandidatoActualizacionAutorizacion(max, offset, sort, order, '', '', '', -1, -1)
 			}
 			else if(id == ModoBusqueda.REPOSICION_AUTORIZACION){
 				//aplican para todos aquellos cuya autorización en la última certificación se encuentra vencia
-				certServRes = certificacionService.findAllEnDictamenPrevio(max, offset, sort, order, '', '', '', -1, -1)
+				certServRes = certificacionService.findAllCandidatoReposicionAutorizacion(max, offset, sort, order, '', '', '', -1, -1)
 			}
 			else if(id == ModoBusqueda.CAMBIO_FIGURA){
 				//aplican todos aquellos que estan autorizados con poderes, pasados 18 meses de su fecha de inicio
 				//esta condición se aplica en la búsqueda de expediente
-				certServRes = certificacionService.findAllEnDictamenPrevio(max, offset, sort, order, '', '', '', -1, -1)
+				certServRes = certificacionService.findAllCandidatoCambioFigura(max, offset, sort, order, '', '', '', -1, -1)
 			}
 			else{
 				certServRes = null
@@ -70,31 +72,33 @@ class CertificacionAutorizableController {
 	
 	//El id es el modo de búsqueda
 	def findAllByMatricula(int id){
+		String sort, order
 		int numeroMatricula
 		//Referencias de objetos a utilizar
 		Map<String,Object> responseModel
 		def certServRes
+		//List<CertificacionTO> certServResList
 		
 		numeroMatricula = this.getNumeroMatriculaParam(params)
 		
 		responseModel = new HashMap<String,Object>()
 		try{
 			if(id == ModoBusqueda.DICTAMEN_PREVIO){
-				certServRes = certificacionService.findAllEnDictamenPrevio(max, offset, sort, order, nombre, primerApellido, segundoApellido, idFigura, idVarianteFigura)
+				certServRes = certificacionService.findAllEnDictamenPrevioByMatricula(numeroMatricula)
 			}
 			else if(id == ModoBusqueda.ACTUALIZACION_AUTORIZACION){
 				//aplican todos aquellos que estan autorizados con poderes, pasados 18 meses de su fecha de inicio
 				//esta condición se aplica en la búsqueda de expediente
-				certServRes = certificacionService.findAllEnDictamenPrevio(max, offset, sort, order, nombre, primerApellido, segundoApellido, idFigura, idVarianteFigura)
+				certServRes = certificacionService.findAllCandidatoActualizacionAutorizacionByMatricula(numeroMatricula)
 			}
 			else if(id == ModoBusqueda.REPOSICION_AUTORIZACION){
 				//aplican para todos aquellos cuya autorización en la última certificación se encuentra vencia
-				certServRes = certificacionService.findAllEnDictamenPrevio(max, offset, sort, order, nombre, primerApellido, segundoApellido, idFigura, idVarianteFigura)
+				certServRes = certificacionService.findAllCandidatoReposicionAutorizacionByMatricula(numeroMatricula)
 			}
 			else if(id == ModoBusqueda.CAMBIO_FIGURA){
 				//aplican todos aquellos que estan autorizados con poderes, pasados 18 meses de su fecha de inicio
 				//esta condición se aplica en la búsqueda de expediente
-				certServRes = certificacionService.findAllEnDictamenPrevio(max, offset, sort, order, nombre, primerApellido, segundoApellido, idFigura, idVarianteFigura)
+				certServRes = certificacionService.findAllCandidatoCambioFiguraByMatricula(numeroMatricula)
 			}
 			else{
 				certServRes = null
@@ -120,12 +124,13 @@ class CertificacionAutorizableController {
 	
 	//El id es el modo de búsqueda
 	def findAllByIdSustentante(int id){
+		String sort, order
 		int idSustentante
 		//Referencias de objetos a utilizar
 		Map<String,Object> responseModel
 		def certServRes
 		
-		idSustentante = this.getNumeroMatriculaParam(params)
+		idSustentante = this.getIdSustentanteParam(params)
 		
 		responseModel = new HashMap<String,Object>()
 		try{
@@ -135,16 +140,16 @@ class CertificacionAutorizableController {
 			else if(id == ModoBusqueda.ACTUALIZACION_AUTORIZACION){
 				//aplican todos aquellos que estan autorizados con poderes, pasados 18 meses de su fecha de inicio
 				//esta condición se aplica en la búsqueda de expediente
-				certServRes = certificacionService.findAllEnDictamenPrevioByFolio(idSustentante)
+				certServRes = certificacionService.findAllCandidatoActualizacionAutorizacionByFolio(idSustentante)
 			}
 			else if(id == ModoBusqueda.REPOSICION_AUTORIZACION){
 				//aplican para todos aquellos cuya autorización en la última certificación se encuentra vencia
-				certServRes = certificacionService.findAllEnDictamenPrevioByFolio(idSustentante)
+				certServRes = certificacionService.findAllCandidatoReposicionAutorizacionByFolio(idSustentante)
 			}
 			else if(id == ModoBusqueda.CAMBIO_FIGURA){
 				//aplican todos aquellos que estan autorizados con poderes, pasados 18 meses de su fecha de inicio
 				//esta condición se aplica en la búsqueda de expediente
-				certServRes = certificacionService.findAllEnDictamenPrevioByFolio(idSustentante)
+				certServRes = certificacionService.findAllCandidatoCambioFiguraByFolio(idSustentante)
 			}
 			else{
 				certServRes = null
@@ -202,16 +207,16 @@ class CertificacionAutorizableController {
 			else if(id == ModoBusqueda.ACTUALIZACION_AUTORIZACION){
 				//aplican todos aquellos que estan autorizados con poderes, pasados 18 meses de su fecha de inicio
 				//esta condición se aplica en la búsqueda de expediente
-				certServRes = certificacionService.findAllEnDictamenPrevio(max, offset, sort, order, nombre, primerApellido, segundoApellido, idFigura, idVarianteFigura)
+				certServRes = certificacionService.findAllCandidatoActualizacionAutorizacion(max, offset, sort, order, nombre, primerApellido, segundoApellido, idFigura, idVarianteFigura)
 			}
 			else if(id == ModoBusqueda.REPOSICION_AUTORIZACION){
 				//aplican para todos aquellos cuya autorización en la última certificación se encuentra vencia
-				certServRes = certificacionService.findAllEnDictamenPrevio(max, offset, sort, order, nombre, primerApellido, segundoApellido, idFigura, idVarianteFigura)
+				certServRes = certificacionService.findAllCandidatoReposicionAutorizacion(max, offset, sort, order, nombre, primerApellido, segundoApellido, idFigura, idVarianteFigura)
 			}
 			else if(id == ModoBusqueda.CAMBIO_FIGURA){
 				//aplican todos aquellos que estan autorizados con poderes, pasados 18 meses de su fecha de inicio
 				//esta condición se aplica en la búsqueda de expediente
-				certServRes = certificacionService.findAllEnDictamenPrevio(max, offset, sort, order, nombre, primerApellido, segundoApellido, idFigura, idVarianteFigura)
+				certServRes = certificacionService.findAllCandidatoCambioFigura(max, offset, sort, order, nombre, primerApellido, segundoApellido, idFigura, idVarianteFigura)
 			}
 			else{
 				certServRes = null
@@ -328,6 +333,9 @@ class CertificacionAutorizableController {
 	}
 	
 	public static class ResultVM{
+		
+		private static DateFormat df = new SimpleDateFormat('dd/MM/YYY')
+		
 		long grailsId = -1
 		long idSustentante = -1
 		int numeroMatricula = -1
@@ -367,25 +375,25 @@ class CertificacionAutorizableController {
 			vm.nombreVarianteFigura = cert.varianteFigura.nombre
 			vm.dsStatusCertificacion = cert.statusCertificacion.descripcion
 			vm.dsStatusAutorizacion = cert.statusAutorizacion.descripcion
-			vm.dsFechaRangoVigencia = cert.fechaInicio.toString() + ' - ' + cert.fechaFin.toString()
+			vm.dsFechaRangoVigencia = df.format(cert.fechaInicio) + ' - ' + df.format(cert.fechaFin)
 			
 			if(modoBusqueda == ModoBusqueda.DICTAMEN_PREVIO){
-				vm.iconoBotonAccion = 'asterisk'
+				vm.iconoBotonAccion = 'edit'
 				vm.mensajeBotonAccion = 'Emitir dictamen'
 				vm.accionUrl = glg.link(controller: 'certificacionDictamenPrevio', action: 'create', id: cert.id)
 			}
 			else if(modoBusqueda == ModoBusqueda.ACTUALIZACION_AUTORIZACION){
-				vm.iconoBotonAccion = 'asterisk'
+				vm.iconoBotonAccion = 'refresh'
 				vm.mensajeBotonAccion = 'Actualizar'
-				vm.accionUrl = glg.link(controller: 'certificacionDictamenPrevio', action: 'create', id: cert.id)
+				vm.accionUrl = glg.link(controller: 'CertificacionActualizacionAutorizacion', action: 'create', id: cert.id)
 			}
 			else if(modoBusqueda == ModoBusqueda.REPOSICION_AUTORIZACION){
-				vm.iconoBotonAccion = 'asterisk'
+				vm.iconoBotonAccion = 'retweet'
 				vm.mensajeBotonAccion = 'Reponer'
 				vm.accionUrl = glg.link(controller: 'certificacionDictamenPrevio', action: 'create', id: cert.id)
 			}
 			else if(modoBusqueda == ModoBusqueda.CAMBIO_FIGURA){
-				vm.iconoBotonAccion = 'asterisk'
+				vm.iconoBotonAccion = 'transfer'
 				vm.mensajeBotonAccion = 'Cambiar figura'
 				vm.accionUrl = glg.link(controller: 'certificacionDictamenPrevio', action: 'create', id: cert.id)
 			}

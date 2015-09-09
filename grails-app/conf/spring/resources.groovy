@@ -61,6 +61,17 @@ beans = {
 		findAllEnAutorizacionUrl = application.config.mx.amib.sistemas.expediente.resthttpURL + application.config.mx.amib.sistemas.expediente.certificacion.Certificacion.findAllEnAutorizacion
 		findAllEnAutorizacionByMatriculaUrl = application.config.mx.amib.sistemas.expediente.resthttpURL + application.config.mx.amib.sistemas.expediente.certificacion.Certificacion.findAllEnAutorizacionByMatricula
 		findAllEnAutorizacionByFolioUrl = application.config.mx.amib.sistemas.expediente.resthttpURL + application.config.mx.amib.sistemas.expediente.certificacion.Certificacion.findAllEnAutorizacionByFolio
+		
+		findAllCandidatoActualizacionAutorizacionUrl = application.config.mx.amib.sistemas.expediente.resthttpURL + application.config.mx.amib.sistemas.expediente.certificacion.Certificacion.findAllCandidatoActualizacionAutorizacion
+		findAllCandidatoActualizacionAutorizacionByMatriculaUrl = application.config.mx.amib.sistemas.expediente.resthttpURL + application.config.mx.amib.sistemas.expediente.certificacion.Certificacion.findAllCandidatoActualizacionAutorizacionByMatricula
+		findAllCandidatoActualizacionAutorizacionByFolioUrl = application.config.mx.amib.sistemas.expediente.resthttpURL + application.config.mx.amib.sistemas.expediente.certificacion.Certificacion.findAllCandidatoActualizacionAutorizacionByFolio
+		findAllCandidatoReposicionAutorizacionUrl = application.config.mx.amib.sistemas.expediente.resthttpURL + application.config.mx.amib.sistemas.expediente.certificacion.Certificacion.findAllCandidatoReposicionAutorizacion
+		findAllCandidatoReposicionAutorizacionByMatriculaUrl = application.config.mx.amib.sistemas.expediente.resthttpURL + application.config.mx.amib.sistemas.expediente.certificacion.Certificacion.findAllCandidatoReposicionAutorizacionByMatricula
+		findAllCandidatoReposicionAutorizacionByFolioUrl = application.config.mx.amib.sistemas.expediente.resthttpURL + application.config.mx.amib.sistemas.expediente.certificacion.Certificacion.findAllCandidatoReposicionAutorizacionByFolio
+		findAllCandidatoCambioFiguraUrl = application.config.mx.amib.sistemas.expediente.resthttpURL + application.config.mx.amib.sistemas.expediente.certificacion.Certificacion.findAllCandidatoCambioFigura
+		findAllCandidatoCambioFiguraByMatriculaUrl = application.config.mx.amib.sistemas.expediente.resthttpURL + application.config.mx.amib.sistemas.expediente.certificacion.Certificacion.findAllCandidatoCambioFiguraByMatricula
+		findAllCandidatoCambioFiguraByFolioUrl = application.config.mx.amib.sistemas.expediente.resthttpURL + application.config.mx.amib.sistemas.expediente.certificacion.Certificacion.findAllCandidatoCambioFiguraByFolio
+		
 		updateDatosParaAprobarDictamenUrl = application.config.mx.amib.sistemas.expediente.resthttpURL + application.config.mx.amib.sistemas.expediente.certificacion.Certificacion.updateDatosParaAprobarDictamen
 	}
 	poderService(mx.amib.sistemas.external.oficios.service.PoderService){

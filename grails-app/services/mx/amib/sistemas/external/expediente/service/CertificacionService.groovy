@@ -36,6 +36,17 @@ class CertificacionService {
 	String findAllEnAutorizacionUrl
 	String findAllEnAutorizacionByMatriculaUrl
 	String findAllEnAutorizacionByFolioUrl
+	
+	String findAllCandidatoActualizacionAutorizacionUrl
+	String findAllCandidatoActualizacionAutorizacionByMatriculaUrl
+	String findAllCandidatoActualizacionAutorizacionByFolioUrl
+	String findAllCandidatoReposicionAutorizacionUrl
+	String findAllCandidatoReposicionAutorizacionByMatriculaUrl
+	String findAllCandidatoReposicionAutorizacionByFolioUrl
+	String findAllCandidatoCambioFiguraUrl
+	String findAllCandidatoCambioFiguraByMatriculaUrl
+	String findAllCandidatoCambioFiguraByFolioUrl
+	
 	String updateDatosParaAprobarDictamenUrl
 	
 	CertificacionTO get(Long id){
@@ -84,50 +95,8 @@ class CertificacionService {
 	
 	CertificacionService.ResultSet findAllEnDictamenPrevio(Integer max, Integer offset, String sort, String order, 
 											String nom, String ap1, String ap2, 
-											Long idfig, Long idvarfig){
-		
-		CertificacionService.ResultSet rs = new CertificacionService.ResultSet()
-											
-		List<SustentanteTO> sustentantes = new ArrayList<SustentanteTO>()
-		List<CertificacionTO> certificaciones = new ArrayList<CertificacionTO>()
-		List<Long> ids = new ArrayList<Long>()
-		
-		def listCertificacionesJson = null
-		def listSustentantesJson = null
-		
-		def getUrl = this.findAllEnDictamenPrevioUrl + "?max=${max}&offset=${offset}&sort=${sort}&order=${order}&nom=${nom}&ap1=${ap1}&ap2=${ap2}&idfig=${idfig}&idvarfig=${idvarfig}"
-		
-		def rest = new RestBuilder()
-		def resp = rest.get( getUrl )
-		
-		if(resp.json instanceof JSONObject && !JSONObject.NULL.equals(resp.json)){
-			resp.json.'list'.each{ x ->
-				ids.add(x.id)
-			}
-			resp.json.'sustentantes'.each{ x ->
-				SustentanteTO s = null
-				s = SustentanteService.obtenerSustentanteFromJSON(x)
-				sustentantes.add(s)
-				s.certificaciones.each { y ->
-					ids.each{ z ->
-						if(z.value == y.id.value){
-							certificaciones.add(y)
-						}
-					}
-				}
-			}
-			rs.list = certificaciones
-			rs.sustentantes = sustentantes
-			rs.count = resp.json.'count'
-			rs.error = false
-			rs.errorDetails = ""
-		}
-		else{
-			rs.error = true
-			rs.errorDetails = "NO_JSON_RESP"
-		}
-		
-		return rs
+											long idfig, long idvarfig){
+		return this._findAll(this.findAllEnDictamenPrevioUrl, max, offset, sort, order, nom, ap1, ap2, idfig, idvarfig)
 	}
 	
 	CertificacionService.ResultSet findAllEnDictamenPrevioByMatricula(int numeroMatricula){
@@ -322,7 +291,7 @@ class CertificacionService {
 		return rs
 	}
 	
-	CertificacionService.ResultSet findAllByIdSustentante(long idSustentante){
+	CertificacionService.ResultSet findAllEnAutorizacionByFolio(long idSustentante){
 		CertificacionService.ResultSet rs = new CertificacionService.ResultSet()
 		
 		List<SustentanteTO> sustentantes = new ArrayList<SustentanteTO>()
@@ -333,6 +302,128 @@ class CertificacionService {
 		def listSustentantesJson = null
 		
 		def getUrl = this.findAllEnAutorizacionByFolioUrl + idSustentante
+		
+		println "URL A SOLICITAR: " + getUrl
+		
+		def rest = new RestBuilder()
+		def resp = rest.get( getUrl )
+		
+		if(resp.json instanceof JSONObject && !JSONObject.NULL.equals(resp.json)){
+			
+			resp.json.'list'.each{ x ->
+				ids.add(x.id)
+			}
+			
+			resp.json.'sustentantes'.each{ x ->
+				SustentanteTO s = null
+				s = SustentanteService.obtenerSustentanteFromJSON(x)
+				sustentantes.add(s)
+				s.certificaciones.each { y ->
+					ids.each{ z ->
+						if(z.value == y.id.value){
+							certificaciones.add(y)
+						}
+					}
+				}
+			}
+			rs.list = certificaciones
+			rs.sustentantes = sustentantes
+			rs.count = resp.json.'count'
+			rs.error = false
+			rs.errorDetails = ""
+		}
+		else{
+			rs.error = true
+			rs.errorDetails = "NO_JSON_RESP"
+		}
+		
+		return rs
+	}
+		
+	CertificacionService.ResultSet findAllCandidatoActualizacionAutorizacion(int max, int offset, String sort, String order, String nom, String ap1, String ap2, long idfig, long idvarfig){
+		return this._findAll(this.findAllCandidatoActualizacionAutorizacionUrl, max, offset, sort, order, nom, ap1, ap2, idfig, idvarfig)
+	}
+	CertificacionService.ResultSet findAllCandidatoActualizacionAutorizacionByMatricula(int numeroMatricula){
+		return this._findAllUsingId(this.findAllCandidatoActualizacionAutorizacionByMatriculaUrl, numeroMatricula.toString())
+	}
+	CertificacionService.ResultSet findAllCandidatoActualizacionAutorizacionByFolio(long idSustentante){
+		return this._findAllUsingId(this.findAllCandidatoActualizacionAutorizacionByFolioUrl, idSustentante.toString())
+	}
+	CertificacionService.ResultSet findAllCandidatoReposicionAutorizacion(int max, int offset, String sort, String order, String nom, String ap1, String ap2, long idfig, long idvarfig){
+		return this._findAll(this.findAllCandidatoReposicionAutorizacionUrl, max, offset, sort, order, nom, ap1, ap2, idfig, idvarfig)
+	}
+	CertificacionService.ResultSet findAllCandidatoReposicionAutorizacionByMatricula(int numeroMatricula){
+		return this._findAllUsingId(this.findAllCandidatoReposicionAutorizacionByMatriculaUrl, numeroMatricula.toString())
+	}
+	CertificacionService.ResultSet findAllCandidatoReposicionAutorizacionByFolio(long idSustentante){
+		return this._findAllUsingId(this.findAllCandidatoReposicionAutorizacionByFolioUrl, idSustentante.toString())
+	}
+	CertificacionService.ResultSet findAllCandidatoCambioFigura(int max, int offset, String sort, String order, String nom, String ap1, String ap2, long idfig, long idvarfig){
+		return this._findAll(this.findAllCandidatoCambioFiguraUrl, max, offset, sort, order, nom, ap1, ap2, idfig, idvarfig)
+	}
+	CertificacionService.ResultSet findAllCandidatoCambioFiguraByMatricula(int numeroMatricula){
+		return this._findAllUsingId(this.findAllCandidatoCambioFiguraByMatriculaUrl, numeroMatricula.toString())
+	}
+	CertificacionService.ResultSet findAllCandidatoCambioFiguraByFolio(long idSustentante){
+		return this._findAllUsingId(this.findAllCandidatoCambioFiguraByFolioUrl, idSustentante.toString())
+	}
+		
+	private CertificacionService.ResultSet _findAll(String url, Integer max, Integer offset, String sort, String order,String nom, String ap1, String ap2, long idfig, long idvarfig){
+		CertificacionService.ResultSet rs = new CertificacionService.ResultSet()
+		
+		List<SustentanteTO> sustentantes = new ArrayList<SustentanteTO>()
+		List<CertificacionTO> certificaciones = new ArrayList<CertificacionTO>()
+		List<Long> ids = new ArrayList<Long>()
+		
+		def listCertificacionesJson = null
+		def listSustentantesJson = null
+		
+		def getUrl = url + "?max=${max}&offset=${offset}&sort=${sort}&order=${order}&nom=${nom}&ap1=${ap1}&ap2=${ap2}&idfig=${idfig}&idvarfig=${idvarfig}"
+		
+		def rest = new RestBuilder()
+		def resp = rest.get( getUrl )
+		
+		if(resp.json instanceof JSONObject && !JSONObject.NULL.equals(resp.json)){
+			resp.json.'list'.each{ x ->
+				ids.add(x.id)
+			}
+			resp.json.'sustentantes'.each{ x ->
+				SustentanteTO s = null
+				s = SustentanteService.obtenerSustentanteFromJSON(x)
+				sustentantes.add(s)
+				s.certificaciones.each { y ->
+					ids.each{ z ->
+						if(z.value == y.id.value){
+							certificaciones.add(y)
+						}
+					}
+				}
+			}
+			rs.list = certificaciones
+			rs.sustentantes = sustentantes
+			rs.count = resp.json.'count'
+			rs.error = false
+			rs.errorDetails = ""
+		}
+		else{
+			rs.error = true
+			rs.errorDetails = "NO_JSON_RESP"
+		}
+		
+		return rs
+	}
+	
+	private CertificacionService.ResultSet _findAllUsingId(String url, String id){
+		CertificacionService.ResultSet rs = new CertificacionService.ResultSet()
+		
+		List<SustentanteTO> sustentantes = new ArrayList<SustentanteTO>()
+		List<CertificacionTO> certificaciones = new ArrayList<CertificacionTO>()
+		List<Long> ids = new ArrayList<Long>()
+		
+		def listCertificacionesJson = null
+		def listSustentantesJson = null
+		
+		def getUrl = url + id
 		
 		println "URL A SOLICITAR: " + getUrl
 		

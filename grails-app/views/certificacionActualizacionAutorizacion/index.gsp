@@ -12,8 +12,9 @@
 	<ul class="breadcrumb">
 		<li><a href="#">Gestión de expedientes</a><span class="divider"></span></li>
 		<li><a href="#">Actualización de la autorización</a></li>
+		<li><a href="#">Búsqueda de candidatos para proceso</a></li>
 	</ul>
-	<h2><strong>Actualización de la autorización</strong></h2>
+	<h2><strong>Actualización de la autorización - Búsqueda de candidatos para proceso</strong></h2>
 
 	<g:if test="${flash.message}">
 		<div class="alert alert-info"><span class="glyphicon glyphicon-info-sign"></span> ${flash.message}</div>

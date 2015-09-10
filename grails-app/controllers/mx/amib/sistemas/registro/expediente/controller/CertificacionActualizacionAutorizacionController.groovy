@@ -24,5 +24,9 @@ class CertificacionActualizacionAutorizacionController {
 			return vm
 		}
 	}
+	
+	def create(long id){
+		render( view:'create' )
+	}
 }
 

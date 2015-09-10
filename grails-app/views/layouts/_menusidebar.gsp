@@ -12,7 +12,7 @@
             <div class="list-group" >
             	<a class="list-group-item colortitle"><strong>Gestión de expediente</strong></a>
             	<a href="<g:createLink controller="expedienteRegistrable" action="index" />" class="list-group-item"><span class="glyphicon glyphicon-share-alt"></span>&nbsp;Solicitud de registro</a>
-            	<a href="<g:createLink controller="expedienteRegistrable" action="index" />" class="list-group-item"><span class="glyphicon glyphicon-refresh"></span>&nbsp;Actualización de la autorización</a>
+            	<a href="<g:createLink controller="certificacionActualizacionAutorizacion" action="index" />" class="list-group-item"><span class="glyphicon glyphicon-refresh"></span>&nbsp;Actualización de la autorización</a>
             	<a href="<g:createLink controller="expedienteRegistrable" action="index" />" class="list-group-item"><span class="glyphicon glyphicon-retweet"></span>&nbsp;Reposición de la autorización</a>
             	<a href="<g:createLink controller="expedienteRegistrable" action="index" />" class="list-group-item"><span class="glyphicon glyphicon-transfer"></span>&nbsp;Cambio de figura</a>
             	<a href="<g:createLink controller="certificacionDictamenPrevio" action="index" />" class="list-group-item"><span class="glyphicon glyphicon-edit"></span>&nbsp;Dictamen previo</a>

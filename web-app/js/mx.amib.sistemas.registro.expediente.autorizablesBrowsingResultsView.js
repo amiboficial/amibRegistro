@@ -475,9 +475,11 @@ app.AutBrwResColView = Backbone.View.extend({
 		var grailsId = this.$(ev.currentTarget).data("grailsid"); //el atributo data-* solo permite minusculas
 		var seleccionado = this.collection.getItemBy('grailsId', grailsId);
 		
+		console.dir(seleccionado);
+		
 		if(seleccionado != null){
-			//window.location.assign(this.seleccionado.accionUrl)
-			alert('NOT YET IMPLEMENTED - realizarAccion');
+			window.location.assign( seleccionado.get('accionUrl') )
+			//alert('NOT YET IMPLEMENTED - realizarAccion');
 		}
 	},
 	

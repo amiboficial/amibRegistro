@@ -84,6 +84,7 @@ environments {
         grails.logging.jul.usebridge = true
 		
 		mx.amib.sistemas.catalogos.resthttpURL = 'http://bimalatrop.no-ip.biz:8080/amibCatalogos-0.1/'
+		//mx.amib.sistemas.expediente.resthttpURL = 'http://bimalatrop.no-ip.biz:8084/amibExpediente/'
 		//mx.amib.sistemas.expediente.resthttpURL = 'http://localhost:8084/amibExpediente/'
 		mx.amib.sistemas.expediente.resthttpURL = 'http://bimalatrop.no-ip.biz:8080/amibExpediente-0.1/'
 		mx.amib.sistemas.oficios.resthttpURL = 'http://bimalatrop.no-ip.biz:8080/amibOficios/'
@@ -93,6 +94,7 @@ environments {
 		grails.logging.jul.usebridge = false
 		// TODO: grails.serverURL = "http://www.changeme.com"
 		mx.amib.sistemas.catalogos.resthttpURL = 'http://bimalatrop.no-ip.biz:8080/amibCatalogos-0.1/'
+		//mx.amib.sistemas.expediente.resthttpURL = 'http://bimalatrop.no-ip.biz:8084/amibExpediente/'
 		//mx.amib.sistemas.expediente.resthttpURL = 'http://localhost:8084/amibExpediente/'
 		mx.amib.sistemas.expediente.resthttpURL = 'http://bimalatrop.no-ip.biz:8080/amibExpediente-0.1/'
 		mx.amib.sistemas.oficios.resthttpURL = 'http://bimalatrop.no-ip.biz:8080/amibOficios/'

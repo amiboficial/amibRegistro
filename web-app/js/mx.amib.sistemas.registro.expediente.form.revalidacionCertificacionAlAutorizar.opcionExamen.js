@@ -1,12 +1,12 @@
 var app = app || {};
 
 app.ExamenVM = Backbone.Model.extend({
-	defaults:{
+	defaults: {
 		grailsId: -1, //id de reservación de exámen
 		numeroMatricula: -1,
 		fechaAplicacionExamen: '01/01/1900',
 		fechaAplicacionExamenUnixEpoch: -2208988800000, //unix epoch time del 01/01/1900
-		descripcionFigura: '',
+		descripcionFigura: 'XXXX',
 		
 		seleccionado: false
 	}
@@ -51,7 +51,7 @@ app.OpcionExamenVM = Backbone.Model.extend({
 app.OpcionExamenView = Backbone.View.extend({
 	model: null,
 	template: _.template( $('#opcionExamenViewTemplate').html() ),
-	el: '#prueba123'
+	el: '#prueba123',
 	
 	initialize: function(options){
 		this.model = new app.OpcionExamenVM();
@@ -67,12 +67,12 @@ app.OpcionExamenView = Backbone.View.extend({
 		this.listenTo( this.model.get('examenVMCollection'), 'examenSeleccionado', this.render );
 		
 		Backbone.View.prototype.initialize.call(this);
-	}
+	},
 	
 	render: function(){
-		this.$el.html( this.template() );
+		this.$el.html( this.template( this.model.toJSON() ) );
 		return this;
-	}
+	},
 	
 	events: {
 		'click .seleccionarExamen': 'seleccionarExamen'
@@ -80,7 +80,7 @@ app.OpcionExamenView = Backbone.View.extend({
 	
 	seleccionarExamen: function(ev){
 		var grailsId = this.$(ev.currentTarget).data("grailsid");
-		
+		//alert('EXAMEN SELECCIONADO -> ' + grailsId);
 		this.model.seleccionarExamen(grailsId);
 	}
 	

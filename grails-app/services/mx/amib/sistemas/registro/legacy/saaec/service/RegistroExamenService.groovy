@@ -113,6 +113,7 @@ class RegistroExamenService {
             dynFilters.add(" ER.IDE_CON_FIGURA = :idFigura ")
             namedParameters.put("idFigura",idFigura)
         }
+		
         if(dynFilters.size() > 0){
             dynFiltersStr.append(" AND ")
             int iteracion = 0, total = dynFilters.size()
@@ -124,6 +125,7 @@ class RegistroExamenService {
                     dynFiltersStr.append(it).append(" AND ")
             }
         }
+		
         //ER.IDE_EST_EXAMEN = 3 significa que ha Aprobado el exámen OR ER.IDE_EST_EXAMEN = 7 lo aprobó por experiencia
         baseSqlQuery.append("SELECT TOP ").append(MAX_RESULTS).append("""
                                     U.IDE_USUARIO,
@@ -182,6 +184,62 @@ class RegistroExamenService {
         return registros
     }
 
+	/**
+	 * Busca en la BD del SAEEC a un registro que haya aprobado su exámen, 
+	 * el cual le permitirá aplicar una actualización, reposición ó cambio de figura de autorización.
+	 */
+	def findAllRevalidableByNumeroMatricula(int numeroMatricula){
+		Sql sql = new Sql(dataSource_legacySaeec)
+		List<GroovyRowResult> saecRowRegs = null
+		List<RegistroExamenTO> registros = new ArrayList<RegistroExamenTO>()
+
+		//ER.IDE_EST_EXAMEN = 3 significa que ha Aprobado el exámen OR ER.IDE_EST_EXAMEN = 7 lo aprobó por experiencia
+		String baseSqlQuery = """SELECT
+                                    U.IDE_USUARIO,
+                                    CF.IDE_FIGURA,
+                                    day(EC.EXA_CAL_FEC_APLICACION) as EXA_CAL_FEC_APL_DAY,
+                                    month(EC.EXA_CAL_FEC_APLICACION) as EXA_CAL_FEC_APL_MONTH,
+                                    year(EC.EXA_CAL_FEC_APLICACION) as EXA_CAL_FEC_APL_YEAR,
+                                    F.FIG_DESCRIPCION,
+                                    USU_NOMBRE,
+                                    USU_APE_PATERNO,
+                                    USU_APE_MATERNO,
+                                    USU_SEXO,
+                                    USU_RFC,
+                                    USU_CURP,
+                                    USU_DOMICILIO1,
+                                    USU_DOMICILIO2,
+                                    USU_COD_POSTAL,
+                                    USU_CIUDAD,
+                                    IDE_ESTADO,
+                                    USU_TEL_CASA,
+                                    USU_TEL_OFICINA,
+                                    USU_EXTENSION,
+                                    USU_EMAIL,
+                                    IDE_EST_CIVIL,
+                                    IDE_NIV_ESTUDIO,
+                                    USU_NACIONALIDAD,
+                                    ER.EXA_RES_INS_TRABAJA,
+                                    USU_PUESTO
+                                FROM USUARIO U
+                                    JOIN EXAMEN_RESERVACION ER ON U.IDE_USUARIO = ER.IDE_USUARIO
+                                    JOIN EXAMEN_CALENDARIO EC ON ER.IDE_EXA_CALENDARIO = EC.IDE_EXA_CALENDARIO
+                                    JOIN CONFIGURACION_FIGURA CF ON ER.IDE_CON_FIGURA = CF.IDE_CON_FIGURA
+                                    JOIN FIGURA F ON CF.IDE_FIGURA = F.IDE_FIGURA
+                                WHERE  (ER.IDE_EST_EXAMEN = 3 OR ER.IDE_EST_EXAMEN = 7) AND U.IDE_USUARIO = ?
+                                ORDER BY EC.EXA_CAL_FEC_APLICACION"""
+		Object[] params = new Object[1]
+
+		params[0] = numeroMatricula
+		saecRowRegs = sql.rows(baseSqlQuery,params)
+		saecRowRegs.each {
+			RegistroExamenTO registro = this.groovyRowResultToRegistroExamenTO(it)
+			registros.add(registro)
+		}
+		
+		return registros
+	}
+	
     /***
      *
      * Obtiene el id correspondiente al nuevo catálogo de nacionalidades
@@ -230,6 +288,7 @@ class RegistroExamenService {
     private RegistroExamenTO groovyRowResultToRegistroExamenTO(GroovyRowResult grr){
         RegistroExamenTO re = new RegistroExamenTO()
 		int rfcYear = 0
+		Calendar calfechaAplicacion = Calendar.getInstance()
 		
         re.numeroMatricula = (Integer)grr.get("IDE_USUARIO")
         re.idFigura = (Long)grr.get("IDE_FIGURA")
@@ -253,11 +312,14 @@ class RegistroExamenService {
 				else{
 					re.fechaNacimientoYear = rfcYear + 2000
 				}
+				calfechaAplicacion.set(re.fechaNacimientoYear, re.fechaNacimientoMonth - 1, re.fechaNacimientoDay, 0, 0, 0)
+				re.fechaAplicacion = calfechaAplicacion.getTime()
 			}
 			catch(NumberFormatException nfe){
 				re.fechaNacimientoDay = -1
 				re.fechaNacimientoMonth = -1
 				re.fechaNacimientoYear = -1
+				re.fechaAplicacion = null
 			}
 		}
         re.curp = ((String)grr.get("USU_CURP"))

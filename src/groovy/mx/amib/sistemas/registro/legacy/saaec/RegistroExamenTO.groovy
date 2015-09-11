@@ -10,6 +10,7 @@ class RegistroExamenTO {
     Integer fechaAplicacionExamenDay
     Integer fechaAplicacionExamenMonth
     Integer fechaAplicacionExamenYear
+	Date fechaAplicacion
     String nombre
     String primerApellido
     String segundoApellido

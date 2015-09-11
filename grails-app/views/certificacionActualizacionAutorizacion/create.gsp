@@ -45,7 +45,11 @@
 		<div class="tab-content">
 			<br/>
 			<div role="tabpanel" class="tab-pane active" id="tabRevCert">
-				<div id="divRevCert"></div>
+				<div id="divRevCert">
+				
+				<div id="prueba123" ></div>
+				
+				</div>
 			</div>
 			<div role="tabpanel" class="tab-pane active" id="tabGen">
 				<div id="divGen"></div>
@@ -70,6 +74,7 @@
 					<div class="panel-heading">Checklist de validación de información</div>
 					<div class="panel-body">
 						<ul style="list-style-type:none">
+							<li><span id="spnCheckRevCert" class="glyphicon glyphicon-unchecked"></span> Datos de la revalidación de la certificación</li>
 							<li><span id="spnCheckGrales" class="glyphicon glyphicon-unchecked"></span> Datos generales</li>
 							<li><span id="spnCheckTels" class="glyphicon glyphicon-unchecked"></span> Datos de teléfonos</li>
 							<li><span id="spnCheckSepomex" class="glyphicon glyphicon-unchecked"></span> Datos de domicilio</li>
@@ -96,6 +101,20 @@
 		</div>
 	
 	</form>
+
+	<g:render template="../common/RevalidacionCertificacionAlAutorizar"/>
+	
+	<g:javascript src="mx.amib.sistemas.registro.expediente.form.revalidacionCertificacionAlAutorizar.opcionExamen.js" />
+	<script type="text/javascript">
+		var examenes = new Array();
+
+		examenes.push( new app.ExamenVM({grailsId:1,numeroMatricula:1}) );
+		examenes.push( new app.ExamenVM({grailsId:2,numeroMatricula:2}) );
+		examenes.push( new app.ExamenVM({grailsId:3,numeroMatricula:3}) );
+		
+		new app.OpcionExamenView({examenes:examenes});
+	</script>
+
 
 </body>
 </html>

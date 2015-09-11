@@ -177,13 +177,13 @@ navbar-default .navbar-nav > li > a:focus{
 }
 
 .form-horizontal .control-label{
-	padding-top: 4px;
+	padding-top: 4px; /* Mod. 10/09/2015 */
 }
 
 /* Mod. 17/12/2014 1.2 - Se agregan mas ajustes de tamaños */
 
 .form-control-static{
-	padding-top: 2px;
+	padding-top: 4px;
 }
 
 label{

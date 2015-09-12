@@ -86,7 +86,7 @@
 				Total de puntos obtenidos
 			</label>
 			<div class="col-md-9 col-sm-9">
-				<input type="text" class="puntaje field form-control" maxlength="4"/>
+				<input type="text" class="puntaje field form-control" maxlength="4" data-field="puntaje" value="{{=puntaje}}" />
 			</div>
 		</div>
 	</fieldset>

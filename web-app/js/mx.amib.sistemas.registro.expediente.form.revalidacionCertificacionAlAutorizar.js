@@ -24,6 +24,11 @@ app.RevCertAutVM = Backbone.Model.extend({
 		errorPuntajeBlank: false,
 		errorPuntajeNonNumeric: false
 	},
+	
+	initialize: function(){
+		this.listenTo( this,'change:idMetodoValidacion',this.cleanValidationErrors );
+	},
+	
 	validate: function(){
 		var valid = true;
 		var regExpIsNumeric = /^[0-9]{1,10}$/; 
@@ -134,9 +139,14 @@ app.RevCertAutView = Backbone.View.extend({
 		}
 	},
 	renderError: function(){
+		this.$('.alert-errorNoMetodoValidacion').hide();
 		this.$('.alert-errorPuntajeBlank').hide();
 		this.$('.alert-errorPuntajeNonNumeric').hide();
 		this.$('.div-totalpuntos').removeClass('has-error');
+		
+		if(this.model.get('errorNoMetodoValidacion') == true){
+			this.$('.alert-errorNoMetodoValidacion').show();
+		}
 		
 		if(this.model.get('errorPuntajeBlank') == true){
 			this.$('.alert-errorPuntajeBlank').show();

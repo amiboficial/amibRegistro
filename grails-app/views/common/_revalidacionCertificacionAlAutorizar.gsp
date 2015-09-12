@@ -1,32 +1,10 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 
 <script type="text/template" id="opcionExamenViewTemplate">
-
-	<fieldset>
-		<legend>Revalidación de cértificación</legend>
-		
-		<div class="form-group div-nombre">
-			<label class="col-md-2 col-sm-3 control-label">
-				Método de revalidación
-			</label>
-			<div class="col-md-9 col-sm-9">
-				<select class="idMetodoValidacion field form-control" >
-					<option id="-1">-Seleccione-</option>
-					<option id="1">Exámen</option>
-					<option id="2">Puntos</option>
-					<option id="3">Experiencia</option>
-				</select>
-			</div>
-			
-		</div>
-		
-	</fieldset>
-
 	<fieldset>
 		<legend>Lista de exámenes acreditados</legend>
 		
 		<div class="alert alert-info"><span class="glyphicon glyphicon-info-sign"></span> Seleccione el exámen sobre el cual aplicó la renovación de la certificación</div>
-		
 		<ul class="list-group">
 			{{ examenVMCollection.each(function(item){ }}
 				<a href="javascript:void(0);" 
@@ -65,11 +43,43 @@
 				</a>
 			{{ }, this); }}
 		</ul>
-		
 	</fieldset>
-	
+</script>
+
+<script type="text/template" id="revCertAutViewTemplate">
+
 	<fieldset>
+		<legend>Revalidación de cértificación</legend>
+		
+		<div class="alert-errorNoMetodoValidacion alert alert-danger" style="display: none;"><span class="glyphicon glyphicon-info-sign" ></span>&nbsp; Seleccione un <strong>Método de validación</strong></div>
+		
+		<div class="form-group div-idMetodoValidacion">
+			<label class="col-md-2 col-sm-3 control-label">
+				Método de revalidación
+			</label>
+			<div class="col-md-9 col-sm-9">
+				<select class="idMetodoValidacion field form-control" data-field="idMetodoValidacion">
+					{{ _.each(metodosValidacion,function(item){ }}
+						{{ if(item.id == idMetodoValidacion){ }}
+							<option value="{{=item.id}}" selected>{{=item.text}}</option>
+						{{ } else{ }}
+							<option value="{{=item.id}}">{{=item.text}}</option>
+						{{ } }}
+					{{ }, this); }}
+				</select>
+			</div>
+		</div>
+	</fieldset>
+
+	<div class="div-opcionExamenVM">
+	</div>
+	
+	<fieldset class="opcionPuntos">
 		<legend>Puntos</legend>
+		
+		<div class="alert-errorPuntajeBlank alert alert-danger" style="display: none;"><span class="glyphicon glyphicon-info-sign" ></span>&nbsp; Ingrese un número de puntaje</div>
+		<div class="alert-errorPuntajeNonNumeric alert alert-danger" style="display: none;"><span class="glyphicon glyphicon-info-sign" ></span>&nbsp; Ingrese un valor numérico de puntaje</div>
+		
 		
 		<div class="form-group div-totalpuntos">
 			<label class="col-md-2 col-sm-3 control-label">
@@ -78,9 +88,7 @@
 			<div class="col-md-9 col-sm-9">
 				<input type="text" class="puntaje field form-control" maxlength="4"/>
 			</div>
-			
 		</div>
-		
 	</fieldset>
 	
 	<div class="form-group">

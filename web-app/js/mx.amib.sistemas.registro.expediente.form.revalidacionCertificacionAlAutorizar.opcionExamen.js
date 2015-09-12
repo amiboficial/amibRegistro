@@ -45,25 +45,26 @@ app.OpcionExamenVM = Backbone.Model.extend({
 	},
 	getExamenSeleccionado: function(){
 		return this.get('examenVMCollection').getExamenSeleccionado();
+	},
+	validate: function(){
+		return true; //TODO: Validar que haya un validado
 	}
 });
 
 app.OpcionExamenView = Backbone.View.extend({
 	model: null,
 	template: _.template( $('#opcionExamenViewTemplate').html() ),
-	el: '#prueba123',
 	
 	initialize: function(options){
-		this.model = new app.OpcionExamenVM();
-		if( options.examenes != null ){
-			this.model.set('examenVMCollection', new app.ExamenVMCollection(options.examenes) );
+		
+		if( options.opcionExamenVM != null ){
+			this.model = options.opcionExamenVM;
 		}
 		else{
-			this.model.set('examenVMCollection', new app.ExamenVMCollection() );
+			this.model = new app.OpcionExamenVM();
 		}
 		
-		this.render();
-		
+		//this.render(); el render lo llama la vista padre
 		this.listenTo( this.model.get('examenVMCollection'), 'examenSeleccionado', this.render );
 		
 		Backbone.View.prototype.initialize.call(this);
@@ -71,11 +72,26 @@ app.OpcionExamenView = Backbone.View.extend({
 	
 	render: function(){
 		this.$el.html( this.template( this.model.toJSON() ) );
+				
 		return this;
 	},
-	
+	renderError: function(){
+		
+	},
 	events: {
-		'click .seleccionarExamen': 'seleccionarExamen'
+		'change .field': 'updateModel',
+		'click .seleccionarExamen': 'seleccionarExamen',
+	},
+	
+	
+	//MÉTODO PARA EL BINDEAO DE DATOS	
+	updateModel: function(ev){
+		ev.preventDefault();
+		
+		var fieldName = this.$(ev.currentTarget).data("field");
+		var fieldValue = this.$(ev.currentTarget).val().trim();
+		
+		this.model.set(fieldName,fieldValue,{silent:true});
 	},
 	
 	seleccionarExamen: function(ev){

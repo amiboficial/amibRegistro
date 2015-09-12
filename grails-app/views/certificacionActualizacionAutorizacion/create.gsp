@@ -46,9 +46,7 @@
 			<br/>
 			<div role="tabpanel" class="tab-pane active" id="tabRevCert">
 				<div id="divRevCert">
-				
-				<div id="prueba123" ></div>
-				
+				<!-- AQUI SE RENDEREA RevCertAutVM -->
 				</div>
 			</div>
 			<div role="tabpanel" class="tab-pane active" id="tabGen">
@@ -105,14 +103,17 @@
 	<g:render template="../common/RevalidacionCertificacionAlAutorizar"/>
 	
 	<g:javascript src="mx.amib.sistemas.registro.expediente.form.revalidacionCertificacionAlAutorizar.opcionExamen.js" />
+	<g:javascript src="mx.amib.sistemas.registro.expediente.form.revalidacionCertificacionAlAutorizar.js" />
 	<script type="text/javascript">
+		var revCertAutView = null;
 		var examenes = new Array();
 
 		examenes.push( new app.ExamenVM({grailsId:1,numeroMatricula:1}) );
 		examenes.push( new app.ExamenVM({grailsId:2,numeroMatricula:2}) );
 		examenes.push( new app.ExamenVM({grailsId:3,numeroMatricula:3}) );
-		
-		new app.OpcionExamenView({examenes:examenes});
+
+		revCertAutView = new app.RevCertAutView( { opcionExamenVM:new app.OpcionExamenVM(examenes) } );
+
 	</script>
 
 

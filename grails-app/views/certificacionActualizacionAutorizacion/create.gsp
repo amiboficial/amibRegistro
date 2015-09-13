@@ -121,6 +121,28 @@
 		var app = app || {};
 		
 		var generalesModel = new app.Generales();
+
+		generalesModel.set("grailsId",${viewModelInstance?.sustentanteInstance?.id}-0);
+		generalesModel.set("numeroMatricula",${viewModelInstance?.sustentanteInstance?.numeroMatricula}-0);
+		generalesModel.set("nombre","${raw(viewModelInstance?.sustentanteInstance?.nombre)}");
+		generalesModel.set("primerApellido","${raw(viewModelInstance?.sustentanteInstance?.primerApellido)}");
+		generalesModel.set("segundoApellido","${raw(viewModelInstance?.sustentanteInstance?.segundoApellido)}");
+		
+		generalesModel.set("fechaNacimientoDay", ${viewModelInstance?.sustentanteInstance?.fechaNacimiento[Calendar.DATE]});
+		generalesModel.set("fechaNacimientoMonth", ${viewModelInstance?.sustentanteInstance?.fechaNacimiento[Calendar.MONTH]+1});
+		generalesModel.set("fechaNacimientoYear", ${viewModelInstance?.sustentanteInstance?.fechaNacimiento[Calendar.YEAR]});
+		
+		generalesModel.set("genero","${viewModelInstance?.sustentanteInstance?.genero}");
+		generalesModel.set("rfc","${viewModelInstance?.sustentanteInstance?.rfc}");
+		generalesModel.set("curp","${viewModelInstance?.sustentanteInstance?.curp}");
+		generalesModel.set("correoElectronico","${viewModelInstance?.sustentanteInstance?.correoElectronico}");
+
+		generalesModel.set("estadoCivil",${viewModelInstance?.sustentanteInstance?.idEstadoCivil}-0);
+		generalesModel.set("nivelEstudios",${viewModelInstance?.sustentanteInstance?.idNivelEstudios}-0);
+		generalesModel.set("nacionalidad",${viewModelInstance?.sustentanteInstance?.idNacionalidad}-0);
+
+		generalesModel.set("calidadMigratoria","${viewModelInstance?.sustentanteInstance?.calidadMigratoria}");
+		generalesModel.set("profesion","${viewModelInstance?.sustentanteInstance?.profesion}");
 		
 		var generalesView = new app.GeneralesView(generalesModel);
 	</script>
@@ -148,7 +170,14 @@
 	<script>
 		var domicilioModel = new app.Domicilio()
 		var sepomexArray = new Array()
-
+		<g:if test="${viewModelInstance?.sustentanteInstance?.idSepomex != null}">
+			domicilioModel.set("codigoPostal","${viewModelInstance?.codigoPostal}");
+			domicilioModel.set("idSepomex",${viewModelInstance?.sustentanteInstance?.idSepomex});
+			domicilioModel.set("calle","${raw(viewModelInstance?.sustentanteInstance?.calle)}");
+			domicilioModel.set("numeroInterior","${viewModelInstance?.sustentanteInstance?.numeroInterior}");
+			domicilioModel.set("numeroExterior","${viewModelInstance?.sustentanteInstance?.numeroExterior}");
+			sepomexArray = ${raw(viewModelInstance?.sepomexJsonList)};
+		</g:if>
 		var sepomexView = new app.SepomexView(sepomexArray, domicilioModel, '<g:createLink controller="Sepomex" action="obtenerDatosSepomex"/>');
 	</script>
 
@@ -160,6 +189,38 @@
 
 		var puestosArray = new Array();
 		app.instituciones = new Array();
+		<g:each var="x" in="${viewModelInstance?.institucionesList}">
+			app.instituciones.push( (new app.Institucion(${x?.id},"${x?.nombre}")) );
+		</g:each>
+
+		puestosArray = [
+		    			<g:each status="i" var="x" in="${viewModelInstance?.sustentanteInstance?.puestos}">
+		    				{
+		    					grailsId: ${x?.id},
+		    					idInstitucion: ${x?.idInstitucion},
+		    					dsInstitucion: app.getInstitucionById(${x?.idInstitucion}).nombre,
+		    					fechaInicio_day: ${x?.fechaInicio[Calendar.DATE]},
+		    					fechaInicio_month: ${x?.fechaInicio[Calendar.MONTH]+1},
+		    					fechaInicio_year: ${x?.fechaInicio[Calendar.YEAR]},
+		    					<g:if test="${x.fechaFin != null}">
+		    						fechaFin_day: ${x.fechaFin[Calendar.DATE]},
+		    						fechaFin_month: ${x.fechaFin[Calendar.MONTH]+1},
+		    						fechaFin_year: ${x.fechaFin[Calendar.YEAR]},
+		    					</g:if>
+		    					nombrePuesto: "${x?.nombrePuesto}",
+		    					statusEntManifProtesta:  ${x?.statusEntManifProtesta},
+		    					obsEntManifProtesta: "${x?.obsEntManifProtesta?:''}",
+		    					statusEntCartaInter:  ${x?.statusEntCartaInter},
+		    					obsEntCartaInter: "${x?.obsEntCartaInter?:''}",
+
+		    					viewStatus: app.EXP_PUES_ST_VALIDATED,
+		    					viewMode: app.EXP_PUES_MODE_NONEDIT,
+		    				}
+		    				<g:if test="${i == viewModelInstance?.sustentanteInstance?.puestos?.size() - 1 }" >
+		    				,
+		    				</g:if>
+		    			</g:each>
+		    			]
 		
 		var puestosView = new app.PuestosView(puestosArray);
 	</script>
@@ -170,6 +231,30 @@
 		var app = app || {};
 
 		var cert = new app.CertificacionViewModel();
+
+		cert.set("grailsId",${viewModelInstance?.certificacionInstance?.id}-0);
+
+		cert.set("nombreFigura","${viewModelInstance?.certificacionInstance?.varianteFigura?.nombreFigura}");
+		cert.set("nombreVarianteFigura","${viewModelInstance?.certificacionInstance?.varianteFigura?.nombre}");
+		cert.set("tipoAutorizacionFigura","${viewModelInstance?.certificacionInstance?.varianteFigura?.tipoAutorizacionFigura}");
+
+		cert.set("fechaInicio_day",${viewModelInstance?.certificacionInstance?.fechaInicio[Calendar.DATE]});
+		cert.set("fechaInicio_month",${viewModelInstance?.certificacionInstance?.fechaInicio[Calendar.MONTH]+1});
+		cert.set("fechaInicio_year",${viewModelInstance?.certificacionInstance?.fechaInicio[Calendar.YEAR]});
+		cert.set("fechaFin_day",${viewModelInstance?.certificacionInstance?.fechaFin[Calendar.DATE]});
+		cert.set("fechaFin_month",${viewModelInstance?.certificacionInstance?.fechaFin[Calendar.MONTH]+1});
+		cert.set("fechaFin_year",${viewModelInstance?.certificacionInstance?.fechaFin[Calendar.YEAR]});
+
+		cert.set("fechaObtencion_day",${viewModelInstance?.certificacionInstance?.fechaObtencion[Calendar.DATE]});
+		cert.set("fechaObtencion_month",${viewModelInstance?.certificacionInstance?.fechaObtencion[Calendar.MONTH]+1});
+		cert.set("fechaObtencion_year",${viewModelInstance?.certificacionInstance?.fechaObtencion[Calendar.YEAR]});
+		
+		cert.set("statusEntHistorialInforme",${viewModelInstance?.certificacionInstance?.statusEntHistorialInforme}-0);
+		cert.set("obsEntHistorialInforme","${viewModelInstance?.certificacionInstance?.obsEntHistorialInforme}");
+		cert.set("statusEntCartaRec",${viewModelInstance?.certificacionInstance?.statusEntCartaRec}-0);
+		cert.set("obsEntCartaRec","${viewModelInstance?.certificacionInstance?.obsEntCartaRec}");
+		cert.set("statusConstBolVal",${viewModelInstance?.certificacionInstance?.statusConstBolVal}-0);
+		cert.set("obsConstBolVal","${viewModelInstance?.certificacionInstance?.obsConstBolVal}");
 		
 		var certView = new app.CertificacionView({model:cert});
 	</script>

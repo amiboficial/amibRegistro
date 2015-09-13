@@ -68,6 +68,7 @@ app.RevCertAutVM = Backbone.Model.extend({
 			errorPuntajeBlank: false,
 			errorPuntajeNonNumeric: false
 		});
+		this.get('opcionExamenVM').cleanValidationErrors();
 		this.trigger('validationErrorsCleaned',{});
 	}
 });
@@ -88,8 +89,10 @@ app.RevCertAutView = Backbone.View.extend({
 		}
 		
 		this.model.set('opcionExamenVM', new app.OpcionExamenVM() );
-		if(options.examenes != null){
-			this.model.get('opcionExamenVM').set('examenVMCollection', new app.ExamenVMCollection(options.examenes) )
+		if(options.examenVMCollection != null){
+			console.log('PASO AQUI !!!!');
+			console.dir(options.examenVMCollection.toJSON());
+			this.model.get('opcionExamenVM').set('examenVMCollection', options.examenVMCollection);
 		}
 		
 		//CALLBACKS DE CAMBIOS EN EL MODELO
@@ -98,6 +101,7 @@ app.RevCertAutView = Backbone.View.extend({
 		this.listenTo( this.model, 'errorOnValidate', this.renderError ); 
 		this.listenTo( this, 'stateChange', this.renderStateChange );
 		
+		this.listenTo( this, 'stateChange', this.propagateStateChange );
 		//LLAMADO AL RENDER
 		this.render();
 		
@@ -121,7 +125,7 @@ app.RevCertAutView = Backbone.View.extend({
 		var view = null;
 		
 		if( this.model.get('idMetodoValidacion') == app.RCA_MV_EXAMEN ){
-			view = new app.OpcionExamenView( { opcionExamenVM:this.model.get('opcionExamenVM') } );
+			view = new app.OpcionExamenView( { model:this.model.get('opcionExamenVM') } );
 			this.$('.div-opcionExamenVM').html( view.render().el );
 		}
 		else{
@@ -171,6 +175,15 @@ app.RevCertAutView = Backbone.View.extend({
 			this.$('select').prop('disabled',true);
 			this.$('.submit').prop('disabled',true);
 			this.$('.edit').prop('disabled',false);
+		}
+	},
+	
+	propagateStateChange: function(){
+		if(this.state == app.RCA_MV_READY){
+			this.model.get('opcionExamenVM').set('disabled',false);
+		}
+		else if(this.state == app.RCA_MV_VALIDATED){
+			this.model.get('opcionExamenVM').set('disabled',true);
 		}
 	},
 	

@@ -4,7 +4,9 @@
 	<fieldset>
 		<legend>Lista de exámenes acreditados</legend>
 		
+		<div class="alert-errorNoHaySeleccion alert alert-danger" style="display: none;"><span class="glyphicon glyphicon-info-sign" ></span>&nbsp; Debe seleccionar el <strong>exámen</strong> sobre el cual aplicó la revalidación</div>
 		<div class="alert alert-info"><span class="glyphicon glyphicon-info-sign"></span> Seleccione el exámen sobre el cual aplicó la renovación de la certificación</div>
+		
 		<ul class="list-group">
 			{{ examenVMCollection.each(function(item){ }}
 				<a href="javascript:void(0);" 

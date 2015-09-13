@@ -106,16 +106,36 @@
 	<g:javascript src="mx.amib.sistemas.registro.expediente.form.revalidacionCertificacionAlAutorizar.js" />
 	<script type="text/javascript">
 		var revCertAutView = null;
-		var examenes = new Array();
+		var examenVMCollection = new app.ExamenVMCollection();
 
-		examenes.push( new app.ExamenVM({grailsId:1,numeroMatricula:1}) );
-		examenes.push( new app.ExamenVM({grailsId:2,numeroMatricula:2}) );
-		examenes.push( new app.ExamenVM({grailsId:3,numeroMatricula:3}) );
+		examenVMCollection.add( new app.ExamenVM({grailsId:1,numeroMatricula:1}) );
+		examenVMCollection.add( new app.ExamenVM({grailsId:2,numeroMatricula:2}) );
+		examenVMCollection.add( new app.ExamenVM({grailsId:3,numeroMatricula:3}) );
 
-		revCertAutView = new app.RevCertAutView( { opcionExamenVM:new app.OpcionExamenVM(examenes) } );
+		revCertAutView = new app.RevCertAutView( { examenVMCollection:examenVMCollection } );
 
 	</script>
 
+	<!-- INICIA: COMPONENTE CHECKsLIST -->
+	<g:javascript src="mx.amib.sistemas.registro.expediente.form.revalidacionCertificacionAlAutorizar.checklist.js" />
+	<script>
+
+		var app = app || {};
+
+		var checkSubmitView = new app.CheckSubmitView();
+		/*checkSubmitView.setViewInstance(app.CHK_GRALES,generalesView);
+		checkSubmitView.setViewInstance(app.CHK_TELS,telefonosView);
+		checkSubmitView.setViewInstance(app.CHK_SEPOMEX,sepomexView);
+		checkSubmitView.setViewInstance(app.CHK_CERT,certView);
+		checkSubmitView.setViewInstance(app.CHK_PUES,puestosView);*/
+		checkSubmitView.setViewInstance(app.CHK_REVALCERT,revCertAutView);
+		
+		$(window).bind("pageshow", function(){
+			$('#spnHdnPostData').html("");
+		});
+
+	</script>	
+	<!-- FIN: COMPONENTE CHECKLIST -->
 
 </body>
 </html>

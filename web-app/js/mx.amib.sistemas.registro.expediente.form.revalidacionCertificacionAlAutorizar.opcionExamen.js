@@ -8,7 +8,9 @@ app.ExamenVM = Backbone.Model.extend({
 		fechaAplicacionExamenUnixEpoch: -2208988800000, //unix epoch time del 01/01/1900
 		descripcionFigura: 'XXXX',
 		
-		seleccionado: false
+		seleccionado: false,
+		
+		disabled: false
 	}
 });
 
@@ -39,15 +41,36 @@ app.ExamenVMCollection = Backbone.Collection.extend({
 app.OpcionExamenVM = Backbone.Model.extend({
 	defaults:{
 		examenVMCollection : new app.ExamenVMCollection(),
+		
+		errorNoHaySeleccion: false
 	},
 	seleccionarExamen: function(graisId){
+		this.cleanValidationErrors();
 		this.get('examenVMCollection').seleccionarExamen(graisId);
 	},
 	getExamenSeleccionado: function(){
 		return this.get('examenVMCollection').getExamenSeleccionado();
 	},
 	validate: function(){
-		return true; //TODO: Validar que haya un validado
+		var valid = true;
+		var coleccion = this.get('examenVMCollection');
+		var seleccionado = null;
+		
+		this.set('errorNoHaySeleccion', false);
+		
+		seleccionado = coleccion.getExamenSeleccionado();
+		if(seleccionado == null){
+			valid = false;
+			this.set('errorNoHaySeleccion', true);
+			this.trigger('errorOnValidate');
+		}
+		
+		return valid; //TODO: Validar que haya un validado
+	},
+	cleanValidationErrors: function(){
+		this.set({
+			errorNoHaySeleccion: false
+		});
 	}
 });
 
@@ -57,26 +80,32 @@ app.OpcionExamenView = Backbone.View.extend({
 	
 	initialize: function(options){
 		
-		if( options.opcionExamenVM != null ){
-			this.model = options.opcionExamenVM;
+		if( options.model != null ){
+			console.log("PASO AQUI options.model != null  ");
+			this.model = options.model;
 		}
 		else{
 			this.model = new app.OpcionExamenVM();
 		}
 		
 		//this.render(); el render lo llama la vista padre
-		this.listenTo( this.model.get('examenVMCollection'), 'examenSeleccionado', this.render );
+		this.listenTo( this.model.get('examenVMCollection') , 'examenSeleccionado', this.render );
+		this.listenTo( this.model , 'errorOnValidate', this.renderError );
 		
 		Backbone.View.prototype.initialize.call(this);
 	},
 	
 	render: function(){
 		this.$el.html( this.template( this.model.toJSON() ) );
-				
+		this.renderError();
 		return this;
 	},
 	renderError: function(){
+		this.$('.alert-errorNoHaySeleccion').hide();
 		
+		if( this.model.get('errorNoHaySeleccion') == true ){
+			this.$('.alert-errorNoHaySeleccion').show();
+		}
 	},
 	events: {
 		'change .field': 'updateModel',
@@ -95,9 +124,11 @@ app.OpcionExamenView = Backbone.View.extend({
 	},
 	
 	seleccionarExamen: function(ev){
-		var grailsId = this.$(ev.currentTarget).data("grailsid");
-		//alert('EXAMEN SELECCIONADO -> ' + grailsId);
-		this.model.seleccionarExamen(grailsId);
+		var deshabilidado = this.model.get('disabled');
+		if(!deshabilidado){
+			var grailsId = this.$(ev.currentTarget).data("grailsid");
+			this.model.seleccionarExamen(grailsId);
+		}
 	}
 	
 });

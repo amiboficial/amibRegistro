@@ -4,6 +4,8 @@ package mx.amib.sistemas.registro.legacy.saaec
  * Created by Gabriel on 24/05/2015.
  */
 class RegistroExamenTO {
+	int idExamenReservacion
+	
     Integer numeroMatricula
     Long idFigura
     String descripcionFigura

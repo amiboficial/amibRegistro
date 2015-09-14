@@ -1,5 +1,9 @@
 var app = app || {};
 
+app.RCA_MV_EXAMEN = 1;
+app.RCA_MV_PUNTOS = 2;
+app.RCA_MV_EXPERIENCIA = 3;
+
 app.CHK_GRALES = 0;
 app.CHK_TELS = 1;
 app.CHK_SEPOMEX = 2;
@@ -118,6 +122,17 @@ app.CheckSubmitView = Backbone.View.extend({
 		var arr = this.model.get('viewsarray');
 		//El método introduce los datos en campos "hidden" con los que se hará POST
 		this.$("#spnHdnPostData").html("");
+		//datos de validacion
+
+		this.$("#spnHdnPostData").append('<input type="hidden" name="validacion.idMetodoValidacion" value="' + arr[app.CHK_REVALCERT].model.get('idMetodoValidacion') + '" />');
+		if(arr[app.CHK_REVALCERT].model.get('idMetodoValidacion') == app.RCA_MV_EXAMEN){
+			this.$("#spnHdnPostData").append('<input type="hidden" name="validacion.idExamenReservacion" value="' + arr[app.CHK_REVALCERT].model.get('opcionExamenVM').getExamenSeleccionado().get('grailsId') + '" />');
+			this.$("#spnHdnPostData").append('<input type="hidden" name="validacion.fechaAplicacionExamenUnixEpoch" value="' + arr[app.CHK_REVALCERT].model.get('opcionExamenVM').getExamenSeleccionado().get('fechaAplicacionExamenUnixEpoch') + '" />');
+		}
+		else if(arr[app.CHK_REVALCERT].model.get('idMetodoValidacion') == app.RCA_MV_PUNTOS){
+			this.$("#spnHdnPostData").append('<input type="hidden" name="validacion.puntaje" value="' + arr[app.CHK_REVALCERT].model.get('puntaje') + '" />');
+		}
+		
 		//datos generales
 		this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.id" value="' + arr[app.CHK_GRALES].model.get('grailsId') + '" />');
 		this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.numeroMatricula" value="' + arr[app.CHK_GRALES].model.get('numeroMatricula') + '" />');
@@ -138,7 +153,7 @@ app.CheckSubmitView = Backbone.View.extend({
 		this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.idEstadoCivil" value="' + arr[app.CHK_GRALES].model.get('estadoCivil') + '" />');
 		//datos de telefonos
 		var telsJson = "[";
-		arr[app.EXP_EDT_CHK_TELS].collection.each(function(item){
+		arr[app.CHK_TELS].collection.each(function(item){
 			telsJson += JSON.stringify(item) + ",";
 		}, this);
 		telsJson += "]";
@@ -153,6 +168,12 @@ app.CheckSubmitView = Backbone.View.extend({
 		this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.fechaObtencion_day" value="' + arr[app.CHK_CERT].model.get('fechaObtencion_day') + '" />');
 		this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.fechaObtencion_month" value="' + arr[app.CHK_CERT].model.get('fechaObtencion_month') + '" />');
 		this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.fechaObtencion_year" value="' + arr[app.CHK_CERT].model.get('fechaObtencion_year') + '" />');
+		this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.fechaInicio_day" value="' + arr[app.CHK_CERT].model.get('fechaInicio_day') + '" />');
+		this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.fechaInicio_month" value="' + arr[app.CHK_CERT].model.get('fechaInicio_month') + '" />');
+		this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.fechaInicio_year" value="' + arr[app.CHK_CERT].model.get('fechaInicio_year') + '" />');
+		this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.fechaFin_day" value="' + arr[app.CHK_CERT].model.get('fechaFin_day') + '" />');
+		this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.fechaFin_month" value="' + arr[app.CHK_CERT].model.get('fechaFin_month') + '" />');
+		this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.fechaFin_year" value="' + arr[app.CHK_CERT].model.get('fechaFin_year') + '" />');
 		this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.statusEntHistorialInforme" value="' + arr[app.CHK_CERT].model.get('statusEntHistorialInforme') + '" />');
 		this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.obsEntHistorialInforme" value="' + arr[app.CHK_CERT].model.get('obsEntHistorialInforme') + '" />');
 		this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.statusEntCartaRec" value="' + arr[app.CHK_CERT].model.get('statusEntCartaRec') + '" />');

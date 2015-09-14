@@ -5,7 +5,7 @@ app.ExamenVM = Backbone.Model.extend({
 		grailsId: -1, //id de reservación de exámen
 		numeroMatricula: -1,
 		fechaAplicacionExamen: '01/01/1900',
-		fechaAplicacionExamenUnixEpoch: -2208988800000, //unix epoch time del 01/01/1900
+		fechaAplicacionExamenUnixEpoch: -2208988800, //unix epoch time del 01/01/1900
 		descripcionFigura: 'XXXX',
 		
 		seleccionado: false,

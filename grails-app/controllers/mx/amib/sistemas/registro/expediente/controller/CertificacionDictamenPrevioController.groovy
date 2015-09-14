@@ -222,6 +222,8 @@ class CertificacionDictamenPrevioController {
 		//sustentante.certificaciones = originalSust.certificaciones
 		CertificacionTO certAEmitDict = originalSust.certificaciones.find{ it.id.value == certificacion.id.value }
 		certAEmitDict.fechaObtencion = sdf.parse(params.'certificacion.fechaObtencion_day' + '-' + params.'certificacion.fechaObtencion_month' + '-' + params.'certificacion.fechaObtencion_year')
+		certAEmitDict.fechaInicio = sdf.parse(params.'certificacion.fechaInicio_day' + '-' + params.'certificacion.fechaInicio_month' + '-' + params.'certificacion.fechaInicio_year')
+		certAEmitDict.fechaFin = sdf.parse(params.'certificacion.fechaFin_day' + '-' + params.'certificacion.fechaFin_month' + '-' + params.'certificacion.fechaFin_year')
 		certAEmitDict.statusEntHistorialInforme = certificacion.statusEntHistorialInforme
 		certAEmitDict.obsEntHistorialInforme = certificacion.obsEntHistorialInforme
 		certAEmitDict.statusEntCartaRec = certificacion.statusEntCartaRec

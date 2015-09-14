@@ -30,6 +30,7 @@ class RegistroExamenService {
 
         //ER.IDE_EST_EXAMEN = 3 significa que ha Aprobado el exámen OR ER.IDE_EST_EXAMEN = 7 lo aprobó por experiencia
         String baseSqlQuery = """SELECT
+									ER.IDE_EXA_RESERVACION,
                                     U.IDE_USUARIO,
                                     CF.IDE_FIGURA,
                                     day(EC.EXA_CAL_FEC_APLICACION) as EXA_CAL_FEC_APL_DAY,
@@ -128,6 +129,7 @@ class RegistroExamenService {
 		
         //ER.IDE_EST_EXAMEN = 3 significa que ha Aprobado el exámen OR ER.IDE_EST_EXAMEN = 7 lo aprobó por experiencia
         baseSqlQuery.append("SELECT TOP ").append(MAX_RESULTS).append("""
+									ER.IDE_EXA_RESERVACION,
                                     U.IDE_USUARIO,
                                     CF.IDE_FIGURA,
                                     day(EC.EXA_CAL_FEC_APLICACION) as EXA_CAL_FEC_APL_DAY,
@@ -196,6 +198,7 @@ class RegistroExamenService {
 		//ER.IDE_EST_EXAMEN = 3 significa que ha Aprobado el exámen OR ER.IDE_EST_EXAMEN = 7 lo aprobó por experiencia y
 		//que además no haya sido mayor a 18 meses.
 		String baseSqlQuery = """SELECT
+									ER.IDE_EXA_RESERVACION,
 								    U.IDE_USUARIO,
 								    CF.IDE_FIGURA,
 								    day(EC.EXA_CAL_FEC_APLICACION) as EXA_CAL_FEC_APL_DAY,
@@ -294,6 +297,7 @@ class RegistroExamenService {
 		int rfcYear = 0
 		Calendar calfechaAplicacion = Calendar.getInstance()
 		
+		re.idExamenReservacion = ((Integer)grr.get("IDE_EXA_RESERVACION"))
         re.numeroMatricula = (Integer)grr.get("IDE_USUARIO")
         re.idFigura = (Long)grr.get("IDE_FIGURA")
         re.descripcionFigura = grr.get("FIG_DESCRIPCION")

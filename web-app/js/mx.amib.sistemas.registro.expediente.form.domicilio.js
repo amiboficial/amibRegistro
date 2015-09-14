@@ -111,8 +111,16 @@ app.SepomexView = Backbone.View.extend({
 		this.$(".cp").val(this.model.get("codigoPostal"));
 		this.$(".asen").val(this.model.get("idSepomex"));
 		this.$(".calle").val(this.model.get("calle"));
-		this.$(".numInt").val(this.model.get("numeroInterior"));
 		this.$(".numExt").val(this.model.get("numeroExterior"));
+		this.$(".numInt").val(this.model.get("numeroInterior"));
+		
+		if( this.model.get("numeroInterior") == null || this.model.get("numeroInterior") == 'null'){
+			this.$(".numInt").val('');
+		}
+		else{
+			this.$(".numInt").val(this.model.get("numeroInterior"));
+		}
+		
 	},
 
 	renderErrorMsgs: function(){

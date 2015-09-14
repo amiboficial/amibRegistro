@@ -382,6 +382,12 @@
 				this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.fechaObtencion_day" value="' + arr[app.EXP_EDT_CHK_CERT].model.get('fechaObtencion_day') + '" />');
 				this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.fechaObtencion_month" value="' + arr[app.EXP_EDT_CHK_CERT].model.get('fechaObtencion_month') + '" />');
 				this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.fechaObtencion_year" value="' + arr[app.EXP_EDT_CHK_CERT].model.get('fechaObtencion_year') + '" />');
+				this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.fechaInicio_day" value="' + arr[app.EXP_EDT_CHK_CERT].model.get('fechaInicio_day') + '" />');
+				this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.fechaInicio_month" value="' + arr[app.EXP_EDT_CHK_CERT].model.get('fechaInicio_month') + '" />');
+				this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.fechaInicio_year" value="' + arr[app.EXP_EDT_CHK_CERT].model.get('fechaInicio_year') + '" />');
+				this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.fechaFin_day" value="' + arr[app.EXP_EDT_CHK_CERT].model.get('fechaFin_day') + '" />');
+				this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.fechaFin_month" value="' + arr[app.EXP_EDT_CHK_CERT].model.get('fechaFin_month') + '" />');
+				this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.fechaFin_year" value="' + arr[app.EXP_EDT_CHK_CERT].model.get('fechaFin_year') + '" />');
 				this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.statusEntHistorialInforme" value="' + arr[app.EXP_EDT_CHK_CERT].model.get('statusEntHistorialInforme') + '" />');
 				this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.obsEntHistorialInforme" value="' + arr[app.EXP_EDT_CHK_CERT].model.get('obsEntHistorialInforme') + '" />');
 				this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.statusEntCartaRec" value="' + arr[app.EXP_EDT_CHK_CERT].model.get('statusEntCartaRec') + '" />');

@@ -1,42 +1,41 @@
 package mx.amib.sistemas.registro.expediente.service
 
-import grails.transaction.Transactional
 import mx.amib.sistemas.external.expediente.certificacion.service.CertificacionTO
 import mx.amib.sistemas.external.expediente.certificacion.service.ValidacionTO
 import mx.amib.sistemas.external.expediente.certificacion.catalog.service.StatusCertificacionTypes
 import mx.amib.sistemas.external.expediente.certificacion.catalog.service.StatusAutorizacionTypes
 import mx.amib.sistemas.external.expediente.persona.service.SustentanteTO
-
+import grails.transaction.Transactional
 // TODO: Implementar logging en este servicio dado que en estos métodos se hace
 // llamada a múltiples servicios, si alguno falla, se rastrea inmediatamente el
-// error. (cuestiones de integridad en "transacciones distribuidas")
+// error. (cuestiones de integridad)
 @Transactional
-class CertificacionDictamenPrevioService {
+class CertificacionActualizacionAutorizacionService {
 
 	def sustentanteService
 	def certificacionService
 	def autorizacionService
 	
-    def obtenerParaEmisionDictamen(Long id) {
+    def obtenerParaActualizacion(long id) {
 		CertificacionTO c = certificacionService.get(id)
-		boolean enDictamenPrevio
+		boolean estaAutorizadoConPoderes
 		boolean estaCertificado
 		
 		//revisa que este en estatus de dictaminable
-		enDictamenPrevio = (c.statusAutorizacion.id.value == StatusAutorizacionTypes.DICTAMEN_PREVIO)
+		estaAutorizadoConPoderes = (c.statusAutorizacion.id.value == StatusAutorizacionTypes.AUTORIZADO)
 		estaCertificado = (c.statusCertificacion.id.value == StatusCertificacionTypes.CERTIFICADO)
 		
-		if(!(enDictamenPrevio && estaCertificado))
+		if(!(estaAutorizadoConPoderes && estaCertificado))
 			c = null
 		
 		return c
     }
 	
-	void enviarAAutorizacion(SustentanteTO sustentante, CertificacionTO certificacion){
+	void actualizarCertificacion(SustentanteTO sustentante, CertificacionTO certificacion, ValidacionTO validacion){
 		sustentanteService.updateDatosPersonales(sustentante)
 		sustentanteService.updatePuestos(sustentante)
-		certificacionService.updateDatosParaAprobarDictamen(certificacion)
-		autorizacionService.aprobarDictamen( [certificacion.id] )
+		certificacionService.updateDatosParaActualizarAutorizacion(certificacion, validacion)
+		//no se requiere actualizar ningún estatus dado que la certificación seguirá autorizadas
 	}
 	
 }

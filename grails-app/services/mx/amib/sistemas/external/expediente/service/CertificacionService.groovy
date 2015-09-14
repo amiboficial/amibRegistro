@@ -479,6 +479,28 @@ class CertificacionService {
 		return c
 	}
 	
+	CertificacionTO updateDatosParaActualizarAutorizacion(CertificacionTO c, ValidacionTO v){
+		def rest = new RestBuilder()
+		Map<String,Object> mapToSend = new HashMap<String,Object>()
+		
+		mapToSend.put('certificacion',c)
+		mapToSend.put('validacion',v)
+		
+		def resp = rest.post(updateDatosParaAprobarDictamenUrl){
+			contentType "application/json;charset=UTF-8"
+			json (mapToSend as JSON)
+		}
+		
+		if(resp.statusCode.value() != HttpStatus.CREATED.value && resp.statusCode.value() != HttpStatus.OK.value)
+			throw new Exception("STATUS CODE: " + resp.statusCode)
+		else
+			if(resp.json != null && resp.json instanceof JSONObject) {
+				c = this.obtenerCertificacionFromJSON(resp.json)
+			}
+		
+		return c
+	}
+	
 	public static CertificacionTO obtenerCertificacionFromJSON(JSONObject data){
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd")
 		

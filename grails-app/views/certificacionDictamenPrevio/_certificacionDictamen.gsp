@@ -21,12 +21,13 @@
 		
 		<div class="form-group">
 			<label class="col-md-2 col-sm-3 control-label">
-				<g:message code="certificacion.figura.label" default="(Variante)" />
+				(Variante en la que aplicó por primera vez)
 			</label>
 			<div class="col-md-9 col-sm-9">
 				<p class="form-control-static">{{=nombreVarianteFigura}}</p>
 			</div>
 		</div>
+		
 		<div class="form-group div-fechaObtencion">
 			<label class="col-md-2 col-sm-3 control-label">
 				<g:message code="certificacion.fechaObtencion.label" default="Fecha de obtención" />
@@ -54,7 +55,7 @@
 				</select>
 				<select style="width: 34%;" class="form-control col-md-4 fechaObtencion_year field" data-field="fechaObtencion_year">
 					<option value="-1">-Seleccione-</option>
-					{{ for(var i=1950;i<=2020;i++){ }}
+					{{ for(var i=1990;i<=2030;i++){ }}
 						{{ if(i == fechaObtencion_year){ }}
 							<option value="{{=i}}" selected>{{=i}}</option>
 						{{ } else{ }}
@@ -64,6 +65,83 @@
 				</select>
 			</div>
 		</div>
+		
+		<div class="form-group div-fechaInicio">
+			<label class="col-md-2 col-sm-3 control-label">
+				Fecha de inicio a aplicar
+			</label>
+			<div class="col-md-5 col-sm-5">
+				<select style="width: 28%;" class="form-control col-md-4 fechaInicio_day field" data-field="fechaInicio_day">
+					<option value="-1">-Seleccione-</option>
+					{{ for(var i=1;i<=31;i++){ }}
+						{{ if(i == fechaInicio_day){ }}
+							<option value="{{=i}}" selected>{{=i}}</option>
+						{{ } else{ }}
+							<option value="{{=i}}">{{=i}}</option>
+						{{ } }}
+					{{ } }}
+				</select>
+				<select style="width: 38%;" class="form-control col-md-4 fechaInicio_month field" data-field="fechaInicio_month">
+					<option value="-1">-Seleccione-</option>
+					{{ for(var i=0;i<app.MESES.length;i++){ }}
+						{{ if(app.MESES[i].id == fechaInicio_month){ }}
+							<option value="{{=app.MESES[i].id}}" selected>{{=app.MESES[i].nombre}}</option>
+						{{ } else{ }}
+							<option value="{{=app.MESES[i].id}}">{{=app.MESES[i].nombre}}</option>
+						{{ } }}
+					{{ } }}
+				</select>
+				<select style="width: 34%;" class="form-control col-md-4 fechaInicio_year field" data-field="fechaInicio_year">
+					<option value="-1">-Seleccione-</option>
+					{{ for(var i=1990;i<=2030;i++){ }}
+						{{ if(i == fechaInicio_year){ }}
+							<option value="{{=i}}" selected>{{=i}}</option>
+						{{ } else{ }}
+							<option value="{{=i}}">{{=i}}</option>
+						{{ } }}
+					{{ } }}
+				</select>
+			</div>
+		</div>
+		
+		<div class="form-group div-fechaFin">
+			<label class="col-md-2 col-sm-3 control-label">
+				Fecha de fin a aplicar
+			</label>
+			<div class="col-md-5 col-sm-5">
+				<select style="width: 28%;" class="form-control col-md-4 fechaFin_day field" data-field="fechaFin_day">
+					<option value="-1">-Seleccione-</option>
+					{{ for(var i=1;i<=31;i++){ }}
+						{{ if(i == fechaFin_day){ }}
+							<option value="{{=i}}" selected>{{=i}}</option>
+						{{ } else{ }}
+							<option value="{{=i}}">{{=i}}</option>
+						{{ } }}
+					{{ } }}
+				</select>
+				<select style="width: 38%;" class="form-control col-md-4 fechaFin_month field" data-field="fechaFin_month">
+					<option value="-1">-Seleccione-</option>
+					{{ for(var i=0;i<app.MESES.length;i++){ }}
+						{{ if(app.MESES[i].id == fechaFin_month){ }}
+							<option value="{{=app.MESES[i].id}}" selected>{{=app.MESES[i].nombre}}</option>
+						{{ } else{ }}
+							<option value="{{=app.MESES[i].id}}">{{=app.MESES[i].nombre}}</option>
+						{{ } }}
+					{{ } }}
+				</select>
+				<select style="width: 34%;" class="form-control col-md-4 fechaFin_year field" data-field="fechaFin_year">
+					<option value="-1">-Seleccione-</option>
+					{{ for(var i=1990;i<=2030;i++){ }}
+						{{ if(i == fechaFin_year){ }}
+							<option value="{{=i}}" selected>{{=i}}</option>
+						{{ } else{ }}
+							<option value="{{=i}}">{{=i}}</option>
+						{{ } }}
+					{{ } }}
+				</select>
+			</div>
+		</div>
+		
 		<div class="form-group">
 			<label class="col-md-2 col-sm-3 control-label">
 				<g:message code="certificacion.tipoAutorizacionFigura.label" default="Autorización solicitada" />

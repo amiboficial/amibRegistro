@@ -193,41 +193,45 @@ class RegistroExamenService {
 		List<GroovyRowResult> saecRowRegs = null
 		List<RegistroExamenTO> registros = new ArrayList<RegistroExamenTO>()
 
-		//ER.IDE_EST_EXAMEN = 3 significa que ha Aprobado el exámen OR ER.IDE_EST_EXAMEN = 7 lo aprobó por experiencia
+		//ER.IDE_EST_EXAMEN = 3 significa que ha Aprobado el exámen OR ER.IDE_EST_EXAMEN = 7 lo aprobó por experiencia y
+		//que además no haya sido mayor a 18 meses.
 		String baseSqlQuery = """SELECT
-                                    U.IDE_USUARIO,
-                                    CF.IDE_FIGURA,
-                                    day(EC.EXA_CAL_FEC_APLICACION) as EXA_CAL_FEC_APL_DAY,
-                                    month(EC.EXA_CAL_FEC_APLICACION) as EXA_CAL_FEC_APL_MONTH,
-                                    year(EC.EXA_CAL_FEC_APLICACION) as EXA_CAL_FEC_APL_YEAR,
-                                    F.FIG_DESCRIPCION,
-                                    USU_NOMBRE,
-                                    USU_APE_PATERNO,
-                                    USU_APE_MATERNO,
-                                    USU_SEXO,
-                                    USU_RFC,
-                                    USU_CURP,
-                                    USU_DOMICILIO1,
-                                    USU_DOMICILIO2,
-                                    USU_COD_POSTAL,
-                                    USU_CIUDAD,
-                                    IDE_ESTADO,
-                                    USU_TEL_CASA,
-                                    USU_TEL_OFICINA,
-                                    USU_EXTENSION,
-                                    USU_EMAIL,
-                                    IDE_EST_CIVIL,
-                                    IDE_NIV_ESTUDIO,
-                                    USU_NACIONALIDAD,
-                                    ER.EXA_RES_INS_TRABAJA,
-                                    USU_PUESTO
-                                FROM USUARIO U
-                                    JOIN EXAMEN_RESERVACION ER ON U.IDE_USUARIO = ER.IDE_USUARIO
-                                    JOIN EXAMEN_CALENDARIO EC ON ER.IDE_EXA_CALENDARIO = EC.IDE_EXA_CALENDARIO
-                                    JOIN CONFIGURACION_FIGURA CF ON ER.IDE_CON_FIGURA = CF.IDE_CON_FIGURA
-                                    JOIN FIGURA F ON CF.IDE_FIGURA = F.IDE_FIGURA
-                                WHERE  (ER.IDE_EST_EXAMEN = 3 OR ER.IDE_EST_EXAMEN = 7) AND U.IDE_USUARIO = ?
-                                ORDER BY EC.EXA_CAL_FEC_APLICACION"""
+								    U.IDE_USUARIO,
+								    CF.IDE_FIGURA,
+								    day(EC.EXA_CAL_FEC_APLICACION) as EXA_CAL_FEC_APL_DAY,
+								    month(EC.EXA_CAL_FEC_APLICACION) as EXA_CAL_FEC_APL_MONTH,
+								    year(EC.EXA_CAL_FEC_APLICACION) as EXA_CAL_FEC_APL_YEAR,
+								    F.FIG_DESCRIPCION,
+								    USU_NOMBRE,
+								    USU_APE_PATERNO,
+								    USU_APE_MATERNO,
+								    USU_SEXO,
+								    USU_RFC,
+								    USU_CURP,
+								    USU_DOMICILIO1,
+								    USU_DOMICILIO2,
+								    USU_COD_POSTAL,
+								    USU_CIUDAD,
+								    IDE_ESTADO,
+								    USU_TEL_CASA,
+								    USU_TEL_OFICINA,
+								    USU_EXTENSION,
+								    USU_EMAIL,
+								    IDE_EST_CIVIL,
+								    IDE_NIV_ESTUDIO,
+								    USU_NACIONALIDAD,
+								    ER.EXA_RES_INS_TRABAJA,
+								    USU_PUESTO
+								FROM USUARIO U
+								    JOIN EXAMEN_RESERVACION ER ON U.IDE_USUARIO = ER.IDE_USUARIO
+								    JOIN EXAMEN_CALENDARIO EC ON ER.IDE_EXA_CALENDARIO = EC.IDE_EXA_CALENDARIO
+								    JOIN CONFIGURACION_FIGURA CF ON ER.IDE_CON_FIGURA = CF.IDE_CON_FIGURA
+								    JOIN FIGURA F ON CF.IDE_FIGURA = F.IDE_FIGURA
+								WHERE 
+									(ER.IDE_EST_EXAMEN = 3 OR ER.IDE_EST_EXAMEN = 7) AND 
+									EC.EXA_CAL_FEC_APLICACION >= DATEADD(month, -18, GETDATE()) AND 
+									U.IDE_USUARIO = ?
+								ORDER BY EC.EXA_CAL_FEC_APLICACION"""
 		Object[] params = new Object[1]
 
 		params[0] = numeroMatricula

@@ -119,23 +119,23 @@ app.CheckSubmitView = Backbone.View.extend({
 		//El método introduce los datos en campos "hidden" con los que se hará POST
 		this.$("#spnHdnPostData").html("");
 		//datos generales
-		this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.id" value="' + arr[app.EXP_EDT_CHK_GRALES].model.get('grailsId') + '" />');
-		this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.numeroMatricula" value="' + arr[app.EXP_EDT_CHK_GRALES].model.get('numeroMatricula') + '" />');
-		this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.nombre" value="' + arr[app.EXP_EDT_CHK_GRALES].model.get('nombre') + '" />');
-		this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.primerApellido" value="' + arr[app.EXP_EDT_CHK_GRALES].model.get('primerApellido') + '" />');
-		this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.segundoApellido" value="' + arr[app.EXP_EDT_CHK_GRALES].model.get('segundoApellido') + '" />');
-		this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.genero" value="' + arr[app.EXP_EDT_CHK_GRALES].model.get('genero') + '" />');
-		this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.rfc" value="' + arr[app.EXP_EDT_CHK_GRALES].model.get('rfc') + '" />');
-		this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.curp" value="' + arr[app.EXP_EDT_CHK_GRALES].model.get('curp') + '" />');
-		this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.fechaNacimiento_day" value="' + arr[app.EXP_EDT_CHK_GRALES].model.get('fechaNacimientoDay') + '" />');
-		this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.fechaNacimiento_month" value="' + arr[app.EXP_EDT_CHK_GRALES].model.get('fechaNacimientoMonth') + '" />');
-		this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.fechaNacimiento_year" value="' + arr[app.EXP_EDT_CHK_GRALES].model.get('fechaNacimientoYear') + '" />');
-		this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.correoElectronico" value="' + arr[app.EXP_EDT_CHK_GRALES].model.get('correoElectronico') + '" />');
-		this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.calidadMigratoria" value="' + arr[app.EXP_EDT_CHK_GRALES].model.get('calidadMigratoria') + '" />');
-		this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.profesion" value="' + arr[app.EXP_EDT_CHK_GRALES].model.get('profesion') + '" />');
-		this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.idNacionalidad" value="' + arr[app.EXP_EDT_CHK_GRALES].model.get('nacionalidad') + '" />');
-		this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.idNivelEstudios" value="' + arr[app.EXP_EDT_CHK_GRALES].model.get('nivelEstudios') + '" />');
-		this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.idEstadoCivil" value="' + arr[app.EXP_EDT_CHK_GRALES].model.get('estadoCivil') + '" />');
+		this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.id" value="' + arr[app.CHK_GRALES].model.get('grailsId') + '" />');
+		this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.numeroMatricula" value="' + arr[app.CHK_GRALES].model.get('numeroMatricula') + '" />');
+		this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.nombre" value="' + arr[app.CHK_GRALES].model.get('nombre') + '" />');
+		this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.primerApellido" value="' + arr[app.CHK_GRALES].model.get('primerApellido') + '" />');
+		this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.segundoApellido" value="' + arr[app.CHK_GRALES].model.get('segundoApellido') + '" />');
+		this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.genero" value="' + arr[app.CHK_GRALES].model.get('genero') + '" />');
+		this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.rfc" value="' + arr[app.CHK_GRALES].model.get('rfc') + '" />');
+		this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.curp" value="' + arr[app.CHK_GRALES].model.get('curp') + '" />');
+		this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.fechaNacimiento_day" value="' + arr[app.CHK_GRALES].model.get('fechaNacimientoDay') + '" />');
+		this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.fechaNacimiento_month" value="' + arr[app.CHK_GRALES].model.get('fechaNacimientoMonth') + '" />');
+		this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.fechaNacimiento_year" value="' + arr[app.CHK_GRALES].model.get('fechaNacimientoYear') + '" />');
+		this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.correoElectronico" value="' + arr[app.CHK_GRALES].model.get('correoElectronico') + '" />');
+		this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.calidadMigratoria" value="' + arr[app.CHK_GRALES].model.get('calidadMigratoria') + '" />');
+		this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.profesion" value="' + arr[app.CHK_GRALES].model.get('profesion') + '" />');
+		this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.idNacionalidad" value="' + arr[app.CHK_GRALES].model.get('nacionalidad') + '" />');
+		this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.idNivelEstudios" value="' + arr[app.CHK_GRALES].model.get('nivelEstudios') + '" />');
+		this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.idEstadoCivil" value="' + arr[app.CHK_GRALES].model.get('estadoCivil') + '" />');
 		//datos de telefonos
 		var telsJson = "[";
 		arr[app.EXP_EDT_CHK_TELS].collection.each(function(item){
@@ -144,23 +144,23 @@ app.CheckSubmitView = Backbone.View.extend({
 		telsJson += "]";
 		this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.telefonos_json" value=\'' + telsJson + '\' />');
 		//datos de sepomex
-		this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.idSepomex" value="' + arr[app.EXP_EDT_CHK_SEPOMEX].model.get('idSepomex') + '" />');
-		this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.calle" value="' + arr[app.EXP_EDT_CHK_SEPOMEX].model.get('calle') + '" />');
-		this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.numeroInterior" value="' + arr[app.EXP_EDT_CHK_SEPOMEX].model.get('numeroInterior') + '" />');
-		this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.numeroExterior" value="' + arr[app.EXP_EDT_CHK_SEPOMEX].model.get('numeroExterior') + '" />');
+		this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.idSepomex" value="' + arr[app.CHK_SEPOMEX].model.get('idSepomex') + '" />');
+		this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.calle" value="' + arr[app.CHK_SEPOMEX].model.get('calle') + '" />');
+		this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.numeroInterior" value="' + arr[app.CHK_SEPOMEX].model.get('numeroInterior') + '" />');
+		this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.numeroExterior" value="' + arr[app.CHK_SEPOMEX].model.get('numeroExterior') + '" />');
 		//datos de certificacion
-		this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.id" value="' + arr[app.EXP_EDT_CHK_CERT].model.get('grailsId') + '" />');
-		this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.fechaObtencion_day" value="' + arr[app.EXP_EDT_CHK_CERT].model.get('fechaObtencion_day') + '" />');
-		this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.fechaObtencion_month" value="' + arr[app.EXP_EDT_CHK_CERT].model.get('fechaObtencion_month') + '" />');
-		this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.fechaObtencion_year" value="' + arr[app.EXP_EDT_CHK_CERT].model.get('fechaObtencion_year') + '" />');
-		this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.statusEntHistorialInforme" value="' + arr[app.EXP_EDT_CHK_CERT].model.get('statusEntHistorialInforme') + '" />');
-		this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.obsEntHistorialInforme" value="' + arr[app.EXP_EDT_CHK_CERT].model.get('obsEntHistorialInforme') + '" />');
-		this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.statusEntCartaRec" value="' + arr[app.EXP_EDT_CHK_CERT].model.get('statusEntCartaRec') + '" />');
-		this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.obsEntCartaRec" value="' + arr[app.EXP_EDT_CHK_CERT].model.get('obsEntCartaRec') + '" />');
-		this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.statusConstBolVal" value="' + arr[app.EXP_EDT_CHK_CERT].model.get('statusConstBolVal') + '" />');
-		this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.obsConstBolVal" value="' + arr[app.EXP_EDT_CHK_CERT].model.get('obsConstBolVal') + '" />');
+		this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.id" value="' + arr[app.CHK_CERT].model.get('grailsId') + '" />');
+		this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.fechaObtencion_day" value="' + arr[app.CHK_CERT].model.get('fechaObtencion_day') + '" />');
+		this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.fechaObtencion_month" value="' + arr[app.CHK_CERT].model.get('fechaObtencion_month') + '" />');
+		this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.fechaObtencion_year" value="' + arr[app.CHK_CERT].model.get('fechaObtencion_year') + '" />');
+		this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.statusEntHistorialInforme" value="' + arr[app.CHK_CERT].model.get('statusEntHistorialInforme') + '" />');
+		this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.obsEntHistorialInforme" value="' + arr[app.CHK_CERT].model.get('obsEntHistorialInforme') + '" />');
+		this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.statusEntCartaRec" value="' + arr[app.CHK_CERT].model.get('statusEntCartaRec') + '" />');
+		this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.obsEntCartaRec" value="' + arr[app.CHK_CERT].model.get('obsEntCartaRec') + '" />');
+		this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.statusConstBolVal" value="' + arr[app.CHK_CERT].model.get('statusConstBolVal') + '" />');
+		this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.obsConstBolVal" value="' + arr[app.CHK_CERT].model.get('obsConstBolVal') + '" />');
 		//datos de puestos
-		var puestosJson = JSON.stringify(arr[app.EXP_EDT_CHK_PUES].collection.toJSON());
+		var puestosJson = JSON.stringify(arr[app.CHK_PUES].collection.toJSON());
 		this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.puestos_json" value=\'' + puestosJson + '\' />');
 		$("#frmApp").submit();
 	},

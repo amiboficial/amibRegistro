@@ -198,6 +198,7 @@ mx.amib.sistemas.expediente.certificacion.Certificacion.findAllCandidatoCambioFi
 mx.amib.sistemas.expediente.certificacion.Certificacion.findAllCandidatoCambioFiguraByMatriculaUrl = "certificacionRestful/findAllCandidatoCambioFiguraByMatricula/"
 mx.amib.sistemas.expediente.certificacion.Certificacion.findAllCandidatoCambioFiguraByFolioUrl = "certificacionRestful/findAllCandidatoCambioFiguraByFolio/"
 mx.amib.sistemas.expediente.certificacion.Certificacion.updateDatosParaAprobarDictamen = 'certificacionRestful/updateDatosParaAprobarDictamen'
+mx.amib.sistemas.expediente.certificacion.Certificacion.updateDatosParaActualizarAutorizacion = 'certificacionRestful/updateDatosParaActualizarAutorizacion'
 
 //especificaciones de rutas para servicios REST de amibOficios
 mx.amib.sistemas.oficios.poder.list = 'poder/index'

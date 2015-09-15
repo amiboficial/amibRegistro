@@ -48,6 +48,7 @@ class CertificacionService {
 	String findAllCandidatoCambioFiguraByFolioUrl
 	
 	String updateDatosParaAprobarDictamenUrl
+	String updateDatosParaActualizarAutorizacionUrl
 	
 	CertificacionTO get(Long id){
 		CertificacionTO c = null
@@ -486,7 +487,9 @@ class CertificacionService {
 		mapToSend.put('certificacion',c)
 		mapToSend.put('validacion',v)
 		
-		def resp = rest.post(updateDatosParaAprobarDictamenUrl){
+		println (mapToSend as JSON)
+		
+		def resp = rest.post(updateDatosParaActualizarAutorizacionUrl){
 			contentType "application/json;charset=UTF-8"
 			json (mapToSend as JSON)
 		}

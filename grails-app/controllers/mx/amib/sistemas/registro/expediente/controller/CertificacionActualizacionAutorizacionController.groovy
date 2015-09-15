@@ -217,16 +217,16 @@ class CertificacionActualizacionAutorizacionController {
 		}
 		
 		
-		//try {
-			//certificacionActualizacionAutorizacionService.actualizarCertificacion(sustentante, certAEmitDict, nuevaValidacion)
-		//flash.successMessage = "La actualización de la autorización para el sustentante  \"" + sustentante.nombre + " " + sustentante.primerApellido + "\" ha sido guardado satisfactoriamente"
-		//}
-		//catch (Exception e){
-			//flash.errorMessage = "Ha ocurrido un error al guardar la información, los detalles son los siguientes: " + e.message.substring(0, Math.min(e.message.length(),256)  )
-		//}
-		//redirect (action: "index")
+		try {
+			certificacionActualizacionAutorizacionService.actualizarCertificacion(sustentante, certAEmitDict, nuevaValidacion)
+			flash.successMessage = "La actualización de la autorización para el sustentante  \"" + sustentante.nombre + " " + sustentante.primerApellido + "\" ha sido guardado satisfactoriamente"
+		}
+		catch (Exception e){
+			flash.errorMessage = "Ha ocurrido un error al guardar la información, los detalles son los siguientes: " + e.message.substring(0, Math.min(e.message.length(),256)  )
+		}
+		redirect (action: "index")
 		
-		render ( ([sustentante:sustentante,certAEmitDict:certAEmitDict,nuevaValidacion:nuevaValidacion]) as JSON)	
+		//render ( ([sustentante:sustentante,certAEmitDict:certAEmitDict,nuevaValidacion:nuevaValidacion]) as JSON)	
 	}
 	
 }

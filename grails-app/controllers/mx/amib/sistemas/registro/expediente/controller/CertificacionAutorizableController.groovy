@@ -385,12 +385,12 @@ class CertificacionAutorizableController {
 			else if(modoBusqueda == ModoBusqueda.ACTUALIZACION_AUTORIZACION){
 				vm.iconoBotonAccion = 'refresh'
 				vm.mensajeBotonAccion = 'Actualizar'
-				vm.accionUrl = glg.link(controller: 'CertificacionActualizacionAutorizacion', action: 'create', id: cert.id)
+				vm.accionUrl = glg.link(controller: 'certificacionActualizacionAutorizacion', action: 'create', id: cert.id)
 			}
 			else if(modoBusqueda == ModoBusqueda.REPOSICION_AUTORIZACION){
 				vm.iconoBotonAccion = 'retweet'
 				vm.mensajeBotonAccion = 'Reponer'
-				vm.accionUrl = glg.link(controller: 'certificacionDictamenPrevio', action: 'create', id: cert.id)
+				vm.accionUrl = glg.link(controller: 'CertificacionReposicionAutorizacion', action: 'create', id: cert.id)
 			}
 			else if(modoBusqueda == ModoBusqueda.CAMBIO_FIGURA){
 				vm.iconoBotonAccion = 'transfer'

@@ -11,7 +11,7 @@ class PathService {
 	def dataSource_membership
 	static datasource = 'membership'
 	
-	//Este query obtiene los paths a los cuales no esta permido que acceda el usuario.
+	//Este query obtiene los paths a los cuales no esta permido que acceda el usuario de acuerdo a su conjunto de roles.
 	//Los 'calcula' obteniendo el numero total de roles por aplicación del usuario (nu_rolesperuser) 
 	//con el numero total de restricciones de path por cada rol que tenga (nu_rolepathrestricperuser)
 	//Si ambos son iguales, es decir, todos los roles de usuario en aplicación aplican la misma restricción, entonces la 

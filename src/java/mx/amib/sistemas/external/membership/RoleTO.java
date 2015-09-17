@@ -21,6 +21,7 @@ public class RoleTO {
 	public void setNumberRole(long numberRole) {
 		this.numberRole = numberRole;
 	}
+	
 	public String getName() {
 		return name;
 	}
@@ -65,5 +66,15 @@ public class RoleTO {
 			return false;
 		return true;
 	}
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("RoleTO [idApplication=").append(idApplication)
+				.append(", numberRole=").append(numberRole).append(", name=")
+				.append(name).append(", description=").append(description)
+				.append(", active=").append(active).append("]");
+		return builder.toString();
+	}
+	
 	
 }

@@ -32,6 +32,7 @@ class UserServiceIntegSpec extends Specification {
 			res.id == id
     }
 */	
+/*
 	void "test validateUserNameAndPassword"(){
 		given:
 			String userName
@@ -46,7 +47,25 @@ class UserServiceIntegSpec extends Specification {
 		then:
 			valid == true
 	}
-
+*/
+	
+	void "test validateUserNameAndPasswordAndApplication"(){
+		given:
+			String userName
+			String password
+			String uuidApp
+			boolean valid
+		when:
+			userName = 'primigenio'
+			password = 'polloshermanos'
+			uuidApp = '30873f55-c21f-4589-aa66-883f3563ab34'
+			
+			valid = userService.validateUserNameAndPasswordAndApplication(userName, password, uuidApp)
+			println valid
+		then:
+			valid == true
+	}
+	
 /*	
 	void "test save"(){
 		given:

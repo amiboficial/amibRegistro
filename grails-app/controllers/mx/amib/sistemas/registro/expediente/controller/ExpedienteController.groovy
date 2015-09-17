@@ -147,10 +147,6 @@ class ExpedienteController {
 		return vm
 	}
 	
-	def listEnDictamen(){}
-	
-	def listEnAutorizacion(){}
-
 	def edit(Long id){
 		def s = sustentanteService.get(id)
 		FormViewModel vm = this.getFormViewModel(s)

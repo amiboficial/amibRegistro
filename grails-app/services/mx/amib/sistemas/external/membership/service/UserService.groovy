@@ -51,7 +51,14 @@ class UserService {
 									:lastPasswordChange, :isLockedOut, 
 									:failedAttempts, :failedAnswerAttempts, :comment, :createdDate);"""
 						
-    long save(UserTO user) {
+	final String validateUserNameAndPasswordAndApplicationSql = """
+		SELECT [tx_password],[tx_pwdformat],[tx_pwdsalt],T002.[tx_uuid] 
+		  FROM [dbo].[t001_t_user] T001 
+		  INNER JOIN [dbo].[t005_t_userinrole] T005 ON T001.[id_user] = T005.[id_user] 
+		  INNER JOIN [dbo].[t002_c_application] T002 ON T005.[id_application] = T002.[id_application] 
+		  WHERE T001.[tx_username] = :userName AND T002.[tx_uuid] = :uuidApp;"""
+		
+	long save(UserTO user) {
 		
 		Sql sql = new Sql(dataSource_membership)
 		def sqlParams = null
@@ -137,6 +144,36 @@ class UserService {
 			hashedSaltedPwd = MessageDigest.getInstance(usuario.passwordFormat).digest( hashedSaltedPwd.bytes ).encodeHex().toString()
 			
 			if( usuario.password.compareTo(hashedSaltedPwd) == 0 ){
+				res = true
+			}
+		}
+		
+		return res
+	}
+	
+	boolean validateUserNameAndPasswordAndApplication( String userName, String password, String uuidApp ){
+		Sql sql = new Sql(dataSource_membership)
+		List<GroovyRowResult> resRows = null
+		
+		String hashedPwdResult
+		String pwdFormatResult
+		String pwdSaltResult
+		String uuidAppResult
+		
+		String hashedSaltedPwd
+		boolean res = false
+		
+		resRows = sql.rows(validateUserNameAndPasswordAndApplicationSql,[userName:userName,uuidApp:uuidApp])
+		if(resRows.size() > 0){
+			hashedPwdResult = (String)resRows.get(0).get('tx_password')
+			pwdFormatResult= (String)resRows.get(0).get('tx_pwdformat')
+			pwdSaltResult = (String)resRows.get(0).get('tx_pwdsalt')
+			uuidAppResult = (String)resRows.get(0).get('tx_uuid')
+			
+			hashedSaltedPwd = pwdSaltResult + password
+			hashedSaltedPwd = MessageDigest.getInstance(pwdFormatResult).digest( hashedSaltedPwd.bytes ).encodeHex().toString()
+			
+			if( hashedPwdResult.compareTo(hashedSaltedPwd) == 0 && uuidAppResult.compareTo(uuidApp) == 0 ){
 				res = true
 			}
 		}

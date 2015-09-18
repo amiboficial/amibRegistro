@@ -57,7 +57,7 @@
 								<div class="navbar-collapse collapse">
 									<div class="nav" role="navigation">
 										<ul class="nav navbar-nav pull-right" role="navigation">
-											<li><a href="#"><span class="glyphicon glyphicon-user"></span> ${membershipService?.authenticatedUser?.userName } (Cerrar Sesión)</a></li>
+											<li><a href="<g:createLink controller="membership" action="logOut" />"><span class="glyphicon glyphicon-user"></span> ${membershipService?.authenticatedUser?.userName } (Cerrar Sesión)</a></li>
 										</ul>
 									</div>
 								</div>		

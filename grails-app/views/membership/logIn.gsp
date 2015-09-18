@@ -26,7 +26,7 @@
 		<div class="alert alert-danger"><span class="glyphicon glyphicon-info-sign"></span> Debe introducir una contraseña</div>
 	</g:if>
 	<g:if test="${vm?.errorCredentialsNotFound}">
-		<div class="alert alert-danger"><span class="glyphicon glyphicon-info-sign"></span> El <strong>nombre de usuario</strong> y <strong>contraseña</strong> no coinciden con ningún registrado. Si el nombre de usuario existe y está introduciendo una contraseña erronea, la cuenta se bloqueará a los 10 intentos.</div>
+		<div class="alert alert-danger"><span class="glyphicon glyphicon-info-sign"></span> El <strong>nombre de usuario</strong> y <strong>contraseña</strong> no coinciden con ningun registro. Si el nombre de usuario existe y está introduciendo una contraseña erronea, la cuenta se bloqueará a los 10 intentos.</div>
 	</g:if>
 	<g:if test="${vm?.errorFetchingData}">
 		<div class="alert alert-danger"><span class="glyphicon glyphicon-info-sign"></span> Error al obtener datos de autenticación</div>

@@ -44,6 +44,6 @@
                 <a href="#" class="list-group-item colortitle"><strong>Acciones</strong></a>
                 <a href="#" class="list-group-item"><span class="glyphicon glyphicon-user"></span>&nbsp;Información de usuario</a>
                 <a href="#" class="list-group-item"><span class="glyphicon glyphicon-cog"></span>&nbsp;Cambio de contraseña</a>
-                <a href="#" class="list-group-item"><span class="glyphicon glyphicon-off"></span>&nbsp;Cerrar sesión</a>
+                <a href="<g:createLink controller="membership" action="logOut" />" class="list-group-item"><span class="glyphicon glyphicon-off"></span>&nbsp;Cerrar sesión</a>
             </div>
         </div>

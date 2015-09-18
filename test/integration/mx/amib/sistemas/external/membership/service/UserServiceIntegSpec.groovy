@@ -10,7 +10,7 @@ import spock.lang.*
  */
 class UserServiceIntegSpec extends Specification {
 
-	//static transactional = false
+	static transactional = false
 	
 	def userService
 	
@@ -56,26 +56,26 @@ class UserServiceIntegSpec extends Specification {
 			String uuidApp
 			boolean valid
 		when:
-			userName = 'primigenio'
-			password = 'polloshermanos'
+			userName = 'nachito2'
+			password = 'decanoescom2'
 			uuidApp = '30873f55-c21f-4589-aa66-883f3563ab34'
 			
 			valid = userService.validateUserNameAndPasswordAndApplication(userName, password, uuidApp)
-			println valid
+			//println valid
 		then:
 			valid == true
 	}
-	
-/*	
+
+/*
 	void "test save"(){
 		given:
 			UserTO u
 			long id
 		when:
 			u = new UserTO()
-			u.userName = 'nachito'
-			u.password = 'decanoescom'
-			u.email = 'ignacio@gmail.com'
+			u.userName = 'nachito2'
+			u.password = 'decanoescom2'
+			u.email = 'ignacio2@gmail.com'
 			id = userService.save(u)
 			println id
 		then:

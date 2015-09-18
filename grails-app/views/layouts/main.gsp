@@ -1,4 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
+<%
+    def membershipService = grailsApplication.mainContext.getBean("membershipService");
+%>
 <!DOCTYPE html>
 <!--[if lt IE 7 ]> <html lang="en" class="no-js ie6"> <![endif]-->
 <!--[if IE 7 ]>    <html lang="en" class="no-js ie7"> <![endif]-->
@@ -54,7 +57,7 @@
 								<div class="navbar-collapse collapse">
 									<div class="nav" role="navigation">
 										<ul class="nav navbar-nav pull-right" role="navigation">
-											<li><a href="#"><span class="glyphicon glyphicon-user"></span> USUARIO_REGISTRADO (Cerrar Sesión)</a></li>
+											<li><a href="#"><span class="glyphicon glyphicon-user"></span> ${membershipService?.authenticatedUser?.userName } (Cerrar Sesión)</a></li>
 										</ul>
 									</div>
 								</div>		

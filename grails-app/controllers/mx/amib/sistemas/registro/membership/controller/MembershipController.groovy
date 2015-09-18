@@ -1,12 +1,16 @@
 package mx.amib.sistemas.registro.membership.controller
 
 import grails.converters.JSON
+import mx.amib.sistemas.external.membership.service.BlockedUserException
+import mx.amib.sistemas.external.membership.service.NonApprovedUserException
+import mx.amib.sistemas.registro.membership.service.MembershipService
 
 class MembershipController {
 
-	String applicationGuid = '30873f55-c21f-4589-aa66-883f3563ab34' 
-	def userService
+	static allowedMethods = [authenticate:'POST']
+	static scope = "prototype"
 	
+	MembershipService membershipService
 	
     def logIn() {
 		LogInViewModel vm = new LogInViewModel()
@@ -18,69 +22,84 @@ class MembershipController {
 		vm.errorCredentialsNotFound = false
 		vm.errorFetchingData = false
 		
-		render('logIn', model:[vm:vm])
+		render(view:'logIn', model:[vm:vm])
 	}
 	
-	def validateUserNameAndPassword(LogInViewModel vm){
-		Map<String,Object> responseMap = new HashMap<>()
+	def authenticate(LogInViewModel vm){
 		boolean valid = false
 		
 		if(vm.validateFields()){
-			if(userService.validateUserNameAndPasswordAndApplication(vm.userName, vm.cleanPassword, applicationGuid)){
-				responseMap.put('status', 'OK')
-				responseMap.put('valid', true)
-				responseMap.put('vm', vm)
+			try{
+				if(membershipService.authenticate(vm.userName, vm.cleanPassword)){
+					valid = true
+				}
+				else{
+					vm.errorCredentialsNotFound = true
+					valid = false
+				}
 			}
-			else{
-				vm.errorCredentialsNotFound = true
-				
-				responseMap.put('status', 'ERROR')
-				responseMap.put('valid', false)
-				responseMap.put('vm', vm)
+			catch(NonApprovedUserException naue){
+				vm.errorNonApproved = true
+				valid = false
+			}
+			catch(BlockedUserException bue){
+				vm.errorIsLockedOut = true
+				valid = false
 			}
 		}
 		else{
-			responseMap.put('status', 'ERROR')
-			responseMap.put('valid', false)
-			responseMap.put('vm', vm)
+			valid = false
 		}
 		
-		render (responseMap as JSON)
-	}
-	
-	def authenticate(){
-		
-	}
-	
-	class LogInViewModel{
-		String userName
-		String cleanPassword
-		
-		boolean errorBlankUserName
-		boolean errorBlankPassword
-		boolean errorCredentialsNotFound
-		boolean errorFetchingData
-		
-		public void validateFields(){
-			
-			errorBlankUserName = false
-			errorBlankPassword = false
-			errorCredentialsNotFound = false
-			errorFetchingData = false
-			
-			if(this.userName.trim().compareTo('') == 0){
-				errorBlankUserName = true
-			}
-			if(this.cleanPassword.trim().compareTo('') == 0){
-				errorBlankUserName = true
-			}
-			
+		if(valid){
+			redirect(url: "/", absolute:false)
+		}
+		else{
+			render(view:'logIn', model:[vm:vm])
 		}
 	}
 	
-	def logOut() { }
+	def logOut() {
+		session.invalidate()
+		redirect(action: 'logIn')
+	}
 	
 	def show() { }
 	
 	def edit() { }
+}
+
+class LogInViewModel{
+	String userName
+	String cleanPassword
+	
+	boolean errorBlankUserName
+	boolean errorBlankPassword
+	boolean errorCredentialsNotFound
+	boolean errorFetchingData
+	boolean errorNonApproved
+	boolean errorIsLockedOut
+	
+	public boolean validateFields(){
+		
+		boolean valid = true
+		
+		errorBlankUserName = false
+		errorBlankPassword = false
+		errorCredentialsNotFound = false
+		errorFetchingData = false
+		errorNonApproved = false
+		errorIsLockedOut = false
+		
+		if(this.userName.trim().compareTo('') == 0){
+			errorBlankUserName = true
+			valid = false
+		}
+		if(this.cleanPassword.trim().compareTo('') == 0){
+			errorBlankUserName = true
+			valid = false
+		}
+		
+		return valid
+	}
 }

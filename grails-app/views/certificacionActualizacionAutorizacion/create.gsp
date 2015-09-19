@@ -107,9 +107,15 @@
 		var revCertAutView = null;
 		var examenVMCollection = new app.ExamenVMCollection();
 
-		examenVMCollection.add( new app.ExamenVM({grailsId:1,numeroMatricula:1}) );
-		examenVMCollection.add( new app.ExamenVM({grailsId:2,numeroMatricula:2}) );
-		examenVMCollection.add( new app.ExamenVM({grailsId:3,numeroMatricula:3}) );
+		<g:each var="x" in="${viewModelInstance?.examanesList?}">
+			examenVMCollection.add( new app.ExamenVM({
+				grailsId:${x?.idExamenReservacion},
+				numeroMatricula:${x?.numeroMatricula},
+				fechaAplicacionExamen:'${x?.fechaAplicacionExamen?.toString()}',
+				fechaAplicacionExamenUnixEpoch:${x?.fechaAplicacionExamen?.getTime()/1000},
+				descripcionFigura:'${x?.descripcionFigura}'
+			}) );
+		</g:each>
 
 		revCertAutView = new app.RevCertAutView( { examenVMCollection:examenVMCollection } );
 	</script>

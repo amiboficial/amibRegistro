@@ -31,6 +31,8 @@ import mx.amib.sistemas.external.expediente.persona.service.TelefonoSustentanteT
 import mx.amib.sistemas.external.expediente.service.CertificacionService
 import mx.amib.sistemas.external.expediente.service.SustentanteService
 import mx.amib.sistemas.registro.expediente.service.CertificacionActualizacionAutorizacionService
+import mx.amib.sistemas.registro.legacy.saaec.RegistroExamenTO
+import mx.amib.sistemas.registro.legacy.saaec.service.RegistroExamenService
 
 import org.codehaus.groovy.grails.web.json.JSONArray
 
@@ -43,6 +45,8 @@ class CertificacionActualizacionAutorizacionController {
 	NivelEstudiosService nivelEstudiosService
 	TipoTelefonoService tipoTelefonoService
 	SepomexService sepomexService
+	
+	RegistroExamenService registroExamenService
 	
 	SustentanteService sustentanteService
 	CertificacionService certificacionService
@@ -68,7 +72,7 @@ class CertificacionActualizacionAutorizacionController {
 	
 	def create(long id){
 		render( view:'create', model:[viewModelInstance:CreateViewModel.getInstance(id,certificacionService,entidadFinancieraService,
-								estadoCivilService, nacionalidadService, nivelEstudiosService, tipoTelefonoService, sepomexService)]  )
+								estadoCivilService, nacionalidadService, nivelEstudiosService, tipoTelefonoService, sepomexService, registroExamenService)]  )
 	}
 	
 	static class CreateViewModel{
@@ -77,6 +81,7 @@ class CertificacionActualizacionAutorizacionController {
 		CertificacionTO certificacionInstance
 		
 		//No bindeables
+		Collection<RegistroExamenTO> examanesList
 		Collection<InstitucionTO> institucionesList
 		Collection<EstadoCivilTO> estadoCivilList
 		Collection<NacionalidadTO> nacionalidadList
@@ -91,12 +96,11 @@ class CertificacionActualizacionAutorizacionController {
 		
 		public static CreateViewModel getInstance(long idCertificacion, CertificacionService certificacionService, EntidadFinancieraService entidadFinancieraService,
 			EstadoCivilService estadoCivilService, NacionalidadService nacionalidadService, NivelEstudiosService nivelEstudiosService, TipoTelefonoService tipoTelefonoService,
-			SepomexService sepomexService){
+			SepomexService sepomexService, RegistroExamenService registroExamenService){
 			
 			CreateViewModel vm = new CreateViewModel()
 			
 			vm.institucionesList = entidadFinancieraService.obtenerInstituciones()
-			
 			vm.estadoCivilList = estadoCivilService.list()
 			vm.institucionesList = entidadFinancieraService.obtenerInstituciones()
 			vm.nacionalidadList = nacionalidadService.list()
@@ -110,6 +114,7 @@ class CertificacionActualizacionAutorizacionController {
 					vm.codigoPostal = sepomexService.obtenerCodigoPostalDeIdSepomex(vm.sustentanteInstance.idSepomex)
 					vm.sepomexJsonList = (sepomexService.obtenerDatosSepomexPorCodigoPostal(vm.codigoPostal).sort{ it.asentamiento?.nombre } as JSON)
 				}
+				vm.examanesList = registroExamenService.findAllRevalidableByNumeroMatricula( vm.sustentanteInstance.numeroMatricula )
 			}
 			
 			return vm

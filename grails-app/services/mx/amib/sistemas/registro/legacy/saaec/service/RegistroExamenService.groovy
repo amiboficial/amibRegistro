@@ -304,6 +304,8 @@ class RegistroExamenService {
         re.fechaAplicacionExamenDay = (Integer)grr.get("EXA_CAL_FEC_APL_DAY")
         re.fechaAplicacionExamenMonth = (Integer)grr.get("EXA_CAL_FEC_APL_MONTH")
         re.fechaAplicacionExamenYear = (Integer)grr.get("EXA_CAL_FEC_APL_YEAR")
+		calfechaAplicacion.set(re.fechaAplicacionExamenYear, re.fechaAplicacionExamenMonth - 1, re.fechaAplicacionExamenDay, 0, 0, 0)
+		re.fechaAplicacionExamen = calfechaAplicacion.getTime()
         re.nombre = grr.get("USU_NOMBRE")
         re.primerApellido = grr.get("USU_APE_PATERNO")
         re.segundoApellido = grr.get("USU_APE_MATERNO")
@@ -320,14 +322,12 @@ class RegistroExamenService {
 				else{
 					re.fechaNacimientoYear = rfcYear + 2000
 				}
-				calfechaAplicacion.set(re.fechaNacimientoYear, re.fechaNacimientoMonth - 1, re.fechaNacimientoDay, 0, 0, 0)
-				re.fechaAplicacion = calfechaAplicacion.getTime()
 			}
 			catch(NumberFormatException nfe){
 				re.fechaNacimientoDay = -1
 				re.fechaNacimientoMonth = -1
 				re.fechaNacimientoYear = -1
-				re.fechaAplicacion = null
+				re.fechaAplicacionExamen = null
 			}
 		}
         re.curp = ((String)grr.get("USU_CURP"))

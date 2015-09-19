@@ -74,6 +74,7 @@ beans = {
 		
 		updateDatosParaAprobarDictamenUrl = application.config.mx.amib.sistemas.expediente.resthttpURL + application.config.mx.amib.sistemas.expediente.certificacion.Certificacion.updateDatosParaAprobarDictamen
 		updateDatosParaActualizarAutorizacionUrl = application.config.mx.amib.sistemas.expediente.resthttpURL + application.config.mx.amib.sistemas.expediente.certificacion.Certificacion.updateDatosParaActualizarAutorizacion
+		createReponerAutorizacionUrl = application.config.mx.amib.sistemas.expediente.resthttpURL + application.config.mx.amib.sistemas.expediente.certificacion.Certificacion.createReponerAutorizacion
 	}
 	poderService(mx.amib.sistemas.external.oficios.service.PoderService){
 		listUrl = application.config.mx.amib.sistemas.oficios.resthttpURL + application.config.mx.amib.sistemas.oficios.poder.list

@@ -49,6 +49,7 @@ class CertificacionService {
 	
 	String updateDatosParaAprobarDictamenUrl
 	String updateDatosParaActualizarAutorizacionUrl
+	String createReponerAutorizacionUrl
 	
 	CertificacionTO get(Long id){
 		CertificacionTO c = null
@@ -490,6 +491,30 @@ class CertificacionService {
 		println (mapToSend as JSON)
 		
 		def resp = rest.post(updateDatosParaActualizarAutorizacionUrl){
+			contentType "application/json;charset=UTF-8"
+			json (mapToSend as JSON)
+		}
+		
+		if(resp.statusCode.value() != HttpStatus.CREATED.value && resp.statusCode.value() != HttpStatus.OK.value)
+			throw new Exception("STATUS CODE: " + resp.statusCode)
+		else
+			if(resp.json != null && resp.json instanceof JSONObject) {
+				c = this.obtenerCertificacionFromJSON(resp.json)
+			}
+		
+		return c
+	}
+	
+	CertificacionTO createReponerAutorizacion(CertificacionTO c, ValidacionTO v){
+		def rest = new RestBuilder()
+		Map<String,Object> mapToSend = new HashMap<String,Object>()
+		
+		mapToSend.put('certificacion',c)
+		mapToSend.put('validacion',v)
+		
+		println (mapToSend as JSON)
+		
+		def resp = rest.post(createReponerAutorizacionUrl){
 			contentType "application/json;charset=UTF-8"
 			json (mapToSend as JSON)
 		}

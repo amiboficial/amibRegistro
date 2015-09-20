@@ -29,11 +29,11 @@
 		<div class="alert alert-danger"><span class="glyphicon glyphicon-info-sign"></span> ${flash.errorMessage}</div>
 	</g:if>
 	
-	<form id="frmApp" class="form-horizontal" role="form" action='<g:createLink controller="certificacionActualizacionAutorizacion" action="save"/>' method="post">
+	<form id="frmApp" class="form-horizontal" role="form" action='<g:createLink controller="certificacionReposicionAutorizacion" action="save"/>' method="post">
 		<div class="alert alert-info"><span class="glyphicon glyphicon-info-sign"></span> Revise y, en caso de ser necesario, rectifique la información del solicitante del cual solicitará autorización. Una vez que toda la información proporcionada este completa, vaya la pestaña "Aplicar proceso" y seleccione confirmar para completar.</div>
 	
 		<ul class="nav nav-tabs" role="tablist">
-			<li role="presentation" class="active"><a href="#tabRepCert" aria-controls="tabRepCert" role="tab" data-toggle="tab">Reposición de certificación</a></li>
+			<li role="presentation" class="active"><a href="#tabRepCert" aria-controls="tabRepCert" role="tab" data-toggle="tab">Certificación para reposición</a></li>
 			<li role="presentation"><a href="#tabGen" aria-controls="tabGen" role="tab" data-toggle="tab">Datos generales</a></li>
 			<li role="presentation"><a href="#tabTels" aria-controls="tabTels" role="tab" data-toggle="tab">Teléfonos</a></li>
 			<li role="presentation"><a href="#tabDom" aria-controls="tabDom" role="tab" data-toggle="tab">Domicilio</a></li>
@@ -45,7 +45,7 @@
 		<div class="tab-content">
 			<br/>
 			<div role="tabpanel" class="tab-pane active" id="tabRepCert">
-				<div id="divRepCert">
+				<div id="divRepAutCert">
 				</div>
 			</div>
 			<div role="tabpanel" class="tab-pane" id="tabGen">
@@ -58,6 +58,7 @@
 				<div id="divDom"></div>
 			</div>
 			<div role="tabpanel" class="tab-pane" id="tabCert">
+				<div class="alert alert-info"><span class="glyphicon glyphicon-info-sign"></span> Es necesario que se capturen nuevamente las fechas de obtención de certificación, así como el rango de fechas sobre el cual aplicará la autorización a reponer.</div>
 				<div id="divCert"></div>
 			</div>
 			<div role="tabpanel" class="tab-pane" id="tabPues">
@@ -71,7 +72,7 @@
 					<div class="panel-heading">Checklist de validación de información</div>
 					<div class="panel-body">
 						<ul style="list-style-type:none">
-							<li><span id="spnCheckRevCert" class="glyphicon glyphicon-unchecked"></span> Datos de la revalidación de la certificación</li>
+							<li><span id="spnCheckRevCert" class="glyphicon glyphicon-unchecked"></span> Datos de exámen para reposición</li>
 							<li><span id="spnCheckGrales" class="glyphicon glyphicon-unchecked"></span> Datos generales</li>
 							<li><span id="spnCheckTels" class="glyphicon glyphicon-unchecked"></span> Datos de teléfonos</li>
 							<li><span id="spnCheckSepomex" class="glyphicon glyphicon-unchecked"></span> Datos de domicilio</li>
@@ -99,9 +100,9 @@
 	
 	</form>
 
-	<g:render template="../common/RevalidacionCertificacionAlAutorizar"/>
+	<g:render template="../common/ReposicionAutorizacionCertificacion"/>
 	<g:javascript src="mx.amib.sistemas.registro.expediente.form.revalidacionCertificacionAlAutorizar.opcionExamen.js" />
-	<g:javascript src="mx.amib.sistemas.registro.expediente.form.revalidacionCertificacionAlAutorizar.js" />
+	<g:javascript src="mx.amib.sistemas.registro.expediente.form.reposicionAutorizacionCertificacion.js" />
 	<script type="text/javascript">
 		var repCertAutView = null;
 		var examenVMCollection = new app.ExamenVMCollection();
@@ -116,7 +117,7 @@
 			}) );
 		</g:each>
 
-		repCertAutView = new app.RepCertAutView( { examenVMCollection:examenVMCollection } );
+		repCertAutView = new app.RepAutCertView( { examenVMCollection:examenVMCollection } );
 	</script>
 
 	<!-- INICIA: COMPONENTE DATOS GENERALES -->
@@ -242,17 +243,6 @@
 		cert.set("nombreFigura","${viewModelInstance?.certificacionInstance?.varianteFigura?.nombreFigura}");
 		cert.set("nombreVarianteFigura","${viewModelInstance?.certificacionInstance?.varianteFigura?.nombre}");
 		cert.set("tipoAutorizacionFigura","${viewModelInstance?.certificacionInstance?.varianteFigura?.tipoAutorizacionFigura}");
-
-		cert.set("fechaInicio_day",${viewModelInstance?.certificacionInstance?.fechaInicio[Calendar.DATE]});
-		cert.set("fechaInicio_month",${viewModelInstance?.certificacionInstance?.fechaInicio[Calendar.MONTH]+1});
-		cert.set("fechaInicio_year",${viewModelInstance?.certificacionInstance?.fechaInicio[Calendar.YEAR]+3});
-		cert.set("fechaFin_day",${viewModelInstance?.certificacionInstance?.fechaFin[Calendar.DATE]});
-		cert.set("fechaFin_month",${viewModelInstance?.certificacionInstance?.fechaFin[Calendar.MONTH]+1});
-		cert.set("fechaFin_year",${viewModelInstance?.certificacionInstance?.fechaFin[Calendar.YEAR]+3});
-
-		cert.set("fechaObtencion_day",${viewModelInstance?.certificacionInstance?.fechaObtencion[Calendar.DATE]});
-		cert.set("fechaObtencion_month",${viewModelInstance?.certificacionInstance?.fechaObtencion[Calendar.MONTH]+1});
-		cert.set("fechaObtencion_year",${viewModelInstance?.certificacionInstance?.fechaObtencion[Calendar.YEAR]});
 		
 		cert.set("statusEntHistorialInforme",${viewModelInstance?.certificacionInstance?.statusEntHistorialInforme}-0);
 		cert.set("obsEntHistorialInforme","${viewModelInstance?.certificacionInstance?.obsEntHistorialInforme}");
@@ -265,7 +255,7 @@
 	</script>
 
 	<!-- INICIA: COMPONENTE CHECKsLIST -->
-	<g:javascript src="mx.amib.sistemas.registro.expediente.form.revalidacionCertificacionAlAutorizar.checklist.js" />
+	<g:javascript src="mx.amib.sistemas.registro.expediente.form.reposicionAutorizacionCertificacion.checklist.js" />
 	<script>
 
 		var app = app || {};

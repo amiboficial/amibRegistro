@@ -26,4 +26,8 @@ class CertificacionCambioFiguraController {
 			return vm
 		}
 	}
+	
+	def create(long id){
+		
+	}
 }

@@ -123,15 +123,9 @@ app.CheckSubmitView = Backbone.View.extend({
 		//El método introduce los datos en campos "hidden" con los que se hará POST
 		this.$("#spnHdnPostData").html("");
 		//datos de validacion
-
 		this.$("#spnHdnPostData").append('<input type="hidden" name="validacion.idMetodoValidacion" value="' + arr[app.CHK_REVALCERT].model.get('idMetodoValidacion') + '" />');
-		if(arr[app.CHK_REVALCERT].model.get('idMetodoValidacion') == app.RCA_MV_EXAMEN){
-			this.$("#spnHdnPostData").append('<input type="hidden" name="validacion.idExamenReservacion" value="' + arr[app.CHK_REVALCERT].model.get('opcionExamenVM').getExamenSeleccionado().get('grailsId') + '" />');
-			this.$("#spnHdnPostData").append('<input type="hidden" name="validacion.fechaAplicacionExamenUnixEpoch" value="' + Math.floor(arr[app.CHK_REVALCERT].model.get('opcionExamenVM').getExamenSeleccionado().get('fechaAplicacionExamenUnixEpoch')) + '" />');
-		}
-		else if(arr[app.CHK_REVALCERT].model.get('idMetodoValidacion') == app.RCA_MV_PUNTOS){
-			this.$("#spnHdnPostData").append('<input type="hidden" name="validacion.puntaje" value="' + arr[app.CHK_REVALCERT].model.get('puntaje') + '" />');
-		}
+		this.$("#spnHdnPostData").append('<input type="hidden" name="validacion.idExamenReservacion" value="' + arr[app.CHK_REVALCERT].model.get('opcionExamenVM').getExamenSeleccionado().get('grailsId') + '" />');
+		this.$("#spnHdnPostData").append('<input type="hidden" name="validacion.fechaAplicacionExamenUnixEpoch" value="' + Math.floor(arr[app.CHK_REVALCERT].model.get('opcionExamenVM').getExamenSeleccionado().get('fechaAplicacionExamenUnixEpoch')) + '" />');
 		
 		//datos generales
 		this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.id" value="' + arr[app.CHK_GRALES].model.get('grailsId') + '" />');

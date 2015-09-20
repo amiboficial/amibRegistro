@@ -382,6 +382,8 @@ class CertificacionService {
 		
 		def getUrl = url + "?max=${max}&offset=${offset}&sort=${sort}&order=${order}&nom=${nom}&ap1=${ap1}&ap2=${ap2}&idfig=${idfig}&idvarfig=${idvarfig}"
 		
+		println getUrl
+		
 		def rest = new RestBuilder()
 		def resp = rest.get( getUrl )
 		

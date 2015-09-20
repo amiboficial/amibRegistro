@@ -30,7 +30,7 @@ class CertificacionAutorizableController {
 		order = this.getOrderParam(params)
 		
 		responseModel = new HashMap<String,Object>()
-		try{
+//		try{
 			if(id == ModoBusqueda.DICTAMEN_PREVIO){
 				certServRes = certificacionService.findAllEnDictamenPrevio(max, offset, sort, order, '', '', '', -1, -1)
 			}
@@ -61,11 +61,11 @@ class CertificacionAutorizableController {
 				responseModel.put('status','ERROR')
 				responseModel.put('errorMessage','ID_MODO_BUSQUEDA_NOT_SPECIFIED')
 			}
-		}
-		catch(Exception e){
-			responseModel.put('status','ERROR')
-			responseModel.put('errorMessage',e.message)
-		}
+//		}
+//		catch(Exception e){
+//			responseModel.put('status','ERROR')
+//			responseModel.put('errorMessage',e.message)
+//		}
 		
 		render (responseModel as JSON)
 	}
@@ -390,12 +390,12 @@ class CertificacionAutorizableController {
 			else if(modoBusqueda == ModoBusqueda.REPOSICION_AUTORIZACION){
 				vm.iconoBotonAccion = 'retweet'
 				vm.mensajeBotonAccion = 'Reponer'
-				vm.accionUrl = glg.link(controller: 'CertificacionReposicionAutorizacion', action: 'create', id: cert.id)
+				vm.accionUrl = glg.link(controller: 'certificacionReposicionAutorizacion', action: 'create', id: cert.id)
 			}
 			else if(modoBusqueda == ModoBusqueda.CAMBIO_FIGURA){
 				vm.iconoBotonAccion = 'transfer'
 				vm.mensajeBotonAccion = 'Cambiar figura'
-				vm.accionUrl = glg.link(controller: 'certificacionDictamenPrevio', action: 'create', id: cert.id)
+				vm.accionUrl = glg.link(controller: 'certificacionCambioFigura', action: 'create', id: cert.id)
 			}
 			return vm
 		}

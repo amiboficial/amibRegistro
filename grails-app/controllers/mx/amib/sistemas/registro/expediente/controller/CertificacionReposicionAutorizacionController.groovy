@@ -66,7 +66,8 @@ class CertificacionReposicionAutorizacionController {
 	}
 	
 	def create(long id){
-		
+		render( view:'create', model:[viewModelInstance:CreateViewModel.getInstance(id,certificacionService,entidadFinancieraService,
+			estadoCivilService, nacionalidadService, nivelEstudiosService, tipoTelefonoService, sepomexService, registroExamenService)]  )
 	}
 	
 	static class CreateViewModel{

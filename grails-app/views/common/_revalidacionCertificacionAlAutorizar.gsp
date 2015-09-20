@@ -109,3 +109,25 @@
 	</div>
 	
 </script>
+
+<script type="text/template" id="repCertAutViewTemplate">
+
+	<div class="div-opcionExamenVM">
+	</div>
+	
+	<div class="form-group">
+		<div class="col-md-3 col-sm-3">
+			&nbsp;
+		</div>
+		<div class="col-md-3 col-sm-3">
+			<button type="button" class="submit btn btn-primary btn-block">Validar y confirmar</button>
+		</div>
+		<div class="col-md-3 col-sm-3">
+			<button disabled="" type="button" class="edit btn btn-primary btn-block">Editar</button>
+		</div>
+		<div class="col-md-3 col-sm-3">
+			&nbsp;
+		</div>
+	</div>
+
+</script>

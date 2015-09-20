@@ -15,7 +15,7 @@
 		<li><a href="<g:createLink controller="certificacionActualizacionAutorizacion" action="index" />">Búsqueda de candidatos a proceso</a></li>
 		<li><a href="#">Proceso de actualización</a></li>
 	</ul>
-	<h2><strong>Proceso de actualización de autorización</strong></h2>
+	<h2><strong>Proceso de reposición de autorización</strong></h2>
 
 	<g:if test="${flash.message}">
 		<div class="alert alert-info"><span class="glyphicon glyphicon-info-sign"></span> ${flash.message}</div>
@@ -33,7 +33,7 @@
 		<div class="alert alert-info"><span class="glyphicon glyphicon-info-sign"></span> Revise y, en caso de ser necesario, rectifique la información del solicitante del cual solicitará autorización. Una vez que toda la información proporcionada este completa, vaya la pestaña "Aplicar proceso" y seleccione confirmar para completar.</div>
 	
 		<ul class="nav nav-tabs" role="tablist">
-			<li role="presentation" class="active"><a href="#tabRevCert" aria-controls="tabRevCert" role="tab" data-toggle="tab">Revalidación de certificación</a></li>
+			<li role="presentation" class="active"><a href="#tabRepCert" aria-controls="tabRepCert" role="tab" data-toggle="tab">Reposición de certificación</a></li>
 			<li role="presentation"><a href="#tabGen" aria-controls="tabGen" role="tab" data-toggle="tab">Datos generales</a></li>
 			<li role="presentation"><a href="#tabTels" aria-controls="tabTels" role="tab" data-toggle="tab">Teléfonos</a></li>
 			<li role="presentation"><a href="#tabDom" aria-controls="tabDom" role="tab" data-toggle="tab">Domicilio</a></li>
@@ -44,9 +44,8 @@
 	
 		<div class="tab-content">
 			<br/>
-			<div role="tabpanel" class="tab-pane active" id="tabRevCert">
-				<div id="divRevCert">
-				<!-- AQUI SE RENDEREA RevCertAutVM -->
+			<div role="tabpanel" class="tab-pane active" id="tabRepCert">
+				<div id="divRepCert">
 				</div>
 			</div>
 			<div role="tabpanel" class="tab-pane" id="tabGen">
@@ -104,7 +103,7 @@
 	<g:javascript src="mx.amib.sistemas.registro.expediente.form.revalidacionCertificacionAlAutorizar.opcionExamen.js" />
 	<g:javascript src="mx.amib.sistemas.registro.expediente.form.revalidacionCertificacionAlAutorizar.js" />
 	<script type="text/javascript">
-		var revCertAutView = null;
+		var repCertAutView = null;
 		var examenVMCollection = new app.ExamenVMCollection();
 
 		<g:each var="x" in="${viewModelInstance?.examanesList?}">
@@ -117,7 +116,7 @@
 			}) );
 		</g:each>
 
-		revCertAutView = new app.RevCertAutView( { examenVMCollection:examenVMCollection } );
+		repCertAutView = new app.RepCertAutView( { examenVMCollection:examenVMCollection } );
 	</script>
 
 	<!-- INICIA: COMPONENTE DATOS GENERALES -->
@@ -278,7 +277,7 @@
 		checkSubmitView.setViewInstance(app.CHK_SEPOMEX,sepomexView);
 		checkSubmitView.setViewInstance(app.CHK_CERT,certView);
 		checkSubmitView.setViewInstance(app.CHK_PUES,puestosView);
-		checkSubmitView.setViewInstance(app.CHK_REVALCERT,revCertAutView);
+		checkSubmitView.setViewInstance(app.CHK_REVALCERT,repCertAutView);
 		
 		$(window).bind("pageshow", function(){
 			$('#spnHdnPostData').html("");

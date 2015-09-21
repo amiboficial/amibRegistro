@@ -4,7 +4,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 <meta name="layout" content="main"/>
-<title>Registro 0.1 - Reposición de la autorización</title>
+<title>Registro 0.1 - Cambio de figura</title>
 </head>
 <body>
 
@@ -12,10 +12,10 @@
 	<ul class="breadcrumb">
 		<li><a href="#">Gestión de expedientes</a><span class="divider"></span></li>
 		<li><a href="#">Reposición de la autorización</a></li>
-		<li><a href="<g:createLink controller="certificacionActualizacionAutorizacion" action="index" />">Búsqueda de candidatos a proceso</a></li>
-		<li><a href="#">Proceso de reposición de autorización</a></li>
+		<li><a href="<g:createLink controller="certificacionCambioFigura" action="index" />">Búsqueda de candidatos a proceso</a></li>
+		<li><a href="#">Proceso de cambio de figura</a></li>
 	</ul>
-	<h2><strong>Proceso de reposición de autorización</strong></h2>
+	<h2><strong>Proceso de cambio de figura</strong></h2>
 
 	<g:if test="${flash.message}">
 		<div class="alert alert-info"><span class="glyphicon glyphicon-info-sign"></span> ${flash.message}</div>
@@ -33,19 +33,18 @@
 		<div class="alert alert-info"><span class="glyphicon glyphicon-info-sign"></span> Revise y, en caso de ser necesario, rectifique la información del solicitante del cual solicitará autorización. Una vez que toda la información proporcionada este completa, vaya la pestaña "Aplicar proceso" y seleccione confirmar para completar.</div>
 	
 		<ul class="nav nav-tabs" role="tablist">
-			<li role="presentation" class="active"><a href="#tabRepCert" aria-controls="tabRepCert" role="tab" data-toggle="tab">Certificación para reposición</a></li>
+			<li role="presentation" class="active"><a href="#tabCamFigEx" aria-controls="tabCamFigEx" role="tab" data-toggle="tab">Cambio de figura</a></li>
 			<li role="presentation"><a href="#tabGen" aria-controls="tabGen" role="tab" data-toggle="tab">Datos generales</a></li>
 			<li role="presentation"><a href="#tabTels" aria-controls="tabTels" role="tab" data-toggle="tab">Teléfonos</a></li>
 			<li role="presentation"><a href="#tabDom" aria-controls="tabDom" role="tab" data-toggle="tab">Domicilio</a></li>
-			<li role="presentation"><a href="#tabCert" aria-controls="tabCert" role="tab" data-toggle="tab">Figura</a></li>
 			<li role="presentation"><a href="#tabPues" aria-controls="tabPues" role="tab" data-toggle="tab">Relaciones laborales</a></li>
 			<li role="presentation"><a href="#tabCheckSubmit" aria-controls="tabCheckSubmit" role="tab" data-toggle="tab">Aplicar proceso</a></li>
 		</ul>
 	
 		<div class="tab-content">
 			<br/>
-			<div role="tabpanel" class="tab-pane active" id="tabRepCert">
-				<div id="divRepAutCert">
+			<div role="tabpanel" class="tab-pane active" id="tabCamFigEx">
+				<div id="divCamFigEx">
 				</div>
 			</div>
 			<div role="tabpanel" class="tab-pane" id="tabGen">
@@ -56,10 +55,6 @@
 			</div>
 			<div role="tabpanel" class="tab-pane" id="tabDom">
 				<div id="divDom"></div>
-			</div>
-			<div role="tabpanel" class="tab-pane" id="tabCert">
-				<div class="alert alert-info"><span class="glyphicon glyphicon-info-sign"></span> Es necesario que se capturen nuevamente las fechas de obtención de certificación, así como el rango de fechas sobre el cual aplicará la autorización a reponer.</div>
-				<div id="divCert"></div>
 			</div>
 			<div role="tabpanel" class="tab-pane" id="tabPues">
 				<div id="divPues"></div>
@@ -72,11 +67,10 @@
 					<div class="panel-heading">Checklist de validación de información</div>
 					<div class="panel-body">
 						<ul style="list-style-type:none">
-							<li><span id="spnCheckRevCert" class="glyphicon glyphicon-unchecked"></span> Datos de exámen para reposición</li>
+							<li><span id="spnCheckCamFigEx" class="glyphicon glyphicon-unchecked"></span> Datos de cambio de figura</li>
 							<li><span id="spnCheckGrales" class="glyphicon glyphicon-unchecked"></span> Datos generales</li>
 							<li><span id="spnCheckTels" class="glyphicon glyphicon-unchecked"></span> Datos de teléfonos</li>
 							<li><span id="spnCheckSepomex" class="glyphicon glyphicon-unchecked"></span> Datos de domicilio</li>
-							<li><span id="spnCheckFigura" class="glyphicon glyphicon-unchecked"></span> Datos de figura</li>
 							<li><span id="spnCheckPuestos" class="glyphicon glyphicon-unchecked"></span> Datos de relaciones laborales con institución</li>
 						</ul>
 					</div>
@@ -100,24 +94,46 @@
 	
 	</form>
 
-	<g:render template="../common/ReposicionAutorizacionCertificacion"/>
-	<g:javascript src="mx.amib.sistemas.registro.expediente.form.revalidacionCertificacionAlAutorizar.opcionExamen.js" />
-	<g:javascript src="mx.amib.sistemas.registro.expediente.form.reposicionAutorizacionCertificacion.js" />
+	<g:render template="cambioFiguraExamen"/>
+	<g:javascript src="mx.amib.sistemas.registro.expediente.form.cambioFiguraExamen.opcionExamen.js" />
+	<g:javascript src="mx.amib.sistemas.registro.expediente.form.cambioFiguraExamen.js" />
 	<script type="text/javascript">
-		var repCertAutView = null;
+		var cambioFiguraExamenView = null;
 		var examenVMCollection = new app.ExamenVMCollection();
-
+		var variantesFigura = new Array();
+		
 		<g:each var="x" in="${viewModelInstance?.examanesList?}">
 			examenVMCollection.add( new app.ExamenVM({
 				grailsId:${x?.idExamenReservacion},
 				numeroMatricula:${x?.numeroMatricula},
 				fechaAplicacionExamen:'${x?.fechaAplicacionExamen?.toString()}',
 				fechaAplicacionExamenUnixEpoch:${x?.fechaAplicacionExamen?.getTime()/1000},
-				descripcionFigura:'${x?.descripcionFigura}'
+				descripcionFigura:'${x?.descripcionFigura}',
+
+				idVarianteFigura: ${x?.idFigura},
+				fechaInicio_day: ${x?.fechaAplicacionExamenDay},
+				fechaInicio_month: ${x?.fechaAplicacionExamenMonth},
+				fechaInicio_year: ${x?.fechaAplicacionExamenYear},
+				fechaFin_day: ${x?.fechaAplicacionExamenDay},
+				fechaFin_month: ${x?.fechaAplicacionExamenMonth},
+				fechaFin_year: ${x?.fechaAplicacionExamenYear} + 3,
+				fechaObtencion_day: ${x?.fechaAplicacionExamenDay},
+				fechaObtencion_month: ${x?.fechaAplicacionExamenMonth},
+				fechaObtencion_year: ${x?.fechaAplicacionExamenYear}
+				
 			}) );
 		</g:each>
-
-		repCertAutView = new app.RepAutCertView( { examenVMCollection:examenVMCollection } );
+		
+		<g:each var="x" in="${viewModelInstance?.vfigList?}">
+			variantesFigura.push({
+				id:'${x?.id}',
+				nombreFigura:'${x?.figura?.nombre}',
+				nombreVarianteFigura:'${x?.nombre}',
+				tipoAutorizacionFigura:'${x?.figura?.tipoAutorizacion}'
+			});
+		</g:each>
+		
+		cambioFiguraExamenView = new app.CamFigExView( { examenVMCollection:examenVMCollection, variantesFigura:variantesFigura } );
 	</script>
 
 	<!-- INICIA: COMPONENTE DATOS GENERALES -->
@@ -255,7 +271,7 @@
 	</script>
 
 	<!-- INICIA: COMPONENTE CHECKsLIST -->
-	<g:javascript src="mx.amib.sistemas.registro.expediente.form.reposicionAutorizacionCertificacion.checklist.js" />
+	<g:javascript src="mx.amib.sistemas.registro.expediente.form.certificacionReposicionAutorizacion.checklist.js" />
 	<script>
 
 		var app = app || {};
@@ -267,7 +283,7 @@
 		checkSubmitView.setViewInstance(app.CHK_SEPOMEX,sepomexView);
 		checkSubmitView.setViewInstance(app.CHK_CERT,certView);
 		checkSubmitView.setViewInstance(app.CHK_PUES,puestosView);
-		checkSubmitView.setViewInstance(app.CHK_REVALCERT,repCertAutView);
+		checkSubmitView.setViewInstance(app.CHK_CAMBFIGEX,cambioFiguraExamenView);
 		
 		$(window).bind("pageshow", function(){
 			$('#spnHdnPostData').html("");

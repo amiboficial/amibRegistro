@@ -29,7 +29,7 @@
 		<div class="alert alert-danger"><span class="glyphicon glyphicon-info-sign"></span> ${flash.errorMessage}</div>
 	</g:if>
 	
-	<form id="frmApp" class="form-horizontal" role="form" action='<g:createLink controller="certificacionReposicionAutorizacion" action="save"/>' method="post">
+	<form id="frmApp" class="form-horizontal" role="form" action='<g:createLink controller="certificacionCambioFigura" action="save"/>' method="post">
 		<div class="alert alert-info"><span class="glyphicon glyphicon-info-sign"></span> Revise y, en caso de ser necesario, rectifique la información del solicitante del cual solicitará autorización. Una vez que toda la información proporcionada este completa, vaya la pestaña "Aplicar proceso" y seleccione confirmar para completar.</div>
 	
 		<ul class="nav nav-tabs" role="tablist">
@@ -119,7 +119,9 @@
 				fechaFin_year: ${x?.fechaAplicacionExamenYear} + 3,
 				fechaObtencion_day: ${x?.fechaAplicacionExamenDay},
 				fechaObtencion_month: ${x?.fechaAplicacionExamenMonth},
-				fechaObtencion_year: ${x?.fechaAplicacionExamenYear}
+				fechaObtencion_year: ${x?.fechaAplicacionExamenYear},
+
+				idCertificaionACambiar: ${viewModelInstance?.certificacionInstance?.id}-0,
 				
 			}) );
 		</g:each>
@@ -150,9 +152,9 @@
 		generalesModel.set("primerApellido","${raw(viewModelInstance?.sustentanteInstance?.primerApellido)}");
 		generalesModel.set("segundoApellido","${raw(viewModelInstance?.sustentanteInstance?.segundoApellido)}");
 		
-		generalesModel.set("fechaNacimientoDay", ${viewModelInstance?.sustentanteInstance?.fechaNacimiento[Calendar.DATE]});
-		generalesModel.set("fechaNacimientoMonth", ${viewModelInstance?.sustentanteInstance?.fechaNacimiento[Calendar.MONTH]+1});
-		generalesModel.set("fechaNacimientoYear", ${viewModelInstance?.sustentanteInstance?.fechaNacimiento[Calendar.YEAR]});
+		generalesModel.set("fechaNacimientoDay", ${viewModelInstance?.sustentanteInstance?.fechaNacimiento?.getAt(Calendar.DATE)});
+		generalesModel.set("fechaNacimientoMonth", ${viewModelInstance?.sustentanteInstance?.fechaNacimiento?.getAt(Calendar.MONTH)+1});
+		generalesModel.set("fechaNacimientoYear", ${viewModelInstance?.sustentanteInstance?.fechaNacimiento?.getAt(Calendar.YEAR)});
 		
 		generalesModel.set("genero","${viewModelInstance?.sustentanteInstance?.genero}");
 		generalesModel.set("rfc","${viewModelInstance?.sustentanteInstance?.rfc}");
@@ -271,7 +273,7 @@
 	</script>
 
 	<!-- INICIA: COMPONENTE CHECKsLIST -->
-	<g:javascript src="mx.amib.sistemas.registro.expediente.form.certificacionReposicionAutorizacion.checklist.js" />
+	<g:javascript src="mx.amib.sistemas.registro.expediente.form.certificacionCambioFigura.checklist.js" />
 	<script>
 
 		var app = app || {};

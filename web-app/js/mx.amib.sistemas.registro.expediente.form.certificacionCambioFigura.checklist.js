@@ -9,7 +9,7 @@ app.CHK_TELS = 1;
 app.CHK_SEPOMEX = 2;
 app.CHK_CERT = 3;
 app.CHK_PUES = 4;
-app.CHK_REVALCERT = 5;
+app.CHK_CAMBFIGEX = 5;
 
 app.CheckSubmit = Backbone.Model.extend({
 	defaults: {
@@ -61,15 +61,6 @@ app.CheckSubmitView = Backbone.View.extend({
 			this.$("#spnCheckSepomex").removeClass("glyphicon-unchecked");
 			this.$("#spnCheckSepomex").addClass("glyphicon-check");
 		}
-		if(arr[app.CHK_CERT] == false){
-			allChecked = false;
-			this.$("#spnCheckFigura").removeClass("glyphicon-check");
-			this.$("#spnCheckFigura").addClass("glyphicon-unchecked");
-		}
-		else{
-			this.$("#spnCheckFigura").removeClass("glyphicon-unchecked");
-			this.$("#spnCheckFigura").addClass("glyphicon-check");
-		}
 		if(arr[app.CHK_PUES] == false){
 			allChecked = false;
 			this.$("#spnCheckPuestos").removeClass("glyphicon-check");
@@ -79,14 +70,14 @@ app.CheckSubmitView = Backbone.View.extend({
 			this.$("#spnCheckPuestos").removeClass("glyphicon-unchecked");
 			this.$("#spnCheckPuestos").addClass("glyphicon-check");
 		}
-		if(arr[app.CHK_REVALCERT] == false){
+		if(arr[app.CHK_CAMBFIGEX] == false){
 			allChecked = false;
-			this.$("#spnCheckRevCert").removeClass("glyphicon-check");
-			this.$("#spnCheckRevCert").addClass("glyphicon-unchecked");
+			this.$("#spnCheckCamFigEx").removeClass("glyphicon-check");
+			this.$("#spnCheckCamFigEx").addClass("glyphicon-unchecked");
 		}
 		else{
-			this.$("#spnCheckRevCert").removeClass("glyphicon-unchecked");
-			this.$("#spnCheckRevCert").addClass("glyphicon-check");
+			this.$("#spnCheckCamFigEx").removeClass("glyphicon-unchecked");
+			this.$("#spnCheckCamFigEx").addClass("glyphicon-check");
 		}
 		if(allChecked == false){
 			this.$(".submit").prop( "disabled", true );
@@ -123,10 +114,11 @@ app.CheckSubmitView = Backbone.View.extend({
 		//El método introduce los datos en campos "hidden" con los que se hará POST
 		this.$("#spnHdnPostData").html("");
 		//datos de validacion
-		this.$("#spnHdnPostData").append('<input type="hidden" name="validacion.idMetodoValidacion" value="' + arr[app.CHK_REVALCERT].model.get('idMetodoValidacion') + '" />');
-		this.$("#spnHdnPostData").append('<input type="hidden" name="validacion.idExamenReservacion" value="' + arr[app.CHK_REVALCERT].model.get('opcionExamenVM').getExamenSeleccionado().get('grailsId') + '" />');
-		this.$("#spnHdnPostData").append('<input type="hidden" name="validacion.fechaAplicacionExamenUnixEpoch" value="' + Math.floor(arr[app.CHK_REVALCERT].model.get('opcionExamenVM').getExamenSeleccionado().get('fechaAplicacionExamenUnixEpoch')) + '" />');
-		
+
+		this.$("#spnHdnPostData").append('<input type="hidden" name="validacion.idMetodoValidacion" value="' + arr[app.CHK_CAMBFIGEX].model.get('idMetodoValidacion') + '" />');
+		this.$("#spnHdnPostData").append('<input type="hidden" name="validacion.idExamenReservacion" value="' + arr[app.CHK_CAMBFIGEX].model.get('opcionExamenVM').getExamenSeleccionado().get('grailsId') + '" />');
+		this.$("#spnHdnPostData").append('<input type="hidden" name="validacion.fechaAplicacionExamenUnixEpoch" value="' + Math.floor(arr[app.CHK_CAMBFIGEX].model.get('opcionExamenVM').getExamenSeleccionado().get('fechaAplicacionExamenUnixEpoch')) + '" />');
+	
 		//datos generales
 		this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.id" value="' + arr[app.CHK_GRALES].model.get('grailsId') + '" />');
 		this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.numeroMatricula" value="' + arr[app.CHK_GRALES].model.get('numeroMatricula') + '" />');
@@ -158,22 +150,23 @@ app.CheckSubmitView = Backbone.View.extend({
 		this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.numeroInterior" value="' + arr[app.CHK_SEPOMEX].model.get('numeroInterior') + '" />');
 		this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.numeroExterior" value="' + arr[app.CHK_SEPOMEX].model.get('numeroExterior') + '" />');
 		//datos de certificacion
-		this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.id" value="' + arr[app.CHK_CERT].model.get('grailsId') + '" />');
-		this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.fechaObtencion_day" value="' + arr[app.CHK_CERT].model.get('fechaObtencion_day') + '" />');
-		this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.fechaObtencion_month" value="' + arr[app.CHK_CERT].model.get('fechaObtencion_month') + '" />');
-		this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.fechaObtencion_year" value="' + arr[app.CHK_CERT].model.get('fechaObtencion_year') + '" />');
-		this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.fechaInicio_day" value="' + arr[app.CHK_CERT].model.get('fechaInicio_day') + '" />');
-		this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.fechaInicio_month" value="' + arr[app.CHK_CERT].model.get('fechaInicio_month') + '" />');
-		this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.fechaInicio_year" value="' + arr[app.CHK_CERT].model.get('fechaInicio_year') + '" />');
-		this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.fechaFin_day" value="' + arr[app.CHK_CERT].model.get('fechaFin_day') + '" />');
-		this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.fechaFin_month" value="' + arr[app.CHK_CERT].model.get('fechaFin_month') + '" />');
-		this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.fechaFin_year" value="' + arr[app.CHK_CERT].model.get('fechaFin_year') + '" />');
-		this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.statusEntHistorialInforme" value="' + arr[app.CHK_CERT].model.get('statusEntHistorialInforme') + '" />');
-		this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.obsEntHistorialInforme" value="' + arr[app.CHK_CERT].model.get('obsEntHistorialInforme') + '" />');
-		this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.statusEntCartaRec" value="' + arr[app.CHK_CERT].model.get('statusEntCartaRec') + '" />');
-		this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.obsEntCartaRec" value="' + arr[app.CHK_CERT].model.get('obsEntCartaRec') + '" />');
-		this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.statusConstBolVal" value="' + arr[app.CHK_CERT].model.get('statusConstBolVal') + '" />');
-		this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.obsConstBolVal" value="' + arr[app.CHK_CERT].model.get('obsConstBolVal') + '" />');
+		this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.id" value="' + arr[app.CHK_CAMBFIGEX].model.get('opcionExamenVM').getExamenSeleccionado().get('idCertificaionACambiar') + '" />');
+		this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.idVarianteFigura" value="' + arr[app.CHK_CAMBFIGEX].model.get('certificacionVM').get('idVarianteFigura') + '" />');
+		this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.fechaObtencion_day" value="' + arr[app.CHK_CAMBFIGEX].model.get('certificacionVM').get('fechaObtencion_day') + '" />');
+		this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.fechaObtencion_month" value="' + arr[app.CHK_CAMBFIGEX].model.get('certificacionVM').get('fechaObtencion_month') + '" />');
+		this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.fechaObtencion_year" value="' + arr[app.CHK_CAMBFIGEX].model.get('certificacionVM').get('fechaObtencion_year') + '" />');
+		this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.fechaInicio_day" value="' + arr[app.CHK_CAMBFIGEX].model.get('certificacionVM').get('fechaInicio_day') + '" />');
+		this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.fechaInicio_month" value="' + arr[app.CHK_CAMBFIGEX].model.get('certificacionVM').get('fechaInicio_month') + '" />');
+		this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.fechaInicio_year" value="' + arr[app.CHK_CAMBFIGEX].model.get('certificacionVM').get('fechaInicio_year') + '" />');
+		this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.fechaFin_day" value="' + arr[app.CHK_CAMBFIGEX].model.get('certificacionVM').get('fechaFin_day') + '" />');
+		this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.fechaFin_month" value="' + arr[app.CHK_CAMBFIGEX].model.get('certificacionVM').get('fechaFin_month') + '" />');
+		this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.fechaFin_year" value="' + arr[app.CHK_CAMBFIGEX].model.get('certificacionVM').get('fechaFin_year') + '" />');
+		this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.statusEntHistorialInforme" value="' + arr[app.CHK_CAMBFIGEX].model.get('certificacionVM').get('statusEntHistorialInforme') + '" />');
+		this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.obsEntHistorialInforme" value="' + arr[app.CHK_CAMBFIGEX].model.get('certificacionVM').get('obsEntHistorialInforme') + '" />');
+		this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.statusEntCartaRec" value="' + arr[app.CHK_CAMBFIGEX].model.get('certificacionVM').get('statusEntCartaRec') + '" />');
+		this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.obsEntCartaRec" value="' + arr[app.CHK_CAMBFIGEX].model.get('certificacionVM').get('obsEntCartaRec') + '" />');
+		this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.statusConstBolVal" value="' + arr[app.CHK_CAMBFIGEX].model.get('certificacionVM').get('statusConstBolVal') + '" />');
+		this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.obsConstBolVal" value="' + arr[app.CHK_CAMBFIGEX].model.get('certificacionVM').get('obsConstBolVal') + '" />');
 		//datos de puestos
 		var puestosJson = JSON.stringify(arr[app.CHK_PUES].collection.toJSON());
 		this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.puestos_json" value=\'' + puestosJson + '\' />');

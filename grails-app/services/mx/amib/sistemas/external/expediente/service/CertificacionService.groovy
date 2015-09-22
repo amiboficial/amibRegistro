@@ -50,6 +50,7 @@ class CertificacionService {
 	String updateDatosParaAprobarDictamenUrl
 	String updateDatosParaActualizarAutorizacionUrl
 	String createReponerAutorizacionUrl
+	String createCambioFiguraUrl
 	
 	CertificacionTO get(Long id){
 		CertificacionTO c = null
@@ -59,7 +60,7 @@ class CertificacionService {
 		}
 		if(resp.json instanceof JSONObject && !JSONObject.NULL.equals(resp.json)){
 			SustentanteTO s = SustentanteService.obtenerSustentanteFromJSON(resp.json.'sustentante')
-			c = s.certificaciones.find{ it.id = id }
+			c = s.certificaciones.find{ it.id == id }
 		}
 		
 		return c
@@ -517,6 +518,32 @@ class CertificacionService {
 		println (mapToSend as JSON)
 		
 		def resp = rest.post(createReponerAutorizacionUrl){
+			contentType "application/json;charset=UTF-8"
+			json (mapToSend as JSON)
+		}
+		
+		if(resp.statusCode.value() != HttpStatus.CREATED.value && resp.statusCode.value() != HttpStatus.OK.value)
+			throw new Exception("STATUS CODE: " + resp.statusCode)
+		else
+			if(resp.json != null && resp.json instanceof JSONObject) {
+				c = this.obtenerCertificacionFromJSON(resp.json)
+			}
+		
+		return c
+	}
+	
+	CertificacionTO createCambioFigura(CertificacionTO c, ValidacionTO v){
+		def rest = new RestBuilder()
+		Map<String,Object> mapToSend = new HashMap<String,Object>()
+		
+		mapToSend.put('certificacion', c)
+		mapToSend.put('validacion', v)
+		
+		println (createCambioFiguraUrl)
+		println (mapToSend as JSON)
+		println (mapToSend as JSON)
+		
+		def resp = rest.post(createCambioFiguraUrl){
 			contentType "application/json;charset=UTF-8"
 			json (mapToSend as JSON)
 		}

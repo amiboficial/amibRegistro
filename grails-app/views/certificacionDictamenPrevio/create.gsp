@@ -107,9 +107,9 @@
 		generalesModel.set("primerApellido","${raw(viewModelInstance?.sustentanteInstance?.primerApellido)}");
 		generalesModel.set("segundoApellido","${raw(viewModelInstance?.sustentanteInstance?.segundoApellido)}");
 		
-		generalesModel.set("fechaNacimientoDay", ${viewModelInstance?.sustentanteInstance?.fechaNacimiento[Calendar.DATE]});
-		generalesModel.set("fechaNacimientoMonth", ${viewModelInstance?.sustentanteInstance?.fechaNacimiento[Calendar.MONTH]+1});
-		generalesModel.set("fechaNacimientoYear", ${viewModelInstance?.sustentanteInstance?.fechaNacimiento[Calendar.YEAR]});
+		generalesModel.set("fechaNacimientoDay", ${viewModelInstance?.sustentanteInstance?.fechaNacimiento?.getAt(Calendar.DATE)});
+		generalesModel.set("fechaNacimientoMonth", ${viewModelInstance?.sustentanteInstance?.fechaNacimiento?.getAt(Calendar.MONTH)+1});
+		generalesModel.set("fechaNacimientoYear", ${viewModelInstance?.sustentanteInstance?.fechaNacimiento?.getAt(Calendar.YEAR)});
 		
 		generalesModel.set("genero","${viewModelInstance?.sustentanteInstance?.genero}");
 		generalesModel.set("rfc","${viewModelInstance?.sustentanteInstance?.rfc}");

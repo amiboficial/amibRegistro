@@ -135,10 +135,8 @@ class CertificacionDictamenPrevioController {
 		render(view:'create', model: [viewModelInstance:cvm])
 	}
 	
-	private CreateViewModel getCreateViewModel(Long id){
+	private CreateViewModel getCreateViewModel(long id){
 		CreateViewModel cvm = new CreateViewModel()
-		
-		cvm.institucionesList = entidadFinancieraService.obtenerInstituciones()
 		
 		cvm.estadoCivilList = estadoCivilService.list()
 		cvm.institucionesList = entidadFinancieraService.obtenerInstituciones()
@@ -153,6 +151,12 @@ class CertificacionDictamenPrevioController {
 				cvm.codigoPostal = sepomexService.obtenerCodigoPostalDeIdSepomex(cvm.sustentanteInstance.idSepomex)
 				cvm.sepomexJsonList = (sepomexService.obtenerDatosSepomexPorCodigoPostal(cvm.codigoPostal).sort{ it.asentamiento?.nombre } as JSON)
 			}
+			if(cvm.sustentanteInstance.fechaNacimiento == null){
+				println "NULO NULO NULO!!!"
+			}
+		}
+		else{
+			println 'HUUUUUULO NULLO'
 		}
 		
 		return cvm

@@ -45,6 +45,7 @@ app.CertificacionVM = Backbone.Model.extend({
 	//errorOnValidate,errorsCleaned,dataChanged
 	defaults: { 
 		grailsId: -1,
+		idCertificaionACambiar: -1,
 		
 		variantesFigura: new Array(),
 		//cada elemento debe incluir los siguientes campos
@@ -231,6 +232,19 @@ app.CertificacionView = Backbone.View.extend({
 		if( this.model.get('errStatusConstBolVal') == true ){
 			this.$('.div-statusConstBolVal').addClass('has-error');
 		}
+	},
+	
+	events: {
+		'change .field': 'updateModel',
+	},
+	
+	updateModel: function(ev){
+		ev.preventDefault();
+		
+		var fieldName = this.$(ev.currentTarget).data("field");
+		var fieldValue = this.$(ev.currentTarget).val().trim();
+		
+		this.model.set(fieldName,fieldValue,{silent:true});
 	}
 });
 

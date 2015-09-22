@@ -19,6 +19,8 @@ app.ExamenVM = Backbone.Model.extend({
 		fechaObtencion_month: -1,
 		fechaObtencion_year: -1,
 		
+		idCertificaionACambiar: -1,
+		
 		seleccionado: false,
 		
 		disabled: false

@@ -255,7 +255,7 @@
 	</script>
 
 	<!-- INICIA: COMPONENTE CHECKsLIST -->
-	<g:javascript src="mx.amib.sistemas.registro.expediente.form.reposicionAutorizacionCertificacion.checklist.js" />
+	<g:javascript src="mx.amib.sistemas.registro.expediente.form.certificacionReposicionAutorizacion.checklist.js" />
 	<script>
 
 		var app = app || {};

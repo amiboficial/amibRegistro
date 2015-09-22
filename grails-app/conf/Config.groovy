@@ -200,6 +200,7 @@ mx.amib.sistemas.expediente.certificacion.Certificacion.findAllCandidatoCambioFi
 mx.amib.sistemas.expediente.certificacion.Certificacion.updateDatosParaAprobarDictamen = 'certificacionRestful/updateDatosParaAprobarDictamen'
 mx.amib.sistemas.expediente.certificacion.Certificacion.updateDatosParaActualizarAutorizacion = 'certificacionRestful/updateDatosParaActualizarAutorizacion'
 mx.amib.sistemas.expediente.certificacion.Certificacion.createReponerAutorizacion = 'certificacionRestful/createReponerAutorizacion'
+mx.amib.sistemas.expediente.certificacion.Certificacion.createCambioFigura = 'certificacionRestful/createCambioFigura'
 
 //especificaciones de rutas para servicios REST de amibOficios
 mx.amib.sistemas.oficios.poder.list = 'poder/index'

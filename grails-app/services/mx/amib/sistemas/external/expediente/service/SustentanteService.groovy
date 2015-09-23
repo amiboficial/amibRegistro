@@ -373,6 +373,7 @@ class SustentanteService {
 			ds.uuid = it.'uuid'
 			ds.vigente = it.'vigente'
 			
+			ds.idTipoDocumentoSustentate = it.'tipoDocumentoSustentate'.'id'
 			ds.tipoDocumentoSustentate = new TipoDocumentoTO()
 			ds.tipoDocumentoSustentate.id = it.'tipoDocumentoSustentate'.'id'
 			ds.tipoDocumentoSustentate.descripcion = it.'tipoDocumentoSustentate'.'descripcion'

@@ -2,7 +2,9 @@ package mx.amib.sistemas.registro.expediente.controller
 
 import java.text.SimpleDateFormat
 import java.util.Collection
+
 import org.codehaus.groovy.grails.web.json.JSONObject
+
 import grails.converters.JSON
 import mx.amib.sistemas.external.catalogos.service.EstadoCivilTO
 import mx.amib.sistemas.external.catalogos.service.FiguraTO
@@ -15,11 +17,13 @@ import mx.amib.sistemas.external.catalogos.service.VarianteFiguraTO
 import mx.amib.sistemas.external.expediente.certificacion.catalog.service.StatusAutorizacionTO
 import mx.amib.sistemas.external.expediente.certificacion.catalog.service.StatusCertificacionTO
 import mx.amib.sistemas.external.expediente.certificacion.service.CertificacionTO
+import mx.amib.sistemas.external.expediente.persona.catalog.service.TipoDocumentoTO
 import mx.amib.sistemas.external.expediente.persona.service.DocumentoSustentanteTO
 import mx.amib.sistemas.external.expediente.persona.service.PuestoTO
 import mx.amib.sistemas.external.expediente.persona.service.SustentanteTO
 import mx.amib.sistemas.external.expediente.persona.service.TelefonoSustentanteTO
 import mx.amib.sistemas.registro.legacy.saaec.RegistroExamenTO
+
 import org.codehaus.groovy.grails.web.json.JSONArray
 
 class ExpedienteController {
@@ -33,6 +37,7 @@ class ExpedienteController {
 	def tipoTelefonoService
 	
 	def sustentanteService
+	def documentoSustentanteService
 	def statusAutorizacionService
 	def statusCertificacionService
 	
@@ -154,6 +159,20 @@ class ExpedienteController {
 		render(view:"edit",model:[viewModelInstance: vm])
 	}
 	
+	def editDoc(Long id){
+		EditDocViewModel vm = new EditDocViewModel()
+		
+		//carga de datos del viewModel
+		vm.tipoDocumentoList = new ArrayList<TipoDocumentoTO>()
+		vm.tipoDocumentoList.add(new TipoDocumentoTO( [ id: 2, descripcion: "Acta de Nacimiento", vigente: true] ))
+		vm.tipoDocumentoList.add(new TipoDocumentoTO( [ id: 3, descripcion: "CURP o RFC", vigente: true] ))
+		vm.tipoDocumentoList.add(new TipoDocumentoTO( [ id: 4, descripcion: "Identificación oficial", vigente: true] ))
+		vm.tipoDocumentoList.add(new TipoDocumentoTO( [ id: 5, descripcion: "Constancia de Acreditación del Curso de Ética", vigente: true] ))
+		vm.sustentanteInstance = sustentanteService.get(id)
+		
+		render(view:"editDoc",model:[viewModelInstance: vm])
+	}
+	
 	private FormViewModel getFormViewModel(SustentanteTO s){
 		FormViewModel vm = new FormViewModel()
 		vm.estadoCivilList = estadoCivilService.list()
@@ -181,7 +200,9 @@ class ExpedienteController {
 		render(view:"show",model:[viewModelInstance: vm])
 	}
 
-	def showDemo() { }
+	def showDemo(long id) { 
+		
+	}
 	
 	//Métodos de guardado de datos
 	def updateDatosPersonales(SustentanteTO sustentante){
@@ -218,11 +239,35 @@ class ExpedienteController {
 			flash.successMessage = "El registro de sustentante de \"" + sustentante.nombre + " " + sustentante.primerApellido + "\" ha sido guardado satisfactoriamente"
 		}
 		catch (Exception e){
-			flash.errorMessage = "Ha ocurrido un error al guardar la informaci�n, los detalles son los siguientes: " + e.message.substring(0, Math.min(e.message.length(),256)  )
+			flash.errorMessage = "Ha ocurrido un error al guardar los datos, los detalles son los siguientes: " + e.message.substring(0, Math.min(e.message.length(),256)  )
 		}
 
-		redirect (action: "index")
+		redirect (action: "show", id:id ) 
 	}
+
+	def updateDoc(long id){
+		List<DocumentoSustentanteTO> docSustList = new ArrayList<DocumentoSustentanteTO>()
+		def docsJsonStr = params.'documentos'
+		def docsJson = JSON.parse(docsJsonStr)
+		
+		docsJson.each{ x -> 
+			DocumentoSustentanteTO dsust = new DocumentoSustentanteTO()
+			dsust.uuid = x.'uuid'
+			dsust.vigente = x.'vigente'
+			dsust.idTipoDocumentoSustentate = Long.parseLong(x.'idTipoDocumento'.toString())
+			docSustList.add(dsust)
+		}
+		
+		try {
+			documentoSustentanteService.updateDocumentosDeSustentante(id, docSustList)
+			flash.successMessage = "La gestión de los documentos ha sido guardada satisfactoriamente"
+		}
+		catch (Exception e){
+			flash.errorMessage = "Ha ocurrido un error al guardar los datos, los detalles son los siguientes: " + e.message.substring(0, Math.min(e.message.length(),256)  )
+		}
+		
+		redirect (action: "show", id:id ) 
+	}	
 }
 
 public class ShowViewModel{
@@ -247,6 +292,13 @@ public class FormViewModel{
 	VarianteFiguraTO varianteFiguraInstance
 	
 	String codigoPostal
+}
+
+public class EditDocViewModel{
+
+	Collection<TipoDocumentoTO> tipoDocumentoList
+	SustentanteTO sustentanteInstance
+	
 }
 
 public class IndexViewModel{

@@ -93,7 +93,7 @@ environments {
 	test {
 		grails.logging.jul.usebridge = false
 		// TODO: grails.serverURL = "http://www.changeme.com"
-		mx.amib.sistemas.catalogos.resthttpURL = 'http://bimalatrop.no-ip.biz:8080/amibCatalogos-0.1/'
+		//mx.amib.sistemas.catalogos.resthttpURL = 'http://bimalatrop.no-ip.biz:8080/amibCatalogos-0.1/'
 		//mx.amib.sistemas.expediente.resthttpURL = 'http://bimalatrop.no-ip.biz:8084/amibExpediente/'
 		//mx.amib.sistemas.expediente.resthttpURL = 'http://localhost:8084/amibExpediente/'
 		mx.amib.sistemas.expediente.resthttpURL = 'http://bimalatrop.no-ip.biz:8080/amibExpediente-0.1/'
@@ -177,6 +177,7 @@ mx.amib.sistemas.expediente.Sustentante.get = 'sustentanteRestful/show/'
 mx.amib.sistemas.expediente.Sustentante.save = 'sustentanteRestful/save'
 mx.amib.sistemas.expediente.Sustentante.updateDatosPersonales = 'sustentanteRestful/updateDatosPersonales'
 mx.amib.sistemas.expediente.Sustentante.updatePuestos = 'sustentanteRestful/updatePuestos'
+mx.amib.sistemas.expediente.DocumentoSustentante.updateDocumentosDeSustentante = 'documentoSustentanteRestful/updateDocumentosDeSustentante'
 mx.amib.sistemas.expediente.certificacion.MetodoValidacion.list = 'metodoValidacionRestful/index?max=100'
 mx.amib.sistemas.expediente.certificacion.StatusAutorizacion.list = 'statusAutorizacionRestful/index?max=100'
 mx.amib.sistemas.expediente.certificacion.StatusCertificacion.list = 'statusCertificacionRestful/index?max=100'

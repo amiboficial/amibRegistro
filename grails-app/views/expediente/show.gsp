@@ -292,120 +292,48 @@
 			<div role="tabpanel" class="tab-pane" id="tabCertifaciones">
 				<br/>
 				<div class="list-group">
-					<div class="list-group-item">
-						<div class="figuraRow row">
-							<label class="col-sm-3 control-label">Figura</label>
-							<div class="col-sm-4"><p class="form-control-static">Operador de Bolsa&nbsp;</p></div>
-						</div>
-						<div class="figuraRow row">
-							<label class="col-sm-3 control-label">Tipo de autorización</label>
-							<div class="col-sm-4"><p class="form-control-static">Operador de Bolsa&nbsp;</p></div>
-						</div>
-						<div class="figuraRow row">
-							<label class="col-sm-3 control-label">Estatus de certificación</label>
-							<div class="col-sm-4"><p class="form-control-static">Certificado&nbsp;</p></div>
-						</div>
-						<div class="figuraRow row">
-							<label class="col-sm-3 control-label">Estatus de autorización</label>
-							<div class="col-sm-4"><p class="form-control-static">Autorizado con poderes&nbsp;</p></div>
-						</div>
-						<div class="figuraRow row">
-							<label class="col-sm-3 control-label">Fecha de inicio de vigencia</label>
-							<div class="col-sm-4"><p class="form-control-static">17/06/1990&nbsp;</p></div>
-						</div>
-						<div class="figuraRow row">
-							<label class="col-sm-3 control-label">Fecha de fin de vigencia</label>
-							<div class="col-sm-4"><p class="form-control-static">17/06/1990&nbsp;</p></div>
-						</div>
-						<div class="row">
-							<div style="text-align:center; margin-top: 0.75em;">
-								<button type="button" class="edit btn btn-info"><span class="glyphicon glyphicon-pencil"></span> Emitir dictamen</button>
-								<button type="button" class="edit btn btn-info"><span class="glyphicon glyphicon-pencil"></span> Revalidar por puntos</button>
-								<button type="button" class="edit btn btn-info"><span class="glyphicon glyphicon-pencil"></span> Revalidar por experiencia</button>
-								<button type="button" class="edit btn btn-info"><span class="glyphicon glyphicon-pencil"></span> Autorizar</button>
-								<button type="button" class="edit btn btn-info"><span class="glyphicon glyphicon-pencil"></span> Revocar certificación</button>
-								<button type="button" class="edit btn btn-info"><span class="glyphicon glyphicon-pencil"></span> Revocar autorización</button>
-								<button type="button" class="edit btn btn-primary"><span class="glyphicon glyphicon-pencil"></span> Editar</button>
-								<button type="button" class="delete btn btn-danger"><span class="glyphicon glyphicon-trash"></span> Borrar</button>
+				
+					<g:each var="x" in="${viewModelInstance?.sustentanteInstance?.certificaciones}">
+						<div class="list-group-item">
+						
+							<div class="figuraRow row">
+								<label class="col-sm-3 control-label">Figura</label>
+								<div class="col-sm-4"><p class="form-control-static">${x?.varianteFigura?.nombre}&nbsp;</p></div>
 							</div>
-						</div>
-					</div>
-					<div class="list-group-item">
-						<div class="figuraRow row">
-							<label class="col-sm-3 control-label">Figura</label>
-							<div class="col-sm-4"><p class="form-control-static">Operador de Bolsa&nbsp;</p></div>
-						</div>
-						<div class="figuraRow row">
-							<label class="col-sm-3 control-label">Tipo de autorización</label>
-							<div class="col-sm-4"><p class="form-control-static">Operador de Bolsa&nbsp;</p></div>
-						</div>
-						<div class="figuraRow row">
-							<label class="col-sm-3 control-label">Estatus de certificación</label>
-							<div class="col-sm-4"><p class="form-control-static">Certificado&nbsp;</p></div>
-						</div>
-						<div class="figuraRow row">
-							<label class="col-sm-3 control-label">Estatus de autorización</label>
-							<div class="col-sm-4"><p class="form-control-static">Autorizado con poderes&nbsp;</p></div>
-						</div>
-						<div class="figuraRow row">
-							<label class="col-sm-3 control-label">Fecha de inicio de vigencia</label>
-							<div class="col-sm-4"><p class="form-control-static">17/06/1990&nbsp;</p></div>
-						</div>
-						<div class="figuraRow row">
-							<label class="col-sm-3 control-label">Fecha de fin de vigencia</label>
-							<div class="col-sm-4"><p class="form-control-static">17/06/1990&nbsp;</p></div>
-						</div>
-						<div class="row">
-							<div style="text-align:center; margin-top: 0.75em;">
-								<button type="button" class="edit btn btn-info"><span class="glyphicon glyphicon-pencil"></span> Emitir dictamen</button>
-								<button type="button" class="edit btn btn-info"><span class="glyphicon glyphicon-pencil"></span> Revalidar por puntos</button>
-								<button type="button" class="edit btn btn-info"><span class="glyphicon glyphicon-pencil"></span> Revalidar por experiencia</button>
-								<button type="button" class="edit btn btn-info"><span class="glyphicon glyphicon-pencil"></span> Autorizar</button>
-								<button type="button" class="edit btn btn-info"><span class="glyphicon glyphicon-pencil"></span> Revocar certificación</button>
-								<button type="button" class="edit btn btn-info"><span class="glyphicon glyphicon-pencil"></span> Revocar autorización</button>
-								<button type="button" class="edit btn btn-primary"><span class="glyphicon glyphicon-pencil"></span> Editar</button>
-								<button type="button" class="delete btn btn-danger"><span class="glyphicon glyphicon-trash"></span> Borrar</button>
+							<div class="figuraRow row">
+								<label class="col-sm-3 control-label">Tipo de autorización</label>
+								<div class="col-sm-4"><p class="form-control-static">${x?.varianteFigura?.tipoAutorizacionFigura}&nbsp;</p></div>
 							</div>
-						</div>
-					</div>
-					<div class="list-group-item">
-						<div class="figuraRow row">
-							<label class="col-sm-3 control-label">Figura</label>
-							<div class="col-sm-4"><p class="form-control-static">Operador de Bolsa&nbsp;</p></div>
-						</div>
-						<div class="figuraRow row">
-							<label class="col-sm-3 control-label">Tipo de autorización</label>
-							<div class="col-sm-4"><p class="form-control-static">Operador de Bolsa&nbsp;</p></div>
-						</div>
-						<div class="figuraRow row">
-							<label class="col-sm-3 control-label">Estatus de certificación</label>
-							<div class="col-sm-4"><p class="form-control-static">Certificado&nbsp;</p></div>
-						</div>
-						<div class="figuraRow row">
-							<label class="col-sm-3 control-label">Estatus de autorización</label>
-							<div class="col-sm-4"><p class="form-control-static">Autorizado con poderes&nbsp;</p></div>
-						</div>
-						<div class="figuraRow row">
-							<label class="col-sm-3 control-label">Fecha de inicio de vigencia</label>
-							<div class="col-sm-4"><p class="form-control-static">17/06/1990&nbsp;</p></div>
-						</div>
-						<div class="figuraRow row">
-							<label class="col-sm-3 control-label">Fecha de fin de vigencia</label>
-							<div class="col-sm-4"><p class="form-control-static">17/06/1990&nbsp;</p></div>
-						</div>
-						<div class="row">
-							<div style="text-align:center; margin-top: 0.75em;">
-								<button type="button" class="edit btn btn-info"><span class="glyphicon glyphicon-pencil"></span> Emitir dictamen</button>
-								<button type="button" class="edit btn btn-info"><span class="glyphicon glyphicon-pencil"></span> Revalidar por puntos</button>
-								<button type="button" class="edit btn btn-info"><span class="glyphicon glyphicon-pencil"></span> Revalidar por experiencia</button>
-								<button type="button" class="edit btn btn-info"><span class="glyphicon glyphicon-pencil"></span> Autorizar</button>
-								<button type="button" class="edit btn btn-info"><span class="glyphicon glyphicon-pencil"></span> Revocar certificación</button>
-								<button type="button" class="edit btn btn-info"><span class="glyphicon glyphicon-pencil"></span> Revocar autorización</button>
-								<button type="button" class="edit btn btn-primary"><span class="glyphicon glyphicon-pencil"></span> Editar</button>
-								<button type="button" class="delete btn btn-danger"><span class="glyphicon glyphicon-trash"></span> Borrar</button>
+							<div class="figuraRow row">
+								<label class="col-sm-3 control-label">Estatus de certificación</label>
+								<div class="col-sm-4"><p class="form-control-static">${x?.statusAutorizacion?.descripcion}&nbsp;</p></div>
 							</div>
+							<div class="figuraRow row">
+								<label class="col-sm-3 control-label">Estatus de autorización</label>
+								<div class="col-sm-4"><p class="form-control-static">${x?.statusCertificacion?.descripcion}&nbsp;</p></div>
+							</div>
+							<div class="figuraRow row">
+								<label class="col-sm-3 control-label">Fecha de obtención</label>
+								<div class="col-sm-4"><p class="form-control-static"><g:formatDate format="dd-MM-yyyy" date="${x?.fechaObtencion}"/>&nbsp;</p></div>
+							</div>
+							<div class="figuraRow row">
+								<label class="col-sm-3 control-label">Fecha de inicio de vigencia</label>
+								<div class="col-sm-4"><p class="form-control-static"><g:formatDate format="dd-MM-yyyy" date="${x?.fechaInicio}"/>&nbsp;</p></div>
+							</div>
+							<div class="figuraRow row">
+								<label class="col-sm-3 control-label">Fecha de fin de vigencia</label>
+								<div class="col-sm-4"><p class="form-control-static"><g:formatDate format="dd-MM-yyyy" date="${x?.fechaFin}"/>&nbsp;</p></div>
+							</div>
+							<div class="row">
+								<div style="text-align:center; margin-top: 0.75em;">
+									<button type="button" class="edit btn btn-primary"><span class="glyphicon glyphicon-pencil"></span> Editar</button>
+									<button type="button" class="delete btn btn-danger"><span class="glyphicon glyphicon-trash"></span> Borrar</button>
+								</div>
+							</div>
+							
 						</div>
-					</div>
+					</g:each>
+				
 				</div>
 			</div>
 			

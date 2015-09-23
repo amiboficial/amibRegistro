@@ -5,7 +5,7 @@
 		<legend>Lista de exámenes acreditados</legend>
 		
 		<div class="alert-errorNoHaySeleccion alert alert-danger" style="display: none;"><span class="glyphicon glyphicon-info-sign" ></span>&nbsp; Debe seleccionar el <strong>exámen</strong> sobre el cual aplicará la reposición</div>
-		<div class="alert alert-info"><span class="glyphicon glyphicon-info-sign"></span> Seleccione el exámen de certificación sobre el cual aplicacará la reposición de la autorización.</div>
+		<div class="alert alert-info"><span class="glyphicon glyphicon-info-sign"></span> Seleccione el exámen de certificación sobre el cual aplicará el cambio de figura.</div>
 		
 		<ul class="list-group">
 			{{ examenVMCollection.each(function(item){ }}

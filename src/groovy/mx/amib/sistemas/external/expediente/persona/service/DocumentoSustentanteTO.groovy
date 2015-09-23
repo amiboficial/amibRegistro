@@ -9,4 +9,5 @@ class DocumentoSustentanteTO {
 	SustentanteTO sustentante
 	
 	TipoDocumentoTO tipoDocumentoSustentate
+	long idTipoDocumentoSustentate
 }

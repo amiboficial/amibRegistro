@@ -52,6 +52,9 @@ beans = {
 		updateDatosPersonalesUrl = application.config.mx.amib.sistemas.expediente.resthttpURL + application.config.mx.amib.sistemas.expediente.Sustentante.updateDatosPersonales
 		updatePuestosUrl = application.config.mx.amib.sistemas.expediente.resthttpURL + application.config.mx.amib.sistemas.expediente.Sustentante.updatePuestos 
 	}
+	documentoSustentanteService(mx.amib.sistemas.external.expediente.service.DocumentoSustentanteService) {
+		updateDocumentosDeSustentanteUrl =  application.config.mx.amib.sistemas.expediente.resthttpURL + application.config.mx.amib.sistemas.expediente.DocumentoSustentante.updateDocumentosDeSustentante 
+	}
 	certificacionService(mx.amib.sistemas.external.expediente.service.CertificacionService){
 		getAllUrl = application.config.mx.amib.sistemas.expediente.resthttpURL + application.config.mx.amib.sistemas.expediente.certificacion.Certificacion.getAll
 		getWithSustentante = application.config.mx.amib.sistemas.expediente.resthttpURL + application.config.mx.amib.sistemas.expediente.certificacion.Certificacion.getWithSustentante

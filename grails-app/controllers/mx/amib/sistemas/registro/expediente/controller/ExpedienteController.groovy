@@ -15,6 +15,7 @@ import mx.amib.sistemas.external.catalogos.service.InstitucionTO
 import mx.amib.sistemas.external.catalogos.service.NacionalidadTO
 import mx.amib.sistemas.external.catalogos.service.NivelEstudiosTO
 import mx.amib.sistemas.external.catalogos.service.SepomexTO
+import mx.amib.sistemas.external.catalogos.service.TipoDocumentoSustentanteService
 import mx.amib.sistemas.external.catalogos.service.TipoTelefonoTO
 import mx.amib.sistemas.external.catalogos.service.VarianteFiguraTO
 import mx.amib.sistemas.external.documentos.service.DocumentoRepositorioService
@@ -42,6 +43,7 @@ class ExpedienteController {
 	def nivelEstudiosService
 	def tipoTelefonoService
 	DocumentoRepositorioService documentoRepositorioService
+	TipoDocumentoSustentanteService tipoDocumentoSustentanteService
 	
 	def sustentanteService
 	def documentoSustentanteService
@@ -170,16 +172,9 @@ class ExpedienteController {
 		EditDocViewModel vm = new EditDocViewModel()
 		
 		//carga de datos del viewModel
-		vm.tipoDocumentoList = new ArrayList<TipoDocumentoTO>()
-		vm.tipoDocumentoList.add(new TipoDocumentoTO( [ id: 2, descripcion: "Acta de Nacimiento", vigente: true] ))
-		vm.tipoDocumentoList.add(new TipoDocumentoTO( [ id: 3, descripcion: "CURP o RFC", vigente: true] ))
-		vm.tipoDocumentoList.add(new TipoDocumentoTO( [ id: 4, descripcion: "Identificación oficial", vigente: true] ))
-		vm.tipoDocumentoList.add(new TipoDocumentoTO( [ id: 5, descripcion: "Constancia de Acreditación del Curso de Ética", vigente: true] ))
+		vm.tipoDocumentoList = tipoDocumentoSustentanteService.list().findAll{ it.vigente == true }.sort{ it.descripcion }
 		vm.sustentanteInstance = sustentanteService.get(id)
 		vm.documentosRespositorioUuidMap = new HashMap<String,DocumentoRepositorioTO>()
-		
-		println (vm.sustentanteInstance.documentos.collect{ it.uuid } as JSON)
-		println (documentoRepositorioService.obtenerTodosPorUuids( vm.sustentanteInstance.documentos.collect{ it.uuid } ) as JSON )
 		
 		documentoRepositorioService.obtenerTodosPorUuids( vm.sustentanteInstance.documentos.collect{ it.uuid } ).list.each { x -> 
 			vm.documentosRespositorioUuidMap.put(x.uuid, x)

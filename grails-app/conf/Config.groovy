@@ -93,7 +93,7 @@ environments {
 	test {
 		grails.logging.jul.usebridge = false
 		// TODO: grails.serverURL = "http://www.changeme.com"
-		//mx.amib.sistemas.catalogos.resthttpURL = 'http://bimalatrop.no-ip.biz:8080/amibCatalogos-0.1/'
+		mx.amib.sistemas.catalogos.resthttpURL = 'http://bimalatrop.no-ip.biz:8080/amibCatalogos-0.1/'
 		//mx.amib.sistemas.expediente.resthttpURL = 'http://bimalatrop.no-ip.biz:8084/amibExpediente/'
 		//mx.amib.sistemas.expediente.resthttpURL = 'http://localhost:8084/amibExpediente/'
 		mx.amib.sistemas.expediente.resthttpURL = 'http://bimalatrop.no-ip.biz:8080/amibExpediente-0.1/'
@@ -162,9 +162,10 @@ mx.amib.sistemas.catalogos.personal.EstadoCivil.getById = 'estadoCivilRestful/in
 mx.amib.sistemas.catalogos.personal.NivelEstudios.list = 'nivelEstudiosRestful/index?max=100'
 mx.amib.sistemas.catalogos.personal.Nacionalidad.list = 'nacionalidadRestful/list'
 mx.amib.sistemas.catalogos.personal.TipoTelefono.list = 'tipoTelefonoRestful/list'
+mx.amib.sistemas.catalogos.personal.TipoDocumentoSustentante.list = 'tipoDocumentoSustentanteRestful/list'
 mx.amib.sistemas.catalogos.sepomex.EntidadFederativa.list = 'entidadFederativaRestful/index?max=32'
 mx.amib.sistemas.catalogos.sepomex.Sepomex.findByCodigoPostal = 'sepomexRestful/findByCodigoPostal?cp='
-mx.amib.sistemas.catalogos.sepomex.Sepomex.get = "sepomexRestful/show/"
+mx.amib.sistemas.catalogos.sepomex.Sepomex.get = 'sepomexRestful/show/'
 
 //especificaciones de rutas para servicios REST de amibExpediente
 mx.amib.sistemas.expediente.Sustentante.comprobarMatriculas = 'sustentanteRestful/comprobarMatriculas/'
@@ -186,7 +187,7 @@ mx.amib.sistemas.expediente.certificacion.Certificacion.getWithSustentante = 'ce
 mx.amib.sistemas.expediente.certificacion.Certificacion.findAllEnDictamenPrevio = 'certificacionRestful/findAllEnDictamenPrevio/'
 mx.amib.sistemas.expediente.certificacion.Certificacion.findAllEnDictamenPrevioByMatricula = 'certificacionRestful/findAllEnDictamenPrevioByMatricula/'
 mx.amib.sistemas.expediente.certificacion.Certificacion.findAllEnDictamenPrevioByFolio = 'certificacionRestful/findAllEnDictamenPrevioByFolio/'
-mx.amib.sistemas.expediente.certificacion.Certificacion.findAllEnAutorizacion = "certificacionRestful/findAllEnAutorizacion"
+mx.amib.sistemas.expediente.certificacion.Certificacion.findAllEnAutorizacion = 'certificacionRestful/findAllEnAutorizacion'
 mx.amib.sistemas.expediente.certificacion.Certificacion.findAllEnAutorizacionByMatricula = "certificacionRestful/findAllEnAutorizacionByMatricula/"
 mx.amib.sistemas.expediente.certificacion.Certificacion.findAllEnAutorizacionByFolio = "certificacionRestful/findAllEnAutorizacionByFolio/"
 mx.amib.sistemas.expediente.certificacion.Certificacion.findAllCandidatoActualizacionAutorizacion = "certificacionRestful/findAllCandidatoActualizacionAutorizacion"

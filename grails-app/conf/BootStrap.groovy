@@ -7,7 +7,8 @@ class BootStrap {
 	def nacionalidadService
 	def nivelEstudiosService
 	def tipoTelefonoService
-
+	def tipoDocumentoSustentanteService
+	
 	//CATALOGOS PROPIOS DE EXPEDIENTE
 	def metodoValidacionService
 	def statusAutorizacionService
@@ -25,6 +26,7 @@ class BootStrap {
 		nacionalidadService.descargarCatalogo()
 		nivelEstudiosService.descargarCatalogo()
 		tipoTelefonoService.descargarCatalogo()
+		tipoDocumentoSustentanteService.descargarCatalogo()
 		//descarga catálogo de sepomex
 		sepomexService.descargarCatalogoEntidadFederativa()
 

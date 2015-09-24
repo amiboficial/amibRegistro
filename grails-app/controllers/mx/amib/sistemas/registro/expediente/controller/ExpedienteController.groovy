@@ -206,7 +206,11 @@ class ExpedienteController {
 		vm.nombreCompleto = s.nombre + " " + s.primerApellido + " " + s.segundoApellido
 		if(s.idSepomex != null)
 			vm.sepomexData = sepomexService.get(s.idSepomex)
+		vm.documentosRespositorioUuidMap = new HashMap<String,DocumentoRepositorioTO>()
 		
+		documentoRepositorioService.obtenerTodosPorUuids( vm.sustentanteInstance.documentos.collect{ it.uuid } ).list.each { x ->
+			vm.documentosRespositorioUuidMap.put(x.uuid, x)
+		}
 			
 		render(view:"show",model:[viewModelInstance: vm])
 	}
@@ -253,7 +257,7 @@ class ExpedienteController {
 			flash.errorMessage = "Ha ocurrido un error al guardar los datos, los detalles son los siguientes: " + e.message.substring(0, Math.min(e.message.length(),256)  )
 		}
 
-		redirect (action: "show", id:id ) 
+		redirect (action: "show", id:sustentante.id ) 
 	}
 
 	def updateDoc(long id){
@@ -323,6 +327,8 @@ public class ShowViewModel{
 	SustentanteTO sustentanteInstance
 	SepomexTO sepomexData
 	String nombreCompleto
+	
+	Map<String,DocumentoRepositorioTO> documentosRespositorioUuidMap
 }
 
 public class FormViewModel{

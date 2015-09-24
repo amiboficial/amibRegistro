@@ -241,58 +241,8 @@
 			<!-- INICIA: SECCION DE DOCUMENTACIÓN -->
 			<div role="tabpanel" class="tab-pane" id="tabDocumentacion">
 			
-				<table class="table">
-					<thead>
-						<tr>
-							<th style='width:32%;'>Tipo</th>
-							<th>Nombre</th>
-							<th>Vigente</th>
-							<th>Fecha de carga</th>
-							<th style='width:18%'>...</th>
-						</tr>
-					</thead>
-					
-					<tbody id="tbdyDocs">
-						<tr>
-							<td>Ejemplo 1</td>
-							<td>Ejemplo 1</td>
-							<td>Sí</td>
-							<td>17/06/1990</td>
-							<td>
-								<button type="button" onclick="btnDescargar_click()" class="download btn btn-info btn-xs">Descargar</button>
-							</td>
-						</tr>
-						<tr>
-							<td>Ejemplo 2</td>
-							<td>Ejemplo 2</td>
-							<td>Sí</td>
-							<td>17/06/1990</td>
-							<td>
-								<button type="button" onclick="btnDescargar_click()" class="download btn btn-info btn-xs">Descargar</button>
-							</td>
-						</tr>
-						<tr>
-							<td>Ejemplo 3</td>
-							<td>Ejemplo 3</td>
-							<td>Sí</td>
-							<td>17/06/1990</td>
-							<td>
-								<button type="button" onclick="btnDescargar_click()" class="download btn btn-info btn-xs">Descargar</button>
-							</td>
-						</tr>
-						<g:each in="${expedienteInstance?.documentos}">
-							<tr>
-								<td>Ejemplo 1</td>
-								<td>Ejemplo 1</td>
-								<td>Ejemplo 1</td>
-								<td>Ejemplo 1</td>
-								<td>
-									<button type="button" onclick="btnDescargar_click('${it.uuid}')" class="download btn btn-info btn-xs">Descargar</button>
-								</td>
-							</tr>
-						</g:each>
-					</tbody>
-				</table>
+				<div id="divDocumentosSustentante">
+				</div>
 			
 			</div>
 			<!-- FIN: SECCION DE DOCUMENTACIÓN -->
@@ -505,6 +455,40 @@
 	<g:if test="${flash.message}">
 		<div class="alert alert-info"><span class="glyphicon glyphicon-info-sign"></span> ${flash.message}</div>
 	</g:if>
+	
+	<g:render template="showDocumentos"/>
+	<g:javascript src="mx.amib.sistemas.registro.expediente.show.documentos.js" />
+	<script>
+
+	var app = app || {};
+
+	var documentosView;
+	var docsArray = new Array();
+	var downloadUrl;
+
+	<g:each status="i" var="x" in="${viewModelInstance?.sustentanteInstance?.documentos}">
+		docsArray.push({
+			grailsId: ${i+1},
+			uuid: '${x?.uuid}',
+			vigente:  ${x?.vigente},
+			nombre: "${viewModelInstance?.documentosRespositorioUuidMap?.get(x?.uuid)?.nombre}",
+			dsTipo: " ${x?.tipoDocumentoSustentate?.descripcion}",
+			manejaVigenciaTipoDocumento: true,
+			fechaCarga: '<g:formatDate format="dd-MM-yyyy" date="${viewModelInstance?.documentosRespositorioUuidMap?.get(x?.uuid)?.fechaCreacion}"/> ',
+			fechaCargaUnixEpoch : ${viewModelInstance?.documentosRespositorioUuidMap?.get(x?.uuid)?.fechaCreacion?.getTime()/1000},
+			<g:if test="${i < 10}">
+				visible: true
+			</g:if>
+		})
+	</g:each>
+	downloadUrl = '<g:createLink controller="documento" action="download" />';
+	
+	documentosView = new app.DocumentoSustentanteCollectionView({
+		docsArray: docsArray,
+		downloadUrl: downloadUrl
+	});
+	
+	</script>
 	
 	<script>
 	

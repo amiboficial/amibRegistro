@@ -79,7 +79,8 @@
 	<script type="text/javascript">
 		var app = app || {};
 		var tiposDocumento = new Array();
-
+		var initialDocumentosArray = new Array();
+		
 		<g:each var="x" in="${viewModelInstance?.tipoDocumentoList}">
 			tiposDocumento.push({
 				grailsId: ${x.id},
@@ -91,16 +92,33 @@
 			});
 		</g:each>
 
+		<g:each status="i" var="x" in="${viewModelInstance?.sustentanteInstance?.documentos}">
+			initialDocumentosArray.push({
+				grailsId: ${i+1},
+				uuid: '${x?.uuid}',
+				vigente:  ${x?.vigente},
+				nombreArchivo: "${viewModelInstance?.documentosRespositorioUuidMap?.get(x?.uuid)?.nombre}",
+				mimeType: "${viewModelInstance?.documentosRespositorioUuidMap?.get(x?.uuid)?.mimetype}",
+				idTipoDocumento:  ${x?.tipoDocumentoSustentate?.id},
+				descripcionTipoDocumento: " ${x?.tipoDocumentoSustentate?.descripcion}",
+				manejaVigenciaTipoDocumento: true,
+				fecha: '${viewModelInstance?.documentosRespositorioUuidMap?.get(x?.uuid)?.fechaCreacion}'
+			})
+		</g:each>
+		
 		var documentosView = new app.DocumentosView({
 			tiposDocumento: tiposDocumento,
 			manejaVigencia: true,
-			initialDocumentos: new app.Documentos()
+			initialDocumentos: new app.Documentos(initialDocumentosArray)
 		});
 		
 		documentosView.setUploadUrl('<g:createLink controller="documento" action="upload" />');
 		documentosView.setDownloadNewUrl('<g:createLink controller="documento" action="downloadNew" />');
 		documentosView.setDownloadUrl('<g:createLink controller="documento" action="download" />');
 		documentosView.setDeleteNewUrl('<g:createLink controller="documento" action="delete" />');
+
+		documentosView.render();
+		
 	</script>
 	
 	<script>

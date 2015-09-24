@@ -174,6 +174,12 @@ app.DocumentoView = Backbone.View.extend({
 			} );
 			
 		}
+		else{
+			//Borra el model
+			view.model.destroy();
+			//Destruye esta vista
+			view.remove();
+		}
 
 	},
 	hacerVigente: function(e){
@@ -263,6 +269,7 @@ app.DocumentosView = Backbone.View.extend({
 		elementView.setDownloadNewUrl(this._downloadNewUrl);
 		elementView.setDownloadUrl(this._downloadUrl);
 		elementView.setDeleteNewUrl(this._deleteNewUrl);
+		
 		this.$(".listaDocumentos").append( elementView.render().el );
 	},
 	renderErrors: function(){
@@ -413,7 +420,7 @@ app.DocumentosView = Backbone.View.extend({
 		this._downloadNewUrl = downloadNewUrl;
 	},
 	setDownloadUrl: function(downloadUrl){
-		this._downloadUrl = downloadUrl;
+		this._downloadUrl = downloadUrl;		
 	},
 	setDeleteNewUrl: function(deleteNewUrl){
 		this._deleteNewUrl = deleteNewUrl;
@@ -528,7 +535,7 @@ app.DocumentosView = Backbone.View.extend({
 		this.collection.comparator = 'nombreArchivo';
 		this.collection.sort();
 		this.setReady();
-		console.log("NO HACE NADA EN ORDER POR ARCHIVO!!");
+		//console.log("NO HACE NADA EN ORDER POR ARCHIVO!!");
 	},
 	orderByIdTipoDocumento: function(e){
 		e.preventDefault();
@@ -545,9 +552,9 @@ app.DocumentosView = Backbone.View.extend({
 	submit: function(e){
 		e.preventDefault();
 		//El modelo ya se encuentra en objeto, solo procedera a validar la información
-		console.log("HACIENDO SUBMIT");
+		//console.log("HACIENDO SUBMIT");
 		if( this.validate() ){
-			console.log("LOS DATOS FUERON VALIDOS");
+			//console.log("LOS DATOS FUERON VALIDOS");
 			this.setValidated();
 		}
 		else{

@@ -242,6 +242,7 @@ mx.amib.sistemas.documentos.Documento.save = 'documentoRestful/save'
 mx.amib.sistemas.documentos.Documento.getByUuid = 'documentoRestful/getByUuid?uuid='
 mx.amib.sistemas.documentos.Documento.deleteByUuid = 'documentoRestful/deleteByUuid?uuid='
 
+mx.amib.sistemas.documentos.Documento.findAllByUuidList = 'documentoRestful/findAllByUuidList'
 mx.amib.sistemas.documentos.Documento.findAllByMatricula = 'documentoRestful/findAllByMatricula'
 mx.amib.sistemas.documentos.Documento.findAllLikeNombreArchivo = 'documentoRestful/findAllLikeNombreArchivo'
 mx.amib.sistemas.documentos.Documento.findAllLikeDescripcion = 'documentoRestful/findAllLikeDescripcion'
@@ -262,6 +263,9 @@ mx.amib.sistemas.documentos.DocumentoRevocacion.save = 'documentoRevocacionRestf
 mx.amib.sistemas.documentos.DocumentoRevocacion.update = 'documentoRevocacionRestful/updateByUuid'
 mx.amib.sistemas.documentos.CnbvDgaOficio.save = 'cnbvDgaOficioRestful/save'
 mx.amib.sistemas.documentos.CnbvDgaOficio.update = 'cnbvDgaOficioRestful/updateByUuid'
-
+mx.amib.sistemas.documentos.FotoSustentante.save = 'fotoSustenanteRestful/save'
+mx.amib.sistemas.documentos.FotoSustentante.update = 'fotoSustenanteRestful/updateByUuid'
+mx.amib.sistemas.documentos.DocumentoSustentante.save = 'documentoSustentanteRestful/save'
+mx.amib.sistemas.documentos.DocumentoSustentante.update = 'documentoSustentanteRestful/updateByUuid'
 mx.amib.sistemas.documentos.archivo.subirArchivoDocumentoUuid = 'archivoDocumento/subirArchivoDocumentoUuid?uuid='
 mx.amib.sistemas.documentos.archivo.descargarArchivoDocumentoUuid = 'archivoDocumento/descargarArchivoDocumentoUuid?uuid='

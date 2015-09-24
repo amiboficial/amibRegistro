@@ -1,7 +1,10 @@
 package mx.amib.sistemas.registro.expediente.controller
 
+import java.rmi.dgc.VMID;
+import java.security.cert.X509Certificate;
 import java.text.SimpleDateFormat
 import java.util.Collection
+import java.util.Date;
 
 import org.codehaus.groovy.grails.web.json.JSONObject
 
@@ -14,6 +17,9 @@ import mx.amib.sistemas.external.catalogos.service.NivelEstudiosTO
 import mx.amib.sistemas.external.catalogos.service.SepomexTO
 import mx.amib.sistemas.external.catalogos.service.TipoTelefonoTO
 import mx.amib.sistemas.external.catalogos.service.VarianteFiguraTO
+import mx.amib.sistemas.external.documentos.service.DocumentoRepositorioService
+import mx.amib.sistemas.external.documentos.service.DocumentoRepositorioTO
+import mx.amib.sistemas.external.documentos.service.DocumentoSustentanteRepositorioTO
 import mx.amib.sistemas.external.expediente.certificacion.catalog.service.StatusAutorizacionTO
 import mx.amib.sistemas.external.expediente.certificacion.catalog.service.StatusCertificacionTO
 import mx.amib.sistemas.external.expediente.certificacion.service.CertificacionTO
@@ -35,6 +41,7 @@ class ExpedienteController {
 	def nacionalidadService
 	def nivelEstudiosService
 	def tipoTelefonoService
+	DocumentoRepositorioService documentoRepositorioService
 	
 	def sustentanteService
 	def documentoSustentanteService
@@ -169,6 +176,14 @@ class ExpedienteController {
 		vm.tipoDocumentoList.add(new TipoDocumentoTO( [ id: 4, descripcion: "Identificación oficial", vigente: true] ))
 		vm.tipoDocumentoList.add(new TipoDocumentoTO( [ id: 5, descripcion: "Constancia de Acreditación del Curso de Ética", vigente: true] ))
 		vm.sustentanteInstance = sustentanteService.get(id)
+		vm.documentosRespositorioUuidMap = new HashMap<String,DocumentoRepositorioTO>()
+		
+		println (vm.sustentanteInstance.documentos.collect{ it.uuid } as JSON)
+		println (documentoRepositorioService.obtenerTodosPorUuids( vm.sustentanteInstance.documentos.collect{ it.uuid } ) as JSON )
+		
+		documentoRepositorioService.obtenerTodosPorUuids( vm.sustentanteInstance.documentos.collect{ it.uuid } ).list.each { x -> 
+			vm.documentosRespositorioUuidMap.put(x.uuid, x)
+		}
 		
 		render(view:"editDoc",model:[viewModelInstance: vm])
 	}
@@ -197,6 +212,7 @@ class ExpedienteController {
 		if(s.idSepomex != null)
 			vm.sepomexData = sepomexService.get(s.idSepomex)
 		
+			
 		render(view:"show",model:[viewModelInstance: vm])
 	}
 
@@ -247,18 +263,56 @@ class ExpedienteController {
 
 	def updateDoc(long id){
 		List<DocumentoSustentanteTO> docSustList = new ArrayList<DocumentoSustentanteTO>()
+		List<DocumentoSustentanteRepositorioTO> docRepSustList = new ArrayList<DocumentoSustentanteRepositorioTO>()
+		SustentanteTO sust = sustentanteService.get(id)
+		List<String> uuidsDocumentosBorrar = new ArrayList<String>()
+		List<String> uuidsDocumentosAntes = new ArrayList<String>()
+		
 		def docsJsonStr = params.'documentos'
 		def docsJson = JSON.parse(docsJsonStr)
 		
 		docsJson.each{ x -> 
 			DocumentoSustentanteTO dsust = new DocumentoSustentanteTO()
+			DocumentoSustentanteRepositorioTO dsustrep = new DocumentoSustentanteRepositorioTO()
+			
 			dsust.uuid = x.'uuid'
 			dsust.vigente = x.'vigente'
 			dsust.idTipoDocumentoSustentate = Long.parseLong(x.'idTipoDocumento'.toString())
 			docSustList.add(dsust)
+			
+			dsustrep.uuid = x.'uuid'
+			dsustrep.clave = ''
+			dsustrep.nombre = '' //asignado por lo que se encontraba en temporal
+			dsustrep.mimetype = '' //asignado por lo que se encontraba en temporal
+			dsustrep.fechaModificacion = new Date() //asignado por lo que se encontraba en temporal
+			dsustrep.fechaCreacion = new Date() //asignado por lo que se encontraba en temporal
+			dsustrep.numeroMatricula = sust.numeroMatricula
+			dsustrep.tipoDocumentoSustentante = Long.parseLong(x.'idTipoDocumento'.toString())
+			dsustrep.nombreCompleto = sust.nombre + sust.primerApellido + sust.segundoApellido
+			docRepSustList.add(dsustrep)
+		}
+		
+		//BORRA LOS QUE YA NO ESTAN EN LA LISTA
+		sust.documentos.each { x -> 
+			uuidsDocumentosAntes.add(x.uuid)
+		}
+		uuidsDocumentosAntes.each{ x ->
+			boolean inList = false;
+			for(Iterator<DocumentoSustentanteTO> iterator = docSustList.iterator(); docSustList.size() > 0 && iterator.hasNext(); ){
+				DocumentoSustentanteTO ds = iterator.next();
+				if(ds.uuid == x){
+					inList = true;
+					break;
+				}
+			}
+			if(!inList){
+				uuidsDocumentosBorrar.add(x)
+			}
 		}
 		
 		try {
+			documentoRepositorioService.eliminarDocumentos( uuidsDocumentosBorrar )
+			documentoRepositorioService.enviarDocumentosArchivoTemporal( docRepSustList )
 			documentoSustentanteService.updateDocumentosDeSustentante(id, docSustList)
 			flash.successMessage = "La gestión de los documentos ha sido guardada satisfactoriamente"
 		}
@@ -297,6 +351,8 @@ public class FormViewModel{
 public class EditDocViewModel{
 
 	Collection<TipoDocumentoTO> tipoDocumentoList
+	
+	Map<String,DocumentoRepositorioTO> documentosRespositorioUuidMap
 	SustentanteTO sustentanteInstance
 	
 }

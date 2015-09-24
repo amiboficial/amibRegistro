@@ -27,7 +27,10 @@ import grails.transaction.Transactional
  * HTTP/REST al sistema de amibDocumentos
  *
  * @author Gabriel
- * @version 1.3 - 14/02/2015
+ * @version 
+ * 			1.4 - 24/09/2015
+ * 					-Se añade función para búsqueda por múltiples UUID
+ * 			1.3 - 14/02/2015
  * 					-Se cambian los tipos de retorno a SearchResult para incluir el count total
  * 					-Se añade metodo findAll (a diferencia del index REST, este devuelve detalles adicionales)
  * 			1.2 - 13/02/2015
@@ -35,6 +38,7 @@ import grails.transaction.Transactional
  * 					obtenerTodosPorNombreArchivoILike, obtenerTodosPorDescripcionILike
  * 					-Se actualiza método obtenerMetadatosDocumento
  *			1.1 - 22/09/2014
+ *	
  */
 @Transactional
 class DocumentoRepositorioService {
@@ -42,18 +46,19 @@ class DocumentoRepositorioService {
 	ArchivoTemporalService archivoTemporalService
 	
 	String saveUrl
-	String updateUrl //TODO: asignar URL
+	String updateUrl 
 	String documentoOficioCnbvSaveUrl
 	String documentoOficioCnbvUpdateUrl
 	String documentoPoderSaveUrl
 	String documentoPoderUpdateUrl
-	String documentoFotoSustentanteSaveUrl //TODO: asignar URL
-	String documentoFotoSustentanteUpdateUrl //TODO: asignar URL
-	String documentoSustentanteRepositorioSaveUrl //TODO: asignar URL
-	String documentoSustentanteRepositorioUpdateUrl //TODO: asignar URL
+	String documentoFotoSustentanteSaveUrl 
+	String documentoFotoSustentanteUpdateUrl
+	String documentoSustentanteRepositorioSaveUrl
+	String documentoSustentanteRepositorioUpdateUrl
 	String documentoRevocacionSaveUrl
 	String documentoRevocacionUpdateUrl
 	
+	String findAllByUuidListUrl
 	String findAllByMatriculaUrl
 	String findAllLikeNombreArchivoUrl
 	String findAllLikeDescripcionUrl
@@ -91,6 +96,46 @@ class DocumentoRepositorioService {
 			docRep = this.llenarMetadatosJsonDocumento(resp.json)
 			
 		return docRep
+	}
+	
+	/**
+	 * Obtiene, del repositorio amibDocumentos,
+	 * una resultado con multiples metadatos de un 
+	 * documento dado un listado de UUIDs
+	 *
+	 * @param uuid
+	 * @return Instanca de DocumentoRepositorioTO
+	 */
+	SearchResult obtenerTodosPorUuids(List<String> uuids){
+		
+		Collection<DocumentoRepositorioTO> resultCollection = new ArrayList<DocumentoRepositorioTO>()
+		SearchResult sr = new SearchResult()
+		int count = 0
+		
+		String restUrl = findAllByUuidListUrl
+		
+		def rest = new RestBuilder()
+		def resp = null
+		
+		resp = rest.post(restUrl){
+			json (uuids as JSON)
+		}
+		
+		if(resp.json != null && resp.json instanceof JSONObject){
+			count = resp.json.'count'
+			if(count>0) {
+				def jsonArrayList = resp.json.'list'
+				jsonArrayList.each{	x ->
+					DocumentoRepositorioTO doc = this.llenarMetadatosJsonDocumento(x)
+					if(doc != null)
+						resultCollection.add(doc)
+				}
+			}
+		}
+			
+		sr.count = resp.json.'count'
+		sr.list = resultCollection
+		return sr
 	}
 	
 	/**
@@ -306,15 +351,15 @@ class DocumentoRepositorioService {
 				restUrl = this.documentoOficioCnbvSaveUrl
 			}
 			else if ( DocumentoFotoSustentanteRepositorioTO.class.isInstance(it) ){
-				restUrl = ""
+				restUrl = this.documentoFotoSustentanteSaveUrl
 			}
 			else if ( DocumentoSustentanteRepositorioTO.class.isInstance(it) ){
-				restUrl = ""
+				restUrl = this.documentoSustentanteRepositorioSaveUrl
 			}
 			else{
 				restUrl = this.saveUrl
 			}
-			
+
 			//Envía acorde al metadato
 			def resp = rest.post(restUrl){
 				contentType "application/json;charset=UTF-8"
@@ -364,10 +409,10 @@ class DocumentoRepositorioService {
 			restUrl = this.documentoOficioCnbvUpdateUrl
 		}
 		else if ( DocumentoFotoSustentanteRepositorioTO.class.isInstance(doc) ){
-			restUrl = ""
+			restUrl = this.documentoFotoSustentanteUpdateUrl
 		}
 		else if ( DocumentoSustentanteRepositorioTO.class.isInstance(doc) ){
-			restUrl = ""
+			restUrl = this.documentoSustentanteRepositorioUpdateUrl
 		}
 		else{
 			restUrl = ""
@@ -506,11 +551,12 @@ class DocumentoRepositorioService {
 		}
 		return doc
 	}
-	
-	class SearchResult{
-		def list
-		def count
-	}
+		
+}
+
+class SearchResult{
+	def list
+	def count
 }
 
 class DocumentoRepositorioTO{

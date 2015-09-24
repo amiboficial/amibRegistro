@@ -14,8 +14,16 @@
 		<li><a href="#">Vista de expediente</a></li>
 	</ul>
 	<!-- FIN: BREADCRUMB ADMIN -->
+	
 	<h2><strong>Datos de expediente</strong></h2>
 	<h4>${raw(viewModelInstance?.nombreCompleto)} (Matricula: ${viewModelInstance?.sustentanteInstance?.numeroMatricula}, Folio: ${viewModelInstance?.sustentanteInstance?.id})</h4>
+	
+	<g:if test="${flash.successMessage}">
+		<div class="alert alert-success" role="alert"><span class="glyphicon glyphicon-info-sign"></span> ${flash.successMessage}</div>
+	</g:if>
+	<g:if test="${flash.errorMessage}">
+		<div class="alert alert-danger" role="alert"><span class="glyphicon glyphicon-info-sign"></span> ${flash.errorMessage}</div>
+	</g:if>
 	
 	<fieldset>
 		<legend>Acciones</legend>

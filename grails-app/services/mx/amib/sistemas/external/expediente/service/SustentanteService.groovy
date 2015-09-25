@@ -287,10 +287,11 @@ class SustentanteService {
 		qsparams.put('idvarfig', idvarfig)
 		qsparams.put('stcert', stcert)
 		qsparams.put('staut', staut)
+		
 		url +=	"?max={max}&offset={offset}&sort={sort}&order={order}&nom={nom}&ap1={ap1}&ap2={ap2}&idfig={idfig}&idvarfig={idvarfig}&stcert={stcert}&staut={staut}"
 		println "La url es: " + url
 		
-		resp = rest.get(url)
+		resp = rest.get(url,qsparams)
 		if(resp.json != null && resp.json instanceof JSONObject) {
 			def lista = new ArrayList<SustentanteTO>()
 			resp.json.'list'.each{

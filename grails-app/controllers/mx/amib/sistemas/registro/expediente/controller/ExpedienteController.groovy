@@ -91,9 +91,9 @@ class ExpedienteController {
 		else if(vm.fltTB == 'A'){
 			def sr = null
 			if(vm.fltCrt == true)
-				sr = sustentanteService.findAllAdvancedSearchWithCertificacion(vm.fltNom, vm.fltAp1, vm.fltAp2, vm.fltFig, vm.fltVFig, vm.fltStCt, vm.fltStAt, vm.max, vm.offset, vm.sort, vm.order)
+				sr = sustentanteService.findAllAdvancedSearchWithCertificacion(vm.fltNom, vm.fltAp1, vm.fltAp2, vm.fltFig, vm.fltVFig, vm.fltStCt, vm.fltStAt, vm.max?:10, vm.offset?:0, vm.sort, vm.order)
 			else	
-				sr = sustentanteService.findAllAdvancedSearch(vm.fltNom, vm.fltAp1, vm.fltAp2, vm.max, vm.offset, vm.sort, vm.order)
+				sr = sustentanteService.findAllAdvancedSearch(vm.fltNom, vm.fltAp1, vm.fltAp2, vm.max?:10, vm.offset?:0, vm.sort, vm.order)
 			vm.resultList = sr.list
 			vm.count = sr.count
 		}
@@ -261,8 +261,8 @@ class ExpedienteController {
 	}
 
 	def updateDoc(long id){
-		List<DocumentoSustentanteTO> docSustList = new ArrayList<DocumentoSustentanteTO>()
-		List<DocumentoSustentanteRepositorioTO> docRepSustList = new ArrayList<DocumentoSustentanteRepositorioTO>()
+		List<DocumentoSustentanteTO> docSustList = new ArrayList<DocumentoSustentanteTO>() //las referencias a documentos que se guardan en el expedneite
+		Map<String,DocumentoSustentanteRepositorioTO> docRepSustMap = new HashMap<String,DocumentoSustentanteRepositorioTO>() //los documentos que se envíaran al repositorio
 		SustentanteTO sust = sustentanteService.get(id)
 		List<String> uuidsDocumentosBorrar = new ArrayList<String>()
 		List<String> uuidsDocumentosAntes = new ArrayList<String>()
@@ -270,15 +270,20 @@ class ExpedienteController {
 		def docsJsonStr = params.'documentos'
 		def docsJson = JSON.parse(docsJsonStr)
 		
+		println ("AQUI LLEGO 1")
+		
+		//OBTIENE LOS DOCUMENTOS
 		docsJson.each{ x -> 
 			DocumentoSustentanteTO dsust = new DocumentoSustentanteTO()
 			DocumentoSustentanteRepositorioTO dsustrep = new DocumentoSustentanteRepositorioTO()
 			
+			//rellena lista de "DocumentoSustentanteTO"
 			dsust.uuid = x.'uuid'
 			dsust.vigente = x.'vigente'
 			dsust.idTipoDocumentoSustentate = Long.parseLong(x.'idTipoDocumento'.toString())
 			docSustList.add(dsust)
 			
+			//rellena map con los documentos a enviar a repositorio
 			dsustrep.uuid = x.'uuid'
 			dsustrep.clave = ''
 			dsustrep.nombre = '' //asignado por lo que se encontraba en temporal
@@ -288,31 +293,43 @@ class ExpedienteController {
 			dsustrep.numeroMatricula = sust.numeroMatricula
 			dsustrep.tipoDocumentoSustentante = Long.parseLong(x.'idTipoDocumento'.toString())
 			dsustrep.nombreCompleto = sust.nombre + sust.primerApellido + sust.segundoApellido
-			docRepSustList.add(dsustrep)
+			docRepSustMap.put(dsustrep.uuid, dsustrep)
 		}
 		
+		println ("AQUI LLEGO 2")
+		
 		//BORRA LOS QUE YA NO ESTAN EN LA LISTA
+		//-OBTIENE LOS UUID'S QUE ESTABAN ANTES
 		sust.documentos.each { x -> 
 			uuidsDocumentosAntes.add(x.uuid)
 		}
+		//-COMPARA CON LOS NUEVOS; LOS QUE NO ESTAN SE BORRAN
 		uuidsDocumentosAntes.each{ x ->
 			boolean inList = false;
 			for(Iterator<DocumentoSustentanteTO> iterator = docSustList.iterator(); docSustList.size() > 0 && iterator.hasNext(); ){
 				DocumentoSustentanteTO ds = iterator.next();
 				if(ds.uuid == x){
-					inList = true;
+					inList = true
 					break;
 				}
 			}
 			if(!inList){
-				uuidsDocumentosBorrar.add(x)
+				uuidsDocumentosBorrar.add(x) //los manda a una lista con uuids de documentos a borrar
+			}
+			else{
+				docRepSustMap.remove(x) //si ya estaba anteriormente, no es necesario mandarlo a repositorio
 			}
 		}
 		
+		println ("AQUI LLEGO 3")
+		
 		try {
-			documentoRepositorioService.eliminarDocumentos( uuidsDocumentosBorrar )
-			documentoRepositorioService.enviarDocumentosArchivoTemporal( docRepSustList )
-			documentoSustentanteService.updateDocumentosDeSustentante(id, docSustList)
+			println ("AQUI LLEGO 4")
+			documentoRepositorioService.eliminarDocumentos( uuidsDocumentosBorrar ) //borra documentos que ya no se encuentran en la lista
+			println ("AQUI LLEGO 5")
+			documentoRepositorioService.enviarDocumentosArchivoTemporal( docRepSustMap.values().asList() ) //los nuevos que se guardaron en temporal los envía a repositorio
+			println ("AQUI LLEGO 6")
+			documentoSustentanteService.updateDocumentosDeSustentante( id, docSustList ) //guarda los registros de las referencias a documentos que se guardan en el expediente
 			flash.successMessage = "La gestión de los documentos ha sido guardada satisfactoriamente"
 		}
 		catch (Exception e){

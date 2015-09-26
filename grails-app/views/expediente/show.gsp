@@ -73,7 +73,12 @@
 						<g:message code="sustentante.segundoApellido.label" default="Segundo apellido" />					
 					</label>
 					<div class="col-md-9 col-sm-9">
-						<p class="form-control-static">${viewModelInstance?.sustentanteInstance?.segundoApellido}&nbsp;</p>
+						<g:if test="${viewModelInstance?.sustentanteInstance?.segundoApellido != null}" >
+							<p class="form-control-static">${viewModelInstance?.sustentanteInstance?.segundoApellido}&nbsp;</p>
+						</g:if>
+						<g:else>
+							<p class="form-control-static">&nbsp;</p>
+						</g:else>
 					</div>
 				</div>
 				
@@ -297,149 +302,159 @@
 			
 			<div role="tabpanel" class="tab-pane" id="tabPoderVigente">
 				<br/>
-				<fieldset>
-					<legend><i>Datos del representante legal</i></legend>
-					
-					<div id="divRepLegalNom" class="form-group">
-						<label class="col-md-2 col-sm-3 control-label">
-			            	<g:message code="poder.representanteLegalNombre.label" default="Nombre" />
-						</label>
-			            <div class="col-md-9 col-sm-9">
-			            	<p class="form-control-static">${poderInstance?.representanteLegalNombre}</p>
-			            </div>
-					</div>
-	
-					<div id="divAp1" class="form-group">
-						<label class="col-md-2 col-sm-3 control-label">
-							<g:message code="poder.representanteLegalApellido1.label" default="Primer apellido" />
-						</label>
-						<div class="col-md-9 col-sm-9">
-							<p class="form-control-static">${poderInstance?.representanteLegalApellido1}</p>
+				<g:if test="${viewModelInstance?.poderInstance != null}">
+				
+					<fieldset>
+						<legend><i>Datos del representante legal</i></legend>
+						
+						<div id="divRepLegalNom" class="form-group">
+							<label class="col-md-2 col-sm-3 control-label">
+				            	<g:message code="poder.representanteLegalNombre.label" default="Nombre" />
+							</label>
+				            <div class="col-md-9 col-sm-9">
+				            	<p class="form-control-static">${viewModelInstance?.poderInstance?.representanteLegalNombre}</p>
+				            </div>
 						</div>
-					</div>
-					
-					<div id="divAp2" class="form-group">
-						<label class="col-md-2 col-sm-3 control-label">
-							<g:message code="poder.representanteLegalApellido2.label" default="Segundo apellido" />					
-						</label>
-						<div class="col-md-9 col-sm-9">
-							<p class="form-control-static">${poderInstance?.representanteLegalApellido2}</p>
+		
+						<div id="divAp1" class="form-group">
+							<label class="col-md-2 col-sm-3 control-label">
+								<g:message code="poder.representanteLegalApellido1.label" default="Primer apellido" />
+							</label>
+							<div class="col-md-9 col-sm-9">
+								<p class="form-control-static">${viewModelInstance?.poderInstance?.representanteLegalApellido1}</p>
+							</div>
 						</div>
-					</div>
-					
-				</fieldset>
-				
-				
-				<fieldset>
-					<legend><i>Datos de la institución o grupo financiero</i></legend>
-					
-					<div id="divAdmGrupoFinanciero" class="form-group">
-						<label class="col-md-2 col-sm-3 control-label">
-			            	<g:message code="poder.groupoFinanciero.label" default="Grupo financiero" />
-						</label>
 						
-			            <div class="col-md-9 col-sm-9">						
-							<p class="form-control-static">${poderInstance?.nombreGrupoFinanciero}</p>
-			            </div>
-					</div>
-					
-					<div id="divAdmInstitucion" class="form-group">
-						<label class="col-md-2 col-sm-3 control-label">
-			            	<g:message code="poder.institucion.label" default="Institución" />
-						</label>
-						<div class="col-md-9 col-sm-9">
-							<p class="form-control-static">${poderInstance?.nombreInstitucion}</p>
+						<div id="divAp2" class="form-group">
+							<label class="col-md-2 col-sm-3 control-label">
+								<g:message code="poder.representanteLegalApellido2.label" default="Segundo apellido" />					
+							</label>
+							<div class="col-md-9 col-sm-9">
+								<g:if test="${viewModelInstance.poderInstance.representanteLegalApellido2.toString().compareToIgnoreCase('null') != 0}" >
+									<p class="form-control-static">${viewModelInstance?.poderInstance?.representanteLegalApellido2}</p>
+								</g:if>
+								<g:else>
+									<p class="form-control-static">&nbsp;</p>
+								</g:else>
+							</div>
 						</div>
-					</div>
-					
-				</fieldset>
-				
-				<fieldset>
-					<legend><i>Datos del poder</i></legend>
-					
-					<div id="divPdrNumEscrit" class="form-group">
-						<label class="col-md-2 col-sm-3 control-label">
-			            	<g:message code="poder.numeroEscritura.label" default="Numero de escritura" />
-						</label>
 						
-			            <div class="col-md-9 col-sm-9">						
-							<p class="form-control-static">${poderInstance?.numeroEscritura}</p>
-			            </div>
-					</div>
+					</fieldset>
 					
-					<div id="divFhApod" class="form-group">
-						<label class="col-md-2 col-sm-3 control-label">
-			            	<g:message code="poder.fechaApoderamiento.label" default="Fecha de aporderamiento" />
-						</label>
-						<div class="col-md-9 col-sm-9">
-							<p class="form-control-static">${poderInstance?.fechaApoderamiento}</p>
+					
+					<fieldset>
+						<legend><i>Datos de la institución o grupo financiero</i></legend>
+						
+						<div id="divAdmGrupoFinanciero" class="form-group">
+							<label class="col-md-2 col-sm-3 control-label">
+				            	<g:message code="poder.groupoFinanciero.label" default="Grupo financiero" />
+							</label>
+							
+				            <div class="col-md-9 col-sm-9">						
+								<p class="form-control-static">${viewModelInstance?.institucionesPoderesMap?.get( viewModelInstance?.poderInstance?.idInstitucion ).grupoFinanciero?.nombre}</p>
+				            </div>
 						</div>
-					</div>
-					
-				</fieldset>
-				
-				<fieldset>
-					<legend><i>Datos del notario</i></legend>
-					
-					<div id="divNumNotario" class="form-group">
-						<label class="col-md-2 col-sm-3 control-label">
-			            	<g:message code="poder.notario.numero.label" default="Número" />
-						</label>
 						
-			            <div class="col-md-9 col-sm-9">						
-							<p class="form-control-static">${poderInstance?.notario?.numeroNotario}</p>
-			            </div>
-					</div>
-					
-					<div id="divNotarioEntidadFederativa" class="form-group">
-						<label class="col-md-2 col-sm-3 control-label">
-			            	<g:message code="poder.notario.entidadFederativa.label" default="Entidad Federativa"  />
-						</label>
+						<div id="divAdmInstitucion" class="form-group">
+							<label class="col-md-2 col-sm-3 control-label">
+				            	<g:message code="poder.institucion.label" default="Institución" />
+							</label>
+							<div class="col-md-9 col-sm-9">
+								<p class="form-control-static">${viewModelInstance?.institucionesPoderesMap?.get( viewModelInstance?.poderInstance?.idInstitucion ).nombre}</p>
+							</div>
+						</div>
 						
-			            <div class="col-md-9 col-sm-9">						
-							<p class="form-control-static">${poderInstance?.notario?.nombreEntidadFederativa}</p>
-			            </div>
-					</div>
+					</fieldset>
 					
-					<div id="divNombreCompleto" class="form-group">
-						<label class="col-md-2 col-sm-3 control-label">
-			            	<g:message code="poder.notario.nombreCompletro.label" default="Nombre" />
-						</label>
+					<fieldset>
+						<legend><i>Datos del poder</i></legend>
 						
-			            <div class="col-md-9 col-sm-9">
-							<p class="form-control-static">${poderInstance?.notario?.nombre + ' ' + poderInstance?.notario?.apellido1 + ' ' + poderInstance?.notario?.apellido2}</p>
-			            </div>
-					</div>
-					
-				</fieldset>
-				
-				<fieldset>
-					<legend><i>Documentos de respaldo</i></legend>
-					
-					<table class="table">
-						<thead>
-							<tr>
-								<th style='width:32%;'>Tipo de documento</th>
-								<th>Nombre de archivo</th>
-								<th style='width:18%'>...</th>
-							</tr>
-						</thead>
+						<div id="divPdrNumEscrit" class="form-group">
+							<label class="col-md-2 col-sm-3 control-label">
+				            	<g:message code="poder.numeroEscritura.label" default="Numero de escritura" />
+							</label>
+							
+				            <div class="col-md-9 col-sm-9">						
+								<p class="form-control-static">${viewModelInstance?.poderInstance?.numeroEscritura}</p>
+				            </div>
+						</div>
 						
-						<tbody id="tbdyDocs">
-							<g:each in="${poderInstance?.documentosRespaldoPoder}">
+						<div id="divFhApod" class="form-group">
+							<label class="col-md-2 col-sm-3 control-label">
+				            	<g:message code="poder.fechaApoderamiento.label" default="Fecha de aporderamiento" />
+							</label>
+							<div class="col-md-9 col-sm-9">
+								<p class="form-control-static">${viewModelInstance?.poderInstance?.fechaApoderamiento}</p>
+							</div>
+						</div>
+						
+					</fieldset>
+					
+					<fieldset>
+						<legend><i>Datos del notario</i></legend>
+						
+						<div id="divNumNotario" class="form-group">
+							<label class="col-md-2 col-sm-3 control-label">
+				            	<g:message code="poder.notario.numero.label" default="Número" />
+							</label>
+							
+				            <div class="col-md-9 col-sm-9">						
+								<p class="form-control-static">${viewModelInstance?.notarioPoder?.numeroNotaria}</p>
+				            </div>
+						</div>
+						
+						<div id="divNotarioEntidadFederativa" class="form-group">
+							<label class="col-md-2 col-sm-3 control-label">
+				            	<g:message code="poder.notario.entidadFederativa.label" default="Entidad Federativa"  />
+							</label>
+							
+				            <div class="col-md-9 col-sm-9">						
+								<p class="form-control-static">${viewModelInstance?.entidadFederativaNotarioPoder?.nombre}</p>
+				            </div>
+						</div>
+						
+						<div id="divNombreCompleto" class="form-group">
+							<label class="col-md-2 col-sm-3 control-label">
+				            	<g:message code="poder.notario.nombreCompletro.label" default="Nombre" />
+							</label>
+							
+				            <div class="col-md-9 col-sm-9">
+								<p class="form-control-static">${viewModelInstance?.notarioPoder?.nombreCompleto}</p>
+				            </div>
+						</div>
+						
+					</fieldset>
+					
+					<fieldset>
+						<legend><i>Documentos de respaldo</i></legend>
+						
+						<table class="table">
+							<thead>
 								<tr>
-									<td>${it.tipoDocumentoRespaldoPoder?.descripcion}</td>
-									<td>${it.nombreDeArchivo}</td>
-									<td>
-										<button type="button" onclick="btnDescargar_click('${it.uuidDocumentoRepositorio}')" class="download btn btn-info btn-xs">Descargar</button>
-									</td>
+									<th style='width:32%;'>Tipo de documento</th>
+									<th>Nombre de archivo</th>
+									<th style='width:18%'>...</th>
 								</tr>
-							</g:each>
-						</tbody>
-					</table>
-					
-				</fieldset>
-			
+							</thead>
+							
+							<tbody id="tbdyDocs">
+									<tr>
+										<td>Documento de respaldo poder</td>
+										<td>${viewModelInstance?.documentoPoderRespaldo?.nombre}</td>
+										<td>
+											<button type="button" data-uuid="${viewModelInstance?.poderInstance?.uuidDocumentoRespaldo}" class="download btn btn-info btn-xs">Descargar</button>
+										</td>
+									</tr>
+							</tbody>
+						</table>
+						
+					</fieldset>
+				
+				</g:if>
+				<g:else>
+					<div class="alert alert-info"><span class="glyphicon glyphicon-info-sign"></span> No hay datos respecto a algún apoderamiento vigente</div>
+				</g:else>
+				
 			</div>
 			
 			<div role="tabpanel" class="tab-pane" id="tabHistPoder">

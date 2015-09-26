@@ -62,7 +62,6 @@
 					</div>
 					<div class="col-md-6 col-sm-6" style="text-align: center">
 						<button id="btnSimpLimpiar" type="button" class="btn btn-default btn-primary">Limpiar campos</button>
-						<button id="btnSimpMostrarRecientes" type="button" class="btn btn-default btn-primary">Mostrar recientes</button>
 						<button id="btnSimpBuscar" type="button" class="btn btn-default btn-primary"><span class="glyphicon glyphicon-search"></span> Realizar búsqueda</button>
 					</div>
 					<div class="col-md-3 col-sm-3">

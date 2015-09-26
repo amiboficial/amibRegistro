@@ -9,15 +9,21 @@ import java.util.Date;
 import org.codehaus.groovy.grails.web.json.JSONObject
 
 import grails.converters.JSON
+import mx.amib.sistemas.external.catalogos.service.EntidadFederativaTO
+import mx.amib.sistemas.external.catalogos.service.EntidadFinancieraService
 import mx.amib.sistemas.external.catalogos.service.EstadoCivilTO
 import mx.amib.sistemas.external.catalogos.service.FiguraTO
 import mx.amib.sistemas.external.catalogos.service.InstitucionTO
 import mx.amib.sistemas.external.catalogos.service.NacionalidadTO
 import mx.amib.sistemas.external.catalogos.service.NivelEstudiosTO
+import mx.amib.sistemas.external.catalogos.service.NotarioService
+import mx.amib.sistemas.external.catalogos.service.NotarioTO
+import mx.amib.sistemas.external.catalogos.service.SepomexService
 import mx.amib.sistemas.external.catalogos.service.SepomexTO
 import mx.amib.sistemas.external.catalogos.service.TipoDocumentoSustentanteService
 import mx.amib.sistemas.external.catalogos.service.TipoTelefonoTO
 import mx.amib.sistemas.external.catalogos.service.VarianteFiguraTO
+import mx.amib.sistemas.external.documentos.service.DocumentoPoderRepositorioTO
 import mx.amib.sistemas.external.documentos.service.DocumentoRepositorioService
 import mx.amib.sistemas.external.documentos.service.DocumentoRepositorioTO
 import mx.amib.sistemas.external.documentos.service.DocumentoSustentanteRepositorioTO
@@ -29,6 +35,11 @@ import mx.amib.sistemas.external.expediente.persona.service.DocumentoSustentante
 import mx.amib.sistemas.external.expediente.persona.service.PuestoTO
 import mx.amib.sistemas.external.expediente.persona.service.SustentanteTO
 import mx.amib.sistemas.external.expediente.persona.service.TelefonoSustentanteTO
+import mx.amib.sistemas.external.oficios.poder.ApoderadoTO
+import mx.amib.sistemas.external.oficios.poder.PoderTO
+import mx.amib.sistemas.external.oficios.service.ApoderadoService
+import mx.amib.sistemas.external.oficios.service.PoderService
+import mx.amib.sistemas.external.oficios.service.RevocadoService
 import mx.amib.sistemas.registro.legacy.saaec.RegistroExamenTO
 
 import org.codehaus.groovy.grails.web.json.JSONArray
@@ -37,7 +48,7 @@ class ExpedienteController {
 
 	def figuraService
 	
-	def entidadFinancieraService
+	EntidadFinancieraService entidadFinancieraService
 	def estadoCivilService
 	def nacionalidadService
 	def nivelEstudiosService
@@ -45,12 +56,18 @@ class ExpedienteController {
 	DocumentoRepositorioService documentoRepositorioService
 	TipoDocumentoSustentanteService tipoDocumentoSustentanteService
 	
+	NotarioService notarioService
+	
 	def sustentanteService
 	def documentoSustentanteService
 	def statusAutorizacionService
 	def statusCertificacionService
 	
-	def sepomexService
+	SepomexService sepomexService
+	
+	PoderService poderService
+	ApoderadoService apoderadoService
+	RevocadoService revocadoService
 	
     def index() {
 		IndexViewModel vm = this.getIndexViewModel(params)
@@ -202,16 +219,61 @@ class ExpedienteController {
 		def s = sustentanteService.get(id)
 		ShowViewModel vm = new ShowViewModel()
 		
+		//CARGA DE DATOS PARA ENTIDADES FEDERATIVAS
+		vm.entidadesFederativasMap = new HashMap<Integer,EntidadFederativaTO>()
+		sepomexService.obtenerEntidadesFederativas().each{ x ->
+			vm.entidadesFederativasMap.put(x.id,x)
+		}
+		println (vm.entidadesFederativasMap as JSON)
+		vm.institucionesPoderesMap = new HashMap<Long,InstitucionTO>()
+		entidadFinancieraService.obtenerInstituciones().each { x ->
+			vm.institucionesPoderesMap.put(x.id,x)
+		}
+		
+		//CARGA DE DATOS DEL SUSTENTANTE
 		vm.sustentanteInstance = s
 		vm.nombreCompleto = s.nombre + " " + s.primerApellido + " " + s.segundoApellido
 		if(s.idSepomex != null)
 			vm.sepomexData = sepomexService.get(s.idSepomex)
+		//CARGA DE DATOS DE DOCUMENTOS
 		vm.documentosRespositorioUuidMap = new HashMap<String,DocumentoRepositorioTO>()
-		
 		documentoRepositorioService.obtenerTodosPorUuids( vm.sustentanteInstance.documentos.collect{ it.uuid } ).list.each { x ->
 			vm.documentosRespositorioUuidMap.put(x.uuid, x)
 		}
-			
+		
+		//CARGA DE DATOS DE PODER
+		def apoderadoResult
+		def ultimaCertificacion
+		List<ApoderadoTO> apoderaminetosUltimaCertificacion
+		Map<Long,Boolean> apoderamientosRevocados
+		def ultimoPoderValido = null
+		
+		//todos los apoderamientos de todas las certificaciones
+		apoderadoResult = apoderadoService.findAllByIdCertificacionIn( new HashSet<Long>(vm.sustentanteInstance.certificaciones.collect{ it.id.value }.asList()) )
+		//obtiene la ultima certificacion
+		ultimaCertificacion = vm.sustentanteInstance.certificaciones.find{ it.isUltima == true }
+		//obtiene todos los apoderamientos correspondientes a esa ultima certificacion
+		apoderaminetosUltimaCertificacion = apoderadoResult.apoderados.findAll{ it.idCertificacion.value == ultimaCertificacion.id.value }
+		//obtiene los estatus de revocacion correspondiente a todas los apoderamientos de las certificaiones
+		apoderamientosRevocados = revocadoService.containsRevocados( new HashSet<Long>( apoderadoResult.apoderados.collect{ it.id } ) )
+		//obtiene el apoderamiento que no ha sido revocado
+		apoderaminetosUltimaCertificacion.each{ x ->
+			if( apoderamientosRevocados.containsKey( x.id.value ) ){
+				if(apoderamientosRevocados.get( x.id.value ) == false){
+					ultimoPoderValido = apoderadoResult.poderes.find{ it.id.value == x.idPoder.value }
+				}
+			}
+		}
+		if(ultimoPoderValido!=null){
+			vm.poderInstance = ultimoPoderValido
+			vm.documentoPoderRespaldo = documentoRepositorioService.obtenerMetadatosDocumento( vm.poderInstance.uuidDocumentoRespaldo )
+			vm.notarioPoder = notarioService.get( vm.poderInstance.idNotario  )
+			vm.entidadFederativaNotarioPoder = sepomexService.obtenerEntidadFederativa( (int)vm.notarioPoder.idEntidadFederativa.value )
+			vm.institucionPoder = entidadFinancieraService.obtenerInstitucion( vm.poderInstance.idInstitucion )
+		}
+		
+		vm.historicoPoderes = apoderadoResult.poderes.sort{ it.fechaApoderamiento }.reverse()
+		
 		render(view:"show",model:[viewModelInstance: vm])
 	}
 
@@ -270,8 +332,6 @@ class ExpedienteController {
 		def docsJsonStr = params.'documentos'
 		def docsJson = JSON.parse(docsJsonStr)
 		
-		println ("AQUI LLEGO 1")
-		
 		//OBTIENE LOS DOCUMENTOS
 		docsJson.each{ x -> 
 			DocumentoSustentanteTO dsust = new DocumentoSustentanteTO()
@@ -296,8 +356,6 @@ class ExpedienteController {
 			docRepSustMap.put(dsustrep.uuid, dsustrep)
 		}
 		
-		println ("AQUI LLEGO 2")
-		
 		//BORRA LOS QUE YA NO ESTAN EN LA LISTA
 		//-OBTIENE LOS UUID'S QUE ESTABAN ANTES
 		sust.documentos.each { x -> 
@@ -321,14 +379,10 @@ class ExpedienteController {
 			}
 		}
 		
-		println ("AQUI LLEGO 3")
 		
 		try {
-			println ("AQUI LLEGO 4")
 			documentoRepositorioService.eliminarDocumentos( uuidsDocumentosBorrar ) //borra documentos que ya no se encuentran en la lista
-			println ("AQUI LLEGO 5")
 			documentoRepositorioService.enviarDocumentosArchivoTemporal( docRepSustMap.values().asList() ) //los nuevos que se guardaron en temporal los envía a repositorio
-			println ("AQUI LLEGO 6")
 			documentoSustentanteService.updateDocumentosDeSustentante( id, docSustList ) //guarda los registros de las referencias a documentos que se guardan en el expediente
 			flash.successMessage = "La gestión de los documentos ha sido guardada satisfactoriamente"
 		}
@@ -346,6 +400,16 @@ public class ShowViewModel{
 	String nombreCompleto
 	
 	Map<String,DocumentoRepositorioTO> documentosRespositorioUuidMap
+	
+	PoderTO poderInstance
+	NotarioTO notarioPoder
+	InstitucionTO institucionPoder
+	EntidadFederativaTO entidadFederativaNotarioPoder
+	DocumentoPoderRepositorioTO documentoPoderRespaldo
+	
+	List<PoderTO> historicoPoderes
+	Map<Long,InstitucionTO> institucionesPoderesMap
+	Map<Integer,EntidadFederativaTO> entidadesFederativasMap
 }
 
 public class FormViewModel{

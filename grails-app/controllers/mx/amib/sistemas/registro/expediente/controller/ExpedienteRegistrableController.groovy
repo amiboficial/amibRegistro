@@ -186,7 +186,7 @@ class ExpedienteRegistrableController {
 		//se guarda el sustentante con todos los datos bindeados
 		try {
 			def sustentanteGuardado = sustentanteService.guardarNuevo(sustentante)
-			flash.successMessage = "El registro de sustentante de \"${sustentante.nombre} ${sustentante.primerApellido} con el folio ${sustentanteGuardado.id} ha sido guardado satisfactoriamente"
+			flash.successMessage = "El registro de sustentante de \"${sustentante.nombre} ${sustentante.primerApellido}\" con el folio ${sustentanteGuardado.id} ha sido guardado satisfactoriamente"
 		}
 		catch (Exception e){
 			flash.errorMessage = "Ha ocurrido un error al guardar la informaci�n, los detalles son los siguientes: " + e.message.substring(0, Math.min(e.message.length(),256)  )

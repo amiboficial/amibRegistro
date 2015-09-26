@@ -57,6 +57,7 @@ class ApoderamientoService {
 		
 		if(s != null){
 			if(s.certificaciones.size() > 0){
+				/*
 				//ordena las certificaciones por fecha
 				s.certificaciones = s.certificaciones.sort{it.fechaFin}
 				//revisa la ultima certificación
@@ -68,6 +69,12 @@ class ApoderamientoService {
 						isApoderable = true
 					}	
 				}
+				*/
+				CertificacionTO c = s.certificaciones.find{ it.isUltima }
+				if(c.statusAutorizacion.id.value == StatusAutorizacionTypes.AUTORIZADO_SIN_PODERES){
+					isApoderable = true
+				}
+				
 			}
 		}
 		if(!isApoderable) s = null 

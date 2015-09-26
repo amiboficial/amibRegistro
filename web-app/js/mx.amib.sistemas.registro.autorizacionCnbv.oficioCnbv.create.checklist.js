@@ -1,6 +1,6 @@
 var app = app || {};
 
-app.OFA_CREATE_CHKIDX_MSG = "OFA_CREATE_CHKIDX_MSG"
+app.OFA_CREATE_CHKIDX_MSG = "¿Confirma que toda la información es correcta?"
 
 app.OFA_CREATE_CHKIDX_DATOFICIO = 0;
 app.OFA_CREATE_CHKIDX_AUTORIZADOS = 1;

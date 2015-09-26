@@ -1,6 +1,6 @@
 var app = app || {};
 
-app.PODER_CREATE_CONFIRM_MSG = "PODER_CREATE_CONFIRM_MSG";
+app.PODER_CREATE_CONFIRM_MSG = "¿Confirma que toda la información es correcta?";
 
 app.PODER_CREATE_CHKIDX_PODER = 0;
 app.PODER_CREATE_CHKIDX_APODERADOS = 1;

@@ -458,7 +458,10 @@
 			</div>
 			
 			<div role="tabpanel" class="tab-pane" id="tabHistPoder">
-			<br/>(PENDIENTE)
+			<br/>
+			
+			<div id="divHistoricoPoderSustentante"></div>
+			
 			</div>
 			<div role="tabpanel" class="tab-pane" id="tabHistRevoc">
 			<br/>(PENDIENTE)
@@ -502,6 +505,181 @@
 		docsArray: docsArray,
 		downloadUrl: downloadUrl
 	});
+	
+	</script>
+	
+	<g:render template="showHistoricoApoderados" />
+	<g:javascript src="mx.amib.sistemas.registro.expediente.show.historicoApoderados.js" />
+	<script>
+	var app = app || {};
+
+	var elementsArray = new Array();
+	var poderUrl;
+	var historioPoderView;
+	
+	elementsArray.push({
+		grailsId: 1,
+		numeroEscritura: 1,
+		nombreCompletoNotario: "ANABEL PÉREZ LÓPEZ",
+		fechaApoderamiento: "26/11/2015",
+		fechaApoderamientoUnixEpoch: 1443270706,
+		grupoFinancieroNombre: "GBM",
+		institucionNombre: "GBM HOMEBROKER",
+		visible: true
+	});
+	elementsArray.push({
+		grailsId: 2,
+		numeroEscritura: 2,
+		nombreCompletoNotario: "DANIEL PÉREZ LÓPEZ",
+		fechaApoderamiento: "25/11/2015",
+		fechaApoderamientoUnixEpoch: 1443184306,
+		grupoFinancieroNombre: "GP BANAMEX",
+		institucionNombre: "HALIFAX BANK",
+		visible: true
+	});
+	elementsArray.push({
+		grailsId: 3,
+		numeroEscritura: 3,
+		nombreCompletoNotario: "RAFAEL PÉREZ LÓPEZ",
+		fechaApoderamiento: "28/11/2015",
+		fechaApoderamientoUnixEpoch: 1443416400,
+		grupoFinancieroNombre: "BANCOMER",
+		institucionNombre: "BARCLAYS DIVISION",
+		visible: true
+	});
+	elementsArray.push({
+		grailsId: 4,
+		numeroEscritura: 4,
+		nombreCompletoNotario: "LILIANA PÉREZ LÓPEZ",
+		fechaApoderamiento: "24/11/2015",
+		fechaApoderamientoUnixEpoch: 1443070800,
+		grupoFinancieroNombre: "INTERCAM",
+		institucionNombre: "INTERCAM CASA DE BOLSA",
+		visible: true
+	});
+	elementsArray.push({
+		grailsId: 1,
+		numeroEscritura: 1,
+		nombreCompletoNotario: "ANABEL PÉREZ LÓPEZ",
+		fechaApoderamiento: "26/11/2015",
+		fechaApoderamientoUnixEpoch: 1443270706,
+		grupoFinancieroNombre: "GBM",
+		institucionNombre: "GBM HOMEBROKER",
+		visible: true
+	});
+	elementsArray.push({
+		grailsId: 2,
+		numeroEscritura: 2,
+		nombreCompletoNotario: "DANIEL PÉREZ LÓPEZ",
+		fechaApoderamiento: "25/11/2015",
+		fechaApoderamientoUnixEpoch: 1443184306,
+		grupoFinancieroNombre: "GP BANAMEX",
+		institucionNombre: "HALIFAX BANK",
+		visible: true
+	});
+	elementsArray.push({
+		grailsId: 3,
+		numeroEscritura: 3,
+		nombreCompletoNotario: "RAFAEL PÉREZ LÓPEZ",
+		fechaApoderamiento: "28/11/2015",
+		fechaApoderamientoUnixEpoch: 1443416400,
+		grupoFinancieroNombre: "BANCOMER",
+		institucionNombre: "BARCLAYS DIVISION",
+		visible: true
+	});
+	elementsArray.push({
+		grailsId: 4,
+		numeroEscritura: 4,
+		nombreCompletoNotario: "LILIANA PÉREZ LÓPEZ",
+		fechaApoderamiento: "24/11/2015",
+		fechaApoderamientoUnixEpoch: 1443070800,
+		grupoFinancieroNombre: "INTERCAM",
+		institucionNombre: "INTERCAM CASA DE BOLSA",
+		visible: true
+	});
+	elementsArray.push({
+		grailsId: 1,
+		numeroEscritura: 1,
+		nombreCompletoNotario: "ANABEL PÉREZ LÓPEZ",
+		fechaApoderamiento: "26/11/2015",
+		fechaApoderamientoUnixEpoch: 1443270706,
+		grupoFinancieroNombre: "GBM",
+		institucionNombre: "GBM HOMEBROKER",
+		visible: true
+	});
+	elementsArray.push({
+		grailsId: 2,
+		numeroEscritura: 2,
+		nombreCompletoNotario: "DANIEL PÉREZ LÓPEZ",
+		fechaApoderamiento: "25/11/2015",
+		fechaApoderamientoUnixEpoch: 1443184306,
+		grupoFinancieroNombre: "GP BANAMEX",
+		institucionNombre: "HALIFAX BANK",
+		visible: true
+	});
+	elementsArray.push({
+		grailsId: 3,
+		numeroEscritura: 3,
+		nombreCompletoNotario: "RAFAEL PÉREZ LÓPEZ",
+		fechaApoderamiento: "28/11/2015",
+		fechaApoderamientoUnixEpoch: 1443416400,
+		grupoFinancieroNombre: "BANCOMER",
+		institucionNombre: "BARCLAYS DIVISION",
+		visible: true
+	});
+	elementsArray.push({
+		grailsId: 4,
+		numeroEscritura: 4,
+		nombreCompletoNotario: "LILIANA PÉREZ LÓPEZ",
+		fechaApoderamiento: "24/11/2015",
+		fechaApoderamientoUnixEpoch: 1443070800,
+		grupoFinancieroNombre: "INTERCAM",
+		institucionNombre: "INTERCAM CASA DE BOLSA",
+		visible: true
+	});
+	elementsArray.push({
+		grailsId: 1,
+		numeroEscritura: 1,
+		nombreCompletoNotario: "ANABEL PÉREZ LÓPEZ",
+		fechaApoderamiento: "26/11/2015",
+		fechaApoderamientoUnixEpoch: 1443270706,
+		grupoFinancieroNombre: "GBM",
+		institucionNombre: "GBM HOMEBROKER",
+		visible: true
+	});
+	elementsArray.push({
+		grailsId: 2,
+		numeroEscritura: 2,
+		nombreCompletoNotario: "DANIEL PÉREZ LÓPEZ",
+		fechaApoderamiento: "25/11/2015",
+		fechaApoderamientoUnixEpoch: 1443184306,
+		grupoFinancieroNombre: "GP BANAMEX",
+		institucionNombre: "HALIFAX BANK",
+		visible: true
+	});
+	elementsArray.push({
+		grailsId: 3,
+		numeroEscritura: 3,
+		nombreCompletoNotario: "RAFAEL PÉREZ LÓPEZ",
+		fechaApoderamiento: "28/11/2015",
+		fechaApoderamientoUnixEpoch: 1443416400,
+		grupoFinancieroNombre: "BANCOMER",
+		institucionNombre: "BARCLAYS DIVISION",
+		visible: true
+	});
+	elementsArray.push({
+		grailsId: 4,
+		numeroEscritura: 4,
+		nombreCompletoNotario: "LILIANA PÉREZ LÓPEZ",
+		fechaApoderamiento: "24/11/2015",
+		fechaApoderamientoUnixEpoch: 1443070800,
+		grupoFinancieroNombre: "INTERCAM",
+		institucionNombre: "INTERCAM CASA DE BOLSA",
+		visible: true
+	});
+
+	poderUrl = '<g:createLink controller="poder" action="show" />';
+	historioPoderView = new app.HPoderVMCollectionView({elementsArray:elementsArray,poderUrl:poderUrl}); 
 	
 	</script>
 	

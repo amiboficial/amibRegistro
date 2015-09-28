@@ -22,8 +22,6 @@ app.DocumentoSustentanteVMCollection = Backbone.Collection.extend({
 	_sort: 'asc',
 	_order: 'dsTipo',
 	
-	_count: 0,
-	
 	comparator: function(itemA, itemB){
 		//console.log('sort:' + this._sort + "; order:" + this._order);
 		//console.log('comparator called:' +itemA.get('dsTipo').toUpperCase() +":"+ itemB.get('dsTipo').toUpperCase() );
@@ -100,13 +98,13 @@ app.DocumentoSustentanteVMCollection = Backbone.Collection.extend({
 		upperLimitInclusive  = this._offset+this._max-1;
 		
 		this.forEach( function(item){
-			i++;
 			if( i >= lowerLimitInclusive && i <= upperLimitInclusive){
 				item.set('visible',true);
 			}
 			else{
 				item.set('visible',false);
 			}
+			i++;
 		} , this );
 		this.trigger('pageChanged',{});
 	},
@@ -116,7 +114,7 @@ app.DocumentoSustentanteVMCollection = Backbone.Collection.extend({
 		return Math.floor(this._offset/this._max) + 1;
 	},
 	getTotalPages: function(){
-		return Math.ceil(this._count/this._max);
+		return Math.ceil(this.length/this._max);
 	},
 	getNextPage: function(){
 		var nextPage = 0;
@@ -140,6 +138,7 @@ app.DocumentoSustentanteCollectionView = Backbone.View.extend({
 	initialize: function(options){
 		this.collection = new app.DocumentoSustentanteVMCollection(options.docsArray);
 		this.downloadUrl = options.downloadUrl;
+		this.collection.goToPage(1);
 		
 		this.render();
 		
@@ -198,7 +197,8 @@ app.DocumentoSustentanteCollectionView = Backbone.View.extend({
 	
 	events: {
 		'click .download':'descargarDocumento',
-		'click .sort':'ordernarLista'
+		'click .sort':'ordernarLista',
+		'click .page': 'irAPagina'
 	},
 	
 	descargarDocumento: function(ev){
@@ -212,5 +212,12 @@ app.DocumentoSustentanteCollectionView = Backbone.View.extend({
 		var order  = this.$(ev.currentTarget).data("order");
 		
 		this.collection.sortAndOrderBy(sort,order);
+		this.collection.goToPage(1);
+	},
+	
+	irAPagina: function(ev){
+		var numeroPag = this.$(ev.currentTarget).data("page");
+		
+		this.collection.goToPage(numeroPag);
 	}
 });

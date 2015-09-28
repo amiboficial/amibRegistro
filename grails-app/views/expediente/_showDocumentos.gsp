@@ -22,7 +22,7 @@
 				<button type="button" class="sort btn btn-default btn-xxs" data-sort="fechaCargaUnixEpoch" data-order="asc"><span class="glyphicon glyphicon-chevron-up"></span></button>
 				<button type="button" class="sort btn btn-default btn-xxs" data-sort="fechaCargaUnixEpoch" data-order="desc"><span class="glyphicon glyphicon-chevron-down"></span></button>
 				</th>
-				<th style='width:18%'>...</th>
+				<th style='width:18%'>&nbsp;</th>
 			</tr>
 		</thead>
 		<tbody class="table-body">
@@ -35,7 +35,13 @@
 	<tr>
 		<td>{{=dsTipo}}</td>
 		<td>{{=nombre}}</td>
-		<td>{{=vigente}}</td>
+		<td>
+		{{ if(vigente){ }}
+			<span class="glyphicon glyphicon-ok"></span>
+		{{ } else{ }}
+			<span class="glyphicon glyphicon-remove"></span>
+		{{ } }}
+		</td>
 		<td>{{=fechaCarga}}</td>
 		<td>
 			<button type="button" class="download btn btn-info btn-xs" data-uuid="{{=uuid}}">Descargar</button>

@@ -247,7 +247,6 @@ class ExpedienteController {
 		List<ApoderadoTO> apoderaminetosUltimaCertificacion
 		Map<Long,Boolean> apoderamientosRevocados
 		def ultimoPoderValido = null
-		
 		//todos los apoderamientos de todas las certificaciones
 		apoderadoResult = apoderadoService.findAllByIdCertificacionIn( new HashSet<Long>(vm.sustentanteInstance.certificaciones.collect{ it.id.value }.asList()) )
 		//obtiene la ultima certificacion
@@ -272,6 +271,7 @@ class ExpedienteController {
 			vm.institucionPoder = entidadFinancieraService.obtenerInstitucion( vm.poderInstance.idInstitucion )
 		}
 		
+		//CARGA EL HISTORICO DE LOS PODERES
 		vm.historicoPoderes = apoderadoResult.poderes.sort{ it.fechaApoderamiento }.reverse()
 		
 		render(view:"show",model:[viewModelInstance: vm])

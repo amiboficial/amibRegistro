@@ -112,7 +112,7 @@
 		            	<g:message code="sustentante.fechaNacimiento.label" default="Fecha de nacimiento" />
 					</label>
 		            <div class="col-md-9 col-sm-9">
-		            	<p class="form-control-static">${viewModelInstance?.sustentanteInstance?.fechaNacimiento}&nbsp;</p>
+		            	<p class="form-control-static"><g:formatDate format="dd-MM-yyyy" date="${viewModelInstance?.sustentanteInstance?.fechaNacimiento}"/>&nbsp;</p>
 		            </div>
 				</div>
 				<div class="form-group">
@@ -131,22 +131,28 @@
 						<p class="form-control-static">${viewModelInstance?.sustentanteInstance?.nivelEstudios?.descripcion}&nbsp;</p>
 					</div>
 				</div>
-				<div class="form-group">
-					<label class="col-md-2 col-sm-3 control-label">
-						<g:message code="sustentante.calidadMigratoria.label" default="Calidad Migratoria" />					
-					</label>
-					<div class="col-md-9 col-sm-9">
-						<p class="form-control-static">${viewModelInstance?.sustentanteInstance?.calidadMigratoria?.descripcion}&nbsp;</p>
+				
+				<g:if test="${viewModelInstance?.sustentanteInstance?.calidadMigratoria != null && viewModelInstance?.sustentanteInstance?.calidadMigratoria?.trim()?.compareToIgnoreCase('null') != 0}" >
+					<div class="form-group">
+						<label class="col-md-2 col-sm-3 control-label">
+							<g:message code="sustentante.calidadMigratoria.label" default="Calidad Migratoria" />					
+						</label>
+						<div class="col-md-9 col-sm-9">
+							<p class="form-control-static">${viewModelInstance?.sustentanteInstance?.calidadMigratoria?.descripcion}&nbsp;</p>
+						</div>
 					</div>
-				</div>
-				<div class="form-group">
-					<label class="col-md-2 col-sm-3 control-label">
-						<g:message code="sustentante.profesion.label" default="Profesion" />					
-					</label>
-					<div class="col-md-9 col-sm-9">
-						<p class="form-control-static">${viewModelInstance?.sustentanteInstance?.profesion?.descripcion}&nbsp;</p>
+				</g:if>
+				
+				<g:if test="${viewModelInstance?.sustentanteInstance?.calidadMigratoria != null && viewModelInstance?.sustentanteInstance?.calidadMigratoria?.trim()?.compareToIgnoreCase('null') != 0}" >
+					<div class="form-group">
+						<label class="col-md-2 col-sm-3 control-label">
+							<g:message code="sustentante.profesion.label" default="Profesión" />					
+						</label>
+						<div class="col-md-9 col-sm-9">
+							<p class="form-control-static">${viewModelInstance?.sustentanteInstance?.profesion?.descripcion}&nbsp;</p>
+						</div>
 					</div>
-				</div>
+				</g:if>
 				
 				<legend><i>Domicilio</i></legend>
 				
@@ -204,14 +210,17 @@
 					</div>
 				</div>
 				
-				<div class="form-group">
-					<label class="col-md-2 col-sm-3 control-label">
-						<g:message code="sustentante.numeroInterior.label" default="Numero Interior" />					
-					</label>
-					<div class="col-md-9 col-sm-9">
-						<p class="form-control-static">${viewModelInstance?.sustentanteInstance?.numeroInterior}&nbsp;</p>
+				<g:if test="${viewModelInstance?.sustentanteInstance?.numeroInterior != null && viewModelInstance?.sustentanteInstance?.numeroInterior?.trim()?.compareToIgnoreCase('null') != 0}" >
+					<div class="form-group">
+						<label class="col-md-2 col-sm-3 control-label">
+							<g:message code="sustentante.numeroInterior.label" default="Numero Interior" />					
+						</label>
+						<div class="col-md-9 col-sm-9">
+							<p class="form-control-static">&nbsp;</p>
+						</div>
 					</div>
-				</div>
+				</g:if>
+				
 				
 				<legend><i>Contacto</i></legend>
 				
@@ -230,6 +239,15 @@
 					<div class="col-md-9 col-sm-9">
 						<p class="form-control-static">
 							<g:each in="${viewModelInstance?.sustentanteInstance?.telefonos.sort{it?.tipoTelefonoSustentante}}">
+								<g:if test="${it?.tipoTelefonoSustentante?.descripcion?.trim()?.compareToIgnoreCase('CASA') == 0}">
+									<span class="glyphicon glyphicon-home"></span>
+								</g:if>
+								<g:elseif test="${it?.tipoTelefonoSustentante?.descripcion?.trim()?.compareToIgnoreCase('TRABAJO') == 0}">
+									<span class="glyphicon glyphicon-briefcase"></span>
+								</g:elseif>
+								<g:elseif test="${it?.tipoTelefonoSustentante?.descripcion?.trim()?.compareToIgnoreCase('MÓVIL') == 0 || it?.tipoTelefonoSustentante?.descripcion?.trim()?.compareToIgnoreCase('MOVIL') == 0}">
+									<span class="glyphicon glyphicon-phone"></span>
+								</g:elseif>
 								${it?.lada}&nbsp;${it?.telefono}&nbsp;
 								<g:if test="${it.extension != null && it.extension.trim() != ''}">
 									Ext. ${it?.extension}&nbsp;
@@ -458,13 +476,12 @@
 			</div>
 			
 			<div role="tabpanel" class="tab-pane" id="tabHistPoder">
-			<br/>
-			
-			<div id="divHistoricoPoderSustentante"></div>
-			
+				<br/>	
+				<div id="divHistoricoPoderSustentante"></div>			
 			</div>
 			<div role="tabpanel" class="tab-pane" id="tabHistRevoc">
-			<br/>(PENDIENTE)
+				<br/>
+				<div id="divHistoricoRevocacionSustentante"></div>
 			</div>
 		</div>
 		
@@ -682,6 +699,183 @@
 	historioPoderView = new app.HPoderVMCollectionView({elementsArray:elementsArray,poderUrl:poderUrl}); 
 	
 	</script>
+	
+	<g:render template="showHistoricoRevocados" />
+	<g:javascript src="mx.amib.sistemas.registro.expediente.show.historicoRevocados.js" />
+	<script>
+
+	var app = app || {};
+
+	var elementsArray = new Array();
+	var revocacionUrl;
+	var historioRevocacionesView;
+	
+	elementsArray.push({
+		grailsId: 1,
+		numeroEscritura: 1,
+		nombreCompletoNotario: "ANABEL PÉREZ LÓPEZ",
+		fechaRevocacion: "26/11/2015",
+		fechaRevocacionUnixEpoch: 1443270706,
+		grupoFinancieroNombre: "GBM",
+		institucionNombre: "GBM HOMEBROKER",
+		visible: true
+	});
+	elementsArray.push({
+		grailsId: 2,
+		numeroEscritura: 2,
+		nombreCompletoNotario: "DANIEL PÉREZ LÓPEZ",
+		fechaRevocacion: "25/11/2015",
+		fechaRevocacionUnixEpoch: 1443184306,
+		grupoFinancieroNombre: "GP BANAMEX",
+		institucionNombre: "HALIFAX BANK",
+		visible: true
+	});
+	elementsArray.push({
+		grailsId: 3,
+		numeroEscritura: 3,
+		nombreCompletoNotario: "RAFAEL PÉREZ LÓPEZ",
+		fechaRevocacion: "28/11/2015",
+		fechaRevocacionUnixEpoch: 1443416400,
+		grupoFinancieroNombre: "BANCOMER",
+		institucionNombre: "BARCLAYS DIVISION",
+		visible: true
+	});
+	elementsArray.push({
+		grailsId: 4,
+		numeroEscritura: 4,
+		nombreCompletoNotario: "LILIANA PÉREZ LÓPEZ",
+		fechaRevocacion: "24/11/2015",
+		fechaRevocacionUnixEpoch: 1443070800,
+		grupoFinancieroNombre: "INTERCAM",
+		institucionNombre: "INTERCAM CASA DE BOLSA",
+		visible: true
+	});
+	elementsArray.push({
+		grailsId: 1,
+		numeroEscritura: 1,
+		nombreCompletoNotario: "ANABEL PÉREZ LÓPEZ",
+		fechaRevocacion: "26/11/2015",
+		fechaRevocacionUnixEpoch: 1443270706,
+		grupoFinancieroNombre: "GBM",
+		institucionNombre: "GBM HOMEBROKER",
+		visible: true
+	});
+	elementsArray.push({
+		grailsId: 2,
+		numeroEscritura: 2,
+		nombreCompletoNotario: "DANIEL PÉREZ LÓPEZ",
+		fechaRevocacion: "25/11/2015",
+		fechaRevocacionUnixEpoch: 1443184306,
+		grupoFinancieroNombre: "GP BANAMEX",
+		institucionNombre: "HALIFAX BANK",
+		visible: true
+	});
+	elementsArray.push({
+		grailsId: 3,
+		numeroEscritura: 3,
+		nombreCompletoNotario: "RAFAEL PÉREZ LÓPEZ",
+		fechaRevocacion: "28/11/2015",
+		fechaRevocacionUnixEpoch: 1443416400,
+		grupoFinancieroNombre: "BANCOMER",
+		institucionNombre: "BARCLAYS DIVISION",
+		visible: true
+	});
+	elementsArray.push({
+		grailsId: 4,
+		numeroEscritura: 4,
+		nombreCompletoNotario: "LILIANA PÉREZ LÓPEZ",
+		fechaRevocacion: "24/11/2015",
+		fechaRevocacionUnixEpoch: 1443070800,
+		grupoFinancieroNombre: "INTERCAM",
+		institucionNombre: "INTERCAM CASA DE BOLSA",
+		visible: true
+	});
+	elementsArray.push({
+		grailsId: 1,
+		numeroEscritura: 1,
+		nombreCompletoNotario: "ANABEL PÉREZ LÓPEZ",
+		fechaRevocacion: "26/11/2015",
+		fechaRevocacionUnixEpoch: 1443270706,
+		grupoFinancieroNombre: "GBM",
+		institucionNombre: "GBM HOMEBROKER",
+		visible: true
+	});
+	elementsArray.push({
+		grailsId: 2,
+		numeroEscritura: 2,
+		nombreCompletoNotario: "DANIEL PÉREZ LÓPEZ",
+		fechaRevocacion: "25/11/2015",
+		fechaRevocacionUnixEpoch: 1443184306,
+		grupoFinancieroNombre: "GP BANAMEX",
+		institucionNombre: "HALIFAX BANK",
+		visible: true
+	});
+	elementsArray.push({
+		grailsId: 3,
+		numeroEscritura: 3,
+		nombreCompletoNotario: "RAFAEL PÉREZ LÓPEZ",
+		fechaRevocacion: "28/11/2015",
+		fechaRevocacionUnixEpoch: 1443416400,
+		grupoFinancieroNombre: "BANCOMER",
+		institucionNombre: "BARCLAYS DIVISION",
+		visible: true
+	});
+	elementsArray.push({
+		grailsId: 4,
+		numeroEscritura: 4,
+		nombreCompletoNotario: "LILIANA PÉREZ LÓPEZ",
+		fechaRevocacion: "24/11/2015",
+		fechaRevocacionUnixEpoch: 1443070800,
+		grupoFinancieroNombre: "INTERCAM",
+		institucionNombre: "INTERCAM CASA DE BOLSA",
+		visible: true
+	});
+	elementsArray.push({
+		grailsId: 1,
+		numeroEscritura: 1,
+		nombreCompletoNotario: "ANABEL PÉREZ LÓPEZ",
+		fechaRevocacion: "26/11/2015",
+		fechaRevocacionUnixEpoch: 1443270706,
+		grupoFinancieroNombre: "GBM",
+		institucionNombre: "GBM HOMEBROKER",
+		visible: true
+	});
+	elementsArray.push({
+		grailsId: 2,
+		numeroEscritura: 2,
+		nombreCompletoNotario: "DANIEL PÉREZ LÓPEZ",
+		fechaRevocacion: "25/11/2015",
+		fechaRevocacionUnixEpoch: 1443184306,
+		grupoFinancieroNombre: "GP BANAMEX",
+		institucionNombre: "HALIFAX BANK",
+		visible: true
+	});
+	elementsArray.push({
+		grailsId: 3,
+		numeroEscritura: 3,
+		nombreCompletoNotario: "RAFAEL PÉREZ LÓPEZ",
+		fechaRevocacion: "28/11/2015",
+		fechaRevocacionUnixEpoch: 1443416400,
+		grupoFinancieroNombre: "BANCOMER",
+		institucionNombre: "BARCLAYS DIVISION",
+		visible: true
+	});
+	elementsArray.push({
+		grailsId: 4,
+		numeroEscritura: 4,
+		nombreCompletoNotario: "LILIANA PÉREZ LÓPEZ",
+		fechaRevocacion: "24/11/2015",
+		fechaRevocacionUnixEpoch: 1443070800,
+		grupoFinancieroNombre: "INTERCAM",
+		institucionNombre: "INTERCAM CASA DE BOLSA",
+		visible: true
+	});
+
+	revocacionUrl = '<g:createLink controller="revocacion" action="show" />';
+	historioRevocacionesView = new app.HRevocacionVMCollectionView({elementsArray:elementsArray, revocacionUrl:revocacionUrl}); 
+	
+	</script>
+	
 	
 	<script>
 	

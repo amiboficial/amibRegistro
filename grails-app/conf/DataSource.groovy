@@ -112,7 +112,7 @@ environments {
 					defaultTransactionIsolation = java.sql.Connection.TRANSACTION_READ_COMMITTED
 				}
 			}
-			dataSource_legacySaeec {
+			dataSource_membership {
 				dbCreate = "validate"
 				url = "jdbc:sqlserver://bimalatrop.no-ip.biz:1433;databaseName=dbamibmembership"
 				properties {

@@ -18,7 +18,8 @@ class RevocacionServiceIntegSpec extends Specification {
 
     def cleanup() {
     }
-
+	
+	/*
     void "test revocacionService.findAllByNumeroEscritura"() {
 		given:
 			int numeroMatricula
@@ -82,6 +83,17 @@ class RevocacionServiceIntegSpec extends Specification {
 			println (res as JSON)
 		then:
 			res != null
-	}
+	}*/
 	
+	void "test getAllByIdCertficacionInSet"(){
+		given:
+			Set<RevocacionTO> res
+			Set<Long> idsCertificacion = [15,17,23,21,22] as Set
+		when:
+			res = revocacionService.getAllByIdCertficacionInSet(idsCertificacion)
+			println 'res getAllByIdCertficacionInSet -> '
+			println (res as JSON)
+		then:
+			res != null
+	}
 }

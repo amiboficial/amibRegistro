@@ -219,6 +219,7 @@ mx.amib.sistemas.oficios.revocacion.findAllByNumeroEscritura = 'revocacion/findA
 mx.amib.sistemas.oficios.revocacion.findAllByFechaRevocacion = 'revocacion/findAllByFechaRevocacion'
 mx.amib.sistemas.oficios.revocacion.findAllByGrupoFinanciero = 'revocacion/findAllByGrupoFinanciero'
 mx.amib.sistemas.oficios.revocacion.findAllByInstitucion = 'revocacion/findAllByInstitucion'
+mx.amib.sistemas.oficios.revocacion.getAllByIdCertficacionInSet = 'revocacion/getAllByIdCertficacionInSet'
 mx.amib.sistemas.oficios.revocacion.get = 'revocacion/show/'
 mx.amib.sistemas.oficios.revocacion.save = 'revocacion/save'
 mx.amib.sistemas.oficios.revocacion.update = 'revocacion/update/'

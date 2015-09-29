@@ -31,6 +31,7 @@ class RevocacionService {
 	String findAllByFechaRevocacionUrl
 	String findAllByGrupoFinancieroUrl
 	String findAllByInstitucionUrl
+	String getAllByIdCertficacionInSetUrl
 	
     public SearchResult<RevocacionTO> list(Integer max, Integer offset, String sort, String order){
 		SearchResult<RevocacionTO> sr = new SearchResult<RevocacionTO>()
@@ -115,6 +116,27 @@ class RevocacionService {
 		}
 		
 		return sr
+	}
+	
+	public Set<RevocacionTO> getAllByIdCertficacionInSet(Set<Long> idsCertficacion){
+		Set<RevocacionTO> result = new HashSet<RevocacionTO>()
+		RestBuilder rest = new RestBuilder()
+		RestResponse resp
+		String queryString
+		
+		println getAllByIdCertficacionInSetUrl
+		println (idsCertficacion as JSON)
+		
+		resp = rest.post(getAllByIdCertficacionInSetUrl){
+			contentType "application/json;charset=UTF-8"
+			json (idsCertficacion as JSON)
+		}
+		
+		if(resp.json instanceof JSONElement && !JSONObject.NULL.equals(resp.json)){			
+			result = RevocacionJsonTranportConverter.fromJsonArrayToTranportSet(resp.json)
+		}
+		
+		return result
 	}
 	
 	public RevocacionTO get(Long id){

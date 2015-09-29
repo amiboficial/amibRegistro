@@ -36,4 +36,12 @@ public class RevocacionJsonTranportConverter {
 		}
 		return objlist
 	}
+	public static Set<RevocacionTO> fromJsonArrayToTranportSet(JSONArray ja){
+		Set<RevocacionTO> objset = new HashSet<RevocacionTO>()
+		ja.each { x ->
+			RevocacionTO obj = RevocacionJsonTranportConverter.fromJsonToTranport(x)
+			objset.add(obj)
+		}
+		return objset
+	}
 }

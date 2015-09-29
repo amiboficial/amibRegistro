@@ -13,6 +13,7 @@ import mx.amib.sistemas.external.catalogos.service.EntidadFederativaTO
 import mx.amib.sistemas.external.catalogos.service.EntidadFinancieraService
 import mx.amib.sistemas.external.catalogos.service.EstadoCivilTO
 import mx.amib.sistemas.external.catalogos.service.FiguraTO
+import mx.amib.sistemas.external.catalogos.service.GrupoFinancieroTO
 import mx.amib.sistemas.external.catalogos.service.InstitucionTO
 import mx.amib.sistemas.external.catalogos.service.NacionalidadTO
 import mx.amib.sistemas.external.catalogos.service.NivelEstudiosTO
@@ -37,6 +38,7 @@ import mx.amib.sistemas.external.expediente.persona.service.SustentanteTO
 import mx.amib.sistemas.external.expediente.persona.service.TelefonoSustentanteTO
 import mx.amib.sistemas.external.oficios.poder.ApoderadoTO
 import mx.amib.sistemas.external.oficios.poder.PoderTO
+import mx.amib.sistemas.external.oficios.revocacion.RevocacionTO
 import mx.amib.sistemas.external.oficios.service.ApoderadoService
 import mx.amib.sistemas.external.oficios.service.PoderService
 import mx.amib.sistemas.external.oficios.service.RevocadoService
@@ -273,6 +275,7 @@ class ExpedienteController {
 		
 		//CARGA EL HISTORICO DE LOS PODERES
 		vm.historicoPoderes = apoderadoResult.poderes.sort{ it.fechaApoderamiento }.reverse()
+		//vm.historioRevocaciones = revocadoService.
 		
 		render(view:"show",model:[viewModelInstance: vm])
 	}
@@ -401,13 +404,17 @@ public class ShowViewModel{
 	
 	Map<String,DocumentoRepositorioTO> documentosRespositorioUuidMap
 	
+	//PODER VIGENTE
 	PoderTO poderInstance
 	NotarioTO notarioPoder
 	InstitucionTO institucionPoder
 	EntidadFederativaTO entidadFederativaNotarioPoder
 	DocumentoPoderRepositorioTO documentoPoderRespaldo
 	
+	//HISTORICO DE PODERES Y REVOCACIONES
 	List<PoderTO> historicoPoderes
+	List<RevocacionTO> historioRevocaciones
+	Map<Long,GrupoFinancieroTO> gruposFinancierosMap
 	Map<Long,InstitucionTO> institucionesPoderesMap
 	Map<Integer,EntidadFederativaTO> entidadesFederativasMap
 }

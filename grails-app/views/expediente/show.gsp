@@ -534,167 +534,19 @@
 	var poderUrl;
 	var historioPoderView;
 	
-	elementsArray.push({
-		grailsId: 1,
-		numeroEscritura: 1,
-		nombreCompletoNotario: "ANABEL PÉREZ LÓPEZ",
-		fechaApoderamiento: "26/11/2015",
-		fechaApoderamientoUnixEpoch: 1443270706,
-		grupoFinancieroNombre: "GBM",
-		institucionNombre: "GBM HOMEBROKER",
-		visible: true
-	});
-	elementsArray.push({
-		grailsId: 2,
-		numeroEscritura: 2,
-		nombreCompletoNotario: "DANIEL PÉREZ LÓPEZ",
-		fechaApoderamiento: "25/11/2015",
-		fechaApoderamientoUnixEpoch: 1443184306,
-		grupoFinancieroNombre: "GP BANAMEX",
-		institucionNombre: "HALIFAX BANK",
-		visible: true
-	});
-	elementsArray.push({
-		grailsId: 3,
-		numeroEscritura: 3,
-		nombreCompletoNotario: "RAFAEL PÉREZ LÓPEZ",
-		fechaApoderamiento: "28/11/2015",
-		fechaApoderamientoUnixEpoch: 1443416400,
-		grupoFinancieroNombre: "BANCOMER",
-		institucionNombre: "BARCLAYS DIVISION",
-		visible: true
-	});
-	elementsArray.push({
-		grailsId: 4,
-		numeroEscritura: 4,
-		nombreCompletoNotario: "LILIANA PÉREZ LÓPEZ",
-		fechaApoderamiento: "24/11/2015",
-		fechaApoderamientoUnixEpoch: 1443070800,
-		grupoFinancieroNombre: "INTERCAM",
-		institucionNombre: "INTERCAM CASA DE BOLSA",
-		visible: true
-	});
-	elementsArray.push({
-		grailsId: 1,
-		numeroEscritura: 1,
-		nombreCompletoNotario: "ANABEL PÉREZ LÓPEZ",
-		fechaApoderamiento: "26/11/2015",
-		fechaApoderamientoUnixEpoch: 1443270706,
-		grupoFinancieroNombre: "GBM",
-		institucionNombre: "GBM HOMEBROKER",
-		visible: true
-	});
-	elementsArray.push({
-		grailsId: 2,
-		numeroEscritura: 2,
-		nombreCompletoNotario: "DANIEL PÉREZ LÓPEZ",
-		fechaApoderamiento: "25/11/2015",
-		fechaApoderamientoUnixEpoch: 1443184306,
-		grupoFinancieroNombre: "GP BANAMEX",
-		institucionNombre: "HALIFAX BANK",
-		visible: true
-	});
-	elementsArray.push({
-		grailsId: 3,
-		numeroEscritura: 3,
-		nombreCompletoNotario: "RAFAEL PÉREZ LÓPEZ",
-		fechaApoderamiento: "28/11/2015",
-		fechaApoderamientoUnixEpoch: 1443416400,
-		grupoFinancieroNombre: "BANCOMER",
-		institucionNombre: "BARCLAYS DIVISION",
-		visible: true
-	});
-	elementsArray.push({
-		grailsId: 4,
-		numeroEscritura: 4,
-		nombreCompletoNotario: "LILIANA PÉREZ LÓPEZ",
-		fechaApoderamiento: "24/11/2015",
-		fechaApoderamientoUnixEpoch: 1443070800,
-		grupoFinancieroNombre: "INTERCAM",
-		institucionNombre: "INTERCAM CASA DE BOLSA",
-		visible: true
-	});
-	elementsArray.push({
-		grailsId: 1,
-		numeroEscritura: 1,
-		nombreCompletoNotario: "ANABEL PÉREZ LÓPEZ",
-		fechaApoderamiento: "26/11/2015",
-		fechaApoderamientoUnixEpoch: 1443270706,
-		grupoFinancieroNombre: "GBM",
-		institucionNombre: "GBM HOMEBROKER",
-		visible: true
-	});
-	elementsArray.push({
-		grailsId: 2,
-		numeroEscritura: 2,
-		nombreCompletoNotario: "DANIEL PÉREZ LÓPEZ",
-		fechaApoderamiento: "25/11/2015",
-		fechaApoderamientoUnixEpoch: 1443184306,
-		grupoFinancieroNombre: "GP BANAMEX",
-		institucionNombre: "HALIFAX BANK",
-		visible: true
-	});
-	elementsArray.push({
-		grailsId: 3,
-		numeroEscritura: 3,
-		nombreCompletoNotario: "RAFAEL PÉREZ LÓPEZ",
-		fechaApoderamiento: "28/11/2015",
-		fechaApoderamientoUnixEpoch: 1443416400,
-		grupoFinancieroNombre: "BANCOMER",
-		institucionNombre: "BARCLAYS DIVISION",
-		visible: true
-	});
-	elementsArray.push({
-		grailsId: 4,
-		numeroEscritura: 4,
-		nombreCompletoNotario: "LILIANA PÉREZ LÓPEZ",
-		fechaApoderamiento: "24/11/2015",
-		fechaApoderamientoUnixEpoch: 1443070800,
-		grupoFinancieroNombre: "INTERCAM",
-		institucionNombre: "INTERCAM CASA DE BOLSA",
-		visible: true
-	});
-	elementsArray.push({
-		grailsId: 1,
-		numeroEscritura: 1,
-		nombreCompletoNotario: "ANABEL PÉREZ LÓPEZ",
-		fechaApoderamiento: "26/11/2015",
-		fechaApoderamientoUnixEpoch: 1443270706,
-		grupoFinancieroNombre: "GBM",
-		institucionNombre: "GBM HOMEBROKER",
-		visible: true
-	});
-	elementsArray.push({
-		grailsId: 2,
-		numeroEscritura: 2,
-		nombreCompletoNotario: "DANIEL PÉREZ LÓPEZ",
-		fechaApoderamiento: "25/11/2015",
-		fechaApoderamientoUnixEpoch: 1443184306,
-		grupoFinancieroNombre: "GP BANAMEX",
-		institucionNombre: "HALIFAX BANK",
-		visible: true
-	});
-	elementsArray.push({
-		grailsId: 3,
-		numeroEscritura: 3,
-		nombreCompletoNotario: "RAFAEL PÉREZ LÓPEZ",
-		fechaApoderamiento: "28/11/2015",
-		fechaApoderamientoUnixEpoch: 1443416400,
-		grupoFinancieroNombre: "BANCOMER",
-		institucionNombre: "BARCLAYS DIVISION",
-		visible: true
-	});
-	elementsArray.push({
-		grailsId: 4,
-		numeroEscritura: 4,
-		nombreCompletoNotario: "LILIANA PÉREZ LÓPEZ",
-		fechaApoderamiento: "24/11/2015",
-		fechaApoderamientoUnixEpoch: 1443070800,
-		grupoFinancieroNombre: "INTERCAM",
-		institucionNombre: "INTERCAM CASA DE BOLSA",
-		visible: true
-	});
-
+	<g:each var="x" in="${viewModelInstance?.historicoPoderes}">
+		elementsArray.push({
+			grailsId: ${x.id},
+			numeroEscritura: ${x.numeroEscritura},
+			nombreCompletoNotario: "${x.idNotario}",
+			fechaApoderamiento: "<g:formatDate format="dd-MM-yyyy" date="${x.fechaApoderamiento}"/>",
+			fechaApoderamientoUnixEpoch: ${x.fechaApoderamiento.getTime()/1000},
+			grupoFinancieroNombre: "${x.idGrupoFinanciero}",
+			institucionNombre: "${x.idInstitucion}",
+			visible: true
+		});
+	</g:each>
+	
 	poderUrl = '<g:createLink controller="poder" action="show" />';
 	historioPoderView = new app.HPoderVMCollectionView({elementsArray:elementsArray,poderUrl:poderUrl}); 
 	
@@ -710,172 +562,23 @@
 	var revocacionUrl;
 	var historioRevocacionesView;
 	
-	elementsArray.push({
-		grailsId: 1,
-		numeroEscritura: 1,
-		nombreCompletoNotario: "ANABEL PÉREZ LÓPEZ",
-		fechaRevocacion: "26/11/2015",
-		fechaRevocacionUnixEpoch: 1443270706,
-		grupoFinancieroNombre: "GBM",
-		institucionNombre: "GBM HOMEBROKER",
-		visible: true
-	});
-	elementsArray.push({
-		grailsId: 2,
-		numeroEscritura: 2,
-		nombreCompletoNotario: "DANIEL PÉREZ LÓPEZ",
-		fechaRevocacion: "25/11/2015",
-		fechaRevocacionUnixEpoch: 1443184306,
-		grupoFinancieroNombre: "GP BANAMEX",
-		institucionNombre: "HALIFAX BANK",
-		visible: true
-	});
-	elementsArray.push({
-		grailsId: 3,
-		numeroEscritura: 3,
-		nombreCompletoNotario: "RAFAEL PÉREZ LÓPEZ",
-		fechaRevocacion: "28/11/2015",
-		fechaRevocacionUnixEpoch: 1443416400,
-		grupoFinancieroNombre: "BANCOMER",
-		institucionNombre: "BARCLAYS DIVISION",
-		visible: true
-	});
-	elementsArray.push({
-		grailsId: 4,
-		numeroEscritura: 4,
-		nombreCompletoNotario: "LILIANA PÉREZ LÓPEZ",
-		fechaRevocacion: "24/11/2015",
-		fechaRevocacionUnixEpoch: 1443070800,
-		grupoFinancieroNombre: "INTERCAM",
-		institucionNombre: "INTERCAM CASA DE BOLSA",
-		visible: true
-	});
-	elementsArray.push({
-		grailsId: 1,
-		numeroEscritura: 1,
-		nombreCompletoNotario: "ANABEL PÉREZ LÓPEZ",
-		fechaRevocacion: "26/11/2015",
-		fechaRevocacionUnixEpoch: 1443270706,
-		grupoFinancieroNombre: "GBM",
-		institucionNombre: "GBM HOMEBROKER",
-		visible: true
-	});
-	elementsArray.push({
-		grailsId: 2,
-		numeroEscritura: 2,
-		nombreCompletoNotario: "DANIEL PÉREZ LÓPEZ",
-		fechaRevocacion: "25/11/2015",
-		fechaRevocacionUnixEpoch: 1443184306,
-		grupoFinancieroNombre: "GP BANAMEX",
-		institucionNombre: "HALIFAX BANK",
-		visible: true
-	});
-	elementsArray.push({
-		grailsId: 3,
-		numeroEscritura: 3,
-		nombreCompletoNotario: "RAFAEL PÉREZ LÓPEZ",
-		fechaRevocacion: "28/11/2015",
-		fechaRevocacionUnixEpoch: 1443416400,
-		grupoFinancieroNombre: "BANCOMER",
-		institucionNombre: "BARCLAYS DIVISION",
-		visible: true
-	});
-	elementsArray.push({
-		grailsId: 4,
-		numeroEscritura: 4,
-		nombreCompletoNotario: "LILIANA PÉREZ LÓPEZ",
-		fechaRevocacion: "24/11/2015",
-		fechaRevocacionUnixEpoch: 1443070800,
-		grupoFinancieroNombre: "INTERCAM",
-		institucionNombre: "INTERCAM CASA DE BOLSA",
-		visible: true
-	});
-	elementsArray.push({
-		grailsId: 1,
-		numeroEscritura: 1,
-		nombreCompletoNotario: "ANABEL PÉREZ LÓPEZ",
-		fechaRevocacion: "26/11/2015",
-		fechaRevocacionUnixEpoch: 1443270706,
-		grupoFinancieroNombre: "GBM",
-		institucionNombre: "GBM HOMEBROKER",
-		visible: true
-	});
-	elementsArray.push({
-		grailsId: 2,
-		numeroEscritura: 2,
-		nombreCompletoNotario: "DANIEL PÉREZ LÓPEZ",
-		fechaRevocacion: "25/11/2015",
-		fechaRevocacionUnixEpoch: 1443184306,
-		grupoFinancieroNombre: "GP BANAMEX",
-		institucionNombre: "HALIFAX BANK",
-		visible: true
-	});
-	elementsArray.push({
-		grailsId: 3,
-		numeroEscritura: 3,
-		nombreCompletoNotario: "RAFAEL PÉREZ LÓPEZ",
-		fechaRevocacion: "28/11/2015",
-		fechaRevocacionUnixEpoch: 1443416400,
-		grupoFinancieroNombre: "BANCOMER",
-		institucionNombre: "BARCLAYS DIVISION",
-		visible: true
-	});
-	elementsArray.push({
-		grailsId: 4,
-		numeroEscritura: 4,
-		nombreCompletoNotario: "LILIANA PÉREZ LÓPEZ",
-		fechaRevocacion: "24/11/2015",
-		fechaRevocacionUnixEpoch: 1443070800,
-		grupoFinancieroNombre: "INTERCAM",
-		institucionNombre: "INTERCAM CASA DE BOLSA",
-		visible: true
-	});
-	elementsArray.push({
-		grailsId: 1,
-		numeroEscritura: 1,
-		nombreCompletoNotario: "ANABEL PÉREZ LÓPEZ",
-		fechaRevocacion: "26/11/2015",
-		fechaRevocacionUnixEpoch: 1443270706,
-		grupoFinancieroNombre: "GBM",
-		institucionNombre: "GBM HOMEBROKER",
-		visible: true
-	});
-	elementsArray.push({
-		grailsId: 2,
-		numeroEscritura: 2,
-		nombreCompletoNotario: "DANIEL PÉREZ LÓPEZ",
-		fechaRevocacion: "25/11/2015",
-		fechaRevocacionUnixEpoch: 1443184306,
-		grupoFinancieroNombre: "GP BANAMEX",
-		institucionNombre: "HALIFAX BANK",
-		visible: true
-	});
-	elementsArray.push({
-		grailsId: 3,
-		numeroEscritura: 3,
-		nombreCompletoNotario: "RAFAEL PÉREZ LÓPEZ",
-		fechaRevocacion: "28/11/2015",
-		fechaRevocacionUnixEpoch: 1443416400,
-		grupoFinancieroNombre: "BANCOMER",
-		institucionNombre: "BARCLAYS DIVISION",
-		visible: true
-	});
-	elementsArray.push({
-		grailsId: 4,
-		numeroEscritura: 4,
-		nombreCompletoNotario: "LILIANA PÉREZ LÓPEZ",
-		fechaRevocacion: "24/11/2015",
-		fechaRevocacionUnixEpoch: 1443070800,
-		grupoFinancieroNombre: "INTERCAM",
-		institucionNombre: "INTERCAM CASA DE BOLSA",
-		visible: true
-	});
+	<g:each var="x" in="${viewModelInstance?.historioRevocaciones}">
+		elementsArray.push({
+			grailsId: ${x.id},
+			numeroEscritura: ${x.numeroEscritura},
+			nombreCompletoNotario: "${x.idNotario}",
+			fechaRevocacion: "<g:formatDate format="dd-MM-yyyy" date="${x.fechaRevocacion}"/>",
+			fechaRevocacionUnixEpoch: ${x.fechaRevocacion.getTime()/1000},
+			grupoFinancieroNombre: "${x.idGrupoFinanciero}",
+			institucionNombre: "${x.idInstitucion}",
+			visible: true
+		});
+	</g:each>
 
 	revocacionUrl = '<g:createLink controller="revocacion" action="show" />';
 	historioRevocacionesView = new app.HRevocacionVMCollectionView({elementsArray:elementsArray, revocacionUrl:revocacionUrl}); 
 	
 	</script>
-	
 	
 	<script>
 	

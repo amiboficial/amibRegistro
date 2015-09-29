@@ -10,6 +10,7 @@ import mx.amib.sistemas.external.oficios.revocacion.RevocacionTO
 import mx.amib.sistemas.external.oficios.revocacion.RevocadoTO
 import mx.amib.sistemas.external.oficios.revocacion.utils.*
 
+import org.codehaus.groovy.grails.web.json.JSONArray
 import org.codehaus.groovy.grails.web.json.JSONElement
 import org.codehaus.groovy.grails.web.json.JSONObject
 
@@ -133,7 +134,7 @@ class RevocacionService {
 		}
 		
 		if(resp.json instanceof JSONElement && !JSONObject.NULL.equals(resp.json)){			
-			result = RevocacionJsonTranportConverter.fromJsonArrayToTranportSet(resp.json)
+			result = RevocacionJsonTranportConverter.fromJsonArrayToTranportSet((JSONArray)resp.json)
 		}
 		
 		return result

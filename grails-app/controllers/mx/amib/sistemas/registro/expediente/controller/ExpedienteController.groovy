@@ -277,7 +277,7 @@ class ExpedienteController {
 		
 		//CARGA EL HISTORICO DE LOS PODERES
 		vm.historicoPoderes = apoderadoResult.poderes.sort{ it.fechaApoderamiento }.reverse()
-		//vm.historioRevocaciones = revocacionService.getAllByIdCertficacionInSet( new HashSet<Long>(vm.sustentanteInstance.certificaciones.collect{ it.id.value }) )
+		vm.historioRevocaciones = revocacionService.getAllByIdCertficacionInSet( new HashSet<Long>(vm.sustentanteInstance.certificaciones.collect{ it.id.value }.asList()) ).asList()
 		
 		render(view:"show",model:[viewModelInstance: vm])
 	}

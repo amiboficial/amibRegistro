@@ -41,6 +41,7 @@ import mx.amib.sistemas.external.oficios.poder.PoderTO
 import mx.amib.sistemas.external.oficios.revocacion.RevocacionTO
 import mx.amib.sistemas.external.oficios.service.ApoderadoService
 import mx.amib.sistemas.external.oficios.service.PoderService
+import mx.amib.sistemas.external.oficios.service.RevocacionService
 import mx.amib.sistemas.external.oficios.service.RevocadoService
 import mx.amib.sistemas.registro.legacy.saaec.RegistroExamenTO
 
@@ -70,6 +71,7 @@ class ExpedienteController {
 	PoderService poderService
 	ApoderadoService apoderadoService
 	RevocadoService revocadoService
+	RevocacionService revocacionService
 	
     def index() {
 		IndexViewModel vm = this.getIndexViewModel(params)
@@ -275,7 +277,7 @@ class ExpedienteController {
 		
 		//CARGA EL HISTORICO DE LOS PODERES
 		vm.historicoPoderes = apoderadoResult.poderes.sort{ it.fechaApoderamiento }.reverse()
-		//vm.historioRevocaciones = revocadoService.
+		//vm.historioRevocaciones = revocacionService.getAllByIdCertficacionInSet( new HashSet<Long>(vm.sustentanteInstance.certificaciones.collect{ it.id.value }) )
 		
 		render(view:"show",model:[viewModelInstance: vm])
 	}

@@ -80,7 +80,8 @@ app.OficioCnbvResultVM = Backbone.Model.extend({
 		grailsId: -1,
 		numeroOficio: -1,
 		claveDga: "",
-		fechaOficio: ""
+		fechaOficio: "",
+		autorizados: ""
 	}
 });
 
@@ -494,6 +495,7 @@ app.OficioCnbvResultVMCollection = Backbone.Collection.extend({
 		elemento.set('numeroOficio',result.numeroOficio);
 		elemento.set('claveDga',result.claveDga);
 		elemento.set('fechaOficio',result.fechaOficio);
+		elemento.set('autorizados',result.autorizados);
 		
 		return elemento;
 	},

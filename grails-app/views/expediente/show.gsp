@@ -100,7 +100,7 @@
 				</div>
 				<div class="form-group">
 					<label class="col-md-2 col-sm-3 control-label">
-						<g:message code="sustentante.curp.label" default="CURP" />					
+						<g:message code="sustentante.curp.label" default="CURP" />
 					</label>
 					<div class="col-md-9 col-sm-9">
 						<p class="form-control-static">${viewModelInstance?.sustentanteInstance?.curp}&nbsp;</p>

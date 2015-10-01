@@ -249,7 +249,7 @@
 	<td style="white-space:nowrap">{{=claveDga}}</td>
 	<td style="white-space:nowrap">{{=numeroOficio}}</td>
 	<td>{{=fechaOficio}}</td>
-	<td>AAAA BBBB CCCC</td>
+	<td>{{=autorizados}}</td>
 	<td>
 		<button type="button" class="show btn btn-default btn-xs" data-grailsId="{{=grailsId}}" ><span class="glyphicon glyphicon-eye-open"></span>&nbsp;Ver detalle</button>
 	</td>

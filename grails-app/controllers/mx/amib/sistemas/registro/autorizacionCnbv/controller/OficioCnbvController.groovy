@@ -1,9 +1,11 @@
 package mx.amib.sistemas.registro.autorizacionCnbv.controller
 
 import grails.converters.JSON
+import java.text.SimpleDateFormat
 import mx.amib.sistemas.external.documentos.service.DocumentoRepositorioTO
 import mx.amib.sistemas.external.expediente.certificacion.service.CertificacionTO
 import mx.amib.sistemas.external.expediente.persona.service.SustentanteTO
+import mx.amib.sistemas.external.expediente.service.SustentanteService
 import mx.amib.sistemas.external.oficios.oficioCnbv.AutorizadoCnbvTO
 import mx.amib.sistemas.external.oficios.oficioCnbv.OficioCnbvTO
 import mx.amib.sistemas.registro.expediente.controller.CertificacionDictamenPrevioController;
@@ -15,9 +17,10 @@ class OficioCnbvController {
 	
 	def oficioCnbvService
 	def autorizacionCnbvService
-	def sustentanteService
+	SustentanteService sustentanteService
 	def certificacionService
 	def documentoRepositorioService
+	
 	
     def index() { }
 	
@@ -97,7 +100,7 @@ class OficioCnbvController {
 			res.put("status", "OK")
 			res.put("object", [
 				'count': servRes.count, 
-				'list' : ResultVM.copyFromServicesResults(servRes.list)
+				'list' : ResultVM.copyFromServicesResults(servRes.list, sustentanteService)
 			] )
 		}
 		catch(Exception ex){
@@ -118,7 +121,7 @@ class OficioCnbvController {
 				res.put("status", "OK")
 				res.put("object", [
 					'count': servRes.count,
-					'list' : ResultVM.copyFromServicesResults(servRes.list)
+					'list' : ResultVM.copyFromServicesResults(servRes.list, sustentanteService)
 				] )
 			}
 			catch(Exception ex){
@@ -139,7 +142,7 @@ class OficioCnbvController {
 		
 		if(claveDga.compareTo("") != 0){
 			try{				
-				servRes = oficioCnbvService.findAllByClaveDga(claveDga)
+				servRes = oficioCnbvService.findAllByClaveDga(claveDga, sustentanteService)
 				res.put("status", "OK")
 				res.put("object", [
 					'count': servRes.count,
@@ -187,7 +190,7 @@ class OficioCnbvController {
 			res.put("status", "OK")
 			res.put("object", [
 				'count': servRes.count,
-				'list' : ResultVM.copyFromServicesResults(servRes.list)
+				'list' : ResultVM.copyFromServicesResults(servRes.list, sustentanteService)
 			] )
 		}
 		catch(Exception ex){
@@ -219,7 +222,7 @@ class OficioCnbvController {
 					res.put("status", "OK")
 					res.put("object", [
 						'count': servRes.count,
-						'list' : ResultVM.copyFromServicesResults(servRes.list)
+						'list' : ResultVM.copyFromServicesResults(servRes.list, sustentanteService)
 					] )
 				}
 				else{
@@ -256,7 +259,7 @@ class OficioCnbvController {
 					res.put("status", "OK")
 					res.put("object", [
 						'count': servRes.count,
-						'list' : ResultVM.copyFromServicesResults(servRes.list)
+						'list' : ResultVM.copyFromServicesResults(servRes.list, sustentanteService)
 					] )
 				}
 				else{
@@ -307,7 +310,7 @@ class OficioCnbvController {
 						res.put("status", "OK")
 						res.put("object", [
 							'count': servRes.count,
-							'list' : ResultVM.copyFromServicesResults(servRes.list)
+							'list' : ResultVM.copyFromServicesResults(servRes.list, sustentanteService)
 						] )
 					}
 					
@@ -339,7 +342,7 @@ class OficioCnbvController {
 			res.put("status", "OK")
 			res.put("object", [
 				'count': servRes.count, 
-				'list' : ResultVM.copyFromServicesResults(servRes.list)
+				'list' : ResultVM.copyFromServicesResults(servRes.list, sustentanteService)
 			] )
 		}
 		catch(Exception ex){
@@ -411,18 +414,28 @@ class OficioCnbvController {
 		int numeroOficio
 		String claveDga
 		String fechaOficio
+		String autorizados
 		
-		public static List<ResultVM> copyFromServicesResults(Collection<OficioCnbvTO> resOficios){
+		public static List<ResultVM> copyFromServicesResults(Collection<OficioCnbvTO> resOficios, SustentanteService sustentanteService){
 			List<ResultVM> res = new ArrayList<ResultVM>()
+			Collection<SustentanteTO> sustAutorizados
+			SimpleDateFormat spdf = new SimpleDateFormat('dd-MM-yyyy')
 			
 			Iterator<OficioCnbvTO> iterator = resOficios.iterator()
 			while(iterator.hasNext()){
 				OficioCnbvTO x = iterator.next()
 				ResultVM resItem = new ResultVM()
+				
 				resItem.id = x.id
 				resItem.numeroOficio = x.numeroOficio
 				resItem.claveDga = x.claveDga
-				resItem.fechaOficio = x.fechaOficio.toString()
+				resItem.fechaOficio = spdf.format(x.fechaOficio)
+				
+				resItem.autorizados = ''
+				sustAutorizados = sustentanteService.findAllByIdCertificacionIn( x.autorizados.collect{ it.idCertificacion } ).sort{ it.nombre }
+				sustAutorizados.each { y ->
+					resItem.autorizados += y.nombre + ' ' + y.primerApellido + ' ' + (y.segundoApellido?:'') + '<br/>'
+				}
 				
 				res.add(resItem)
 			}

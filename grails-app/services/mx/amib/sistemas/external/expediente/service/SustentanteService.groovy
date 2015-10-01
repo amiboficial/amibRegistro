@@ -10,6 +10,7 @@ import java.text.SimpleDateFormat
 import java.nio.charset.Charset
 import java.text.Normalizer
 import java.text.Normalizer.Form
+import org.codehaus.groovy.grails.web.json.JSONElement
 import org.codehaus.groovy.grails.web.json.JSONObject
 
 import grails.converters.JSON
@@ -47,6 +48,7 @@ class SustentanteService {
 	String findAllUrl
 	String findAllAdvancedSearchUrl
 	String findAllAdvancedSearchWithCertificacionUrl
+	String findAllByIdCertificacionInUrl
 	String getUrl
 	String getByNumeroMatriculaUrl
 	String saveUrl
@@ -310,6 +312,23 @@ class SustentanteService {
 		return sr
 	}
 	
+	Collection<SustentanteTO> findAllByIdCertificacionIn(Collection<Long> idsCertificacion){		
+		Collection<Integer> result = new ArrayList<Integer>()
+		def rest = new RestBuilder()
+		def resp = rest.post(findAllByIdCertificacionInUrl){
+			json (idsCertificacion as JSON)
+		}
+		if(resp.json != null && resp.json instanceof JSONElement) {
+			def lista = new ArrayList<SustentanteTO>()
+			resp.json.each{
+				SustentanteTO sustentante = this.obtenerSustentanteFromJSON(it)
+				lista.add(sustentante)
+			}
+			result = lista
+		}
+		return result
+	}
+		
 	public static SustentanteTO obtenerSustentanteFromJSON(JSONObject data){
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd")
 		SustentanteTO sustentante = new SustentanteTO()

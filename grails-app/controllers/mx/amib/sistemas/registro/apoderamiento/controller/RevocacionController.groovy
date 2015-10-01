@@ -161,10 +161,15 @@ class RevocacionController {
 			
 			revocacion.revocados.add(rev)
 		}
+
+		try{
+			flash.successMessage = "La revocación con el número de escritura " + revocacion.numeroEscritura + " ha sido dado de alta [ID:" + revocacion.id + "]"
+		}
+		catch(Exception e){
+			flash.errorMessage = "Ha ocurrido un error al dar de alta la revocación"
+		}
 		
-		revocacion = apoderamientoService.altaRevocacion(revocacion)
-		
-		render (revocacion as JSON)
+		redirect (action: "index")
 	}
 	
 	def show(Long id) {

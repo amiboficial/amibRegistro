@@ -20,17 +20,27 @@ class LoteEnvioAutorizacionController {
 	def downloadAsExcel(){
 		Set<Long> qresult = null
 		List<CertificacionTO> certs = null
-		ServletOutputStream sos = response.outputStream
+		//ServletOutputStream sos = 
 		
 		qresult = loteEnvioAutorizacionService.getSet(this.session.id)
 		certs = certificacionService.getAll(qresult.toList())
 		
 		formatoSolicitudAutorizacionService.fill(certs)
 		if(certs.size() > 0){
+			
 			response.setContentType('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
 			response.setHeader('Content-disposition', 'attachment;filename=\"envioAutorizacion' + (int)(System.currentTimeMillis()/1000) + '.xlsx\"')
-			formatoSolicitudAutorizacionService.renderAsXLSX(sos)
-			sos.close()
+			try{
+				formatoSolicitudAutorizacionService.renderAsXLSX(response.outputStream)
+				response.outputStream.flush()
+			}
+			catch(IOException e){
+				response.sendError(404)
+			}
+			finally{
+				response.outputStream.close()
+			}
+			
 			return
 		}
 		else {

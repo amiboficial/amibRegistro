@@ -1,6 +1,6 @@
 var app = app || {};
 
-app.REV_CREATE_CHKIDX_MSG = "REV_CREATE_CHKIDX_MSG"
+app.REV_CREATE_CHKIDX_MSG = "¿Confirma que toda la información es correcta?";
 
 app.REV_CREATE_CHKIDX_DATOFICIO = 0;
 app.REV_CREATE_CHKIDX_NOTARIO = 1;

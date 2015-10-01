@@ -128,7 +128,7 @@ class ApoderamientoService {
 		idsCert = apoderadoService.getAll(r.revocados.collect{ it.idApoderado }.toSet()).apoderados.collect{ it.idCertificacion }
 		//aplica el status de "Autorizado sin poderes" si es que se encontraba
 		//"Autorizado con poderes"
-		autorizacionService.revocar(idsCert)
+		autorizacionService.deshacerApoderar(idsCert)
 		//Llama al servicio de repositorio de documentos (amibDocumentos) para
 		//enviar el documento de respaldo que ha sido cargado previamiente
 		//en el espacio temporal otorgado por el servicio de Archivos Temporales

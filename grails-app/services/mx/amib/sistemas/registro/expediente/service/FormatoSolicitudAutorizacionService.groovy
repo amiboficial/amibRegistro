@@ -15,6 +15,7 @@ import mx.amib.sistemas.external.catalogos.service.InstitucionTO
 import mx.amib.sistemas.external.catalogos.service.SepomexTO
 import mx.amib.sistemas.external.expediente.certificacion.service.CertificacionTO
 import mx.amib.sistemas.external.expediente.persona.service.PuestoTO
+import mx.amib.sistemas.external.expediente.persona.service.TelefonoSustentanteTO
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import org.apache.poi.ss.usermodel.Cell
 import org.apache.poi.ss.usermodel.CellStyle
@@ -113,8 +114,8 @@ class FormatoSolicitudAutorizacionService {
 			//obtiene el elemento sepomex del sustentante
 			SepomexTO sepomexSust = sepomexService.get(x.sustentante.idSepomex) 
 			//obtiene un telefono de casa y oficina
-			String telCasa = x.sustentante.telefonos.find{ it.tipoTelefonoSustentante.descripcion == "Casa" }
-			String telOficina = x.sustentante.telefonos.find{ it.tipoTelefonoSustentante.descripcion == "Oficina" }
+			TelefonoSustentanteTO telCasa = x.sustentante.telefonos.find{ it.tipoTelefonoSustentante.descripcion == "Casa" }
+			TelefonoSustentanteTO telOficina = x.sustentante.telefonos.find{ it.tipoTelefonoSustentante.descripcion == "Oficina" }
 			
 			refMap = new HashMap<String,String>()
 			refMap.put(this.HEADER_SECUENCIA, nuseq++)
@@ -139,8 +140,10 @@ class FormatoSolicitudAutorizacionService {
 			refMap.put(this.HEADER_CIUDAD, sepomexSust.ciudad.nombre)
 			refMap.put(this.HEADER_CP, sepomexSust.codigoPostal)
 			refMap.put(this.HEADER_EDO, sepomexSust.asentamiento.municipio.entidadFederativa.nombre)
-			refMap.put(this.HEADER_TELCAS, telCasa.lada?:'' + ' ' + telCasa.telefono?:'' + ' ' + telCasa.extension?:'')
-			refMap.put(this.HEADER_TELOFI, telOficina.lada?:'' + ' ' + telOficina.telefono?:'' + ' ' + telOficina.extension?:'')
+			if(telCasa != null)
+				refMap.put(this.HEADER_TELCAS, telCasa.lada?:'' + ' ' + telCasa.telefono?:'' + ' ' + telCasa.extension?:'')
+			if(telOficina != null)
+				refMap.put(this.HEADER_TELOFI, telOficina.lada?:'' + ' ' + telOficina.telefono?:'' + ' ' + telOficina.extension?:'')
 			refMap.put(this.HEADER_EMAIL, x.sustentante.correoElectronico)
 			refMap.put(this.HEADER_NAL, x.sustentante.nacionalidad.descripcion)
 			refMap.put(this.HEADER_CALMIG, x.sustentante.calidadMigratoria)

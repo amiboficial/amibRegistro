@@ -64,6 +64,10 @@ class MembershipController {
 		redirect(action: 'logIn')
 	}
 	
+	def unauthorized(){
+		render(view:'unauthorized')
+	}
+	
 	def show() { }
 	
 	def edit() { }

@@ -1,6 +1,11 @@
 import grails.util.Environment
 // Place your Spring DSL code here
 beans = {
+	membershipServiceScopedProxy(org.springframework.aop.scope.ScopedProxyFactoryBean)
+	{
+		targetBeanName = 'membershipService'
+		proxyTargetClass = true
+	}
 	archivoTemporalService(mx.amib.sistemas.utils.service.ArchivoTemporalService) {
 		directorioTemporal = application.config.mx.amib.sistemas.registro.tempDir
 		minutosCaducidadPorArchivo = 50

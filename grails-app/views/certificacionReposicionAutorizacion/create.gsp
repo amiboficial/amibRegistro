@@ -100,7 +100,7 @@
 	
 	</form>
 
-	<g:render template="../common/ReposicionAutorizacionCertificacion"/>
+	<g:render template="../common/reposicionAutorizacionCertificacion"/>
 	<g:javascript src="mx.amib.sistemas.registro.expediente.form.revalidacionCertificacionAlAutorizar.opcionExamen.js" />
 	<g:javascript src="mx.amib.sistemas.registro.expediente.form.reposicionAutorizacionCertificacion.js" />
 	<script type="text/javascript">

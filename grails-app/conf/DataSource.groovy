@@ -1,25 +1,25 @@
-
-dataSource {
-	pooled = false//pooled = true
-	//jmxExport = true
-	driverClassName = "com.microsoft.sqlserver.jdbc.SQLServerDriver"
-	username = "sa"
-	password = "bimalatrop2014"
-}
-dataSource_legacySaeec {
-	pooled = false//pooled = true
-	//jmxExport = true
-	driverClassName = "com.microsoft.sqlserver.jdbc.SQLServerDriver"
-	username = "sa"
-	password = "bimalatrop2014"
-}
-dataSource_membership {
-	pooled = false//pooled = true
-	//jmxExport = true
-	driverClassName = "com.microsoft.sqlserver.jdbc.SQLServerDriver"
-	username = "sa"
-	password = "bimalatrop2014"
-}
+//
+//dataSource {
+//	pooled = false//pooled = true
+//	//jmxExport = true
+//	driverClassName = "com.microsoft.sqlserver.jdbc.SQLServerDriver"
+//	username = "auditoria"
+//	password = "E5c0m100"
+//}
+//dataSource_legacySaeec {
+//	pooled = false//pooled = true
+//	//jmxExport = true
+//	driverClassName = "com.microsoft.sqlserver.jdbc.SQLServerDriver"
+//	username = "auditoria"
+//	password = "E5c0m100"
+//}
+//dataSource_membership {
+//	pooled = false//pooled = true
+//	//jmxExport = true
+//	driverClassName = "com.microsoft.sqlserver.jdbc.SQLServerDriver"
+//	username = "auditoria"
+//	password = "E5c0m100"
+//}
 
 hibernate {
 	cache.use_second_level_cache = true
@@ -32,41 +32,110 @@ hibernate {
 // environment specific settings
 environments {
 	development {
-			dataSource {
-				dbCreate = "validate" // one of 'create', 'create-drop', 'update', 'validate', ''
-				url = "jdbc:sqlserver://bimalatrop.no-ip.biz:1433;databaseName=dbamibregistro"
-				logSql = true
+		dataSource {
+			driverClassName = "com.microsoft.sqlserver.jdbc.SQLServerDriver"
+			username = "auditoria"
+			password = "E5c0m100"
+			dbCreate = "validate"
+			url = "jdbc:sqlserver://10.100.128.58:1433;databaseName=qa_amib_registro"
+			properties {
+				// See http://grails.org/doc/latest/guide/conf.html#dataSource for documentation
+				jmxEnabled = true
+				initialSize = 5
+				maxActive = 50
+				minIdle = 5
+				maxIdle = 25
+				maxWait = 10000
+				maxAge = 10 * 60000
+				timeBetweenEvictionRunsMillis = 5000
+				minEvictableIdleTimeMillis = 60000
+				validationQuery = "SELECT 1"
+				validationQueryTimeout = 3
+				validationInterval = 15000
+				testOnBorrow = true
+				testWhileIdle = true
+				testOnReturn = false
+				jdbcInterceptors = "ConnectionState"
+				defaultTransactionIsolation = java.sql.Connection.TRANSACTION_READ_COMMITTED
 			}
-			dataSource_legacySaeec {
-				dbCreate = "validate" // one of 'create', 'create-drop', 'update', 'validate', ''
-				url = "jdbc:sqlserver://bimalatrop.no-ip.biz:1433;databaseName=certificacion"
-				logSql = true
+		}
+		dataSource_legacySaeec {
+			driverClassName = "com.microsoft.sqlserver.jdbc.SQLServerDriver"
+			username = "auditoria"
+			password = "E5c0m100"
+			dbCreate = "validate"
+			url = "jdbc:sqlserver://10.100.128.58:1433;databaseName=certificacion"
+			properties {
+				// See http://grails.org/doc/latest/guide/conf.html#dataSource for documentation
+				jmxEnabled = true
+				initialSize = 5
+				maxActive = 50
+				minIdle = 5
+				maxIdle = 25
+				maxWait = 10000
+				maxAge = 10 * 60000
+				timeBetweenEvictionRunsMillis = 5000
+				minEvictableIdleTimeMillis = 60000
+				validationQuery = "SELECT 1"
+				validationQueryTimeout = 3
+				validationInterval = 15000
+				testOnBorrow = true
+				testWhileIdle = true
+				testOnReturn = false
+				jdbcInterceptors = "ConnectionState"
+				defaultTransactionIsolation = java.sql.Connection.TRANSACTION_READ_COMMITTED
 			}
-			dataSource_membership {
-				dbCreate = "validate" // one of 'create', 'create-drop', 'update', 'validate', ''
-				url = "jdbc:sqlserver://bimalatrop.no-ip.biz:1433;databaseName=dbamibmembership"
-				logSql = true
+		}
+		dataSource_membership {
+			driverClassName = "com.microsoft.sqlserver.jdbc.SQLServerDriver"
+			username = "auditoria"
+			password = "E5c0m100"
+			dbCreate = "validate"
+			url = "jdbc:sqlserver://10.100.128.58:1433;databaseName=qa_amib_membership"
+			properties {
+				// See http://grails.org/doc/latest/guide/conf.html#dataSource for documentation
+				jmxEnabled = true
+				initialSize = 5
+				maxActive = 50
+				minIdle = 5
+				maxIdle = 25
+				maxWait = 10000
+				maxAge = 10 * 60000
+				timeBetweenEvictionRunsMillis = 5000
+				minEvictableIdleTimeMillis = 60000
+				validationQuery = "SELECT 1"
+				validationQueryTimeout = 3
+				validationInterval = 15000
+				testOnBorrow = true
+				testWhileIdle = true
+				testOnReturn = false
+				jdbcInterceptors = "ConnectionState"
+				defaultTransactionIsolation = java.sql.Connection.TRANSACTION_READ_COMMITTED
 			}
+		}
 	}
 	test {
 			dataSource {
 				dbCreate = "validate"
-				url = "jdbc:sqlserver://bimalatrop.no-ip.biz:1433;databaseName=dbamibregistro"
+				url = "jdbc:sqlserver://10.100.128.58:1433;databaseName=dbamibregistro"
 			}
 			dataSource_legacySaeec {
 				dbCreate = "validate"
-				url = "jdbc:sqlserver://bimalatrop.no-ip.biz:1433;databaseName=certificacion"
+				url = "jdbc:sqlserver://10.100.128.58:1433;databaseName=certificacion"
 			}
 			dataSource_membership {
 				dbCreate = "validate" // one of 'create', 'create-drop', 'update', 'validate', ''
-				url = "jdbc:sqlserver://bimalatrop.no-ip.biz:1433;databaseName=dbamibmembership"
+				url = "jdbc:sqlserver://10.100.128.58:1433;databaseName=dbamibmembership"
 				logSql = true
 			}
 	}
 	production {
 			dataSource {
+				driverClassName = "com.microsoft.sqlserver.jdbc.SQLServerDriver"
+				username = "auditoria"
+				password = "E5c0m100"
 				dbCreate = "validate"
-				url = "jdbc:sqlserver://bimalatrop.no-ip.biz:1433;databaseName=dbamibregistro"
+				url = "jdbc:sqlserver://10.100.128.58:1433;databaseName=qa_amib_registro"
 				properties {
 					// See http://grails.org/doc/latest/guide/conf.html#dataSource for documentation
 					jmxEnabled = true
@@ -89,8 +158,11 @@ environments {
 				}
 			}
 			dataSource_legacySaeec {
+				driverClassName = "com.microsoft.sqlserver.jdbc.SQLServerDriver"
+				username = "auditoria"
+				password = "E5c0m100"
 				dbCreate = "validate"
-				url = "jdbc:sqlserver://bimalatrop.no-ip.biz:1433;databaseName=certificacion"
+				url = "jdbc:sqlserver://10.100.128.58:1433;databaseName=certificacion2"
 				properties {
 					// See http://grails.org/doc/latest/guide/conf.html#dataSource for documentation
 					jmxEnabled = true
@@ -113,8 +185,11 @@ environments {
 				}
 			}
 			dataSource_membership {
+				driverClassName = "com.microsoft.sqlserver.jdbc.SQLServerDriver"
+				username = "auditoria"
+				password = "E5c0m100"
 				dbCreate = "validate"
-				url = "jdbc:sqlserver://bimalatrop.no-ip.biz:1433;databaseName=dbamibmembership"
+				url = "jdbc:sqlserver://10.100.128.58:1433;databaseName=qa_amib_membership"
 				properties {
 					// See http://grails.org/doc/latest/guide/conf.html#dataSource for documentation
 					jmxEnabled = true

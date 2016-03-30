@@ -9,8 +9,8 @@
 <body>
 
   <form class="form-signin" action='<g:createLink controller="membership" action="authenticate"/>' method="post">
-    <asset:image class="center-block" src="logoamiblogin.jpg" alt="AMIB" />
-    <h1 class="form-signin-heading">AMIB Registro 0.1</h1>
+    <asset:image class="center-block" src="amib_logo.png" alt="AMIB" />
+    <h1 class="form-signin-heading">AMIB-Registro</h1>
     <h2 class="form-signin-heading">Introduzca sus credenciales para ingresar al sistema</h2>
     <label for="userName" class="sr-only">Nombre de usuario</label>
     <input type=text id="txtUserName" name="vm.userName" class="form-control" placeholder="Nombre de usuario" required="" autofocus="">

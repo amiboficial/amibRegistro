@@ -510,7 +510,7 @@
 			dsTipo: " ${x?.tipoDocumentoSustentate?.descripcion}",
 			manejaVigenciaTipoDocumento: true,
 			fechaCarga: '<g:formatDate format="dd-MM-yyyy" date="${viewModelInstance?.documentosRespositorioUuidMap?.get(x?.uuid)?.fechaCreacion}"/> ',
-			fechaCargaUnixEpoch : ${viewModelInstance?.documentosRespositorioUuidMap?.get(x?.uuid)?.fechaCreacion?.getTime()/1000},
+			
 			<g:if test="${i < 10}">
 				visible: true
 			</g:if>

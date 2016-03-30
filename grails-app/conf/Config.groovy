@@ -83,12 +83,12 @@ environments {
         grails.converters.json.pretty.print = true
         grails.logging.jul.usebridge = true
 		
-		mx.amib.sistemas.catalogos.resthttpURL = 'http://bimalatrop.no-ip.biz:8080/amibCatalogos-0.1/'
+		mx.amib.sistemas.catalogos.resthttpURL = 'http://10.100.128.57:8080/amibCatalogos-0.1/'
 		//mx.amib.sistemas.expediente.resthttpURL = 'http://bimalatrop.no-ip.biz:8084/amibExpediente/'
 		//mx.amib.sistemas.expediente.resthttpURL = 'http://localhost:8084/amibExpediente/'
-		mx.amib.sistemas.expediente.resthttpURL = 'http://bimalatrop.no-ip.biz:8080/amibExpediente-0.1/'
-		mx.amib.sistemas.oficios.resthttpURL = 'http://bimalatrop.no-ip.biz:8080/amibOficios/'
-		mx.amib.sistemas.documentos.resthttpURL = 'http://bimalatrop.no-ip.biz:8080/amibDocumentos-0.1/'
+		mx.amib.sistemas.expediente.resthttpURL = 'http://10.100.128.57:8080/amibExpediente-0.1/'
+		mx.amib.sistemas.oficios.resthttpURL = 'http://10.100.128.57:8080/amibOficios/'
+		mx.amib.sistemas.documentos.resthttpURL = 'http://10.100.128.57:8080/amibDocumentos-0.1/'
     }
 	test {
 		grails.logging.jul.usebridge = false
@@ -103,10 +103,10 @@ environments {
     production {
         grails.logging.jul.usebridge = false
         // TODO: grails.serverURL = "http://www.changeme.com"
-		mx.amib.sistemas.catalogos.resthttpURL = 'http://bimalatrop.no-ip.biz:8080/amibCatalogos-0.1/'
-		mx.amib.sistemas.expediente.resthttpURL = 'http://bimalatrop.no-ip.biz:8080/amibExpediente-0.1/'
-		mx.amib.sistemas.oficios.resthttpURL = 'http://bimalatrop.no-ip.biz:8080/amibOficios/'
-		mx.amib.sistemas.documentos.resthttpURL = 'http://bimalatrop.no-ip.biz:8080/amibDocumentos-0.1/'
+		mx.amib.sistemas.catalogos.resthttpURL = 'http://10.100.128.57:8080/amibCatalogos-0.1/'
+		mx.amib.sistemas.expediente.resthttpURL = 'http://10.100.128.57:8080/amibExpediente-0.1/'
+		mx.amib.sistemas.oficios.resthttpURL = 'http://10.100.128.57:8080/amibOficios/'
+		mx.amib.sistemas.documentos.resthttpURL = 'http://10.100.128.57:8080/amibDocumentos-0.1/'
     }
 }
 
@@ -139,7 +139,7 @@ grails.plugin.reveng.excludeTables = [
 grails.plugins.twitterbootstrap.fixtaglib = true
 grails.plugins.twitterbootstrap.defaultBundle = 'bundle_bootstrap'
 
-mx.amib.sistemas.registro.tempDir = 'H:\\Temp\\amibRegistro\\'
+mx.amib.sistemas.registro.tempDir = 'O:\\Temp\\amibRegistro\\'
 
 mx.amib.sistemas.catalogos.general.GrupoFinanciero.classname = 'mx.amib.sistemas.catalogos.general.model.catalog.GrupoFinanciero'
 mx.amib.sistemas.catalogos.general.Institucion.classname = 'mx.amib.sistemas.catalogos.general.model.catalog.Institucion'

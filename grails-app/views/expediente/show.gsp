@@ -286,11 +286,11 @@
 								<div class="col-sm-4"><p class="form-control-static">${x?.varianteFigura?.tipoAutorizacionFigura}&nbsp;</p></div>
 							</div>
 							<div class="figuraRow row">
-								<label class="col-sm-3 control-label">Estatus de certificación</label>
+								<label class="col-sm-3 control-label">Estatus de  autorización </label>
 								<div class="col-sm-4"><p class="form-control-static">${x?.statusAutorizacion?.descripcion}&nbsp;</p></div>
 							</div>
 							<div class="figuraRow row">
-								<label class="col-sm-3 control-label">Estatus de autorización</label>
+								<label class="col-sm-3 control-label">Estatus de certificación</label>
 								<div class="col-sm-4"><p class="form-control-static">${x?.statusCertificacion?.descripcion}&nbsp;</p></div>
 							</div>
 							<div class="figuraRow row">

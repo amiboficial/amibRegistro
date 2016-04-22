@@ -10,6 +10,7 @@ import java.text.SimpleDateFormat
 import java.nio.charset.Charset
 import java.text.Normalizer
 import java.text.Normalizer.Form
+
 import org.codehaus.groovy.grails.web.json.JSONElement
 import org.codehaus.groovy.grails.web.json.JSONObject
 
@@ -311,6 +312,110 @@ class SustentanteService {
 		}
 		return sr
 	}
+		
+		//metodos de busqueda avanzada que incluyen la institucion financiera
+		SearchResult findAllAdvancedSearchAndIns(String nom, String ap1, String ap2,
+			Integer max, Integer offset, String sort, String order, Long idgrup, Long idfina){
+			
+			SearchResult sr = new SearchResult()
+			String url = findAllAdvancedSearchUrl
+			Map<String,String> qsparams = new HashMap<String,String>()
+			RestBuilder rest = new RestBuilder()
+			def resp = null
+			
+			qsparams.put('max', max)
+			qsparams.put('offset', offset)
+			qsparams.put('sort', sort)
+			qsparams.put('order', order)
+			qsparams.put('nom', nom)
+			qsparams.put('ap1', ap1)
+			qsparams.put('ap2', ap2)
+			qsparams.put('idgrup', idgrup)
+			qsparams.put('idfina', idfina)
+			
+//			String uri2 = "http://localhost:8084/amibExpediente/sustentanteRestful/findAllAdvancedSearch"
+//			uri2 += 'AndIns?max={max}&offset={offset}&sort={sort}&order={order}&nom={nom}&ap1={ap1}&ap2={ap2}&idgrup={idgrup}&idfina={idfina}'
+//			println "La url es: " + uri2
+			
+			url += 'AndIns?max={max}&offset={offset}&sort={sort}&order={order}&nom={nom}&ap1={ap1}&ap2={ap2}&idgrup={idgrup}&idfina={idfina}'
+			println "La url es: " + url
+			
+//			url = uri2
+	
+			resp = rest.get(url,qsparams)
+			println("resp.headers")
+			println(resp.headers)
+			if(resp.json != null && resp.json instanceof JSONObject) {
+				def lista = new ArrayList<SustentanteTO>()
+				resp.json.'list'.each{
+					SustentanteTO sustentante = this.obtenerSustentanteFromJSON(it)
+					lista.add(sustentante)
+				}
+				sr.list = lista
+				sr.count = resp.json.'count'
+				sr.error = resp.json.'error'
+				sr.errorDetails = resp.json.'errorDetails'
+			}
+			else{
+				sr.error = true
+				sr.errorDetails = "NON_JSON_RESPONSE"
+			}
+			return sr
+		}
+			
+		SearchResult findAllAdvancedSearchWithCertificacionAndIns(String nom, String ap1, String ap2,
+			Long idfig, Long idvarfig, Long stcert, Long staut,
+			Integer max, Integer offset, String sort, String order, Long idgrup, Long idfina){
+			
+			SearchResult sr = new SearchResult()
+			String url = findAllAdvancedSearchWithCertificacionUrl
+			Map<String,String> qsparams = new HashMap<String,String>()
+			RestBuilder rest = new RestBuilder()
+			def resp = null
+			
+			qsparams.put('max', max)
+			qsparams.put('offset', offset)
+			qsparams.put('sort', sort)
+			qsparams.put('order', order)
+			qsparams.put('nom', nom)
+			qsparams.put('ap1', ap1)
+			qsparams.put('ap2', ap2)
+			qsparams.put('idfig', idfig)
+			qsparams.put('idvarfig', idvarfig)
+			qsparams.put('stcert', stcert)
+			qsparams.put('staut', staut)
+			qsparams.put('idgrup', idgrup)
+			qsparams.put('idfina', idfina)
+			
+//			String uri2 = "http://localhost:8084/amibExpediente/sustentanteRestful/findAllAdvancedSearchWithCertificacion"
+//			uri2 += 'AndIns?max={max}&offset={offset}&sort={sort}&order={order}&nom={nom}&ap1={ap1}&ap2={ap2}&idfig={idfig}&idvarfig={idvarfig}&stcert={stcert}&staut={staut}&idgrup={idgrup}&idfina={idfina}'
+//			println "La url es: " + uri2
+			
+			url +=	'AndIns?max={max}&offset={offset}&sort={sort}&order={order}&nom={nom}&ap1={ap1}&ap2={ap2}&idfig={idfig}&idvarfig={idvarfig}&stcert={stcert}&staut={staut}&idgrup={idgrup}&idfina={idfina}'
+			println "La url es: " + url
+			
+//			url = uri2
+			
+			resp = rest.get(url,qsparams)
+			println("resp.headers")
+			if(resp.json != null && resp.json instanceof JSONObject) {
+				def lista = new ArrayList<SustentanteTO>()
+				resp.json.'list'.each{
+					SustentanteTO sustentante = this.obtenerSustentanteFromJSON(it)
+					lista.add(sustentante)
+				}
+				sr.list = lista
+				sr.count = resp.json.'count'
+				sr.error = resp.json.'error'
+				sr.errorDetails = resp.json.'errorDetails'
+			}
+			else{
+				sr.error = true
+				sr.errorDetails = "NON_JSON_RESPONSE"
+			}
+			return sr
+		}
+		//END metodos de busqueda avanzada que incluyen la institucion financiera
 	
 	Collection<SustentanteTO> findAllByIdCertificacionIn(Collection<Long> idsCertificacion){		
 		Collection<Integer> result = new ArrayList<Integer>()

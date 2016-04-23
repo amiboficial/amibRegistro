@@ -402,7 +402,7 @@
 	</g:if>
 	
 	<script>
-
+	$("#divAffixSidebar").parent().remove();
 	var app = app || {};
 
 	var documentosView;

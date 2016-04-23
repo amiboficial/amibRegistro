@@ -212,6 +212,8 @@
 						
 					<script type="text/javascript">
 
+						$("#divAffixSidebar").parent().remove();
+					
 						var gruposFinancieros;
 						var institucionesGruposFinancieros;
 				

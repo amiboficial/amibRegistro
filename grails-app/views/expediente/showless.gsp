@@ -105,31 +105,7 @@
 		            	<p class="form-control-static">${viewModelInstance?.sustentanteInstance?.genero}&nbsp;</p>
 		            </div>
 				</div>
-				<div class="form-group">
-					<label class="col-md-2 col-sm-3 control-label">
-						<g:message code="sustentante.rfc.label" default="RFC" />
-					</label>
-					<div class="col-md-9 col-sm-9">
-						<p class="form-control-static">${viewModelInstance?.sustentanteInstance?.rfc}&nbsp;</p>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="col-md-2 col-sm-3 control-label">
-						<g:message code="sustentante.curp.label" default="CURP" />
-					</label>
-					<div class="col-md-9 col-sm-9">
-						<p class="form-control-static">${viewModelInstance?.sustentanteInstance?.curp}&nbsp;</p>
-					</div>
-				</div>
 				
-				<div class="form-group">
-					<label class="col-md-2 col-sm-3 control-label">
-		            	<g:message code="sustentante.fechaNacimiento.label" default="Fecha de nacimiento" />
-					</label>
-		            <div class="col-md-9 col-sm-9">
-		            	<p class="form-control-static"><g:formatDate format="dd-MM-yyyy" date="${viewModelInstance?.sustentanteInstance?.fechaNacimiento}"/>&nbsp;</p>
-		            </div>
-				</div>
 				<div class="form-group">
 					<label class="col-md-2 col-sm-3 control-label">
 						<g:message code="sustentante.nacionalidad.label" default="Nacionalidad" />					
@@ -163,27 +139,6 @@
 		            	<p class="form-control-static">${viewModelInstance?.sustentanteInstance?.numeroInterior}&nbsp;</p>
 		            </div>
 				</div>
-				<g:if test="${viewModelInstance?.sustentanteInstance?.calidadMigratoria != null && viewModelInstance?.sustentanteInstance?.calidadMigratoria?.trim()?.compareToIgnoreCase('null') != 0}" >
-					<div class="form-group">
-						<label class="col-md-2 col-sm-3 control-label">
-							<g:message code="sustentante.calidadMigratoria.label" default="Calidad Migratoria" />					
-						</label>
-						<div class="col-md-9 col-sm-9">
-							<p class="form-control-static">${viewModelInstance?.sustentanteInstance?.calidadMigratoria?.descripcion}&nbsp;</p>
-						</div>
-					</div>
-				</g:if>
-				
-				<g:if test="${viewModelInstance?.sustentanteInstance?.calidadMigratoria != null && viewModelInstance?.sustentanteInstance?.calidadMigratoria?.trim()?.compareToIgnoreCase('null') != 0}" >
-					<div class="form-group">
-						<label class="col-md-2 col-sm-3 control-label">
-							<g:message code="sustentante.profesion.label" default="Profesión" />					
-						</label>
-						<div class="col-md-9 col-sm-9">
-							<p class="form-control-static">${viewModelInstance?.sustentanteInstance?.profesion?.descripcion}&nbsp;</p>
-						</div>
-					</div>
-				</g:if>
 				
 			</div>
 			

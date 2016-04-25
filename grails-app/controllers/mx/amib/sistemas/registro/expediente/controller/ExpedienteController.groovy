@@ -130,9 +130,9 @@ class ExpedienteController {
 		println ("params")
 		println (params as JSON)
 		if(vm.fltTB == 'T'){
-			def sr = sustentanteService.findAll(vm.max, vm.offset, vm.sort, vm.order)
-			vm.resultList = sr.list
-			vm.count = sr.count
+			def sr = null
+			vm.resultList = new ArrayList<SustentanteTO>()
+			vm.count = 0
 		}
 		else if(vm.fltTB == 'M'){
 			

@@ -25,15 +25,6 @@
 		<div class="alert alert-danger" role="alert"><span class="glyphicon glyphicon-info-sign"></span> ${flash.errorMessage}</div>
 	</g:if>
 	
-	<!-- <fieldset>
-		<legend>Acciones</legend>
-		
-		<button type="button" data-id="${viewModelInstance?.sustentanteInstance?.id}" data-url="<g:createLink controller="expediente" action="edit" id="${viewModelInstance?.sustentanteInstance?.id}"/>" class="editar btn btn-default btn-primary"><span class="glyphicon glyphicon-pencil"></span> Editar datos personales</button>
-		<button type="button" data-id="${viewModelInstance?.sustentanteInstance?.id}" data-url="<g:createLink controller="expediente" action="editDoc" id="${viewModelInstance?.sustentanteInstance?.id}"/>" class="editarDoc btn btn-default btn-primary"><span class="glyphicon glyphicon-pencil"></span> Gestión de documentación</button>
-		<button type="button" data-id="${viewModelInstance?.sustentanteInstance?.id}" data-url="<g:createLink controller="expediente" action="remove" id="${viewModelInstance?.sustentanteInstance?.id}"/>" class="eliminar btn btn-default btn-primary"><span class="glyphicon glyphicon-trash"></span> Eliminar</button>
-		
-	</fieldset>-->
-	
 	<fieldset class="form-horizontal">
 		<legend>Expediente</legend>
 		
@@ -177,14 +168,6 @@
 								<label class="col-sm-3 control-label">Fecha de fin de vigencia</label>
 								<div class="col-sm-4"><p class="form-control-static"><g:formatDate format="dd-MM-yyyy" date="${x?.fechaFin}"/>&nbsp;</p></div>
 							</div>
-							<!-- 
-							<div class="row">
-								<div style="text-align:center; margin-top: 0.75em;">
-									<button type="button" class="edit btn btn-primary"><span class="glyphicon glyphicon-pencil"></span> Editar</button>
-									<button type="button" class="delete btn btn-danger"><span class="glyphicon glyphicon-trash"></span> Borrar</button>
-								</div>
-							</div>
-							 -->
 						</div>
 					</g:each>
 				
@@ -356,7 +339,7 @@
 		<div class="alert alert-info"><span class="glyphicon glyphicon-info-sign"></span> ${flash.message}</div>
 	</g:if>
 	
-	<script>
+	<script type="text/javascript">
 	$("#divAffixSidebar").parent().remove();
 	var app = app || {};
 
@@ -381,23 +364,20 @@
 	</g:each>
 	downloadUrl = '<g:createLink controller="documento" action="download" />';
 	
-	documentosView = new app.DocumentoSustentanteCollectionView({
-		docsArray: docsArray,
-		downloadUrl: downloadUrl
-	});
+	
 	
 	</script>
 	
 	<g:render template="showHistoricoApoderados" />
 	<g:javascript src="mx.amib.sistemas.registro.expediente.show.historicoApoderados.js" />
-	<script>
+	<script type="text/javascript" >
 	var app = app || {};
 
 	var elementsArray = new Array();
 	var poderUrl;
 	var historioPoderView;
 	
-	<g:each var="x" in="${viewModelInstance?.historicoPoderes}">
+	<g:each var="x" in="${viewModelInstance?.historicoPoderes}" >
 		elementsArray.push({
 			grailsId: ${x.id},
 			numeroEscritura: ${x.numeroEscritura},
@@ -417,7 +397,7 @@
 	
 	<g:render template="showHistoricoRevocados" />
 	<g:javascript src="mx.amib.sistemas.registro.expediente.show.historicoRevocados.js" />
-	<script>
+	<script type="text/javascript">
 
 	var app = app || {};
 
@@ -443,7 +423,7 @@
 	
 	</script>
 	
-	<script>
+	<script type="text/javascript">
 	
 	$(".editar").click(function(e){
 		e.preventDefault();

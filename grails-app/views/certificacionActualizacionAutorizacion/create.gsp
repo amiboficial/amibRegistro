@@ -284,6 +284,13 @@
 			$('#spnHdnPostData').html("");
 		});
 
+		$(function() {
+		    var aaaa = $("[name='ZXhwZWRpZW50ZS5lc3RhZG9DaXZpbA']").val();
+		    if(aaaa == undefined || aaaa == null || aaaa == "" ){
+		    	$("[name='ZXhwZWRpZW50ZS5lc3RhZG9DaXZpbA']").val("-1");
+			}
+		});
+
 	</script>	
 	<!-- FIN: COMPONENTE CHECKLIST -->
 

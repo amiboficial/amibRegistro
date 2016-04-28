@@ -231,9 +231,9 @@ app.GeneralesView = Backbone.View.extend({
 		if($.trim(this.$(".rfc").val()).length < 13){
 			this.errors.push(app.EXP_GRAL_ERRMSG_NORFC);
 		}
-		if($.trim(this.$(".curp").val()).length < 18){
-			this.errors.push(app.EXP_GRAL_ERRMSG_NOCURP);
-		}
+//		if($.trim(this.$(".curp").val()).length < 18){
+//			this.errors.push(app.EXP_GRAL_ERRMSG_NOCURP);
+//		}
 		if($.trim(this.$(".correoElectronico").val()).length == 0){
 			this.errors.push(app.EXP_GRAL_ERRMSG_NOEMAIL);
 		}

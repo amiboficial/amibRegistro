@@ -298,31 +298,6 @@
 						</div>
 						
 					</fieldset>
-					
-					<fieldset>
-						<legend><i>Documentos de respaldo</i></legend>
-						
-						<table class="table">
-							<thead>
-								<tr>
-									<th style='width:32%;'>Tipo de documento</th>
-									<th>Nombre de archivo</th>
-									<th style='width:18%'>...</th>
-								</tr>
-							</thead>
-							
-							<tbody id="tbdyDocs">
-									<tr>
-										<td>Documento de respaldo poder</td>
-										<td>${viewModelInstance?.documentoPoderRespaldo?.nombre}</td>
-										<td>
-											<button type="button" data-uuid="${viewModelInstance?.poderInstance?.uuidDocumentoRespaldo}" class="download btn btn-info btn-xs">Descargar</button>
-										</td>
-									</tr>
-							</tbody>
-						</table>
-						
-					</fieldset>
 				
 				</g:if>
 				<g:else>

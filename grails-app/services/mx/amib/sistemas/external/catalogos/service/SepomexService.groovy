@@ -165,11 +165,11 @@ class SepomexService {
 			spmx.asentamiento.vigente = resp.json.'asentamiento'.'vigente'
 			
 			spmx.ciudad = new CiudadTO()
-			if(!JSONObject.NULL.equals(it.'ciudad')&&!JSONObject.NULL.equals(it.'ciudad'.'id')){
-			spmx.ciudad.id = it.'ciudad'.'id'
-			spmx.ciudad.clave = it.'ciudad'.'clave'
-			spmx.ciudad.nombre = it.'ciudad'.'nombre'
-			spmx.ciudad.vigente = it.'ciudad'.'vigente'
+			if(!JSONObject.NULL.equals(resp.json.'ciudad')&&!JSONObject.NULL.equals(resp.json.'ciudad'.'id')){
+			spmx.ciudad.id = resp.json.'ciudad'.'id'
+			spmx.ciudad.clave = resp.json.'ciudad'.'clave'
+			spmx.ciudad.nombre = resp.json.'ciudad'.'nombre'
+			spmx.ciudad.vigente = resp.json.'ciudad'.'vigente'
 			}
 		
 			//rellena datos de municipio

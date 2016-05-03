@@ -74,7 +74,8 @@ class CertificacionReposicionAutorizacionController {
 	
 	def create(long id){
 		render( view:'create', model:[viewModelInstance:CreateViewModel.getInstance(id,certificacionService,entidadFinancieraService,
-			estadoCivilService, nacionalidadService, nivelEstudiosService, tipoTelefonoService, sepomexService, registroExamenService)]  )
+			estadoCivilService, nacionalidadService, nivelEstudiosService, tipoTelefonoService, sepomexService, registroExamenService,
+			figuraService)]  )
 	}
 	
 	static class CreateViewModel{
@@ -84,6 +85,7 @@ class CertificacionReposicionAutorizacionController {
 		
 		//No bindeables
 		Collection<RegistroExamenTO> examanesList
+		Collection<VarianteFiguraTO> vfigList
 		Collection<InstitucionTO> institucionesList
 		Collection<EstadoCivilTO> estadoCivilList
 		Collection<NacionalidadTO> nacionalidadList
@@ -98,7 +100,7 @@ class CertificacionReposicionAutorizacionController {
 		
 		public static CreateViewModel getInstance(long idCertificacion, CertificacionService certificacionService, EntidadFinancieraService entidadFinancieraService,
 			EstadoCivilService estadoCivilService, NacionalidadService nacionalidadService, NivelEstudiosService nivelEstudiosService, TipoTelefonoService tipoTelefonoService,
-			SepomexService sepomexService, RegistroExamenService registroExamenService){
+			SepomexService sepomexService, RegistroExamenService registroExamenService, FiguraService figuraService){
 		
 			CreateViewModel vm = new CreateViewModel()
 			
@@ -117,6 +119,7 @@ class CertificacionReposicionAutorizacionController {
 					vm.sepomexJsonList = (sepomexService.obtenerDatosSepomexPorCodigoPostal(vm.codigoPostal).sort{ it.asentamiento?.nombre } as JSON)
 				}
 				vm.examanesList = registroExamenService.findAllRevalidableByNumeroMatricula( vm.sustentanteInstance.numeroMatricula )
+				vm.vfigList = figuraService.listVariantes()
 			}
 			
 			return vm

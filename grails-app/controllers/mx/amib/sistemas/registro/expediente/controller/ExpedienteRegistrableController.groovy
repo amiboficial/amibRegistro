@@ -60,7 +60,12 @@ class ExpedienteRegistrableController {
 			vm.searchResults = registroExamenService.findAllRegistrable(vm.fltAvNombre,vm.fltAvPrimerApellido,vm.fltAvSegundoApellido,vm.fltAvVarFigura)
 		}
 		else if(vm.fltTipoBusqueda == 'T'){ //mostrar los mas recientes
-			vm.searchResults = registroExamenService.findAllRegistrable("","","",null)
+			vm.searchResults = registroExamenService.findAllRegistrable("","","",null) 
+		}
+		
+		if(vm.searchResults.size()>0){
+		println("el index muestra el primer elemento como json para ver si se puede sacar id examen")
+		println(vm.searchResults.first() as JSON)
 		}
 
 		//carga la lista de variantes de figura
@@ -70,17 +75,32 @@ class ExpedienteRegistrableController {
 	}
 
 	def create(Integer id) {
-		def viewModelInstance = this.getCreateViewModel(id)
+		
+		//println("cual examen fue?")
+		//println(params.fechafetch)
+		def viewModelInstance = this.getCreateViewModel(id,params.fechafetch)
 
 		respond new Object(), model:[viewModelInstance:viewModelInstance]
 	}
+	
+	
 
-	private CreateViewModel getCreateViewModel(Integer id){
+	private CreateViewModel getCreateViewModel(Integer id, String fecha){
 		CreateViewModel cvm = new CreateViewModel()
 		if(id != null){
 			def res = registroExamenService.findAllRegistrableByNumeroMatricula(id)
 			if(res.size() > 0){
+				if(fecha==null){
 				cvm.registroExamenInstance = res.first()
+				}
+				else{
+					res.each {
+						//println it.fechaAplicacionExamen
+						if(it.fechaAplicacionExamen.toString().equals(fecha)){
+							cvm.registroExamenInstance = it;
+						}
+					}
+				}
 				cvm.institutoInstance = entidadFinancieraService.obtenerInstitucion(4) //<-se obtiene del elemento "registrable"
 				cvm.varianteFiguraInstance = figuraService.getVariante(cvm.registroExamenInstance.idFigura) //<-se obtiene del elemento "registrable"
 			}
@@ -88,7 +108,7 @@ class ExpedienteRegistrableController {
 				cvm.registroExamenInstance = new RegistroExamenTO()
 				cvm.registroExamenInstance.numeroMatricula = -1
 				cvm.institutoInstance = entidadFinancieraService.obtenerInstitucion(4) //<-se obtiene del elemento "registrable"
-				cvm.varianteFiguraInstance = figuraService.getVariante(195) //<-se obtiene del elemento "registrable"
+				cvm.varianteFiguraInstance = figuraService.getVariante(195)	 //<-se obtiene del elemento "registrable"
 			}
 		}
 		else{

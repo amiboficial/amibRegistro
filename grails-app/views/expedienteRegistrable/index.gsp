@@ -154,7 +154,8 @@
 							<td>${it.primerApellido}</td>
 							<td>${it.segundoApellido}</td>
 							<td>${it.fechaAplicacionExamenDay}/${it.fechaAplicacionExamenMonth}/${it.fechaAplicacionExamenYear}</td>
-							<td><button class="registrar btn btn-default btn-xs" data-numeroMatricula="${it.numeroMatricula}">Registrar</button></td>
+							<td><button class="registrar btn btn-default btn-xs" data-numeroMatricula="${it.numeroMatricula}"
+							 data-fechafetch="${it.fechaAplicacionExamen}">Registrar</button></td>
 						</tr>
 					</g:each>
 				</tbody>
@@ -178,6 +179,7 @@
 		$(".registrar").click(function(e){
 			e.preventDefault();
 			window.location.href = '<g:createLink controller="expedienteRegistrable" action="create" />/' + $(this).attr('data-numeroMatricula')
+			+'?fechafetch=' + $(this).attr('data-fechafetch')
 		});
 
 		$("#btnSimpLimpiar").click(function(e){

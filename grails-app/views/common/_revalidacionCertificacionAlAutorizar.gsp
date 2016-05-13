@@ -92,6 +92,14 @@
 			</div>
 		</div>
 	</fieldset>
+
+	<fieldset id="opcionPFI">
+	<div class="alert-errorPFICantSelect alert alert-danger" style="display: none;"><span class="glyphicon glyphicon-info-sign" ></span>&nbsp; Debe seleccionar el <strong>exámen</strong> sobre el cual aplicó la revalidación</div>
+		<legend>Lista de exámenes PFI</legend>
+		<ul class="list-group" id="clasicPFIrevalidation">
+				
+		</ul>
+	</fieldset>
 	
 	<div class="form-group">
 		<div class="col-md-3 col-sm-3">

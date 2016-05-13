@@ -3,6 +3,7 @@ var app = app || {};
 app.RCA_MV_EXAMEN = 1;
 app.RCA_MV_PUNTOS = 2;
 app.RCA_MV_EXPERIENCIA = 3;
+app.RCA_MV_PFI = 4;
 
 app.RCA_MV_READY = 0;
 app.RCA_MV_VALIDATED = 1;
@@ -10,19 +11,61 @@ app.RCA_MV_VALIDATED = 1;
 
 app.RepAutCertVM = Backbone.Model.extend({
 	defaults:{
+		idMetodoValidacion: -1,
+		metodosValidacion: [
+			{ id:'-1',text:'-Seleccione-' },
+			{ id:'1',text:'Exámen' },
+			{ id:'2',text:'Puntos' },
+			{ id:'3',text:'Experiencia' },
+			{ id:'4',text:'Examen PFI' },
+		],
 		opcionExamenVM : null, //app.OpcionExamenVM
-		errorEnSeleccionExamen: false
+		puntaje: 0,
+		examenPFIvalido : false,
+		errorPFICantSelect : false,
+		
+
+		errorNoMetodoValidacion: false,
+		errorPuntajeBlank: false,
+		errorEnSeleccionExamen: false,
+		errorPuntajeNonNumeric: false
 	},
 	
 	validate: function(){
 		var valid = true;
+		var regExpIsNumeric = /^[0-9]{1,10}$/; 
+		var idMetodoValidacion = this.get('idMetodoValidacion');
+		var metodoValidacionSeleccionado =  (this.get('idMetodoValidacion') != -1)
 		
 		this.cleanValidationErrors();
 		
-		if(!this.get('opcionExamenVM').validate()){
-			this.set('errorEnSeleccionExamen',true);
+		if(!metodoValidacionSeleccionado){
+			this.set('errorNoMetodoValidacion',true);
 			this.trigger('errorOnValidate');
 			valid = false;
+		}
+		else{
+			if(idMetodoValidacion == app.RCA_MV_EXAMEN){
+				if(!this.get('opcionExamenVM').validate()){
+					this.set('errorEnSeleccionExamen',true);
+					this.trigger('errorOnValidate');
+					valid = false;
+				}
+			}
+			else if(idMetodoValidacion == app.RCA_MV_PUNTOS){
+				if( !regExpIsNumeric.test( this.get('puntaje') ) ){
+					this.set('errorPuntajeNonNumeric',true);
+					this.trigger('errorOnValidate');
+					valid = false;
+				}
+			}
+			else if(idMetodoValidacion == app.RCA_MV_PFI){
+				if( !this.get('examenPFIvalido')){
+					this.set('errorPFICantSelect',true);
+					this.trigger('errorOnValidate');
+					valid = false;
+				}
+			}
 		}
 		
 		return valid;

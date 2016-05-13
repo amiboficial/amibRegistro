@@ -116,6 +116,8 @@
 				descripcionFigura:'${x?.descripcionFigura}'
 			}) );
 		</g:each>
+		
+		var xmlResponsecontentstring = "${viewModelInstance?.PFIResult}";
 
 		revCertAutView = new app.RevCertAutView( { examenVMCollection:examenVMCollection } );
 	</script>

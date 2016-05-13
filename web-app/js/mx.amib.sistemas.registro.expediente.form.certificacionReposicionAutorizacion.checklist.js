@@ -124,8 +124,13 @@ app.CheckSubmitView = Backbone.View.extend({
 		this.$("#spnHdnPostData").html("");
 		//datos de validacion
 		this.$("#spnHdnPostData").append('<input type="hidden" name="validacion.idMetodoValidacion" value="' + arr[app.CHK_REVALCERT].model.get('idMetodoValidacion') + '" />');
-		this.$("#spnHdnPostData").append('<input type="hidden" name="validacion.idExamenReservacion" value="' + arr[app.CHK_REVALCERT].model.get('opcionExamenVM').getExamenSeleccionado().get('grailsId') + '" />');
-		this.$("#spnHdnPostData").append('<input type="hidden" name="validacion.fechaAplicacionExamenUnixEpoch" value="' + Math.floor(arr[app.CHK_REVALCERT].model.get('opcionExamenVM').getExamenSeleccionado().get('fechaAplicacionExamenUnixEpoch')) + '" />');
+		if(arr[app.CHK_REVALCERT].model.get('idMetodoValidacion') == app.RCA_MV_EXAMEN){
+			this.$("#spnHdnPostData").append('<input type="hidden" name="validacion.idExamenReservacion" value="' + arr[app.CHK_REVALCERT].model.get('opcionExamenVM').getExamenSeleccionado().get('grailsId') + '" />');
+			this.$("#spnHdnPostData").append('<input type="hidden" name="validacion.fechaAplicacionExamenUnixEpoch" value="' + Math.floor(arr[app.CHK_REVALCERT].model.get('opcionExamenVM').getExamenSeleccionado().get('fechaAplicacionExamenUnixEpoch')) + '" />');
+		}
+		else if(arr[app.CHK_REVALCERT].model.get('idMetodoValidacion') == app.RCA_MV_PUNTOS){
+			this.$("#spnHdnPostData").append('<input type="hidden" name="validacion.puntaje" value="' + arr[app.CHK_REVALCERT].model.get('puntaje') + '" />');
+		}
 		
 		//datos generales
 		this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.id" value="' + arr[app.CHK_GRALES].model.get('grailsId') + '" />');

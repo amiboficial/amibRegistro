@@ -72,7 +72,8 @@ class CertificacionActualizacionAutorizacionController {
 	
 	def create(long id){
 		render( view:'create', model:[viewModelInstance:CreateViewModel.getInstance(id,certificacionService,entidadFinancieraService,
-								estadoCivilService, nacionalidadService, nivelEstudiosService, tipoTelefonoService, sepomexService, registroExamenService)]  )
+								estadoCivilService, nacionalidadService, nivelEstudiosService, tipoTelefonoService, sepomexService, registroExamenService
+								, certificacionActualizacionAutorizacionService)]  )
 	}
 	
 	static class CreateViewModel{
@@ -94,9 +95,12 @@ class CertificacionActualizacionAutorizacionController {
 		
 		String codigoPostal
 		
+		String PFIResult
+		
 		public static CreateViewModel getInstance(long idCertificacion, CertificacionService certificacionService, EntidadFinancieraService entidadFinancieraService,
 			EstadoCivilService estadoCivilService, NacionalidadService nacionalidadService, NivelEstudiosService nivelEstudiosService, TipoTelefonoService tipoTelefonoService,
-			SepomexService sepomexService, RegistroExamenService registroExamenService){
+			SepomexService sepomexService, RegistroExamenService registroExamenService
+			, CertificacionActualizacionAutorizacionService certificacionActualizacionAutorizacionService){
 			
 			CreateViewModel vm = new CreateViewModel()
 			
@@ -106,6 +110,7 @@ class CertificacionActualizacionAutorizacionController {
 			vm.nacionalidadList = nacionalidadService.list()
 			vm.nivelEstudiosList = nivelEstudiosService.list()
 			vm.tipoTelefonoList = tipoTelefonoService.list()
+			vm.PFIResult = ""
 			
 			vm.certificacionInstance = certificacionService.get(idCertificacion)
 			if(vm.certificacionInstance != null){
@@ -115,6 +120,11 @@ class CertificacionActualizacionAutorizacionController {
 					vm.sepomexJsonList = (sepomexService.obtenerDatosSepomexPorCodigoPostal(vm.codigoPostal).sort{ it.asentamiento?.nombre } as JSON)
 				}
 				vm.examanesList = registroExamenService.findAllRevalidableByNumeroMatricula( vm.sustentanteInstance.numeroMatricula )
+			}
+			try{
+			vm.PFIResult = certificacionActualizacionAutorizacionService.getPFIExamns(vm.sustentanteInstance.numeroMatricula)
+			}catch(Exception e){
+				e.printStackTrace();
 			}
 			
 			return vm

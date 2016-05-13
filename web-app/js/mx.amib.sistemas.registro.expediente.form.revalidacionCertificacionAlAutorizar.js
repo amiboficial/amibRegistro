@@ -3,10 +3,13 @@ var app = app || {};
 app.RCA_MV_EXAMEN = 1;
 app.RCA_MV_PUNTOS = 2;
 app.RCA_MV_EXPERIENCIA = 3;
+app.RCA_MV_PFI = 4;
 
 app.RCA_MV_READY = 0;
 app.RCA_MV_VALIDATED = 1;
 
+
+//TODO: agregar una peticion para traer los metodos desde el catalogo
 app.RevCertAutVM = Backbone.Model.extend({
 	defaults:{
 		idMetodoValidacion: -1,
@@ -14,10 +17,13 @@ app.RevCertAutVM = Backbone.Model.extend({
 			{ id:'-1',text:'-Seleccione-' },
 			{ id:'1',text:'Exámen' },
 			{ id:'2',text:'Puntos' },
-			{ id:'3',text:'Experiencia' }
+			{ id:'3',text:'Experiencia' },
+			{ id:'4',text:'Examen PFI' },
 		],
 		opcionExamenVM : null, //app.OpcionExamenVM
 		puntaje: 0,
+		examenPFIvalido : false,
+		errorPFICantSelect : false,
 		
 		errorEnSeleccionExamen: false,
 		errorNoMetodoValidacion: false,
@@ -53,6 +59,13 @@ app.RevCertAutVM = Backbone.Model.extend({
 			else if(idMetodoValidacion == app.RCA_MV_PUNTOS){
 				if( !regExpIsNumeric.test( this.get('puntaje') ) ){
 					this.set('errorPuntajeNonNumeric',true);
+					this.trigger('errorOnValidate');
+					valid = false;
+				}
+			}
+			else if(idMetodoValidacion == app.RCA_MV_PFI){
+				if( !this.get('examenPFIvalido')){
+					this.set('errorPFICantSelect',true);
 					this.trigger('errorOnValidate');
 					valid = false;
 				}
@@ -112,6 +125,7 @@ app.RevCertAutView = Backbone.View.extend({
 		this.$el.html( this.template( this.model.toJSON() ) );
 		this.renderOpcionExamen();
 		this.renderOpcionPuntos();
+		this.renderOpcionPFI();
 		this.renderError();
 		this.renderStateChange();
 		
@@ -142,6 +156,56 @@ app.RevCertAutView = Backbone.View.extend({
 			this.$('.opcionPuntos').hide();
 		}
 	},
+	renderOpcionPFI: function(){
+		if( this.model.get('idMetodoValidacion') == app.RCA_MV_PFI ){
+			this.$('#opcionPFI').show();
+			if(xmlResponsecontentstring == undefined || xmlResponsecontentstring == "" ){
+				this.$('#clasicPFIrevalidation').html('<div class="form-group"><label class="col-md-2 col-sm-3 control-label">No se pudo contactar el sericio intentelo mas tarde</label></div>');
+				this.set('examenPFIvalido',false);
+			}else{
+				if(xmlResponsecontentstring=="FALSE"){
+					this.$('#clasicPFIrevalidation').html('<div class="form-group"><label class="col-md-2 col-sm-3 control-label">No se encontro la matricula </label></div>');
+					this.set('examenPFIvalido',false);
+				}
+				else{
+					
+					var elementos = xmlResponsecontentstring.split("-}");
+					
+					if(elementos[5].length>3){
+						elementos[5] = elementos[5].substring(0,elementos[5].length-2);
+					}
+					var aproved;
+					var validTargeting = "";
+					if(elementos[5] == "APROBADO"){
+						aproved = true;
+					}else{
+						aproved = false;
+						validTargeting = "style='cursor: not-allowed;'";
+					}
+					var htmlcontentPFIexam = '<a  href="javascript:void(0)" class="list-group-item seleccionarPFI" '+validTargeting+'  data-field="'+aproved+'" >'
+					+'<div class="form-group">'
+					+'<label class="col-md-2 col-sm-3 control-static">'+elementos[0]+'</label>'
+					+'<div class="col-md-9 col-sm-9"><p class="form-control-static">'+elementos[3]+'</p></div></div>'
+					+'<div class="form-group">'
+					+'	<label class="col-md-2 col-sm-3 control-static">'
+					+elementos[4]
+					+'	</label>'
+					+'	<div class="col-md-9 col-sm-9">'
+					+'		<p class="form-control-static">'+elementos[5]+'</p>'
+					+'	</div>'
+					+'</div>'
+					+'</a>';
+					
+					this.$('#clasicPFIrevalidation').html(htmlcontentPFIexam);
+					
+					
+				}
+			}
+		}
+		else{
+			this.$('#opcionPFI').hide();
+		}
+	},
 	renderError: function(){
 		this.$('.alert-errorNoMetodoValidacion').hide();
 		this.$('.alert-errorPuntajeBlank').hide();
@@ -159,6 +223,9 @@ app.RevCertAutView = Backbone.View.extend({
 		if(this.model.get('errorPuntajeNonNumeric') == true){
 			this.$('.alert-errorPuntajeNonNumeric').show();
 			this.$('.div-totalpuntos').addClass('has-error');
+		}
+		if(this.model.get('errorPFICantSelect') == true){
+			this.$('.alert-errorPFICantSelect').show();
 		}
 	},
 	renderStateChange: function(){
@@ -201,7 +268,8 @@ app.RevCertAutView = Backbone.View.extend({
 	events: {
 		'change .field': 'updateModel',
 		'click .submit': 'submit',
-		'click .edit': 'edit'
+		'click .edit': 'edit',
+		'click .seleccionarPFI':'pfiselec'
 	},
 	
 	//VIEW STATUS
@@ -248,6 +316,14 @@ app.RevCertAutView = Backbone.View.extend({
 	edit: function(ev){
 		ev.preventDefault();
 		this.setReady();
+	},
+	pfiselec: function(truOrFalse){
+		this.model.set('examenPFIvalido',truOrFalse);
+		if(truOrFalse){
+			$(".seleccionarPFI").addClass("active");
+		}else{
+			$(".seleccionarPFI").removeClass("active");
+		}
 	}
 	
 });

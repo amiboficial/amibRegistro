@@ -15,6 +15,7 @@
 		<li><a href="<g:createLink controller="certificacionActualizacionAutorizacion" action="index" />">Búsqueda de candidatos a proceso</a></li>
 		<li><a href="#">Proceso de reposición de autorización</a></li>
 	</ul>
+
 	<h2><strong>Proceso de reposición de autorización</strong></h2>
 
 	<g:if test="${flash.message}">
@@ -45,7 +46,10 @@
 		<div class="tab-content">
 			<br/>
 			<div role="tabpanel" class="tab-pane active" id="tabRepCert">
-				<div id="divRepAutCert">
+				<!-- <div id="divRepAutCert">
+				</div> -->
+				<div id="divRevCert">
+				<!-- AQUI SE RENDEREA RevCertAutVM -->
 				</div>
 			</div>
 			<div role="tabpanel" class="tab-pane" id="tabGen">
@@ -100,6 +104,7 @@
 	
 	</form>
 
+	<!-- 
 	<g:render template="../common/reposicionAutorizacionCertificacion"/>
 	<g:javascript src="mx.amib.sistemas.registro.expediente.form.revalidacionCertificacionAlAutorizar.opcionExamen.js" />
 	<g:javascript src="mx.amib.sistemas.registro.expediente.form.reposicionAutorizacionCertificacion.js" />
@@ -119,6 +124,30 @@
 
 		repCertAutView = new app.RepAutCertView( { examenVMCollection:examenVMCollection } );
 	</script>
+	-->
+			
+	<g:render template="../common/revalidacionCertificacionAlAutorizar"/>
+	<g:javascript src="mx.amib.sistemas.registro.expediente.form.revalidacionCertificacionAlAutorizar.opcionExamen.js" />
+	<g:javascript src="mx.amib.sistemas.registro.expediente.form.revalidacionCertificacionAlAutorizar.js" />
+	<script type="text/javascript">
+		var revCertAutView = null;
+		var examenVMCollection = new app.ExamenVMCollection();
+
+		<g:each var="x" in="${viewModelInstance?.examanesList?}">
+			examenVMCollection.add( new app.ExamenVM({
+				grailsId:${x?.idExamenReservacion},
+				numeroMatricula:${x?.numeroMatricula},
+				fechaAplicacionExamen:'${x?.fechaAplicacionExamen?.toString()}',
+				fechaAplicacionExamenUnixEpoch:${x?.fechaAplicacionExamen?.getTime()/1000},
+				descripcionFigura:'${x?.descripcionFigura}'
+			}) );
+		</g:each>
+
+		var xmlResponsecontentstring = "${viewModelInstance?.PFIResult}";
+
+		revCertAutView = new app.RevCertAutView( { examenVMCollection:examenVMCollection } );
+	</script>
+	
 
 	<!-- INICIA: COMPONENTE DATOS GENERALES -->
 	<g:render template="../common/expedienteGenerales"/>
@@ -267,7 +296,7 @@
 		checkSubmitView.setViewInstance(app.CHK_SEPOMEX,sepomexView);
 		checkSubmitView.setViewInstance(app.CHK_CERT,certView);
 		checkSubmitView.setViewInstance(app.CHK_PUES,puestosView);
-		checkSubmitView.setViewInstance(app.CHK_REVALCERT,repCertAutView);
+		checkSubmitView.setViewInstance(app.CHK_REVALCERT,revCertAutView);
 		
 		$(window).bind("pageshow", function(){
 			$('#spnHdnPostData').html("");

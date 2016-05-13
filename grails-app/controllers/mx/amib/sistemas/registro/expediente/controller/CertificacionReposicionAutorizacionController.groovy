@@ -21,6 +21,7 @@ import mx.amib.sistemas.external.catalogos.service.TipoTelefonoService;
 import mx.amib.sistemas.external.catalogos.service.TipoTelefonoTO;
 import mx.amib.sistemas.external.catalogos.service.VarianteFiguraTO;
 import mx.amib.sistemas.external.expediente.certificacion.service.CertificacionTO;
+import mx.amib.sistemas.external.expediente.certificacion.service.EventoPuntosTO
 import mx.amib.sistemas.external.expediente.certificacion.service.ValidacionTO;
 import mx.amib.sistemas.external.expediente.persona.service.PuestoTO
 import mx.amib.sistemas.external.expediente.persona.service.SustentanteTO;
@@ -33,6 +34,7 @@ import mx.amib.sistemas.registro.expediente.service.CertificacionActualizacionAu
 import mx.amib.sistemas.registro.expediente.service.CertificacionReposicionAutorizacionService
 import mx.amib.sistemas.registro.legacy.saaec.RegistroExamenTO;
 import mx.amib.sistemas.registro.legacy.saaec.service.RegistroExamenService;
+
 import org.codehaus.groovy.grails.web.json.JSONArray
 
 import mx.amib.sistemas.external.expediente.certificacion.catalog.service.MetodoValidacionTO
@@ -55,6 +57,8 @@ class CertificacionReposicionAutorizacionController {
 	
 	CertificacionReposicionAutorizacionService certificacionReposicionAutorizacionService
 	
+	CertificacionActualizacionAutorizacionService certificacionActualizacionAutorizacionService
+	
     def index() {
 		render( view:'index', model:[vm:IndexViewModel.getInstance(figuraService)] )
 	}
@@ -75,7 +79,8 @@ class CertificacionReposicionAutorizacionController {
 	def create(long id){
 		render( view:'create', model:[viewModelInstance:CreateViewModel.getInstance(id,certificacionService,entidadFinancieraService,
 			estadoCivilService, nacionalidadService, nivelEstudiosService, tipoTelefonoService, sepomexService, registroExamenService,
-			figuraService)]  )
+			figuraService
+			, certificacionActualizacionAutorizacionService)]  )
 	}
 	
 	static class CreateViewModel{
@@ -97,10 +102,12 @@ class CertificacionReposicionAutorizacionController {
 		VarianteFiguraTO varianteFiguraInstance
 		
 		String codigoPostal
+		String PFIResult
 		
 		public static CreateViewModel getInstance(long idCertificacion, CertificacionService certificacionService, EntidadFinancieraService entidadFinancieraService,
 			EstadoCivilService estadoCivilService, NacionalidadService nacionalidadService, NivelEstudiosService nivelEstudiosService, TipoTelefonoService tipoTelefonoService,
-			SepomexService sepomexService, RegistroExamenService registroExamenService, FiguraService figuraService){
+			SepomexService sepomexService, RegistroExamenService registroExamenService, FiguraService figuraService
+			, CertificacionActualizacionAutorizacionService certificacionActualizacionAutorizacionService){
 		
 			CreateViewModel vm = new CreateViewModel()
 			
@@ -110,6 +117,7 @@ class CertificacionReposicionAutorizacionController {
 			vm.nacionalidadList = nacionalidadService.list()
 			vm.nivelEstudiosList = nivelEstudiosService.list()
 			vm.tipoTelefonoList = tipoTelefonoService.list()
+			vm.PFIResult = ""
 			
 			vm.certificacionInstance = certificacionService.get(idCertificacion)
 			if(vm.certificacionInstance != null){
@@ -122,6 +130,12 @@ class CertificacionReposicionAutorizacionController {
 				vm.vfigList = figuraService.listVariantes()
 			}
 			
+			try{
+				vm.PFIResult = certificacionActualizacionAutorizacionService.getPFIExamns(vm.sustentanteInstance.numeroMatricula)
+				}catch(Exception e){
+					e.printStackTrace();
+				}
+			
 			return vm
 			
 		}
@@ -133,6 +147,7 @@ class CertificacionReposicionAutorizacionController {
 		CertificacionTO originalCert
 		SustentanteTO originalSust
 		ValidacionTO nuevaValidacion
+		EventoPuntosTO nuevoEventoPuntos
 		
 		//Obtiene los datos
 		originalCert = certificacionReposicionAutorizacionService.obtenerParaReposicion(certificacion.id)
@@ -206,11 +221,29 @@ class CertificacionReposicionAutorizacionController {
 		nuevaValidacion.fechaFin = certAEmitDict.fechaFin
 		nuevaValidacion.autorizadoPorUsuario = validacion.autorizadoPorUsuario
 		
-		nuevaValidacion.idMetodoValidacion = MetodosValidacionTypes.EXAMEN
+		nuevaValidacion.idMetodoValidacion = validacion.idMetodoValidacion
 		
-		//Aquí introduce el id de reservación del exámen ocupado
-		//idExamenReservacion -> validacion.idExamenReservacion
-		nuevaValidacion.fechaAplicacion = new Date(Long.parseLong(params.'validacion.fechaAplicacionExamenUnixEpoch'.toString())*1000)
+		if(nuevaValidacion.idMetodoValidacion == MetodosValidacionTypes.EXAMEN){
+			//Aquí introduce el id de reservación del exámen ocupado 
+			//idExamenReservacion -> validacion.idExamenReservacion
+			nuevaValidacion.fechaAplicacion = new Date(Long.parseLong(params.'validacion.fechaAplicacionExamenUnixEpoch'.toString())*1000)
+		}
+		else if(nuevaValidacion.idMetodoValidacion == MetodosValidacionTypes.PUNTOS){
+			//Aquí añadirá los puntos de acuerdo a los eventos enviados
+			nuevoEventoPuntos = new EventoPuntosTO()
+			nuevoEventoPuntos.puntaje = Integer.parseInt(params.'validacion.puntaje'.toString())
+			
+			validacion = nuevaValidacion
+			
+			nuevaValidacion.eventosPuntos = new ArrayList<EventoPuntosTO>()
+			nuevaValidacion.eventosPuntos.add(nuevoEventoPuntos)
+			
+			nuevaValidacion.fechaAplicacion = new Date()
+		}else{
+			nuevaValidacion.fechaAplicacion = new Date()
+		}
+		
+		
 		
 		try {
 			certificacionReposicionAutorizacionService.reponerAutorizacion(sustentante, certAEmitDict, nuevaValidacion)

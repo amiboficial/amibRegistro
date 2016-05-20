@@ -6,6 +6,7 @@ import java.io.ByteArrayOutputStream
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.io.IOException
+import java.text.SimpleDateFormat
 import java.util.ArrayList
 import java.util.HashMap
 import java.util.Iterator
@@ -117,14 +118,21 @@ class FormatoSolicitudAutorizacionService {
 			TelefonoSustentanteTO telCasa = x.sustentante.telefonos.find{ it.tipoTelefonoSustentante.descripcion == "Casa" }
 			TelefonoSustentanteTO telOficina = x.sustentante.telefonos.find{ it.tipoTelefonoSustentante.descripcion == "Oficina" }
 			
+			String output;
+			output = puestoActual.fechaInicio.format( 'ddMMyyyy' )
+			String fechaNac;
+			fechaNac = x.sustentante.fechaNacimiento.format( 'ddMMyyyy' )
+			
 			refMap = new HashMap<String,String>()
 			refMap.put(this.HEADER_SECUENCIA, nuseq++)
 			refMap.put(this.HEADER_FHENTORG, "ddmmyyyy")
 			refMap.put(this.HEADER_TPINST, institucionPuestoActual.idTipoInstitucion)
 			refMap.put(this.HEADER_CVINST, institucionPuestoActual.id)
 			refMap.put(this.HEADER_INST, institucionPuestoActual.nombre)
-			refMap.put(this.HEADER_FHINILAB, puestoActual.fechaInicio.getAt(Calendar.DAY_OF_MONTH) + "" + (puestoActual.fechaInicio.getAt(Calendar.MONTH)+1) + "" + puestoActual.fechaInicio.getAt(Calendar.YEAR) )
-			refMap.put(this.HEADER_TPAUT, x.varianteFigura.tipoAutorizacionFigura)
+			refMap.put(this.HEADER_FHINILAB, output )
+//			refMap.put(this.HEADER_FHINILAB, puestoActual.fechaInicio.getAt(Calendar.DAY_OF_MONTH) + "" + (puestoActual.fechaInicio.getAt(Calendar.MONTH)+1) + "" + puestoActual.fechaInicio.getAt(Calendar.YEAR) )
+			refMap.put(this.HEADER_TPAUT, x.varianteFigura.idFigura)
+			//refMap.put(this.HEADER_TPAUT, x.varianteFigura.tipoAutorizacionFigura)
 			refMap.put(this.HEADER_NUMMAT, x.sustentante.numeroMatricula)
 			refMap.put(this.HEADER_FOLIO, x.sustentante.id)
 			refMap.put(this.HEADER_AP1, x.sustentante.primerApellido)
@@ -132,7 +140,8 @@ class FormatoSolicitudAutorizacionService {
 			refMap.put(this.HEADER_NOM, x.sustentante.nombre)
 			refMap.put(this.HEADER_RFC, x.sustentante.rfc)
 			refMap.put(this.HEADER_CURP, x.sustentante.curp)
-			refMap.put(this.HEADER_FHNAC, x.sustentante.fechaNacimiento.getAt(Calendar.DAY_OF_MONTH) + "" + (x.sustentante.fechaNacimiento.getAt(Calendar.MONTH)+1) + "" + x.sustentante.fechaNacimiento.getAt(Calendar.YEAR))
+			refMap.put(this.HEADER_FHNAC, fechaNac)
+			//refMap.put(this.HEADER_FHNAC, x.sustentante.fechaNacimiento.getAt(Calendar.DAY_OF_MONTH) + "" + (x.sustentante.fechaNacimiento.getAt(Calendar.MONTH)+1) + "" + x.sustentante.fechaNacimiento.getAt(Calendar.YEAR))
 			refMap.put(this.HEADER_CALLE, x.sustentante.nombre)
 			refMap.put(this.HEADER_NUM, x.sustentante.numeroExterior?:'' + ' ' + x.sustentante.numeroInterior?:'')
 			refMap.put(this.HEADER_COL, sepomexSust.asentamiento.nombre)

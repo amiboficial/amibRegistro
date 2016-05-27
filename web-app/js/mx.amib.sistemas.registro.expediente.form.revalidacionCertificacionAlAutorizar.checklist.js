@@ -9,7 +9,7 @@ app.CHK_TELS = 1;
 app.CHK_SEPOMEX = 2;
 app.CHK_CERT = 3;
 app.CHK_PUES = 4;
-app.CHK_REVALCERT = 5;
+app.CHK_REVALCERT = 5;	
 
 app.CheckSubmit = Backbone.Model.extend({
 	defaults: {
@@ -181,6 +181,16 @@ app.CheckSubmitView = Backbone.View.extend({
 		this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.statusConstBolVal" value="' + arr[app.CHK_CERT].model.get('statusConstBolVal') + '" />');
 		this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.obsConstBolVal" value="' + arr[app.CHK_CERT].model.get('obsConstBolVal') + '" />');
 		//datos de puestos
+		
+		//para capturar los datos de fecha de autorización
+		this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.fechaInicioAutorizacion_day" value="' + arr[app.CHK_CERT].model.get('fechaInicioAutorizacion_day') + '" />');
+		this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.fechaInicioAutorizacion_month" value="' + arr[app.CHK_CERT].model.get('fechaInicioAutorizacion_month') + '" />');
+		this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.fechaInicioAutorizacion_year" value="' + arr[app.CHK_CERT].model.get('fechaInicioAutorizacion_year') + '" />');
+		this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.fechaFinAutorizacion_day" value="' + arr[app.CHK_CERT].model.get('fechaFinAutorizacion_day') + '" />');
+		this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.fechaFinAutorizacion_month" value="' + arr[app.CHK_CERT].model.get('fechaFinAutorizacion_month') + '" />');
+		this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.fechaFinAutorizacion_year" value="' + arr[app.CHK_CERT].model.get('fechaFinAutorizacion_year') + '" />');
+		//ens autorizacion fechas
+		
 		var puestosJson = JSON.stringify(arr[app.CHK_PUES].collection.toJSON());
 		this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.puestos_json" value=\'' + puestosJson + '\' />');
 		$("#frmApp").submit();

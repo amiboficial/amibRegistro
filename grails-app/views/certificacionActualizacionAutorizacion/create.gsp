@@ -248,11 +248,24 @@
 
 		cert.set("fechaInicio_day",${viewModelInstance?.certificacionInstance?.fechaInicio[Calendar.DATE]});
 		cert.set("fechaInicio_month",${viewModelInstance?.certificacionInstance?.fechaInicio[Calendar.MONTH]+1});
-		cert.set("fechaInicio_year",${viewModelInstance?.certificacionInstance?.fechaInicio[Calendar.YEAR]+3});
+		cert.set("fechaInicio_year",${viewModelInstance?.certificacionInstance?.fechaInicio[Calendar.YEAR]});
 		cert.set("fechaFin_day",${viewModelInstance?.certificacionInstance?.fechaFin[Calendar.DATE]});
 		cert.set("fechaFin_month",${viewModelInstance?.certificacionInstance?.fechaFin[Calendar.MONTH]+1});
-		cert.set("fechaFin_year",${viewModelInstance?.certificacionInstance?.fechaFin[Calendar.YEAR]+3});
+		cert.set("fechaFin_year",${viewModelInstance?.certificacionInstance?.fechaFin[Calendar.YEAR]});
 
+
+		<g:if test="${viewModelInstance?.certificacionInstance?.fechaAutorizacionInicio != null}">
+		cert.set("fechaInicioAutorizacion_day",${viewModelInstance?.certificacionInstance?.fechaAutorizacionInicio[Calendar.DATE]});
+		cert.set("fechaInicioAutorizacion_month",${viewModelInstance?.certificacionInstance?.fechaAutorizacionInicio[Calendar.MONTH]+1});
+		cert.set("fechaInicioAutorizacion_year",${viewModelInstance?.certificacionInstance?.fechaAutorizacionInicio[Calendar.YEAR]+3});
+		</g:if>
+		<g:if test="${viewModelInstance?.certificacionInstance?.fechaAutorizacionFin != null}">
+		cert.set("fechaFinAutorizacion_day",${viewModelInstance?.certificacionInstance?.fechaAutorizacionFin[Calendar.DATE]});
+		cert.set("fechaFinAutorizacion_month",${viewModelInstance?.certificacionInstance?.fechaAutorizacionFin[Calendar.MONTH]+1});
+		cert.set("fechaFinAutorizacion_year",${viewModelInstance?.certificacionInstance?.fechaAutorizacionFin[Calendar.YEAR]+3});
+		</g:if>
+
+		
 		cert.set("fechaObtencion_day",${viewModelInstance?.certificacionInstance?.fechaObtencion[Calendar.DATE]});
 		cert.set("fechaObtencion_month",${viewModelInstance?.certificacionInstance?.fechaObtencion[Calendar.MONTH]+1});
 		cert.set("fechaObtencion_year",${viewModelInstance?.certificacionInstance?.fechaObtencion[Calendar.YEAR]});

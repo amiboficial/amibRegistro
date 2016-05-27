@@ -142,6 +142,8 @@
 			</div>
 		</div>
 		
+
+
 		<div class="form-group">
 			<label class="col-md-2 col-sm-3 control-label">
 				<g:message code="certificacion.tipoAutorizacionFigura.label" default="Autorización solicitada" />
@@ -150,7 +152,86 @@
 				<p class="form-control-static">{{=tipoAutorizacionFigura}}</p>
 			</div>
 		</div>
+		<div class="form-group div-fechaInicioAuth">
+			<label class="col-md-2 col-sm-3 control-label">
+				Fecha de inicio de autorización
+			</label>
+			<div class="col-md-5 col-sm-5">
+				<select style="width: 28%;" class="form-control col-md-4 fechaInicioAutorizacion_day field" data-field="fechaInicioAutorizacion_day">
+					<option value="-1">-Seleccione-</option>
+					{{ for(var i=1;i<=31;i++){ }}
+						{{ if(i == fechaInicioAutorizacion_day){ }}
+							<option value="{{=i}}" selected>{{=i}}</option>
+						{{ } else{ }}
+							<option value="{{=i}}">{{=i}}</option>
+						{{ } }}
+					{{ } }}
+				</select>
+				<select style="width: 38%;" class="form-control col-md-4 fechaInicioAutorizacion_month field" data-field="fechaInicioAutorizacion_month">
+					<option value="-1">-Seleccione-</option>
+					{{ for(var i=0;i<app.MESES.length;i++){ }}
+						{{ if(app.MESES[i].id == fechaInicioAutorizacion_month){ }}
+							<option value="{{=app.MESES[i].id}}" selected>{{=app.MESES[i].nombre}}</option>
+						{{ } else{ }}
+							<option value="{{=app.MESES[i].id}}">{{=app.MESES[i].nombre}}</option>
+						{{ } }}
+					{{ } }}
+				</select>
+				<select style="width: 34%;" class="form-control col-md-4 fechaInicioAutorizacion_year field" data-field="fechaInicioAutorizacion_year">
+					<option value="-1">-Seleccione-</option>
+					{{ for(var i=1990;i<=2030;i++){ }}
+						{{ if(i == fechaInicioAutorizacion_year){ }}
+							<option value="{{=i}}" selected>{{=i}}</option>
+						{{ } else{ }}
+							<option value="{{=i}}">{{=i}}</option>
+						{{ } }}
+					{{ } }}
+				</select>
+			</div>
+		</div>
 		
+		<div class="form-group div-fechaFin">
+			<label class="col-md-2 col-sm-3 control-label">
+				Fecha de fin de autorización
+			</label>
+			<div class="col-md-5 col-sm-5">
+				<select style="width: 28%;" class="form-control col-md-4 fechaFinAutorizacion_day field" data-field="fechaFinAutorizacion_day">
+					<option value="-1">-Seleccione-</option>
+					{{ for(var i=1;i<=31;i++){ }}
+						{{ if(i == fechaFinAutorizacion_day){ }}
+							<option value="{{=i}}" selected>{{=i}}</option>
+						{{ } else{ }}
+							<option value="{{=i}}">{{=i}}</option>
+						{{ } }}
+					{{ } }}
+				</select>
+				<select style="width: 38%;" class="form-control col-md-4 fechaFinAutorizacion_month field" data-field="fechaFinAutorizacion_month">
+					<option value="-1">-Seleccione-</option>
+					{{ for(var i=0;i<app.MESES.length;i++){ }}
+						{{ if(app.MESES[i].id == fechaFinAutorizacion_month){ }}
+							<option value="{{=app.MESES[i].id}}" selected>{{=app.MESES[i].nombre}}</option>
+						{{ } else{ }}
+							<option value="{{=app.MESES[i].id}}">{{=app.MESES[i].nombre}}</option>
+						{{ } }}
+					{{ } }}
+				</select>
+				<select style="width: 34%;" class="form-control col-md-4 fechaFinAutorizacion_year field" data-field="fechaFinAutorizacion_year">
+					<option value="-1">-Seleccione-</option>
+					{{ for(var i=1990;i<=2030;i++){ }}
+						{{ if(i == fechaFinAutorizacion_year){ }}
+							<option value="{{=i}}" selected>{{=i}}</option>
+						{{ } else{ }}
+							<option value="{{=i}}">{{=i}}</option>
+						{{ } }}
+					{{ } }}
+				</select>
+			</div>
+		</div>
+
+
+
+
+
 		<div class="form-group div-statusEntHistorialInforme">
 			<label class="col-md-2 col-sm-3 control-label">
 				<g:message code="certificacion.statusEntHistorialInforme.label" default="Informe proporcionado por una sociedad de información crediticia son su historial de cuando menos 5 años" />

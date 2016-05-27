@@ -198,6 +198,11 @@ class CertificacionActualizacionAutorizacionController {
 		certAEmitDict.fechaObtencion = sdf.parse(params.'certificacion.fechaObtencion_day' + '-' + params.'certificacion.fechaObtencion_month' + '-' + params.'certificacion.fechaObtencion_year')
 		certAEmitDict.fechaInicio = sdf.parse(params.'certificacion.fechaInicio_day' + '-' + params.'certificacion.fechaInicio_month' + '-' + params.'certificacion.fechaInicio_year')
 		certAEmitDict.fechaFin = sdf.parse(params.'certificacion.fechaFin_day' + '-' + params.'certificacion.fechaFin_month' + '-' + params.'certificacion.fechaFin_year')
+		
+		//para agregar los cambios de la autorizacion
+		certAEmitDict.fechaAutorizacionInicio = sdf.parse(params.'certificacion.fechaInicioAutorizacion_day' + '-' + params.'certificacion.fechaInicioAutorizacion_month' + '-' + params.'certificacion.fechaInicioAutorizacion_year')
+		certAEmitDict.fechaAutorizacionFin = sdf.parse(params.'certificacion.fechaFinAutorizacion_day' + '-' + params.'certificacion.fechaFinAutorizacion_month' + '-' + params.'certificacion.fechaFinAutorizacion_year')
+		
 		certAEmitDict.statusEntHistorialInforme = certificacion.statusEntHistorialInforme
 		certAEmitDict.obsEntHistorialInforme = certificacion.obsEntHistorialInforme
 		certAEmitDict.statusEntCartaRec = certificacion.statusEntCartaRec

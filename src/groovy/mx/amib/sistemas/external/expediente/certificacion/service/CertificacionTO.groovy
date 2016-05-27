@@ -1,5 +1,7 @@
 package mx.amib.sistemas.external.expediente.certificacion.service
 
+import java.util.Date;
+
 import mx.amib.sistemas.external.expediente.certificacion.catalog.service.*
 import mx.amib.sistemas.external.expediente.persona.service.*
 
@@ -32,4 +34,7 @@ class CertificacionTO {
 
 	SustentanteTO sustentante
 	List<ValidacionTO> validaciones
+	
+	Date fechaAutorizacionInicio
+	Date fechaAutorizacionFin
 }

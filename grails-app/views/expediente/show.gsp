@@ -276,7 +276,7 @@
 				
 					<g:each var="x" in="${viewModelInstance?.sustentanteInstance?.certificaciones}">
 						<div class="list-group-item">
-						
+							<legend><i>Autorización</i></legend>
 							<div class="figuraRow row">
 								<label class="col-sm-3 control-label">Figura</label>
 								<div class="col-sm-4"><p class="form-control-static">${x?.varianteFigura?.nombre}&nbsp;</p></div>
@@ -289,6 +289,15 @@
 								<label class="col-sm-3 control-label">Estatus de  autorización </label>
 								<div class="col-sm-4"><p class="form-control-static">${x?.statusAutorizacion?.descripcion}&nbsp;</p></div>
 							</div>
+							<div class="figuraRow row">
+								<label class="col-sm-3 control-label">Fecha de inicio de autorización</label>
+								<div class="col-sm-4"><p class="form-control-static"><g:formatDate format="dd-MM-yyyy" date="${x?.fechaAutorizacionInicio}"/>&nbsp;</p></div>
+							</div>
+							<div class="figuraRow row">
+								<label class="col-sm-3 control-label">Fecha de fin de autorización</label>
+								<div class="col-sm-4"><p class="form-control-static"><g:formatDate format="dd-MM-yyyy" date="${x?.fechaAutorizacionFin}"/>&nbsp;</p></div>
+							</div>
+							<legend><i>Certificación</i></legend>
 							<div class="figuraRow row">
 								<label class="col-sm-3 control-label">Estatus de certificación</label>
 								<div class="col-sm-4"><p class="form-control-static">${x?.statusCertificacion?.descripcion}&nbsp;</p></div>

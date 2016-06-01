@@ -119,13 +119,20 @@ class FormatoSolicitudAutorizacionService {
 			TelefonoSustentanteTO telOficina = x.sustentante.telefonos.find{ it.tipoTelefonoSustentante.descripcion == "Oficina" }
 			
 			String output;
-			output = puestoActual.fechaInicio.format( 'ddMMyyyy' )
+			output = puestoActual.fechaInicio.format( 'yyyyMMdd' )
 			String fechaNac;
-			fechaNac = x.sustentante.fechaNacimiento.format( 'ddMMyyyy' )
+			fechaNac = x.sustentante.fechaNacimiento.format( 'yyyyMMdd' )
+			
+			String nacionalidad;
+			
+			if(x.sustentante.nacionalidad.descripcion == 'Mexicano/a'){
+			  nacionalidad = 'M'}else{
+			  'E'}
+			
 			
 			refMap = new HashMap<String,String>()
 			refMap.put(this.HEADER_SECUENCIA, nuseq++)
-			refMap.put(this.HEADER_FHENTORG, "ddmmyyyy")
+			refMap.put(this.HEADER_FHENTORG, "yyyyMMdd")
 			refMap.put(this.HEADER_TPINST, institucionPuestoActual.idTipoInstitucion)
 			refMap.put(this.HEADER_CVINST, institucionPuestoActual.id)
 			refMap.put(this.HEADER_INST, institucionPuestoActual.nombre)
@@ -142,19 +149,19 @@ class FormatoSolicitudAutorizacionService {
 			refMap.put(this.HEADER_CURP, x.sustentante.curp)
 			refMap.put(this.HEADER_FHNAC, fechaNac)
 			//refMap.put(this.HEADER_FHNAC, x.sustentante.fechaNacimiento.getAt(Calendar.DAY_OF_MONTH) + "" + (x.sustentante.fechaNacimiento.getAt(Calendar.MONTH)+1) + "" + x.sustentante.fechaNacimiento.getAt(Calendar.YEAR))
-			refMap.put(this.HEADER_CALLE, x.sustentante.nombre)
+			refMap.put(this.HEADER_CALLE, x.sustentante.calle)
 			refMap.put(this.HEADER_NUM, x.sustentante.numeroExterior?:'' + ' ' + x.sustentante.numeroInterior?:'')
 			refMap.put(this.HEADER_COL, sepomexSust.asentamiento.nombre)
 			refMap.put(this.HEADER_DEL, sepomexSust.asentamiento.municipio.nombre)
 			refMap.put(this.HEADER_CIUDAD, sepomexSust.ciudad.nombre)
 			refMap.put(this.HEADER_CP, sepomexSust.codigoPostal)
-			refMap.put(this.HEADER_EDO, sepomexSust.asentamiento.municipio.entidadFederativa.nombre)
+			refMap.put(this.HEADER_EDO, sepomexSust.asentamiento.municipio.entidadFederativa.id)
 			if(telCasa != null)
 				refMap.put(this.HEADER_TELCAS, telCasa.lada?:'' + ' ' + telCasa.telefono?:'' + ' ' + telCasa.extension?:'')
 			if(telOficina != null)
 				refMap.put(this.HEADER_TELOFI, telOficina.lada?:'' + ' ' + telOficina.telefono?:'' + ' ' + telOficina.extension?:'')
 			refMap.put(this.HEADER_EMAIL, x.sustentante.correoElectronico)
-			refMap.put(this.HEADER_NAL, x.sustentante.nacionalidad.descripcion)
+			refMap.put(this.HEADER_NAL, nacionalidad)
 			refMap.put(this.HEADER_CALMIG, x.sustentante.calidadMigratoria)
 			refMap.put(this.HEADER_ULTGRAD, x.sustentante.nivelEstudios.descripcion)
 			this.listaMapDato.add(refMap)
@@ -207,13 +214,13 @@ class FormatoSolicitudAutorizacionService {
 		csDato.setFont(fuenteDato);
 		
 		//crea el titulo
-		row = s.createRow(0); //instancia a la primera fila
-		cell = row.createCell(0); //instance a la primer celda (la que hicimos "merge"
-		cell.setCellValue("Formato de Solicitud de Autorización");
-		cell.setCellStyle(csTitulo);
+		//row = s.createRow(0); //instancia a la primera fila
+//		cell = row.createCell(0); //instance a la primer celda (la que hicimos "merge"
+//		cell.setCellValue("Formato de Solicitud de Autorización");
+//		cell.setCellStyle(csTitulo);
 		//crea las cabeceras
 		row = s.createRow(2);
-		i = 0;
+		i = 2;
 		for(String nombreCabecera : mapHeadersIdx.keySet()){
 			cell = row.createCell( mapHeadersIdx.get(nombreCabecera) );
 			cell.setCellStyle(csCabecera);

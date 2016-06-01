@@ -305,5 +305,11 @@
 	</script>	
 	<!-- FIN: COMPONENTE CHECKLIST -->
 
+
+<script>
+$(".div-fechaObtencion").remove();
+$(".div-fechaInicioAuth").remove();
+$(".div-fechaFinAuth").remove();
+</script>
 </body>
 </html>

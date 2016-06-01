@@ -28,44 +28,8 @@
 			</div>
 		</div>
 		
-		<div class="form-group div-fechaObtencion">
-			<label class="col-md-2 col-sm-3 control-label">
-				<g:message code="certificacion.fechaObtencion.label" default="Fecha de obtención" />
-			</label>
-			<div class="col-md-5 col-sm-5">
-				<select style="width: 28%;" class="form-control col-md-4 fechaObtencion_day field" data-field="fechaObtencion_day">
-					<option value="-1">-Seleccione-</option>
-					{{ for(var i=1;i<=31;i++){ }}
-						{{ if(i == fechaObtencion_day){ }}
-							<option value="{{=i}}" selected>{{=i}}</option>
-						{{ } else{ }}
-							<option value="{{=i}}">{{=i}}</option>
-						{{ } }}
-					{{ } }}
-				</select>
-				<select style="width: 38%;" class="form-control col-md-4 fechaObtencion_month field" data-field="fechaObtencion_month">
-					<option value="-1">-Seleccione-</option>
-					{{ for(var i=0;i<app.MESES.length;i++){ }}
-						{{ if(app.MESES[i].id == fechaObtencion_month){ }}
-							<option value="{{=app.MESES[i].id}}" selected>{{=app.MESES[i].nombre}}</option>
-						{{ } else{ }}
-							<option value="{{=app.MESES[i].id}}">{{=app.MESES[i].nombre}}</option>
-						{{ } }}
-					{{ } }}
-				</select>
-				<select style="width: 34%;" class="form-control col-md-4 fechaObtencion_year field" data-field="fechaObtencion_year">
-					<option value="-1">-Seleccione-</option>
-					{{ for(var i=1990;i<=2030;i++){ }}
-						{{ if(i == fechaObtencion_year){ }}
-							<option value="{{=i}}" selected>{{=i}}</option>
-						{{ } else{ }}
-							<option value="{{=i}}">{{=i}}</option>
-						{{ } }}
-					{{ } }}
-				</select>
-			</div>
-		</div>
 		
+		<legend><i>Certificación</i></legend>
 		<div class="form-group div-fechaInicio">
 			<label class="col-md-2 col-sm-3 control-label">
 				Fecha de inicio a aplicar
@@ -143,7 +107,7 @@
 		</div>
 		
 
-
+		<legend><i>Autorización</i></legend>
 		<div class="form-group">
 			<label class="col-md-2 col-sm-3 control-label">
 				<g:message code="certificacion.tipoAutorizacionFigura.label" default="Autorización solicitada" />
@@ -152,6 +116,45 @@
 				<p class="form-control-static">{{=tipoAutorizacionFigura}}</p>
 			</div>
 		</div>
+
+		<div class="form-group div-fechaObtencion">
+			<label class="col-md-2 col-sm-3 control-label">
+				<g:message code="certificacion.fechaObtencion.label" default="Fecha de obtención" />
+			</label>
+			<div class="col-md-5 col-sm-5">
+				<select style="width: 28%;" class="form-control col-md-4 fechaObtencion_day field" data-field="fechaObtencion_day">
+					<option value="-1">-Seleccione-</option>
+					{{ for(var i=1;i<=31;i++){ }}
+						{{ if(i == fechaObtencion_day){ }}
+							<option value="{{=i}}" selected>{{=i}}</option>
+						{{ } else{ }}
+							<option value="{{=i}}">{{=i}}</option>
+						{{ } }}
+					{{ } }}
+				</select>
+				<select style="width: 38%;" class="form-control col-md-4 fechaObtencion_month field" data-field="fechaObtencion_month">
+					<option value="-1">-Seleccione-</option>
+					{{ for(var i=0;i<app.MESES.length;i++){ }}
+						{{ if(app.MESES[i].id == fechaObtencion_month){ }}
+							<option value="{{=app.MESES[i].id}}" selected>{{=app.MESES[i].nombre}}</option>
+						{{ } else{ }}
+							<option value="{{=app.MESES[i].id}}">{{=app.MESES[i].nombre}}</option>
+						{{ } }}
+					{{ } }}
+				</select>
+				<select style="width: 34%;" class="form-control col-md-4 fechaObtencion_year field" data-field="fechaObtencion_year">
+					<option value="-1">-Seleccione-</option>
+					{{ for(var i=1990;i<=2030;i++){ }}
+						{{ if(i == fechaObtencion_year){ }}
+							<option value="{{=i}}" selected>{{=i}}</option>
+						{{ } else{ }}
+							<option value="{{=i}}">{{=i}}</option>
+						{{ } }}
+					{{ } }}
+				</select>
+			</div>
+		</div>
+		
 		<div class="form-group div-fechaInicioAuth">
 			<label class="col-md-2 col-sm-3 control-label">
 				Fecha de inicio de autorización
@@ -190,7 +193,7 @@
 			</div>
 		</div>
 		
-		<div class="form-group div-fechaFin">
+		<div class="form-group div-fechaFinAuth">
 			<label class="col-md-2 col-sm-3 control-label">
 				Fecha de fin de autorización
 			</label>

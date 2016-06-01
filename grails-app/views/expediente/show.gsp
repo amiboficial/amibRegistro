@@ -276,18 +276,26 @@
 				
 					<g:each var="x" in="${viewModelInstance?.sustentanteInstance?.certificaciones}">
 						<div class="list-group-item">
-							<legend><i>Autorización</i></legend>
 							<div class="figuraRow row">
 								<label class="col-sm-3 control-label">Figura</label>
 								<div class="col-sm-4"><p class="form-control-static">${x?.varianteFigura?.nombre}&nbsp;</p></div>
+							</div>
+							<legend><i>Autorización</i></legend>
+							<div class="figuraRow row">
+								<label class="col-sm-3 control-label">Estatus de  autorización </label>
+								<div class="col-sm-4"><p class="form-control-static">${x?.statusAutorizacion?.descripcion}&nbsp;</p></div>
 							</div>
 							<div class="figuraRow row">
 								<label class="col-sm-3 control-label">Tipo de autorización</label>
 								<div class="col-sm-4"><p class="form-control-static">${x?.varianteFigura?.tipoAutorizacionFigura}&nbsp;</p></div>
 							</div>
 							<div class="figuraRow row">
-								<label class="col-sm-3 control-label">Estatus de  autorización </label>
-								<div class="col-sm-4"><p class="form-control-static">${x?.statusAutorizacion?.descripcion}&nbsp;</p></div>
+								<label class="col-sm-3 control-label">DGA </label>
+								<div class="col-sm-4"><p class="form-control-static">${x?.id}&nbsp;</p></div>
+							</div>
+							<div class="figuraRow row">
+								<label class="col-sm-3 control-label">Fecha de obtención</label>
+								<div class="col-sm-4"><p class="form-control-static"><g:formatDate format="dd-MM-yyyy" date="${x?.fechaObtencion}"/>&nbsp;</p></div>
 							</div>
 							<div class="figuraRow row">
 								<label class="col-sm-3 control-label">Fecha de inicio de autorización</label>
@@ -303,10 +311,6 @@
 								<div class="col-sm-4"><p class="form-control-static">${x?.statusCertificacion?.descripcion}&nbsp;</p></div>
 							</div>
 							<div class="figuraRow row">
-								<label class="col-sm-3 control-label">Fecha de obtención</label>
-								<div class="col-sm-4"><p class="form-control-static"><g:formatDate format="dd-MM-yyyy" date="${x?.fechaObtencion}"/>&nbsp;</p></div>
-							</div>
-							<div class="figuraRow row">
 								<label class="col-sm-3 control-label">Fecha de inicio de vigencia</label>
 								<div class="col-sm-4"><p class="form-control-static"><g:formatDate format="dd-MM-yyyy" date="${x?.fechaInicio}"/>&nbsp;</p></div>
 							</div>
@@ -314,6 +318,13 @@
 								<label class="col-sm-3 control-label">Fecha de fin de vigencia</label>
 								<div class="col-sm-4"><p class="form-control-static"><g:formatDate format="dd-MM-yyyy" date="${x?.fechaFin}"/>&nbsp;</p></div>
 							</div>
+							<g:each in="${x?.validaciones[0].metodoValidacion}" var="vali">
+        						<div class="figuraRow row">
+									<label class="col-sm-3 control-label">Metodo de validación</label>
+									<div class="col-sm-4"><p class="form-control-static">${vali?.descripcion}&nbsp;</p></div>
+								</div>
+      						</g:each>
+							
 							<div class="row">
 								<div style="text-align:center; margin-top: 0.75em;">
 									<button type="button" class="edit btn btn-primary"><span class="glyphicon glyphicon-pencil"></span> Editar</button>

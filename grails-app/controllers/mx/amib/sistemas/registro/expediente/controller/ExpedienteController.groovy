@@ -31,6 +31,7 @@ import mx.amib.sistemas.external.documentos.service.DocumentoSustentanteReposito
 import mx.amib.sistemas.external.expediente.certificacion.catalog.service.StatusAutorizacionTO
 import mx.amib.sistemas.external.expediente.certificacion.catalog.service.StatusCertificacionTO
 import mx.amib.sistemas.external.expediente.certificacion.service.CertificacionTO
+import mx.amib.sistemas.external.expediente.certificacion.service.ValidacionTO
 import mx.amib.sistemas.external.expediente.persona.catalog.service.TipoDocumentoTO
 import mx.amib.sistemas.external.expediente.persona.service.DocumentoSustentanteTO
 import mx.amib.sistemas.external.expediente.persona.service.PuestoTO
@@ -307,6 +308,28 @@ class ExpedienteController {
 			vm.institucionesPoderesMap.put(x.id,x)
 		}
 		
+		//se quitan las demas certificaciones para dejar solo la valida 
+		CertificacionTO ultima = s.certificaciones.find{ it.isUltima == true }
+		s.certificaciones.clear()
+		s.certificaciones.add(ultima)
+		//
+		if(s.certificaciones.size()>0){
+				Date mostRecent
+				s.certificaciones.get(0).validaciones.each{ x ->
+					if(mostRecent == null && x.fechaInicio!=null){
+						mostRecent = x.fechaInicio
+					}else if(x.fechaInicio!=null && x.fechaInicio > mostRecent){
+						mostRecent = x.fechaInicio
+					}
+				}
+				println("la validacion mas recienteeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"+mostRecent)
+				if(mostRecent!=null){
+					ValidacionTO lastone =s.certificaciones.get(0).validaciones.find { vali -> vali.fechaInicio == mostRecent }
+					s.certificaciones.get(0).validaciones.clear()
+					s.certificaciones.get(0).validaciones.add(lastone)
+				}
+		}
+		//end de filtro de certificaciones
 		//CARGA DE DATOS DEL SUSTENTANTE
 		vm.sustentanteInstance = s
 		vm.nombreCompleto = s.nombre + " " + s.primerApellido + " " + s.segundoApellido
@@ -377,8 +400,31 @@ class ExpedienteController {
 			vm.institucionesPoderesMap.put(x.id,x)
 		}
 		
+		//se quitan las demas certificaciones para dejar solo la valida
+		CertificacionTO ultima = s.certificaciones.find{ it.isUltima == true }
+		s.certificaciones.clear()
+		s.certificaciones.add(ultima)
+		//
+		if(s.certificaciones.size()>0){
+				Date mostRecent
+				s.certificaciones.get(0).validaciones.each{ x ->
+					if(mostRecent == null && x.fechaInicio!=null){
+						mostRecent = x.fechaInicio
+					}else if(x.fechaInicio!=null && x.fechaInicio > mostRecent){
+						mostRecent = x.fechaInicio
+					}
+				}
+				println("la validacion mas recienteeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"+mostRecent)
+				if(mostRecent!=null){
+					ValidacionTO lastone =s.certificaciones.get(0).validaciones.find { vali -> vali.fechaInicio == mostRecent }
+					s.certificaciones.get(0).validaciones.clear()
+					s.certificaciones.get(0).validaciones.add(lastone)
+				}
+		}
+		//end de filtro de certificaciones
 		//CARGA DE DATOS DEL SUSTENTANTE
 		vm.sustentanteInstance = s
+		
 		vm.nombreCompleto = s.nombre + " " + s.primerApellido + " " + s.segundoApellido
 		if(s.idSepomex != null)
 			vm.sepomexData = sepomexService.get(s.idSepomex)

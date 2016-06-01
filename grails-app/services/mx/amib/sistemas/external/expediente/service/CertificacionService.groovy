@@ -623,8 +623,9 @@ class CertificacionService {
 			//aqui van el registro de los eventos que generaron puntos
 			
 			v.metodoValidacion = new MetodoValidacionTO()
-			v.idMetodoValidacion = x.'idMetodoValidacion'
-		
+			if(!JSONObject.NULL.equals(x.'idMetodoValidacion')) v.idMetodoValidacion = x.'idMetodoValidacion'
+			if(!JSONObject.NULL.equals(x.'metodoValidacion')) v.metodoValidacion = x.'metodoValidacion'
+			
 			if(!JSONObject.NULL.equals(data.'fechaCreacion'))  v.fechaCreacion = df.parse(x.'fechaCreacion'.substring(0,10))
 			if(!JSONObject.NULL.equals(data.'fechaModificacion'))  v.fechaModificacion = df.parse(x.'fechaModificacion'.substring(0,10))
 			

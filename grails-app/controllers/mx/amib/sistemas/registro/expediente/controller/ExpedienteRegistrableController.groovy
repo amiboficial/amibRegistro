@@ -178,6 +178,8 @@ class ExpedienteRegistrableController {
 		c.obsEntCartaRec = params.'registro.obsEntCartaRec'
 		c.statusConstBolVal = Long.parseLong(params.'registro.statusConstBolVal')
 		c.obsConstBolVal = params.'registro.obsConstBolVal'
+		c.fechaAutorizacionInicio = null
+		c.fechaAutorizacionFin = null
 		
 		
 		ValidacionTO v = new ValidacionTO()
@@ -185,7 +187,7 @@ class ExpedienteRegistrableController {
 		v.fechaInicio = new Date()
 		v.fechaFin = fechaFinCalendar.getTime()
 		v.autorizadoPorUsuario = "REGISTRO_DESDE_SAEEC"
-		v.idMetodoValidacion = 1 //Ex�men
+		v.idMetodoValidacion = 1 //Examen
 		v.fechaCreacion = new Date()
 		v.fechaModificacion = new Date()
 		v.certificacion = null

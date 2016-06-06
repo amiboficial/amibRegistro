@@ -156,7 +156,7 @@
 							</div>
 							<div class="figuraRow row">
 								<label class="col-sm-3 control-label">DGA </label>
-								<div class="col-sm-4"><p class="form-control-static">${x?.id}&nbsp;</p></div>
+								<div class="col-sm-4"><p class="form-control-static">${x?.dga}&nbsp;</p></div>
 							</div>
 							<div class="figuraRow row">
 								<label class="col-sm-3 control-label">Fecha de obtención</label>

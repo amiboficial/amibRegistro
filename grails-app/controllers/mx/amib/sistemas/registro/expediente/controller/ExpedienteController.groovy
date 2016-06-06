@@ -37,6 +37,7 @@ import mx.amib.sistemas.external.expediente.persona.service.DocumentoSustentante
 import mx.amib.sistemas.external.expediente.persona.service.PuestoTO
 import mx.amib.sistemas.external.expediente.persona.service.SustentanteTO
 import mx.amib.sistemas.external.expediente.persona.service.TelefonoSustentanteTO
+import mx.amib.sistemas.external.oficios.oficioCnbv.OficioCnbvTO
 import mx.amib.sistemas.external.oficios.poder.ApoderadoTO
 import mx.amib.sistemas.external.oficios.poder.PoderTO
 import mx.amib.sistemas.external.oficios.revocacion.RevocacionTO
@@ -45,6 +46,7 @@ import mx.amib.sistemas.external.oficios.service.PoderService
 import mx.amib.sistemas.external.oficios.service.RevocacionService
 import mx.amib.sistemas.external.oficios.service.RevocadoService
 import mx.amib.sistemas.registro.legacy.saaec.RegistroExamenTO
+import mx.amib.sistemas.utils.SearchResult
 
 import org.codehaus.groovy.grails.web.json.JSONArray
 
@@ -73,6 +75,7 @@ class ExpedienteController {
 	ApoderadoService apoderadoService
 	RevocadoService revocadoService
 	RevocacionService revocacionService
+	def oficioCnbvService
 	
     def index() {
 		IndexViewModel vm = this.getIndexViewModel(params)
@@ -309,11 +312,18 @@ class ExpedienteController {
 		}
 		
 		//se quitan las demas certificaciones para dejar solo la valida 
-		CertificacionTO ultima = s.certificaciones.find{ it.isUltima == true }
-		s.certificaciones.clear()
-		s.certificaciones.add(ultima)
+//		CertificacionTO ultima = s.certificaciones.find{ it.isUltima == true }
+//		s.certificaciones.clear()
+//		s.certificaciones.add(ultima)
 		//
+		SearchResult<OficioCnbvTO> servRes = null
+		int max = Integer.parseInt(params.max?:"10")
+		int offset = Integer.parseInt(params.offset?:"0")
+		String sort = params.sort?:"id"
+		String order = params.order?:"asc"
 		if(s.certificaciones.size()>0){
+			println("certifications ids")
+			println(s.certificaciones.collect{it.id})
 				Date mostRecent
 				s.certificaciones.get(0).validaciones.each{ x ->
 					if(mostRecent == null && x.fechaInicio!=null){
@@ -328,6 +338,22 @@ class ExpedienteController {
 					s.certificaciones.get(0).validaciones.clear()
 					s.certificaciones.get(0).validaciones.add(lastone)
 				}
+				//obtencion de dga si existe
+				s.certificaciones.each{ x ->
+					try{
+						SearchResult<OficioCnbvTO> resOficios = oficioCnbvService.findAllByMultipleIdCertificacionInAutorizados(max, offset, sort, order, x.collect{ it.id } )
+						println("pendejadas")
+						println(resOficios as JSON)
+						servRes = resOficios.getList()
+						if(servRes!=null&&servRes.first().claveDga != null){
+							x.dga = resOficios.first().claveDga
+						}
+					}
+					catch(Exception ex){
+						ex.printStackTrace();
+					}
+				}
+				//END obtencion de dga si existe
 		}
 		//end de filtro de certificaciones
 		//CARGA DE DATOS DEL SUSTENTANTE
@@ -400,12 +426,20 @@ class ExpedienteController {
 			vm.institucionesPoderesMap.put(x.id,x)
 		}
 		
-		//se quitan las demas certificaciones para dejar solo la valida
-		CertificacionTO ultima = s.certificaciones.find{ it.isUltima == true }
-		s.certificaciones.clear()
-		s.certificaciones.add(ultima)
+		
+		//se quitan las demas certificaciones para dejar solo la valida 
+//		CertificacionTO ultima = s.certificaciones.find{ it.isUltima == true }
+//		s.certificaciones.clear()
+//		s.certificaciones.add(ultima)
 		//
+		SearchResult<OficioCnbvTO> servRes = null
+		int max = Integer.parseInt(params.max?:"10")
+		int offset = Integer.parseInt(params.offset?:"0")
+		String sort = params.sort?:"id"
+		String order = params.order?:"asc"
 		if(s.certificaciones.size()>0){
+			println("certifications ids")
+			println(s.certificaciones.collect{it.id})
 				Date mostRecent
 				s.certificaciones.get(0).validaciones.each{ x ->
 					if(mostRecent == null && x.fechaInicio!=null){
@@ -420,6 +454,22 @@ class ExpedienteController {
 					s.certificaciones.get(0).validaciones.clear()
 					s.certificaciones.get(0).validaciones.add(lastone)
 				}
+				//obtencion de dga si existe
+				s.certificaciones.each{ x ->
+					try{
+						SearchResult<OficioCnbvTO> resOficios = oficioCnbvService.findAllByMultipleIdCertificacionInAutorizados(max, offset, sort, order, x.collect{ it.id } )
+						println("pendejadas")
+						println(resOficios as JSON)
+						servRes = resOficios.getList()
+						if(servRes!=null&&servRes.first().claveDga != null){
+							x.dga = resOficios.first().claveDga
+						}
+					}
+					catch(Exception ex){
+						ex.printStackTrace();
+					}
+				}
+				//END obtencion de dga si existe
 		}
 		//end de filtro de certificaciones
 		//CARGA DE DATOS DEL SUSTENTANTE

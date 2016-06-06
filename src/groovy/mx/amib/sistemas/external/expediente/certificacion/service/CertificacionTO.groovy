@@ -37,4 +37,6 @@ class CertificacionTO {
 	
 	Date fechaAutorizacionInicio
 	Date fechaAutorizacionFin
+	
+	String dga
 }

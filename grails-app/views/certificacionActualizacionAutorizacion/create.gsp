@@ -304,6 +304,11 @@
 		    if(aaaa == undefined || aaaa == null || aaaa == "" ){
 		    	$("[name='ZXhwZWRpZW50ZS5lc3RhZG9DaXZpbA']").val("-1");
 			}
+		    var bbbb = $("[name='ZXhwZWRpZW50ZS5uYWNpb25hbGlkYWQ']").val();
+		    if(bbbb == undefined || bbbb == null || bbbb == "" || bbbb == "-1" ){
+		    	$("[name='ZXhwZWRpZW50ZS5uYWNpb25hbGlkYWQ']").val("117");
+			}
+		    
 		});
 
 	</script>	

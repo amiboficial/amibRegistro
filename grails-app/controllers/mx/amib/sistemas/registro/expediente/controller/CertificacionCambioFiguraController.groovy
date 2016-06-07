@@ -199,6 +199,10 @@ class CertificacionCambioFiguraController {
 		certAEmitDict.statusConstBolVal = certificacion.statusConstBolVal
 		certAEmitDict.obsConstBolVal = certificacion.obsConstBolVal
 		
+		if(params.'certificacion.idVarianteFigura' != null){
+			certAEmitDict.idVarianteFigura = Long.parseLong(params.'certificacion.idVarianteFigura')
+		}
+		
 		nuevaValidacion = new ValidacionTO()
 		//nuevaValidacion = validacion.
 		nuevaValidacion.fechaInicio = certAEmitDict.fechaInicio

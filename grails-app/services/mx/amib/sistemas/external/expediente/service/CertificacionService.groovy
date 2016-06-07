@@ -624,7 +624,11 @@ class CertificacionService {
 			
 			v.metodoValidacion = new MetodoValidacionTO()
 			if(!JSONObject.NULL.equals(x.'idMetodoValidacion')) v.idMetodoValidacion = x.'idMetodoValidacion'
-			if(!JSONObject.NULL.equals(x.'metodoValidacion')) v.metodoValidacion = x.'metodoValidacion'
+			if(!JSONObject.NULL.equals(x.'metodoValidacion')){
+				if(!JSONObject.NULL.equals(x.'idMetodoValidacion.id')) v.idMetodoValidacion.id = x.'idMetodoValidacion.id'
+				if(!JSONObject.NULL.equals(x.'idMetodoValidacion.descripcion')) v.idMetodoValidacion.descripcion = x.'idMetodoValidacion.descripcion'
+				if(!JSONObject.NULL.equals(x.'idMetodoValidacion.vigente')) v.idMetodoValidacion.vigente = x.'idMetodoValidacion.vigente'
+			}
 			
 			if(!JSONObject.NULL.equals(data.'fechaCreacion'))  v.fechaCreacion = df.parse(x.'fechaCreacion'.substring(0,10))
 			if(!JSONObject.NULL.equals(data.'fechaModificacion'))  v.fechaModificacion = df.parse(x.'fechaModificacion'.substring(0,10))

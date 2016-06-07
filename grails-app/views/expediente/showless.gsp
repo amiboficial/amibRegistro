@@ -183,14 +183,20 @@
 								<label class="col-sm-3 control-label">Fecha de fin de vigencia</label>
 								<div class="col-sm-4"><p class="form-control-static"><g:formatDate format="dd-MM-yyyy" date="${x?.fechaFin}"/>&nbsp;</p></div>
 							</div>
+							<g:if test="${x?.validaciones.size() > 0}">
 							<g:each in="${x?.validaciones[0].metodoValidacion}" var="vali">
         						<div class="figuraRow row">
 									<label class="col-sm-3 control-label">Metodo de validación</label>
 									<div class="col-sm-4"><p class="form-control-static">${vali?.descripcion}&nbsp;</p></div>
 								</div>
       						</g:each>
-							
-							
+							</g:if>
+							<g:else>
+							   <div class="figuraRow row">
+									<label class="col-sm-3 control-label">Metodo de validación</label>
+									<div class="col-sm-4"><p class="form-control-static">&nbsp;</p></div>
+								</div>
+							</g:else>
 						</div>
 					</g:each>
 				

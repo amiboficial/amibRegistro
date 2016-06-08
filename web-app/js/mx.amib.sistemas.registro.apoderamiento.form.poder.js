@@ -157,10 +157,10 @@ app.PoderView = Backbone.View.extend({
 				this.$('.errorValidacion').show();
 			}
 			
-			if(this.model.get("dispNumeroEscritura") == app.PODER_NUMESC_NON_AVAILABLE){
-				this.$('.msgErrorNumeroEscritura').text(app.PODER_ERRMSG_NUMESC_NON_AVAILABLE);
-				this.$('.errorNumeroEscritura').show();
-			}
+//			if(this.model.get("dispNumeroEscritura") == app.PODER_NUMESC_NON_AVAILABLE){
+//				this.$('.msgErrorNumeroEscritura').text(app.PODER_ERRMSG_NUMESC_NON_AVAILABLE);
+//				this.$('.errorNumeroEscritura').show();
+//			}
 			
 			if(this.model.get("dispNumeroEscritura") == app.PODER_NUMESC_NONCHECKED){
 				this.$('.msgErrorNumeroEscritura').text(app.PODER_ERRMSG_NUMESC_NONCHECKED);
@@ -527,24 +527,24 @@ app.PoderView = Backbone.View.extend({
 		if($.trim(this.model.get("dispNumeroEscritura")) == ""){
 			view.model.set("dispNumeroEscritura",app.PODER_NUMESC_EMPTY);
 		}
-		
-		$.ajax({
-			url: view.isNumeroEscrituraAvailableUrl + "?numeroEscritura=" + view.model.get("numeroEscritura") ,
-			beforeSend: function(){
-				view.model.set("dispNumeroEscritura",app.PODER_NUMESC_NONCHECKED);
-				view.setProcessingNumeroEscritura();
-			},
-			success: function(result){
-				if(result.status == "OK")
-					if(result.object.isNumeroEscrituraAvailable == true)
-						view.model.set("dispNumeroEscritura",app.PODER_NUMESC_AVAILABLE);
-					else
-						view.model.set("dispNumeroEscritura",app.PODER_NUMESC_NON_AVAILABLE);
-				else
-					view.model.set("dispNumeroEscritura",app.PODER_NUMESC_NONCHECKED);
-				view.setReady();
-			}
-		});
+		view.model.set("dispNumeroEscritura",app.PODER_NUMESC_AVAILABLE);
+//		$.ajax({
+//			url: view.isNumeroEscrituraAvailableUrl + "?numeroEscritura=" + view.model.get("numeroEscritura") ,
+//			beforeSend: function(){
+//				view.model.set("dispNumeroEscritura",app.PODER_NUMESC_NONCHECKED);
+//				view.setProcessingNumeroEscritura();
+//			},
+//			success: function(result){
+//				if(result.status == "OK")
+//					if(result.object.isNumeroEscrituraAvailable == true)
+//						view.model.set("dispNumeroEscritura",app.PODER_NUMESC_AVAILABLE);
+//					else
+//						view.model.set("dispNumeroEscritura",app.PODER_NUMESC_NON_AVAILABLE);
+//				else
+//					view.model.set("dispNumeroEscritura",app.PODER_NUMESC_NONCHECKED);
+//				view.setReady();
+//			}
+//		});
 	}
 });
 

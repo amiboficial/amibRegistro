@@ -478,12 +478,12 @@ app.PoderView = Backbone.View.extend({
 		else if(num10CarExp.test(this.model.get("numeroEscritura")) == false){
 			this.setErrorValidacion("numeroEscritura",app.PODER_ERRMSG_NUMESC_NOVALID);
 		}
-		else{
-			//revisa si el numero de matrícula ya fue revisado de disponibilidad
-			if(this.model.get("dispNumeroEscritura") != app.PODER_NUMESC_AVAILABLE){
-				this.setErrorValidacion("numeroEscritura",app.PODER_ERRMSG_NUMESCREP);
-			}
-		}
+//		else{
+//			//revisa si el numero de matrícula ya fue revisado de disponibilidad
+//			if(this.model.get("dispNumeroEscritura") != app.PODER_NUMESC_AVAILABLE){
+//				this.setErrorValidacion("numeroEscritura",app.PODER_ERRMSG_NUMESCREP);
+//			}
+//		}
 		
 		if(this.model.get("fechaApoderamiento_day") == -1 || this.model.get("fechaApoderamiento_month") == -1 || 
 			this.model.get("fechaApoderamiento_year") == -1 ){

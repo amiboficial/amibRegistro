@@ -578,6 +578,9 @@ class CertificacionService {
 		if(!JSONObject.NULL.equals(data.'fechaAutorizacionInicio')) c.fechaAutorizacionInicio = df.parse(data.'fechaAutorizacionInicio'.substring(0,10))
 		if(!JSONObject.NULL.equals(data.'fechaAutorizacionFin')) c.fechaAutorizacionFin = df.parse(data.'fechaAutorizacionFin'.substring(0,10))
 		
+		if(!JSONObject.NULL.equals(data.'fechaEntregaRecepcion')) c.fechaEntregaRecepcion = df.parse(data.'fechaEntregaRecepcion'.substring(0,10))
+		if(!JSONObject.NULL.equals(data.'fechaEnvioComision')) c.fechaEnvioComision = df.parse(data.'fechaEnvioComision'.substring(0,10))
+		
 		c.varianteFigura = new VarianteFiguraTO()
 		c.varianteFigura.id = data.'varianteFigura'.'id'
 		c.varianteFigura.nombre = data.'varianteFigura'.'nombre'

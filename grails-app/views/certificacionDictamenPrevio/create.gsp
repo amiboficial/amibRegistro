@@ -4,6 +4,18 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 <meta name="layout" content="main"/>
 <title>Registro 0.1 - Emitir dictamen</title>
+<script>
+$(function() {
+	$(".div-fechaObtencion").remove();
+	$(".div-fechaInicioAuth").remove();
+	$(".div-fechaFinAuth").remove();
+    var bbbb = $("[name='ZXhwZWRpZW50ZS5uYWNpb25hbGlkYWQ']").val();
+    if(bbbb == undefined || bbbb == null || bbbb == "" || bbbb == "-1" ){
+    	$("[name='ZXhwZWRpZW50ZS5uYWNpb25hbGlkYWQ']").val("117");
+	}
+    
+});
+</script>
 </head>
 <body>
 	<a id="anchorForm"></a>
@@ -122,6 +134,8 @@
 
 		generalesModel.set("calidadMigratoria","${viewModelInstance?.sustentanteInstance?.calidadMigratoria}");
 		generalesModel.set("profesion","${viewModelInstance?.sustentanteInstance?.profesion}");
+
+		generalesModel.set("asentamientoOtro","${viewModelInstance?.sustentanteInstance?.asentamientoOtro}");
 		
 		var generalesView = new app.GeneralesView(generalesModel);
 	</script>
@@ -234,7 +248,6 @@
 		var certView = new app.CertificacionView({model:cert});
 	</script>
 		
-	<!-- INICIA: COMPONENTE CHECKsLIST -->
 	<script>
 
 		var app = app || {};

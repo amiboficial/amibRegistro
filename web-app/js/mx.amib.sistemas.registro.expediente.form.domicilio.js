@@ -16,6 +16,8 @@ app.Domicilio = Backbone.Model.extend({
 		calle: "",
 		numeroInterior: "",
 		numeroExterior: "",
+
+		asentamientoOtro : ""
 	},
 });
 
@@ -85,6 +87,7 @@ app.SepomexView = Backbone.View.extend({
 			this.$(".calle").prop( "disabled", false );
 			this.$(".numExt").prop( "disabled", false );
 			this.$(".numInt").prop( "disabled", false );
+			this.$(".otherAscen").prop( "disabled", false );
 		}
 		else if(this.state == app.EXP_SEPOMEX_PROCESSING){
 			this.$(".submit").prop( "disabled", true );
@@ -95,6 +98,7 @@ app.SepomexView = Backbone.View.extend({
 			this.$(".calle").prop( "disabled", true );
 			this.$(".numExt").prop( "disabled", true );
 			this.$(".numInt").prop( "disabled", true );
+			this.$(".otherAscen").prop( "disabled", true );
 		}
 		else if(this.state == app.EXP_SEPOMEX_VALIDATED){
 			this.$(".submit").prop( "disabled", true );
@@ -105,6 +109,7 @@ app.SepomexView = Backbone.View.extend({
 			this.$(".calle").prop( "disabled", true );
 			this.$(".numExt").prop( "disabled", true );
 			this.$(".numInt").prop( "disabled", true );
+			this.$(".otherAscen").prop( "disabled", true );
 		}
 
 
@@ -113,6 +118,7 @@ app.SepomexView = Backbone.View.extend({
 		this.$(".calle").val(this.model.get("calle"));
 		this.$(".numExt").val(this.model.get("numeroExterior"));
 		this.$(".numInt").val(this.model.get("numeroInterior"));
+		this.$(".otherAscen").val(this.model.get("asentamientoOtro"));
 		
 		if( this.model.get("numeroInterior") == null || this.model.get("numeroInterior") == 'null'){
 			this.$(".numInt").val('');
@@ -174,6 +180,7 @@ app.SepomexView = Backbone.View.extend({
 		this.$(".calle").val("");
 		this.$(".numExt").val("");
 		this.$(".numInt").val("");
+		this.$(".otherAscen").val("");
 	},
 
 	setInitialAsentamiento: function(initialId){
@@ -186,6 +193,7 @@ app.SepomexView = Backbone.View.extend({
 		this.model.set("calle", $.trim(this.$(".calle").val()) );
 		this.model.set("numeroInterior", $.trim(this.$(".numInt").val()));
 		this.model.set("numeroExterior", $.trim(this.$(".numExt").val()));
+		this.model.set("asentamientoOtro",$.trim(this.$(".otherAscen").val()));
 	
 		this.setProcessingState();
 		this.render();
@@ -224,6 +232,7 @@ app.SepomexView = Backbone.View.extend({
 			this.model.set("calle", $.trim(this.$(".calle").val()) );
 			this.model.set("numeroInterior", $.trim(this.$(".numInt").val()));
 			this.model.set("numeroExterior", $.trim(this.$(".numExt").val()));
+			this.model.set("asentamientoOtro",$.trim(this.$(".otherAscen").val()));
 			
 			this.setValidatedState();
 			this.renderNoErrorMsgs();

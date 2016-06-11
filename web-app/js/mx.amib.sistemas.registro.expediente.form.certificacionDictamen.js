@@ -58,6 +58,14 @@ app.CertificacionViewModel = Backbone.Model.extend({
 		fechaFinAutorizacion_month: -1,
 		fechaFinAutorizacion_year: -1,
 		
+
+		fechaEntrega_day: -1,
+		fechaEntrega_month: -1,
+		fechaEntrega_year: -1,
+		fechaEnvio_day: -1,
+		fechaEnvio_month: -1,
+		fechaEnvio_year: -1,
+		
 		
 		statusEntHistorialInforme: -1,
 		obsEntHistorialInforme: "",

@@ -151,6 +151,7 @@
 
 		generalesModel.set("calidadMigratoria","${viewModelInstance?.sustentanteInstance?.calidadMigratoria}");
 		generalesModel.set("profesion","${viewModelInstance?.sustentanteInstance?.profesion}");
+		generalesModel.set("asentamientoOtro",${viewModelInstance?.sustentanteInstance?.asentamientoOtro});
 		
 		var generalesView = new app.GeneralesView(generalesModel);
 	</script>

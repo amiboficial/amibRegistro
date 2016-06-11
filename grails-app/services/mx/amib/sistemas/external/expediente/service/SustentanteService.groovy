@@ -452,6 +452,7 @@ class SustentanteService {
 		if(!JSONObject.NULL.equals(data.'numeroExterior')) sustentante.numeroExterior = data.'numeroExterior'
 		if(!JSONObject.NULL.equals(data.'numeroInterior')) sustentante.numeroInterior = data.'numeroInterior'
 		if(!JSONObject.NULL.equals(data.'idSepomex')) sustentante.idSepomex = data.'idSepomex'
+		if(!JSONObject.NULL.equals(data.'asentamientoOtro')) sustentante.asentamientoOtro = data.'asentamientoOtro'
 		
 		sustentante.nacionalidad = new NacionalidadTO()
 		if(data.'nacionalidad' instanceof JSONObject && !JSONObject.NULL.equals(data.'nacionalidad')){

@@ -38,5 +38,8 @@ class CertificacionTO {
 	Date fechaAutorizacionInicio
 	Date fechaAutorizacionFin
 	
+	Date fechaEntregaRecepcion
+	Date fechaEnvioComision
+	
 	String dga
 }

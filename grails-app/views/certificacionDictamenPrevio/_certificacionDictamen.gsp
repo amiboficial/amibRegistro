@@ -362,5 +362,84 @@
 			&nbsp;
 		</div>
 	</div>
+
+<div id="DueTimeLapse">
+	<legend><i>Lapso de átencion</i></legend>
+		<div class="form-group div-fechaEntrega">
+			<label class="col-md-2 col-sm-3 control-label">
+				Fecha de entrega
+			</label>
+			<div class="col-md-5 col-sm-5">
+				<select style="width: 28%;" class="form-control col-md-4 fechaInicio_day field" data-field="fechaEntrega_day">
+					<option value="-1">-Seleccione-</option>
+					{{ for(var i=1;i<=31;i++){ }}
+						{{ if(i == fechaEntrega_day){ }}
+							<option value="{{=i}}" selected>{{=i}}</option>
+						{{ } else{ }}
+							<option value="{{=i}}">{{=i}}</option>
+						{{ } }}
+					{{ } }}
+				</select>
+				<select style="width: 38%;" class="form-control col-md-4 fechaInicio_month field" data-field="fechaEntrega_month">
+					<option value="-1">-Seleccione-</option>
+					{{ for(var i=0;i<app.MESES.length;i++){ }}
+						{{ if(app.MESES[i].id == fechaEntrega_month){ }}
+							<option value="{{=app.MESES[i].id}}" selected>{{=app.MESES[i].nombre}}</option>
+						{{ } else{ }}
+							<option value="{{=app.MESES[i].id}}">{{=app.MESES[i].nombre}}</option>
+						{{ } }}
+					{{ } }}
+				</select>
+				<select style="width: 34%;" class="form-control col-md-4 fechaInicio_year field" data-field="fechaEntrega_year">
+					<option value="-1">-Seleccione-</option>
+					{{ for(var i=1990;i<=2030;i++){ }}
+						{{ if(i == fechaEntrega_year){ }}
+							<option value="{{=i}}" selected>{{=i}}</option>
+						{{ } else{ }}
+							<option value="{{=i}}">{{=i}}</option>
+						{{ } }}
+					{{ } }}
+				</select>
+			</div>
+		</div>
+		
+		<div class="form-group div-fechaEnvio">
+			<label class="col-md-2 col-sm-3 control-label">
+				Fecha de envio
+			</label>
+			<div class="col-md-5 col-sm-5">
+				<select style="width: 28%;" class="form-control col-md-4 fechaFin_day field" data-field="fechaEnvio_day">
+					<option value="-1">-Seleccione-</option>
+					{{ for(var i=1;i<=31;i++){ }}
+						{{ if(i == fechaEnvio_day){ }}
+							<option value="{{=i}}" selected>{{=i}}</option>
+						{{ } else{ }}
+							<option value="{{=i}}">{{=i}}</option>
+						{{ } }}
+					{{ } }}
+				</select>
+				<select style="width: 38%;" class="form-control col-md-4 fechaFin_month field" data-field="fechaEnvio_month">
+					<option value="-1">-Seleccione-</option>
+					{{ for(var i=0;i<app.MESES.length;i++){ }}
+						{{ if(app.MESES[i].id == fechaEnvio_month){ }}
+							<option value="{{=app.MESES[i].id}}" selected>{{=app.MESES[i].nombre}}</option>
+						{{ } else{ }}
+							<option value="{{=app.MESES[i].id}}">{{=app.MESES[i].nombre}}</option>
+						{{ } }}
+					{{ } }}
+				</select>
+				<select style="width: 34%;" class="form-control col-md-4 fechaFin_year field" data-field="fechaEnvio_year">
+					<option value="-1">-Seleccione-</option>
+					{{ for(var i=1990;i<=2030;i++){ }}
+						{{ if(i == fechaEnvio_year){ }}
+							<option value="{{=i}}" selected>{{=i}}</option>
+						{{ } else{ }}
+							<option value="{{=i}}">{{=i}}</option>
+						{{ } }}
+					{{ } }}
+				</select>
+			</div>
+		</div>
+</div>
 	
 </script>

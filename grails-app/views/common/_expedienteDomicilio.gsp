@@ -41,6 +41,22 @@
                 </select>
             </div>
         </div>
+		<div class="form-group">
+            <label class="col-md-2 col-sm-3 control-label">
+                &nbsp;
+            </label>
+            <div class="col-md-9 col-sm-9">
+                <label>(Solo si el asentamiento no coincide con los proporcionados por Sepomex seleccione el primer asentamiento e ingrese el texto correcto en el siguiente campo )</label>
+            </div>
+        </div>
+		<div class="form-group">
+            <label class="col-md-2 col-sm-3 control-label">
+                <g:message code="expediente.asentamieto.otro" default="Otro Asentamiento" />
+            </label>
+            <div class="col-md-9 col-sm-9">
+                <input type="text" class="form-control otherAscen" maxlength="255"/>
+            </div>
+        </div>
         <div class="form-group">
             <label class="col-md-2 col-sm-3 control-label">
                 <g:message code="expediente.calle.label" default="Calle" />

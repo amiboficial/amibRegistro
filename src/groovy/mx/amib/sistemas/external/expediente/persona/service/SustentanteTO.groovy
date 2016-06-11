@@ -1,6 +1,7 @@
 package mx.amib.sistemas.external.expediente.persona.service
 
 import java.util.Date;
+
 import mx.amib.sistemas.external.expediente.persona.catalog.service.*
 import mx.amib.sistemas.external.expediente.certificacion.service.*
 
@@ -22,6 +23,8 @@ class SustentanteTO {
 	String numeroExterior
 	String numeroInterior
 	Long idSepomex
+	//se agrega para acarrear los asentamientos erroneos 
+	String asentamientoOtro
 
 	Date fechaCreacion
 	Date fechaModificacion

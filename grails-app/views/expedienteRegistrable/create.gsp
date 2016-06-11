@@ -120,6 +120,7 @@
 
 	generalesModel.set("calidadMigratoria","");
 	generalesModel.set("profesion","");
+	generalesModel.set("asentamientoOtro","");
 
 	var generalesView = new app.GeneralesView(generalesModel);
 
@@ -293,13 +294,14 @@
 				this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.calle" value="' + arr[app.EXP_REG_CHK_SEPOMEX].model.get('calle') + '" />');
 				this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.numeroInterior" value="' + arr[app.EXP_REG_CHK_SEPOMEX].model.get('numeroInterior') + '" />');
 				this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.numeroExterior" value="' + arr[app.EXP_REG_CHK_SEPOMEX].model.get('numeroExterior') + '" />');
+				this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.asentamientoOtro" value="' + arr[app.EXP_REG_CHK_SEPOMEX].model.get('asentamientoOtro') + '" />');
 				//datos de registro
 				this.$("#spnHdnPostData").append('<input type="hidden" name="registro.nombrePuesto" value="' + arr[app.EXP_REG_CHK_REGISTRO].model.get('nombrePuesto') + '" />');
 				this.$("#spnHdnPostData").append('<input type="hidden" name="registro.fechaInicio_day" value="' + arr[app.EXP_REG_CHK_REGISTRO].model.get('fechaInicioDay') + '" />');
 				this.$("#spnHdnPostData").append('<input type="hidden" name="registro.fechaInicio_month" value="' + arr[app.EXP_REG_CHK_REGISTRO].model.get('fechaInicioMonth') + '" />');
 				this.$("#spnHdnPostData").append('<input type="hidden" name="registro.fechaInicio_year" value="' + arr[app.EXP_REG_CHK_REGISTRO].model.get('fechaInicioYear') + '" />');
 				this.$("#spnHdnPostData").append('<input type="hidden" name="registro.idInstitucion" value="' + arr[app.EXP_REG_CHK_REGISTRO].model.get('idInstitucion') + '" />');
-
+				
 				this.$("#spnHdnPostData").append('<input type="hidden" name="registro.statusEntManifProtesta" value="' + arr[app.EXP_REG_CHK_REGISTRO].model.get('statusEntManifProtesta') + '" />');
 				this.$("#spnHdnPostData").append('<input type="hidden" name="registro.obsEntManifProtesta" value="' + arr[app.EXP_REG_CHK_REGISTRO].model.get('obsEntManifProtesta') + '" />');
 				this.$("#spnHdnPostData").append('<input type="hidden" name="registro.statusEntCartaInter" value="' + arr[app.EXP_REG_CHK_REGISTRO].model.get('statusEntCartaInter') + '" />');

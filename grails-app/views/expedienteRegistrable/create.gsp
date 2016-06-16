@@ -120,7 +120,7 @@
 
 	generalesModel.set("calidadMigratoria","");
 	generalesModel.set("profesion","");
-	generalesModel.set("asentamientoOtro","");
+	//generalesModel.set("asentamientoOtro","");
 
 	var generalesView = new app.GeneralesView(generalesModel);
 

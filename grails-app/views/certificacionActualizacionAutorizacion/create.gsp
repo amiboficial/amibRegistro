@@ -151,7 +151,6 @@
 
 		generalesModel.set("calidadMigratoria","${viewModelInstance?.sustentanteInstance?.calidadMigratoria}");
 		generalesModel.set("profesion","${viewModelInstance?.sustentanteInstance?.profesion}");
-		generalesModel.set("asentamientoOtro",${viewModelInstance?.sustentanteInstance?.asentamientoOtro});
 		
 		var generalesView = new app.GeneralesView(generalesModel);
 	</script>
@@ -185,6 +184,7 @@
 			domicilioModel.set("calle","${raw(viewModelInstance?.sustentanteInstance?.calle)}");
 			domicilioModel.set("numeroInterior","${raw(viewModelInstance?.sustentanteInstance?.numeroInterior)}");
 			domicilioModel.set("numeroExterior","${raw(viewModelInstance?.sustentanteInstance?.numeroExterior)}");
+			domicilioModel.set("asentamientoOtro","${viewModelInstance?.sustentanteInstance?.asentamientoOtro}");
 			sepomexArray = ${raw(viewModelInstance?.sepomexJsonList)};
 		</g:if>
 		var sepomexView = new app.SepomexView(sepomexArray, domicilioModel, '<g:createLink controller="Sepomex" action="obtenerDatosSepomex"/>');
@@ -309,7 +309,8 @@
 		    if(bbbb == undefined || bbbb == null || bbbb == "" || bbbb == "-1" ){
 		    	$("[name='ZXhwZWRpZW50ZS5uYWNpb25hbGlkYWQ']").val("117");
 			}
-		    
+		    //para quitar las fechas de fecha de entrega y fecha de envio
+		    $("#DueTimeLapse").remove();
 		});
 
 	</script>	

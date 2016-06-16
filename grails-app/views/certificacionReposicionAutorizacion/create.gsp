@@ -310,6 +310,8 @@
 $(".div-fechaObtencion").remove();
 $(".div-fechaInicioAuth").remove();
 $(".div-fechaFinAuth").remove();
+//para quitar las fechas de fecha de entrega y fecha de envio
+$("#DueTimeLapse").remove();
 
 $(function() {
     var bbbb = $("[name='ZXhwZWRpZW50ZS5uYWNpb25hbGlkYWQ']").val();

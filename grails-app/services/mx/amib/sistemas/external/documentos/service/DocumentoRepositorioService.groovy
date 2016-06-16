@@ -122,7 +122,12 @@ class DocumentoRepositorioService {
 		}
 		
 		if(resp.json != null && resp.json instanceof JSONObject){
-			count = resp.json.'count'
+			if(!JSONObject.NULL.equals(resp.json.'count')){
+				count = resp.json.'count'
+				}
+			else{
+				count = 0
+			}
 			if(count>0) {
 				def jsonArrayList = resp.json.'list'
 				jsonArrayList.each{	x ->

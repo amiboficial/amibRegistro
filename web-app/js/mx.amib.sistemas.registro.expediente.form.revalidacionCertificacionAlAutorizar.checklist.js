@@ -151,6 +151,7 @@ app.CheckSubmitView = Backbone.View.extend({
 		this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.idNacionalidad" value="' + arr[app.CHK_GRALES].model.get('nacionalidad') + '" />');
 		this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.idNivelEstudios" value="' + arr[app.CHK_GRALES].model.get('nivelEstudios') + '" />');
 		this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.idEstadoCivil" value="' + arr[app.CHK_GRALES].model.get('estadoCivil') + '" />');
+		this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.asentamientoOtro" value="' + arr[app.CHK_SEPOMEX].model.get('asentamientoOtro') + '" />');
 		//datos de telefonos
 		var telsJson = "[";
 		arr[app.CHK_TELS].collection.each(function(item){

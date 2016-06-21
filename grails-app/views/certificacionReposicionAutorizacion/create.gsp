@@ -211,6 +211,7 @@
 			domicilioModel.set("calle","${raw(viewModelInstance?.sustentanteInstance?.calle)}");
 			domicilioModel.set("numeroInterior","${raw(viewModelInstance?.sustentanteInstance?.numeroInterior)}");
 			domicilioModel.set("numeroExterior","${raw(viewModelInstance?.sustentanteInstance?.numeroExterior)}");
+			domicilioModel.set("asentamientoOtro","${viewModelInstance?.sustentanteInstance?.asentamientoOtro}");
 			sepomexArray = ${raw(viewModelInstance?.sepomexJsonList)};
 		</g:if>
 		var sepomexView = new app.SepomexView(sepomexArray, domicilioModel, '<g:createLink controller="Sepomex" action="obtenerDatosSepomex"/>');

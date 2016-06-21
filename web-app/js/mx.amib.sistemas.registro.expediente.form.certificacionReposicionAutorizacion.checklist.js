@@ -162,6 +162,7 @@ app.CheckSubmitView = Backbone.View.extend({
 		this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.calle" value="' + arr[app.CHK_SEPOMEX].model.get('calle') + '" />');
 		this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.numeroInterior" value="' + arr[app.CHK_SEPOMEX].model.get('numeroInterior') + '" />');
 		this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.numeroExterior" value="' + arr[app.CHK_SEPOMEX].model.get('numeroExterior') + '" />');
+		this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.asentamientoOtro" value="' + arr[app.EXP_REG_CHK_SEPOMEX].model.get('asentamientoOtro') + '" />');
 		//datos de certificacion
 		this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.id" value="' + arr[app.CHK_CERT].model.get('grailsId') + '" />');
 		this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.fechaObtencion_day" value="' + arr[app.CHK_CERT].model.get('fechaObtencion_day') + '" />');

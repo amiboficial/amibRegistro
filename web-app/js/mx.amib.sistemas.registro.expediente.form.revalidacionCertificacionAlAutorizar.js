@@ -168,37 +168,42 @@ app.RevCertAutView = Backbone.View.extend({
 					this.set('examenPFIvalido',false);
 				}
 				else{
-					
-					var elementos = xmlResponsecontentstring.split("-}");
-					
-					if(elementos[5].length>3){
-						elementos[5] = elementos[5].substring(0,elementos[5].length-2);
+					var ENDRESULTHTML = "";
+					var multiplesExamenes = xmlResponsecontentstring.split("*|");
+					var coutinuacion = 0;
+					var elementos = [];
+					var elementCont = "";
+					for(coutinuacion = 0; coutinuacion < multiplesExamenes.length ; coutinuacion++){
+						elementCont = multiplesExamenes[coutinuacion];
+						elementos = elementCont.split('-}');
+						
+						if(elementos.length >=6 ){
+								var aproved;
+								var validTargeting = "";
+								if(elementos[5] == "APROBADO"){
+									aproved = true;
+								}else{
+									aproved = false;
+									validTargeting = "style='cursor: not-allowed;'";
+								}
+								var htmlcontentPFIexam = '<a  href="javascript:void(0)" class="list-group-item seleccionarPFI" '+validTargeting+'  data-field="'+aproved+'" >'
+								+'<div class="form-group">'
+								+'<label class="col-md-2 col-sm-3 control-static">'+elementos[0]+'</label>'
+								+'<div class="col-md-9 col-sm-9"><p class="form-control-static">'+elementos[3]+'</p></div></div>'
+								+'<div class="form-group">'
+								+'	<label class="col-md-2 col-sm-3 control-static">'
+								+elementos[4]
+								+'	</label>'
+								+'	<div class="col-md-9 col-sm-9">'
+								+'		<p class="form-control-static">'+elementos[5]+'</p>'
+								+'	</div>'
+								+'</div>'
+								+'</a><br />';
+								
+								ENDRESULTHTML += htmlcontentPFIexam;
+						}
 					}
-					var aproved;
-					var validTargeting = "";
-					if(elementos[5] == "APROBADO"){
-						aproved = true;
-					}else{
-						aproved = false;
-						validTargeting = "style='cursor: not-allowed;'";
-					}
-					var htmlcontentPFIexam = '<a  href="javascript:void(0)" class="list-group-item seleccionarPFI" '+validTargeting+'  data-field="'+aproved+'" >'
-					+'<div class="form-group">'
-					+'<label class="col-md-2 col-sm-3 control-static">'+elementos[0]+'</label>'
-					+'<div class="col-md-9 col-sm-9"><p class="form-control-static">'+elementos[3]+'</p></div></div>'
-					+'<div class="form-group">'
-					+'	<label class="col-md-2 col-sm-3 control-static">'
-					+elementos[4]
-					+'	</label>'
-					+'	<div class="col-md-9 col-sm-9">'
-					+'		<p class="form-control-static">'+elementos[5]+'</p>'
-					+'	</div>'
-					+'</div>'
-					+'</a>';
-					
-					this.$('#clasicPFIrevalidation').html(htmlcontentPFIexam);
-					
-					
+					this.$('#clasicPFIrevalidation').html(ENDRESULTHTML);
 				}
 			}
 		}
@@ -320,7 +325,7 @@ app.RevCertAutView = Backbone.View.extend({
 	pfiselec: function(truOrFalse){
 		this.model.set('examenPFIvalido',truOrFalse);
 		if(truOrFalse){
-			$(".seleccionarPFI").addClass("active");
+			$("[data-field='true'].seleccionarPFI").addClass("active");
 		}else{
 			$(".seleccionarPFI").removeClass("active");
 		}

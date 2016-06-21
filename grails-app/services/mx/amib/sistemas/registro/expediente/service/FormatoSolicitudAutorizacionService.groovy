@@ -132,7 +132,10 @@ class FormatoSolicitudAutorizacionService {
 			
 			refMap = new HashMap<String,String>()
 			refMap.put(this.HEADER_SECUENCIA, nuseq++)
-			refMap.put(this.HEADER_FHENTORG, "yyyyMMdd")
+			//fecha de entrega que se le asigno en dictament previo
+//			refMap.put(this.HEADER_FHENTORG, "yyyyMMdd")
+			if(x.fechaEntregaRecepcion != null)
+			refMap.put(this.HEADER_FHENTORG, x.fechaEntregaRecepcion)			
 			refMap.put(this.HEADER_TPINST, institucionPuestoActual.idTipoInstitucion)
 			refMap.put(this.HEADER_CVINST, institucionPuestoActual.id)
 			refMap.put(this.HEADER_INST, institucionPuestoActual.nombre)
@@ -202,7 +205,7 @@ class FormatoSolicitudAutorizacionService {
 		fuenteDato.setBold(false);
 		fuenteDato.setFontHeightInPoints((short)12);
 		// setedo de celdas unidas
-		s.addMergedRegion(new CellRangeAddress(0,0,0,9)); //el rango es de A1 a J1
+		//s.addMergedRegion(new CellRangeAddress(0,0,0,9)); //el rango es de A1 a J1
 		// seteo de estilo de celda de cabecera
 		csTitulo = wb.createCellStyle();
 		csTitulo.setFont(fuenteTitulo);
@@ -219,17 +222,20 @@ class FormatoSolicitudAutorizacionService {
 //		cell.setCellValue("Formato de Solicitud de Autorización");
 //		cell.setCellStyle(csTitulo);
 		//crea las cabeceras
-		row = s.createRow(2);
-		i = 2;
-		for(String nombreCabecera : mapHeadersIdx.keySet()){
-			cell = row.createCell( mapHeadersIdx.get(nombreCabecera) );
-			cell.setCellStyle(csCabecera);
-			cell.setCellValue(nombreCabecera);
-			i++;
-		}
+//		row = s.createRow(2);
+//		i = 2;
+//		for(String nombreCabecera : mapHeadersIdx.keySet()){
+//			cell = row.createCell( mapHeadersIdx.get(nombreCabecera) );
+//			cell.setCellStyle(csCabecera);
+//			cell.setCellValue(nombreCabecera);
+//			i++;
+//		}
 		
 		//llena los datos recibidos en el fill
-		i = 3; //inicia a partir de la fila 3 (indice desde 0)
+//		i = 3; //inicia a partir de la fila 3 (indice desde 0)
+		
+		
+		i = 0; //inicia a partir de la fila 3 (indice desde 0)
 		totalAtributos = mapHeadersIdx.size();
 		
 		println "aqui llego 1, con el listaMapDato cuyo tamanio es: " + listaMapDato.size()

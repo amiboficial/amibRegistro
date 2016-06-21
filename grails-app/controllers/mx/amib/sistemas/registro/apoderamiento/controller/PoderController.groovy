@@ -230,14 +230,26 @@ class PoderController {
 		try{
 			numeroMatricula = Integer.parseInt(params.'numeroMatricula'?:"-1")
 			sustentanteApoderable = apoderamientoService.obtenerApoderable(numeroMatricula)
+			//bloque de codigo para determinar el nombre de la institucion a la que pertenece actualmente
+			def puestoActual
+			if(sustentanteApoderable != null && sustentanteApoderable.puestos != null && !sustentanteApoderable.puestos.isEmpty()){
+				puestoActual = sustentanteApoderable.puestos.find{ it.esActual }
+			}
+			String institucionActual = ""
+			if(puestoActual!= null && puestoActual.idInstitucion != null && puestoActual.idInstitucion > 0L){
+				def inst = entidadFinancieraService.obtenerInstitucion(puestoActual.idInstitucion)
+				institucionActual = inst.nombre
+			}
+			//end
 			if(sustentanteApoderable == null){
 				res = [ 'status': 'NOT_FOUND' ]
 			}
 			else{
-				res = [ 'status': 'OK', 'object': [ 'sustentante': sustentanteApoderable,'certificacion':sustentanteApoderable.certificaciones.last() ] ]
+				res = [ 'status': 'OK', 'object': [ 'sustentante': sustentanteApoderable,'certificacion':sustentanteApoderable.certificaciones.last(), 'institucion':institucionActual ] ]
 			}
 		}
 		catch(Exception ex) {
+			ex.printStackTrace()	
 			res = [ 'status': 'ERROR', 'object': ex.message ]
 		}
 		render res as JSON

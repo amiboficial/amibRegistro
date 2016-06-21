@@ -53,6 +53,15 @@
 				<input type="text" data-field="nombreVarianteFiguraBuscar" maxlength="10" class="field nombreVarianteFiguraBuscar form-control" name="apoderados.nombreVarianteFiguraBuscar" value="{{=nombreVarianteFigura}}" disabled/>
 			</div>
 		</div>
+
+		<div class="div-nombreInstitucionBuscar form-group">
+			<label class="col-md-2 col-sm-3 control-label">
+				<g:message code="apoderados.nombreInstitucionBuscar.label" default="Nombre de Institucion en Puesto Actual" />
+			</label>
+			<div class="col-md-9 col-sm-9">
+				<input type="text" data-field="nombreInstitucionBuscar" maxlength="10" class="field nombreInstitucionBuscar form-control"  value="{{=institucion}}" disabled/>
+			</div>
+		</div>
 		
 		<div class="form-group">
 			<div class="col-md-3 col-sm-3">
@@ -107,6 +116,10 @@
 	<div class="div-nombreVarianteFigura row">
 		<label class="col-sm-2 control-label">Variante de figura</label>
 		<div class="col-sm-9"><p class="form-control-static">{{=nombreVarianteFigura}}</p></div>
+	</div>
+	<div class="div-nombreInstitucionPuesto row">
+		<label class="col-sm-2 control-label">Nombre de Institucion en Puesto Actual</label>
+		<div class="col-sm-9"><p class="form-control-static">{{=institucion}}</p></div>
 	</div>
 	<div class="row">
 		<div class="col-sm-9">

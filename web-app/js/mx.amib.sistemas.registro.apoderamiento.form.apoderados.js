@@ -19,6 +19,7 @@ app.Apoderado = Backbone.Model.extend ({
 		nombreFigura: "",
 		nombreVarianteFigura: "",
 		idCertificacion: -1
+		,institucion: ""
 	}
 });
 
@@ -266,6 +267,7 @@ app.ApoderadosView = Backbone.View.extend({
 					view.model.set("nombreFigura",data.object.certificacion.varianteFigura.nombreFigura);
 					view.model.set("nombreVarianteFigura",data.object.certificacion.varianteFigura.nombre);
 					view.model.set("idCertificacion",data.object.certificacion.id);
+					view.model.set("institucion",data.object.institucion);
 					view.setReady();
 				}
 				else if(data.status == "NOT_FOUND"){

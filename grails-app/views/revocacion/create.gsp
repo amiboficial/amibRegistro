@@ -188,10 +188,18 @@
 					grailsId: 1,
 					descripcion: "Oficio de revocación",
 					vigente: true,
-					cantidadRequerida: 1,
+					cantidadRequerida: 0,
 					cantidadMaxima: 1,
 					manejaVigencia: false
 				},
+				{
+					grailsId: 2,
+					descripcion: "Renuncia Voluntaria",
+					vigente: true,
+					cantidadRequerida: 0,
+					cantidadMaxima: 1,
+					manejaVigencia: false
+				}
 			],
 			manejaVigencia: true,
 			initialDocumentos: new app.Documentos()

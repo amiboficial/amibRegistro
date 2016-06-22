@@ -577,6 +577,11 @@ app.DocumentosView = Backbone.View.extend({
 		var colInArray = this.collection.toJSON();
 		this.clearAllErrors();
 		
+		if(colInArray.length < 1){
+			valid = false;
+			this.setErrorValidacion(app.DOCMULTI2_ERRMSG_CANT_REQ + ": el tramite debe contar con un documento de respaldo" );
+		}
+		
 		for(var i=0; i<this.tiposDocumento.length; i++){
 			currCantReq = 0;
 			for(var j=0; j<colInArray.length; j++){

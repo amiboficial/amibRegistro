@@ -163,6 +163,8 @@ class RevocacionController {
 		}
 
 		try{
+			revocacion = apoderamientoService.altaRevocacion(revocacion)
+//			println (revocacion as JSON)
 			flash.successMessage = "La revocación con el número de escritura " + revocacion.numeroEscritura + " ha sido dado de alta [ID:" + revocacion.id + "]"
 		}
 		catch(Exception e){

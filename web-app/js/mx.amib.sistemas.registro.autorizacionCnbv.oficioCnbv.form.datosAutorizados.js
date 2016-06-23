@@ -23,6 +23,7 @@ app.DatosAutorizadosTabVM = Backbone.Model.extend({
 		processing: false,
 
 		findAutorizableByNumeroMatriculaUrl: ''
+		, institucion: ''
 	},
 	findAutorizableByNumeroMatricula: function(){
 		var _this = this;
@@ -311,6 +312,8 @@ app.DatosAutorizadosTabView = Backbone.View.extend({
 			errorNumeroMatriculaInvalidDataType: false,
 			errorNumeroMatriculaInList: false,
 			errorNumeroMatriculaAtLeastOne: false
+
+			, institucion: ''
 		});
 	},
 	

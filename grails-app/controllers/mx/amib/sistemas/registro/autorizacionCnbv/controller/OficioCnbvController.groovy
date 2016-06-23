@@ -20,6 +20,7 @@ class OficioCnbvController {
 	SustentanteService sustentanteService
 	def certificacionService
 	def documentoRepositorioService
+	def entidadFinancieraService
 	
 	
     def index() { }
@@ -393,6 +394,18 @@ class OficioCnbvController {
 		try{
 			servRes = certificacionService.findAllEnAutorizacionByMatricula(numeroMatricula)
 			if( servRes.count > 0 ){
+				//bloque de codigo para determinar el nombre de la institucion a la que pertenece actualmente
+				def puestoActual
+				if(servRes.sustentantes.first() != null && servRes.sustentantes.first().puestos != null && !servRes.sustentantes.first().puestos.isEmpty()){
+					puestoActual = servRes.sustentantes.first().puestos.find{ it.esActual }
+				}
+				String institucionActual = ""
+				if(puestoActual!= null && puestoActual.idInstitucion != null && puestoActual.idInstitucion > 0L){
+					def inst = entidadFinancieraService.obtenerInstitucion(puestoActual.idInstitucion)
+					institucionActual = inst.nombre
+					servRes.list.first().dga = institucionActual
+				}
+				//end
 				res.put("status", "OK")
 				res.put("object", AutorizableResultVM.copyFromServicesResults( servRes.list.first() ) )
 			}
@@ -454,6 +467,7 @@ class OficioCnbvController {
 		String dsFigura
 		String dsVarianteFigura
 		String dsTipoAutorizacion
+		String institucion
 		
 		public static AutorizableResultVM copyFromServicesResults(CertificacionTO resCert){
 			AutorizableResultVM res = new AutorizableResultVM()
@@ -467,6 +481,7 @@ class OficioCnbvController {
 			res.dsFigura = resCert.varianteFigura.nombreFigura
 			res.dsVarianteFigura = resCert.varianteFigura.nombre
 			res.dsTipoAutorizacion = resCert.varianteFigura.tipoAutorizacionFigura
+			res.institucion = resCert.dga
 			
 			return res
 		}

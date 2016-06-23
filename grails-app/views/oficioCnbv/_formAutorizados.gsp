@@ -80,6 +80,15 @@
 			<input class="dsTipoAutorizacion form-control" type="text" value="{{=dsTipoAutorizacion}}" disabled>
 		</div>
 	</div>
+
+		<div class="div-nombreInstitucionBuscar form-group">
+			<label class="col-md-2 col-sm-3 control-label">
+				<g:message code="apoderados.nombreInstitucionBuscar.label" default="Nombre de Institucion en Puesto Actual" />
+			</label>
+			<div class="col-md-9 col-sm-9">
+				<input type="text" data-field="nombreInstitucionBuscar" maxlength="10" class="field nombreInstitucionBuscar form-control"  value="{{=institucion}}" disabled/>
+			</div>
+		</div>
 	
 	<div class="form-group">
 		<div class="col-md-3 col-sm-3">

@@ -370,7 +370,7 @@
 				Fecha de entrega
 			</label>
 			<div class="col-md-5 col-sm-5">
-				<select style="width: 28%;" class="form-control col-md-4 fechaInicio_day field" data-field="fechaEntrega_day">
+				<select style="width: 28%;" class="form-control col-md-4 fechaEntrega_day field" data-field="fechaEntrega_day">
 					<option value="-1">-Seleccione-</option>
 					{{ for(var i=1;i<=31;i++){ }}
 						{{ if(i == fechaEntrega_day){ }}
@@ -380,7 +380,7 @@
 						{{ } }}
 					{{ } }}
 				</select>
-				<select style="width: 38%;" class="form-control col-md-4 fechaInicio_month field" data-field="fechaEntrega_month">
+				<select style="width: 38%;" class="form-control col-md-4 fechaEntrega_month field" data-field="fechaEntrega_month">
 					<option value="-1">-Seleccione-</option>
 					{{ for(var i=0;i<app.MESES.length;i++){ }}
 						{{ if(app.MESES[i].id == fechaEntrega_month){ }}
@@ -390,7 +390,7 @@
 						{{ } }}
 					{{ } }}
 				</select>
-				<select style="width: 34%;" class="form-control col-md-4 fechaInicio_year field" data-field="fechaEntrega_year">
+				<select style="width: 34%;" class="form-control col-md-4 fechaEntrega_year field" data-field="fechaEntrega_year">
 					<option value="-1">-Seleccione-</option>
 					{{ for(var i=1990;i<=2030;i++){ }}
 						{{ if(i == fechaEntrega_year){ }}
@@ -408,7 +408,7 @@
 				Fecha de envio
 			</label>
 			<div class="col-md-5 col-sm-5">
-				<select style="width: 28%;" class="form-control col-md-4 fechaFin_day field" data-field="fechaEnvio_day">
+				<select style="width: 28%;" class="form-control col-md-4 fechaEnvio_day field" data-field="fechaEnvio_day">
 					<option value="-1">-Seleccione-</option>
 					{{ for(var i=1;i<=31;i++){ }}
 						{{ if(i == fechaEnvio_day){ }}
@@ -418,7 +418,7 @@
 						{{ } }}
 					{{ } }}
 				</select>
-				<select style="width: 38%;" class="form-control col-md-4 fechaFin_month field" data-field="fechaEnvio_month">
+				<select style="width: 38%;" class="form-control col-md-4 fechaEnvio_month field" data-field="fechaEnvio_month">
 					<option value="-1">-Seleccione-</option>
 					{{ for(var i=0;i<app.MESES.length;i++){ }}
 						{{ if(app.MESES[i].id == fechaEnvio_month){ }}
@@ -428,7 +428,7 @@
 						{{ } }}
 					{{ } }}
 				</select>
-				<select style="width: 34%;" class="form-control col-md-4 fechaFin_year field" data-field="fechaEnvio_year">
+				<select style="width: 34%;" class="form-control col-md-4 fechaEnvio_year field" data-field="fechaEnvio_year">
 					<option value="-1">-Seleccione-</option>
 					{{ for(var i=1990;i<=2030;i++){ }}
 						{{ if(i == fechaEnvio_year){ }}

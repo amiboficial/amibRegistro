@@ -163,6 +163,12 @@ class CertificacionDictamenPrevioController {
 		certAEmitDict.fechaObtencion = sdf.parse(params.'certificacion.fechaObtencion_day' + '-' + params.'certificacion.fechaObtencion_month' + '-' + params.'certificacion.fechaObtencion_year')
 		certAEmitDict.fechaInicio = sdf.parse(params.'certificacion.fechaInicio_day' + '-' + params.'certificacion.fechaInicio_month' + '-' + params.'certificacion.fechaInicio_year')
 		certAEmitDict.fechaFin = sdf.parse(params.'certificacion.fechaFin_day' + '-' + params.'certificacion.fechaFin_month' + '-' + params.'certificacion.fechaFin_year')
+		
+		println(params.'certificacion.fechaEntrega_day' + '-' + params.'certificacion.fechaEntrega_month' + '-' + params.'certificacion.fechaEntrega_year')
+		println(params.'certificacion.fechaEnvio_day' + '-' + params.'certificacion.fechaEnvio_month' + '-' + params.'certificacion.fechaEnvio_year')
+		certAEmitDict.fechaEntregaRecepcion = sdf.parse(params.'certificacion.fechaEntrega_day' + '-' + params.'certificacion.fechaEntrega_month' + '-' + params.'certificacion.fechaEntrega_year')
+		certAEmitDict.fechaEnvioComision = sdf.parse(params.'certificacion.fechaEnvio_day' + '-' + params.'certificacion.fechaEnvio_month' + '-' + params.'certificacion.fechaEnvio_year')
+		
 		certAEmitDict.statusEntHistorialInforme = certificacion.statusEntHistorialInforme
 		certAEmitDict.obsEntHistorialInforme = certificacion.obsEntHistorialInforme
 		certAEmitDict.statusEntCartaRec = certificacion.statusEntCartaRec
@@ -171,6 +177,12 @@ class CertificacionDictamenPrevioController {
 		certAEmitDict.obsConstBolVal = certificacion.obsConstBolVal
 		
 		try {
+//			println("salvar el dictament previo preview")
+//			println("IMPRIME sustentante:")
+//			println(sustentante as JSON)
+//			println("IMPRIME CERTIFICACION")
+//			println(certAEmitDict as JSON)
+			
 			certificacionDictamenPrevioService.enviarAAutorizacion(sustentante, certAEmitDict)
 			flash.successMessage = "La emisión de dictamen de sustentante de \"" + sustentante.nombre + " " + sustentante.primerApellido + "\" ha sido guardado satisfactoriamente"
 		}

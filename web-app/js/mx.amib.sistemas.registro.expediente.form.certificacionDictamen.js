@@ -114,6 +114,10 @@ app.CertificacionView = Backbone.View.extend({
 	render: function(){
 		this.$el.html( this.template( this.model.toJSON() ) );
 		
+		if (typeof viewAdjustCustomize == 'function') { 
+			viewAdjustCustomize(); 
+			}
+		
 		//dependiendo del status, los campos se habilitan o deshabilitan
 		if(this.state == app.CERTDICT_CERT_ST_OPEN){ //status de abierto a edición
 			this.enableFields();
@@ -264,10 +268,13 @@ app.CertificacionView = Backbone.View.extend({
 		var statusConstBolVal = this.model.get("statusConstBolVal");
 		
 		//valida datos del modelo y setear errores en modelo
-		if(fechaObtencion_day == -1 || fechaObtencion_month == -1 || fechaObtencion_year == -1){
-			valid = false;
-			this.model.set("errFechaObtencion",true);
-			this.model.get("viewErrMessages").push(app.CERTDICT_ERR_FHOBT_BLANK);
+		var fchExist= $(".fechaObtencion_day")
+		if(fchExist!=undefined && fchExist !=null && fchExist.length>0){
+			if(fechaObtencion_day == -1 || fechaObtencion_month == -1 || fechaObtencion_year == -1){
+				valid = false;
+				this.model.set("errFechaObtencion",true);
+				this.model.get("viewErrMessages").push(app.CERTDICT_ERR_FHOBT_BLANK);
+			}
 		}
 		if(statusEntHistorialInforme == -1){
 			valid = false;

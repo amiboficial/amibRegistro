@@ -5,16 +5,51 @@
 <meta name="layout" content="main"/>
 <title>Registro 0.1 - Emitir dictamen</title>
 <script>
+function viewAdjustCustomize(){
+	$(".div-fechaObtencion").html("").remove();
+	$(".div-fechaInicioAuth").html("").remove();
+	$(".div-fechaFinAuth").html("").remove();
+
+	$("#dueLapseTarget").html($("#DueTimeLapse").html());
+	$("#DueTimeLapse").remove();
+	
+	
+	$(".fechaEntrega_day").on('change', function() {
+    	cert.attributes.fechaEntrega_day = parseInt($(".fechaEntrega_day").val());
+    	});
+
+    $(".fechaEntrega_month").on('change', function() {
+    	cert.attributes.fechaEntrega_month = parseInt($(".fechaEntrega_month").val());
+    	});
+
+    $(".fechaEntrega_year").on('change', function() {
+    	cert.attributes.fechaEntrega_year = parseInt($(".fechaEntrega_year").val());
+    	});
+
+    $(".fechaEnvio_day").on('change', function() {
+    	cert.attributes.fechaEnvio_day = parseInt($(".fechaEnvio_day").val());
+    	});
+
+    $(".fechaEnvio_month").on('change', function() {
+    	cert.attributes.fechaEnvio_month = parseInt($(".fechaEnvio_month").val());
+    	});
+
+    $(".fechaEnvio_year").on('change', function() {
+    	cert.attributes.fechaEnvio_year = parseInt($(".fechaEnvio_year").val());
+    	});
+}
+
 $(function() {
-	$(".div-fechaObtencion").remove();
-	$(".div-fechaInicioAuth").remove();
-	$(".div-fechaFinAuth").remove();
+	viewAdjustCustomize();
     var bbbb = $("[name='ZXhwZWRpZW50ZS5uYWNpb25hbGlkYWQ']").val();
     if(bbbb == undefined || bbbb == null || bbbb == "" || bbbb == "-1" ){
     	$("[name='ZXhwZWRpZW50ZS5uYWNpb25hbGlkYWQ']").val("117");
 	}
-    
 });
+
+
+
+
 </script>
 </head>
 <body>
@@ -53,6 +88,8 @@ $(function() {
 			 <li role="presentation"><a href="#tabCheckSubmit" aria-controls="tabCheckSubmit" role="tab" data-toggle="tab">Emitir dictamen</a></li>
 		</ul>
 		
+		
+		
 		<div class="tab-content">
 			<br/>
 			<div role="tabpanel" class="tab-pane active" id="tabGen">
@@ -84,6 +121,8 @@ $(function() {
 							<li><span id="spnCheckFigura" class="glyphicon glyphicon-unchecked"></span> Datos de figura</li>
 							<li><span id="spnCheckPuestos" class="glyphicon glyphicon-unchecked"></span> Datos de relaciones laborales con institución</li>
 						</ul>
+					</div>
+					<div id="dueLapseTarget">
 					</div>
 					<div class="form-group">
 						<div class="col-md-3 col-sm-3">
@@ -118,10 +157,12 @@ $(function() {
 		generalesModel.set("nombre","${raw(viewModelInstance?.sustentanteInstance?.nombre)}");
 		generalesModel.set("primerApellido","${raw(viewModelInstance?.sustentanteInstance?.primerApellido)}");
 		generalesModel.set("segundoApellido","${raw(viewModelInstance?.sustentanteInstance?.segundoApellido)}");
-		
+
+		<g:if test="${viewModelInstance?.sustentanteInstance?.fechaNacimiento != null}">
 		generalesModel.set("fechaNacimientoDay", ${viewModelInstance?.sustentanteInstance?.fechaNacimiento?.getAt(Calendar.DATE)});
 		generalesModel.set("fechaNacimientoMonth", ${viewModelInstance?.sustentanteInstance?.fechaNacimiento?.getAt(Calendar.MONTH)+1});
 		generalesModel.set("fechaNacimientoYear", ${viewModelInstance?.sustentanteInstance?.fechaNacimiento?.getAt(Calendar.YEAR)});
+		</g:if>
 		
 		generalesModel.set("genero","${viewModelInstance?.sustentanteInstance?.genero}");
 		generalesModel.set("rfc","${viewModelInstance?.sustentanteInstance?.rfc}");
@@ -227,16 +268,34 @@ $(function() {
 		cert.set("nombreVarianteFigura","${viewModelInstance?.certificacionInstance?.varianteFigura?.nombre}");
 		cert.set("tipoAutorizacionFigura","${viewModelInstance?.certificacionInstance?.varianteFigura?.tipoAutorizacionFigura}");
 
+		<g:if test="${viewModelInstance?.certificacionInstance?.fechaInicio != null}">
 		cert.set("fechaInicio_day",${viewModelInstance?.certificacionInstance?.fechaInicio[Calendar.DATE]});
 		cert.set("fechaInicio_month",${viewModelInstance?.certificacionInstance?.fechaInicio[Calendar.MONTH]+1});
 		cert.set("fechaInicio_year",${viewModelInstance?.certificacionInstance?.fechaInicio[Calendar.YEAR]});
+		</g:if>
+
+		<g:if test="${viewModelInstance?.certificacionInstance?.fechaFin != null}">
 		cert.set("fechaFin_day",${viewModelInstance?.certificacionInstance?.fechaFin[Calendar.DATE]});
 		cert.set("fechaFin_month",${viewModelInstance?.certificacionInstance?.fechaFin[Calendar.MONTH]+1});
 		cert.set("fechaFin_year",${viewModelInstance?.certificacionInstance?.fechaFin[Calendar.YEAR]});
+		</g:if>
 
+		<g:if test="${viewModelInstance?.certificacionInstance?.fechaObtencion != null}">
 		cert.set("fechaObtencion_day",${viewModelInstance?.certificacionInstance?.fechaObtencion[Calendar.DATE]});
 		cert.set("fechaObtencion_month",${viewModelInstance?.certificacionInstance?.fechaObtencion[Calendar.MONTH]+1});
 		cert.set("fechaObtencion_year",${viewModelInstance?.certificacionInstance?.fechaObtencion[Calendar.YEAR]});
+		</g:if>
+
+		<g:if test="${viewModelInstance?.certificacionInstance?.fechaEntregaRecepcion != null}">
+		cert.set("fechaEntrega_day",${viewModelInstance?.certificacionInstance?.fechaEntregaRecepcion[Calendar.DATE]});
+		cert.set("fechaEntrega_month",${viewModelInstance?.certificacionInstance?.fechaEntregaRecepcion[Calendar.MONTH]+1});
+		cert.set("fechaEntrega_year",${viewModelInstance?.certificacionInstance?.fechaEntregaRecepcion[Calendar.YEAR]});
+		</g:if>
+		<g:if test="${viewModelInstance?.certificacionInstance?.fechaEnvioComision != null}">
+		cert.set("fechaEnvio_day",${viewModelInstance?.certificacionInstance?.fechaEnvioComision[Calendar.DATE]});
+		cert.set("fechaEnvio_month",${viewModelInstance?.certificacionInstance?.fechaEnvioComision[Calendar.MONTH]+1});
+		cert.set("fechaEnvio_year",${viewModelInstance?.certificacionInstance?.fechaEnvioComision[Calendar.YEAR]});
+		</g:if>
 		
 		cert.set("statusEntHistorialInforme",${viewModelInstance?.certificacionInstance?.statusEntHistorialInforme}-0);
 		cert.set("obsEntHistorialInforme","${viewModelInstance?.certificacionInstance?.obsEntHistorialInforme}");
@@ -390,7 +449,7 @@ $(function() {
 				this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.calle" value="' + arr[app.EXP_EDT_CHK_SEPOMEX].model.get('calle') + '" />');
 				this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.numeroInterior" value="' + arr[app.EXP_EDT_CHK_SEPOMEX].model.get('numeroInterior') + '" />');
 				this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.numeroExterior" value="' + arr[app.EXP_EDT_CHK_SEPOMEX].model.get('numeroExterior') + '" />');
-				this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.asentamientoOtro" value="' + arr[app.EXP_REG_CHK_SEPOMEX].model.get('asentamientoOtro') + '" />');
+				this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.asentamientoOtro" value="' + arr[app.EXP_EDT_CHK_SEPOMEX].model.get('asentamientoOtro') + '" />');
 				//datos de certificacion
 				this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.id" value="' + arr[app.EXP_EDT_CHK_CERT].model.get('grailsId') + '" />');
 				this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.fechaObtencion_day" value="' + arr[app.EXP_EDT_CHK_CERT].model.get('fechaObtencion_day') + '" />');
@@ -408,6 +467,14 @@ $(function() {
 				this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.obsEntCartaRec" value="' + arr[app.EXP_EDT_CHK_CERT].model.get('obsEntCartaRec') + '" />');
 				this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.statusConstBolVal" value="' + arr[app.EXP_EDT_CHK_CERT].model.get('statusConstBolVal') + '" />');
 				this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.obsConstBolVal" value="' + arr[app.EXP_EDT_CHK_CERT].model.get('obsConstBolVal') + '" />');
+				
+				//datos de lapso de atencion
+				this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.fechaEntrega_day" value="' + arr[app.EXP_EDT_CHK_CERT].model.get('fechaEntrega_day') + '" />');
+				this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.fechaEntrega_month" value="' + arr[app.EXP_EDT_CHK_CERT].model.get('fechaEntrega_month') + '" />');
+				this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.fechaEntrega_year" value="' + arr[app.EXP_EDT_CHK_CERT].model.get('fechaEntrega_year') + '" />');
+				this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.fechaEnvio_day" value="' + arr[app.EXP_EDT_CHK_CERT].model.get('fechaEnvio_day') + '" />');
+				this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.fechaEnvio_month" value="' + arr[app.EXP_EDT_CHK_CERT].model.get('fechaEnvio_month') + '" />');
+				this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.fechaEnvio_year" value="' + arr[app.EXP_EDT_CHK_CERT].model.get('fechaEnvio_year') + '" />');
 				//datos de puestos
 				var puestosJson = JSON.stringify(arr[app.EXP_EDT_CHK_PUES].collection.toJSON());
 				this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.puestos_json" value=\'' + puestosJson + '\' />');

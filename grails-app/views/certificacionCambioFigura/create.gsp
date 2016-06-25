@@ -296,14 +296,18 @@
 	<!-- FIN: COMPONENTE CHECKLIST -->
 <script>
 
+function viewAdjustCustomize(){
+	//para quitar las fechas de fecha de entrega y fecha de envio
+	$("#DueTimeLapse").remove();
+}
+
 $(function() {
     var bbbb = $("[name='ZXhwZWRpZW50ZS5uYWNpb25hbGlkYWQ']").val();
     if(bbbb == undefined || bbbb == null || bbbb == "" || bbbb == "-1" ){
     	$("[name='ZXhwZWRpZW50ZS5uYWNpb25hbGlkYWQ']").val("117");
 	}
 
-    //para quitar las fechas de fecha de entrega y fecha de envio
-    $("#DueTimeLapse").remove();
+    viewAdjustCustomize();
 });
 </script>
 </body>

@@ -342,10 +342,10 @@ class ExpedienteController {
 				s.certificaciones.each{ x ->
 					try{
 						SearchResult<OficioCnbvTO> resOficios = oficioCnbvService.findAllByMultipleIdCertificacionInAutorizados(max, offset, sort, order, x.collect{ it.id } )
-						println("pendejadas")
+						println("respuestaOFICIOS")
 						println(resOficios as JSON)
 						servRes = resOficios.getList()
-						if(servRes!=null&&servRes.first().claveDga != null){
+						if(servRes!=null && resOficios.count>0 && servRes.first().claveDga != null){
 							x.dga = resOficios.first().claveDga
 						}
 					}

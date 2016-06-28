@@ -1022,11 +1022,13 @@ app.OficioCnbvResultView = Backbone.View.extend({
 	template: _.template( $('#oficioCnbvResultTemplate').html() ),
 	
 	showUrl: '',
+	editionUrl: '',
 	
 	initialize: function(options){
 		this.model = options.model;
 		this.parentView = options.parentView;
 		this.showUrl = options.showUrl;
+		this.editionUrl = options.editionUrl;
 		this.render();
 	},
 	render: function(){
@@ -1034,11 +1036,16 @@ app.OficioCnbvResultView = Backbone.View.extend({
 		return this;
 	},
 	events: {
-		'click .show' : 'show'
+		'click .show' : 'show',
+		'click .edition' : 'edition'
 	},
 	show: function(e){
 		e.preventDefault();
 		window.location.assign(this.showUrl + '/' + this.model.get('grailsId'));
+	},
+	edition: function(e){
+		e.preventDefault();
+		window.location.assign(this.editionUrl + '/' + this.model.get('grailsId'));
 	}
 });
 
@@ -1048,11 +1055,13 @@ app.OficioCnbvResultsView = Backbone.View.extend({
 	template: _.template( $('#oficioCnbvResultsTemplate').html() ),
 	
 	showUrl: '',
+	editionUrl: '',
 	
 	initialize: function(options){
 		this.collection = options.collection;
 		this.parentView = options.parentView;
 		this.showUrl = options.showUrl;
+		this.editionUrl = options.editionUrl;
 		
 		this.listenTo( this.collection, 'reset', this.renderList );
 		
@@ -1075,7 +1084,7 @@ app.OficioCnbvResultsView = Backbone.View.extend({
 	},
 	renderElement: function(item){
 		var view = this;
-		var elementView =  new app.OficioCnbvResultView({model:item,parentView:view,showUrl:view.showUrl});
+		var elementView =  new app.OficioCnbvResultView({model:item,parentView:view,showUrl:view.showUrl ,editionUrl:view.editionUrl});
 		elementView.viewModel = this.viewModel;
 		this.$(".list-items").append( elementView.render().el );
 		return elementView;
@@ -1174,11 +1183,13 @@ app.OficioCnbvIndexView = Backbone.View.extend({
 	options: {},
 	createUrl: '',
 	showUrl: '',
+	editionUrl: '',
 	
 	initialize: function(options){
 		this.options = options;
 		this.createUrl = options.createUrl;
 		this.showUrl = options.showUrl;
+		this.editionUrl = options.editionUrl;
 		this.render();
 	},
 	
@@ -1218,7 +1229,7 @@ app.OficioCnbvIndexView = Backbone.View.extend({
 		var parentView = this;
 		var collection = this.options.resultVMCollection;
 		
-		var view = new app.OficioCnbvResultsView({ collection:collection, parentView:parentView, showUrl:_this.showUrl });
+		var view = new app.OficioCnbvResultsView({ collection:collection, parentView:parentView, showUrl:_this.showUrl, editionUrl:_this.editionUrl });
 
 		this.$(".div-resultados").html("");
 		this.$(".div-resultados").append( view.render().el );

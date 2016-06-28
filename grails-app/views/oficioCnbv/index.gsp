@@ -40,7 +40,8 @@
 		var mainView = new app.OficioCnbvIndexView({
 			resultVMCollection: resultVMCollection,
 			createUrl : '<g:createLink action="create" />',
-			showUrl : '<g:createLink action="show" />'
+			showUrl : '<g:createLink action="show" />',
+			editionUrl : '<g:createLink action="edit" />'
 		});
 	</script>
 	

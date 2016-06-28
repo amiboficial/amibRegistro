@@ -252,6 +252,7 @@
 	<td>{{=autorizados}}</td>
 	<td>
 		<button type="button" class="show btn btn-default btn-xs" data-grailsId="{{=grailsId}}" ><span class="glyphicon glyphicon-eye-open"></span>&nbsp;Ver detalle</button>
+		<button type="button" class="edition btn btn-default btn-xs" data-grailsId="{{=grailsId}}" ><span class="glyphicon glyphicon-pencil"></span>&nbsp;Editar autorizados</button>
 	</td>
 
 </script>

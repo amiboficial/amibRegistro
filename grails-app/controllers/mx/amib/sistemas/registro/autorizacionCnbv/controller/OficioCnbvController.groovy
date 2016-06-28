@@ -88,6 +88,67 @@ class OficioCnbvController {
 		redirect (action: "index")
 	}
 	
+	def edit(long id) {
+		OficioCnbvTO ofiServRes
+		List<CertificacionTO> certServRes
+		DocumentoRepositorioTO docServRes
+		ShowVM vm
+		
+		ofiServRes = oficioCnbvService.get(id)
+		certServRes = certificacionService.getAll( ofiServRes.autorizados.collect{ it.idCertificacion } )
+		docServRes = documentoRepositorioService.obtenerMetadatosDocumento(ofiServRes.uuidDocumentoRespaldo)
+		vm = ShowVM.copyFromServicesResults(ofiServRes, certServRes, docServRes)
+		
+		println (vm as JSON)
+		
+		render(view:'edit', model: [viewModelInstance:vm])
+	}
+	
+	def update(OficioCnbvTO oficioCnbv){
+		def idsCertificacion
+		def certsFromIds
+		int fechaOficio_day
+		int fechaOficio_month
+		int fechaOficio_year
+		Calendar calFechaOficio
+		
+		//BINDINGS MANUALES
+		idsCertificacion = params.list('autorizadosCnbv.idCertificacion').collect{ Long.parseLong(it) }
+		fechaOficio_day = params.int('oficioCnbv.fechaOficio_day')
+		fechaOficio_month = params.int('oficioCnbv.fechaOficio_month')
+		fechaOficio_year = params.int('oficioCnbv.fechaOficio_year')
+		
+		calFechaOficio = Calendar.getInstance()
+		calFechaOficio.set(Calendar.DAY_OF_MONTH, fechaOficio_day )
+		calFechaOficio.set(Calendar.MONTH, fechaOficio_month - 1 )
+		calFechaOficio.set(Calendar.YEAR, fechaOficio_year )
+		calFechaOficio.set(Calendar.MINUTE, 0 )
+		calFechaOficio.set(Calendar.SECOND, 0 )
+		calFechaOficio.set(Calendar.MILLISECOND, 0 )
+		oficioCnbv.fechaOficio = calFechaOficio.getTime()
+		
+		certsFromIds = certificacionService.getAll(idsCertificacion)
+		oficioCnbv.autorizados = new ArrayList<AutorizadoCnbvTO>()
+		certsFromIds.each { x ->
+			def aut = new AutorizadoCnbvTO()
+			aut.id = null
+			aut.idCertificacion = x.id
+			aut.idOficioCnbv = null
+			oficioCnbv.autorizados.add(aut)
+		}
+		
+		//try{
+			//Ya teniendo todo bindeado a oficioCnbv
+			oficioCnbv = autorizacionCnbvService.editarDatosOficioCnbv(oficioCnbv)
+			flash.successMessage = "El oficio con la Clave DGA: " + oficioCnbv.claveDga + " ha sido modificado [ID:" + oficioCnbv.id + "]"
+		//}
+		//catch(Exception e){
+		//	flash.errorMessage = "Ha ocurrido un error al dar de alta el oficio de autorización"
+		//}
+		
+		redirect (action: "index")
+	}
+	
 	def findAllByDatosOficio(){ 
 		Map<String,Object> res = new HashMap<String,Object>()
 		

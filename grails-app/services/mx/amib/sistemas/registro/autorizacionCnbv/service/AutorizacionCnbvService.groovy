@@ -38,6 +38,19 @@ class AutorizacionCnbvService {
 		
 		return oficioCnbvService.update(modobj)
 	}
+	
+	OficioCnbvTO editarAutorizadosDatosOficioCnbv(OficioCnbvTO oficioCnbv){
+		OficioCnbvTO modobj = oficioCnbvService.get(oficioCnbv.id)
+		
+		modobj.claveDga = oficioCnbv.claveDga
+		modobj.numeroOficio = oficioCnbv.numeroOficio
+		modobj.fechaOficio = oficioCnbv.fechaOficio
+		modobj.uuidDocumentoRespaldo = oficioCnbv.uuidDocumentoRespaldo
+		modobj.autorizados = oficioCnbv.autorizados
+		
+		return oficioCnbvService.update(modobj)
+	}
+	
 	OficioCnbvTO quitarAutorizadosCnbv(Long idOficioCnbv, List<Long> multipleIdAutorizado){
 		OficioCnbvTO modobj = oficioCnbvService.get(idOficioCnbv)
 		List<AutorizadoCnbvTO> toDelete = new ArrayList<AutorizadoCnbvTO>()

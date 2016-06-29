@@ -25,8 +25,8 @@
 		<div class="alert alert-danger" role="alert"><span class="glyphicon glyphicon-info-sign"></span> ${flash.errorMessage}</div>
 	</g:if>
 	
-	<form id="frmApp" class="form-horizontal" role="form" action="update" method="post">
-		
+	<form id="frmApp" class="form-horizontal" role="form" action='<g:createLink controller="oficioCnbv" action="update"/>' method="post">
+		<input type="hidden" name="oficioCnbv.id" value="${viewModelInstance?.oficioCnbv?.id}" />
 		<ul class="nav nav-tabs" role="tablist">
 			<li role="presentation" class="active"><a href="#tabOficio" aria-controls="tabOficio" role="tab" data-toggle="tab">Datos del oficio</a></li>
 			<li role="presentation"><a href="#tabAutorizados" aria-controls="tabAutorizados" role="tab" data-toggle="tab">Datos de los autorizados</a></li>
@@ -114,6 +114,24 @@
 		var findAutorizableByNumeroMatriculaUrl;
 
 		findAutorizableByNumeroMatriculaUrl = '<g:createLink action="findAutorizableByNumeroMatricula" />';
+
+		autorizadosData = [
+		<g:each status="i" in="${viewModelInstance?.certAutList}" var="item">
+		{
+			idCertificacion: ${item?.id},
+			idSustentante: ${item?.sustentante?.id},
+			numeroMatricula: '${item?.sustentante?.numeroMatricula}',
+			nombreCompleto: '${item?.sustentante?.nombre} ${item?.sustentante?.primerApellido} ${item?.sustentante?.segundoApellido}',
+			nombre: '${item?.sustentante?.nombre}',
+			primerApellido: '${item?.sustentante?.primerApellido}',
+			segundoApellido: '${item?.sustentante?.segundoApellido}',
+			dsFigura: '${item?.varianteFigura?.nombreFigura}',
+			dsVarianteFigura: '${item?.varianteFigura?.nombre}',
+			dsTipoAutorizacion: '${item?.varianteFigura?.tipoAutorizacionFigura}'
+		}<g:if test="${i != viewModelInstance?.certAutList.size() - 1}">,</g:if>
+		</g:each>
+		];
+
 		
 		/*autorizadosData = [
 			{
@@ -142,7 +160,7 @@
 			}
 		];*/
 		
-		datosAutorizadoView = new app.DatosAutorizadosTabView({ model: new app.DatosAutorizadosTabVM( {findAutorizableByNumeroMatriculaUrl:findAutorizableByNumeroMatriculaUrl} ), collection: new app.AutorizadoVMCollection() });
+		datosAutorizadoView = new app.DatosAutorizadosTabView({ model: new app.DatosAutorizadosTabVM( {findAutorizableByNumeroMatriculaUrl:findAutorizableByNumeroMatriculaUrl} ), collection: new app.AutorizadoVMCollection(autorizadosData) });
 	</script>
 
 	<g:javascript src="mx.amib.sistemas.registro.autorizacionCnbv.oficioCnbv.edit.checklist.js" />

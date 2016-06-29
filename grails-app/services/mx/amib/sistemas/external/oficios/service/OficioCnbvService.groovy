@@ -184,6 +184,8 @@ class OficioCnbvService {
 		def resp = rest.get(getUrl + id)
 		
 		if(resp.json instanceof JSONObject && !JSONObject.NULL.equals(resp.json)){
+			println("respuesta del getcosa jaja")
+			println(resp.json)
 			o = new OficioCnbvTO( this.fixOficioCnbvJsonObject(resp.json) )
 		}
 		return o
@@ -208,7 +210,7 @@ class OficioCnbvService {
 	public OficioCnbvTO update(OficioCnbvTO o){
 		
 		def rest = new RestBuilder()
-		def resp = rest.post(updateUrl + o.id){
+		def resp = rest.put(updateUrl + o.id){
 			contentType "application/json;charset=UTF-8"
 			json this.customServiceJson(o)
 		}

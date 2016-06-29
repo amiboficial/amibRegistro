@@ -104,7 +104,10 @@ class OficioCnbvController {
 		render(view:'edit', model: [viewModelInstance:vm])
 	}
 	
-	def update(OficioCnbvTO oficioCnbv){
+	def update(){
+		OficioCnbvTO oficioCnbv = new OficioCnbvTO()
+		oficioCnbv.id = params.int('oficioCnbv.id')
+		oficioCnbv = oficioCnbvService.get(oficioCnbv.id)
 		def idsCertificacion
 		def certsFromIds
 		int fechaOficio_day
@@ -118,14 +121,7 @@ class OficioCnbvController {
 		fechaOficio_month = params.int('oficioCnbv.fechaOficio_month')
 		fechaOficio_year = params.int('oficioCnbv.fechaOficio_year')
 		
-		calFechaOficio = Calendar.getInstance()
-		calFechaOficio.set(Calendar.DAY_OF_MONTH, fechaOficio_day )
-		calFechaOficio.set(Calendar.MONTH, fechaOficio_month - 1 )
-		calFechaOficio.set(Calendar.YEAR, fechaOficio_year )
-		calFechaOficio.set(Calendar.MINUTE, 0 )
-		calFechaOficio.set(Calendar.SECOND, 0 )
-		calFechaOficio.set(Calendar.MILLISECOND, 0 )
-		oficioCnbv.fechaOficio = calFechaOficio.getTime()
+
 		
 		certsFromIds = certificacionService.getAll(idsCertificacion)
 		oficioCnbv.autorizados = new ArrayList<AutorizadoCnbvTO>()
@@ -137,9 +133,12 @@ class OficioCnbvController {
 			oficioCnbv.autorizados.add(aut)
 		}
 		
+		println("oficio a actualizar")
+		println(oficioCnbv as JSON)
+		
 		//try{
 			//Ya teniendo todo bindeado a oficioCnbv
-			oficioCnbv = autorizacionCnbvService.editarDatosOficioCnbv(oficioCnbv)
+			oficioCnbv = autorizacionCnbvService.editarAutorizadosDatosOficioCnbv(oficioCnbv)
 			flash.successMessage = "El oficio con la Clave DGA: " + oficioCnbv.claveDga + " ha sido modificado [ID:" + oficioCnbv.id + "]"
 		//}
 		//catch(Exception e){

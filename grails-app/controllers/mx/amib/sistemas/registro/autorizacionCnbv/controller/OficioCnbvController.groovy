@@ -203,11 +203,11 @@ class OficioCnbvController {
 		
 		if(claveDga.compareTo("") != 0){
 			try{				
-				servRes = oficioCnbvService.findAllByClaveDga(claveDga, sustentanteService)
+				servRes = oficioCnbvService.findAllByClaveDga(claveDga)
 				res.put("status", "OK")
 				res.put("object", [
 					'count': servRes.count,
-					'list' : ResultVM.copyFromServicesResults(servRes.list)
+					'list' : ResultVM.copyFromServicesResults(servRes.list, sustentanteService)
 				] )
 			}
 			catch(Exception ex){

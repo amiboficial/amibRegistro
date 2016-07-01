@@ -171,8 +171,8 @@
 
 		var app = app || {};
 
-		app.ERROR_MSG_MATRICULA = "ERROR_MSG_MATRICULA";
-		app.ERROR_MSG_NO_ELEM_BUSQ_AV = "ERROR_MSG_NO_ELEM_BUSQ_AV";
+		app.ERROR_MSG_MATRICULA = "Introduzca datos en el campo Matricula. El formato debe ser correcto";
+		app.ERROR_MSG_NO_ELEM_BUSQ_AV = "No hay datos para realizar la búsqueda avanzada. Introduzca datos en los campos disponibles.";
 
 		app.errorList = new Array();
 

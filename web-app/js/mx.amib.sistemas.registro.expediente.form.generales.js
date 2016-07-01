@@ -7,16 +7,16 @@ app.EXP_GRAL_PROCESSING = 2;
 app.EXP_GRAL_ERRMSG_NONOMBRE = "Introduzca datos en el campo Nombre";
 app.EXP_GRAL_ERRMSG_NOAP1 = "Introduzca datos en el campo Apellido Paterno";
 app.EXP_GRAL_ERRMSG_NOFECNAC = "Introduzca datos en el campo Fecha de Nacimiento";
-app.EXP_GRAL_ERRMSG_NOGEN = "EXP_GRAL_ERRMSG_NOGEN";
+app.EXP_GRAL_ERRMSG_NOGEN = "EXP_GRAL_ERRMSG_NOGEN";//no se usa
 app.EXP_GRAL_ERRMSG_NORFC = "Introduzca datos en el campo RFC";
 app.EXP_GRAL_ERRMSG_NOCURP = "Introduzca datos en el campo CURP";
 app.EXP_GRAL_ERRMSG_NOVALRFC = "Debe introducir un RFC válido para personas físicas";
 app.EXP_GRAL_ERRMSG_NOVALCURP = "Debe introducir una CURP válida";
 app.EXP_GRAL_ERRMSG_NOEMAIL = "Introduzca datos en el campo Correo Electrónico";
 app.EXP_GRAL_ERRMSG_NOVALEMAIL = "Debe introducir un Correo Electrónico Válido";
-app.EXP_GRAL_ERRMSG_NOEDOCIVIL = "Debe introducir un valor en el campo Estado Civil";
-app.EXP_GRAL_ERRMSG_NONIVEST = "EXP_GRAL_ERRMSG_NONIVEST";
-app.EXP_GRAL_ERRMSG_NONAL = "Debe introducir un valor en la nacionalidad";
+app.EXP_GRAL_ERRMSG_NOEDOCIVIL = "Debe seleccionar un valor en el campo Estado Civil";
+app.EXP_GRAL_ERRMSG_NONIVEST = "Debe seleccionar un valor en el campo nivel de estudios";
+app.EXP_GRAL_ERRMSG_NONAL = "Debe seleccionar un valor en el campo nacionalidad";
 
 app.Generales = Backbone.Model.extend({
 	defaults: {

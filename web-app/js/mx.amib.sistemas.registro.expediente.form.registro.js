@@ -8,12 +8,12 @@ app.EXP_REG_ST_NOAPLICA = 0;
 app.EXP_REG_ST_ENTREGADO = 1;
 app.EXP_REG_ST_NO_ENTREGADO = 2;
 
-app.EXP_REG_ERRMSG_NOFECCERT = "EXP_REG_ERRMSG_NOFECCERT";
-app.EXP_REG_ERRMSG_NOVALFECCERT = "EXP_REG_ERRMSG_NOVALFECCERT";
-app.EXP_REG_ERRMSG_NOINST = "EXP_REG_ERRMSG_NOINST";
-app.EXP_REG_ERRMSG_NOFECLAB = "EXP_REG_ERRMSG_NOFECLAB";
-app.EXP_REG_ERRMSG_NOVALFECLAB = "EXP_REG_ERRMSG_NOVALFECLAB";
-app.EXP_REG_ERRMSG_NOPUESTOACT = "EXP_REG_ERRMSG_NOPUESTOACT";
+app.EXP_REG_ERRMSG_NOFECCERT = "Debe seleccionar un valor en el campo Fecha certificación";
+app.EXP_REG_ERRMSG_NOVALFECCERT = "EXP_REG_ERRMSG_NOVALFECCERT";//no se usa
+app.EXP_REG_ERRMSG_NOINST = "Debe seleccionar un valor en el campo Intermediario del mercado de valores o asesor de inversión";
+app.EXP_REG_ERRMSG_NOFECLAB = "Debe seleccionar un valor en el campo Fecha a partir de la cual labora";
+app.EXP_REG_ERRMSG_NOVALFECLAB = "EXP_REG_ERRMSG_NOVALFECLAB";//no se usa
+app.EXP_REG_ERRMSG_NOPUESTOACT = "Introduzca datos en el campo Puesto actual";
 
 app.Registro = Backbone.Model.extend({
 	defaults: {

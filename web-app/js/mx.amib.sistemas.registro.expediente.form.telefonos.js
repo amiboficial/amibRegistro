@@ -5,7 +5,7 @@ app.EXP_TEL_VALIDATED = 1;
 
 app.EXP_TEL_ERRMSG_NOLADA = "EXP_TEL_ERRMSG_NOLADA";
 
-app.EXP_TEL_ERRMSG_NOTELS = "EXP_TEL_ERRMSG_NOTELS";
+app.EXP_TEL_ERRMSG_NOTELS = "Debe haber al menos un telefono";
 
 app.Telefono = Backbone.Model.extend({
 	defaults: {

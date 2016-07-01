@@ -4,10 +4,10 @@ app.EXP_SEPOMEX_OPEN = 0;
 app.EXP_SEPOMEX_VALIDATED = 1;
 app.EXP_SEPOMEX_PROCESSING = 2;
 
-app.EXP_SEPOMEX_ERRMSG_NOASEN = "EXP_SEPOMEX_ERRMSG_NOASEN";
-app.EXP_SEPOMEX_ERRMSG_NOCALLE = "EXP_SEPOMEX_ERRMSG_NOCALLE";
-app.EXP_SEPOMEX_ERRMSG_NONUMEXT = "EXP_SEPOMEX_ERRMSG_NONUMEXT";
-app.EXP_SEPOMEX_ERRMSG_NONUMINT = "EXP_SEPOMEX_ERRMSG_NONUMINT";
+app.EXP_SEPOMEX_ERRMSG_NOASEN = "Debe seleccionar un valor en el campo asentamiento";
+app.EXP_SEPOMEX_ERRMSG_NOCALLE = "Introduzca datos en el campo calle";
+app.EXP_SEPOMEX_ERRMSG_NONUMEXT = "Introduzca datos en el campo número exterior";
+app.EXP_SEPOMEX_ERRMSG_NONUMINT = "EXP_SEPOMEX_ERRMSG_NONUMINT";//no se usa
 
 app.Domicilio = Backbone.Model.extend({
 	defaults: {

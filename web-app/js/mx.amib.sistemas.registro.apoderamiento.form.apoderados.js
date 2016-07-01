@@ -4,7 +4,7 @@ app.APODERADOS_READY = 0;
 app.APODERADOS_VALIDATED = 1;
 app.APODERADOS_PROC = 2;
 
-app.APODERADOS_ERRMSG_NOAPOINLIST = "APODERADOS_ERRMSG_NOAPOINLIST";
+app.APODERADOS_ERRMSG_NOAPOINLIST = "El listado de apoderados esta vacío, debe agregar al menos un apoderado";
 
 app.APODERADOS_ERRMSG_NMINVALID = "Número de matrícula no válido"; //NUMERO DE MATRICULA NO VALIDO
 app.APODERADOS_ERRMSG_NOTFOUND = "No encontrado"; //NO ENCONTRADO

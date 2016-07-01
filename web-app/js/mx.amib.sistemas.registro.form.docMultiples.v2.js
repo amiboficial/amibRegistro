@@ -4,15 +4,15 @@ app.DOCMULTI2_READY = 0;
 app.DOCMULTI2_VALIDATED = 1;
 app.DOCMULTI2_PROC = 2;
 
-app.DOCMULTI2_ERRMSG_NOINPUT = "DOCMULTI2_ERRMSG_NOINPUT"; //no ha introducido información del tipo ni y/o el archivo
-app.DOCMULTI2_ERRMSG_ERRUPLD = "DOCMULTI2_ERRMSG_ERRUPLD"; //error al subir archivo (general)
+app.DOCMULTI2_ERRMSG_NOINPUT = "No ha introducido información del tipo ni y/o el archivo"; //no ha introducido información del tipo ni y/o el archivo
+app.DOCMULTI2_ERRMSG_ERRUPLD = "Error al subir archivo "; //error al subir archivo (general)
 app.DOCMULTI2_ERRMSG_MAXSIZE = "DOCMULTI2_ERRMSG_MAXSIZE"; //tamaño máximo de archivo superado
 app.DOCMULTI2_ERRMSG_TYPE_NOT_ALLOWED = "DOCMULTI2_ERRMSG_TYPE_NOT_ALLOWED"; //tipo de archivo no permitido
-app.DOCMULTI2_ERRMSG_CANT_MAX = "DOCMULTI2_ERRMSG_CANT_MAX"; //se ha sobrepasado la cantidad máxima de documentos del mismo tipo permitidos
+app.DOCMULTI2_ERRMSG_CANT_MAX = "Se ha sobrepasado la cantidad máxima de documentos del mismo tipo permitidos"; //se ha sobrepasado la cantidad máxima de documentos del mismo tipo permitidos
 app.DOCMULTI2_ERRMSG_ERRMSG_EPROC = "DOCMULTI2_ERRMSG_ERRMSG_EPROC"; //error al procesar la peticion
 
-app.DOCMULTI2_ERRMSG_SUBMITVAL = "DOCMULTI2_ERRMSG_SUBMITVAL"; //mensaje de validación al hacer submit
-app.DOCMULTI2_ERRMSG_CANT_REQ = "DOCMULTI2_ERRMSG_CANT_REQ"; //no se cumplió con la cantidad de documentos requeridos
+app.DOCMULTI2_ERRMSG_SUBMITVAL = "Se han detectado errores en los campos del formulario. Verifique cada campo según corresponda."; //mensaje de validación al hacer submit
+app.DOCMULTI2_ERRMSG_CANT_REQ = "No se cumplió con la cantidad de documentos requeridos"; //no se cumplió con la cantidad de documentos requeridos
 
 /*app.TipoDocumento = Backbone.Model.extend ({
 	defaults: {

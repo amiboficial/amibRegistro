@@ -15,26 +15,26 @@ app.PODER_NUMESC_NON_AVAILABLE = 2;
 app.PODER_NUMESC_NONCHECKED = 3;
 app.PODER_NUMESC_CHECKING = 4;
 
-app.PODER_ERRMSG_NUMESC_NON_AVAILABLE = "PODER_ERRMSG_NUMESC_NON_AVAILABLE";
-app.PODER_ERRMSG_NUMESC_NONCHECKED = "PODER_ERRMSG_NUMESC_NONCHECKED";
+app.PODER_ERRMSG_NUMESC_NON_AVAILABLE = "El número de escritura no está disponible";
+app.PODER_ERRMSG_NUMESC_NONCHECKED = "El número de escritura no está revisado";
 
-app.PODER_ERRMSG_INSTIT_REQUESTERROR = "PODER_ERRMSG_INSTIT_REQUESTERROR";
+app.PODER_ERRMSG_INSTIT_REQUESTERROR = "Ocurrió un error en la petición de la lista de instituciones";
 
-app.PODER_ERRMSG_NUMNOTARIO_NOVALID = "PODER_ERRMSG_NUMNOTARIO_NOVALID";
-app.PODER_ERRMSG_NOTARIO_NOTFOUND = "PODER_ERRMSG_NOTARIO_NOTFOUND";
-app.PODER_ERRMSG_NOTARIO_REQUESTERROR = "PODER_ERRMSG_NOTARIO_REQUESTERROR";
+app.PODER_ERRMSG_NUMNOTARIO_NOVALID = "El número de notario no es válido";
+app.PODER_ERRMSG_NOTARIO_NOTFOUND = "No se encontro ningun notario";
+app.PODER_ERRMSG_NOTARIO_REQUESTERROR = "Ocurrió un error en la petición del notario";
 
-app.PODER_ERRMSG_NUMESCREP = "PODER_ERRMSG_NONUMESCREP"; //El número de escritura no ha sido validado correctamente
+app.PODER_ERRMSG_NUMESCREP = "El número de escritura no ha sido validado correctamente"; //El número de escritura no ha sido validado correctamente
 
-app.PODER_ERRMSG_NOVALID = "PODER_ERRMSG_NOVALID";
-app.PODER_ERRMSG_NOGPOFIN = "PODER_ERRMSG_NOGPOFIN";
-app.PODER_ERRMSG_NORLNOM = "PODER_ERRMSG_NORLNOM";
-app.PODER_ERRMSG_NORLAP1 = "PODER_ERRMSG_NORLAP1";
-app.PODER_ERRMSG_NUMESC_NOVALID = "PODER_ERRMSG_NONUMESC_NOVALID";
-app.PODER_ERRMSG_NONUMESC = "PODER_ERRMSG_NONUMESC";
-app.PODER_ERRMSG_NOFECAP = "PODER_ERRMSG_NOFECAP";
-app.PODER_ERRMSG_NONOTARIO = "PODER_ERRMSG_NONOTARIO";
-app.PODER_ERRMSG_NODOCRESP = "PODER_ERRMSG_NODOCRESP";
+app.PODER_ERRMSG_NOVALID = "Se han detectado errores de entrada en los campos del formulario. Verifique cada campo según corresponda.";
+app.PODER_ERRMSG_NOGPOFIN = "Debe seleccionar un valor en el campo grupo financiero";
+app.PODER_ERRMSG_NORLNOM = "Introduzca datos en el campo nombre del representante legal";
+app.PODER_ERRMSG_NORLAP1 = "Introduzca datos en el campo primer apellido del representante legal";
+app.PODER_ERRMSG_NUMESC_NOVALID = "El número de escritura tiene un formato invalido, solo debe contener números";
+app.PODER_ERRMSG_NONUMESC = "Introduzca datos en el campo numero de escritura";
+app.PODER_ERRMSG_NOFECAP = "Debe seleccionar un valor en el campo fecha de aporderamiento";
+app.PODER_ERRMSG_NONOTARIO = "Debe seleccionar un valor en el campo nombre del notario";
+app.PODER_ERRMSG_NODOCRESP = "PODER_ERRMSG_NODOCRESP";//no usado
 
 app.Poder = Backbone.Model.extend ({
 	defaults: {

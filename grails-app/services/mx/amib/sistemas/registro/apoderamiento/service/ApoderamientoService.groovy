@@ -81,6 +81,51 @@ class ApoderamientoService {
 		
 		return s
 	}
+	
+	SustentanteTO obtenerApoderableInstitucion(int numeroMatricula, int idGrupoFinanciero){
+		SustentanteTO s = sustentanteService.findByMatricula(numeroMatricula)
+		boolean isApoderable = false
+		
+		//CARGA DE DATOS DE PODER
+		def intitucionactual = 0
+		def apoderadoResult
+		def ultimaCertificacion
+		PoderTO poderInstance
+		List<ApoderadoTO> apoderaminetosUltimaCertificacion
+		Map<Long,Boolean> apoderamientosRevocados
+		def ultimoPoderValido = null
+		//todos los apoderamientos de todas las certificaciones
+		apoderadoResult = apoderadoService.findAllByIdCertificacionIn( new HashSet<Long>(s.certificaciones.collect{ it.id.value }.asList()) )
+		//obtiene la ultima certificacion
+		ultimaCertificacion = s.certificaciones.find{ it.isUltima == true }
+		//obtiene todos los apoderamientos correspondientes a esa ultima certificacion
+		apoderaminetosUltimaCertificacion = apoderadoResult.apoderados.findAll{ it.idCertificacion.value == ultimaCertificacion.id.value }
+		//obtiene los estatus de revocacion correspondiente a todas los apoderamientos de las certificaiones
+		apoderamientosRevocados = revocadoService.containsRevocados( new HashSet<Long>( apoderadoResult.apoderados.collect{ it.id } ) )
+		//obtiene el apoderamiento que no ha sido revocado
+		apoderaminetosUltimaCertificacion.each{ x ->
+			if( apoderamientosRevocados.containsKey( x.id.value ) ){
+				if(apoderamientosRevocados.get( x.id.value ) == false){
+					ultimoPoderValido = apoderadoResult.poderes.find{ it.id.value == x.idPoder.value }
+				}
+			}
+		}
+		if(s != null){
+			if(s.certificaciones.size() > 0){
+				CertificacionTO c = s.certificaciones.find{ it.isUltima }
+				if(c.statusAutorizacion.id.value == StatusAutorizacionTypes.AUTORIZADO_SIN_PODERES){
+					isApoderable = true
+				}
+				else if(c.statusAutorizacion.id.value == StatusAutorizacionTypes.AUTORIZADO && ultimoPoderValido != null && ultimoPoderValido.idGrupoFinanciero == idGrupoFinanciero){
+					isApoderable = true
+				}
+			}
+		}
+		if(!isApoderable) s = null
+		
+		return s
+	}
+	
 	PoderTO editarDatosPoder(PoderTO poder) {
 		def modobj = poderService.get(poder.id)
 		//Edita solo los datos de poder y no sus apoderados

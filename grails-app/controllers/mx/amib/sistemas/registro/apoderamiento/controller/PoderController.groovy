@@ -185,6 +185,7 @@ class PoderController {
 			flash.successMessage = "El poder con el número de escritura " + poder.numeroEscritura + " ha sido dado de alta [ID:" + poder.id + "]"
 		}
 		catch(Exception e){
+			e.printStackTrace()
 			flash.errorMessage = "Ha ocurrido un error al dar de alta el poder"
 		}
 		
@@ -224,12 +225,23 @@ class PoderController {
 	
 	def getApoderable(){
 		int numeroMatricula = -1
+		int idGrupoFinanciero = -1
 		def res = null
 		SustentanteTO sustentanteApoderable = null
 		
 		try{
 			numeroMatricula = Integer.parseInt(params.'numeroMatricula'?:"-1")
+			idGrupoFinanciero = Integer.parseInt(params.'idGrupoFinanciero'?:"-1")
+			if(idGrupoFinanciero != null && idGrupoFinanciero > 0){
+			sustentanteApoderable = apoderamientoService.obtenerApoderableInstitucion(numeroMatricula,idGrupoFinanciero)
+			}
+			else{
 			sustentanteApoderable = apoderamientoService.obtenerApoderable(numeroMatricula)
+			}
+			if(sustentanteApoderable != null){
+			println("sustentanteApoderable" )
+			println(sustentanteApoderable as JSON)
+			}
 			//bloque de codigo para determinar el nombre de la institucion a la que pertenece actualmente
 			def puestoActual
 			if(sustentanteApoderable != null && sustentanteApoderable.puestos != null && !sustentanteApoderable.puestos.isEmpty()){

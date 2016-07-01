@@ -20,13 +20,24 @@
 		
 		<div class="div-idGrupoFinanciero form-group">
 			<label class="col-md-2 col-sm-3 control-label">
+				<span class="required-indicator">&nbsp;</span>
+			</label>
+
+			<div class="col-md-9 col-sm-9 alert-warningNotFound alert alert-warning" style="display: block;">
+				<span class="glyphicon glyphicon-info-sign"></span>&nbsp;<g:message code="search.group.warning" default="Nota: Los apoderados están ligados al grupo financiero seleccionado. Si se modifica el grupo financiero, se ELIMINARÁN los apoderados agregados en la pestaña 'Datos de los apoderados'" />
+			</div>
+		</div>
+
+		<div class="div-idGrupoFinanciero form-group">
+			<label class="col-md-2 col-sm-3 control-label">
 				<g:message code="poder.groupoFinanciero.label" default="Grupo financiero" /><span class="required-indicator">*</span>
 			</label>
 			<div class="col-md-9 col-sm-9">
 				<g:select class="field idGrupoFinanciero form-control" name='poder.idGrupoFinanciero' value="{{=idGrupoFinanciero}}"
 				noSelection="${['-1':'-Seleccione-']}"
 				from='${viewModelInstance.gruposFinancieroList}'
-				optionKey="id" optionValue="nombre" data-field="idGrupoFinanciero"></g:select>
+				optionKey="id" optionValue="nombre" data-field="idGrupoFinanciero"
+				onchange="habilitarBusquedaGrupoFin(this);"></g:select>
 			</div>
 		</div>
 		

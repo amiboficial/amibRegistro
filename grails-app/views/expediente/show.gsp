@@ -294,6 +294,10 @@
 								<div class="col-sm-4"><p class="form-control-static">${x?.dga}&nbsp;</p></div>
 							</div>
 							<div class="figuraRow row">
+								<label class="col-sm-3 control-label">Numero de Oficio </label>
+								<div class="col-sm-4"><p class="form-control-static">${x?.numeroOficio}&nbsp;</p></div>
+							</div>
+							<div class="figuraRow row">
 								<label class="col-sm-3 control-label">Fecha de obtención</label>
 								<div class="col-sm-4"><p class="form-control-static"><g:formatDate format="dd-MM-yyyy" date="${x?.fechaObtencion}"/>&nbsp;</p></div>
 							</div>
@@ -396,7 +400,11 @@
 							</label>
 							
 				            <div class="col-md-9 col-sm-9">						
-								<p class="form-control-static">${viewModelInstance?.institucionesPoderesMap?.get( viewModelInstance?.poderInstance?.idInstitucion ).grupoFinanciero?.nombre}</p>
+								<p class="form-control-static">
+									<g:if test="${viewModelInstance?.institucionesPoderesMap?.get( viewModelInstance?.poderInstance?.idInstitucion ) != null}">
+										${viewModelInstance?.institucionesPoderesMap?.get( viewModelInstance?.poderInstance?.idInstitucion ).grupoFinanciero?.nombre}
+									</g:if>
+								</p>
 				            </div>
 						</div>
 						
@@ -405,7 +413,9 @@
 				            	<g:message code="poder.institucion.label" default="Institución" />
 							</label>
 							<div class="col-md-9 col-sm-9">
-								<p class="form-control-static">${viewModelInstance?.institucionesPoderesMap?.get( viewModelInstance?.poderInstance?.idInstitucion ).nombre}</p>
+									<g:if test="${viewModelInstance?.institucionesPoderesMap?.get( viewModelInstance?.poderInstance?.idInstitucion ) != null}">
+										<p class="form-control-static">${viewModelInstance?.institucionesPoderesMap?.get( viewModelInstance?.poderInstance?.idInstitucion ).nombre}</p>
+									</g:if>
 							</div>
 						</div>
 						

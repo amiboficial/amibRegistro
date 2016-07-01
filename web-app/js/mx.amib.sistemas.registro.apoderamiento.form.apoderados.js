@@ -75,6 +75,13 @@ app.ApoderadosView = Backbone.View.extend({
 		//this.listenTo( this.collection, 'add', this.renderElement );
 	},
 	
+	resetCollection: function( ){
+		this.collection = new app.Apoderados();
+		this.model = new app.Apoderado();
+		this.render();
+		//this.listenTo( this.collection, 'add', this.renderElement );
+	},
+	
 	events: {
 		'change .numeroMatriculaBuscar':'buscarApoderable',
 		'click .add':'agregarApoderable',
@@ -226,6 +233,7 @@ app.ApoderadosView = Backbone.View.extend({
 		var numericRegEx = /^[0-9]{1,10}$/;
 
 		var numeroMatricula = $(".numeroMatriculaBuscar").val().trim();
+		var idGrupoFinanciero = $(".idGrupoFinanciero").val();
 
 		if( !numericRegEx.test(numeroMatricula) ){
 			//console.log("NO PASO LA 1ERA VALIDACION");
@@ -248,7 +256,9 @@ app.ApoderadosView = Backbone.View.extend({
 					view.clearErrorBusqueda();
 					view.setProcessing();
 				},
-				data: { numeroMatricula:numeroMatricula }
+				data: { numeroMatricula:numeroMatricula,
+						idGrupoFinanciero:idGrupoFinanciero
+						}
 			}).done( function(data){
 				if(data.status == "OK"){
 				

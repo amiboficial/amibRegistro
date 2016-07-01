@@ -347,6 +347,7 @@ class ExpedienteController {
 						servRes = resOficios.getList()
 						if(servRes!=null && resOficios.count>0 && servRes.first().claveDga != null){
 							x.dga = resOficios.first().claveDga
+							x.numeroOficio = resOficios.first().numeroOficio
 						}
 					}
 					catch(Exception ex){

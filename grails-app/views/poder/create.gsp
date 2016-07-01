@@ -35,7 +35,11 @@
 					
 				</div>
 				<div role="tabpanel" class="tab-pane" id="tabApoderados">
-				
+				<div class="">
+				<ul style="list-style-type:none">
+					<li><span id="apoderarSameInst" class="glyphicon glyphicon-unchecked"></span> la busqueda incluye sustentantes autorizados del grupo financiero</li>
+				</ul>
+				</div>
 					<div id="divApoderados"></div>
 					
 				</div>
@@ -171,6 +175,39 @@
 			$('#spnHdnPostData').html("");
 		});
 		*/
+	</script>
+	
+	<script type="text/javascript">
+
+	function habilitarBusquedaGrupoFin(grup) {
+
+		var selected = $(grup).val();
+		if($.data(this, 'val')==undefined || $.data(this, 'val')==null || $.data(this, 'val')==""){
+			$.data(this, 'val', "-1");
+		}
+		if ($.data(this, 'val') != "-1") {
+			apoderadosView.resetCollection();
+			alert("lista de apderados eliminada satisfactoriamente");
+        }
+        $.data(this, 'val', selected);  
+		 
+	     if(grup.value=="-1"||grup.value<0){
+	    	 if($("#apoderarSameInst").hasClass('glyphicon-check')){
+	    		 $("#apoderarSameInst").removeClass('glyphicon-check');
+		   	 }
+	    	 if(!$("#apoderarSameInst").hasClass('glyphicon-unchecked')){
+	    		 $("#apoderarSameInst").addClass('glyphicon-unchecked');
+		   	 }
+		 }else{
+	    	 if($("#apoderarSameInst").hasClass('glyphicon-unchecked')){
+	    		 $("#apoderarSameInst").removeClass('glyphicon-unchecked');
+		   	 }
+	    	 if(!$("#apoderarSameInst").hasClass('glyphicon-check')){
+	    		 $("#apoderarSameInst").addClass('glyphicon-check');
+		   	 }
+		 }
+	}
+	
 	</script>
 	
 	</body>

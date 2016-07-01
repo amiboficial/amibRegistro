@@ -42,4 +42,5 @@ class CertificacionTO {
 	Date fechaEnvioComision
 	
 	String dga
+	Long numeroOficio
 }

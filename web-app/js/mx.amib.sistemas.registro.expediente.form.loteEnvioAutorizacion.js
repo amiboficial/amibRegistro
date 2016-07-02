@@ -17,6 +17,9 @@ app.LoteElementVM = Backbone.Model.extend({
 		nombre: "",
 		primerApellido: "",
 		segundoApellido: "",
+		fechaEntrega: "",
+		fechaEnvio: "",
+		tipoSolicitud: "",
 		
 		checked: false,
 		showing: true

@@ -101,6 +101,10 @@ app.ResultVM = Backbone.Model.extend({
 		idVarianteFigura: -1,
 		dsVarianteFigura: "",
 		
+		fechaEntrega: "",
+		fechaEnvio: "",
+		tipoSolicitud: "",
+		
 		yaEnLote: false,
 		
 		viewChecked: false,
@@ -470,6 +474,10 @@ app.ResultVMCollection = Backbone.Collection.extend({
 		elemento.set('dsFigura',result.dsFigura);
 		elemento.set('idVarianteFigura',result.idVarianteFigura);
 		elemento.set('dsVarianteFigura',result.dsVarianteFigura);
+		
+		elemento.set('fechaEntrega',result.fechaEntrega);
+		elemento.set('fechaEnvio',result.fechaEnvio);
+		elemento.set('tipoSolicitud',result.tipoSolicitud);
 		
 		elemento.set('yaEnLote',result.yaEnLote); // <- checar con los que ya estan en lote
 		elemento.set('procesando',false);

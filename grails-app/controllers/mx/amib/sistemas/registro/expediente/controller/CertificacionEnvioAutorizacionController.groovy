@@ -5,6 +5,7 @@ import java.util.Collection;
 import grails.converters.JSON
 import mx.amib.sistemas.external.catalogos.service.FiguraService
 import mx.amib.sistemas.external.catalogos.service.FiguraTO;
+import mx.amib.sistemas.external.expediente.certificacion.service.ValidacionTO
 import mx.amib.sistemas.external.expediente.service.CertificacionService
 import mx.amib.sistemas.registro.expediente.service.LoteEnvioAutorizacionService
 
@@ -74,14 +75,14 @@ class CertificacionEnvioAutorizacionController {
 		long idvarfig = Long.parseLong(params.idvarfig?:"-1")
 		
 		
-		//try{
+		try{
 			def certServRes = certificacionService.findAllEnAutorizacion(max, offset, sort, order, nom, ap1, ap2, idfig, idvarfig)
 			def ctrlActResList = ResultElementViewModel.copyFromServicesResults(certServRes, loteEnvioAutorizacionService.getSet(session.id))
 			res = [ 'status' : 'OK' , 'object' : [ 'count': certServRes.count , 'list' : ctrlActResList ] ]
-		//}
-		//catch(Exception ex){
-		//	res = [ 'status': 'ERROR', 'object': ex.message ]
-		//}
+		}
+		catch(Exception ex){
+			res = [ 'status': 'ERROR', 'object': ex.message ]
+		}
 		
 		render (res as JSON)
 	}
@@ -103,6 +104,9 @@ class CertificacionEnvioAutorizacionController {
 		long idVarianteFigura
 		String dsVarianteFigura
 		boolean yaEnLote
+		String fechaEntrega
+		String fechaEnvio
+		String tipoSolicitud
 		
 		public static List<ResultElementViewModel> copyFromServicesResults(CertificacionService.ResultSet rs, Set<Long> idsCertEnLote){
 			List<ResultElementViewModel> newResults = new ArrayList<ResultElementViewModel>()
@@ -119,6 +123,30 @@ class CertificacionEnvioAutorizacionController {
 				revm.idVarianteFigura = x.varianteFigura.id.value
 				revm.dsVarianteFigura = x.varianteFigura.nombre
 				revm.yaEnLote = idsCertEnLote.contains( new Long(revm.id) )
+				if(x.fechaEntregaRecepcion != null){
+					revm.fechaEntrega = x.fechaEntregaRecepcion.format( 'yyyy-MM-dd' )
+				}
+				else{
+					revm.fechaEntrega = ""
+				}
+				if(x.fechaEnvioComision != null){
+					revm.fechaEnvio = x.fechaEnvioComision.format( 'yyyy-MM-dd' )
+				}
+				else{
+					revm.fechaEnvio = ""
+				}
+				if(x.validaciones!= null && !x.validaciones.isEmpty()){
+					Date lastone;
+					for(ValidacionTO va: x.validaciones){
+						if(lastone==null){
+							lastone = va.fechaModificacion;
+						}else if(lastone != null && lastone<va.fechaModificacion){
+							lastone = va.fechaModificacion;
+						}
+					}
+					def lastVali = x.validaciones.find{it.fechaModificacion == lastone}
+					revm.tipoSolicitud = lastVali.metodoValidacion.descripcion
+				}
 				newResults.add(revm)
 			}
 			return newResults

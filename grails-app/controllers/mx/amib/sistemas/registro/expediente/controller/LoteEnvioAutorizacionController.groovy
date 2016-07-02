@@ -3,6 +3,7 @@ package mx.amib.sistemas.registro.expediente.controller
 import grails.converters.JSON
 import javax.servlet.ServletOutputStream
 import mx.amib.sistemas.external.expediente.certificacion.service.CertificacionTO
+import mx.amib.sistemas.external.expediente.certificacion.service.ValidacionTO
 import mx.amib.sistemas.external.expediente.service.CertificacionService
 import mx.amib.sistemas.registro.expediente.service.FormatoSolicitudAutorizacionService
 import mx.amib.sistemas.registro.expediente.service.LoteEnvioAutorizacionService
@@ -196,6 +197,9 @@ class LoteEnvioAutorizacionController {
 		String nombre
 		String primerApellido
 		String segundoApellido
+		String fechaEntrega
+		String fechaEnvio
+		String tipoSolicitud
 		
 		public static List<ResultElement> copyFromServicesResults(List<CertificacionTO> certs, String sort, String order){
 			List<ResultElement> rel = new ArrayList<ResultElement>()
@@ -209,6 +213,32 @@ class LoteEnvioAutorizacionController {
 				re.nombre = x.sustentante.nombre
 				re.primerApellido = x.sustentante.primerApellido
 				re.segundoApellido = x.sustentante.segundoApellido
+				
+				if(x.fechaEntregaRecepcion != null){
+					re.fechaEntrega = x.fechaEntregaRecepcion.format( 'yyyy-MM-dd' )
+				}
+				else{
+					re.fechaEntrega = ""
+				}
+				if(x.fechaEnvioComision != null){
+					re.fechaEnvio = x.fechaEnvioComision.format( 'yyyy-MM-dd' )
+				}
+				else{
+					re.fechaEnvio = ""
+				}
+				if(x.validaciones!= null && !x.validaciones.isEmpty()){
+					Date lastone;
+					for(ValidacionTO va: x.validaciones){
+						if(lastone==null){
+							lastone = va.fechaModificacion;
+						}else if(lastone != null && lastone<va.fechaModificacion){
+							lastone = va.fechaModificacion;
+						}
+					}
+					def lastVali = x.validaciones.find{it.fechaModificacion == lastone}
+					re.tipoSolicitud = lastVali.metodoValidacion.descripcion
+				}
+				
 				rel.add(re)
 			}
 			

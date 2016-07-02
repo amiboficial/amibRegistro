@@ -52,6 +52,27 @@
 							<button type="button" class="sort btn btn-default btn-xxs" data-sort="segundoApellido" data-order="asc"><span class="glyphicon glyphicon-chevron-up"></span></button>
 							<button type="button" class="sort btn btn-default btn-xxs" data-sort="segundoApellido" data-order="desc"><span class="glyphicon glyphicon-chevron-down"></span></button>
 						</th>
+						<th>
+						Fecha de Entrega 
+							<%--
+							<button type="button" class="sort btn btn-default btn-xxs" data-sort="segundoApellido" data-order="asc"><span class="glyphicon glyphicon-chevron-up"></span></button>
+							<button type="button" class="sort btn btn-default btn-xxs" data-sort="segundoApellido" data-order="desc"><span class="glyphicon glyphicon-chevron-down"></span></button>
+							--%>
+						</th>
+						<th>
+						Fecha de Envio
+							<%--
+							<button type="button" class="sort btn btn-default btn-xxs" data-sort="segundoApellido" data-order="asc"><span class="glyphicon glyphicon-chevron-up"></span></button>
+							<button type="button" class="sort btn btn-default btn-xxs" data-sort="segundoApellido" data-order="desc"><span class="glyphicon glyphicon-chevron-down"></span></button>
+							--%>
+						</th>
+						<th>
+						Tipo de Solicitud
+							<%--
+							<button type="button" class="sort btn btn-default btn-xxs" data-sort="segundoApellido" data-order="asc"><span class="glyphicon glyphicon-chevron-up"></span></button>
+							<button type="button" class="sort btn btn-default btn-xxs" data-sort="segundoApellido" data-order="desc"><span class="glyphicon glyphicon-chevron-down"></span></button>
+							--%>
+						</th>
 					</tr>
 				</thead>
 				
@@ -76,4 +97,7 @@
 	<td class="check handCursor">{{=nombre}}</td>
 	<td class="check handCursor">{{=primerApellido}}</td>
 	<td class="check handCursor">{{=segundoApellido}}</td>
+	<td class="check handCursor">{{=fechaEntrega}}</td>
+	<td class="check handCursor">{{=fechaEnvio}}</td>
+	<td class="check handCursor">{{=tipoSolicitud}}</td>
 </script>

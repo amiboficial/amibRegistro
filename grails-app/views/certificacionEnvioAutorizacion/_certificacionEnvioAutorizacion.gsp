@@ -171,6 +171,9 @@
 	<td class="check handCursor">{{=nombre}}</td>
 	<td class="check handCursor">{{=primerApellido}}</td>
 	<td class="check handCursor">{{=segundoApellido}}</td>
+	<td class="check handCursor">{{=fechaEntrega}}</td>
+	<td class="check handCursor">{{=fechaEnvio}}</td>
+	<td class="check handCursor">{{=tipoSolicitud}}</td>
 	<td style="width:1px;white-space:nowrap">
 		{{ if(yaEnLote==false && procesando==false){ }}
 			<button class="send btn btn-default btn-xs" data-id="{{=grailsId}}">Enviar a lote de envio</button>
@@ -231,6 +234,27 @@
 						${message(code: 'expediente.segundoApellido.label', default: '2do Apellido')} 
 							<button type="button" class="sort btn btn-default btn-xxs" data-sort="segundoApellido" data-order="asc"><span class="sort handCursor glyphicon glyphicon-chevron-up"></span></button>
 							<button type="button" class="sort btn btn-default btn-xxs" data-sort="segundoApellido" data-order="desc"><span class="sort handCursor glyphicon glyphicon-chevron-down"></span></button>
+						</th>
+						<th>
+						${message(code: 'expediente.fechaEntrega.label', default: 'Fecha de Entrega')} 
+							<%--
+							<button type="button" class="sort btn btn-default btn-xxs" data-sort="fechaEntrega" data-order="asc"><span class="sort handCursor glyphicon glyphicon-chevron-up"></span></button>
+							<button type="button" class="sort btn btn-default btn-xxs" data-sort="fechaEntrega" data-order="desc"><span class="sort handCursor glyphicon glyphicon-chevron-down"></span></button>
+							--%>
+						</th>
+						<th>
+						${message(code: 'expediente.fechaEnvio.label', default: 'Fecha de Envio')} 
+							<%--
+							<button type="button" class="sort btn btn-default btn-xxs" data-sort="fechaEnvio" data-order="asc"><span class="sort handCursor glyphicon glyphicon-chevron-up"></span></button>
+							<button type="button" class="sort btn btn-default btn-xxs" data-sort="fechaEnvio" data-order="desc"><span class="sort handCursor glyphicon glyphicon-chevron-down"></span></button>
+							--%>
+						</th>
+						<th>
+						${message(code: 'expediente.tipoSolicitud.label', default: 'Tipo de Solicitud')} 
+							<%--
+							<button type="button" class="sort btn btn-default btn-xxs" data-sort="tipoSolicitud" data-order="asc"><span class="sort handCursor glyphicon glyphicon-chevron-up"></span></button>
+							<button type="button" class="sort btn btn-default btn-xxs" data-sort="tipoSolicitud" data-order="desc"><span class="sort handCursor glyphicon glyphicon-chevron-down"></span></button>
+							--%>
 						</th>
 						<th>...</th>
 					</tr>

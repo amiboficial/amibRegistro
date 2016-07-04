@@ -24,8 +24,8 @@
                 <a href="<g:createLink controller="revocacion" action="index" />" class="list-group-item"><span class="glyphicon glyphicon-share-alt"></span>&nbsp;Revocaciones</a>
                 <a href="<g:createLink controller="oficioCnbv" action="index" />" class="list-group-item"><span class="glyphicon glyphicon-file"></span>&nbsp;Oficios CNBV</a>
             	<a class="list-group-item colortitle"><strong>Movimientos de personal</strong></a>
-            	<a href="<g:createLink controller="bajaPersonal" action="create" />" class="list-group-item"><span class="glyphicon glyphicon-open"></span>&nbsp;Baja en Institución</a>
-                <a href="<g:createLink controller="altaPersonal" action="create" />" class="list-group-item"><span class="glyphicon glyphicon-share-alt"></span>&nbsp;Alta en Institución</a>
+            	<a href="<g:createLink controller="bajaPersonal" action="create" />" class="list-group-item"><span class="glyphicon glyphicon-hand-down"></span>&nbsp;Baja en Institución</a>
+                <a href="<g:createLink controller="altaPersonal" action="create" />" class="list-group-item"><span class="glyphicon glyphicon-hand-up"></span>&nbsp;Alta en Institución</a>
                
                 
                 <!-- ESTO SE PUEDE USAR MAS ADELANTE PARA SOLICITUDES

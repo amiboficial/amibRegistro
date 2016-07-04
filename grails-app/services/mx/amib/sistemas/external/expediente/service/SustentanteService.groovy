@@ -511,7 +511,10 @@ class SustentanteService {
 		sustentante.puestos = new ArrayList<PuestoTO>()
 		data.'puestos'.each {
 			PuestoTO p = new PuestoTO()
-			p.id = it.'id'
+			if(!JSONObject.NULL.equals(it.'id')){p.id = Long.parseLong(it.'id'.toString())}
+			else{
+				p.id = -1
+			}
 			
 			p.idInstitucion = it.'idInstitucion'
 			if(!JSONObject.NULL.equals(it.'fechaInicio')) p.fechaInicio = df.parse(it.'fechaInicio'.substring(0,10))

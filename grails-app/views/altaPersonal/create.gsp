@@ -14,7 +14,7 @@
 		<li><a href="#">Baja en Institución</a></li>
 		<li><a href="<g:createLink controller="bajaPersonal" action="create" />">Búsqueda de candidatos a proceso</a></li>
 	</ul>
-	<h2><strong>Movimientos de personal - Baja en Institución</strong></h2>
+	<h2><strong>Movimientos de personal - Alta en Institución</strong></h2>
 
 	<g:if test="${flash.message}">
 		<div class="alert alert-info"><span class="glyphicon glyphicon-info-sign"></span> ${flash.message}</div>
@@ -28,9 +28,8 @@
 		<div class="alert alert-danger"><span class="glyphicon glyphicon-info-sign"></span> ${flash.errorMessage}</div>
 	</g:if>
 	
-	<form id="frmApp" class="form-horizontal" role="form" action='<g:createLink controller="bajaPersonal" action="save"/>' method="post">
+	<form id="frmApp" class="form-horizontal" role="form" action='<g:createLink controller="altaPersonal" action="save"/>' method="post">
 	<input type="hidden" name="bajaMatricula" value="" />
-		<div class="alert alert-info"><span class="glyphicon glyphicon-info-sign"></span> Revise y, en caso de ser necesario, rectifique la información del solicitante del cual solicitará autorización. Una vez que toda la información proporcionada este completa, vaya la pestaña "Aplicar proceso" y seleccione confirmar para completar.</div>
 	<div class="alert-processing alert alert-info" style="display:none;"><asset:image src="spinner_alert_info.gif"/>&nbsp; Procesando datos, espere unos instantes...</div>
 		
 	
@@ -86,7 +85,7 @@
 			<br/>
 				<div class="list-group-item">
 					<div class="row" style="padding-left:0.75em;">
-						<button type="button" class="add btn btn-success " style="display: none;"><span class="glyphicon glyphicon-plus"></span> Baja de Institución</button>
+						<button type="button" class="add btn btn-success " style="display: none;"><span class="glyphicon glyphicon-plus"></span> Alta en Institución</button>
 					</div>
 					<div id="newjobContainer"  style="display:none;">
 					<div class="form-group div-idInstitucion">
@@ -94,8 +93,11 @@
 			<g:message code="puesto.idInstitucion.label" default="Intermediario del mercado de valores o asesor de inversión contratante en que labora" />
 		</label>
 		<div class="col-md-8 col-sm-9">
-				<select class="form-control" data-field="idInstitucion" disabled="true">
-					<option value="-1">-Sin Institucion-</option>
+				<select class="form-control" data-field="idInstitucion" name="idInstitucion">
+					<option value="-1">-Seleccione-</option>
+					<g:each var="x" in="${intList}">
+							<option value="${x.id}">${x.nombre}</option>
+					</g:each>
 				</select>
 		</div>
 	</div>
@@ -104,7 +106,64 @@
 			<g:message code="puesto.fechaInicio.label" default="Fecha a partir de la cual labora" />
 		</label>
 		<div class="col-md-5 col-sm-5">
-				<p class="form-control-static">${new Date().format( 'dd/MM/yyyy' )}</p>
+				<select style="width: 28%;" class="form-control col-md-4 fechaInicio_day field"
+				 data-field="fechaInicio_day" name="fechaInicio_day">
+							<option value="-1">-Seleccione-</option>
+							<option value="1">1</option>
+							<option value="2">2</option>
+							<option value="3">3</option>
+							<option value="4">4</option>
+							<option value="5">5</option>
+							<option value="6">6</option>
+							<option value="7">7</option>
+							<option value="8">8</option>
+							<option value="9">9</option>
+							<option value="10">10</option>
+							<option value="11">11</option>
+							<option value="12">12</option>
+							<option value="13">13</option>
+							<option value="14">14</option>
+							<option value="15">15</option>
+							<option value="16">16</option>
+							<option value="17">17</option>
+							<option value="18">18</option>
+							<option value="19">19</option>
+							<option value="20">20</option>
+							<option value="21">21</option>
+							<option value="22">22</option>
+							<option value="23">23</option>
+							<option value="24">24</option>
+							<option value="25">25</option>
+							<option value="26">26</option>
+							<option value="27">27</option>
+							<option value="28">28</option>
+							<option value="29">29</option>
+							<option value="30">30</option>
+							<option value="31">31</option>
+				</select>
+				<select style="width: 38%;" class="form-control col-md-4 fechaInicio_month field" 
+				data-field="fechaInicio_month" name="fechaInicio_month">
+							<option value="-1">-Seleccione-</option>
+							<option value="1">enero</option>
+							<option value="2">febrero</option>
+							<option value="3">marzo</option>
+							<option value="4">abril</option>
+							<option value="5">mayo</option>
+							<option value="6">junio</option>
+							<option value="7">julio</option>
+							<option value="8">agosto</option>
+							<option value="9">septiembre</option>
+							<option value="10">octubre</option>
+							<option value="11">noviembre</option>
+							<option value="12">diciembre</option>
+				</select>
+				<select style="width: 34%;" class="form-control col-md-4 fechaInicio_year field"
+				 data-field="fechaInicio_year" name="fechaInicio_year">
+					<option value="-1">-Seleccione-</option>
+					<g:each var="number" in="${(1950..2050)}">
+					    <option value="${number}">${number}</option>
+					</g:each>
+				</select>
 		</div>
 	</div>
 	<div class="form-group div-fechaFin">
@@ -112,7 +171,64 @@
 			<g:message code="puesto.fechaFin.label" default="Fecha fin de labores" />
 		</label>
 		<div class="col-md-5 col-sm-5">
-			<p class="form-control-static">(Puesto Actual)</p>
+			<select style="width: 28%;" class="form-control col-md-4 fechaFin_day field" data-field="fechaFin_day"
+			name="fechaFin_day">
+					<option value="-1">-Seleccione-</option>
+							<option value="1">1</option>
+							<option value="2">2</option>
+							<option value="3">3</option>
+							<option value="4">4</option>
+							<option value="5">5</option>
+							<option value="6">6</option>
+							<option value="7">7</option>
+							<option value="8">8</option>
+							<option value="9">9</option>
+							<option value="10">10</option>
+							<option value="11">11</option>
+							<option value="12">12</option>
+							<option value="13">13</option>
+							<option value="14">14</option>
+							<option value="15">15</option>
+							<option value="16">16</option>
+							<option value="17">17</option>
+							<option value="18">18</option>
+							<option value="19">19</option>
+							<option value="20">20</option>
+							<option value="21">21</option>
+							<option value="22">22</option>
+							<option value="23">23</option>
+							<option value="24">24</option>
+							<option value="25">25</option>
+							<option value="26">26</option>
+							<option value="27">27</option>
+							<option value="28">28</option>
+							<option value="29">29</option>
+							<option value="30">30</option>
+							<option value="31">31</option>
+				</select>
+				<select style="width: 38%;" class="form-control col-md-4 fechaFin_month field" data-field="fechaFin_month"
+				name="fechaFin_month">
+					<option value="-1">-Seleccione-</option>
+							<option value="1">enero</option>
+							<option value="2">febrero</option>
+							<option value="3">marzo</option>
+							<option value="4">abril</option>
+							<option value="5">mayo</option>
+							<option value="6">junio</option>
+							<option value="7">julio</option>
+							<option value="8">agosto</option>
+							<option value="9">septiembre</option>
+							<option value="10">octubre</option>
+							<option value="11">noviembre</option>
+							<option value="12">diciembre</option>
+				</select>
+				<select style="width: 34%;" class="form-control col-md-4 fechaFin_year field" data-field="fechaFin_year"
+				name="fechaFin_year" >
+					<option value="-1">-Seleccione-</option>
+					<g:each var="number" in="${(1950..2050)}">
+					    <option value="${number}">${number}</option>
+					</g:each>
+				</select>
 		</div>
 	</div>
 	<div class="form-group div-nombrePuesto">
@@ -120,7 +236,7 @@
 			<g:message code="puesto.nombrePuesto.label" default="Puesto" />
 		</label>
 		<div class="col-md-8 col-sm-9">
-				<input type="text" class="form-control" data-field="nombrePuesto" value="Baja institución" disabled="true"/>
+				<input type="text" class="form-control" data-field="nombrePuesto" value="" name="nombrePuesto"/>
 		</div>
 	</div>
 
@@ -129,21 +245,47 @@
 			<g:message code="puesto.statusEntManifProtesta.label" default="Manifestación ''bajo protesta de decir la verdad'' de acuerdo al formato entregado por AMIB" />
 		</label>
 		<div class="col-md-8 col-sm-9">
-				<select class="form-control " data-field="statusEntManifProtesta" disabled="true">
-					<option value="0" selected>No aplica</option>	
+				<select class="form-control " data-field="statusEntManifProtesta"
+				name="statusEntManifProtesta" >
+					<option value="-1">-Seleccione-</option>
+					<option value="0">No aplica</option>	
+					<option value="1">Entregó</option>
+					<option value="2">No entregó</option>
 				</select>
 		</div>
 	</div>
+	<div class="form-group div-obsEntManifProtesta">
+			<label class="col-md-2 col-sm-3 control-label">
+				(Observaciones)
+			</label>
+			<div class="col-md-10 col-sm-9">
+				<input type="text" class="obsEntManifProtesta form-control field" data-field="obsEntManifProtesta" value=""
+				name="obsEntManifProtesta" >
+			</div>
+		</div>
 	<div class="form-group div-statusEntCartaInter">
 		<label class="col-md-4 col-sm-3 control-label">
 			<g:message code="puesto.statusEntCartaInter.label" default="Cartas de los intermediarios del mercado de valores o asesores de inversión relativas a su contratación" />
 		</label>
 		<div class="col-md-8 col-sm-9">
-				<select class="form-control" data-field="statusEntCartaInter" disabled="true">
-					<option value="0" selected>No aplica</option>	
+				<select class="form-control" data-field="statusEntCartaInter"
+				name="statusEntCartaInter" >
+					<option value="-1">-Seleccione-</option>
+					<option value="0">No aplica</option>	
+					<option value="1">Entregó</option>
+					<option value="2">No entregó</option>
 				</select>
 		</div>
 	</div>
+	<div class="form-group">
+			<label class="col-md-2 col-sm-3 control-label">
+				(Observaciones)
+			</label>
+			<div class="col-md-10 col-sm-9">
+				<input type="text" class="obsEntCartaInter form-control field" data-field="obsEntCartaInter" value=""
+				name="obsEntCartaInter" >
+			</div>
+		</div>
 					<div class="row">
 						<div style="text-align:center; margin-top: 0.75em;">
 							<button type="button" class="save btn btn-info"><span class="glyphicon glyphicon-floppy-disk"></span> Guardar nuevo</button>
@@ -224,6 +366,14 @@
 	
 	</form>
 <Script>
+Institucion = function(id,nombre){
+	this.id = id;
+	this.nombre = nombre;
+}
+var instituciones = new Array();
+<g:each var="x" in="${intList}">
+	instituciones.push( (new Institucion(${x?.id},"${x?.nombre}")) );
+</g:each>
 
 function clearPuesto(){
 
@@ -284,7 +434,7 @@ $(".verifyNumeroMatricula").click(function(e){
 	
 	if(valid){
 		$.ajax({
-			url:  '<g:createLink controller="bajaPersonal" action="findByNumeroMatricula" />',
+			url:  '<g:createLink controller="altaPersonal" action="findByNumeroMatricula" />',
 			beforeSend: function(xhr){
 				$('.alert-processing').show();
 				clearPuesto();
@@ -304,7 +454,12 @@ $(".verifyNumeroMatricula").click(function(e){
 				var puestoCout = 0;
 				for(puestoCout = 0; puestoCout < data.object.puestos.length;puestoCout++){
 					if(data.object.puestos[puestoCout]!= null && data.object.puestos[puestoCout].esActual){
-						$('.dsInstitucion').html("");
+						for(var i=0; i<instituciones.length; i++){
+							if(instituciones[i].id == data.object.puestos[puestoCout].idInstitucion){
+								$('.dsInstitucion').html(instituciones[i].nombre);
+								break;
+							}
+						}
 						$('.fechaInicio').html(data.object.puestos[puestoCout].fechaInicio);
 						$('.fechaFin').html(data.object.puestos[puestoCout].fechaFin);
 						$('.nombrePuesto').html(data.object.puestos[puestoCout].nombrePuesto);
@@ -332,17 +487,17 @@ $(".verifyNumeroMatricula").click(function(e){
 				}//end for puestos	
 			}
 			else{
-				if(data.object == "SUSTENTANTE_NOT_FOUND"){
+				if(data.object == "ALREADY_ASIGNATED_JOB"){
 					$(".validationErrorMessage").show();
 					$(".errorMessagesContainer").html("<div class='alert alert-danger' role='alert'>"
 							+"<span class='glyphicon glyphicon-info-sign'></span>"
-							 +"no se encontro al sustentante."
+							 +"el sustentante ya cuenta con una intitución en su puesto actual."
 							 +"</div>");
 					}else{
 						$(".validationErrorMessage").show();
 						$(".errorMessagesContainer").html("<div class='alert alert-danger' role='alert'>"
 								+"<span class='glyphicon glyphicon-info-sign'></span>"
-								 +"El sustentante no cuenta autorización y apoderamiento o no tiene un puesto asociado"
+								 +"El sustentante no cuenta con un puesto asociado."
 								 +"</div>");
 					}
 			}
@@ -362,7 +517,50 @@ $(".cancelNew.btn.btn-danger").click(function(e){
 });
 
 $(".save.btn.btn-info").click(function(e){
+var valid = true;
+
+//clean errors
+	$(".validationErrorMessage").hide();
+	$(".errorMessagesContainer").html("");
+
+if($("[data-field='idInstitucion']").val()=="-1"){
+$(".validationErrorMessage").show();
+		$(".errorMessagesContainer").html("<div class='alert alert-danger' role='alert'>"
+				+"<span class='glyphicon glyphicon-info-sign'></span>"
+				 +"Debe seleccionar un valor en el campo 'Intermediario del mercado de valores o asesor de inversión contratante en que labora'"
+				 +"</div>");
+valid = false;
+}
+if($("[data-field='fechaInicio_day']").val()=="-1" || $("[data-field='fechaInicio_month']").val()=="-1"  || $("[data-field='fechaInicio_year']").val()=="-1"){
+$(".validationErrorMessage").show();
+		$(".errorMessagesContainer").html($(".errorMessagesContainer").html()+"<div class='alert alert-danger' role='alert'>"
+				+"<span class='glyphicon glyphicon-info-sign'></span>"
+				 +"Debe seleccionar un valor en el campo 'Fecha a partir de la cual labora'"
+				 +"</div>");
+valid = false;
+}
+if($("[data-field='statusEntManifProtesta']").val()=="-1"){
+$(".validationErrorMessage").show();
+		$(".errorMessagesContainer").html($(".errorMessagesContainer").html()+"<div class='alert alert-danger' role='alert'>"
+				+"<span class='glyphicon glyphicon-info-sign'></span>"
+				 +"Debe seleccionar un valor en el campo 'Manifestación ''bajo protesta de decir la verdad'' de acuerdo al formato entregado por AMIB'"
+				 +"</div>");
+valid = false;
+}
+if($("[data-field='statusEntCartaInter']").val()=="-1"){
+$(".validationErrorMessage").show();
+		$(".errorMessagesContainer").html($(".errorMessagesContainer").html()+"<div class='alert alert-danger' role='alert'>"
+				+"<span class='glyphicon glyphicon-info-sign'></span>"
+				 +"Debe seleccionar un valor en el campo 'Cartas de los intermediarios del mercado de valores o asesores de inversión relativas a su contratación'"
+				 +"</div>");
+valid = false;
+}
+if(valid){
 	$("form").submit();
+	}
+	else{
+	return;
+	}
 });
 
 </Script>

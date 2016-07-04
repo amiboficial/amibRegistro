@@ -1,6 +1,10 @@
-package mx.amib.sistemas.registro.apoderamiento.controller
+	package mx.amib.sistemas.registro.apoderamiento.controller
+
+import java.util.Collection;
 
 import grails.converters.JSON
+import mx.amib.sistemas.external.catalogos.service.EntidadFinancieraService;
+import mx.amib.sistemas.external.catalogos.service.InstitucionTO;
 import mx.amib.sistemas.external.expediente.certificacion.service.CertificacionTO
 import mx.amib.sistemas.external.expediente.persona.service.PuestoTO
 import mx.amib.sistemas.external.expediente.persona.service.SustentanteTO
@@ -9,12 +13,17 @@ import mx.amib.sistemas.external.expediente.service.SustentanteService;
 class BajaPersonalController {
 	
 	SustentanteService sustentanteService
-	
+	EntidadFinancieraService entidadFinancieraService
 	
 
     def index() { }
 	
-	def create() { }
+	def create() {
+		
+		Collection<InstitucionTO> institucionesList
+		institucionesList = entidadFinancieraService.obtenerInstituciones()
+		render( view:'create', model:[intList:institucionesList] )
+	}
 	
 	
 	def findByNumeroMatricula(){

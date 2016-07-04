@@ -30,7 +30,7 @@
 	
 	<form id="frmApp" class="form-horizontal" role="form" action='<g:createLink controller="bajaPersonal" action="save"/>' method="post">
 	<input type="hidden" name="bajaMatricula" value="" />
-		<div class="alert alert-info"><span class="glyphicon glyphicon-info-sign"></span> Revise y, en caso de ser necesario, rectifique la información del solicitante del cual solicitará autorización. Una vez que toda la información proporcionada este completa, vaya la pestaña "Aplicar proceso" y seleccione confirmar para completar.</div>
+		
 	<div class="alert-processing alert alert-info" style="display:none;"><asset:image src="spinner_alert_info.gif"/>&nbsp; Procesando datos, espere unos instantes...</div>
 		
 	
@@ -95,7 +95,11 @@
 		</label>
 		<div class="col-md-8 col-sm-9">
 				<select class="form-control" data-field="idInstitucion" disabled="true">
-					<option value="-1">-Sin Institucion-</option>
+					<g:each var="x" in="${intList}">
+						<g:if test="${x.id == 336}">
+							<option value="${x.id}" selected>${x.nombre}</option>
+						</g:if>
+					</g:each>
 				</select>
 		</div>
 	</div>
@@ -120,7 +124,7 @@
 			<g:message code="puesto.nombrePuesto.label" default="Puesto" />
 		</label>
 		<div class="col-md-8 col-sm-9">
-				<input type="text" class="form-control" data-field="nombrePuesto" value="Baja institución" disabled="true"/>
+				<input type="text" class="form-control" data-field="nombrePuesto" value="No aplica" disabled="true"/>
 		</div>
 	</div>
 
@@ -224,6 +228,14 @@
 	
 	</form>
 <Script>
+Institucion = function(id,nombre){
+	this.id = id;
+	this.nombre = nombre;
+}
+var instituciones = new Array();
+<g:each var="x" in="${intList}">
+	instituciones.push( (new Institucion(${x?.id},"${x?.nombre}")) );
+</g:each>
 
 function clearPuesto(){
 
@@ -304,7 +316,12 @@ $(".verifyNumeroMatricula").click(function(e){
 				var puestoCout = 0;
 				for(puestoCout = 0; puestoCout < data.object.puestos.length;puestoCout++){
 					if(data.object.puestos[puestoCout]!= null && data.object.puestos[puestoCout].esActual){
-						$('.dsInstitucion').html("");
+						for(var i=0; i<instituciones.length; i++){
+							if(instituciones[i].id == data.object.puestos[puestoCout].idInstitucion){
+								$('.dsInstitucion').html(instituciones[i].nombre);
+								break;
+							}
+						}
 						$('.fechaInicio').html(data.object.puestos[puestoCout].fechaInicio);
 						$('.fechaFin').html(data.object.puestos[puestoCout].fechaFin);
 						$('.nombrePuesto').html(data.object.puestos[puestoCout].nombrePuesto);

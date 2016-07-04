@@ -73,16 +73,16 @@ class AltaPersonalController {
 		numeroMatricula = params.int('bajaMatricula')
 		idInstitucion = params.int('idInstitucion')
 		nombrePuesto = params.'nombrePuesto'
-		statusEntManifProtesta = params.'statusEntManifProtesta'
+		statusEntManifProtesta = params.int('statusEntManifProtesta')
 		obsEntManifProtesta = params.'obsEntManifProtesta'
-		statusEntCartaInter = params.'statusEntCartaInter'
+		statusEntCartaInter = params.int('statusEntCartaInter')
 		obsEntCartaInter = params.'obsEntCartaInter'
 		statusEntCartaInter
 		SustentanteTO sustentante
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("dd-M-yyyy")
 		sustentante = sustentanteService.findByMatricula(numeroMatricula)
-		sustentante.puestos.each{ pue ->
+		def ultimoPuesto = sustentante.puestos.each{ pue -> 
 			if(pue.esActual){
 				pue.fechaFin = new Date()
 				pue.esActual = false
@@ -112,8 +112,11 @@ class AltaPersonalController {
 		
 		println("beforesaveALTA")
 		println(sustentante as JSON)
+		try{
 		sustentanteService.updatePuestos(sustentante)
-		
+		}catch(Exception e){
+			e.printStackTrace()
+		}
 		flash.successMessage = "El sustentante con matricula: " + params.int('bajaMatricula') + " ha sido asignado al puesto exitosamente"
 		redirect (action: "create")
 	}

@@ -299,7 +299,7 @@ class ExpedienteController {
 	def show(Long id){ 
 		def s = sustentanteService.get(id)
 		ShowViewModel vm = new ShowViewModel()
-		
+		vm.institucionesList = entidadFinancieraService.obtenerInstituciones()
 		//CARGA DE DATOS PARA ENTIDADES FEDERATIVAS
 		vm.entidadesFederativasMap = new HashMap<Integer,EntidadFederativaTO>()
 		sepomexService.obtenerEntidadesFederativas().each{ x ->
@@ -659,6 +659,8 @@ public class ShowViewModel{
 	SepomexTO sepomexData
 	String nombreCompleto
 	
+	Collection<InstitucionTO> institucionesList
+	
 	Map<String,DocumentoRepositorioTO> documentosRespositorioUuidMap
 	
 	//PODER VIGENTE
@@ -712,6 +714,7 @@ public class IndexViewModel{
 	Collection<StatusCertificacionTO> statusCertificacionList
 	Collection<StatusAutorizacionTO> statusAutorizacionList
 	Collection<GrupoFinancieroTO> gfins
+	
 	
 	Collection<SustentanteTO> resultList
 	Integer count

@@ -247,12 +247,16 @@
 		cert.set("nombreVarianteFigura","${viewModelInstance?.certificacionInstance?.varianteFigura?.nombre}");
 		cert.set("tipoAutorizacionFigura","${viewModelInstance?.certificacionInstance?.varianteFigura?.tipoAutorizacionFigura}");
 
+		<g:if test="${viewModelInstance?.certificacionInstance?.fechaInicio != null}">
 		cert.set("fechaInicio_day",${viewModelInstance?.certificacionInstance?.fechaInicio[Calendar.DATE]});
 		cert.set("fechaInicio_month",${viewModelInstance?.certificacionInstance?.fechaInicio[Calendar.MONTH]+1});
 		cert.set("fechaInicio_year",${viewModelInstance?.certificacionInstance?.fechaInicio[Calendar.YEAR]});
+		</g:if>
+		<g:if test="${viewModelInstance?.certificacionInstance?.fechaFin != null}">
 		cert.set("fechaFin_day",${viewModelInstance?.certificacionInstance?.fechaFin[Calendar.DATE]});
 		cert.set("fechaFin_month",${viewModelInstance?.certificacionInstance?.fechaFin[Calendar.MONTH]+1});
 		cert.set("fechaFin_year",${viewModelInstance?.certificacionInstance?.fechaFin[Calendar.YEAR]});
+		</g:if>
 
 
 		<g:if test="${viewModelInstance?.certificacionInstance?.fechaAutorizacionInicio != null}">

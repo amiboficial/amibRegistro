@@ -115,6 +115,7 @@ class CertificacionAutorizableController {
 			}
 		}
 		catch(Exception e){
+			e.printStackTrace()
 			responseModel.put('status','ERROR')
 			responseModel.put('errorMessage',e.message)
 		}
@@ -375,7 +376,15 @@ class CertificacionAutorizableController {
 			vm.nombreVarianteFigura = cert.varianteFigura.nombre
 			vm.dsStatusCertificacion = cert.statusCertificacion.descripcion
 			vm.dsStatusAutorizacion = cert.statusAutorizacion.descripcion
-			vm.dsFechaRangoVigencia = df.format(cert.fechaInicio) + ' - ' + df.format(cert.fechaFin)
+			vm.dsFechaRangoVigencia = ""
+			if(cert.fechaInicio != null){
+				vm.dsFechaRangoVigencia += cert.fechaInicio.format( 'dd/MM/yyyy' )
+			}
+			vm.dsFechaRangoVigencia += ' - '
+			if(cert.fechaFin != null){
+				vm.dsFechaRangoVigencia += cert.fechaFin.format( 'dd/MM/yyyy' )
+			}
+			
 			
 			if(modoBusqueda == ModoBusqueda.DICTAMEN_PREVIO){
 				vm.iconoBotonAccion = 'edit'

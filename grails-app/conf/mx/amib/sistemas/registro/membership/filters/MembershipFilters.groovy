@@ -9,15 +9,20 @@ class MembershipFilters {
 	def filters = {
 		restrictPages(controller: '*', uriExclude: '/assets/**'){
 			before = {
-				if(!(actionName.equals('logIn') || actionName.equals('authenticate'))){
-					if(!membershipServiceScopedProxy.isAuthenticated()){
-						redirect( controller: 'membership', action: 'logIn' )
-					}
-					else{
-						if(membershipServiceScopedProxy.checkIfRestricted( controllerName, actionName )){
-							redirect( controller: 'membership', action: 'unauthorized' )
+				if( actionName.equals('consulta') ||  actionName.equals('showless') ){
+					//si la accion es consulta entonces no intercepta
+				}
+				else{
+						if(!(actionName.equals('logIn') || actionName.equals('authenticate'))){
+							if(!membershipServiceScopedProxy.isAuthenticated()){
+								redirect( controller: 'membership', action: 'logIn' )
+							}
+							else{
+								if(membershipServiceScopedProxy.checkIfRestricted( controllerName, actionName )){
+									redirect( controller: 'membership', action: 'unauthorized' )
+								}
+							}
 						}
-					}
 				}
 			}
 		}

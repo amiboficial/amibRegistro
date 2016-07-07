@@ -345,6 +345,7 @@
 	
 	<script type="text/javascript">
 	$("#divAffixSidebar").parent().remove();
+	$(".nav.navbar-nav.pull-right").parent().remove();
 	var app = app || {};
 
 	var documentosView;

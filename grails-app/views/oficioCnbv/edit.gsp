@@ -11,7 +11,7 @@
 	<!-- INICIA: BREADCRUMB ADMIN -->
 	<ul class="breadcrumb">
 		<li><a href="#">Gestión</a><span class="divider"></span></li>
-		<li><a href="<g:createLink controller="oficioCnbv" action="edit" />">Oficios de Autorización (CNBV)</a></li>
+		<li><a href="<g:createLink controller="oficioCnbv" action="index" />">Oficios de Autorización (CNBV)</a></li>
 		<li><a href="#">Edición de oficio</a></li>
 	</ul>
 	<!-- FIN: BREADCRUMB ADMIN -->

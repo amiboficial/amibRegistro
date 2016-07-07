@@ -213,7 +213,8 @@
 					<script type="text/javascript">
 
 						$("#divAffixSidebar").parent().remove();
-					
+						$(".nav.navbar-nav.pull-right").remove();
+						
 						var gruposFinancieros;
 						var institucionesGruposFinancieros;
 				

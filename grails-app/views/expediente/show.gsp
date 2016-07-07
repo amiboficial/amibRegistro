@@ -4,6 +4,34 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 <meta name="layout" content="main"/>
 <title>Registro 0.1 - Vista de expediente</title>
+
+<script type="text/javascript">
+	function enableCertificationEditDates(idCertificacion, idSustentante){
+		$(".div-fhIniCert"+idCertificacion).show();
+		$(".div-fhFinCert"+idCertificacion).show();
+		$("#enableEditCert"+idCertificacion).hide();
+		$("#finishEditCert"+idCertificacion).show();
+		$("#cancelEditCert"+idCertificacion).show();
+		}
+
+	function finishCertificationEditDates(idCertificacion, idSustentante){
+		$(".div-fhIniCert"+idCertificacion).show();
+		$(".div-fhFinCert"+idCertificacion).show();
+		$("#enableEditCert"+idCertificacion).hide();
+		$("#finishEditCert"+idCertificacion).show();
+		$("#cancelEditCert"+idCertificacion).show();
+		}
+
+	function cancelCertificationEditDates(idCertificacion, idSustentante){
+		$(".div-fhIniCert"+idCertificacion).hide();
+		$(".div-fhFinCert"+idCertificacion).hide();
+		$("#enableEditCert"+idCertificacion).show();
+		$("#finishEditCert"+idCertificacion).hide();
+		$("#cancelEditCert"+idCertificacion).hide();
+		}
+
+	
+	</script>
 </head>
 <body>
 	<a id="anchorForm"></a>
@@ -315,14 +343,148 @@
 								<label class="col-sm-3 control-label">Estatus de certificación</label>
 								<div class="col-sm-4"><p class="form-control-static">${x?.statusCertificacion?.descripcion}&nbsp;</p></div>
 							</div>
-							<div class="figuraRow row">
+							<div class="figuraRow row" id="fhIniCert${x?.id}">
 								<label class="col-sm-3 control-label">Fecha de inicio de vigencia</label>
 								<div class="col-sm-4"><p class="form-control-static"><g:formatDate format="dd-MM-yyyy" date="${x?.fechaInicio}"/>&nbsp;</p></div>
 							</div>
-							<div class="figuraRow row">
+							<div class="form-group div-fhIniCert${x?.id}" style="display:none;">
+								<label class="col-md-4 col-sm-3 control-label">
+									<span class="glyphicon glyphicon-import"></span><g:message code="puesto.fechaEditInicio.label" default="Fecha de inicio de vigencia" />
+								</label>
+								<div class="col-md-5 col-sm-5">
+										<select style="width: 28%;" class="form-control col-md-4"
+										 data-field="dayFhIniCert${x?.id}">
+													<option value="-1">-Seleccione-</option>
+													<option value="1">1</option>
+													<option value="2">2</option>
+													<option value="3">3</option>
+													<option value="4">4</option>
+													<option value="5">5</option>
+													<option value="6">6</option>
+													<option value="7">7</option>
+													<option value="8">8</option>
+													<option value="9">9</option>
+													<option value="10">10</option>
+													<option value="11">11</option>
+													<option value="12">12</option>
+													<option value="13">13</option>
+													<option value="14">14</option>
+													<option value="15">15</option>
+													<option value="16">16</option>
+													<option value="17">17</option>
+													<option value="18">18</option>
+													<option value="19">19</option>
+													<option value="20">20</option>
+													<option value="21">21</option>
+													<option value="22">22</option>
+													<option value="23">23</option>
+													<option value="24">24</option>
+													<option value="25">25</option>
+													<option value="26">26</option>
+													<option value="27">27</option>
+													<option value="28">28</option>
+													<option value="29">29</option>
+													<option value="30">30</option>
+													<option value="31">31</option>
+										</select>
+										<select style="width: 38%;" class="form-control col-md-4 fechaInicio_month field" 
+										data-field="monthFhIniCert${x?.id}" >
+													<option value="-1">-Seleccione-</option>
+													<option value="1">enero</option>
+													<option value="2">febrero</option>
+													<option value="3">marzo</option>
+													<option value="4">abril</option>
+													<option value="5">mayo</option>
+													<option value="6">junio</option>
+													<option value="7">julio</option>
+													<option value="8">agosto</option>
+													<option value="9">septiembre</option>
+													<option value="10">octubre</option>
+													<option value="11">noviembre</option>
+													<option value="12">diciembre</option>
+										</select>
+										<select style="width: 34%;" class="form-control col-md-4 fechaInicio_year field"
+										 data-field="yearFhIniCert${x?.id}">
+											<option value="-1">-Seleccione-</option>
+											<g:each var="number" in="${(1950..2050)}">
+											    <option value="${number}">${number}</option>
+											</g:each>
+										</select>
+								</div>
+							</div>
+							<div class="figuraRow row" id="fhFinCert${x?.id}">
 								<label class="col-sm-3 control-label">Fecha de fin de vigencia</label>
 								<div class="col-sm-4"><p class="form-control-static"><g:formatDate format="dd-MM-yyyy" date="${x?.fechaFin}"/>&nbsp;</p></div>
 							</div>
+							<div class="form-group div-fhFinCert${x?.id}" style="display:none;">
+								<label class="col-md-4 col-sm-3 control-label">
+									<span class="glyphicon glyphicon-import"></span><g:message code="puesto.fechaEditFin.label" default="Fecha de inicio de vigencia" />
+								</label>
+								<div class="col-md-5 col-sm-5">
+										<select style="width: 28%;" class="form-control col-md-4"
+										 data-field="dayFhFinCert${x?.id}">
+													<option value="-1">-Seleccione-</option>
+													<option value="1">1</option>
+													<option value="2">2</option>
+													<option value="3">3</option>
+													<option value="4">4</option>
+													<option value="5">5</option>
+													<option value="6">6</option>
+													<option value="7">7</option>
+													<option value="8">8</option>
+													<option value="9">9</option>
+													<option value="10">10</option>
+													<option value="11">11</option>
+													<option value="12">12</option>
+													<option value="13">13</option>
+													<option value="14">14</option>
+													<option value="15">15</option>
+													<option value="16">16</option>
+													<option value="17">17</option>
+													<option value="18">18</option>
+													<option value="19">19</option>
+													<option value="20">20</option>
+													<option value="21">21</option>
+													<option value="22">22</option>
+													<option value="23">23</option>
+													<option value="24">24</option>
+													<option value="25">25</option>
+													<option value="26">26</option>
+													<option value="27">27</option>
+													<option value="28">28</option>
+													<option value="29">29</option>
+													<option value="30">30</option>
+													<option value="31">31</option>
+										</select>
+										<select style="width: 38%;" class="form-control col-md-4 fechaInicio_month field" 
+										data-field="monthFhFinCert${x?.id}" >
+													<option value="-1">-Seleccione-</option>
+													<option value="1">enero</option>
+													<option value="2">febrero</option>
+													<option value="3">marzo</option>
+													<option value="4">abril</option>
+													<option value="5">mayo</option>
+													<option value="6">junio</option>
+													<option value="7">julio</option>
+													<option value="8">agosto</option>
+													<option value="9">septiembre</option>
+													<option value="10">octubre</option>
+													<option value="11">noviembre</option>
+													<option value="12">diciembre</option>
+										</select>
+										<select style="width: 34%;" class="form-control col-md-4 fechaInicio_year field"
+										 data-field="yearFhFinCert${x?.id}">
+											<option value="-1">-Seleccione-</option>
+											<g:each var="number" in="${(1950..2050)}">
+											    <option value="${number}">${number}</option>
+											</g:each>
+										</select>
+								</div>
+							</div>
+							
+							
+							
+							
 							<g:if test="${x?.validaciones.size() > 0}">
 							<g:each in="${x?.validaciones[0].metodoValidacion}" var="vali">
         						<div class="figuraRow row">
@@ -339,8 +501,10 @@
 							</g:else>
 							<div class="row">
 								<div style="text-align:center; margin-top: 0.75em;">
-									<button type="button" class="edit btn btn-primary"><span class="glyphicon glyphicon-pencil"></span> Editar</button>
-									<button type="button" class="delete btn btn-danger"><span class="glyphicon glyphicon-trash"></span> Borrar</button>
+									<button type="button" class="edit btn btn-primary" onclick="enableCertificationEditDates(${x?.id},${viewModelInstance?.sustentanteInstance?.id});" id="enableEditCert${x?.id}" ><span class="glyphicon glyphicon-pencil"></span> Editar</button>
+									<button type="button" class="update btn btn-info"  onclick="finishCertificationEditDates(${x?.id},${viewModelInstance?.sustentanteInstance?.id});"  id="finishEditCert${x?.id}" style="display:none;"><span class="glyphicon glyphicon-floppy-disk"></span> Finalizar edición</button>
+									<button type="button" class="cancelEdit btn btn-danger"  onclick="cancelCertificationEditDates(${x?.id},${viewModelInstance?.sustentanteInstance?.id});"  id="cancelEditCert${x?.id}" style="display:none;"><span class="glyphicon glyphicon-remove"></span> Cancelar</button>
+									<%--<button type="button" class="delete btn btn-danger"><span class="glyphicon glyphicon-trash"></span> Borrar</button>  --%>
 								</div>
 							</div>
 							
@@ -595,7 +759,7 @@
 	
 	<g:render template="showHistoricoRevocados" />
 	<g:javascript src="mx.amib.sistemas.registro.expediente.show.historicoRevocados.js" />
-	<script>
+	<script type="text/javascript">
 
 	var app = app || {};
 
@@ -621,7 +785,7 @@
 	
 	</script>
 	
-	<script>
+	<script type="text/javascript">
 	
 	$(".editar").click(function(e){
 		e.preventDefault();
@@ -646,7 +810,7 @@
 	
 	<g:render template="../common/expedienteShowPuestos"/>
 	<g:javascript src="mx.amib.sistemas.registro.expediente.form.puestos.js" />
-	<script>
+	<script type="text/javascript">
 		var app = app || {};
 
 		var puestosArray = new Array();
@@ -692,6 +856,8 @@
 			</g:if>
 		</g:each>
 	</script>
+	
+	
 	
 </body>
 </html>

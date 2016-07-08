@@ -15,11 +15,73 @@
 		}
 
 	function finishCertificationEditDates(idCertificacion, idSustentante){
-		$(".div-fhIniCert"+idCertificacion).show();
-		$(".div-fhFinCert"+idCertificacion).show();
-		$("#enableEditCert"+idCertificacion).hide();
-		$("#finishEditCert"+idCertificacion).show();
-		$("#cancelEditCert"+idCertificacion).show();
+		var tieneErrores = false;
+		var ErrorsString = "<div class='errorValidacion alert alert-danger' style='display: block;'><span class='glyphicon glyphicon-ban-circle'></span>&nbsp;<span class='msgErrorValidacion'>Se han detectado errores de entrada en los campos del formulario. Verifique cada campo según corresponda.</span><br><ul class='validationErrorMsgs'>"
+		if($("[data-field='dayFhIniCert"+idCertificacion+"']").val()==undefined || $("[data-field='dayFhIniCert"+idCertificacion+"']").val()=="-1"){
+			tieneErrores = true;
+				ErrorsString += "<li>Debe seleccionar un valor en el campo dia en Fecha de inicio de vigencia</li>";
+			}
+		if($("[data-field='monthFhIniCert"+idCertificacion+"']").val()==undefined || $("[data-field='monthFhIniCert"+idCertificacion+"']").val()=="-1"){
+			tieneErrores = true;
+				ErrorsString += "<li>Debe seleccionar un valor en el campo mes en Fecha de inicio de vigencia</li>";
+			}
+		if($("[data-field='yearFhIniCert"+idCertificacion+"']").val()==undefined || $("[data-field='yearFhIniCert"+idCertificacion+"']").val()=="-1"){
+			tieneErrores = true;
+				ErrorsString += "<li>Debe seleccionar un valor en el campo año en Fecha de inicio de vigencia</li>";
+			}
+		if($("[data-field='dayFhFinCert"+idCertificacion+"']").val()==undefined || $("[data-field='dayFhFinCert"+idCertificacion+"']").val()=="-1"){
+			tieneErrores = true;
+				ErrorsString += "<li>Debe seleccionar un valor en el campo dia en Fecha de fin de vigencia</li>";
+			}
+		if($("[data-field='monthFhFinCert"+idCertificacion+"']").val()==undefined || $("[data-field='monthFhFinCert"+idCertificacion+"']").val()=="-1"){
+			tieneErrores = true;
+				ErrorsString += "<li>Debe seleccionar un valor en el campo mes en Fecha de fin de vigencia</li>";
+			}
+		if($("[data-field='yearFhFinCert"+idCertificacion+"']").val()==undefined || $("[data-field='yearFhFinCert"+idCertificacion+"']").val()=="-1"){
+			tieneErrores = true;
+				ErrorsString += "<li>Debe seleccionar un valor en el campo año en Fecha de fin de vigencia</li>";
+			}
+		ErrorsString += "</ul></div>";
+		$("#errorMessagesCertificationEditDates"+idCertificacion).html("");
+		if(tieneErrores){
+				$("#errorMessagesCertificationEditDates"+idCertificacion).html(ErrorsString);
+				return;
+			}
+
+		$.ajax({
+			url: "<g:createLink controller="expediente" action="updateDatesCertificationExpedient" />", 
+			//beforeSend: function(xhr){
+			
+				//En lo que se carga el apoderado, muetra el número de matricula
+				//a buscar, dado que este modelo es rendereado cuando se cambia
+				//al estado de processing
+				//view.model = new app.Apoderado();
+				//view.model.set("numeroMatricula",numeroMatricula);
+				
+				//view.clearErrorBusqueda();
+				//view.setProcessing();
+			//},
+			data: { idCertificacion:idCertificacion,
+					dayFhIniCert:$("[data-field='dayFhIniCert"+idCertificacion+"']").val(),
+					monthFhIniCert:$("[data-field='monthFhIniCert"+idCertificacion+"']").val(),
+					yearFhIniCert:$("[data-field='yearFhIniCert"+idCertificacion+"']").val(),
+					dayFhFinCert:$("[data-field='dayFhFinCert"+idCertificacion+"']").val(),
+					monthFhFinCert:$("[data-field='monthFhFinCert"+idCertificacion+"']").val(),
+					yearFhFinCert:$("[data-field='yearFhFinCert"+idCertificacion+"']").val()
+					}
+		}).done( function(data){
+			if(data.status == "OK"){
+				$("#fhIniCert"+idCertificacion+" p:first").html($("[data-field='dayFhIniCert"+idCertificacion+"']").val()+"-"+$("[data-field='monthFhIniCert"+idCertificacion+"']").val()+"-"+$("[data-field='yearFhIniCert"+idCertificacion+"']").val());
+				$("#fhFinCert"+idCertificacion+" p:first").html($("[data-field='dayFhFinCert"+idCertificacion+"']").val()+"-"+$("[data-field='monthFhFinCert"+idCertificacion+"']").val()+"-"+$("[data-field='yearFhFinCert"+idCertificacion+"']").val());
+				$("#errorMessagesCertificationEditDates"+idCertificacion).html("<div class='alert alert-success'><span class='glyphicon glyphicon-info-sign'>Se actualizaron exitosamente las fechas de Certificación.</span></div>");
+			}
+			else{
+				//error alguno
+				$("#errorMessagesCertificationEditDates"+idCertificacion).html(ErrorsString);
+			}
+		} );
+		
+		
 		}
 
 	function cancelCertificationEditDates(idCertificacion, idSustentante){
@@ -28,6 +90,16 @@
 		$("#enableEditCert"+idCertificacion).show();
 		$("#finishEditCert"+idCertificacion).hide();
 		$("#cancelEditCert"+idCertificacion).hide();
+
+		$("#errorMessagesCertificationEditDates"+idCertificacion).html("");
+
+		$("[data-field='dayFhIniCert"+idCertificacion+"']").val("-1");
+		$("[data-field='monthFhIniCert"+idCertificacion+"']").val("-1");
+		$("[data-field='yearFhIniCert"+idCertificacion+"']").val("-1");
+
+		$("[data-field='dayFhFinCert"+idCertificacion+"']").val("-1");
+		$("[data-field='monthFhFinCert"+idCertificacion+"']").val("-1");
+		$("[data-field='yearFhFinCert"+idCertificacion+"']").val("-1");
 		}
 
 	
@@ -41,7 +113,7 @@
 		<li><a href="<g:createLink controller="expediente" action="index" />">Expedientes</a></li>
 		<li><a href="#">Vista de expediente</a></li>
 	</ul>
-	<!-- FIN: BREADCRUMB ADMIN -->
+
 	
 	<h2><strong>Datos de expediente</strong></h2>
 	<h4>${raw(viewModelInstance?.nombreCompleto)} (Matricula: ${viewModelInstance?.sustentanteInstance?.numeroMatricula}, Folio: ${viewModelInstance?.sustentanteInstance?.id})</h4>
@@ -290,14 +362,13 @@
 				
 			</div>
 			
-			<!-- INICIA: SECCION DE DOCUMENTACIÓN -->
+
 			<div role="tabpanel" class="tab-pane" id="tabDocumentacion">
 			
 				<div id="divDocumentosSustentante">
 				</div>
 			
 			</div>
-			<!-- FIN: SECCION DE DOCUMENTACIÓN -->
 			
 			<div role="tabpanel" class="tab-pane" id="tabCertifaciones">
 				<br/>
@@ -339,6 +410,7 @@
 								<div class="col-sm-4"><p class="form-control-static"><g:formatDate format="dd-MM-yyyy" date="${x?.fechaAutorizacionFin}"/>&nbsp;</p></div>
 							</div>
 							<legend><i>Certificación</i></legend>
+							<div id="errorMessagesCertificationEditDates${x?.id}">&nbsp;</div>
 							<div class="figuraRow row">
 								<label class="col-sm-3 control-label">Estatus de certificación</label>
 								<div class="col-sm-4"><p class="form-control-static">${x?.statusCertificacion?.descripcion}&nbsp;</p></div>
@@ -418,7 +490,7 @@
 							</div>
 							<div class="form-group div-fhFinCert${x?.id}" style="display:none;">
 								<label class="col-md-4 col-sm-3 control-label">
-									<span class="glyphicon glyphicon-import"></span><g:message code="puesto.fechaEditFin.label" default="Fecha de inicio de vigencia" />
+									<span class="glyphicon glyphicon-import"></span><g:message code="puesto.fechaEditFin.label" default="Fecha de fin de vigencia" />
 								</label>
 								<div class="col-md-5 col-sm-5">
 										<select style="width: 28%;" class="form-control col-md-4"

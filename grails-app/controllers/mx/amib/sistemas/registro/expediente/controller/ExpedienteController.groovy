@@ -77,6 +77,8 @@ class ExpedienteController {
 	RevocacionService revocacionService
 	def oficioCnbvService
 	
+	def certificacionService
+	
     def index() {
 		IndexViewModel vm = this.getIndexViewModel(params)
 
@@ -652,6 +654,26 @@ class ExpedienteController {
 		
 		redirect (action: "show", id:id ) 
 	}	
+	
+	def updateDatesCertificationExpedient(){
+		Long idCert = 1L
+		SimpleDateFormat sdf = new SimpleDateFormat("dd-M-yyyy")
+		Map<String,Object> respuesta = new HashMap<String,Object>()
+		idCert = Long.parseLong( params.idCertificacion)
+		CertificacionTO cert = certificacionService.get(idCert)
+		cert.fechaInicio = sdf.parse(params.'dayFhIniCert' + '-' + params.'monthFhIniCert' + '-' + params.'yearFhIniCert')
+		cert.fechaFin = sdf.parse(params.'dayFhFinCert' + '-' + params.'monthFhFinCert' + '-' + params.'yearFhFinCert')
+		println(cert as JSON)
+		cert = certificacionService.updateDatosParaAprobarDictamen(cert)
+		if(cert!=null){
+			respuesta = [ 'status' : 'OK' ]
+		}else{
+			respuesta = [ 'status' : 'ERROR' ]
+		}
+		render(respuesta as JSON)
+	}
+	
+	
 }
 
 public class ShowViewModel{

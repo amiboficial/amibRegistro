@@ -45,6 +45,7 @@ import mx.amib.sistemas.external.oficios.service.ApoderadoService
 import mx.amib.sistemas.external.oficios.service.PoderService
 import mx.amib.sistemas.external.oficios.service.RevocacionService
 import mx.amib.sistemas.external.oficios.service.RevocadoService
+import mx.amib.sistemas.registro.expediente.service.CertificacionActualizacionAutorizacionService;
 import mx.amib.sistemas.registro.legacy.saaec.RegistroExamenTO
 import mx.amib.sistemas.utils.SearchResult
 
@@ -78,6 +79,9 @@ class ExpedienteController {
 	def oficioCnbvService
 	
 	def certificacionService
+	
+	CertificacionActualizacionAutorizacionService certificacionActualizacionAutorizacionService
+	
 	
     def index() {
 		IndexViewModel vm = this.getIndexViewModel(params)
@@ -312,7 +316,6 @@ class ExpedienteController {
 		entidadFinancieraService.obtenerInstituciones().each { x ->
 			vm.institucionesPoderesMap.put(x.id,x)
 		}
-		
 		//se quitan las demas certificaciones para dejar solo la valida 
 //		CertificacionTO ultima = s.certificaciones.find{ it.isUltima == true }
 //		s.certificaciones.clear()
@@ -346,7 +349,7 @@ class ExpedienteController {
 						SearchResult<OficioCnbvTO> resOficios = oficioCnbvService.findAllByMultipleIdCertificacionInAutorizados(max, offset, sort, order, x.collect{ it.id } )
 						println("respuestaOFICIOS")
 						println(resOficios as JSON)
-						servRes = resOficios.getList()
+						servRes = resOficios.list
 						if(servRes!=null && resOficios.count>0 && servRes.first().claveDga != null){
 							x.dga = resOficios.first().claveDga
 							x.numeroOficio = resOficios.first().numeroOficio
@@ -409,6 +412,8 @@ class ExpedienteController {
 		//CARGA EL HISTORICO DE LOS PODERES
 		vm.historicoPoderes = apoderadoResult.poderes.sort{ it.fechaApoderamiento }.reverse()
 		vm.historioRevocaciones = revocacionService.getAllByIdCertficacionInSet( new HashSet<Long>(vm.sustentanteInstance.certificaciones.collect{ it.id.value }.asList()) ).asList()
+		
+		vm.PFIResult = certificacionActualizacionAutorizacionService.getPFIExamns(id)
 		
 		render(view:"show",model:[viewModelInstance: vm])
 	}
@@ -680,6 +685,7 @@ public class ShowViewModel{
 	SustentanteTO sustentanteInstance
 	SepomexTO sepomexData
 	String nombreCompleto
+	String PFIResult
 	
 	Collection<InstitucionTO> institucionesList
 	

@@ -100,14 +100,70 @@
 		$("[data-field='dayFhFinCert"+idCertificacion+"']").val("-1");
 		$("[data-field='monthFhFinCert"+idCertificacion+"']").val("-1");
 		$("[data-field='yearFhFinCert"+idCertificacion+"']").val("-1");
-		}
+	}
 
+	var xmlResponsecontentstring = "${viewModelInstance?.PFIResult}";
+
+	function showPFI(){
+		this.$('#opcionPFI').show();
+		if(xmlResponsecontentstring == undefined || xmlResponsecontentstring == "" ){
+			this.$('#clasicPFIrevalidation').html('<div class="form-group"><label class="col-md-2 col-sm-3 control-label">No se pudo contactar el sericio intentelo mas tarde</label></div>');
+			this.set('examenPFIvalido',false);
+		}else{
+			if(xmlResponsecontentstring=="FALSE"){
+				this.$('#clasicPFIrevalidation').html('<div class="form-group"><label class="col-md-2 col-sm-3 control-label">No se encontro la matricula </label></div>');
+				this.set('examenPFIvalido',false);
+			}
+			else{
+				var ENDRESULTHTML = "";
+				var multiplesExamenes = xmlResponsecontentstring.split("*|");
+				var coutinuacion = 0;
+				var elementos = [];
+				var elementCont = "";
+				for(coutinuacion = 0; coutinuacion < multiplesExamenes.length ; coutinuacion++){
+					elementCont = multiplesExamenes[coutinuacion];
+					elementos = elementCont.split('-}');
+					
+					if(elementos.length >=6 ){
+							var aproved;
+							var validTargeting = "";
+							if(elementos[5] == "APROBADO"){
+								aproved = true;
+							}else{
+								aproved = false;
+								validTargeting = "style='cursor: not-allowed;'";
+							}
+							var htmlcontentPFIexam = '<a  href="#" class="list-group-item seleccionarPFI" '+validTargeting+'  data-field="'+aproved+'" >'
+							+'<div class="form-group">'
+							+'<label class="col-md-2 col-sm-3 control-static">'+elementos[0]+'</label>'
+							+'<div class="col-md-9 col-sm-9"><p class="form-control-static">'+elementos[3]+'</p></div></div>'
+							+'<div class="form-group">'
+							+'	<label class="col-md-2 col-sm-3 control-static">'
+							+elementos[4]
+							+'	</label>'
+							+'	<div class="col-md-9 col-sm-9">'
+							+'		<p class="form-control-static">'+elementos[5]+'</p>'
+							+'	</div>'
+							+'</div>'
+							+'</a><br />';
+							
+							ENDRESULTHTML += htmlcontentPFIexam;
+					}
+				}
+				this.$('#clasicPFIrevalidation').html(ENDRESULTHTML);
+			}
+		}
+	}
+
+	$( document ).ready(function() {
+		showPFI();
+	});
 	
 	</script>
 </head>
 <body>
 	<a id="anchorForm"></a>
-	<!-- INICIA: BREADCRUMB ADMIN -->
+	
 	<ul class="breadcrumb">
 		<li><a href="#">Gestión de expedientes</a><span class="divider"></span></li>
 		<li><a href="<g:createLink controller="expediente" action="index" />">Expedientes</a></li>
@@ -584,6 +640,14 @@
 					</g:each>
 				
 				</div>
+				
+				<fieldset id="opcionPFI">
+					<legend>Lista de exámenes PFI</legend>
+					<ul class="list-group" id="clasicPFIrevalidation">
+							
+					</ul>
+				</fieldset>
+				
 			</div>
 			
 			<div role="tabpanel" class="tab-pane" id="tabPoderVigente">

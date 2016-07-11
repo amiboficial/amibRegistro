@@ -149,7 +149,7 @@ app.CheckSubmitView = Backbone.View.extend({
 		this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.calle" value="' + arr[app.CHK_SEPOMEX].model.get('calle') + '" />');
 		this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.numeroInterior" value="' + arr[app.CHK_SEPOMEX].model.get('numeroInterior') + '" />');
 		this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.numeroExterior" value="' + arr[app.CHK_SEPOMEX].model.get('numeroExterior') + '" />');
-		this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.asentamientoOtro" value="' + arr[app.EXP_REG_CHK_SEPOMEX].model.get('asentamientoOtro') + '" />');
+		this.$("#spnHdnPostData").append('<input type="hidden" name="sustentante.asentamientoOtro" value="' + arr[app.CHK_SEPOMEX].model.get('asentamientoOtro') + '" />');
 		//datos de certificacion
 		this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.id" value="' + arr[app.CHK_CAMBFIGEX].model.get('opcionExamenVM').getExamenSeleccionado().get('idCertificaionACambiar') + '" />');
 		this.$("#spnHdnPostData").append('<input type="hidden" name="certificacion.idVarianteFigura" value="' + arr[app.CHK_CAMBFIGEX].model.get('certificacionVM').get('idVarianteFigura') + '" />');

@@ -413,7 +413,7 @@ class ExpedienteController {
 		vm.historicoPoderes = apoderadoResult.poderes.sort{ it.fechaApoderamiento }.reverse()
 		vm.historioRevocaciones = revocacionService.getAllByIdCertficacionInSet( new HashSet<Long>(vm.sustentanteInstance.certificaciones.collect{ it.id.value }.asList()) ).asList()
 		
-		vm.PFIResult = certificacionActualizacionAutorizacionService.getPFIExamns(id)
+		vm.PFIResult = certificacionActualizacionAutorizacionService.getPFIExamns(s.numeroMatricula)	
 		
 		render(view:"show",model:[viewModelInstance: vm])
 	}
@@ -541,6 +541,9 @@ class ExpedienteController {
 				}
 			}
 		}
+		
+		vm.PFIResult = certificacionActualizacionAutorizacionService.getPFIExamns(s.numeroMatricula)
+		
 		render(view:"showless",model:[viewModelInstance: vm])
 	}
 

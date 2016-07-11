@@ -108,11 +108,9 @@
 		this.$('#opcionPFI').show();
 		if(xmlResponsecontentstring == undefined || xmlResponsecontentstring == "" ){
 			this.$('#clasicPFIrevalidation').html('<div class="form-group"><label class="col-md-2 col-sm-3 control-label">No se pudo contactar el sericio intentelo mas tarde</label></div>');
-			this.set('examenPFIvalido',false);
 		}else{
 			if(xmlResponsecontentstring=="FALSE"){
 				this.$('#clasicPFIrevalidation').html('<div class="form-group"><label class="col-md-2 col-sm-3 control-label">No se encontro la matricula </label></div>');
-				this.set('examenPFIvalido',false);
 			}
 			else{
 				var ENDRESULTHTML = "";

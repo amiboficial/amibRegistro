@@ -48,7 +48,7 @@ app.RevocacionDatosOficioTabVM = Backbone.Model.extend({
 	},
 	
 	initialize: function(){
-		this.listenTo( this, 'change:numeroEscritura', this.checkNumeroEscrituraUnique );
+		this.listenTo( this, 'change:numeroEscritura', this.validateNumeroEscritura );
 		this.listenTo( this, 'change:idGrupoFinanciero', this.cargarInstitucionesDeGrupoFinanciero );
 		
 		
@@ -181,7 +181,7 @@ app.RevocacionDatosOficioTabVM = Backbone.Model.extend({
 		
 		var noNumeroEscritura = (this.get('numeroEscritura') == '');
 		var numeroEscrituraNoNumerico = (!num10CarExp.test(this.get('numeroEscritura')));
-		
+		this.invalidateCheckNumeroEscrituraUnique();
 		this.set('errorNoNumeroEscritura',false);
 		this.set('errorNumeroEscrituraNoNumerico',false);
 		
@@ -195,6 +195,8 @@ app.RevocacionDatosOficioTabVM = Backbone.Model.extend({
 		}
 		
 		this.trigger('numeroEscrituraValidated',{});
+		this.set('isNumeroEscrituraUnique',true);
+		this.set('numeroEscrituraUniqueChecked',true);
 		
 		return valid;
 	},

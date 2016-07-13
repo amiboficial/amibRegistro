@@ -143,7 +143,7 @@ class CertificacionReposicionAutorizacionController {
 	
 	def save(SustentanteTO sustentante, CertificacionTO certificacion, ValidacionTO validacion){
 		//Aquí se recuperan datos enviados por la vista y se envían al servicio
-		SimpleDateFormat sdf = new SimpleDateFormat("dd-M-yyyy")
+		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy")
 		CertificacionTO originalCert
 		SustentanteTO originalSust
 		ValidacionTO nuevaValidacion
@@ -155,7 +155,11 @@ class CertificacionReposicionAutorizacionController {
 			originalSust = originalCert.sustentante
 		}
 		
-		sustentante.fechaNacimiento = sdf.parse(params.'sustentante.fechaNacimiento_day' + '-' + params.'sustentante.fechaNacimiento_month' + '-' + params.'sustentante.fechaNacimiento_year')
+		if(params.'sustentante.fechaNacimiento_month'!=null && params.'sustentante.fechaNacimiento_month'.toString().length()<2){
+			sustentante.fechaNacimiento = sdf.parse(params.'sustentante.fechaNacimiento_day' + '-0' + params.'sustentante.fechaNacimiento_month' + '-' + params.'sustentante.fechaNacimiento_year')
+		}else{
+			sustentante.fechaNacimiento = sdf.parse(params.'sustentante.fechaNacimiento_day' + '-0' + params.'sustentante.fechaNacimiento_month' + '-' + params.'sustentante.fechaNacimiento_year')
+		}
 		
 		def telefonosJsonElement = JSON.parse(params.'sustentante.telefonos_json')
 		sustentante.telefonos = new ArrayList<TelefonoSustentanteTO>()
@@ -184,8 +188,19 @@ class CertificacionReposicionAutorizacionController {
 				else
 					p.id = Long.parseLong(it.'id'.toString())
 				p.idInstitucion = Long.parseLong(it.'idInstitucion'.toString())
-				p.fechaInicio = sdf.parse(it.'fechaInicio_day' + '-' + it.'fechaInicio_month' + '-' + it.'fechaInicio_year')
+				if(it.'fechaInicio_month'!=null && it.'fechaInicio_month'.toString().length()<2){
+					p.fechaInicio = sdf.parse(it.'fechaInicio_day' + '-0' + it.'fechaInicio_month' + '-' + it.'fechaInicio_year')
+				}
+				else{
+					p.fechaInicio = sdf.parse(it.'fechaInicio_day' + '-' + it.'fechaInicio_month' + '-' + it.'fechaInicio_year')
+				}
 				if(it.'fechaFin_day'.toString() != '-1' && it.'fechaFin_month'.toString() != '-1' && it.'fechaFin_year'.toString() != '-1'){
+					if(it.'fechaInicio_month'!=null && it.'fechaInicio_month'.toString().length()<2){
+						p.fechaInicio = sdf.parse(it.'fechaInicio_day' + '-0' + it.'fechaInicio_month' + '-' + it.'fechaInicio_year')
+					}
+					else{
+						p.fechaInicio = sdf.parse(it.'fechaInicio_day' + '-' + it.'fechaInicio_month' + '-' + it.'fechaInicio_year')
+					}
 					p.fechaFin = sdf.parse(it.'fechaFin_day' + '-' + it.'fechaFin_month' + '-' + it.'fechaFin_year')
 					p.esActual = false
 				}
@@ -205,9 +220,16 @@ class CertificacionReposicionAutorizacionController {
 		}
 		//sustentante.certificaciones = originalSust.certificaciones
 		CertificacionTO certAEmitDict = originalSust.certificaciones.find{ it.id.value == certificacion.id.value }
-		certAEmitDict.fechaObtencion = sdf.parse(params.'certificacion.fechaObtencion_day' + '-' + params.'certificacion.fechaObtencion_month' + '-' + params.'certificacion.fechaObtencion_year')
-		certAEmitDict.fechaInicio = sdf.parse(params.'certificacion.fechaInicio_day' + '-' + params.'certificacion.fechaInicio_month' + '-' + params.'certificacion.fechaInicio_year')
-		certAEmitDict.fechaFin = sdf.parse(params.'certificacion.fechaFin_day' + '-' + params.'certificacion.fechaFin_month' + '-' + params.'certificacion.fechaFin_year')
+		if(params.'certificacion.fechaInicio_month'!=null && params.'certificacion.fechaInicio_month'.toString().length()<2){
+			certAEmitDict.fechaInicio = sdf.parse(params.'certificacion.fechaInicio_day' + '-0' + params.'certificacion.fechaInicio_month' + '-' + params.'certificacion.fechaInicio_year')
+		}else{
+			certAEmitDict.fechaInicio = sdf.parse(params.'certificacion.fechaInicio_day' + '-' + params.'certificacion.fechaInicio_month' + '-' + params.'certificacion.fechaInicio_year')
+		}
+		if(params.'certificacion.fechaFin_month'!=null && params.'certificacion.fechaFin_month'.toString().length()<2){
+			certAEmitDict.fechaFin = sdf.parse(params.'certificacion.fechaFin_day' + '-0' + params.'certificacion.fechaFin_month' + '-' + params.'certificacion.fechaFin_year')
+		}else{
+			certAEmitDict.fechaFin = sdf.parse(params.'certificacion.fechaFin_day' + '-' + params.'certificacion.fechaFin_month' + '-' + params.'certificacion.fechaFin_year')
+		}
 		certAEmitDict.statusEntHistorialInforme = certificacion.statusEntHistorialInforme
 		certAEmitDict.obsEntHistorialInforme = certificacion.obsEntHistorialInforme
 		certAEmitDict.statusEntCartaRec = certificacion.statusEntCartaRec

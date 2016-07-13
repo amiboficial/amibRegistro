@@ -41,7 +41,7 @@ class AltaPersonalController {
 			}
 			else {
 				def lastpuest = sustentante.puestos.find{ it.esActual}
-				if(lastpuest.idInstitucion == 336L){
+				if(lastpuest.idInstitucion == 92L){
 					respuesta = [ 'status' : 'OK' , 'object' : sustentante ]
 				}else{
 					respuesta = [ 'status' : 'ERROR' , 'object' : 'ALREADY_ASIGNATED_JOB' ]

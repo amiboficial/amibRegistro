@@ -47,7 +47,7 @@ class BajaPersonalController {
 			}
 			else {
 				def lastpuest = sustentante.puestos.find{ it.esActual}
-				if(lastpuest.idInstitucion == 336L){
+				if(lastpuest.idInstitucion == 92L){
 					respuesta = [ 'status' : 'ERROR' , 'object' : 'ALREADY_DISCARTED_JOB' ]
 				}else{
 					respuesta = [ 'status' : 'OK' , 'object' : sustentante ]
@@ -74,7 +74,7 @@ class BajaPersonalController {
 			}
 		}
 		PuestoTO bajapuesto = new PuestoTO()
-		bajapuesto.idInstitucion = 336L
+		bajapuesto.idInstitucion = 92L
 		bajapuesto.fechaCreacion = new Date()
 		bajapuesto.fechaInicio = new Date()
 		bajapuesto.fechaFin = null

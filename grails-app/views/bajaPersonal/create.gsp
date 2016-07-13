@@ -96,7 +96,7 @@
 		<div class="col-md-8 col-sm-9">
 				<select class="form-control" data-field="idInstitucion" disabled="true">
 					<g:each var="x" in="${intList}">
-						<g:if test="${x.id == 336}">
+						<g:if test="${x.id == 92}">
 							<option value="${x.id}" selected>${x.nombre}</option>
 						</g:if>
 					</g:each>

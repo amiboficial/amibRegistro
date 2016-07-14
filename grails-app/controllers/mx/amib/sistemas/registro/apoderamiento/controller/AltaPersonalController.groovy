@@ -80,7 +80,7 @@ class AltaPersonalController {
 		statusEntCartaInter
 		SustentanteTO sustentante
 		
-		SimpleDateFormat sdf = new SimpleDateFormat("dd-M-yyyy")
+		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy")
 		sustentante = sustentanteService.findByMatricula(numeroMatricula)
 		def ultimoPuesto = sustentante.puestos.each{ pue -> 
 			if(pue.esActual){
@@ -94,10 +94,18 @@ class AltaPersonalController {
 		bajapuesto.fechaCreacion = new Date()
 		bajapuesto.fechaModificacion = new Date()
 		if(params.'fechaInicio_day'!="-1" && params.'fechaInicio_month'!="-1" && params.'fechaInicio_year'!="-1"){
-			bajapuesto.fechaInicio = sdf.parse(params.'fechaInicio_day' + '-' + params.'fechaInicio_month' + '-' + params.'fechaInicio_year')
+			if(params.'fechaInicio_month'!=null && params.'fechaInicio_month'.toString().length()<2){
+				bajapuesto.fechaInicio = sdf.parse(params.'fechaInicio_day' + '-0' + params.'fechaInicio_month' + '-' + params.'fechaInicio_year')
+			}else{
+				bajapuesto.fechaInicio = sdf.parse(params.'fechaInicio_day' + '-' + params.'fechaInicio_month' + '-' + params.'fechaInicio_year')
+			}
 		}
 		if(params.'fechaFin_day'!=null && params.'fechaFin_day'!="-1" && params.'fechaFin_month'!=null && params.'fechaFin_month'!="-1" && params.'fechaFin_year'!=null && params.'fechaFin_year'!="-1"){
-			bajapuesto.fechaFin = sdf.parse(params.'fechaFin_day' + '-' + params.'fechaFin_month' + '-' + params.'fechaFin_year')
+			if(params.'fechaFin_month'!=null && params.'fechaFin_month'.toString().length()<2){
+				bajapuesto.fechaFin = sdf.parse(params.'fechaFin_day' + '-0' + params.'fechaFin_month' + '-' + params.'fechaFin_year')
+			}else{
+				bajapuesto.fechaFin = sdf.parse(params.'fechaFin_day' + '-' + params.'fechaFin_month' + '-' + params.'fechaFin_year')
+			}
 		}else{
 			bajapuesto.fechaFin = null
 		}

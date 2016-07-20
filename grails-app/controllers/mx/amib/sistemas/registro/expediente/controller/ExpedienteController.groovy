@@ -321,7 +321,7 @@ class ExpedienteController {
 //		s.certificaciones.clear()
 //		s.certificaciones.add(ultima)
 		//
-		SearchResult<OficioCnbvTO> servRes = null
+		List<Map<String,String>> servRes = null
 		int max = Integer.parseInt(params.max?:"10")
 		int offset = Integer.parseInt(params.offset?:"0")
 		String sort = params.sort?:"id"
@@ -350,9 +350,9 @@ class ExpedienteController {
 						println("respuestaOFICIOS")
 						println(resOficios as JSON)
 						servRes = resOficios.list
-						if(servRes!=null && resOficios.count>0 && servRes.first().claveDga != null){
-							x.dga = resOficios.first().claveDga
-							x.numeroOficio = resOficios.first().numeroOficio
+						if(resOficios.list!=null && resOficios.count>0 && servRes.first().get("claveDga") != null){
+							x.dga = servRes.first().get("claveDga")
+							x.numeroOficio = servRes.first().get("numeroOficio")
 						}
 					}
 					catch(Exception ex){
@@ -440,7 +440,7 @@ class ExpedienteController {
 //		s.certificaciones.clear()
 //		s.certificaciones.add(ultima)
 		//
-		SearchResult<OficioCnbvTO> servRes = null
+		List<Map<String,String>> servRes = null
 		int max = Integer.parseInt(params.max?:"10")
 		int offset = Integer.parseInt(params.offset?:"0")
 		String sort = params.sort?:"id"
@@ -466,11 +466,12 @@ class ExpedienteController {
 				s.certificaciones.each{ x ->
 					try{
 						SearchResult<OficioCnbvTO> resOficios = oficioCnbvService.findAllByMultipleIdCertificacionInAutorizados(max, offset, sort, order, x.collect{ it.id } )
-						println("pendejadas")
+						println("respuestaOFICIOS")
 						println(resOficios as JSON)
-						servRes = resOficios.getList()
-						if(servRes!=null&&servRes.first().claveDga != null){
-							x.dga = resOficios.first().claveDga
+						servRes = resOficios.list
+						if(resOficios.list!=null && resOficios.count>0 && servRes.first().get("claveDga") != null){
+							x.dga = servRes.first().get("claveDga")
+							x.numeroOficio = servRes.first().get("numeroOficio")
 						}
 					}
 					catch(Exception ex){

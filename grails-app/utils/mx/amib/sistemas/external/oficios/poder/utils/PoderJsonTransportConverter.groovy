@@ -19,25 +19,31 @@ public class PoderJsonTransportConverter {
 		Calendar calfc = Calendar.getInstance()
 		Calendar calfm = Calendar.getInstance()
 		
-		p.id = jsonObject.'id'
-		p.version = jsonObject.'version'
+		if(!JSONObject.NULL.equals(jsonObject.'id')) p.id = jsonObject.'id'
+		if(!JSONObject.NULL.equals(jsonObject.'version')) p.version = jsonObject.'version'
 		
-		p.idGrupoFinanciero = jsonObject.'idGrupoFinanciero'
-		p.idInstitucion = jsonObject.'idInstitucion'
-		p.idNotario = jsonObject.'idNotario'
-		p.numeroEscritura = jsonObject.'numeroEscritura'
-		p.representanteLegalNombre = jsonObject.'representanteLegalNombre'
-		p.representanteLegalApellido1 = jsonObject.'representanteLegalApellido1'
-		p.representanteLegalApellido2 = jsonObject.'representanteLegalApellido2'
+		if(!JSONObject.NULL.equals(jsonObject.'idGrupoFinanciero')) p.idGrupoFinanciero = jsonObject.'idGrupoFinanciero'
+		if(!JSONObject.NULL.equals(jsonObject.'idInstitucion')) p.idInstitucion = jsonObject.'idInstitucion'
+		if(!JSONObject.NULL.equals(jsonObject.'idNotario')) p.idNotario = jsonObject.'idNotario'
+		if(!JSONObject.NULL.equals(jsonObject.'numeroEscritura')) p.numeroEscritura = jsonObject.'numeroEscritura'
+		if(!JSONObject.NULL.equals(jsonObject.'representanteLegalNombre')) p.representanteLegalNombre = jsonObject.'representanteLegalNombre'
+		if(!JSONObject.NULL.equals(jsonObject.'representanteLegalApellido1')) p.representanteLegalApellido1 = jsonObject.'representanteLegalApellido1'
+		if(!JSONObject.NULL.equals(jsonObject.'representanteLegalApellido2')) p.representanteLegalApellido2 = jsonObject.'representanteLegalApellido2'
+		if(!JSONObject.NULL.equals(jsonObject.'fechaApoderamiento')){
 		calfap.setTimeInMillis(jsonObject.'fechaApoderamiento')
 		p.fechaApoderamiento = calfap.getTime()
-		p.uuidDocumentoRespaldo = jsonObject.'uuidDocumentoRespaldo'
-		p.apoderados = ApoderadoJsonTranportConverter.fromJsonArrayToTranport(jsonObject.'apoderados')
+		}
+		if(!JSONObject.NULL.equals(jsonObject.'uuidDocumentoRespaldo')) p.uuidDocumentoRespaldo = jsonObject.'uuidDocumentoRespaldo'
+		if(!JSONObject.NULL.equals(jsonObject.'apoderados')) p.apoderados = ApoderadoJsonTranportConverter.fromJsonArrayToTranport(jsonObject.'apoderados')
 
-		calfc.setTimeInMillis(jsonObject.'fechaCreacion')
-		p.fechaCreacion = calfc.getTime()
+		if(!JSONObject.NULL.equals(jsonObject.'fechaCreacion')){
+			calfc.setTimeInMillis(jsonObject.'fechaCreacion')
+			p.fechaCreacion = calfc.getTime()
+		}
+		if(!JSONObject.NULL.equals(jsonObject.'fechaModificacion')){
 		calfm.setTimeInMillis(jsonObject.'fechaModificacion')
 		p.fechaModificacion = calfm.getTime()
+		}
 		
 		return p
 	}

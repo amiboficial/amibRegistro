@@ -329,21 +329,34 @@ class ExpedienteController {
 		if(s.certificaciones.size()>0){
 			println("certifications ids")
 			println(s.certificaciones.collect{it.id})
-				Date mostRecent
-				s.certificaciones.get(0).validaciones.each{ x ->
-					if(mostRecent == null && x.fechaInicio!=null){
-						mostRecent = x.fechaInicio
-					}else if(x.fechaInicio!=null && x.fechaInicio > mostRecent){
-						mostRecent = x.fechaInicio
+			Date mostMostRecent
+				s.certificaciones.each{w -> 
+					Date mostRecent
+					w.validaciones.each{ x ->
+						println("validaciones x.fechaInicio:::::;;;;;;;;")
+						println(x.fechaInicio)
+						if(mostRecent == null && x.fechaInicio!=null){
+							mostRecent = x.fechaInicio
+						}else if(x.fechaInicio!=null && x.fechaInicio > mostRecent){
+							mostRecent = x.fechaInicio
+						}
+					}
+					if(mostMostRecent == null && w.fechaAutorizacionInicio!=null){
+						mostMostRecent = w.fechaAutorizacionInicio
+					}else if(w.fechaAutorizacionInicio!=null && w.fechaAutorizacionInicio > mostMostRecent){
+						mostMostRecent = w.fechaAutorizacionInicio
+					}
+					println("la validacion mas recienteeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"+mostRecent)
+					if(mostRecent!=null){
+						ValidacionTO lastone =w.validaciones.find { vali -> vali.fechaInicio == mostRecent }
+						w.validaciones.clear()
+						w.validaciones.add(lastone)
+						//ultima autorizacion
 					}
 				}
-				println("la validacion mas recienteeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"+mostRecent)
-				if(mostRecent!=null){
-					ValidacionTO lastone =s.certificaciones.get(0).validaciones.find { vali -> vali.fechaInicio == mostRecent }
-					s.certificaciones.get(0).validaciones.clear()
-					s.certificaciones.get(0).validaciones.add(lastone)
-				}
 				//obtencion de dga si existe
+				String degea = ""
+				String numeroficio = ""
 				s.certificaciones.each{ x ->
 					try{
 						SearchResult<OficioCnbvTO> resOficios = oficioCnbvService.findAllByMultipleIdCertificacionInAutorizados(max, offset, sort, order, x.collect{ it.id } )
@@ -351,12 +364,37 @@ class ExpedienteController {
 						println(resOficios as JSON)
 						servRes = resOficios.list
 						if(resOficios.list!=null && resOficios.count>0 && servRes.first().get("claveDga") != null){
-							x.dga = servRes.first().get("claveDga")
-							x.numeroOficio = servRes.first().get("numeroOficio")
+							SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy")
+							Date masReciente
+							servRes.each{ y ->
+								Date parseo = (Date)y.get("fechaOficio")
+								if(masReciente == null && y.get("fechaOficio")!=null){
+									masReciente = parseo
+								}else if(masReciente!=null && parseo > masReciente){
+									masReciente = parseo
+								}
+							}
+							println("cual es el dga mas reciente ---------<<>>"+masReciente)
+							def actual = servRes.find{ valit -> valit.get("fechaOficio") == masReciente }
+							degea = actual.get("claveDga")
+							numeroficio = actual.get("numeroOficio")
 						}
 					}
 					catch(Exception ex){
 						ex.printStackTrace();
+					}
+				}
+				if(degea!=""){
+					println("degea____>>>"+degea)
+					println("numeroficio>>>"+numeroficio)
+					println("mostMostRecent>>>"+mostMostRecent)
+					
+					s.certificaciones.each{ x ->
+						
+						if(mostMostRecent!= null && x.fechaAutorizacionInicio == mostMostRecent){
+							x.dga = degea
+							x.numeroOficio = Long.parseLong(numeroficio, 10)
+						}
 					}
 				}
 				//END obtencion de dga si existe
@@ -405,6 +443,7 @@ class ExpedienteController {
 			vm.poderInstance = ultimoPoderValido
 			vm.documentoPoderRespaldo = documentoRepositorioService.obtenerMetadatosDocumento( vm.poderInstance.uuidDocumentoRespaldo )
 			vm.notarioPoder = notarioService.get( vm.poderInstance.idNotario  )
+			if(vm.notarioPoder.idEntidadFederativa != null && vm.notarioPoder.idEntidadFederativa.value != null)
 			vm.entidadFederativaNotarioPoder = sepomexService.obtenerEntidadFederativa( (int)vm.notarioPoder.idEntidadFederativa.value )
 			vm.institucionPoder = entidadFinancieraService.obtenerInstitucion( vm.poderInstance.idInstitucion )
 		}
@@ -448,21 +487,34 @@ class ExpedienteController {
 		if(s.certificaciones.size()>0){
 			println("certifications ids")
 			println(s.certificaciones.collect{it.id})
-				Date mostRecent
-				s.certificaciones.get(0).validaciones.each{ x ->
-					if(mostRecent == null && x.fechaInicio!=null){
-						mostRecent = x.fechaInicio
-					}else if(x.fechaInicio!=null && x.fechaInicio > mostRecent){
-						mostRecent = x.fechaInicio
+			Date mostMostRecent
+				s.certificaciones.each{w -> 
+					Date mostRecent
+					w.validaciones.each{ x ->
+						println("validaciones x.fechaInicio:::::;;;;;;;;")
+						println(x.fechaInicio)
+						if(mostRecent == null && x.fechaInicio!=null){
+							mostRecent = x.fechaInicio
+						}else if(x.fechaInicio!=null && x.fechaInicio > mostRecent){
+							mostRecent = x.fechaInicio
+						}
+					}
+					if(mostMostRecent == null && w.fechaAutorizacionInicio!=null){
+						mostMostRecent = w.fechaAutorizacionInicio
+					}else if(w.fechaAutorizacionInicio!=null && w.fechaAutorizacionInicio > mostMostRecent){
+						mostMostRecent = w.fechaAutorizacionInicio
+					}
+					println("la validacion mas recienteeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"+mostRecent)
+					if(mostRecent!=null){
+						ValidacionTO lastone =w.validaciones.find { vali -> vali.fechaInicio == mostRecent }
+						w.validaciones.clear()
+						w.validaciones.add(lastone)
+						//ultima autorizacion
 					}
 				}
-				println("la validacion mas recienteeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"+mostRecent)
-				if(mostRecent!=null){
-					ValidacionTO lastone =s.certificaciones.get(0).validaciones.find { vali -> vali.fechaInicio == mostRecent }
-					s.certificaciones.get(0).validaciones.clear()
-					s.certificaciones.get(0).validaciones.add(lastone)
-				}
 				//obtencion de dga si existe
+				String degea = ""
+				String numeroficio = ""
 				s.certificaciones.each{ x ->
 					try{
 						SearchResult<OficioCnbvTO> resOficios = oficioCnbvService.findAllByMultipleIdCertificacionInAutorizados(max, offset, sort, order, x.collect{ it.id } )
@@ -470,12 +522,37 @@ class ExpedienteController {
 						println(resOficios as JSON)
 						servRes = resOficios.list
 						if(resOficios.list!=null && resOficios.count>0 && servRes.first().get("claveDga") != null){
-							x.dga = servRes.first().get("claveDga")
-							x.numeroOficio = servRes.first().get("numeroOficio")
+							SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy")
+							Date masReciente
+							servRes.each{ y ->
+								Date parseo = (Date)y.get("fechaOficio")
+								if(masReciente == null && y.get("fechaOficio")!=null){
+									masReciente = parseo
+								}else if(masReciente!=null && parseo > masReciente){
+									masReciente = parseo
+								}
+							}
+							println("cual es el dga mas reciente ---------<<>>"+masReciente)
+							def actual = servRes.find{ valit -> valit.get("fechaOficio") == masReciente }
+							degea = actual.get("claveDga")
+							numeroficio = actual.get("numeroOficio")
 						}
 					}
 					catch(Exception ex){
 						ex.printStackTrace();
+					}
+				}
+				if(degea!=""){
+					println("degea____>>>"+degea)
+					println("numeroficio>>>"+numeroficio)
+					println("mostMostRecent>>>"+mostMostRecent)
+					
+					s.certificaciones.each{ x ->
+						
+						if(mostMostRecent!= null && x.fechaAutorizacionInicio == mostMostRecent){
+							x.dga = degea
+							x.numeroOficio = Long.parseLong(numeroficio, 10)
+						}
 					}
 				}
 				//END obtencion de dga si existe
@@ -525,6 +602,7 @@ class ExpedienteController {
 			vm.poderInstance = ultimoPoderValido
 			vm.documentoPoderRespaldo = documentoRepositorioService.obtenerMetadatosDocumento( vm.poderInstance.uuidDocumentoRespaldo )
 			vm.notarioPoder = notarioService.get( vm.poderInstance.idNotario  )
+			if(vm.notarioPoder.idEntidadFederativa != null && vm.notarioPoder.idEntidadFederativa.value != null)
 			vm.entidadFederativaNotarioPoder = sepomexService.obtenerEntidadFederativa( (int)vm.notarioPoder.idEntidadFederativa.value )
 			vm.institucionPoder = entidadFinancieraService.obtenerInstitucion( vm.poderInstance.idInstitucion )
 		}

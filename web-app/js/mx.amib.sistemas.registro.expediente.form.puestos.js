@@ -94,6 +94,8 @@ app.PuestoViewModel = Backbone.Model.extend({
 		errStatusEntManifProtesta: false,
 		errStatusEntCartaInter: false,
 		showErrMessages: false //si esta bandera se pone en true, se renderea la pila de erores
+		
+		,esActual: ""
 	}
 });
 

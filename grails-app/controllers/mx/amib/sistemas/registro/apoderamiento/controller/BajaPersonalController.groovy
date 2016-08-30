@@ -66,8 +66,8 @@ class BajaPersonalController {
 		SustentanteTO sustentante
 		numeroMatricula = params.int('bajaMatricula')
 		sustentante = sustentanteService.findByMatricula(numeroMatricula)
-		def ultimoPuesto = sustentante.puestos.each{ pue -> 
-			if(pue.esActual){
+		sustentante.puestos.each{ pue -> 
+			if(pue.esActual || pue.fechaFin == null){
 				pue.fechaFin = new Date()
 				pue.esActual = false
 				pue.fechaModificacion = new Date()

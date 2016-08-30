@@ -7,6 +7,7 @@
 		</div>
 	</div>
 
+<div class="{{=esActual}}">
 	<div class="form-group div-idInstitucion">
 		<label class="col-md-2 col-sm-3 control-label">
 			<g:message code="puesto.idInstitucion.label" default="Intermediario del mercado de valores o asesor de inversión contratante en que labora" />
@@ -239,6 +240,7 @@
 		</div>
 	{{ } }}
 
+</div>
 </script>
 
 <script type="text/template" id="expedientePuestos">

@@ -975,6 +975,10 @@
 
 		    					viewStatus: app.EXP_PUES_ST_VALIDATED,
 		    					viewMode: app.EXP_PUES_MODE_NONEDIT,
+
+		    					<g:if test="${x?.esActual}" >
+		    						esActual: "esActual"
+		    					</g:if>
 		    				}
 		    				<g:if test="${i <= viewModelInstance?.sustentanteInstance?.puestos?.size() - 1 }" >
 		    				,
@@ -986,7 +990,7 @@
 
 		<g:each status="i" var="x" in="${viewModelInstance?.sustentanteInstance?.puestos}">
 			<g:if test="${x?.esActual}" >
-				$("<style type='text/css'> div.listaPuestos > div.list-group-item:nth-child(${ viewModelInstance?.sustentanteInstance?.puestos?.size() - i}){ background-color:#eee; font-weight:bold;}</style>").appendTo("head");
+				$("<style type='text/css'> div.esActual{ background-color:#eee; font-weight:bold;}</style>").appendTo("head");
 			</g:if>
 		</g:each>
 	</script>

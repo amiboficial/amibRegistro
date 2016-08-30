@@ -41,6 +41,14 @@ class AltaPersonalController {
 			}
 			else {
 				def lastpuest = sustentante.puestos.find{ it.esActual}
+				if(lastpuest == null){
+					sustentante.puestos.each{ puest ->
+							if(puest.idInstitucion == 92L){
+								puest.esActual = true
+								lastpuest = puest;
+							}
+						}
+				}
 				if(lastpuest.idInstitucion == 92L){
 					respuesta = [ 'status' : 'OK' , 'object' : sustentante ]
 				}else{

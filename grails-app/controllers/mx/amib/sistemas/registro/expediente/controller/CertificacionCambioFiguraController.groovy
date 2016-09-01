@@ -205,8 +205,14 @@ class CertificacionCambioFiguraController {
 		
 		nuevaValidacion = new ValidacionTO()
 		//nuevaValidacion = validacion.
-		nuevaValidacion.fechaInicio = certAEmitDict.fechaInicio
-		nuevaValidacion.fechaFin = certAEmitDict.fechaFin
+		if(certAEmitDict!= null && certAEmitDict.fechaInicio!= null &&  certAEmitDict.fechaFin!= null ){
+			nuevaValidacion.fechaInicio = certAEmitDict.fechaInicio
+			nuevaValidacion.fechaFin = certAEmitDict.fechaFin
+		}else{
+			nuevaValidacion.fechaInicio = new Date()
+			nuevaValidacion.fechaFin = new Date()
+		}
+		
 		nuevaValidacion.autorizadoPorUsuario = 'CAMBIO_FIGURA'
 		
 		nuevaValidacion.idMetodoValidacion = MetodosValidacionTypes.EXAMEN

@@ -155,12 +155,15 @@ class CertificacionReposicionAutorizacionController {
 			originalSust = originalCert.sustentante
 		}
 		
-		if(params.'sustentante.fechaNacimiento_month'!=null && params.'sustentante.fechaNacimiento_month'.toString().length()<2){
-			sustentante.fechaNacimiento = sdf.parse(params.'sustentante.fechaNacimiento_day' + '-0' + params.'sustentante.fechaNacimiento_month' + '-' + params.'sustentante.fechaNacimiento_year')
-		}else{
-			sustentante.fechaNacimiento = sdf.parse(params.'sustentante.fechaNacimiento_day' + '-0' + params.'sustentante.fechaNacimiento_month' + '-' + params.'sustentante.fechaNacimiento_year')
+		if(params.'sustentante.fechaNacimiento_month'!=null && params.'sustentante.fechaNacimiento_month'!="-1"
+		&& params.'sustentante.fechaNacimiento_day'!=null && params.'sustentante.fechaNacimiento_day'!="-1"	
+		&& params.'sustentante.fechaNacimiento_year'!=null && params.'sustentante.fechaNacimiento_year'!="-1"	){
+			if(params.'sustentante.fechaNacimiento_month'!=null && params.'sustentante.fechaNacimiento_month'.toString().length()<2){
+				sustentante.fechaNacimiento = sdf.parse(params.'sustentante.fechaNacimiento_day' + '-0' + params.'sustentante.fechaNacimiento_month' + '-' + params.'sustentante.fechaNacimiento_year')
+			}else{
+				sustentante.fechaNacimiento = sdf.parse(params.'sustentante.fechaNacimiento_day' + '-0' + params.'sustentante.fechaNacimiento_month' + '-' + params.'sustentante.fechaNacimiento_year')
+			}
 		}
-		
 		def telefonosJsonElement = JSON.parse(params.'sustentante.telefonos_json')
 		sustentante.telefonos = new ArrayList<TelefonoSustentanteTO>()
 		if(telefonosJsonElement != null && telefonosJsonElement instanceof JSONArray){
@@ -188,20 +191,25 @@ class CertificacionReposicionAutorizacionController {
 				else
 					p.id = Long.parseLong(it.'id'.toString())
 				p.idInstitucion = Long.parseLong(it.'idInstitucion'.toString())
-				if(it.'fechaInicio_month'!=null && it.'fechaInicio_month'.toString().length()<2){
-					p.fechaInicio = sdf.parse(it.'fechaInicio_day' + '-0' + it.'fechaInicio_month' + '-' + it.'fechaInicio_year')
+				if(it.'fechaInicio_month'!=null && it.'fechaInicio_month'!="-1"
+					&& it.'fechaInicio_day'!=null && it.'fechaInicio_day'!="-1"
+					&& it.'fechaInicio_year'!=null && it.'fechaInicio_year'!="-1"	){
+						if(it.'fechaInicio_month'!=null && it.'fechaInicio_month'.toString().length()<2){
+							p.fechaInicio = sdf.parse(it.'fechaInicio_day' + '-0' + it.'fechaInicio_month' + '-' + it.'fechaInicio_year')
+						}
+						else{
+							p.fechaInicio = sdf.parse(it.'fechaInicio_day' + '-' + it.'fechaInicio_month' + '-' + it.'fechaInicio_year')
+						}
 				}
-				else{
-					p.fechaInicio = sdf.parse(it.'fechaInicio_day' + '-' + it.'fechaInicio_month' + '-' + it.'fechaInicio_year')
-				}
-				if(it.'fechaFin_day'.toString() != '-1' && it.'fechaFin_month'.toString() != '-1' && it.'fechaFin_year'.toString() != '-1'){
-					if(it.'fechaInicio_month'!=null && it.'fechaInicio_month'.toString().length()<2){
-						p.fechaInicio = sdf.parse(it.'fechaInicio_day' + '-0' + it.'fechaInicio_month' + '-' + it.'fechaInicio_year')
+					
+				if(	it.'fechaFin_day'!=null && it.'fechaFin_month'!=null && it.'fechaFin_year'!=null &&
+					it.'fechaFin_day'.toString() != '-1' && it.'fechaFin_month'.toString() != '-1' && it.'fechaFin_year'.toString() != '-1'){
+					if(it.'fechaFin_month'!=null && it.'fechaFin_month'.toString().length()<2){
+						p.fechaFin = sdf.parse(it.'fechaFin_day' + '-0' + it.'fechaFin_month' + '-' + it.'fechaFin_year')
 					}
 					else{
-						p.fechaInicio = sdf.parse(it.'fechaInicio_day' + '-' + it.'fechaInicio_month' + '-' + it.'fechaInicio_year')
+						p.fechaFin = sdf.parse(it.'fechaFin_day' + '-' + it.'fechaFin_month' + '-' + it.'fechaFin_year')
 					}
-					p.fechaFin = sdf.parse(it.'fechaFin_day' + '-' + it.'fechaFin_month' + '-' + it.'fechaFin_year')
 					p.esActual = false
 				}
 				else{
@@ -220,15 +228,27 @@ class CertificacionReposicionAutorizacionController {
 		}
 		//sustentante.certificaciones = originalSust.certificaciones
 		CertificacionTO certAEmitDict = originalSust.certificaciones.find{ it.id.value == certificacion.id.value }
-		if(params.'certificacion.fechaInicio_month'!=null && params.'certificacion.fechaInicio_month'.toString().length()<2){
-			certAEmitDict.fechaInicio = sdf.parse(params.'certificacion.fechaInicio_day' + '-0' + params.'certificacion.fechaInicio_month' + '-' + params.'certificacion.fechaInicio_year')
-		}else{
-			certAEmitDict.fechaInicio = sdf.parse(params.'certificacion.fechaInicio_day' + '-' + params.'certificacion.fechaInicio_month' + '-' + params.'certificacion.fechaInicio_year')
+		
+		println("obtencion fechas")
+		println(params.'certificacion.fechaFin_day' + '-' + params.'certificacion.fechaFin_month' + '-' + params.'certificacion.fechaFin_year')
+		println(params.'certificacion.fechaInicio_day' + '-' + params.'certificacion.fechaInicio_month' + '-' + params.'certificacion.fechaInicio_year')
+		
+		
+		if(	params.'certificacion.fechaInicio_day'!=null && params.'certificacion.fechaInicio_month'!=null && params.'certificacion.fechaInicio_year'!=null &&
+			params.'certificacion.fechaInicio_day'!= '-1' && params.'certificacion.fechaInicio_month'!= '-1' && params.'certificacion.fechaInicio_year'!= '-1'){
+				if(params.'certificacion.fechaInicio_month'!=null && params.'certificacion.fechaInicio_month'.toString().length()<2){
+					certAEmitDict.fechaInicio = sdf.parse(params.'certificacion.fechaInicio_day' + '-0' + params.'certificacion.fechaInicio_month' + '-' + params.'certificacion.fechaInicio_year')
+				}else{
+					certAEmitDict.fechaInicio = sdf.parse(params.'certificacion.fechaInicio_day' + '-' + params.'certificacion.fechaInicio_month' + '-' + params.'certificacion.fechaInicio_year')
+				}
 		}
-		if(params.'certificacion.fechaFin_month'!=null && params.'certificacion.fechaFin_month'.toString().length()<2){
-			certAEmitDict.fechaFin = sdf.parse(params.'certificacion.fechaFin_day' + '-0' + params.'certificacion.fechaFin_month' + '-' + params.'certificacion.fechaFin_year')
-		}else{
-			certAEmitDict.fechaFin = sdf.parse(params.'certificacion.fechaFin_day' + '-' + params.'certificacion.fechaFin_month' + '-' + params.'certificacion.fechaFin_year')
+		if(	params.'certificacion.fechaFin_day'!=null && params.'certificacion.fechaFin_month'!=null && params.'certificacion.fechaFin_year'!=null &&
+			params.'certificacion.fechaFin_day'!= '-1' && params.'certificacion.fechaFin_month'!= '-1' && params.'certificacion.fechaFin_year'!= '-1'){
+				if(params.'certificacion.fechaFin_month'!=null && params.'certificacion.fechaFin_month'.toString().length()<2){
+					certAEmitDict.fechaFin = sdf.parse(params.'certificacion.fechaFin_day' + '-0' + params.'certificacion.fechaFin_month' + '-' + params.'certificacion.fechaFin_year')
+				}else{
+					certAEmitDict.fechaFin = sdf.parse(params.'certificacion.fechaFin_day' + '-' + params.'certificacion.fechaFin_month' + '-' + params.'certificacion.fechaFin_year')
+				}
 		}
 		certAEmitDict.statusEntHistorialInforme = certificacion.statusEntHistorialInforme
 		certAEmitDict.obsEntHistorialInforme = certificacion.obsEntHistorialInforme
@@ -239,8 +259,13 @@ class CertificacionReposicionAutorizacionController {
 		
 		nuevaValidacion = new ValidacionTO()
 		//nuevaValidacion = validacion.
-		nuevaValidacion.fechaInicio = certAEmitDict.fechaInicio
-		nuevaValidacion.fechaFin = certAEmitDict.fechaFin
+		if(certAEmitDict!= null && certAEmitDict.fechaInicio!= null &&  certAEmitDict.fechaFin!= null ){
+			nuevaValidacion.fechaInicio = certAEmitDict.fechaInicio
+			nuevaValidacion.fechaFin = certAEmitDict.fechaFin
+		}else{
+			nuevaValidacion.fechaInicio = new Date()
+			nuevaValidacion.fechaFin = new Date()
+		}
 		nuevaValidacion.autorizadoPorUsuario = validacion.autorizadoPorUsuario
 		
 		nuevaValidacion.idMetodoValidacion = validacion.idMetodoValidacion
@@ -249,6 +274,12 @@ class CertificacionReposicionAutorizacionController {
 			//Aquí introduce el id de reservación del exámen ocupado 
 			//idExamenReservacion -> validacion.idExamenReservacion
 			nuevaValidacion.fechaAplicacion = new Date(Long.parseLong(params.'validacion.fechaAplicacionExamenUnixEpoch'.toString())*1000)
+			
+			//asigna la figura asociada al examen
+			Collection<RegistroExamenTO> examents = registroExamenService.findAllRevalidableByNumeroMatricula( sustentante.numeroMatricula )
+			RegistroExamenTO exacto = examents.find{it.idExamenReservacion.value.toString() == params.'validacion.idExamenReservacion'}
+			certAEmitDict.idVarianteFigura = exacto.idFigura
+			
 		}
 		else if(nuevaValidacion.idMetodoValidacion == MetodosValidacionTypes.PUNTOS){
 			//Aquí añadirá los puntos de acuerdo a los eventos enviados
@@ -264,8 +295,6 @@ class CertificacionReposicionAutorizacionController {
 		}else{
 			nuevaValidacion.fechaAplicacion = new Date()
 		}
-		
-		
 		
 		try {
 			certificacionReposicionAutorizacionService.reponerAutorizacion(sustentante, certAEmitDict, nuevaValidacion)

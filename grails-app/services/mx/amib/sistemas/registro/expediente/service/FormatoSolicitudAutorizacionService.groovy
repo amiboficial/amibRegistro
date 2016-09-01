@@ -123,6 +123,12 @@ class FormatoSolicitudAutorizacionService {
 			String fechaNac;
 			fechaNac = x.sustentante.fechaNacimiento.format( 'yyyyMMdd' )
 			
+			
+			String fechaOrg;
+			
+			fechaOrg = x.fechaEntregaRecepcion.format('yyyyMMdd')
+			
+			
 			String nacionalidad;
 			
 			if(x.sustentante.nacionalidad.descripcion == 'Mexicano/a'){
@@ -135,7 +141,7 @@ class FormatoSolicitudAutorizacionService {
 			//fecha de entrega que se le asigno en dictament previo
 //			refMap.put(this.HEADER_FHENTORG, "yyyyMMdd")
 			if(x.fechaEntregaRecepcion != null)
-			refMap.put(this.HEADER_FHENTORG, x.fechaEntregaRecepcion)			
+			refMap.put(this.HEADER_FHENTORG, fechaOrg)			
 			refMap.put(this.HEADER_TPINST, institucionPuestoActual.idTipoInstitucion)
 			refMap.put(this.HEADER_CVINST, institucionPuestoActual.id)
 			refMap.put(this.HEADER_INST, institucionPuestoActual.nombre)

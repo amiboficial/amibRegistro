@@ -35,7 +35,7 @@
 		                   			</a>
 		                		</div>
 		                		<div class="hidden-xs col-sm-9" style="padding-top:1.18em">    
-		                			<span class="letracabecera">Asociación Mexicana de Intermediarios Bursátiles</span>
+		                			<span class="letracabecera">Asociación Mexicana de Instituciones Bursátiles</span>
 		                		</div>
 		                	</div>
 		                </div>	

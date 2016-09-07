@@ -88,7 +88,7 @@ $( document ).ready(function() {
 		<ul class="nav nav-tabs" role="tablist">
 		  <li role="presentation" class="active"><a href="#tabDatosPersonales" aria-controls="tabDatosPersonales" role="tab" data-toggle="tab">Datos personales</a></li>
 		  <li role="presentation"><a href="#tabCertifaciones" aria-controls="tabCertifaciones" role="tab" data-toggle="tab">Certificaciones</a></li>
-		  <li role="presentation"><a href="#tabPoderVigente" aria-controls="tabPoderVigente" role="tab" data-toggle="tab">Poder vigente</a></li>
+<%--		  <li role="presentation"><a href="#tabPoderVigente" aria-controls="tabPoderVigente" role="tab" data-toggle="tab">Poder vigente</a></li>--%>
 		</ul>
 		
 		<div class="tab-content">
@@ -268,6 +268,7 @@ $( document ).ready(function() {
 				
 			</div>
 			
+<!--
 			<div role="tabpanel" class="tab-pane" id="tabPoderVigente">
 				<br/>
 				<g:if test="${viewModelInstance?.poderInstance != null}">
@@ -399,7 +400,7 @@ $( document ).ready(function() {
 				</g:else>
 				
 			</div>
-
+-->
 		</div>
 		
 	</fieldset>

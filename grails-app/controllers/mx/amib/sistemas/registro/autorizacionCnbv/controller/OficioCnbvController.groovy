@@ -57,6 +57,11 @@ class OficioCnbvController {
 		fechaOficio_month = params.int('oficioCnbv.fechaOficio_month')
 		fechaOficio_year = params.int('oficioCnbv.fechaOficio_year')
 		
+		println("dfghjkjhjgfjkjlñjhgjklkgfgkhjiop")
+		println(fechaOficio_day)
+		println(fechaOficio_month)
+		println(fechaOficio_year)
+		
 		calFechaOficio = Calendar.getInstance()
 		calFechaOficio.set(Calendar.DAY_OF_MONTH, fechaOficio_day )
 		calFechaOficio.set(Calendar.MONTH, fechaOficio_month - 1 )
@@ -65,6 +70,8 @@ class OficioCnbvController {
 		calFechaOficio.set(Calendar.SECOND, 0 )
 		calFechaOficio.set(Calendar.MILLISECOND, 0 )
 		oficioCnbv.fechaOficio = calFechaOficio.getTime()
+		println("timu-------oficioCnbv.fechaOficio")
+		println(oficioCnbv.fechaOficio)
 		
 		certsFromIds = certificacionService.getAll(idsCertificacion)
 		oficioCnbv.autorizados = new ArrayList<AutorizadoCnbvTO>()
@@ -76,14 +83,15 @@ class OficioCnbvController {
 			oficioCnbv.autorizados.add(aut)
 		}
 		
-		//try{	
+		try{	
 			//Ya teniendo todo bindeado a oficioCnbv
 			oficioCnbv = autorizacionCnbvService.altaOficioCnbv(oficioCnbv)
 			flash.successMessage = "El oficio con la Clave DGA: " + oficioCnbv.claveDga + " ha sido dado de alta [ID:" + oficioCnbv.id + "]"
-		//}
-		//catch(Exception e){
-		//	flash.errorMessage = "Ha ocurrido un error al dar de alta el oficio de autorización"
-		//}
+		}
+		catch(Exception e){
+			e.printStackTrace()
+			flash.errorMessage = "Ha ocurrido un error al dar de alta el oficio de autorización"
+		}
 		
 		redirect (action: "index")
 	}

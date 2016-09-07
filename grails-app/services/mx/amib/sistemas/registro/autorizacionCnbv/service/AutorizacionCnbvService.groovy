@@ -24,7 +24,11 @@ class AutorizacionCnbvService {
 		documentoCol.add( this.obtenerDocumentoConMetadatos(oficioCnbv) )
 		documentoRepositorioService.enviarDocumentosArchivoTemporal( documentoCol )
 		
-		autorizacionService.autorizar(oficioCnbv.autorizados.collect{ it.idCertificacion })
+//		println("altaOficioCnbv id de certificacion de los autorizados")
+//		println(oficioCnbv.autorizados.collect{ it.idCertificacion })
+		
+		println("cosa que mandara en aurotizaraltaoficio"+oficioCnbv.fechaOficio)
+		autorizacionService.autorizarAltaOficio(oficioCnbv.autorizados.collect{ it.idCertificacion } , oficioCnbv.fechaOficio)
 		
 		return oficioCnbvService.save(oficioCnbv)
 	}

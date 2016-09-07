@@ -213,46 +213,57 @@ $(function() {
 	var sepomexView = new app.SepomexView(sepomexArray, domicilioModel, '<g:createLink controller="Sepomex" action="obtenerDatosSepomex"/>');
 	</script>
 	
-	<g:render template="../common/expedientePuestos"/>
+	<g:render template="../common/expedienteShowPuestos"/>
 	<g:javascript src="mx.amib.sistemas.registro.expediente.form.puestos.js" />
-	<script>
+	<script type="text/javascript">
 		var app = app || {};
-		
+
+		var puestosArray = new Array();
 		app.instituciones = new Array();
 		<g:each var="x" in="${viewModelInstance?.institucionesList}">
 			app.instituciones.push( (new app.Institucion(${x?.id},"${x?.nombre}")) );
 		</g:each>
 
-		var puestosArray = [
-			<g:each status="i" var="x" in="${viewModelInstance?.sustentanteInstance?.puestos}">
-				{
-					grailsId: ${x?.id},
-					idInstitucion: ${x?.idInstitucion},
-					dsInstitucion: app.getInstitucionById(${x?.idInstitucion}).nombre,
-					fechaInicio_day: ${x?.fechaInicio[Calendar.DATE]},
-					fechaInicio_month: ${x?.fechaInicio[Calendar.MONTH]+1},
-					fechaInicio_year: ${x?.fechaInicio[Calendar.YEAR]},
-					<g:if test="${x.fechaFin != null}">
-						fechaFin_day: ${x.fechaFin[Calendar.DATE]},
-						fechaFin_month: ${x.fechaFin[Calendar.MONTH]+1},
-						fechaFin_year: ${x.fechaFin[Calendar.YEAR]},
-					</g:if>
-					nombrePuesto: "${x?.nombrePuesto}",
-					statusEntManifProtesta:  ${x?.statusEntManifProtesta},
-					obsEntManifProtesta: "${x?.obsEntManifProtesta?:''}",
-					statusEntCartaInter:  ${x?.statusEntCartaInter},
-					obsEntCartaInter: "${x?.obsEntCartaInter?:''}",
+		puestosArray = [
+		    			<g:each status="i" var="x" in="${viewModelInstance?.sustentanteInstance?.puestos}">
+		    				{
+		    					grailsId: ${x?.id},
+		    					idInstitucion: ${x?.idInstitucion},
+		    					dsInstitucion: app.getInstitucionById(${x?.idInstitucion}).nombre,
+		    					fechaInicio_day: ${x?.fechaInicio[Calendar.DATE]},
+		    					fechaInicio_month: ${x?.fechaInicio[Calendar.MONTH]+1},
+		    					fechaInicio_year: ${x?.fechaInicio[Calendar.YEAR]},
+		    					<g:if test="${x.fechaFin != null}">
+		    						fechaFin_day: ${x.fechaFin[Calendar.DATE]},
+		    						fechaFin_month: ${x.fechaFin[Calendar.MONTH]+1},
+		    						fechaFin_year: ${x.fechaFin[Calendar.YEAR]},
+		    					</g:if>
+		    					nombrePuesto: "${x?.nombrePuesto}",
+		    					statusEntManifProtesta:  ${x?.statusEntManifProtesta},
+		    					obsEntManifProtesta: "${x?.obsEntManifProtesta?:''}",
+		    					statusEntCartaInter:  ${x?.statusEntCartaInter},
+		    					obsEntCartaInter: "${x?.obsEntCartaInter?:''}",
 
-					viewStatus: app.EXP_PUES_ST_VALIDATED,
-					viewMode: app.EXP_PUES_MODE_NONEDIT,
-				}
-				<g:if test="${i == viewModelInstance?.sustentanteInstance?.puestos?.size() - 1 }" >
-				,
-				</g:if>
-			</g:each>			
-		];
+		    					viewStatus: app.EXP_PUES_ST_VALIDATED,
+		    					viewMode: app.EXP_PUES_MODE_NONEDIT,
+
+		    					<g:if test="${x?.esActual}" >
+		    						esActual: "esActual"
+		    					</g:if>
+		    				}
+		    				<g:if test="${i <= viewModelInstance?.sustentanteInstance?.puestos?.size() - 1 }" >
+		    				,
+		    				</g:if>
+		    			</g:each>
+		    			]
 		
 		var puestosView = new app.PuestosView(puestosArray);
+
+		<g:each status="i" var="x" in="${viewModelInstance?.sustentanteInstance?.puestos}">
+			<g:if test="${x?.esActual}" >
+				$("<style type='text/css'> div.esActual{ background-color:#eee; font-weight:bold;}</style>").appendTo("head");
+			</g:if>
+		</g:each>
 	</script>
 		
 	<g:render template="certificacionDictamen"/>

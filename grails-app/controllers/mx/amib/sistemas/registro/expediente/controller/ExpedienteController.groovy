@@ -29,6 +29,7 @@ import mx.amib.sistemas.external.documentos.service.DocumentoRepositorioService
 import mx.amib.sistemas.external.documentos.service.DocumentoRepositorioTO
 import mx.amib.sistemas.external.documentos.service.DocumentoSustentanteRepositorioTO
 import mx.amib.sistemas.external.expediente.certificacion.catalog.service.StatusAutorizacionTO
+import mx.amib.sistemas.external.expediente.certificacion.catalog.service.StatusAutorizacionTypes
 import mx.amib.sistemas.external.expediente.certificacion.catalog.service.StatusCertificacionTO
 import mx.amib.sistemas.external.expediente.certificacion.service.CertificacionTO
 import mx.amib.sistemas.external.expediente.certificacion.service.ValidacionTO
@@ -79,6 +80,8 @@ class ExpedienteController {
 	def oficioCnbvService
 	
 	def certificacionService
+	
+	StatusAutorizacionTypes statusAutorizacion
 	
 	CertificacionActualizacionAutorizacionService certificacionActualizacionAutorizacionService
 	
@@ -205,6 +208,98 @@ class ExpedienteController {
 		vm.gfins = entidadFinancieraService.obtenerGruposFinancierosVigentes().sort{ it.nombre }
 		
 		render(view:'consulta', model: [viewModelInstance:vm])
+	}
+	
+	def poderes() {
+		IndexViewModel vm = this.getIndexViewModel(params)
+		
+		println ("params")
+		println (params as JSON)
+		if(vm.fltTB == 'T'){
+			def sr = null
+			vm.resultList = new ArrayList<SustentanteTO>()
+			vm.count = 0
+		}
+		else if(vm.fltTB == 'M'){
+			
+			def result = sustentanteService.findByMatricula(vm.fltMat.value)
+			vm.resultList = new ArrayList<SustentanteTO>()
+			
+			vm.offset = 0
+			
+			if(result == null){
+				vm.count = 0
+			}
+			else{
+				Boolean havePowers=false
+				result.certificaciones.each{ x ->
+					if(x.statusAutorizacion.id.value == 5L){
+						havePowers = true
+					}
+				}
+				if(havePowers){
+					vm.count = 1
+					vm.resultList.add(result)
+				}else{
+					vm.count = 0
+				}
+			}
+			
+		}
+		else if(vm.fltTB == 'F'){
+			def result = sustentanteService.get(vm.fltFol)
+			vm.resultList = new ArrayList<SustentanteTO>()
+			
+			if(result == null){
+				vm.count = 0
+			}
+			else{
+				Boolean havePowers=false
+				result.certificaciones.each{ x ->
+					if(x.statusAutorizacion.id.value == 5L){
+						havePowers = true
+					}
+				}
+				if(havePowers){
+					vm.count = 1
+					vm.resultList.add(result)
+				}else{
+					vm.count = 0
+				}	
+			}
+		}
+		else if(vm.fltTB == 'A'){
+			def sr = null
+		println ("vm A")
+		println "vm.finGroup-->" + vm.finGroup
+		println "vm.instFin-->" + vm.instFin
+			if(vm.fltCrt == true){
+				if(vm.finGroup == -1 && vm.instFin == -1 ){
+					println("findAllAdvancedSearchWithCertificacion")
+					sr = sustentanteService.findAllAdvancedSearchWithCertificacion(vm.fltNom, vm.fltAp1, vm.fltAp2, vm.fltFig, vm.fltVFig, vm.fltStCt, vm.fltStAt, vm.max?:10, vm.offset?:0, vm.sort, vm.order)
+				}else{
+					println("findAllAdvancedSearchWithCertificacionAndIns")
+					sr = sustentanteService.findAllAdvancedSearchWithCertificacionAndIns(vm.fltNom, vm.fltAp1, vm.fltAp2, vm.fltFig, vm.fltVFig, vm.fltStCt, vm.fltStAt, vm.max?:10, vm.offset?:0, vm.sort, vm.order, vm.finGroup, vm.instFin)
+				}
+			}else{
+				if(vm.finGroup == -1 && vm.instFin == -1 ){
+					println("findAllAdvancedSearch")
+					sr = sustentanteService.findAllAdvancedSearch(vm.fltNom, vm.fltAp1, vm.fltAp2, vm.max?:10, vm.offset?:0, vm.sort, vm.order)
+				}else{
+					println("findAllAdvancedSearchAndIns")
+					sr = sustentanteService.findAllAdvancedSearchAndIns(vm.fltNom, vm.fltAp1, vm.fltAp2, vm.max?:10, vm.offset?:0, vm.sort, vm.order, vm.finGroup, vm.instFin)
+				}
+			}
+			vm.resultList = sr.list
+			vm.count = sr.count
+		}
+		
+		println ("vm after")
+		//println (vm as JSON)
+		
+		vm.gfins = entidadFinancieraService.obtenerGruposFinancierosVigentes().sort{ it.nombre }
+		
+		render(view:'withPower', model: [viewModelInstance:vm])
 	}
 
 	private IndexViewModel getIndexViewModel(Map params){
@@ -626,6 +721,175 @@ class ExpedienteController {
 		render(view:"showless",model:[viewModelInstance: vm])
 	}
 
+	def powerShow(Long id){
+		println "id de showless"+id
+		def s = sustentanteService.get(id)
+		ShowViewModel vm = new ShowViewModel()
+		
+		//CARGA DE DATOS PARA ENTIDADES FEDERATIVAS
+		vm.entidadesFederativasMap = new HashMap<Integer,EntidadFederativaTO>()
+		sepomexService.obtenerEntidadesFederativas().each{ x ->
+			vm.entidadesFederativasMap.put(x.id,x)
+		}
+		println (vm.entidadesFederativasMap as JSON)
+		vm.institucionesPoderesMap = new HashMap<Long,InstitucionTO>()
+		entidadFinancieraService.obtenerInstituciones().each { x ->
+			vm.institucionesPoderesMap.put(x.id,x)
+		}
+		
+		
+		//se quitan las demas certificaciones para dejar solo la valida
+//		CertificacionTO ultima = s.certificaciones.find{ it.isUltima == true }
+//		s.certificaciones.clear()
+//		s.certificaciones.add(ultima)
+		//
+		List<Map<String,String>> servRes = null
+		int max = Integer.parseInt(params.max?:"10")
+		int offset = Integer.parseInt(params.offset?:"0")
+		String sort = params.sort?:"id"
+		String order = params.order?:"asc"
+		if(s.certificaciones.size()>0){
+			println("certifications ids")
+			println(s.certificaciones.collect{it.id})
+			Date mostMostRecent
+				s.certificaciones.each{w ->
+					Date mostRecent
+					w.validaciones.each{ x ->
+						println("validaciones x.fechaInicio:::::;;;;;;;;")
+						println(x.fechaInicio)
+						if(mostRecent == null && x.fechaInicio!=null){
+							mostRecent = x.fechaInicio
+						}else if(x.fechaInicio!=null && x.fechaInicio > mostRecent){
+							mostRecent = x.fechaInicio
+						}
+					}
+					if(mostMostRecent == null && w.fechaAutorizacionInicio!=null){
+						mostMostRecent = w.fechaAutorizacionInicio
+					}else if(w.fechaAutorizacionInicio!=null && w.fechaAutorizacionInicio > mostMostRecent){
+						mostMostRecent = w.fechaAutorizacionInicio
+					}
+					println("la validacion mas recienteeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"+mostRecent)
+					if(mostRecent!=null){
+						ValidacionTO lastone =w.validaciones.find { vali -> vali.fechaInicio == mostRecent }
+						w.validaciones.clear()
+						w.validaciones.add(lastone)
+						//ultima autorizacion
+					}
+				}
+				//obtencion de dga si existe
+				String degea = ""
+				String numeroficio = ""
+				s.certificaciones.each{ x ->
+					try{
+						SearchResult<OficioCnbvTO> resOficios = oficioCnbvService.findAllByMultipleIdCertificacionInAutorizados(max, offset, sort, order, x.collect{ it.id } )
+						println("respuestaOFICIOS")
+						println(resOficios as JSON)
+						servRes = resOficios.list
+						if(resOficios.list!=null && resOficios.count>0 && servRes.first().get("claveDga") != null){
+							SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy")
+							Date masReciente
+							servRes.each{ y ->
+								Date parseo = (Date)y.get("fechaOficio")
+								if(masReciente == null && y.get("fechaOficio")!=null){
+									masReciente = parseo
+								}else if(masReciente!=null && parseo > masReciente){
+									masReciente = parseo
+								}
+							}
+							println("cual es el dga mas reciente ---------<<>>"+masReciente)
+							def actual = servRes.find{ valit -> valit.get("fechaOficio") == masReciente }
+							degea = actual.get("claveDga")
+							numeroficio = actual.get("numeroOficio")
+						}
+					}
+					catch(Exception ex){
+						ex.printStackTrace();
+					}
+				}
+				if(degea!=""){
+					println("degea____>>>"+degea)
+					println("numeroficio>>>"+numeroficio)
+					println("mostMostRecent>>>"+mostMostRecent)
+					
+					s.certificaciones.each{ x ->
+						
+						if(mostMostRecent!= null && x.fechaAutorizacionInicio == mostMostRecent){
+							x.dga = degea
+							x.numeroOficio = Long.parseLong(numeroficio, 10)
+						}
+					}
+				}
+				//END obtencion de dga si existe
+		}
+		//end de filtro de certificaciones
+		//CARGA DE DATOS DEL SUSTENTANTE
+		vm.sustentanteInstance = s
+		
+		vm.nombreCompleto = s.nombre + " " + s.primerApellido + " " + s.segundoApellido
+		if(s.idSepomex != null)
+			vm.sepomexData = sepomexService.get(s.idSepomex)
+			
+			println("vm.sustentanteInstance")
+			println(vm.sustentanteInstance as JSON)
+		println("vm.sepomexData")
+		println(vm.sepomexData as JSON)
+		
+		//CARGA DE DATOS DE DOCUMENTOS
+		vm.documentosRespositorioUuidMap = new HashMap<String,DocumentoRepositorioTO>()
+		documentoRepositorioService.obtenerTodosPorUuids( vm.sustentanteInstance.documentos.collect{ it.uuid } ).list.each { x ->
+			vm.documentosRespositorioUuidMap.put(x.uuid, x)
+		}
+		
+		//CARGA DE DATOS DE PODER
+		def apoderadoResult
+		def ultimaCertificacion
+		List<ApoderadoTO> apoderaminetosUltimaCertificacion
+		Map<Long,Boolean> apoderamientosRevocados
+		def ultimoPoderValido = null
+		//todos los apoderamientos de todas las certificaciones
+		apoderadoResult = apoderadoService.findAllByIdCertificacionIn( new HashSet<Long>(vm.sustentanteInstance.certificaciones.collect{ it.id.value }.asList()) )
+		//obtiene la ultima certificacion
+		ultimaCertificacion = vm.sustentanteInstance.certificaciones.find{ it.isUltima == true }
+		//obtiene todos los apoderamientos correspondientes a esa ultima certificacion
+		apoderaminetosUltimaCertificacion = apoderadoResult.apoderados.findAll{ it.idCertificacion.value == ultimaCertificacion.id.value }
+		//obtiene los estatus de revocacion correspondiente a todas los apoderamientos de las certificaiones
+		apoderamientosRevocados = revocadoService.containsRevocados( new HashSet<Long>( apoderadoResult.apoderados.collect{ it.id } ) )
+		//obtiene el apoderamiento que no ha sido revocado
+		apoderaminetosUltimaCertificacion.each{ x ->
+			if( apoderamientosRevocados.containsKey( x.id.value ) ){
+				if(apoderamientosRevocados.get( x.id.value ) == false){
+					ultimoPoderValido = apoderadoResult.poderes.find{ it.id.value == x.idPoder.value }
+				}
+			}
+		}
+		if(ultimoPoderValido!=null){
+			vm.poderInstance = ultimoPoderValido
+			vm.documentoPoderRespaldo = documentoRepositorioService.obtenerMetadatosDocumento( vm.poderInstance.uuidDocumentoRespaldo )
+			vm.notarioPoder = notarioService.get( vm.poderInstance.idNotario  )
+			if(vm.notarioPoder.idEntidadFederativa != null && vm.notarioPoder.idEntidadFederativa.value != null)
+			vm.entidadFederativaNotarioPoder = sepomexService.obtenerEntidadFederativa( (int)vm.notarioPoder.idEntidadFederativa.value )
+			vm.institucionPoder = entidadFinancieraService.obtenerInstitucion( vm.poderInstance.idInstitucion )
+		}
+		
+		//CARGA EL HISTORICO DE LOS PODERES
+		vm.historicoPoderes = apoderadoResult.poderes.sort{ it.fechaApoderamiento }.reverse()
+		vm.historioRevocaciones = revocacionService.getAllByIdCertficacionInSet( new HashSet<Long>(vm.sustentanteInstance.certificaciones.collect{ it.id.value }.asList()) ).asList()
+		
+		vm.sustentanteInstance.puestos.each { pu ->
+			if(pu.esActual && pu.idInstitucion != null){
+				InstitucionTO institucionActual = entidadFinancieraService.obtenerInstitucion( pu.idInstitucion )
+				if(institucionActual != null && institucionActual){
+					vm.sustentanteInstance.numeroInterior = institucionActual.getNombre()
+					vm.sustentanteInstance.numeroExterior = institucionActual.getGrupoFinanciero().getNombre()
+				}
+			}
+		}
+		
+		vm.PFIResult = certificacionActualizacionAutorizacionService.getPFIExamns(s.numeroMatricula)
+		
+		render(view:"powerShow",model:[viewModelInstance: vm])
+	}
+	
 	def showDemo(long id) { 
 		
 	}

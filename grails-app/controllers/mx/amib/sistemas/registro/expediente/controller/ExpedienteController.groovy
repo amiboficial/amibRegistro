@@ -30,6 +30,7 @@ import mx.amib.sistemas.external.documentos.service.DocumentoRepositorioTO
 import mx.amib.sistemas.external.documentos.service.DocumentoSustentanteRepositorioTO
 import mx.amib.sistemas.external.expediente.certificacion.catalog.service.StatusAutorizacionTO
 import mx.amib.sistemas.external.expediente.certificacion.catalog.service.StatusAutorizacionTypes
+import mx.amib.sistemas.external.expediente.certificacion.catalog.service.StatusCertificacionTypes
 import mx.amib.sistemas.external.expediente.certificacion.catalog.service.StatusCertificacionTO
 import mx.amib.sistemas.external.expediente.certificacion.service.CertificacionTO
 import mx.amib.sistemas.external.expediente.certificacion.service.ValidacionTO
@@ -579,6 +580,14 @@ class ExpedienteController {
 		int offset = Integer.parseInt(params.offset?:"0")
 		String sort = params.sort?:"id"
 		String order = params.order?:"asc"
+		
+		//se quitan las certificaciones que no esten autorizados o certificados
+		s.certificaciones.retainAll {
+			(it.idStatusAutorizacion == StatusAutorizacionTypes.AUTORIZADO_SIN_PODERES ||
+				it.idStatusAutorizacion == StatusAutorizacionTypes.AUTORIZADO
+				)&&(it.idStatusAutorizacion == StatusCertificacionTypes.CERTIFICADO)
+				}
+		
 		if(s.certificaciones.size()>0){
 			println("certifications ids")
 			println(s.certificaciones.collect{it.id})
@@ -748,6 +757,7 @@ class ExpedienteController {
 		int offset = Integer.parseInt(params.offset?:"0")
 		String sort = params.sort?:"id"
 		String order = params.order?:"asc"
+		
 		if(s.certificaciones.size()>0){
 			println("certifications ids")
 			println(s.certificaciones.collect{it.id})

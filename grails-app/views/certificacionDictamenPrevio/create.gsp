@@ -246,7 +246,7 @@ $(function() {
 					viewStatus: app.EXP_PUES_ST_VALIDATED,
 					viewMode: app.EXP_PUES_MODE_NONEDIT,
 				}
-				<g:if test="${i == viewModelInstance?.sustentanteInstance?.puestos?.size() - 1 }" >
+				<g:if test="${i <= viewModelInstance?.sustentanteInstance?.puestos?.size() - 1 }" >
 				,
 				</g:if>
 			</g:each>			

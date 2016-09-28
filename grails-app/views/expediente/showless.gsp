@@ -87,8 +87,12 @@ $( document ).ready(function() {
 		
 		<ul class="nav nav-tabs" role="tablist">
 		  <li role="presentation" class="active"><a href="#tabDatosPersonales" aria-controls="tabDatosPersonales" role="tab" data-toggle="tab">Datos personales</a></li>
+		  
 		  <li role="presentation"><a href="#tabCertifaciones" aria-controls="tabCertifaciones" role="tab" data-toggle="tab">Certificaciones</a></li>
-<%--		  <li role="presentation"><a href="#tabPoderVigente" aria-controls="tabPoderVigente" role="tab" data-toggle="tab">Poder vigente</a></li>--%>
+		  <li role="presentation"><a href="#tabPoderVigente" aria-controls="tabPoderVigente" role="tab" data-toggle="tab">Poder vigente</a></li>
+		  <li role="presentation"><a href="#tabHistPoder" aria-controls="tabHistPoder" role="tab" data-toggle="tab">Histórico de apoderamientos</a></li>
+		  <li role="presentation"><a href="#tabHistRevoc" aria-controls="tabHistRevoc" role="tab" data-toggle="tab">Histórico de revocaciones</a></li>
+		  <li role="presentation"><a href="#tabPues" aria-controls="tabPues" role="tab" data-toggle="tab">Relaciones laborales</a></li>
 		</ul>
 		
 		<div class="tab-content">
@@ -190,6 +194,8 @@ $( document ).ready(function() {
 				
 			</div>
 			
+			
+			
 			<div role="tabpanel" class="tab-pane" id="tabCertifaciones">
 				<br/>
 				<div class="list-group">
@@ -268,7 +274,7 @@ $( document ).ready(function() {
 				
 			</div>
 			
-<!--
+			
 			<div role="tabpanel" class="tab-pane" id="tabPoderVigente">
 				<br/>
 				<g:if test="${viewModelInstance?.poderInstance != null}">
@@ -320,7 +326,11 @@ $( document ).ready(function() {
 							</label>
 							
 				            <div class="col-md-9 col-sm-9">						
-								<p class="form-control-static">${viewModelInstance?.institucionesPoderesMap?.get( viewModelInstance?.poderInstance?.idInstitucion ).grupoFinanciero?.nombre}</p>
+								<p class="form-control-static">
+									<g:if test="${viewModelInstance?.institucionesPoderesMap?.get( viewModelInstance?.poderInstance?.idInstitucion ) != null}">
+										${viewModelInstance?.institucionesPoderesMap?.get( viewModelInstance?.poderInstance?.idInstitucion ).grupoFinanciero?.nombre}
+									</g:if>
+								</p>
 				            </div>
 						</div>
 						
@@ -329,7 +339,9 @@ $( document ).ready(function() {
 				            	<g:message code="poder.institucion.label" default="Institución" />
 							</label>
 							<div class="col-md-9 col-sm-9">
-								<p class="form-control-static">${viewModelInstance?.institucionesPoderesMap?.get( viewModelInstance?.poderInstance?.idInstitucion ).nombre}</p>
+									<g:if test="${viewModelInstance?.institucionesPoderesMap?.get( viewModelInstance?.poderInstance?.idInstitucion ) != null}">
+										<p class="form-control-static">${viewModelInstance?.institucionesPoderesMap?.get( viewModelInstance?.poderInstance?.idInstitucion ).nombre}</p>
+									</g:if>
 							</div>
 						</div>
 						
@@ -393,6 +405,31 @@ $( document ).ready(function() {
 						</div>
 						
 					</fieldset>
+					
+					<fieldset>
+						<legend><i>Documentos de respaldo</i></legend>
+						
+						<table class="table">
+							<thead>
+								<tr>
+									<th style='width:32%;'>Tipo de documento</th>
+									<th>Nombre de archivo</th>
+									<%--<th style='width:18%'>...</th>
+								--%></tr>
+							</thead>
+							
+							<tbody id="tbdyDocs">
+									<tr>
+										<td>Documento de respaldo poder</td>
+										<td>${viewModelInstance?.documentoPoderRespaldo?.nombre}</td>
+										<%--<td>
+											<button type="button" data-uuid="${viewModelInstance?.poderInstance?.uuidDocumentoRespaldo}" class="download btn btn-info btn-xs">Descargar</button>
+										</td>
+									--%></tr>
+							</tbody>
+						</table>
+						
+					</fieldset>
 				
 				</g:if>
 				<g:else>
@@ -400,7 +437,19 @@ $( document ).ready(function() {
 				</g:else>
 				
 			</div>
--->
+			
+			<div role="tabpanel" class="tab-pane" id="tabHistPoder">
+				<br/>	
+				<div id="divHistoricoPoderSustentante"></div>			
+			</div>
+			<div role="tabpanel" class="tab-pane" id="tabHistRevoc">
+				<br/>
+				<div id="divHistoricoRevocacionSustentante"></div>
+			</div>
+			<div role="tabpanel" class="tab-pane" id="tabPues">
+				<div id="divPues"></div>
+			</div>
+			
 		</div>
 		
 	</fieldset>
@@ -412,43 +461,18 @@ $( document ).ready(function() {
 	<script type="text/javascript">
 	$("#divAffixSidebar").parent().remove();
 	$(".nav.navbar-nav.pull-right").parent().remove();
-	var app = app || {};
-
-	var documentosView;
-	var docsArray = new Array();
-	var downloadUrl;
-
-	<g:each status="i" var="x" in="${viewModelInstance?.sustentanteInstance?.documentos}">
-		docsArray.push({
-			grailsId: ${i+1},
-			uuid: '${x?.uuid}',
-			vigente:  ${x?.vigente},
-			nombre: "${viewModelInstance?.documentosRespositorioUuidMap?.get(x?.uuid)?.nombre}",
-			dsTipo: " ${x?.tipoDocumentoSustentate?.descripcion}",
-			manejaVigenciaTipoDocumento: true,
-			fechaCarga: '<g:formatDate format="dd-MM-yyyy" date="${viewModelInstance?.documentosRespositorioUuidMap?.get(x?.uuid)?.fechaCreacion}"/> ',
-			
-			<g:if test="${i < 10}">
-				visible: true
-			</g:if>
-		})
-	</g:each>
-	downloadUrl = '<g:createLink controller="documento" action="download" />';
-	
-	
 	
 	</script>
-	
-	<g:render template="showHistoricoApoderados" />
+	<g:render template="viewHistoricoApoderados" />
 	<g:javascript src="mx.amib.sistemas.registro.expediente.show.historicoApoderados.js" />
-	<script type="text/javascript" >
+	<script>
 	var app = app || {};
 
 	var elementsArray = new Array();
 	var poderUrl;
 	var historioPoderView;
 	
-	<g:each var="x" in="${viewModelInstance?.historicoPoderes}" >
+	<g:each var="x" in="${viewModelInstance?.historicoPoderes}">
 		elementsArray.push({
 			grailsId: ${x.id},
 			numeroEscritura: ${x.numeroEscritura},
@@ -466,7 +490,7 @@ $( document ).ready(function() {
 	
 	</script>
 	
-	<g:render template="showHistoricoRevocados" />
+	<g:render template="viewHistoricoRevocados" />
 	<g:javascript src="mx.amib.sistemas.registro.expediente.show.historicoRevocados.js" />
 	<script type="text/javascript">
 
@@ -515,6 +539,59 @@ $( document ).ready(function() {
 		window.location.href = url;
 	});
 	
+	</script>
+	
+	<g:render template="../common/expedienteShowPuestos"/>
+	<g:javascript src="mx.amib.sistemas.registro.expediente.form.puestos.js" />
+	<script type="text/javascript">
+		var app = app || {};
+
+		var puestosArray = new Array();
+		app.instituciones = new Array();
+		<g:each var="x" in="${viewModelInstance?.institucionesList}">
+			app.instituciones.push( (new app.Institucion(${x?.id},"${x?.nombre}")) );
+		</g:each>
+
+		puestosArray = [
+		    			<g:each status="i" var="x" in="${viewModelInstance?.sustentanteInstance?.puestos}">
+		    				{
+		    					grailsId: ${x?.id},
+		    					idInstitucion: ${x?.idInstitucion},
+		    					dsInstitucion: app.getInstitucionById(${x?.idInstitucion}).nombre,
+		    					fechaInicio_day: ${x?.fechaInicio[Calendar.DATE]},
+		    					fechaInicio_month: ${x?.fechaInicio[Calendar.MONTH]+1},
+		    					fechaInicio_year: ${x?.fechaInicio[Calendar.YEAR]},
+		    					<g:if test="${x.fechaFin != null}">
+		    						fechaFin_day: ${x.fechaFin[Calendar.DATE]},
+		    						fechaFin_month: ${x.fechaFin[Calendar.MONTH]+1},
+		    						fechaFin_year: ${x.fechaFin[Calendar.YEAR]},
+		    					</g:if>
+		    					nombrePuesto: "${x?.nombrePuesto}",
+		    					statusEntManifProtesta:  ${x?.statusEntManifProtesta},
+		    					obsEntManifProtesta: "${x?.obsEntManifProtesta?:''}",
+		    					statusEntCartaInter:  ${x?.statusEntCartaInter},
+		    					obsEntCartaInter: "${x?.obsEntCartaInter?:''}",
+
+		    					viewStatus: app.EXP_PUES_ST_VALIDATED,
+		    					viewMode: app.EXP_PUES_MODE_NONEDIT,
+
+		    					<g:if test="${x?.esActual}" >
+		    						esActual: "esActual"
+		    					</g:if>
+		    				}
+		    				<g:if test="${i <= viewModelInstance?.sustentanteInstance?.puestos?.size() - 1 }" >
+		    				,
+		    				</g:if>
+		    			</g:each>
+		    			]
+		
+		var puestosView = new app.PuestosView(puestosArray);
+
+		<g:each status="i" var="x" in="${viewModelInstance?.sustentanteInstance?.puestos}">
+			<g:if test="${x?.esActual}" >
+				$("<style type='text/css'> div.esActual{ background-color:#eee; font-weight:bold;}</style>").appendTo("head");
+			</g:if>
+		</g:each>
 	</script>
 	
 </body>

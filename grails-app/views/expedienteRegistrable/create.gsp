@@ -116,7 +116,11 @@
 
 	generalesModel.set("estadoCivil",${viewModelInstance?.registroExamenInstance?.idEstadoCivil});
 	generalesModel.set("nivelEstudios",${viewModelInstance?.registroExamenInstance?.idNivelEstudios});
-	generalesModel.set("nacionalidad",${viewModelInstance?.registroExamenInstance?.idNacionalidad});
+	<g:if test="${ viewModelInstance?.registroExamenInstance?.idNacionalidad != null 
+		&& viewModelInstance?.registroExamenInstance?.idNacionalidad != "" }" >
+		generalesModel.set("nacionalidad",${viewModelInstance?.registroExamenInstance?.idNacionalidad});
+	</g:if>
+	
 
 	generalesModel.set("calidadMigratoria","");
 	generalesModel.set("profesion","");

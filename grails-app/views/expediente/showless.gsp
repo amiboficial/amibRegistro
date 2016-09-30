@@ -374,7 +374,7 @@ $( document ).ready(function() {
 					<fieldset>
 						<legend><i>Datos del notario</i></legend>
 						
-						<div id="divNumNotario" class="form-group">
+						<%--<div id="divNumNotario" class="form-group">
 							<label class="col-md-2 col-sm-3 control-label">
 				            	<g:message code="poder.notario.numero.label" default="Número" />
 							</label>
@@ -382,7 +382,7 @@ $( document ).ready(function() {
 				            <div class="col-md-9 col-sm-9">						
 								<p class="form-control-static">${viewModelInstance?.notarioPoder?.numeroNotaria}</p>
 				            </div>
-						</div>
+						</div>--%>
 						
 						<div id="divNotarioEntidadFederativa" class="form-group">
 							<label class="col-md-2 col-sm-3 control-label">

@@ -557,7 +557,7 @@ class ExpedienteController {
 		println "id de showless"+id
 		def s = sustentanteService.get(id)
 		ShowViewModel vm = new ShowViewModel()
-		
+		vm.institucionesList = entidadFinancieraService.obtenerInstituciones()
 		//CARGA DE DATOS PARA ENTIDADES FEDERATIVAS
 		vm.entidadesFederativasMap = new HashMap<Integer,EntidadFederativaTO>()
 		sepomexService.obtenerEntidadesFederativas().each{ x ->
@@ -568,8 +568,6 @@ class ExpedienteController {
 		entidadFinancieraService.obtenerInstituciones().each { x ->
 			vm.institucionesPoderesMap.put(x.id,x)
 		}
-		
-		
 		//se quitan las demas certificaciones para dejar solo la valida 
 //		CertificacionTO ultima = s.certificaciones.find{ it.isUltima == true }
 //		s.certificaciones.clear()
@@ -580,14 +578,6 @@ class ExpedienteController {
 		int offset = Integer.parseInt(params.offset?:"0")
 		String sort = params.sort?:"id"
 		String order = params.order?:"asc"
-		
-		//se quitan las certificaciones que no esten autorizados o certificados
-		s.certificaciones.retainAll {
-			(it.idStatusAutorizacion == StatusAutorizacionTypes.AUTORIZADO_SIN_PODERES ||
-				it.idStatusAutorizacion == StatusAutorizacionTypes.AUTORIZADO
-				)&&(it.idStatusAutorizacion == StatusCertificacionTypes.CERTIFICADO)
-				}
-		
 		if(s.certificaciones.size()>0){
 			println("certifications ids")
 			println(s.certificaciones.collect{it.id})
@@ -664,7 +654,6 @@ class ExpedienteController {
 		//end de filtro de certificaciones
 		//CARGA DE DATOS DEL SUSTENTANTE
 		vm.sustentanteInstance = s
-		
 		vm.nombreCompleto = s.nombre + " " + s.primerApellido + " " + s.segundoApellido
 		if(s.idSepomex != null)
 			vm.sepomexData = sepomexService.get(s.idSepomex)
@@ -714,16 +703,6 @@ class ExpedienteController {
 		//CARGA EL HISTORICO DE LOS PODERES
 		vm.historicoPoderes = apoderadoResult.poderes.sort{ it.fechaApoderamiento }.reverse()
 		vm.historioRevocaciones = revocacionService.getAllByIdCertficacionInSet( new HashSet<Long>(vm.sustentanteInstance.certificaciones.collect{ it.id.value }.asList()) ).asList()
-		
-		vm.sustentanteInstance.puestos.each { pu ->
-			if(pu.esActual && pu.idInstitucion != null){
-				InstitucionTO institucionActual = entidadFinancieraService.obtenerInstitucion( pu.idInstitucion )
-				if(institucionActual != null && institucionActual){
-					vm.sustentanteInstance.numeroInterior = institucionActual.getNombre()
-					vm.sustentanteInstance.numeroExterior = institucionActual.getGrupoFinanciero().getNombre()
-				}
-			}
-		}
 		
 		vm.PFIResult = certificacionActualizacionAutorizacionService.getPFIExamns(s.numeroMatricula)
 		

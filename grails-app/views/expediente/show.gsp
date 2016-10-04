@@ -945,10 +945,8 @@
 	<g:render template="../common/expedienteShowPuestos"/>
 	<g:javascript src="mx.amib.sistemas.registro.expediente.form.puestos.js" />
 	<script type="text/javascript">
-		var app = app || {};
-
-		var puestosArray = new Array();
-		app.instituciones = new Array();
+		var puestosArray = [];
+		app.instituciones = [];
 		<g:each var="x" in="${viewModelInstance?.institucionesList}">
 			app.instituciones.push( (new app.Institucion(${x?.id},"${x?.nombre}")) );
 		</g:each>
@@ -959,10 +957,12 @@
 		    					grailsId: ${x?.id},
 		    					idInstitucion: ${x?.idInstitucion},
 		    					dsInstitucion: app.getInstitucionById(${x?.idInstitucion}).nombre,
+		    					<g:if test="${x?.fechaInicio != null}">
 		    					fechaInicio_day: ${x?.fechaInicio[Calendar.DATE]},
 		    					fechaInicio_month: ${x?.fechaInicio[Calendar.MONTH]+1},
 		    					fechaInicio_year: ${x?.fechaInicio[Calendar.YEAR]},
-		    					<g:if test="${x.fechaFin != null}">
+		    					</g:if>
+		    					<g:if test="${x?.fechaFin != null}">
 		    						fechaFin_day: ${x.fechaFin[Calendar.DATE]},
 		    						fechaFin_month: ${x.fechaFin[Calendar.MONTH]+1},
 		    						fechaFin_year: ${x.fechaFin[Calendar.YEAR]},
@@ -974,10 +974,10 @@
 		    					obsEntCartaInter: "${x?.obsEntCartaInter?:''}",
 
 		    					viewStatus: app.EXP_PUES_ST_VALIDATED,
-		    					viewMode: app.EXP_PUES_MODE_NONEDIT,
+		    					viewMode: app.EXP_PUES_MODE_NONEDIT
 
-		    					<g:if test="${x?.esActual}" >
-		    						esActual: "esActual"
+		    					<g:if test="${x!=null && x?.esActual}" >
+		    						,esActual: "esActual"
 		    					</g:if>
 		    				}
 		    				<g:if test="${i <= viewModelInstance?.sustentanteInstance?.puestos?.size() - 1 }" >

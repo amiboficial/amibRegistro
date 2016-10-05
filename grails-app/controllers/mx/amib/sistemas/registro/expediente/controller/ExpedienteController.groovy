@@ -497,6 +497,7 @@ class ExpedienteController {
 		}
 		//end de filtro de certificaciones
 		//CARGA DE DATOS DEL SUSTENTANTE
+		s.certificaciones.sort{ a,b-> b.fechaFin<=>a.fechaFin }
 		vm.sustentanteInstance = s
 		vm.nombreCompleto = s.nombre + " " + s.primerApellido + " " + s.segundoApellido
 		if(s.idSepomex != null)
@@ -653,6 +654,7 @@ class ExpedienteController {
 		}
 		//end de filtro de certificaciones
 		//CARGA DE DATOS DEL SUSTENTANTE
+		s.certificaciones.sort{ a,b-> b.fechaFin<=>a.fechaFin }
 		vm.sustentanteInstance = s
 		vm.nombreCompleto = s.nombre + " " + s.primerApellido + " " + s.segundoApellido
 		if(s.idSepomex != null)

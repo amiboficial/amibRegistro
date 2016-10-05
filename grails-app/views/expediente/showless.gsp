@@ -203,7 +203,12 @@ $( document ).ready(function() {
 				
 				
 					<g:each var="x" in="${viewModelInstance?.sustentanteInstance?.certificaciones}">
-						<div class="list-group-item">
+						<g:if test="${x?.isUltima}" >
+							<div class="list-group-item esActual">
+						</g:if>
+						<g:else>
+						     <div class="list-group-item">
+						</g:else>
 							<div class="figuraRow row">
 								<label class="col-sm-3 control-label">Figura</label>
 								<div class="col-sm-4"><p class="form-control-static">${x?.varianteFigura?.nombre}&nbsp;</p></div>

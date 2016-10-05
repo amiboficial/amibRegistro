@@ -229,9 +229,11 @@ $(function() {
 					grailsId: ${x?.id},
 					idInstitucion: ${x?.idInstitucion},
 					dsInstitucion: app.getInstitucionById(${x?.idInstitucion}).nombre,
+					<g:if test="${x?.fechaInicio != null}">
 					fechaInicio_day: ${x?.fechaInicio[Calendar.DATE]},
 					fechaInicio_month: ${x?.fechaInicio[Calendar.MONTH]+1},
 					fechaInicio_year: ${x?.fechaInicio[Calendar.YEAR]},
+					</g:if>
 					<g:if test="${x.fechaFin != null}">
 						fechaFin_day: ${x.fechaFin[Calendar.DATE]},
 						fechaFin_month: ${x.fechaFin[Calendar.MONTH]+1},

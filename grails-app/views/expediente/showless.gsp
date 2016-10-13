@@ -284,7 +284,7 @@ $( document ).ready(function() {
 				<br/>
 				<g:if test="${viewModelInstance?.poderInstance != null}">
 				
-					<fieldset>
+					<%--<fieldset>
 						<legend><i>Datos del representante legal</i></legend>
 						
 						<div id="divRepLegalNom" class="form-group">
@@ -319,7 +319,7 @@ $( document ).ready(function() {
 							</div>
 						</div>
 						
-					</fieldset>
+					</fieldset>--%>	
 					
 					
 					<fieldset>

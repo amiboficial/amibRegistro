@@ -158,6 +158,122 @@
 	});
 	
 	</script>
+	
+	<script type="text/javascript">
+	function enableEditNotarioShow(){
+		$("#errorEditNotarioShow").html("");
+		$("#divEditNotarioShow").show();
+		$("#enableEditNotarioShow").hide();
+		$("#finishEditNotarioShow").show();
+		$("#cancelEditNotarioShow").show();
+		$("#numeroNotarioEditNotarioShow").val("");
+		$(".selectNotarioEditNotarioShow").val("-1");
+		}
+
+	function finishEditNotarioShow(idPowa){
+		var tieneErrores = false;
+		var ErrorsString = "<div class='errorValidacion alert alert-danger' style='display: block;'><span class='glyphicon glyphicon-ban-circle'></span>&nbsp;<span class='msgErrorValidacion'>Se han detectado errores de entrada en los campos del formulario. Verifique cada campo según corresponda.</span><br><ul class='validationErrorMsgs'>"
+			var valid = $(".selectNotarioEditNotarioShow").val()
+		if(valid==undefined || valid=="-1"){
+			tieneErrores = true;
+				ErrorsString += "<li>Debe seleccionar un valor en el campo Nombre de Notario y Entidad Federativa</li>";
+			}
+		if($("#numeroNotarioEditNotarioShow").val()==undefined || $("#numeroNotarioEditNotarioShow").val()==""){
+			tieneErrores = true;
+				ErrorsString += "<li>Debe ingresar un valor en el campo Número de Notario</li>";
+			}
+		ErrorsString += "</ul></div>";
+		$("#errorEditNotarioShow").html("");
+		if(tieneErrores){
+				$("#errorEditNotarioShow").html(ErrorsString);
+				return;
+			}
+
+		$.ajax({
+			url: "<g:createLink controller="expediente" action="updateEditNotarioShow" />",
+			data: { idPoder: idPowa,
+					notid: $(".selectNotarioEditNotarioShow").val()
+					}
+		}).done( function(data){
+			if(data.status == "OK"){
+				var texto = $(".selectNotarioEditNotarioShow option:selected").text();
+				var nameNotariNameEntidad = texto.split("-");
+				$("#nombrecompletoNotarioShowNombre").text(nameNotariNameEntidad[0]);
+				$("#entidadfedNotarioShowEntidadFed").text(nameNotariNameEntidad[1]);
+				cancelEditNotarioShow();
+				$("#errorEditNotarioShow").html("<div class='alert alert-success'><span class='glyphicon glyphicon-info-sign'>Se actualizaron los datos del notario en el poder asociado.</span></div>");
+			}
+			else{
+				ErrorsString = "<div class='errorValidacion alert alert-danger' style='display: block;'><span class='glyphicon glyphicon-ban-circle'></span>"+
+				"&nbsp;"+data.object+
+				"<span class='msgErrorValidacion'></span>";
+				$("#errorEditNotarioShow").html(ErrorsString);
+			}
+		} );
+		
+		
+		}
+
+	function cancelEditNotarioShow(){
+		$("#errorEditNotarioShow").html("");
+		$("#divEditNotarioShow").hide();
+		$("#enableEditNotarioShow").show();
+		$("#finishEditNotarioShow").hide();
+		$("#cancelEditNotarioShow").hide();
+		$("#numeroNotarioEditNotarioShow").val("");
+		$(".selectNotarioEditNotarioShow").val("-1");
+
+		$(".selectNotarioEditNotarioShow").html("");
+		$(".selectNotarioEditNotarioShow").html("<option value='-1'>-Seleccione-</option>");
+	}
+
+
+	function changeEditNotarioShow(){
+		$(".loadingNotarioEditNotarioShow").show();
+		$("#errorEditNotarioShow").html("");
+		var tieneErrores = false;
+		var ErrorsString = "<div class='errorValidacion alert alert-danger' style='display: block;'><span class='glyphicon glyphicon-ban-circle'></span>&nbsp;<span class='msgErrorValidacion'>Se han detectado errores de entrada en los campos del formulario. Verifique cada campo según corresponda.</span><br><ul class='validationErrorMsgs'>"
+		if($("#numeroNotarioEditNotarioShow").val()==undefined || $("#numeroNotarioEditNotarioShow").val()==""){
+			tieneErrores = true;
+				ErrorsString += "<li>Debe ingresar un valor en el campo Número de Notario</li>";
+			}
+		ErrorsString += "</ul></div>";
+		$("#errorEditNotarioShow").html("");
+		if(tieneErrores){
+				$("#errorEditNotarioShow").html(ErrorsString);
+				return;
+			}
+		$.ajax({
+			url: "<g:createLink controller="expediente" action="changeEditNotarioShow" />",
+			data: { 
+					nuNotario:$(".numeroNotarioEditNotarioShow").val()
+				  }
+		}).done( function(data){
+			if(data.status == "OK"){
+				var lista = data.object
+				$(".selectNotarioEditNotarioShow").html("")
+				$(".selectNotarioEditNotarioShow").html("<option value='-1'>-Seleccione-</option>")
+				
+				$.each(lista, function (i, item) {
+				    $('.selectNotarioEditNotarioShow').append($('<option>', { 
+				        value: item.id,
+				        text : item.nombreCompleto 
+				    }));
+				});
+				//alert(lista.length)
+				//console.log(lista);
+			}
+			else{
+				//error alguno
+				$("#errorEditNotarioShow").html(data.object);
+			}
+			$(".loadingNotarioEditNotarioShow").hide();
+		} );
+		}
+
+	
+	</script>
+	
 </head>
 <body>
 	<a id="anchorForm"></a>
@@ -659,7 +775,7 @@
 				<g:if test="${viewModelInstance?.poderInstance != null}">
 				
 					<fieldset>
-						<legend><i>Datos del representante legal</i></legend>
+						<legend><i>Datos del representante legal (Notario de Registro Viejo)</i></legend>
 						
 						<div id="divRepLegalNom" class="form-group">
 							<label class="col-md-2 col-sm-3 control-label">
@@ -690,6 +806,15 @@
 								<g:else>
 									<p class="form-control-static">&nbsp;</p>
 								</g:else>
+							</div>
+						</div>
+						
+						<div id="divNoNotario" class="form-group">
+							<label class="col-md-2 col-sm-3 control-label">
+								<g:message code="poder.representanteLegalNumeroNotario.label" default="Número de Notario" />
+							</label>
+							<div class="col-md-9 col-sm-9">
+								<p class="form-control-static">${viewModelInstance?.poderInstance?.idNotario}</p>
 							</div>
 						</div>
 						
@@ -756,7 +881,7 @@
 						<%--<div id="divNumNotario" class="form-group">
 							<label class="col-md-2 col-sm-3 control-label">
 				            	<g:message code="poder.notario.numero.label" default="Número" />
-							</label>
+							</label>	
 							
 				            <div class="col-md-9 col-sm-9">						
 								<p class="form-control-static">${viewModelInstance?.notarioPoder?.numeroNotaria}</p>
@@ -769,7 +894,7 @@
 							</label>
 							
 				            <div class="col-md-9 col-sm-9">						
-								<p class="form-control-static">${viewModelInstance?.entidadFederativaNotarioPoder?.nombre}</p>
+								<p id="entidadfedNotarioShowEntidadFed" class="form-control-static">${viewModelInstance?.entidadFederativaNotarioPoder?.nombre}</p>
 				            </div>
 						</div>
 						
@@ -779,9 +904,47 @@
 							</label>
 							
 				            <div class="col-md-9 col-sm-9">
-								<p class="form-control-static">${viewModelInstance?.notarioPoder?.nombreCompleto}</p>
+								<p id="nombrecompletoNotarioShowNombre" class="form-control-static">${viewModelInstance?.notarioPoder?.nombreCompleto}</p>
 				            </div>
 						</div>
+						
+						<div id="errorEditNotarioShow">&nbsp;</div>
+						
+						<div id="divEditNotarioShow" style="display:none;" class="form-group">
+						
+							<div class="loadingNotarioEditNotarioShow alert alert-info" style="display:none;" >
+								<asset:image src="spinner_alert_info.gif"/><strong>Procesando datos, espere un momento</strong>.
+							</div>
+						
+							<div class="div-notario form-group">
+								<div class="div-numeroNotaria">
+									<label class="col-md-2 col-sm-3 control-label">
+										<g:message code="notario.numeroNotaria.label" default="Número" /><span class="required-indicator">*</span>
+									</label>
+									<div class="col-md-2 col-sm-2">
+										<input type="text" maxlength="10" class="field form-control numeroNotarioEditNotarioShow"  value="" 
+										id="numeroNotarioEditNotarioShow" 
+										/>
+									</div>
+									<button type="button" class="btn btn-search" onclick="changeEditNotarioShow();" ><span class="glyphicon glyphicon-pencil"></span> Buscar Notarios</button>
+								</div>
+							</div>
+							
+							<div class="div-nombreCompleto form-group">
+								<label class="col-md-2 col-sm-3 control-label">
+									<g:message code="notario.nombreCompletro.label" default="Nombre" /><span class="required-indicator">*</span>
+								</label>
+								<div class="col-md-9 col-sm-9">
+									<select class="field selectNotarioEditNotarioShow form-control" name="selectNotarioEditNotarioShow">
+									</select>
+								</div>
+							</div>
+							
+						</div>
+						
+						<button type="button" class="edit btn btn-primary" onclick="enableEditNotarioShow();" id="enableEditNotarioShow" ><span class="glyphicon glyphicon-pencil"></span> Editar</button>
+						<button type="button" class="update btn btn-info"  onclick="finishEditNotarioShow(${viewModelInstance?.poderInstance?.id});"  id="finishEditNotarioShow" style="display:none;"><span class="glyphicon glyphicon-floppy-disk"></span> Finalizar edición</button>
+						<button type="button" class="cancelEdit btn btn-danger"  onclick="cancelEditNotarioShow();"  id="cancelEditNotarioShow" style="display:none;"><span class="glyphicon glyphicon-remove"></span> Cancelar</button>
 						
 					</fieldset>
 					

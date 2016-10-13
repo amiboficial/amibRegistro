@@ -86,6 +86,7 @@ class ExpedienteController {
 	
 	CertificacionActualizacionAutorizacionService certificacionActualizacionAutorizacionService
 	
+	Collection<EntidadFederativaTO> entidadFederativaList
 	
     def index() {
 		IndexViewModel vm = this.getIndexViewModel(params)
@@ -525,7 +526,7 @@ class ExpedienteController {
 		//obtiene la ultima certificacion
 		ultimaCertificacion = vm.sustentanteInstance.certificaciones.find{ it.isUltima == true }
 		//obtiene todos los apoderamientos correspondientes a esa ultima certificacion
-		apoderaminetosUltimaCertificacion = apoderadoResult.apoderados.findAll{ it.idCertificacion.value == ultimaCertificacion.id.value }
+		apoderaminetosUltimaCertificacion = apoderadoResult.apoderados.findAll{ it?.idCertificacion?.value == ultimaCertificacion?.id?.value }
 		//obtiene los estatus de revocacion correspondiente a todas los apoderamientos de las certificaiones
 		apoderamientosRevocados = revocadoService.containsRevocados( new HashSet<Long>( apoderadoResult.apoderados.collect{ it.id } ) )
 		//obtiene el apoderamiento que no ha sido revocado
@@ -1012,6 +1013,57 @@ class ExpedienteController {
 		}else{
 			respuesta = [ 'status' : 'ERROR' ]
 		}
+		render(respuesta as JSON)
+	}
+	
+	def changeEditNotarioShow(){
+		if(entidadFederativaList==null){
+			entidadFederativaList = sepomexService.obtenerEntidadesFederativas()
+		}
+		def ult = null
+		def res = new SearchResult<NotarioTO>()
+		res.list = new ArrayList<NotarioTO>()
+		int numeroNotaria = -1
+		def auxList = null
+		try{
+			for(EntidadFederativaTO eft: entidadFederativaList){
+				numeroNotaria = Integer.parseInt(params.nuNotario?:"-1")
+				auxList = notarioService.findAllBy(100,0,"desc","nombreCompleto",eft.id,numeroNotaria,"")
+				if(auxList!=null && auxList.error!= null && !auxList.error && auxList.count!= null && auxList.count > 0
+					&& auxList.list!= null ){
+					auxList.list.each{
+							def auxRow = it;
+							auxRow.nombreCompleto = auxRow.nombreCompleto +" - "+ eft.nombre
+							res.list.add(auxRow)
+					}
+				}//end if not null or error rasultset
+			}//end iteration federal entyties
+			ult = [ 'status': 'OK', 'object': res.list ]
+		}
+		catch(Exception ex) {
+			ex.printStackTrace()
+			ult = [ 'status': 'ERROR', 'object': ex.message ]
+		}
+		render ult as JSON
+	}
+	
+	def updateEditNotarioShow(){
+		def respuesta = null
+		try{
+			def poderToUpdate = Long.parseLong( params.idPoder)
+			def nuevoNotarioId = Long.parseLong( params.notid)
+			def poderActual = poderService.get(poderToUpdate)
+			println("poderActual get")
+			println(poderActual as JSON)
+			poderActual.idNotario = nuevoNotarioId
+			poderActual = poderService.update(poderActual)
+			println("poderActual after")
+			println(poderActual as JSON)
+		}catch(Exception ex) {
+			ex.printStackTrace()
+			respuesta = [ 'status' : 'ERROR' ]
+		}
+			respuesta = [ 'status' : 'OK' ]
 		render(respuesta as JSON)
 	}
 	

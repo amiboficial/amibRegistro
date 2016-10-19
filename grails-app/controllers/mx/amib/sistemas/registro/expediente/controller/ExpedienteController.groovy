@@ -529,14 +529,28 @@ class ExpedienteController {
 		apoderaminetosUltimaCertificacion = apoderadoResult.apoderados.findAll{ it?.idCertificacion?.value == ultimaCertificacion?.id?.value }
 		//obtiene los estatus de revocacion correspondiente a todas los apoderamientos de las certificaiones
 		apoderamientosRevocados = revocadoService.containsRevocados( new HashSet<Long>( apoderadoResult.apoderados.collect{ it.id } ) )
-		//obtiene el apoderamiento que no ha sido revocado
+		//obtiene los apoderamientos que no han sido revocados
+		List<PoderTO> sinRevocar = new ArrayList<PoderTO>()
 		apoderaminetosUltimaCertificacion.each{ x ->
 			if( apoderamientosRevocados.containsKey( x.id.value ) ){
 				if(apoderamientosRevocados.get( x.id.value ) == false){
 					ultimoPoderValido = apoderadoResult.poderes.find{ it.id.value == x.idPoder.value }
+					sinRevocar.add(ultimoPoderValido)
 				}
 			}
 		}
+		//se obtiene la fecha de apoderamiento mas reciente
+		def recentApoderamientodate = null
+		sinRevocar.each{y -> 
+			if(recentApoderamientodate == null){
+				recentApoderamientodate = y.fechaApoderamiento
+			}else if(recentApoderamientodate<y.fechaApoderamiento){
+				recentApoderamientodate = y.fechaApoderamiento
+			}
+		}
+		//se limpia el campo para obtener el ultimo poder con base en la fecha de apoderamiento
+		ultimoPoderValido = null
+		ultimoPoderValido = sinRevocar.find{ it.fechaApoderamiento == recentApoderamientodate }
 		if(ultimoPoderValido!=null){
 			vm.poderInstance = ultimoPoderValido
 			vm.documentoPoderRespaldo = documentoRepositorioService.obtenerMetadatosDocumento( vm.poderInstance.uuidDocumentoRespaldo )
@@ -686,14 +700,28 @@ class ExpedienteController {
 		apoderaminetosUltimaCertificacion = apoderadoResult.apoderados.findAll{ it.idCertificacion.value == ultimaCertificacion.id.value }
 		//obtiene los estatus de revocacion correspondiente a todas los apoderamientos de las certificaiones
 		apoderamientosRevocados = revocadoService.containsRevocados( new HashSet<Long>( apoderadoResult.apoderados.collect{ it.id } ) )
-		//obtiene el apoderamiento que no ha sido revocado
+		//obtiene los apoderamientos que no han sido revocados
+		List<PoderTO> sinRevocar = new ArrayList<PoderTO>()
 		apoderaminetosUltimaCertificacion.each{ x ->
 			if( apoderamientosRevocados.containsKey( x.id.value ) ){
 				if(apoderamientosRevocados.get( x.id.value ) == false){
 					ultimoPoderValido = apoderadoResult.poderes.find{ it.id.value == x.idPoder.value }
+					sinRevocar.add(ultimoPoderValido)
 				}
 			}
 		}
+		//se obtiene la fecha de apoderamiento mas reciente
+		def recentApoderamientodate = null
+		sinRevocar.each{y -> 
+			if(recentApoderamientodate == null){
+				recentApoderamientodate = y.fechaApoderamiento
+			}else if(recentApoderamientodate<y.fechaApoderamiento){
+				recentApoderamientodate = y.fechaApoderamiento
+			}
+		}
+		//se limpia el campo para obtener el ultimo poder con base en la fecha de apoderamiento
+		ultimoPoderValido = null
+		ultimoPoderValido = sinRevocar.find{ it.fechaApoderamiento == recentApoderamientodate }
 		if(ultimoPoderValido!=null){
 			vm.poderInstance = ultimoPoderValido
 			vm.documentoPoderRespaldo = documentoRepositorioService.obtenerMetadatosDocumento( vm.poderInstance.uuidDocumentoRespaldo )
@@ -846,14 +874,28 @@ class ExpedienteController {
 		apoderaminetosUltimaCertificacion = apoderadoResult.apoderados.findAll{ it.idCertificacion.value == ultimaCertificacion.id.value }
 		//obtiene los estatus de revocacion correspondiente a todas los apoderamientos de las certificaiones
 		apoderamientosRevocados = revocadoService.containsRevocados( new HashSet<Long>( apoderadoResult.apoderados.collect{ it.id } ) )
-		//obtiene el apoderamiento que no ha sido revocado
+		//obtiene los apoderamientos que no han sido revocados
+		List<PoderTO> sinRevocar = new ArrayList<PoderTO>()
 		apoderaminetosUltimaCertificacion.each{ x ->
 			if( apoderamientosRevocados.containsKey( x.id.value ) ){
 				if(apoderamientosRevocados.get( x.id.value ) == false){
 					ultimoPoderValido = apoderadoResult.poderes.find{ it.id.value == x.idPoder.value }
+					sinRevocar.add(ultimoPoderValido)
 				}
 			}
 		}
+		//se obtiene la fecha de apoderamiento mas reciente
+		def recentApoderamientodate = null
+		sinRevocar.each{y -> 
+			if(recentApoderamientodate == null){
+				recentApoderamientodate = y.fechaApoderamiento
+			}else if(recentApoderamientodate<y.fechaApoderamiento){
+				recentApoderamientodate = y.fechaApoderamiento
+			}
+		}
+		//se limpia el campo para obtener el ultimo poder con base en la fecha de apoderamiento
+		ultimoPoderValido = null
+		ultimoPoderValido = sinRevocar.find{ it.fechaApoderamiento == recentApoderamientodate }
 		if(ultimoPoderValido!=null){
 			vm.poderInstance = ultimoPoderValido
 			vm.documentoPoderRespaldo = documentoRepositorioService.obtenerMetadatosDocumento( vm.poderInstance.uuidDocumentoRespaldo )

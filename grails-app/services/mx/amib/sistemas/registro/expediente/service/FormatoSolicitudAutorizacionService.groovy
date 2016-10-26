@@ -164,7 +164,7 @@ class FormatoSolicitudAutorizacionService {
 			refMap.put(this.HEADER_DEL, sepomexSust.asentamiento.municipio.nombre)
 			refMap.put(this.HEADER_CIUDAD, sepomexSust.ciudad.nombre)
 			refMap.put(this.HEADER_CP, sepomexSust.codigoPostal)
-			refMap.put(this.HEADER_EDO, sepomexSust.asentamiento.municipio.entidadFederativa.id)
+			refMap.put(this.HEADER_EDO, sepomexSust.ciudad.municipio.entidadFederativa.id)
 			if(telCasa != null)
 				refMap.put(this.HEADER_TELCAS, telCasa.lada?:'' + ' ' + telCasa.telefono?:'' + ' ' + telCasa.extension?:'')
 			if(telOficina != null)

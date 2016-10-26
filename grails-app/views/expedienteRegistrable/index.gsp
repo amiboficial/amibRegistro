@@ -143,6 +143,7 @@
 						<th>${message(code: 'expedienteRegistrable.primerApellido.label', default: 'Primer Apellido')}</th>
 						<th>${message(code: 'expedienteRegistrable.segundoApellido.label', default: 'Segundo Apellido')}</th>
 						<th>${message(code: 'expedienteRegistrable.fechaExamen.label', default: 'Fecha de exámen')}</th>
+						<th>${message(code: 'expedienteRegistrable.figuraExamen.label', default: 'Figura de exámen')}</th>
 						<th>...</th>
 					</tr>
 				</thead>
@@ -154,6 +155,7 @@
 							<td>${it.primerApellido}</td>
 							<td>${it.segundoApellido}</td>
 							<td>${it.fechaAplicacionExamenDay}/${it.fechaAplicacionExamenMonth}/${it.fechaAplicacionExamenYear}</td>
+							<td>${it.descripcionFigura}</td>
 							<td><button class="registrar btn btn-default btn-xs" data-numeroMatricula="${it.numeroMatricula}"
 							 data-fechafetch="${it.fechaAplicacionExamen}">Registrar</button></td>
 						</tr>

@@ -1,6 +1,5 @@
 package mx.amib.sistemas.registro.expediente.service
 
-import javax.xml.soap.SOAPMessage;
 import javax.xml.soap.*;
 
 import mx.amib.sistemas.external.expediente.certificacion.service.CertificacionTO
@@ -8,6 +7,8 @@ import mx.amib.sistemas.external.expediente.certificacion.service.ValidacionTO
 import mx.amib.sistemas.external.expediente.certificacion.catalog.service.StatusCertificacionTypes
 import mx.amib.sistemas.external.expediente.certificacion.catalog.service.StatusAutorizacionTypes
 import mx.amib.sistemas.external.expediente.persona.service.SustentanteTO
+import mx.amib.sistemas.external.expediente.service.CertificacionService;
+import mx.amib.sistemas.external.expediente.service.SustentanteService;
 import grails.transaction.Transactional
 // TODO: Implementar logging en este servicio dado que en estos métodos se hace
 // llamada a múltiples servicios, si alguno falla, se rastrea inmediatamente el
@@ -15,8 +16,8 @@ import grails.transaction.Transactional
 @Transactional
 class CertificacionActualizacionAutorizacionService {
 
-	def sustentanteService
-	def certificacionService
+	SustentanteService sustentanteService
+	CertificacionService certificacionService
 	def autorizacionService
 	
     def obtenerParaActualizacion(long id) {
@@ -25,7 +26,8 @@ class CertificacionActualizacionAutorizacionService {
 		boolean estaCertificado
 		
 		//revisa que este en estatus de dictaminable
-		estaAutorizadoConPoderes = (c.statusAutorizacion.id.value == StatusAutorizacionTypes.AUTORIZADO)
+		estaAutorizadoConPoderes = ( c.statusAutorizacion.id.value == StatusAutorizacionTypes.AUTORIZADO 
+		|| c.statusAutorizacion.id.value == StatusAutorizacionTypes.AUTORIZADO_SIN_PODERES )
 		estaCertificado = (c.statusCertificacion.id.value == StatusCertificacionTypes.CERTIFICADO)
 		
 		if(!(estaAutorizadoConPoderes && estaCertificado))

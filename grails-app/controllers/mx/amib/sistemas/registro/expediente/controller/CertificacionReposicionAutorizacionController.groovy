@@ -229,9 +229,9 @@ class CertificacionReposicionAutorizacionController {
 		//sustentante.certificaciones = originalSust.certificaciones
 		CertificacionTO certAEmitDict = originalSust.certificaciones.find{ it.id.value == certificacion.id.value }
 		
-		println("obtencion fechas")
-		println(params.'certificacion.fechaFin_day' + '-' + params.'certificacion.fechaFin_month' + '-' + params.'certificacion.fechaFin_year')
-		println(params.'certificacion.fechaInicio_day' + '-' + params.'certificacion.fechaInicio_month' + '-' + params.'certificacion.fechaInicio_year')
+//		println("obtencion fechas")
+//		println(params.'certificacion.fechaFin_day' + '-' + params.'certificacion.fechaFin_month' + '-' + params.'certificacion.fechaFin_year')
+//		println(params.'certificacion.fechaInicio_day' + '-' + params.'certificacion.fechaInicio_month' + '-' + params.'certificacion.fechaInicio_year')
 		
 		
 		if(	params.'certificacion.fechaInicio_day'!=null && params.'certificacion.fechaInicio_month'!=null && params.'certificacion.fechaInicio_year'!=null &&

@@ -20,7 +20,8 @@ class CertificacionCambioFiguraService {
 		boolean estaCertificado
 		
 		//revisa que este en estatus de autorizado y certificado
-		estaAutorizadoConPoderes = (c.statusAutorizacion.id.value == StatusAutorizacionTypes.AUTORIZADO)
+		estaAutorizadoConPoderes = (c.statusAutorizacion.id.value == StatusAutorizacionTypes.AUTORIZADO ||
+			c.statusAutorizacion.id.value == StatusAutorizacionTypes.VENCIDA )
 		estaCertificado = (c.statusCertificacion.id.value == StatusCertificacionTypes.CERTIFICADO)
 		
 		if(!(estaAutorizadoConPoderes && estaCertificado))

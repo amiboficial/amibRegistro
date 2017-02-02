@@ -39,7 +39,11 @@ class BajaPersonalController {
 			if(sustentante.certificaciones !=null && sustentante.certificaciones.size()>0){
 				ultimacert = sustentante.certificaciones.find{ it.isUltima == true }
 			}
-			if( ultimacert!=null && !ultimacert.isAutorizado && !ultimacert.isApoderado ){
+			if( 
+				ultimacert!=null && 
+//				!ultimacert.isAutorizado &&
+				 !ultimacert.isApoderado 
+				 ){
 				respuesta = [ 'status' : 'ERROR' , 'object' : 'SUSTENTANTE_NOT_AUT_AND_APODERATED' ]
 			}
 			else if(sustentante.puestos==null || sustentante.puestos.size()<=0){

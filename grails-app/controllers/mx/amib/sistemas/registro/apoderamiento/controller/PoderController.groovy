@@ -156,7 +156,7 @@ class PoderController {
 		//Seteo de fechas en poder
 		Calendar c = Calendar.getInstance()
 		int faDay = Integer.parseInt(params.'poder.fechaApoderamiento_day')
-		int faMonth = Integer.parseInt(params.'poder.fechaApoderamiento_month') - 0
+		int faMonth = Integer.parseInt(params.'poder.fechaApoderamiento_month') - 1
 		int faYear = Integer.parseInt(params.'poder.fechaApoderamiento_year')
 		c.set(faYear,faMonth,faDay);
 		poder.fechaApoderamiento = c.getTime()

@@ -26,8 +26,10 @@ class CertificacionActualizacionAutorizacionService {
 		boolean estaCertificado
 		
 		//revisa que este en estatus de dictaminable
+		//edit1: se agrego tatusAutorizacionTypes.REVOCADA para que en la actualizacion de la autorizacion permita revocadas
 		estaAutorizadoConPoderes = ( c.statusAutorizacion.id.value == StatusAutorizacionTypes.AUTORIZADO 
-		|| c.statusAutorizacion.id.value == StatusAutorizacionTypes.AUTORIZADO_SIN_PODERES )
+		|| c.statusAutorizacion.id.value == StatusAutorizacionTypes.AUTORIZADO_SIN_PODERES
+		|| c.statusAutorizacion.id.value == StatusAutorizacionTypes.REVOCADA)
 		estaCertificado = (c.statusCertificacion.id.value == StatusCertificacionTypes.CERTIFICADO)
 		
 		if(!(estaAutorizadoConPoderes && estaCertificado))

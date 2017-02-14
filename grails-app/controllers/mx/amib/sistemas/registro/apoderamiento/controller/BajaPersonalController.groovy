@@ -35,18 +35,7 @@ class BajaPersonalController {
 		
 		if(sustentante != null){
 			println(sustentante as JSON)
-			CertificacionTO ultimacert
-			if(sustentante.certificaciones !=null && sustentante.certificaciones.size()>0){
-				ultimacert = sustentante.certificaciones.find{ it.isUltima == true }
-			}
-			if( 
-				ultimacert!=null && 
-//				!ultimacert.isAutorizado &&
-				 !ultimacert.isApoderado 
-				 ){
-				respuesta = [ 'status' : 'ERROR' , 'object' : 'SUSTENTANTE_NOT_AUT_AND_APODERATED' ]
-			}
-			else if(sustentante.puestos==null || sustentante.puestos.size()<=0){
+			if(sustentante.puestos==null || sustentante.puestos.size()<=0){
 				respuesta = [ 'status' : 'ERROR' , 'object' : 'SUSTENTANTE_NOT_AUT_AND_APODERATED' ]
 			}
 			else {

@@ -27,14 +27,11 @@ class EntidadFinancieraService {
 	
 	Collection<GrupoFinancieroTO> obtenerGruposFinancierosVigentes(){
 		List<GrupoFinancieroTO> gpvig = new ArrayList<GrupoFinancieroTO>()
-		
 		gruposFinancieros.values().sort{it.nombre}.each{
 			if(it.vigente == true){
 				gpvig.add(it)
 			}
-				
 		}
-		
 		return gpvig
 	}
 	

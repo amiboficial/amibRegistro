@@ -107,7 +107,7 @@
 	function showPFI(){
 		this.$('#opcionPFI').show();
 		if(xmlResponsecontentstring == undefined || xmlResponsecontentstring == "" ){
-			this.$('#clasicPFIrevalidation').html('<div class="form-group"><label class="col-md-2 col-sm-3 control-label">No se pudo contactar el sericio intentelo mas tarde</label></div>');
+			this.$('#clasicPFIrevalidation').html('<div class="form-group"><label class="col-md-2 col-sm-3 control-label">No se pudo contactar el servicio intentelo mas tarde</label></div>');
 		}else{
 			if(xmlResponsecontentstring=="FALSE"){
 				this.$('#clasicPFIrevalidation').html('<div class="form-group"><label class="col-md-2 col-sm-3 control-label">No se encontro la matricula </label></div>');
@@ -315,6 +315,7 @@
 		  <li role="presentation"><a href="#tabHistPoder" aria-controls="tabHistPoder" role="tab" data-toggle="tab">Histórico de apoderamientos</a></li>
 		  <li role="presentation"><a href="#tabHistRevoc" aria-controls="tabHistRevoc" role="tab" data-toggle="tab">Histórico de revocaciones</a></li>
 		  <li role="presentation"><a href="#tabPues" aria-controls="tabPues" role="tab" data-toggle="tab">Relaciones laborales</a></li>
+		  <li role="presentation"><a href="#tabDatosOnline" aria-controls="tabPues" role="tab" data-toggle="tab">Datos Online</a></li>
 		</ul>
 		
 		<div class="tab-content">
@@ -990,6 +991,10 @@
 			</div>
 			<div role="tabpanel" class="tab-pane" id="tabPues">
 				<div id="divPues"></div>
+			</div>
+			
+			<div role="tabpanel" class="tab-pane" id="tabDatosOnline">
+				ONLINE DATA JAJAJAJA XD
 			</div>
 		</div>
 		

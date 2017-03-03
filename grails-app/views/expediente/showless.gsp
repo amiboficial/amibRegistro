@@ -10,7 +10,7 @@ var xmlResponsecontentstring = "${viewModelInstance?.PFIResult}";
 function showPFI(){
 	this.$('#opcionPFI').show();
 	if(xmlResponsecontentstring == undefined || xmlResponsecontentstring == "" ){
-		this.$('#clasicPFIrevalidation').html('<div class="form-group"><label class="col-md-2 col-sm-3 control-label">No se pudo contactar el sericio intentelo mas tarde</label></div>');
+		this.$('#clasicPFIrevalidation').html('<div class="form-group"><label class="col-md-2 col-sm-3 control-label">No se pudo contactar el servicio intentelo mas tarde</label></div>');
 	}else{
 		if(xmlResponsecontentstring=="FALSE"){
 			this.$('#clasicPFIrevalidation').html('<div class="form-group"><label class="col-md-2 col-sm-3 control-label">No se encontro la matricula </label></div>');

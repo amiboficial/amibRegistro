@@ -445,8 +445,6 @@ class SustentanteService {
 		sustentante.genero = data.'genero'
 		sustentante.rfc = data.'rfc'
 		if(!JSONObject.NULL.equals(data.'curp')) sustentante.curp = data.'curp'
-		println("data.'fechaNacimiento'")
-		println(data.'fechaNacimiento')
 		if(!JSONObject.NULL.equals(data.'fechaNacimiento')) sustentante.fechaNacimiento = df.parse(data.'fechaNacimiento'.substring(0,10))
 		sustentante.correoElectronico = data.'correoElectronico'
 		

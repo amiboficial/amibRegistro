@@ -50,6 +50,8 @@ class CertificacionActualizacionAutorizacionService {
 	}
 	
 	def getPFIExamns(Long matricula){
+		String responseContent = "";
+		try{
 		// Create SOAP Connection
 		SOAPConnectionFactory soapConnectionFactory = SOAPConnectionFactory.newInstance();
 		SOAPConnection soapConnection = soapConnectionFactory.createConnection();
@@ -57,10 +59,7 @@ class CertificacionActualizacionAutorizacionService {
 		String url = "http://actualizacionamib.com.mx/SysGEMv2/index.php/services/calificaciones_WSDL/wsdl";
 		SOAPMessage soapResponse = soapConnection.call(createSOAPRequest(""+matricula), url);
 		// print SOAP Response
-		System.out.println();
-		System.out.println("Response SOAP Message:asasaas");
-		soapResponse.writeTo(System.out);
-		String responseContent = "";
+		//soapResponse.writeTo(System.out);
         SOAPPart soapPart = soapResponse.getSOAPPart();
 		SOAPEnvelope env = soapPart.getEnvelope();
 		SOAPBody MyBody = env.getBody();
@@ -68,20 +67,21 @@ class CertificacionActualizacionAutorizacionService {
 		while (iterator.hasNext()) {
 			SOAPBodyElement bodyElement = (SOAPBodyElement)iterator.next();
 			String lastPrice = bodyElement.getValue();
-			System.out.println("The last price for SUNW is ");
-			System.out.println(lastPrice);
 			Iterator iterator2 = bodyElement.getChildElements()
 			while (iterator2.hasNext()) {
 				SOAPBodyElement bodyElement2 = (SOAPBodyElement)iterator2.next();
 				String lastPrice2 = bodyElement2.getValue();
-				System.out.println("The last price for SUNW is ");
-				System.out.println(lastPrice2);
 				if(lastPrice2!=null&&!lastPrice2.equals("")){
 					responseContent = lastPrice2;
 				}
 			}
 		}
 		soapConnection.close();
+		}catch(Exception e){
+			//e.printStackTrace();
+			System.out.println(" error al intentar contactar el servicio externo ssym Mensaje: "+ e.message);
+			responseContent = "";
+		}
 		return responseContent
 	}
 	
@@ -101,10 +101,9 @@ class CertificacionActualizacionAutorizacionService {
 		MimeHeaders headers = soapMessage.getMimeHeaders();
 		headers.addHeader("SOAPAction", serverURI);
 		soapMessage.saveChanges();
-		/* Print the request message */
-		System.out.println("Request SOAP Message:");
-		soapMessage.writeTo(System.out);
-		System.out.println();
+		/* Print the request message 
+		System.out.println("Request SOAP Message:");*/
+		//soapMessage.writeTo(System.out);
 		return soapMessage;
 	}
 	

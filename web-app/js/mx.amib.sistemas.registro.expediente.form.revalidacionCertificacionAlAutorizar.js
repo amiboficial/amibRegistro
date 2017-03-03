@@ -160,7 +160,7 @@ app.RevCertAutView = Backbone.View.extend({
 		if( this.model.get('idMetodoValidacion') == app.RCA_MV_PFI ){
 			this.$('#opcionPFI').show();
 			if(xmlResponsecontentstring == undefined || xmlResponsecontentstring == "" ){
-				this.$('#clasicPFIrevalidation').html('<div class="form-group"><label class="col-md-2 col-sm-3 control-label">No se pudo contactar el sericio intentelo mas tarde</label></div>');
+				this.$('#clasicPFIrevalidation').html('<div class="form-group"><label class="col-md-2 col-sm-3 control-label">No se pudo contactar el servicio intentelo mas tarde</label></div>');
 				this.set('examenPFIvalido',false);
 			}else{
 				if(xmlResponsecontentstring=="FALSE"){

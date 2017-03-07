@@ -21,7 +21,8 @@ class CertificacionCambioFiguraService {
 		
 		//revisa que este en estatus de autorizado y certificado
 		estaAutorizadoConPoderes = (c.statusAutorizacion.id.value == StatusAutorizacionTypes.AUTORIZADO ||
-			c.statusAutorizacion.id.value == StatusAutorizacionTypes.VENCIDA )
+			c.statusAutorizacion.id.value == StatusAutorizacionTypes.VENCIDA ||
+			c.statusAutorizacion.id.value == StatusAutorizacionTypes.AUTORIZADO_SIN_PODERES )
 		estaCertificado = (c.statusCertificacion.id.value == StatusCertificacionTypes.CERTIFICADO)
 		
 		if(!(estaAutorizadoConPoderes && estaCertificado))

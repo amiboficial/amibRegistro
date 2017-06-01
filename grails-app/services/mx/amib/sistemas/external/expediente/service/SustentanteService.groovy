@@ -220,9 +220,15 @@ class SustentanteService {
 				lista.add(sustentante)
 			}
 			sr.list = lista
-			sr.count = resp.json.'count'
-			sr.error = resp.json.'error'
-			sr.errorDetails = resp.json.'errorDetails'
+				if(resp.json != null && resp.json.'count' != null && resp.json.'error' != null ){ //previene fallos cuando falla la peticion a expediente
+					sr.count = resp.json.'count'
+					sr.error = resp.json.'error'
+					sr.errorDetails = resp.json.'errorDetails'
+				}else{
+					sr.count = 0
+					sr.error = false
+					sr.errorDetails = ""
+				}
 		}
 		else{
 			sr.error = true
@@ -258,9 +264,15 @@ class SustentanteService {
 				lista.add(sustentante)
 			}
 			sr.list = lista
-			sr.count = resp.json.'count'
-			sr.error = resp.json.'error'
-			sr.errorDetails = resp.json.'errorDetails'
+				if(resp.json != null && resp.json.'count' != null && resp.json.'error' != null ){ //previene fallos cuando falla la peticion a expediente
+					sr.count = resp.json.'count'
+					sr.error = resp.json.'error'
+					sr.errorDetails = resp.json.'errorDetails'
+				}else{
+					sr.count = 0
+					sr.error = false
+					sr.errorDetails = ""
+				}
 		}
 		else{
 			sr.error = true
@@ -301,10 +313,18 @@ class SustentanteService {
 				SustentanteTO sustentante = this.obtenerSustentanteFromJSON(it)
 				lista.add(sustentante)
 			}
+			println("enates del error AXXXXXXXXXXXXXXXXXXXXXXX")
+			println(resp.json as JSON)
 			sr.list = lista
-			sr.count = resp.json.'count'
-			sr.error = resp.json.'error'
-			sr.errorDetails = resp.json.'errorDetails'
+			if(resp.json != null && resp.json.'count' != null && resp.json.'error' != null ){ //previene fallos cuando falla la peticion a expediente
+				sr.count = resp.json.'count'
+				sr.error = resp.json.'error'
+				sr.errorDetails = resp.json.'errorDetails'
+			}else{
+				sr.count = 0
+				sr.error = false
+				sr.errorDetails = ""
+			}
 		}
 		else{
 			sr.error = true
@@ -352,9 +372,15 @@ class SustentanteService {
 					lista.add(sustentante)
 				}
 				sr.list = lista
-				sr.count = resp.json.'count'
-				sr.error = resp.json.'error'
-				sr.errorDetails = resp.json.'errorDetails'
+				if(resp.json != null && resp.json.'count' != null && resp.json.'error' != null ){ //previene fallos cuando falla la peticion a expediente
+					sr.count = resp.json.'count'
+					sr.error = resp.json.'error'
+					sr.errorDetails = resp.json.'errorDetails'
+				}else{
+					sr.count = 0
+					sr.error = false
+					sr.errorDetails = ""
+				}
 			}
 			else{
 				sr.error = true
@@ -405,9 +431,15 @@ class SustentanteService {
 					lista.add(sustentante)
 				}
 				sr.list = lista
-				sr.count = resp.json.'count'
-				sr.error = resp.json.'error'
-				sr.errorDetails = resp.json.'errorDetails'
+				if(resp.json != null && resp.json.'count' != null && resp.json.'error' != null ){ //previene fallos cuando falla la peticion a expediente
+					sr.count = resp.json.'count'
+					sr.error = resp.json.'error'
+					sr.errorDetails = resp.json.'errorDetails'
+				}else{
+					sr.count = 0
+					sr.error = false
+					sr.errorDetails = ""
+				}
 			}
 			else{
 				sr.error = true

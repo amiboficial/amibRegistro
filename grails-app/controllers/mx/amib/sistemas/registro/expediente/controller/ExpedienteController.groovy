@@ -583,9 +583,9 @@ class ExpedienteController {
 		
 		//listado de solicitudes aceptadas asociadas a la matricula		
 		//aqui se obtiene la informacion de las solicitudes online si es que existe
-		vm.solicitudes = solicitudesOnlineDataService.findAllRegistrableByNumeroMatricula(s.numeroMatricula)
-		println("vm.solicitudes")
-		println(vm.solicitudes)
+//		vm.solicitudes = solicitudesOnlineDataService.findAllRegistrableByNumeroMatricula(s.numeroMatricula)
+//		println("vm.solicitudes")
+//		println(vm.solicitudes)
 		
 		
 		

@@ -28,7 +28,8 @@ grails.mime.types = [ // the first one is the default format
     rss:           'application/rss+xml',
     text:          'text/plain',
     hal:           ['application/hal+json','application/hal+xml'],
-    xml:           ['text/xml', 'application/xml']
+    xml:           ['text/xml', 'application/xml'],
+	docx:          'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
 ]
 
 // URL Mapping Cache Max Size, defaults to 5000
@@ -83,12 +84,21 @@ environments {
         grails.converters.json.pretty.print = true
         grails.logging.jul.usebridge = true
 		
-		mx.amib.sistemas.catalogos.resthttpURL = 'http://10.100.128.57:8080/amibCatalogos-0.1/'
-		//mx.amib.sistemas.expediente.resthttpURL = 'http://bimalatrop.no-ip.biz:8084/amibExpediente/'
-		//mx.amib.sistemas.expediente.resthttpURL = 'http://localhost:8084/amibExpediente/'
-		mx.amib.sistemas.expediente.resthttpURL = 'http://10.100.128.57:8080/amibExpediente-0.1/'
-		mx.amib.sistemas.oficios.resthttpURL = 'http://10.100.128.57:8080/amibOficios/'
-		mx.amib.sistemas.documentos.resthttpURL = 'http://10.100.128.57:8080/amibDocumentos-0.1/'
+//		//mx.amib.sistemas.expediente.resthttpURL = 'http://bimalatrop.no-ip.biz:8084/amibExpediente/'
+//		//mx.amib.sistemas.expediente.resthttpURL = 'http://localhost:8084/amibExpediente/'
+		
+		
+//		mx.amib.sistemas.catalogos.resthttpURL = 'http://10.100.128.57:8080/amibCatalogos-0.1/'
+//		mx.amib.sistemas.expediente.resthttpURL = 'http://10.100.128.57:8080/amibExpediente-0.1/'
+//		mx.amib.sistemas.oficios.resthttpURL = 'http://10.100.128.57:8080/amibOficios/'
+//		mx.amib.sistemas.documentos.resthttpURL = 'http://10.100.128.57:8080/amibDocumentos-0.1/'
+		
+		
+		mx.amib.sistemas.catalogos.resthttpURL = 'http://amibrevalidacion.amib.com.mx:8080/amibCatalogos-0.1/'
+		mx.amib.sistemas.expediente.resthttpURL = 'http://amibrevalidacion.amib.com.mx:8080/amibExpediente-0.1/'
+		mx.amib.sistemas.oficios.resthttpURL = 'http://amibrevalidacion.amib.com.mx:8080/amibOficios/'
+		mx.amib.sistemas.documentos.resthttpURL = 'http://amibrevalidacion.amib.com.mx:8080/amibDocumentos-0.1/'
+		
     }
 	test {
 		grails.logging.jul.usebridge = false

@@ -19,12 +19,12 @@ class NotarioService {
 	
 	def grailsApplication
 	
-	String listUrl = "http://bimalatrop.no-ip.biz:8080/amibCatalogos-0.1/notarioRestful/index"
-	String getUrl = "http://bimalatrop.no-ip.biz:8080/amibCatalogos-0.1/notarioRestful/show/"
-	String saveUrl = "http://bimalatrop.no-ip.biz:8080/amibCatalogos-0.1/notarioRestful/save"
-	String updateUrl = "http://bimalatrop.no-ip.biz:8080/amibCatalogos-0.1/notarioRestful/update/"
-	String deleteUrl = "http://bimalatrop.no-ip.biz:8080/amibCatalogos-0.1/notarioRestful/delete/"
-	String findAllByUrl = "http://bimalatrop.no-ip.biz:8080/amibCatalogos-0.1/notarioRestful/findAllBy"
+	String listUrl = "http://10.100.128.57:8080/amibCatalogos-0.1/notarioRestful/index"
+	String getUrl = "http://10.100.128.57:8080/amibCatalogos-0.1/notarioRestful/show/"
+	String saveUrl = "http://10.100.128.57:8080/amibCatalogos-0.1/notarioRestful/save"
+	String updateUrl = "http://10.100.128.57:8080/amibCatalogos-0.1/notarioRestful/update/"
+	String deleteUrl = "http://10.100.128.57:8080/amibCatalogos-0.1/notarioRestful/delete/"
+	String findAllByUrl = "http://10.100.128.57:8080/amibCatalogos-0.1/notarioRestful/findAllBy"
 	
 	SearchResult list(Integer max, Integer offset, String sort, String order){
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssX")

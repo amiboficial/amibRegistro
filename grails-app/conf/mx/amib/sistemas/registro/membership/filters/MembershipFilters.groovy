@@ -9,8 +9,7 @@ class MembershipFilters {
 	def filters = {
 		restrictPages(controller: '*', uriExclude: '/assets/**'){
 			before = {
-				if( actionName.equals('consulta') ||  actionName.equals('showless') 
-					 || actionName.equals('poderes') ||  actionName.equals('powerShow')  ){
+				if( actionName.equals('consulta') ||  actionName.equals('showless') ||  actionName.equals('descargarCocaFullDocx')  ||  actionName.equals('wordExport') || actionName.equals('poderes') ||  actionName.equals('powerShow')  ){
 					//si la accion es consulta entonces no intercepta
 				}
 				else{

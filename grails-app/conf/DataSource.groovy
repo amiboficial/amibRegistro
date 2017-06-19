@@ -37,7 +37,8 @@ environments {
 			username = "auditoria"
 			password = "E5c0m100"
 			dbCreate = "validate"
-			url = "jdbc:sqlserver://10.100.128.58:1433;databaseName=qa_amib_registro"
+//			url = "jdbc:sqlserver://10.100.128.58:1433;databaseName=qa_amib_registro"
+			url = "jdbc:sqlserver://10.0.2.2:1433;databaseName=qa_amib_registro"
 			properties {
 				// See http://grails.org/doc/latest/guide/conf.html#dataSource for documentation
 				jmxEnabled = true
@@ -64,7 +65,8 @@ environments {
 			username = "auditoria"
 			password = "E5c0m100"
 			dbCreate = "validate"
-			url = "jdbc:sqlserver://10.100.128.58:1433;databaseName=certificacion"
+//			url = "jdbc:sqlserver://10.100.128.58:1433;databaseName=certificacion"
+			url = "jdbc:sqlserver://10.0.2.2:1433;databaseName=certificacion"
 			properties {
 				// See http://grails.org/doc/latest/guide/conf.html#dataSource for documentation
 				jmxEnabled = true
@@ -91,7 +93,8 @@ environments {
 			username = "auditoria"
 			password = "E5c0m100"
 			dbCreate = "validate"
-			url = "jdbc:sqlserver://10.100.128.58:1433;databaseName=qa_amib_membership"
+//			url = "jdbc:sqlserver://10.100.128.58:1433;databaseName=qa_amib_membership"
+			url = "jdbc:sqlserver://10.0.2.2:1433;databaseName=qa_amib_membership"
 			properties {
 				// See http://grails.org/doc/latest/guide/conf.html#dataSource for documentation
 				jmxEnabled = true
@@ -113,6 +116,48 @@ environments {
 				defaultTransactionIsolation = java.sql.Connection.TRANSACTION_READ_COMMITTED
 			}
 		}
+		dataSource_solicitudOnline {
+//            dbCreate = "validate"
+			username = "auditoria"
+			password = "E5c0m100"
+			dbCreate = "create"
+//			url = "jdbc:sqlserver://10.100.128.58:1433;databaseName=amibqa"
+			url = "jdbc:sqlserver://10.0.2.2:1433;databaseName=amibqa"
+			driverClassName = "com.microsoft.sqlserver.jdbc.SQLServerDriver"
+			dialect = "org.hibernate.dialect.SQLServerDialect"
+            pooled = true
+            properties {
+               maxActive = -1
+               minEvictableIdleTimeMillis=1800000
+               timeBetweenEvictionRunsMillis=1800000
+               numTestsPerEvictionRun=3
+               testOnBorrow=true
+               testWhileIdle=true
+               testOnReturn=true
+               validationQuery="SELECT 1"
+            }
+        }
+		dataSource_unificada {
+            dbCreate = "validate"
+			username = "auditoria"
+			password = "E5c0m100"
+//			url = "jdbc:sqlserver://10.100.128.58:1433;databaseName=constanciasCertificacion"
+			url = "jdbc:sqlserver://10.0.2.2:1433;databaseName=constanciasCertificacion"
+			driverClassName = "com.microsoft.sqlserver.jdbc.SQLServerDriver"
+			dialect = "org.hibernate.dialect.SQLServerDialect"
+            pooled = true
+            properties {
+               maxActive = -1
+               minEvictableIdleTimeMillis=1800000
+               timeBetweenEvictionRunsMillis=1800000
+               numTestsPerEvictionRun=3
+               testOnBorrow=true
+               testWhileIdle=true
+               testOnReturn=true
+               validationQuery="SELECT 1"
+            }
+        }
+		
 	}
 	test {
 			dataSource {
@@ -211,5 +256,45 @@ environments {
 					defaultTransactionIsolation = java.sql.Connection.TRANSACTION_READ_COMMITTED
 				}
 			}
+		dataSource_solicitudOnline {
+            dbCreate = "validate"
+			username = "auditoria"
+			password = "E5c0m100"
+			url = "jdbc:sqlserver://10.100.128.58:1433;databaseName=amibqa"
+//			url = "jdbc:sqlserver://10.0.2.2:1433;databaseName=amibqa"
+			driverClassName = "com.microsoft.sqlserver.jdbc.SQLServerDriver"
+			dialect = "org.hibernate.dialect.SQLServerDialect"
+            pooled = true
+            properties {
+               maxActive = -1
+               minEvictableIdleTimeMillis=1800000
+               timeBetweenEvictionRunsMillis=1800000
+               numTestsPerEvictionRun=3
+               testOnBorrow=true
+               testWhileIdle=true
+               testOnReturn=true
+               validationQuery="SELECT 1"
+            }
+        }
+		dataSource_unificada {
+            dbCreate = "validate"
+			username = "auditoria"
+			password = "E5c0m100"
+			url = "jdbc:sqlserver://10.100.128.58:1433;databaseName=constanciasCertificacion"
+//			url = "jdbc:sqlserver://10.0.2.2:1433;databaseName=constanciasCertificacion"
+			driverClassName = "com.microsoft.sqlserver.jdbc.SQLServerDriver"
+			dialect = "org.hibernate.dialect.SQLServerDialect"
+            pooled = true
+            properties {
+               maxActive = -1
+               minEvictableIdleTimeMillis=1800000
+               timeBetweenEvictionRunsMillis=1800000
+               numTestsPerEvictionRun=3
+               testOnBorrow=true
+               testWhileIdle=true
+               testOnReturn=true
+               validationQuery="SELECT 1"
+            }
+        }
 	}
 }

@@ -57,6 +57,12 @@ grails.project.dependency.resolution = {
 		compile 'org.apache.poi:poi-ooxml-schemas:3.12'
 		compile 'org.apache.poi:ooxml-schemas:1.1'
         test "org.grails:grails-datastore-test-support:1.0-grails-2.4"
+		
+		compile "org.apache.poi:poi:3.15"
+		compile "org.apache.poi:poi-ooxml:3.15"
+		compile "org.apache.poi:poi-ooxml-schemas:3.15"
+		compile "org.apache.poi:ooxml-schemas:1.1"
+		
     }
 
     plugins {

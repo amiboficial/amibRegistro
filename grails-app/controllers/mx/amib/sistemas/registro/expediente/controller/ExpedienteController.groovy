@@ -6,6 +6,13 @@ import java.text.SimpleDateFormat
 import java.util.Collection
 import java.util.Date;
 
+import org.apache.poi.xwpf.usermodel.Borders;
+import org.apache.poi.xwpf.usermodel.UnderlinePatterns;
+import org.apache.poi.xwpf.usermodel.XWPFDocument
+import org.apache.poi.xwpf.usermodel.XWPFParagraph
+import org.apache.poi.xwpf.usermodel.XWPFRun
+import org.apache.poi.xwpf.usermodel.XWPFTable
+import org.apache.poi.xwpf.usermodel.XWPFTableRow
 import org.codehaus.groovy.grails.web.json.JSONObject
 
 import grails.converters.JSON
@@ -47,11 +54,17 @@ import mx.amib.sistemas.external.oficios.service.ApoderadoService
 import mx.amib.sistemas.external.oficios.service.PoderService
 import mx.amib.sistemas.external.oficios.service.RevocacionService
 import mx.amib.sistemas.external.oficios.service.RevocadoService
+import mx.amib.sistemas.registro.comprobante.model.ComprobantePuntos
 import mx.amib.sistemas.registro.expediente.service.CertificacionActualizacionAutorizacionService;
 import mx.amib.sistemas.registro.legacy.saaec.RegistroExamenTO
+import mx.amib.sistemas.registro.legacy.saaec.service.SolicitudesOnlineDataService
+import mx.amib.sistemas.solicitud.SolicitudesOnlineTO
 import mx.amib.sistemas.utils.SearchResult
 
 import org.codehaus.groovy.grails.web.json.JSONArray
+
+
+import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
 
 class ExpedienteController {
 
@@ -87,6 +100,8 @@ class ExpedienteController {
 	CertificacionActualizacionAutorizacionService certificacionActualizacionAutorizacionService
 	
 	Collection<EntidadFederativaTO> entidadFederativaList
+	
+	SolicitudesOnlineDataService solicitudesOnlineDataService
 	
     def index() {
 		IndexViewModel vm = this.getIndexViewModel(params)
@@ -565,6 +580,14 @@ class ExpedienteController {
 		vm.historioRevocaciones = revocacionService.getAllByIdCertficacionInSet( new HashSet<Long>(vm.sustentanteInstance.certificaciones.collect{ it.id.value }.asList()) ).asList()
 		
 		vm.PFIResult = certificacionActualizacionAutorizacionService.getPFIExamns(s.numeroMatricula)	
+		
+		//listado de solicitudes aceptadas asociadas a la matricula		
+		//aqui se obtiene la informacion de las solicitudes online si es que existe
+		vm.solicitudes = solicitudesOnlineDataService.findAllRegistrableByNumeroMatricula(s.numeroMatricula)
+		println("vm.solicitudes")
+		println(vm.solicitudes)
+		
+		
 		
 		render(view:"show",model:[viewModelInstance: vm])
 	}
@@ -1110,6 +1133,765 @@ class ExpedienteController {
 	}
 	
 	
+	
+	/***
+	 * metodo para hacer el export de word just example
+	 *
+	 * @param listaOperadoras
+	 * @param idPeriodoMensual
+	 * @param httpServletResponse
+	 */
+	def descargarTabFormatDocx(){
+	//OutputStream os = httpServletResponse.getOutputStream();
+	// TODO: DESCARGA DE ARCHIVO DE CARGA
+	
+	//Seteo de cabeceras
+//	httpServletResponse.setContentType("application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+//	httpServletResponse.setHeader("Content-Disposition", "attachment; filename=testxls.xlsx");
+//	httpServletResponse.setContentType("application/zip");
+//	httpServletResponse.setHeader("Content-Disposition", "attachment; filename=carteras.docx");
+//	httpServletResponse.setStatus(HttpStatus.OK.value());
+	
+	//en este bloque obtiene todos las filas ordenadas por fondo
+//	String[] operadoras = listaOperadoras.split(",");
+	
+	//max list size for fondos
+//	int MaxArrayLength = 0;
+//	String currentFondeu = "";
+//	if(list != null && !list.isEmpty() && list.size()>0){
+//		   MaxArrayLength = list.size() ;
+//		   currentFondeu = list.get(0).getFondo();
+//	}
+		
+	//se INICIA el outputstream que regresara todos los archivos
+//	InputStream is = null;
+//	OutputStream os = null;
+//	int data = 0;
+	
+	//Blank Document
+	XWPFDocument document= new XWPFDocument();
+	  
+	//create paragraph
+	XWPFParagraph paragraph = document.createParagraph();
+	
+	//crea el titulo del documento
+	XWPFRun paragraphOneRunOne = paragraph.createRun();
+	paragraphOneRunOne.setBold(true);
+//	paragraphOneRunOne.setItalic(true);
+	paragraph.setAlignment(ParagraphAlignment.CENTER);
+    paragraphOneRunOne.setFontSize(18);
+    paragraphOneRunOne.setFontFamily("Times New Roman");
+	paragraphOneRunOne.setText("Sistema de Revalidación por Puntos AMIB");
+	paragraphOneRunOne.addBreak();
+	
+	//create table
+	XWPFTable table = document.createTable();
+	  
+	//create first row
+	XWPFTableRow tableRowOne = table.getRow(0);
+	XWPFRun column1 = tableRowOne.getCell(0).addParagraph().createRun();
+    column1.setFontSize(8);
+    column1.setFontFamily("Times New Roman");
+	column1.setText("Número de Matrícula: "+"7850");
+	
+	XWPFRun column2 = tableRowOne.addNewTableCell().addParagraph().createRun();
+    column2.setFontSize(8);
+    column2.setFontFamily("Times New Roman");
+	column2.setText("Nombre del sustentante:  "+"Mónica Marisela Hernández Ibarra");
+	tableRowOne.addNewTableCell();
+	tableRowOne.addNewTableCell();
+	
+	//create space
+	XWPFTableRow tableSeparator = table.createRow();
+	tableSeparator.getCell(0).setText(" ");
+	
+	//create segundo parrafo
+	XWPFTableRow tableRowTwo = table.createRow();
+	tableRowTwo.getCell(0).setText("Figura Certificada:  "+" Asesor de Estrategias de Inversión");
+	
+	//create space2
+	XWPFTableRow tableSeparator2 = table.createRow();
+	tableSeparator2.getCell(0).setText(" ");
+	  
+	//create tercer parrafo
+	XWPFTableRow tableRowTres = table.createRow();
+	tableRowTres.getCell(0).setText("Vigencia de la Certificación Anterior:");
+	tableRowTres.getCell(1).setText("Inicio 24/04/2014");
+	tableRowTres.getCell(2).setText("Fin 24/04/2017");
+	
+	//create space3
+	XWPFTableRow tableSeparator3 = table.createRow();
+	tableSeparator3.getCell(0).setText(" ");
+	  
+	//create cuarto parrafo
+	XWPFTableRow tableRowCuatro = table.createRow();
+	tableRowCuatro.getCell(0).setText("Vigencia de la Certificación:");
+	tableRowCuatro.getCell(1).setText("Inicio 24/04/2017");
+	tableRowCuatro.getCell(2).setText("Fin 24/04/2020");
+	
+	//create space4
+	XWPFTableRow tableSeparator4 = table.createRow();
+	tableSeparator4.getCell(0).setText(" ");
+	  
+	//create cinco
+	XWPFTableRow tableRowCinco = table.createRow();
+	tableRowCinco.getCell(0).setText("Fecha de Emisión del Dictamen: 28/02/2017");
+	
+	//create space5
+	XWPFTableRow tableSeparator5 = table.createRow();
+	tableSeparator5.getCell(0).setText(" ");
+	  
+	//create cinco
+	XWPFTableRow tableRowSeis = table.createRow();
+	tableRowSeis.getCell(0).setText("Institución en la que labora:   Banco Santander (México) S.A., Institución de Banca Múltiple, Grupo Financiero Santander México");
+	
+	//create space5
+	XWPFTableRow tableSeparator6 = table.createRow();
+	tableSeparator6.getCell(0).setText(" ");
+	  
+	//create tercer parrafo
+	XWPFTableRow tableRowSiete = table.createRow();
+	tableRowSiete.getCell(0).setText("Vigencia de la Certificación Anterior:");
+	tableRowSiete.getCell(1).setText("Inicio 24/04/2014");
+	tableRowSiete.getCell(2).setText("Fin 24/04/2017");
+	
+	  
+	//Set alignment paragraph to RIGHT
+	XWPFRun run=paragraph.createRun();
+	run.setText("At tutorialspoint.com, we strive hard to " +
+	   "provide quality tutorials for self-learning " +
+	   "purpose in the domains of Academics, Information " +
+	   "Technology, Management and Computer Programming " +
+	   "Languages.");
+	  
+	//Create Another paragraph
+	paragraph=document.createParagraph();
+	  
+	//Set alignment paragraph to CENTER
+	run=paragraph.createRun();
+	run.setText("The endeavour started by Mohtashim, an AMU " +
+	   "alumni, who is the founder and the managing director " +
+	   "of Tutorials Point (I) Pvt. Ltd. He came up with the " +
+	   "website tutorialspoint.com in year 2006 with the help" +
+	   "of handpicked freelancers, with an array of tutorials" +
+	   " for computer programming languages. ");
+			
+		
+	//end Phase este exporta el ultimo sea cual sea
+//	try {
+//		os = httpServletResponse.getOutputStream();
+//		document.write(os);
+//		System.out.println("alignparagraph.docx written successfully");
+//		os.flush();
+//		os.close();
+//	} catch (IOException e) {
+//		// TODO Auto-generated catch block
+//		e.printStackTrace();
+//	}
+	//end Phase este exporta el ultimo se acual sea
+		
+   response.contentType  = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' // or whatever content type your resources are
+   response.setHeader("Content-disposition", "filename=test.docx")
+   document.write(response.outputStream)
+//   response.outputStream << document.getBytes()
+   response.outputStream.flush()
+   
+	}
+	
+	
+	
+	/***
+	 * metodo para hacer el export de word just example
+	 *
+	 * @param listaOperadoras
+	 * @param idPeriodoMensual
+	 * @param httpServletResponse
+	 */
+	def descargarCocaFullDocx(){
+	
+	List<ComprobantePuntos> comprobantes = solicitudesOnlineDataService.findAllComprobantesPuntos(Integer.parseInt(params.numeroMatricula))
+	
+	if(comprobantes == null || comprobantes.empty){
+		flash.message = "Matricula no encontrada	"
+		render(view:"wordExport",model:[])
+		return
+	}
+	
+	ComprobantePuntos auxiliar = comprobantes.get(0);
+		
+		
+	//Blank Document
+//	XWPFDocument document= new XWPFDocument();
+//		def fos = new FileOutputStream("groovytut.txt")
+	FileInputStream file = new FileInputStream("comprobanteSource.docx")
+	XWPFDocument document = new XWPFDocument(file);
+	  
+	//create paragraph
+	XWPFParagraph paragraphone = document.createParagraph();
+	
+	//crea el titulo del documento
+	XWPFRun paragraphOneRunOne = paragraphone.createRun();
+	paragraphOneRunOne.setBold(true);
+//	paragraphOneRunOne.setItalic(true);
+	paragraphone.setAlignment(ParagraphAlignment.CENTER);
+	paragraphOneRunOne.setFontSize(18);
+	paragraphOneRunOne.setFontFamily("Times New Roman");
+	paragraphOneRunOne.setText("Sistema de Revalidación por Puntos AMIB");
+	paragraphOneRunOne.addCarriageReturn();
+	paragraphOneRunOne.addBreak();
+	
+	
+	//create paragraph
+	XWPFParagraph paragraph = document.createParagraph();
+	
+	//crea el titulo del documento
+	XWPFRun secondp = paragraph.createRun();
+	secondp.setFontSize(7);
+	paragraph.setAlignment(ParagraphAlignment.LEFT);
+	secondp.setFontFamily("Times New Roman");
+	secondp.setText("Número de Matrícula: "+auxiliar.Matricula.replace(".0", "")+"\t\t"+"Nombre del sustentante:  "+auxiliar.Nombre);
+	secondp.addCarriageReturn();
+	secondp.addBreak();
+	
+	//crea el titulo del documento
+	XWPFRun tercerp = paragraph.createRun();
+	tercerp.setFontSize(7);
+	tercerp.setFontFamily("Times New Roman");
+	tercerp.setText("Figura Certificada:  "+auxiliar.Figura_Certificada);
+	tercerp.addCarriageReturn();
+	tercerp.addBreak();
+	
+	
+	//crea el titulo del documento
+	XWPFRun cuartop = paragraph.createRun();
+	cuartop.setFontSize(7);
+	cuartop.setFontFamily("Times New Roman");
+	cuartop.setText("Vigencia de la Certificación Anterior:"+"\t\t"+" Inicio: "+auxiliar.Inicio_de_Vigencia_Anterior+"\t\t"+" Fin: "+auxiliar.Fin_de_Vigencia_Anterior);
+	cuartop.addCarriageReturn();
+	cuartop.addBreak();
+	
+	//crea el titulo del documento
+	XWPFRun quintop = paragraph.createRun();
+	quintop.setFontSize(7);
+	quintop.setFontFamily("Times New Roman");
+	quintop.setText("Vigencia de la Certificación:"+"\t\t"+" Inicio: "+auxiliar.Inicio_Nueva_Vigencia+"\t\t"+" Fin: "+auxiliar.Fin_Nueva_Vigencia);
+	quintop.addCarriageReturn();
+	quintop.addBreak();
+	
+	//crea el titulo del documento
+	XWPFRun sextop = paragraph.createRun();
+	sextop.setFontSize(7);
+	sextop.setFontFamily("Times New Roman");
+	sextop.setText("Fecha de Emisión del Dictamen: "+auxiliar.Fecha_de_Emisión);
+	sextop.addCarriageReturn();
+	sextop.addBreak();
+	
+	//crea el titulo del documento
+	XWPFRun septimop = paragraph.createRun();
+	septimop.setFontSize(7);
+	septimop.setFontFamily("Times New Roman");
+	septimop.setText("Institución en la que labora: "+auxiliar.INSTITUCIÓN_EN_LA_QUE_LABORA);
+	septimop.addBreak();
+	
+	//////////////////7INICIO DE TABLA DE OPCIONES 
+	
+	//create table
+	XWPFTable table = document.createTable();
+	table.getCTTbl().getTblPr().unsetTblBorders();
+	  
+	//create first row
+	XWPFTableRow tableRowOne = table.getRow(0);
+	XWPFRun column1 = tableRowOne.getCell(0).getParagraphArray(0).createRun();
+	column1.setFontSize(7);
+	column1.setFontFamily("Times New Roman");
+	column1.setText("OPCIÓN");
+	
+	tableRowOne.addNewTableCell();
+	
+	//create first row
+	XWPFRun column2 = tableRowOne.addNewTableCell().getParagraphArray(0).createRun();
+	column2.setFontSize(7);
+	column2.setFontFamily("Times New Roman");
+	column2.setText("INSTITUTO");
+	
+	tableRowOne.addNewTableCell();
+	
+	//create first row
+	XWPFRun column3 = tableRowOne.addNewTableCell().getParagraphArray(0).createRun();
+	column3.setFontSize(7);
+	column3.setFontFamily("Times New Roman");
+	column3.setText("PUNTOS");
+	
+	tableRowOne.addNewTableCell();
+	
+	
+	
+	//create space
+	XWPFTableRow tableSeparator = table.createRow();
+	
+	//Total Calculado
+	Integer totalcalc = 0;
+	
+	if(auxiliar.Opción_1 != null){
+		//create cuarto parrafo
+		XWPFTableRow tableRowCuatro = table.createRow();
+		
+		XWPFRun opcionCol = tableRowCuatro.getCell(0).getParagraphArray(0).createRun();
+		opcionCol.setFontSize(7);
+		opcionCol.setFontFamily("Times New Roman");
+		opcionCol.setText(auxiliar.Opción_1);
+		
+		XWPFRun opcionCol2 = tableRowCuatro.getCell(1).addParagraph().createRun();
+		opcionCol2.setFontSize(7);
+		opcionCol2.setFontFamily("Times New Roman");
+		opcionCol2.setText("        ");
+		
+		XWPFRun opcionCol3 = tableRowCuatro.getCell(2).getParagraphArray(0).createRun();
+		opcionCol3.setFontSize(7);
+		opcionCol3.setFontFamily("Times New Roman");
+		opcionCol3.setText(auxiliar.Instituto_1);
+		
+		XWPFRun opcionCol4 = tableRowCuatro.getCell(3).addParagraph().createRun();
+		opcionCol4.setFontSize(7);
+		opcionCol4.setFontFamily("Times New Roman");
+		opcionCol4.setText("        ");
+		
+		XWPFRun opcionCol5 = tableRowCuatro.getCell(4).getParagraphArray(0).createRun();
+		opcionCol5.setFontSize(7);
+		opcionCol5.setFontFamily("Times New Roman");
+		opcionCol5.setText(auxiliar.Puntos.replace(".0", ""));
+		
+		totalcalc += Integer.valueOf(auxiliar.Puntos.replace(".0", ""))
+		
+		XWPFRun opcionCol6 = tableRowCuatro.getCell(5).addParagraph().createRun();
+		opcionCol6.setFontSize(7);
+		opcionCol6.setFontFamily("Times New Roman");
+		opcionCol6.setText("        ");
+	}
+	
+	if(auxiliar.Opción_2 != null){
+		//create cuarto parrafo
+		XWPFTableRow tableRowCuatro = table.createRow();
+		
+		XWPFRun opcionCol = tableRowCuatro.getCell(0).getParagraphArray(0).createRun();
+		opcionCol.setFontSize(7);
+		opcionCol.setFontFamily("Times New Roman");
+		opcionCol.setText(auxiliar.Opción_2);
+		
+		XWPFRun opcionCol2 = tableRowCuatro.getCell(1).addParagraph().createRun();
+		opcionCol2.setFontSize(7);
+		opcionCol2.setFontFamily("Times New Roman");
+		opcionCol2.setText("        ");
+		
+		XWPFRun opcionCol3 = tableRowCuatro.getCell(2).getParagraphArray(0).createRun();
+		opcionCol3.setFontSize(7);
+		opcionCol3.setFontFamily("Times New Roman");
+		opcionCol3.setText(auxiliar.Instituto_2);
+		
+		XWPFRun opcionCol4 = tableRowCuatro.getCell(3).addParagraph().createRun();
+		opcionCol4.setFontSize(7);
+		opcionCol4.setFontFamily("Times New Roman");
+		opcionCol4.setText("        ");
+		
+		XWPFRun opcionCol5 = tableRowCuatro.getCell(4).getParagraphArray(0).createRun();
+		opcionCol5.setFontSize(7);
+		opcionCol5.setFontFamily("Times New Roman");
+		opcionCol5.setText(auxiliar.Puntos2.replace(".0", ""));
+		
+		totalcalc += Integer.valueOf(auxiliar.Puntos2.replace(".0", ""))
+		
+		XWPFRun opcionCol6 = tableRowCuatro.getCell(5).addParagraph().createRun();
+		opcionCol6.setFontSize(7);
+		opcionCol6.setFontFamily("Times New Roman");
+		opcionCol6.setText("        ");
+	}
+	
+	
+	if(auxiliar.Opción_3 != null){
+		//create cuarto parrafo
+		XWPFTableRow tableRowCuatro = table.createRow();
+		
+		XWPFRun opcionCol = tableRowCuatro.getCell(0).getParagraphArray(0).createRun();
+		opcionCol.setFontSize(7);
+		opcionCol.setFontFamily("Times New Roman");
+		opcionCol.setText(auxiliar.Opción_3);
+		
+		XWPFRun opcionCol2 = tableRowCuatro.getCell(1).addParagraph().createRun();
+		opcionCol2.setFontSize(7);
+		opcionCol2.setFontFamily("Times New Roman");
+		opcionCol2.setText("        ");
+		
+		XWPFRun opcionCol3 = tableRowCuatro.getCell(2).getParagraphArray(0).createRun();
+		opcionCol3.setFontSize(7);
+		opcionCol3.setFontFamily("Times New Roman");
+		opcionCol3.setText(auxiliar.Instituto_3);
+		
+		XWPFRun opcionCol4 = tableRowCuatro.getCell(3).addParagraph().createRun();
+		opcionCol4.setFontSize(7);
+		opcionCol4.setFontFamily("Times New Roman");
+		opcionCol4.setText("        ");
+		
+		XWPFRun opcionCol5 = tableRowCuatro.getCell(4).getParagraphArray(0).createRun();
+		opcionCol5.setFontSize(7);
+		opcionCol5.setFontFamily("Times New Roman");
+		opcionCol5.setText(auxiliar.Puntos3.replace(".0", ""));
+		
+		totalcalc += Integer.valueOf(auxiliar.Puntos3.replace(".0", ""))
+		
+		XWPFRun opcionCol6 = tableRowCuatro.getCell(5).addParagraph().createRun();
+		opcionCol6.setFontSize(7);
+		opcionCol6.setFontFamily("Times New Roman");
+		opcionCol6.setText("        ");
+	}
+	
+	
+	
+	
+	if(auxiliar.Opción_4 != null){
+		//create cuarto parrafo
+		XWPFTableRow tableRowCuatro = table.createRow();
+		
+		XWPFRun opcionCol = tableRowCuatro.getCell(0).getParagraphArray(0).createRun();
+		opcionCol.setFontSize(7);
+		opcionCol.setFontFamily("Times New Roman");
+		opcionCol.setText(auxiliar.Opción_4);
+		
+		XWPFRun opcionCol2 = tableRowCuatro.getCell(1).addParagraph().createRun();
+		opcionCol2.setFontSize(7);
+		opcionCol2.setFontFamily("Times New Roman");
+		opcionCol2.setText("        ");
+		
+		XWPFRun opcionCol3 = tableRowCuatro.getCell(2).getParagraphArray(0).createRun();
+		opcionCol3.setFontSize(7);
+		opcionCol3.setFontFamily("Times New Roman");
+		opcionCol3.setText(auxiliar.Instituto_4);
+		
+		XWPFRun opcionCol4 = tableRowCuatro.getCell(3).addParagraph().createRun();
+		opcionCol4.setFontSize(7);
+		opcionCol4.setFontFamily("Times New Roman");
+		opcionCol4.setText("        ");
+		
+		XWPFRun opcionCol5 = tableRowCuatro.getCell(4).getParagraphArray(0).createRun();
+		opcionCol5.setFontSize(7);
+		opcionCol5.setFontFamily("Times New Roman");
+		opcionCol5.setText(auxiliar.Puntos4.replace(".0", ""));
+		
+		totalcalc += Integer.valueOf(auxiliar.Puntos4.replace(".0", ""))
+		
+		XWPFRun opcionCol6 = tableRowCuatro.getCell(5).addParagraph().createRun();
+		opcionCol6.setFontSize(7);
+		opcionCol6.setFontFamily("Times New Roman");
+		opcionCol6.setText("        ");
+	}
+	
+	
+	
+	if(auxiliar.Opción_5 != null){
+		//create cuarto parrafo
+		XWPFTableRow tableRowCuatro = table.createRow();
+		
+		XWPFRun opcionCol = tableRowCuatro.getCell(0).getParagraphArray(0).createRun();
+		opcionCol.setFontSize(7);
+		opcionCol.setFontFamily("Times New Roman");
+		opcionCol.setText(auxiliar.Opción_5);
+		
+		XWPFRun opcionCol2 = tableRowCuatro.getCell(1).addParagraph().createRun();
+		opcionCol2.setFontSize(7);
+		opcionCol2.setFontFamily("Times New Roman");
+		opcionCol2.setText("        ");
+		
+		XWPFRun opcionCol3 = tableRowCuatro.getCell(2).getParagraphArray(0).createRun();
+		opcionCol3.setFontSize(7);
+		opcionCol3.setFontFamily("Times New Roman");
+		opcionCol3.setText(auxiliar.Instituto_5);
+		
+		XWPFRun opcionCol4 = tableRowCuatro.getCell(3).addParagraph().createRun();
+		opcionCol4.setFontSize(7);
+		opcionCol4.setFontFamily("Times New Roman");
+		opcionCol4.setText("        ");
+		
+		XWPFRun opcionCol5 = tableRowCuatro.getCell(4).getParagraphArray(0).createRun();
+		opcionCol5.setFontSize(7);
+		opcionCol5.setFontFamily("Times New Roman");
+		opcionCol5.setText(auxiliar.Puntos5.replace(".0", ""));
+		
+		totalcalc += Integer.valueOf(auxiliar.Puntos5.replace(".0", ""))
+		
+		XWPFRun opcionCol6 = tableRowCuatro.getCell(5).addParagraph().createRun();
+		opcionCol6.setFontSize(7);
+		opcionCol6.setFontFamily("Times New Roman");
+		opcionCol6.setText("        ");
+	}
+	
+	
+	
+	if(auxiliar.Opción_6 != null){
+		//create cuarto parrafo
+		XWPFTableRow tableRowCuatro = table.createRow();
+		
+		XWPFRun opcionCol = tableRowCuatro.getCell(0).getParagraphArray(0).createRun();
+		opcionCol.setFontSize(7);
+		opcionCol.setFontFamily("Times New Roman");
+		opcionCol.setText(auxiliar.Opción_6);
+		
+		XWPFRun opcionCol2 = tableRowCuatro.getCell(1).addParagraph().createRun();
+		opcionCol2.setFontSize(7);
+		opcionCol2.setFontFamily("Times New Roman");
+		opcionCol2.setText("        ");
+		
+		XWPFRun opcionCol3 = tableRowCuatro.getCell(2).getParagraphArray(0).createRun();
+		opcionCol3.setFontSize(7);
+		opcionCol3.setFontFamily("Times New Roman");
+		opcionCol3.setText(auxiliar.Instituto_6);
+		
+		XWPFRun opcionCol4 = tableRowCuatro.getCell(3).addParagraph().createRun();
+		opcionCol4.setFontSize(7);
+		opcionCol4.setFontFamily("Times New Roman");
+		opcionCol4.setText("        ");
+		
+		XWPFRun opcionCol5 = tableRowCuatro.getCell(4).getParagraphArray(0).createRun();
+		opcionCol5.setFontSize(7);
+		opcionCol5.setFontFamily("Times New Roman");
+		opcionCol5.setText(auxiliar.Puntos6.replace(".0", ""));
+		
+		totalcalc += Integer.valueOf(auxiliar.Puntos6.replace(".0", ""))
+		
+		XWPFRun opcionCol6 = tableRowCuatro.getCell(5).addParagraph().createRun();
+		opcionCol6.setFontSize(7);
+		opcionCol6.setFontFamily("Times New Roman");
+		opcionCol6.setText("        ");
+	}
+	
+	
+	
+	if(auxiliar.Opción_7 != null){
+		//create cuarto parrafo
+		XWPFTableRow tableRowCuatro = table.createRow();
+		
+		XWPFRun opcionCol = tableRowCuatro.getCell(0).getParagraphArray(0).createRun();
+		opcionCol.setFontSize(7);
+		opcionCol.setFontFamily("Times New Roman");
+		opcionCol.setText(auxiliar.Opción_7);
+		
+		XWPFRun opcionCol2 = tableRowCuatro.getCell(1).addParagraph().createRun();
+		opcionCol2.setFontSize(7);
+		opcionCol2.setFontFamily("Times New Roman");
+		opcionCol2.setText("        ");
+		
+		XWPFRun opcionCol3 = tableRowCuatro.getCell(2).getParagraphArray(0).createRun();
+		opcionCol3.setFontSize(7);
+		opcionCol3.setFontFamily("Times New Roman");
+		opcionCol3.setText(auxiliar.Instituto_7);
+		
+		XWPFRun opcionCol4 = tableRowCuatro.getCell(3).addParagraph().createRun();
+		opcionCol4.setFontSize(7);
+		opcionCol4.setFontFamily("Times New Roman");
+		opcionCol4.setText("        ");
+		
+		XWPFRun opcionCol5 = tableRowCuatro.getCell(4).getParagraphArray(0).createRun();
+		opcionCol5.setFontSize(7);
+		opcionCol5.setFontFamily("Times New Roman");
+		opcionCol5.setText(auxiliar.Puntos7.replace(".0", ""));
+		
+		totalcalc += Integer.valueOf(auxiliar.Puntos7.replace(".0", ""))
+		
+		XWPFRun opcionCol6 = tableRowCuatro.getCell(5).addParagraph().createRun();
+		opcionCol6.setFontSize(7);
+		opcionCol6.setFontFamily("Times New Roman");
+		opcionCol6.setText("        ");
+	}
+	
+	
+	
+	if(auxiliar.Opción_8 != null){
+		//create cuarto parrafo
+		XWPFTableRow tableRowCuatro = table.createRow();
+		
+		XWPFRun opcionCol = tableRowCuatro.getCell(0).getParagraphArray(0).createRun();
+		opcionCol.setFontSize(7);
+		opcionCol.setFontFamily("Times New Roman");
+		opcionCol.setText(auxiliar.Opción_8);
+		
+		XWPFRun opcionCol2 = tableRowCuatro.getCell(1).addParagraph().createRun();
+		opcionCol2.setFontSize(7);
+		opcionCol2.setFontFamily("Times New Roman");
+		opcionCol2.setText("        ");
+		
+		XWPFRun opcionCol3 = tableRowCuatro.getCell(2).getParagraphArray(0).createRun();
+		opcionCol3.setFontSize(7);
+		opcionCol3.setFontFamily("Times New Roman");
+		opcionCol3.setText(auxiliar.Instituto_8);
+		
+		XWPFRun opcionCol4 = tableRowCuatro.getCell(3).addParagraph().createRun();
+		opcionCol4.setFontSize(7);
+		opcionCol4.setFontFamily("Times New Roman");
+		opcionCol4.setText("        ");
+		
+		XWPFRun opcionCol5 = tableRowCuatro.getCell(4).getParagraphArray(0).createRun();
+		opcionCol5.setFontSize(7);
+		opcionCol5.setFontFamily("Times New Roman");
+		opcionCol5.setText(auxiliar.Puntos_8.replace(".0", ""));
+		
+		totalcalc += Integer.valueOf(auxiliar.Puntos_8.replace(".0", ""))
+		
+		XWPFRun opcionCol6 = tableRowCuatro.getCell(5).addParagraph().createRun();
+		opcionCol6.setFontSize(7);
+		opcionCol6.setFontFamily("Times New Roman");
+		opcionCol6.setText("        ");
+	}
+	
+	
+	
+	
+	
+	if(auxiliar.Opción_9 != null){
+		//create cuarto parrafo
+		XWPFTableRow tableRowCuatro = table.createRow();
+		
+		XWPFRun opcionCol = tableRowCuatro.getCell(0).getParagraphArray(0).createRun();
+		opcionCol.setFontSize(7);
+		opcionCol.setFontFamily("Times New Roman");
+		opcionCol.setText(auxiliar.Opción_9);
+		
+		XWPFRun opcionCol2 = tableRowCuatro.getCell(1).addParagraph().createRun();
+		opcionCol2.setFontSize(7);
+		opcionCol2.setFontFamily("Times New Roman");
+		opcionCol2.setText("        ");
+		
+		XWPFRun opcionCol3 = tableRowCuatro.getCell(2).getParagraphArray(0).createRun();
+		opcionCol3.setFontSize(7);
+		opcionCol3.setFontFamily("Times New Roman");
+		opcionCol3.setText(auxiliar.Instituto_9);
+		
+		XWPFRun opcionCol4 = tableRowCuatro.getCell(3).addParagraph().createRun();
+		opcionCol4.setFontSize(7);
+		opcionCol4.setFontFamily("Times New Roman");
+		opcionCol4.setText("        ");
+		
+		XWPFRun opcionCol5 = tableRowCuatro.getCell(4).getParagraphArray(0).createRun();
+		opcionCol5.setFontSize(7);
+		opcionCol5.setFontFamily("Times New Roman");
+		opcionCol5.setText(auxiliar.Puntos_9.replace(".0", ""));
+		
+		totalcalc += Integer.valueOf(auxiliar.Puntos_9.replace(".0", ""))
+		
+		XWPFRun opcionCol6 = tableRowCuatro.getCell(5).addParagraph().createRun();
+		opcionCol6.setFontSize(7);
+		opcionCol6.setFontFamily("Times New Roman");
+		opcionCol6.setText("        ");
+	}
+	
+	
+	////ESTE ERA UN MOCK UP CON DATOS ESTATICOS
+//	//create cuarto parrafo
+//	tableRowCuatro = table.createRow();
+//	
+//	opcionCol = tableRowCuatro.getCell(0).getParagraphArray(0).createRun();
+//	opcionCol.setFontSize(7);
+//	opcionCol.setFontFamily("Times New Roman");
+//	opcionCol.setText("Especialista en Estrategias de Inversión E- Learning (Versión 2014)");
+//	
+//	opcionCol2 = tableRowCuatro.getCell(1).addParagraph().createRun();
+//	opcionCol2.setFontSize(7);
+//	opcionCol2.setFontFamily("Times New Roman");
+//	opcionCol2.setText("        ");
+//	
+//	opcionCol3 = tableRowCuatro.getCell(2).getParagraphArray(0).createRun();
+//	opcionCol3.setFontSize(7);
+//	opcionCol3.setFontFamily("Times New Roman");
+//	opcionCol3.setText("Laura Garza & Asociados.");
+//	
+//	opcionCol4 = tableRowCuatro.getCell(3).addParagraph().createRun();
+//	opcionCol4.setFontSize(7);
+//	opcionCol4.setFontFamily("Times New Roman");
+//	opcionCol4.setText("        ");
+//	
+//	opcionCol5 = tableRowCuatro.getCell(4).getParagraphArray(0).createRun();
+//	opcionCol5.setFontSize(7);
+//	opcionCol5.setFontFamily("Times New Roman");
+//	opcionCol5.setText("350");
+//	
+//	opcionCol6 = tableRowCuatro.getCell(5).getParagraphArray(0).createRun();
+//	opcionCol6.setFontSize(7);
+//	opcionCol6.setFontFamily("Times New Roman");
+//	opcionCol6.setText("        ");
+	
+	//ESPACIO ENTRE OPCIONES Y TOTAL
+	XWPFTableRow tableSeparator2 = table.createRow();
+	
+	//create cuarto parrafo
+	XWPFTableRow tableRowCuatro = table.createRow();
+	
+	XWPFRun opcionCol = tableRowCuatro.getCell(3).getParagraphArray(0).createRun();
+	opcionCol.setFontSize(7);
+	opcionCol.setFontFamily("Times New Roman");
+	opcionCol.setText("TOTAL DE PUNTOS");
+	
+	XWPFRun opcionCol3 = tableRowCuatro.getCell(5).getParagraphArray(0).createRun();
+	opcionCol3.setFontSize(7);
+	opcionCol3.setFontFamily("Times New Roman");
+	opcionCol3.setText(totalcalc.toString());
+	
+	//create resutlado de la evaluacion
+	tableRowCuatro = table.createRow();
+	
+	opcionCol = tableRowCuatro.getCell(3).getParagraphArray(0).createRun();
+	opcionCol.setFontSize(7);
+	opcionCol.setFontFamily("Times New Roman");
+	opcionCol.setText("RESULTADO DE LA REVALIDACIÓN:");
+	
+	opcionCol3 = tableRowCuatro.getCell(5).getParagraphArray(0).createRun();
+	opcionCol3.setFontSize(7);
+	opcionCol3.setFontFamily("Times New Roman");
+	opcionCol3.setText(auxiliar.Estatus);
+	
+	//create paragraph
+	XWPFParagraph paragraphPie = document.createParagraph();
+	
+	//crea el titulo del documento
+	XWPFRun parrafoFinal = paragraphPie.createRun();
+	parrafoFinal.setFontSize(12);
+	parrafoFinal.setUnderline(UnderlinePatterns.DASHED_HEAVY);
+	parrafoFinal.setBold(true);
+	paragraphPie.setAlignment(ParagraphAlignment.CENTER);
+	parrafoFinal.setFontFamily("Times New Roman");
+	parrafoFinal.setText("Fernando Muñoz Nolasco");
+	
+	//create paragraph
+	XWPFParagraph paragraphNF = document.createParagraph();
+	
+	//crea el titulo del documento
+	XWPFRun parrafoNF = paragraphNF.createRun();
+	parrafoNF.setFontSize(8);
+	paragraphNF.setAlignment(ParagraphAlignment.CENTER);
+	parrafoNF.setFontFamily("Times New Roman");
+	parrafoNF.setText("NOMBRE Y FIRMA DEL DICTAMINADOR");
+	parrafoNF.addCarriageReturn();
+	
+	//create paragraph pie de pagina
+	XWPFParagraph paragraphNota = document.createParagraph();
+	
+	//crea el pie de pagina
+	XWPFRun parrafoNota = paragraphNota.createRun();
+	parrafoNota.setFontSize(7);
+	parrafoNota.setBold(true);
+	paragraphNota.setAlignment(ParagraphAlignment.LEFT);
+	parrafoNota.setFontFamily("Times New Roman");
+	parrafoNota.setText("Esta constancia sólo acredita que se ha obtenido la Revalidación de la Certificación, pero de ninguna forma revalida la \n Autorización otorgada por la CNBV, dado que para tales efectos se requiere la entrega de documentación adicional. \n Para corroborar ésta información consulte la página de la AMIB: www.amib.com.mx ");
+		
+   response.contentType  = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' // or whatever content type your resources are
+   response.setHeader("Content-disposition", "filename=test.docx")
+   document.write(response.outputStream)
+//   response.outputStream << document.getBytes()
+   response.outputStream.flush()
+   
+	}
+	
+	def wordExport() {
+		render(view:"wordExport",model:[])
+	}
+	
+	
 }
 
 public class ShowViewModel{
@@ -1135,6 +1917,9 @@ public class ShowViewModel{
 	Map<Long,GrupoFinancieroTO> gruposFinancierosMap
 	Map<Long,InstitucionTO> institucionesPoderesMap
 	Map<Integer,EntidadFederativaTO> entidadesFederativasMap
+	
+	//Datos de solicitudes Online
+	List<SolicitudesOnlineTO> solicitudes
 }
 
 public class FormViewModel{

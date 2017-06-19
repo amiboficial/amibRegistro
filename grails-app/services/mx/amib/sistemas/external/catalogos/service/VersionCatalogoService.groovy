@@ -17,7 +17,7 @@ import org.codehaus.groovy.grails.web.json.JSONObject
 class VersionCatalogoService {
 
 	// TODO: Mover la asignación del valor a la configuración de spring
-	String obtenerUltimaVersionUrl = "http://bimalatrop.no-ip.biz:8080/amibCatalogos-0.1/versionCatalogoRestful/obtenerUltimaVersion/"
+	String obtenerUltimaVersionUrl = "http://10.100.128.57:8080/amibCatalogos-0.1/versionCatalogoRestful/obtenerUltimaVersion/"
 	
     def obtenerUltimaVersion(Integer id) {
 		String restUrl = obtenerUltimaVersionUrl + id

@@ -1,0 +1,62 @@
+package mx.amib.sistemas.registro.comprobante.model
+
+class ComprobantePuntos {
+	
+	String Matricula
+	String Nombre
+	String Apellido_Paterno
+	String Apellido_Materno
+	String Figura_Certificada
+	String Inicio_de_Vigencia_Anterior
+	String Fin_de_Vigencia_Anterior
+	String Inicio_Nueva_Vigencia
+	String Fin_Nueva_Vigencia
+	String Fecha_de_Emisión
+	String Fecha_de_Recepción
+	String INSTITUCIÓN_EN_LA_QUE_LABORA
+	String Tipo_de_Insitución
+	String Estatus
+	String Opción_1
+	String Instituto_1
+	String Puntos
+	String No_Evento
+	String Opción_2
+	String Instituto_2
+	String Puntos2
+	String No_Evento1
+	String Opción_3
+	String Instituto_3
+	String Puntos3
+	String No_Evento2
+	String Opción_4
+	String Instituto_4
+	String Puntos4
+	String No_Evento3
+	String Opción_5
+	String Instituto_5
+	String Puntos5
+	String No_Evento4
+	String Opción_6
+	String Instituto_6
+	String Puntos6
+	String No_Evento5
+	String Opción_7
+	String Instituto_7
+	String Puntos7
+	String No_Evento6
+	String Opción_8
+	String Instituto_8
+	String Puntos_8
+	String No_Evento7
+	String Opción_9
+	String Instituto_9
+	String Puntos_9
+	String No_Evento8
+	String Opción_10
+	String Instituto_10
+	String Puntos_10
+	String No_Evento9
+	String TOTAL_DE_PUNTOS
+	String DIAS_DE_ENTREGA_VS_NUEVA_VIGENCIA
+
+}

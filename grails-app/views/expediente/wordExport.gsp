@@ -70,11 +70,11 @@
 			$("#frmApp").submit() //checkar submit
 	});
 
-
-	//A ejectuar en cuento se muestre le página
-	$(window).bind("pageshow", function(){
-		
-	});
+	</script>
+	
+	<script type="text/javascript">
+	$("#divAffixSidebar").parent().remove();
+	$(".nav.navbar-nav.pull-right").parent().remove();
 	
 	</script>
 

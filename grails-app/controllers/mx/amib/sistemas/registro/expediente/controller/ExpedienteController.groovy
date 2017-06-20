@@ -1321,10 +1321,10 @@ class ExpedienteController {
 		
 		
 	//Blank Document
-//	XWPFDocument document= new XWPFDocument();
-//		def fos = new FileOutputStream("groovytut.txt")
-	FileInputStream file = new FileInputStream("comprobanteSource.docx")
-	XWPFDocument document = new XWPFDocument(file);
+	File file = grailsApplication.mainContext.getResource("comprobanteSource.docx").file
+	String pat = file.path
+	FileInputStream fi = new FileInputStream(file.path);
+	XWPFDocument document = new XWPFDocument(fi);
 	  
 	//create paragraph
 	XWPFParagraph paragraphone = document.createParagraph();

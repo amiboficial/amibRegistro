@@ -50,7 +50,6 @@
 					</div>
 				</div>
 			
-				
 			</div>
 			
 		</fieldset>
@@ -63,7 +62,7 @@
 	$('.limpiar').click(function(e){
 		e.preventDefault();
 			//Limpiar campos por matricula
-			$("[name='txtMat']").val("");
+			$("[name='numeroMatricula']").val("");
 	});
 	$('.buscar').click(function(e){
 		e.preventDefault();

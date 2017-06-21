@@ -162,14 +162,7 @@ $( document ).ready(function() {
 						<p class="form-control-static">${viewModelInstance?.sustentanteInstance?.nacionalidad?.descripcion}&nbsp;</p>
 					</div>
 				</div>
-				<div class="form-group">
-					<label class="col-md-2 col-sm-3 control-label">
-						<g:message code="sustentante.nivelEstudios.label" default="Nivel de estudios" />					
-					</label>
-					<div class="col-md-9 col-sm-9">
-						<p class="form-control-static">${viewModelInstance?.sustentanteInstance?.nivelEstudios?.descripcion}&nbsp;</p>
-					</div>
-				</div>
+
 				<div class="form-group">
 					<label class="col-md-2 col-sm-3 control-label">
 						<g:message code="sustentante.GrupoFinanciero.label" default="Grupo financiero" />

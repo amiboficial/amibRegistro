@@ -1,4 +1,4 @@
-amibCatalogos
+amib Catalogos
 =============
 (Grails 2.4.2)
 
